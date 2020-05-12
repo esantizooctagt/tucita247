@@ -1,0 +1,129 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import '~@angular/material/theming';
+// Plus imports for other components in your app.
+
+// // Define a custom typography config that overrides the font-family as well as the
+// // `headlines` and `body-1` levels.
+// $custom-typography: mat-typography-config(
+//   $font-family: 'Roboto Slab, monospace',
+//   $headline: mat-typography-level(32px, 48px, 700),
+//   $body-1: mat-typography-level(16px, 24px, 500)
+// );
+
+// // Override typography CSS classes (e.g., mat-h1, mat-display-1, mat-typography, etc.).
+// @include mat-base-typography($custom-typography);
+
+// // Override typography for a specific Angular Material components.
+// @include mat-checkbox-typography($custom-typography);
+
+// // Override typography for all Angular Material, including mat-base-typography and all components.
+// @include angular-material-typography($custom-typography);
+
+// // Override the typography in the core CSS.
+// @include mat-core($custom-typography);
+
+// // Create a config with the default typography levels.
+// $config: mat-typography-config();
+
+// // Custom header that uses only the Material `font-size` and `font-family`.
+// .unicorn-header {
+//   font-size: mat-font-size($config, headline);
+//   font-family: mat-font-family($config);
+// }
+
+// // Custom title that uses all of the typography styles from the `title` level.
+// .unicorn-title {
+//   @include mat-typography-level-to-styles($config, title);
+// }
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+@import '../../styles.scss';
+
+$md-primary: (
+    50 : #e1e6ed,
+    100 : #b5c0d1,
+    200 : #8497b3,
+    300 : #536d94,
+    400 : #2e4d7d,
+    500 : #092e66,
+    600 : #08295e,
+    700 : #062353,
+    800 : #051d49,
+    900 : #021238,
+    A100 : #6e8bff,
+    A200 : #3b63ff,
+    A400 : #083aff,
+    A700 : #0030ee,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #ffffff,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #ffffff,
+        A400 : #ffffff,
+        A700 : #ffffff,
+    )
+);
+
+$md-accent: (
+    50 : #e5f2ff,
+    100 : #bfdfff,
+    200 : #95caff,
+    300 : #6ab4ff,
+    400 : #4aa4ff,
+    500 : #2a94ff,
+    600 : #258cff,
+    700 : #1f81ff,
+    800 : #1977ff,
+    900 : #0f65ff,
+    A100 : #ffffff,
+    A200 : #f7faff,
+    A400 : #c4d7ff,
+    A700 : #abc6ff,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #000000,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$tucita247-primary: mat-palette($md-primary);
+$tucita247-accent: mat-palette($md-accent, A700, A600, A900);
+
+// The warn palette is optional (defaults to red).
+$tucita247-warn: mat-palette($mat-red);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$tucita247-theme: mat-light-theme($tucita247-primary, $tucita247-accent, $tucita247-warn);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($tucita247-theme);
+@include snackBar-theme($tucita247-theme);

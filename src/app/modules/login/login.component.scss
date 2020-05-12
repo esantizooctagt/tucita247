@@ -1,0 +1,42 @@
+.panel-lt-login{
+    width: 100%;
+    min-height: 180px;
+}
+.panel-rt-login{
+    width: 100%;;
+    min-height: 280px;
+}
+.spinner-login{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+}
+.overlay-login{
+    height:100%;
+    width:100%;
+    background-color:rgba(0, 0, 0, 0.418);
+    z-index:    10;
+    top:        0; 
+    left:       0; 
+    position: absolute;
+}
+.login-forgot{
+    text-align: right;
+    cursor: pointer;
+}
+.img-back{
+    // background-image: url('https://previews.123rf.com/images/melpomen/melpomen1902/melpomen190200571/116956656-online-shopping-theme-with-woman-using-her-smartphone-in-a-living-room.jpg');
+    background-position: right;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+}
+.login-form{
+    position: absolute; 
+    background-color: white;
+}
+.alert-danger{
+    color: red;
+    font-weight: 500;
+}

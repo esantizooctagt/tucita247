@@ -1,0 +1,25 @@
+<ng-container *ngIf="(deleteRole$ | async) && deletingRole"></ng-container>
+<ng-container *ngIf="message$ | async">
+    <mat-list class="form-field pl-3 pr-3 mt-3 mb-3" *ngIf="onError==''">
+        <mat-label class="form-field">List of Roles</mat-label>
+        <div class="list-scroll">
+            <ng-container *ngFor="let role of roles$ | async; let i=index; trackBy: trackById">
+                <mat-list-item>
+                    <mat-action-list>
+                        <button id="{{'selectRole-' + role.Role_Id }}" mat-icon-button color="primary" (click)="onSelect(role)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button id="{{'deleteRole-' + role.Role_Id }}" mat-icon-button color="warn" (click)="onDelete(role)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </mat-action-list>
+                    <span class="list-text">{{role.Name}}</span>
+                </mat-list-item>
+                <mat-divider class="list-divider"></mat-divider>
+            </ng-container>
+        </div>
+    </mat-list>
+    <div *ngIf="onError!=''">
+        <span>{{onError}}</span>
+    </div>
+</ng-container>

@@ -1,0 +1,68 @@
+.profile-avatar{
+    font-size: 100px;
+    color: #092e66;
+    height: 100px;
+    width: 100px;
+}
+.header-route{
+    height: 33px;
+}
+.circle {
+    border-radius: 1000px!important;
+    overflow: hidden;
+    width: 120px;
+    height: 120px;
+    border: 3px solid #092e66;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+}
+.circle-overlay {
+    border-radius: 1000px !important;
+    overflow: hidden;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+    text-align: center;
+    opacity: 0;
+    transition: .5s ease;
+    background-color: rgba(0, 0, 0);
+    top: -0.3%;
+    left: -0.89%;
+    position: absolute;
+    z-index: 100;
+}
+.circle:hover .circle-overlay {
+    opacity: 0.58;
+}
+.camera-avatar {
+    margin: 0 auto;
+    color: white;
+}
+.circle:hover button{
+    display: block;
+}
+.circle button{
+    display: none;
+}
+.mat-icon-button:hover .mat-button-focus-overlay {
+    opacity: 1 !important;
+}
+.profile-qr{
+    text-align: center;
+}
+.mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+}
+mat-card{
+    margin-left: 16px;
+}
+@media only screen and (max-width: 600px) {
+    .header-route{
+        padding-left: 0;
+    }
+    mat-card{
+        margin-left: 0;
+    }
+}

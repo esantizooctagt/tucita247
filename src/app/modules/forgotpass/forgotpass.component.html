@@ -1,0 +1,33 @@
+<div class="container-fluid h-100">
+    <div class="row align-items-center h-100">
+        <div class="img-back"></div>
+        <div class="col-md-6 offset-md-3 rounded login-form">
+            <div class="row align-items-center border rounded">
+                <div class="overlay-forgot" *ngIf="loading">
+                    <mat-progress-spinner class="spinner-forgot" matSuffix [diameter]="60" mode="indeterminate">
+                    </mat-progress-spinner>
+                </div>
+                <div class="col-md-5 panel-lt-forgot pl-2 pr-2 pt-2 pb-2"></div>
+                <div class="col-md-7 panel-rt-forgot pl-4 pr-4 pt-4 pb-4">
+                    <ng-container *ngIf="(user$ | async) || displayForm">
+                        <form [formGroup]="forgotForm" (ngSubmit)="onSubmit()">
+                            <h2 class="">Forgot your password?</h2>
+                            <div class="mb-0 form-field">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Email</mat-label>
+                                    <input matInput placeholder="Email" formControlName="Email"
+                                        [errorStateMatcher]="confirmValidParentMatcher" maxlength="200" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
+                                    <mat-error *ngIf="f.Email.invalid && f.Email.touched">{{getErrorMessage('Email')}}</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="login-forgot"><a class="" [routerLink]="['/login']">Login</a></div>
+                            <button mat-flat-button color="primary" id="reset" [disabled]="loading" class="mr-3 mt-2">Reset Password
+                            </button>
+                            <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+                        </form>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,79 @@
+<mat-sidenav-container class="sidenav-container" autosize>
+    <mat-sidenav #drawer class="sidenav" fixedInViewport
+        [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+        [mode]="(isHandset$ | async) ? 'over' : 'side'"
+        [opened]="(isHandset$ | async) === false"
+        [ngStyle]="{'width': collapse === true ? '60px' : '200px'}">
+      <mat-toolbar color="primary">{{ (!collapse ? 'Tu Cita 24/7' : '') }}
+        <button mat-icon-button *ngIf="!collapse" (click)="OnCollapse()">
+          <mat-icon class="mr-2">arrow_left</mat-icon>
+        </button>
+        <button mat-icon-button *ngIf="collapse" (click)="OnCollapse()">
+          <mat-icon class="mr-2">arrow_right</mat-icon>
+        </button>
+      </mat-toolbar>
+      <mat-nav-list color="primary">
+        <ng-container class="" *ngFor="let item of apps$ | async">
+          <a class="list-item" *ngIf="item.Active" mat-list-item [routerLink]="['/'+item.Route]" routerLinkActive="menu-active" (click)="displayHome(item.Name)"><mat-icon class="mr-2">{{item.Icon}}</mat-icon>{{ (!collapse ? item.Name : '') }}</a>
+        </ng-container>
+        <div *ngIf="isAdmin">
+          <mat-divider></mat-divider>
+          <a mat-list-item class="item-list"><mat-icon class="mr-2">settings</mat-icon>{{ (!collapse ? 'Settings' : '' ) }}</a>
+          <a mat-list-item [routerLink]="['/company']" routerLinkActive="menu-active" (click)="displayHome('Company')"><mat-icon class="mr-2">location_city</mat-icon>{{ (!collapse ? 'Company' : '') }}</a>
+          <a mat-list-item [routerLink]="['/documents']" routerLinkActive="menu-active" (click)="displayHome('Documents')"><mat-icon class="mr-2">folder</mat-icon>{{ (!collapse ? 'Documents' : '') }}</a>
+          <a mat-list-item [routerLink]="['/inventory']" routerLinkActive="menu-active" (click)="displayHome('Inventory')"><mat-icon class="mr-2">store</mat-icon>{{ (!collapse ? 'Inventory' : '') }}</a>
+          <a mat-list-item [routerLink]="['/taxes']" routerLinkActive="menu-active" (click)="displayHome('Taxes')"><mat-icon class="mr-2">local_atm</mat-icon>{{ (!collapse ? 'Taxes' :'') }} </a>
+          <a mat-list-item [routerLink]="['/users']" routerLinkActive="menu-active" (click)="displayHome('Users')"><mat-icon class="mr-2">person</mat-icon>{{ (!collapse ? 'Users' :'') }}</a>
+          <a mat-list-item [routerLink]="['/roles']" routerLinkActive="menu-active" (click)="displayHome('Roles')"><mat-icon class="mr-2">security</mat-icon>{{ (!collapse ? 'Roles' : '') }}</a>
+        </div>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content [ngStyle]="{'margin-left': collapse === true ? '45px' : '200px'}">
+      <mat-toolbar>
+        <button
+          type="button"
+          aria-label="Toggle sidenav"
+          mat-icon-button
+          (click)="drawer.toggle()"
+          *ngIf="isHandset$ | async">
+          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        </button>
+        <button
+          type="button"
+          mat-icon-button
+          (click)="drawer.toggle()"
+          *ngIf="!(isHandset$ | async)">
+          <mat-icon>blur_on</mat-icon>
+        </button>
+        <!-- <span></span> -->
+        <span class="spacer"></span>
+        <!-- <button mat-icon-button [matMenuTriggerFor]="languageMenu" class="mr-1">
+          <mat-icon *ngIf="language === ''">language</mat-icon>
+          <img [src]="language" width="20"/>
+        </button>
+        <mat-menu #languageMenu="matMenu" xPosition="before">
+          <a class="item-language" mat-menu-item href="https://portal.cashier2go.com/en"><img class="mr-4 ml-1" src="assets/images/icon/EN.svg" width="30"/>  English</a>
+          <a class="item-language" mat-menu-item href="https://portal.cashier2go.com/es"><img class="mr-4 ml-1" src="assets/images/icon/ES.svg" width="30"/>  Español</a>
+          <a class="item-language" mat-menu-item href="https://portal.cashier2go.com/de"><img class="mr-4 ml-1" src="assets/images/icon/DE.svg" width="30"/>  Deutsch</a>
+        </mat-menu> -->
+        <button mat-icon-button class="mr-1" [routerLink]="['/help']">
+          <mat-icon>help</mat-icon>
+        </button>
+        <button mat-icon-button [matMenuTriggerFor]="userMenu">
+          <img *ngIf="avatar!=''; else isIcon" id="img-profile" class="img-profile rounded-circle" [src]="authService.userAvatar?authService.userAvatar:avatar">
+          <ng-template #isIcon>
+            <mat-icon class="rounded circle">perm_identity</mat-icon>
+          </ng-template>
+        </button>
+        <mat-menu #userMenu="matMenu" xPosition="before">
+          <button mat-menu-item [routerLink]="['/profile']"><mat-icon>perm_identity</mat-icon>Profle</button>
+          <!-- <button *ngIf="isAdmin" [routerLink]="['/settings']" mat-menu-item><mat-icon>settings</mat-icon>Settings</button> -->
+          <button mat-menu-item (click)="logout()"><mat-icon>exit_to_app</mat-icon>Logout</button>
+        </mat-menu>
+      </mat-toolbar>
+      <!-- Add Content Here -->
+      <app-home *ngIf="dispHome"></app-home>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  

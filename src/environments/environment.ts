@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  apiUrl: 'https://api.tucita247.com',
+  bucket: 'https://tucita247-bucket.s3.amazonaws.com/'
 };
 
 /*

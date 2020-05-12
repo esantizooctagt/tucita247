@@ -1,0 +1,18 @@
+<div class="header">
+    <h2 mat-dialog-title>{{header}}</h2>
+    <button mat-icon-button (click)="close()" class="icon-close">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+<div mat-dialog-content>
+    <p class="pt-3">{{message}}</p>
+    <div class="icon mt-2 mb-2">
+        <mat-icon class="success-icon" *ngIf="success" svgIcon="check"></mat-icon>
+        <mat-icon class="error-icon" *ngIf="error" svgIcon="error"></mat-icon>
+        <mat-icon class="warn-icon" *ngIf="warn" svgIcon="warning"></mat-icon>
+    </div>
+</div>
+<div mat-dialog-actions *ngIf="ask">
+    <button mat-raised-button (click)="close()" color="warn">No</button>
+    <button mat-raised-button [mat-dialog-close]="accepted" color="primary">Yes</button>
+</div>

@@ -1,0 +1,29 @@
+<div class="pl-0 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
+    <h4>Roles</h4>
+</div>
+<ng-container *ngIf="(roleSave$ | async) && savingRole"></ng-container>
+<mat-card *ngIf="(role$ | async) || displayForm">
+    <form [formGroup]="roleForm" (ngSubmit)="onSubmit()">
+        <div class="form-field pl-3 pr-3">
+            <mat-form-field hintLabel="Min 3 characters">
+                <input matInput #Name placeholder="Name" maxlength="50" minlength="3" formControlName="Name"
+                    [errorStateMatcher]="confirmValidParentMatcher" required>
+                <mat-hint align="end">{{Name.value?.length || 0}}/50</mat-hint>
+                <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{getErrorMessage('Name')}}</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="form-field">
+            <mat-selection-list #lstApps (selectionChange)=changeValue($event.option)>
+                <mat-list-option formArrayName="Access" *ngFor="let item of fAccess.controls; let i = index;" [value]="i" [selected]="item.value.Active">
+                    {{item.value.Name}}
+                </mat-list-option>
+            </mat-selection-list>
+        </div>
+        <div class="form-field-check ml-3 pr-3" *ngIf="roleForm.value.RoleId !== '' && roleForm.value.RoleId !== null">
+            <mat-checkbox formControlName="Status">Status</mat-checkbox>
+        </div>
+        <button mat-flat-button color="primary" id="save" [disabled]="!roleForm.valid" class="ml-3 mr-3 mt-2">Save</button>
+        <button mat-flat-button color="accent" type="button" id="cancel" (click)="onCancel()" class="mt-2">Cancel</button>
+        <!-- {{ roleForm.value | json }} -->
+    </form>
+</mat-card>

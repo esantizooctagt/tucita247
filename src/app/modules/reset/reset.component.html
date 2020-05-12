@@ -1,0 +1,62 @@
+<div class="container-fluid h-100">
+    <div class="row align-items-center h-100">
+        <div class="img-back"></div>
+        <div class="col-md-6 offset-md-3 rounded reset-form">
+            <div class="row align-items-center border rounded">
+                <div class="overlay-reset" *ngIf="loading">
+                    <mat-progress-spinner class="spinner-reset" matSuffix [diameter]="60" mode="indeterminate">
+                    </mat-progress-spinner>
+                </div>
+                <div class="col-md-5 panel-lt-reset pl-2 pr-2 pt-2 pb-2"></div>
+                <div class="col-md-7 panel-rt-reset pl-4 pr-4 pt-4 pb-4">
+                    <ng-container *ngIf="userReset$ | async"></ng-container>
+                    <form [formGroup]="resetForm" (ngSubmit)="onSubmit()">
+                        <h2>Reset Password</h2>
+                        <div formGroupName="Passwords">
+                            <div class="mb-0 form-field">
+                                <mat-form-field appearance="outline" hintLabel="Min 8 characters">
+                                    <mat-label>Password</mat-label>
+                                    <input type="password" matInput placeholder="Password" formControlName="password"
+                                        [errorStateMatcher]="confirmValidParentMatcher" [type]="hide ? 'password' : 'text'" minlength="8" maxlength="20" pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!#$%&?])[a-zA-Z0-9!#$%&?]{8,}" required>
+                                    <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                    </button>
+                                    <mat-error *ngIf="resetForm.get('Passwords.password').errors?.required">You must enter a password</mat-error>
+                                    <mat-error *ngIf="resetForm.get('Passwords.password').errors?.minlength">Minimun length 8</mat-error>
+                                    <mat-error *ngIf="resetForm.get('Passwords.password').errors?.pattern">
+                                        <div>Require at least 1 number</div>
+                                        <div>Require at least 1 special character !#$%&?</div>
+                                        <div>Require at least 1 uppercase letters</div>
+                                        <div>Require at least 1 lowercase letters</div>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="mb-0 form-field">
+                                <mat-form-field appearance="outline" hintLabel="Min 8 characters">
+                                    <mat-label>Confirm Password</mat-label>
+                                    <input type="password" matInput placeholder="Password" formControlName="confpassword"
+                                        [errorStateMatcher]="confirmValidParentMatcher" [type]="hideconf ? 'password' : 'text'" minlength="8" maxlength="20" pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!#$%&?])[a-zA-Z0-9!#$%&?]{8,}" required>
+                                    <button type="button" mat-icon-button matSuffix (click)="hideconf = !hideconf" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                        <mat-icon>{{hideconf ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                    </button>
+                                    <mat-error *ngIf="resetForm.get('Passwords.confpassword').errors?.required">You must enter a password</mat-error>
+                                    <mat-error *ngIf="resetForm.get('Passwords.confpassword').errors?.minlength">Minimun length 8</mat-error>
+                                    <mat-error *ngIf="resetForm.get('Passwords.confpassword').errors?.pattern">
+                                        <div>Require at least 1 number</div>
+                                        <div>Require at least 1 special character !#$%&?</div>
+                                        <div>Require at least 1 uppercase letters</div>
+                                        <div>Require at least 1 lowercase letters</div>
+                                    </mat-error>
+                                    <mat-error *ngIf="resetForm.get('Passwords.confpassword').errors?.notSame">Confirm Password does not match</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <button mat-flat-button color="primary" id="save" [disabled]="resetForm.invalid" class="mr-3 mt-2">Reset
+                        </button>
+                        <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

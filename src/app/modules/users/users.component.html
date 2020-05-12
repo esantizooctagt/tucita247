@@ -1,0 +1,8 @@
+<div class="container-fluid h-100">
+    <div class="row pl-2 pr-1">
+        <app-user [user]="clickedUser" class="col-md-12"></app-user>
+        <div class="col-md-12">
+            <app-user-list (userSelected)="onSelected($event)"></app-user-list>
+        </div> 
+    </div>
+</div>

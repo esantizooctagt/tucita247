@@ -1,0 +1,8 @@
+<div class="container-fluid h-100">
+    <div class="row pl-2 pr-1">
+        <app-role [role]="clickedRole" class="col-md-6"></app-role>
+        <div class="col-md-6">
+            <app-role-list (roleSelected)="roleClicked($event)"></app-role-list>
+        </div> 
+    </div>
+</div>

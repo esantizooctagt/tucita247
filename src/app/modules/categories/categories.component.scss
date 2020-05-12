@@ -1,0 +1,12 @@
+.list-text{
+    padding-top: 8px;
+    display: block;
+    -webkit-tap-highlight-color: transparent;
+}
+.list-scroll {
+    max-height: 400px;
+    overflow: auto;
+}
+.list-divider {
+    position: unset !important;
+}

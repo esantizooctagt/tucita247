@@ -1,0 +1,47 @@
+<div class="container-fluid h-100">
+    <div class="row pl-2 pr-1">
+        <div class="col-md-8">
+            <div class="pl-0 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
+                <h4>Categories</h4>
+            </div>
+            <ng-container *ngIf="(categorySave$ | async) && savingCategory"></ng-container>
+            <ng-container *ngIf="(deleteCategory$ | async) && deletingCategory"></ng-container>
+            <mat-card *ngIf="(category$ | async) || displayForm">
+                <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+                    <div class="form-field pl-3 pr-3">
+                        <mat-form-field hintLabel="Min 3 characters">
+                            <input matInput #Description placeholder="Description" minlength="3" maxlength="70" formControlName="Description"
+                                [errorStateMatcher]="confirmValidParentMatcher" required>
+                            <mat-error *ngIf="f.Description.invalid && f.Description.touched">{{getErrorMessage('Description')}}</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-field-check ml-3 pr-3" *ngIf="categoryForm.value.CategoryId !== '' && categoryForm.value.CategoryId !== null">
+                        <mat-checkbox formControlName="Status">Status</mat-checkbox>
+                    </div>
+                    <button mat-flat-button color="primary" id="save" [disabled]="!categoryForm.valid" class="ml-3 mr-3 mt-2">Save</button>
+                    <button mat-flat-button color="accent" id="cancel" type="button" (click)="onCancel()" class="mt-2">Cancel</button>
+                    <!-- {{ categoryForm.value | json }} -->
+                </form>
+                <mat-list class="form-field pl-3 pr-3 mt-3 mb-3">
+                    <mat-label class="form-field">List of Categories</mat-label>
+                    <div class="list-scroll">
+                        <ng-container *ngFor="let cat of categories$ | async; let i=index; trackBy: trackById">
+                            <mat-list-item>
+                                <mat-action-list>
+                                    <button id="{{'selectCat-' + cat.Category_Id }}" mat-icon-button color="primary" (click)="onSelect(cat.Category_Id)">
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+                                    <button id="{{'deleteCat-' + cat.Category_Id }}" mat-icon-button color="warn" (click)="onDelete(cat.Category_Id)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </mat-action-list>
+                                <span class="list-text">{{cat.Description}}</span>
+                            </mat-list-item>
+                            <mat-divider class="list-divider"></mat-divider>
+                        </ng-container>
+                    </div>
+                </mat-list>
+            </mat-card>
+        </div>
+    </div>
+</div>
