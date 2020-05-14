@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://api.tucita247.com',
+  apiUrl: 'https://bxc56s4102.execute-api.us-east-1.amazonaws.com', //'https://api.tucita247.com',
   bucket: 'https://tucita247-bucket.s3.amazonaws.com/'
 };
 

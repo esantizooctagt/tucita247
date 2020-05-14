@@ -66,6 +66,7 @@ export class MainNavComponent implements OnInit {
   }
 
   ngOnInit(){
+    console.log(this.router.url);
     if (this.router.url != '/'){
       this.dispHome = false;
     }
@@ -80,7 +81,7 @@ export class MainNavComponent implements OnInit {
   }
 
   loadAccess(){
-    this.apps$ = this.roleService.getApplications((this.roleId != '' ? this.roleId : 1));
+    this.apps$ = this.roleService.getApplications((this.roleId != '' ? this.roleId : 0), this.companyId);
   }
 
   logout() {

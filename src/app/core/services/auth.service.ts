@@ -42,8 +42,8 @@ export class AuthService {
     return this.currentAccessTknSubject.value;
   }
 
-  login(userName: string, password: string, authCode: string) {
-    return this.http.post<any>(this.apiURL + '/user/login', { "UserName": userName, "Password": password, "MFact_Auth": authCode })
+  login(email: string, password: string, authCode: string) {
+    return this.http.post<any>(this.apiURL + '/user/login', { "Email": email, "Password": password, "MFact_Auth": authCode })
       .pipe(
           map(user => {
               if (user && user.token && user.Code == 100) {

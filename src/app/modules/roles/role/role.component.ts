@@ -168,7 +168,7 @@ export class RoleComponent implements OnInit {
   }
 
   loadAccess(){
-    this.apps$ = this.roleService.getApplications(this.roleForm.get('RoleId').value);
+    this.apps$ = this.roleService.getApplications(this.roleForm.get('RoleId').value, this.companyId);
     this.roleForm.setControl('Access', this.setExistingApps(this.apps$));
   }
 

@@ -22,8 +22,8 @@ export class RolesService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  getApplications(roleId): Observable<Access[]>{
-    return this.http.get<Access[]>(this.apiURL + '/apps/'+(roleId === '' ? '0' : roleId))
+  getApplications(roleId, companyId): Observable<Access[]>{
+    return this.http.get<Access[]>(this.apiURL + '/apps/'+(roleId === '' ? '0' : roleId) + '/' + companyId)
                     .pipe(catchError(this.errorHandler));
   }
 
