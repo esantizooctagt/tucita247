@@ -12,8 +12,8 @@ export class UserService {
   readonly apiURL = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
-  getUser(userId, companyId): Observable<User> {
-    return this.http.get<User>(this.apiURL + '/user/' + userId + '/' + companyId)
+  getUser(userId, businessId): Observable<User> {
+    return this.http.get<User>(this.apiURL + '/user/' + userId + '/' + businessId)
                     .pipe(catchError(this.errorHandler));
   }
 

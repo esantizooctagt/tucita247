@@ -14,10 +14,10 @@
                             <h2>User Login</h2>
                             <div class="mb-0 form-field">
                                 <mat-form-field appearance="outline">
-                                    <mat-label>User Name</mat-label>
-                                    <input matInput placeholder="User Name" formControlName="username"
+                                    <mat-label>Email</mat-label>
+                                    <input matInput placeholder="Email" formControlName="email"
                                         [errorStateMatcher]="confirmValidParentMatcher" required>
-                                    <mat-error *ngIf="f.username.invalid">{{getErrorMessage('UserName')}}</mat-error>
+                                    <mat-error *ngIf="f.email.invalid">{{getErrorMessage('Email')}}</mat-error>
                                 </mat-form-field>
                             </div>
                             <div class="mb-0 form-field">

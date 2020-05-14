@@ -3,7 +3,7 @@
 export class Store {
     constructor (
         public StoreId: string,
-        public CompanyId: string,
+        public businessId: string,
         public Name: string,
         public Address: string,
         public Postal_Code: string,

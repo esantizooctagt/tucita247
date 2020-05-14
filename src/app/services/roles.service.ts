@@ -12,8 +12,8 @@ export class RolesService {
   readonly apiURL = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
-  getRoles(companyId): Observable<Role[]> {
-    return this.http.get<Role[]>(this.apiURL + '/roles/' + companyId)
+  getRoles(businessId): Observable<Role[]> {
+    return this.http.get<Role[]>(this.apiURL + '/roles/' + businessId)
                     .pipe(catchError(this.errorHandler));
   }
 
@@ -22,8 +22,8 @@ export class RolesService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  getApplications(roleId, companyId): Observable<Access[]>{
-    return this.http.get<Access[]>(this.apiURL + '/apps/'+(roleId === '' ? '0' : roleId) + '/' + companyId)
+  getApplications(roleId, businessId): Observable<Access[]>{
+    return this.http.get<Access[]>(this.apiURL + '/apps/'+(roleId === '' ? '0' : roleId) + '/' + businessId)
                     .pipe(catchError(this.errorHandler));
   }
 

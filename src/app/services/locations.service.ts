@@ -17,8 +17,8 @@ export class LocationsService {
                       .pipe(catchError(this.errorHandler));
     }
 
-    getStores(companyId): Observable<Store[]> {
-        return this.http.get<Store[]>(this.apiURL + '/locations/' + companyId)
+    getStores(businessId): Observable<Store[]> {
+        return this.http.get<Store[]>(this.apiURL + '/locations/' + businessId)
                         .pipe(catchError(this.errorHandler));
     }
 

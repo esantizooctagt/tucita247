@@ -18,7 +18,7 @@ import { RolesService } from '@app/services';
 })
 export class MainNavComponent implements OnInit {
   public online: boolean = true;
-  companyId: string='';
+  businessId: string='';
   userId: string='';
   avatar: string='';
   roleId: string='';
@@ -70,7 +70,7 @@ export class MainNavComponent implements OnInit {
     if (this.router.url != '/'){
       this.dispHome = false;
     }
-    this.companyId = this.authService.companyId();
+    this.businessId = this.authService.businessId();
     this.roleId = this.authService.roleId();
     this.userId = this.authService.userId();
     this.isAdmin = this.authService.isAdmin();
@@ -81,7 +81,7 @@ export class MainNavComponent implements OnInit {
   }
 
   loadAccess(){
-    this.apps$ = this.roleService.getApplications((this.roleId != '' ? this.roleId : 0), this.companyId);
+    this.apps$ = this.roleService.getApplications((this.roleId != '' ? this.roleId : 0), this.businessId);
   }
 
   logout() {

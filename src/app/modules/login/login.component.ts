@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
-      username: ['', Validators.required],
+      email: ['', Validators.required],
       password: ['', Validators.required],
       authcode: ['',[Validators.max(999999), Validators.min(1), Validators.maxLength(6), Validators.minLength(6)]]
     });
@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit {
     var ctObj = CryptoJS.AES.encrypt(data, password);
     var ctStr = ctObj.toString();
 
-    this.authService.login(this.f.username.value, ctStr, this.f.authcode.value)
+    this.authService.login(this.f.email.value, ctStr, this.f.authcode.value)
       .pipe(first())
       .subscribe(
           data => {
@@ -88,8 +88,8 @@ export class LoginComponent implements OnInit {
   }
 
   getErrorMessage(component: string) {
-    if (component === 'UserName'){
-      return this.f.username.hasError('required') ? 'You must enter a username' :
+    if (component === 'Email'){
+      return this.f.email.hasError('required') ? 'You must enter an email' :
         '';
     }
     if (component === 'Password'){

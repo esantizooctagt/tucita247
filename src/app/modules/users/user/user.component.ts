@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { User, Role } from '@app/_models';
 import { FormBuilder, Validators } from '@angular/forms';
-import { UserService, LocationsService, RolesService } from "@app/services";
+import { UserService, RolesService } from "@app/services";
 import { AuthService } from '@core/services';
 import { Router } from '@angular/router';
 import { MonitorService } from "@shared/monitor.service";
@@ -28,9 +28,8 @@ export class UserComponent implements OnInit {
   statTemp: number = 0;
   message$: Observable<string>;
   userAct$: Observable<any>;
-  companyId: string='';
+  businessId: string='';
   changesUser: Subscription;
-  locations$: Observable<any[]>; //StoreDocto
   roles$: Observable<Role[]>;
   displayForm: boolean = true;
   availability$: Observable<any>;
@@ -49,7 +48,6 @@ export class UserComponent implements OnInit {
     private authService: AuthService,
     private usersService: UserService,
     private rolesService: RolesService,
-    private locationService: LocationsService,
     private spinnerService: SpinnerService,
     private router: Router,
     private data: MonitorService,
@@ -58,13 +56,13 @@ export class UserComponent implements OnInit {
   
   userForm = this.fb.group({
     UserId: [''],
-    CompanyId: [''],
+    BusinessId: [''],
     Email: ['', [Validators.required, Validators.maxLength(200), Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
     First_Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     Last_Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     Password: ['',[Validators.minLength(8), Validators.maxLength(20), Validators.pattern("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!#$%&?])[a-zA-Z0-9!#$%&?]{8,}")]],
     Avatar: [''],
-    LocationId: [''],
+    Phone: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(15)]],
     RoleId: ['', [Validators.required]],
     MFact_Auth: [''],
     Is_Admin: [{value: 0, disabled: true}],
@@ -72,9 +70,8 @@ export class UserComponent implements OnInit {
   })
 
   ngOnInit(): void {
-    this.companyId = this.authService.companyId();
+    this.businessId = this.authService.businessId();
     this.message$ = this.data.monitorMessage;
-    this.loadStores();
     this.loadRoles();
     this.onValueChanges();
   }
@@ -114,6 +111,11 @@ export class UserComponent implements OnInit {
             this.f.Last_Name.hasError('maxlength') ? 'Maximun length 100' :
               '';
     }
+    if (component === 'Phone'){
+      return this.f.Last_Name.hasError('minlength') ? 'Minimun length 6' :
+            this.f.Last_Name.hasError('maxlength') ? 'Maximun length 15' :
+              '';
+    }
     if (component === 'RoleId'){
       return this.f.RoleId.hasError('required') ? 'You must select a value' :
         '';
@@ -144,11 +146,11 @@ export class UserComponent implements OnInit {
       this.statTemp = 0;
       var spinnerRef = this.spinnerService.start("Loading User...");
       let userResult = changes.user.currentValue;
-      this.userForm.reset({UserId:'', CompanyId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', LocationId: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
-      this.user$ = this.usersService.getUser(userResult.User_Id, this.companyId).
+      this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
+      this.user$ = this.usersService.getUser(userResult.User_Id, this.businessId).
         pipe(
           tap(user => { 
-            this.userForm.controls.UserName.disable();
+            this.userForm.controls.Email.disable();
             if (user.Is_Admin === 1){
               this.userForm.controls['RoleId'].clearValidators();
             } else {
@@ -156,19 +158,18 @@ export class UserComponent implements OnInit {
             }
             this.userForm.setValue({
               UserId: user.User_Id,
-              CompanyId: user.Company_Id,
+              BusinessId: user.Business_Id,
               Email: user.Email,
               First_Name: user.First_Name,
               Last_Name: user.Last_Name,
               Password: '',
               Avatar: '',
+              Phone: user.Phone,
               MFact_Auth: user.MFact_Auth,
-              LocationId: user.Location_Id,
               RoleId: (user.Is_Admin === 1 ? 'None' : user.Role_Id),
               Is_Admin: user.Is_Admin,
               Status: user.Status
             });
-            this.userData = user.User_Name;
             this.statTemp = user.Status;
             this.spinnerService.stop(spinnerRef);
           }),
@@ -181,16 +182,12 @@ export class UserComponent implements OnInit {
     } else {
       this.userData = '';
       this.statTemp = 0;
-      this.userForm.reset({UserId:'', CompanyId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', LocationId: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
+      this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
     }
-  }
-  
-  loadStores(){
-    // this.stores$ = this.storeService.getStoresDoctos(this.companyId);
-  }
+  }  
 
   loadRoles(){
-    this.roles$ = this.rolesService.getRoles(this.companyId);
+    this.roles$ = this.rolesService.getRoles(this.businessId);
   }
 
   onSubmit(){
@@ -207,8 +204,7 @@ export class UserComponent implements OnInit {
           "First_Name": this.userForm.value.First_Name,
           "Last_Name": this.userForm.value.Last_Name,
           "Password": '', //this.userForm.value.Password,
-          "LocationId": this.userForm.value.LocationId,
-          "UserLogId": userLoggedId,
+          "Phone": this.userForm.value.Phone,
           "RoleId": this.userForm.value.RoleId,
           "MFact_Auth": this.userForm.value.MFact_Auth,
           "Status": (this.statTemp === 3 ? 3 : this.userForm.value.Status),
@@ -219,10 +215,10 @@ export class UserComponent implements OnInit {
             this.savingUser = true;
             this.spinnerService.stop(spinnerRef);
             this.emailValidated = false;
-            this.userForm.controls.UserName.enable();
+            this.userForm.controls.Email.enable();
             this.userData = '';
             this.statTemp = 0;
-            this.userForm.reset({UserId:'', CompanyId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', LocationId: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
+            this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
             this.data.changeData('users');
             this.openDialog('Users', 'User updated successful', true, false, false);
           }),
@@ -241,12 +237,12 @@ export class UserComponent implements OnInit {
         var ctObj = CryptoJS.AES.encrypt(data, password);
         var ctStr = ctObj.toString();
         let dataForm = { 
-          "CompanyId": this.companyId,
+          "BusinessId": this.businessId,
           "Email": this.userForm.value.Email,
           "First_Name": this.userForm.value.First_Name,
           "Last_Name": this.userForm.value.Last_Name,
           "Password": ctStr,
-          "LocationId": this.userForm.value.LocationId,
+          "Phone": this.userForm.value.Phone,
           "RoleId": this.userForm.value.RoleId,
           "MFact_Auth": this.userForm.value.MFact_Auth,
           "UserLogId": userLoggedId,
@@ -257,10 +253,10 @@ export class UserComponent implements OnInit {
             this.savingUser = true;
             this.spinnerService.stop(spinnerRef);
             this.emailValidated = false;
-            this.userForm.controls.UserName.enable();
+            this.userForm.controls.Email.enable();
             this.userData = '';
             this.statTemp = 0;
-            this.userForm.reset({UserId:'', CompanyId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', LocationId: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
+            this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
             this.data.changeData('users');
             this.openDialog('Users', 'User created successful', true, false, false);
           }),
@@ -280,8 +276,8 @@ export class UserComponent implements OnInit {
     this.emailValidated = false;
     this.userData = '';
     this.statTemp = 0;
-    this.userForm.controls.UserName.enable();
-    this.userForm.reset({UserId:'', CompanyId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', LocationId: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
+    this.userForm.controls.Email.enable();
+    this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
   }
 
   // allow only digits and dot

@@ -29,7 +29,7 @@ export class RoleComponent implements OnInit {
     return this.roleForm.get('Access') as FormArray;
   }
 
-  companyId: string = '';
+  businessId: string = '';
   displayForm: boolean = true;
   savingRole: boolean=false;
 
@@ -57,7 +57,7 @@ export class RoleComponent implements OnInit {
   
   roleForm = this.fb.group({
     RoleId: [''],
-    CompanyId: [''],
+    businessId: [''],
     Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
     Access: this.fb.array([this.createAccess()]),
     Status: [1]
@@ -89,7 +89,7 @@ export class RoleComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.companyId = this.authService.companyId();
+    this.businessId = this.authService.businessId();
     this.message$ = this.data.monitorMessage;
     this.onValueChanges();
     this.loadAccess();
@@ -98,7 +98,7 @@ export class RoleComponent implements OnInit {
   onCancel(){
     this.roleForm.patchValue({RoleId:''});
     this.loadAccess();
-    this.roleForm.reset({RoleId: '', CompanyId: '', Name: '', Status:1, Access: this.apps$});
+    this.roleForm.reset({RoleId: '', businessId: '', Name: '', Status:1, Access: this.apps$});
   }
 
   onSubmit(){
@@ -124,7 +124,7 @@ export class RoleComponent implements OnInit {
             this.spinnerService.stop(spinnerRef);
             this.roleForm.patchValue({RoleId: ''});
             this.loadAccess();
-            this.roleForm.reset({RoleId: '', CompanyId: this.companyId, Name: '', Status:1, Access: this.apps$});
+            this.roleForm.reset({RoleId: '', businessId: this.businessId, Name: '', Status:1, Access: this.apps$});
             this.data.changeData('roles');
             this.openDialog('Roles', 'Role updated successful', true, false, false);
           }),
@@ -138,7 +138,7 @@ export class RoleComponent implements OnInit {
       } else {
         let perc = +this.roleForm.value.Percentage;
         let dataForm = { 
-          "Company_Id": this.companyId,
+          "Company_Id": this.businessId,
           "Name": this.roleForm.value.Name,
           "User_Id": userId,
           "Status": 1,
@@ -152,7 +152,7 @@ export class RoleComponent implements OnInit {
             this.spinnerService.stop(spinnerRef);
             this.roleForm.patchValue({RoleId: ''});
             this.loadAccess();
-            this.roleForm.reset({RoleId: '', CompanyId: this.companyId, Name: '', Status:1, Access: this.apps$});
+            this.roleForm.reset({RoleId: '', businessId: this.businessId, Name: '', Status:1, Access: this.apps$});
             this.data.changeData('roles');
             this.openDialog('Roles', 'Role created successful', true, false, false);
           }),
@@ -168,7 +168,7 @@ export class RoleComponent implements OnInit {
   }
 
   loadAccess(){
-    this.apps$ = this.roleService.getApplications(this.roleForm.get('RoleId').value, this.companyId);
+    this.apps$ = this.roleService.getApplications(this.roleForm.get('RoleId').value, this.businessId);
     this.roleForm.setControl('Access', this.setExistingApps(this.apps$));
   }
 
@@ -219,7 +219,7 @@ export class RoleComponent implements OnInit {
     if (changes.role.currentValue != undefined) {
       var spinnerRef = this.spinnerService.start("Loading Role...");
       let roleResult = changes.role.currentValue;
-      this.roleForm.reset({RoleId: '', CompanyId: '', Name: '', Status: 1});
+      this.roleForm.reset({RoleId: '', businessId: '', Name: '', Status: 1});
       this.g.clear();
       this.role$ = this.roleService.getRole(roleResult.Role_Id).pipe(
         tap(res => {
@@ -227,7 +227,7 @@ export class RoleComponent implements OnInit {
             this.roleForm.setValue({
               RoleId: res.Role_Id,
               Name: res.Name,
-              CompanyId: res.Company_Id,
+              businessId: res.Company_Id,
               Status: res.Status,
               Access: []
             });
@@ -243,7 +243,7 @@ export class RoleComponent implements OnInit {
         })
       );
     } else {
-      this.roleForm.reset({RoleId: '', CompanyId: '', Name: '', Status: 1});
+      this.roleForm.reset({RoleId: '', businessId: '', Name: '', Status: 1});
       this.g.clear();
       this.loadAccess();
     }

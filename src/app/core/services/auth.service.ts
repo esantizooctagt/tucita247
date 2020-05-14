@@ -60,19 +60,14 @@ export class AuthService {
       );
   }
 
-  companyId() {
+  businessId() {
     let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
-    return user.Company_Id;
+    return user.Business_Id;
   }
 
   userId(){
     let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
     return user.User_Id;
-  }
-
-  userName(){
-    let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
-    return user.User_Name;
   }
 
   currentToken() {

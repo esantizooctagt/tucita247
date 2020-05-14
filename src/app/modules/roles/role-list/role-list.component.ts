@@ -19,7 +19,7 @@ export class RoleListComponent implements OnInit {
   
   public onError: string='';
   
-  companyId: string = '';
+  businessId: string = '';
   message: string = '';
   lastRole: Role;
   deletingRole: boolean = false;
@@ -56,7 +56,7 @@ export class RoleListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.companyId = this.authService.companyId();
+    this.businessId = this.authService.businessId();
     this.loadRoles();
     this.message$ = this.data.monitorMessage.pipe(
       map(res => {
@@ -72,7 +72,7 @@ export class RoleListComponent implements OnInit {
 
   loadRoles(){
     var spinnerRef = this.spinnerService.start("Loading Roles...");
-    this.roles$ = this.rolesService.getRoles(this.companyId).pipe(
+    this.roles$ = this.rolesService.getRoles(this.businessId).pipe(
       map((res: any) => {
         if (res != null) {
           this.spinnerService.stop(spinnerRef);

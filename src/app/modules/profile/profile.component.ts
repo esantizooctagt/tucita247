@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { User, Store } from '@app/_models';
+import { User } from '@app/_models';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 // import { NgxImageCompressService } from 'ngx-image-compress';
-import { UserService, LocationsService } from "@app/services";
+import { UserService } from "@app/services";
 import { AuthService } from '@core/services';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { ConfirmValidParentMatcher } from '@app/validators';
@@ -18,12 +18,11 @@ import { SpinnerService } from '@app/shared/spinner.service';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  locations$: Observable<Store[]>;
   user$: Observable<User>;
   userUpdate$: Observable<any>;
   imgAvatar$: Observable<any>;
 
-  companyId: string = '';
+  businessId: string = '';
   userId: string = '';
   fileName: string= '';
   fileString: any;
@@ -42,7 +41,6 @@ export class ProfileComponent implements OnInit {
     private fb: FormBuilder,
     private dialog: MatDialog,
     private authService: AuthService,
-    private locationService: LocationsService,
     private spinnerService: SpinnerService,
     private usersService: UserService,
     // private imageCompress: NgxImageCompressService
@@ -50,10 +48,10 @@ export class ProfileComponent implements OnInit {
 
   profileForm = this.fb.group({
     Email: [''],
-    First_Name: [''],
-    Last_Name: [''],
+    First_Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
+    Last_Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     Avatar: [''],
-    LocationId: [''],
+    Phone: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(15)]],
     LanguageId: [''],
     MFact_Auth: ['']
   })
@@ -63,19 +61,18 @@ export class ProfileComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.companyId = this.authService.companyId();
+    this.businessId = this.authService.businessId();
     this.userId = this.authService.userId();
     var spinnerRef = this.spinnerService.start("Loading Profile...");
-    // this.stores$ = this.storeService.getStores(this.companyId);
-    this.user$ = this.usersService.getUser(this.userId, this.companyId).pipe(
+    this.user$ = this.usersService.getUser(this.userId, this.businessId).pipe(
       tap(res => {
         this.profileForm.setValue({
           Email: res.Email,
           First_Name: res.First_Name,
           Last_Name: res.Last_Name,
           Avatar: res.Avatar,
-          LocationId: res.Location_Id,
-          LanguageId: res.Language_Id,
+          Phone: res.Phone,
+          LanguageId: res.Language,
           MFact_Auth: res.MFact_Auth,
         });
         this.spinnerService.stop(spinnerRef);
@@ -115,6 +112,11 @@ export class ProfileComponent implements OnInit {
       return this.f.Last_Name.hasError('required') ? 'You must enter a value' :
           this.f.Last_Name.hasError('minlength') ? 'Minimun length 3' :
             this.f.Last_Name.hasError('maxlength') ? 'Maximun length 100' :
+              '';
+    }
+    if (component === 'Phone'){
+      return this.f.Phone.hasError('minlength') ? 'Minimun length 6' :
+            this.f.Phone.hasError('maxlength') ? 'Maximun length 15' :
               '';
     }
   }
@@ -174,10 +176,10 @@ export class ProfileComponent implements OnInit {
       "Email": this.profileForm.value.Email,
       "First_Name": this.profileForm.value.First_Name,
       "Last_Name": this.profileForm.value.Last_Name,
-      "LocationId": this.profileForm.value.LocationId,
+      "Phone": this.profileForm.value.Phone,
       "MFact_Auth": (this.profileForm.value.MFact_Auth ? 1 : 0),
       "LanguageId": this.profileForm.value.LanguageId,
-      "BusinessId": this.companyId
+      "BusinessId": this.businessId
     }
     this.userUpdate$ = this.usersService.updateProfile(this.userId, dataForm).pipe(
       tap(res =>  {
@@ -209,8 +211,8 @@ export class ProfileComponent implements OnInit {
     this.imgAvatar$ = this.usersService.uploadImage(this.userId, formData).pipe(
       tap(response =>  {
           this.spinnerService.stop(spinnerRef);
-          this.profileForm.patchValue({'Avatar': this.companyId+'/img/avatars/'+this.userId+type});
-          this.authService.setUserAvatar(this.companyId+'/img/avatars/'+this.userId+type);
+          this.profileForm.patchValue({'Avatar': this.businessId+'/img/avatars/'+this.userId+type});
+          this.authService.setUserAvatar(this.businessId+'/img/avatars/'+this.userId+type);
           this.avatarForm.reset({'Avatar':null});
           this.fileString = null;
           this.openDialog('User', 'Avatar uploaded successful', true, false, false);

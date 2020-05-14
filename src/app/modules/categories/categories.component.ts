@@ -21,7 +21,7 @@ export class CategoriesComponent implements OnInit {
     return this.categoryForm.controls;
   }
 
-  companyId: string='';
+  businessId: string='';
   displayForm: boolean =true;
   categories$: Observable<Category[]>;
   category$: Observable<Category>;
@@ -48,7 +48,7 @@ export class CategoriesComponent implements OnInit {
 
   categoryForm = this.fb.group({
     CategoryId: [''],
-    CompanyId: [''],
+    businessId: [''],
     Description: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(70)]],
     Status: [1]
   })
@@ -89,8 +89,8 @@ export class CategoriesComponent implements OnInit {
 
   initData(){
     var spinnerRef = this.spinnerService.start("Loading Categories...");
-    this.companyId = this.authService.companyId();
-    this.categories$ = this.categoryService.getCategories(this.companyId);
+    this.businessId = this.authService.businessId();
+    this.categories$ = this.categoryService.getCategories(this.businessId);
     this.spinnerService.stop(spinnerRef);
   }
 
@@ -106,13 +106,13 @@ export class CategoriesComponent implements OnInit {
   onSelect(value: string){
     if (value != undefined) {
       var spinnerRef = this.spinnerService.start("Loading Category...");
-      this.categoryForm.reset({ CategoryId: "", CompanyId: this.companyId, Description: "", Status: 1 });
+      this.categoryForm.reset({ CategoryId: "", businessId: this.businessId, Description: "", Status: 1 });
       this.category$ = this.categoryService.getCategory(value).pipe(
         tap(res => {
           if (res != null) {
             this.categoryForm.setValue({
               CategoryId: res.Category_Id,
-              CompanyId: res.Company_Id,
+              businessId: res.Company_Id,
               Description: res.Description,
               Status: res.Status
             });
@@ -126,7 +126,7 @@ export class CategoriesComponent implements OnInit {
         })
       );
     } else {
-      this.categoryForm.reset({ CategoryId: "", CompanyId: this.companyId, Description: "", Status: 1 });
+      this.categoryForm.reset({ CategoryId: "", businessId: this.businessId, Description: "", Status: 1 });
     }
   }
 
@@ -161,7 +161,7 @@ export class CategoriesComponent implements OnInit {
                 this.spinnerService.stop(spinnerRef);
                 this.displayYesNo = false;
                 this.deletingCategory = true;
-                this.categories$ = this.categoryService.getCategories(this.companyId);
+                this.categories$ = this.categoryService.getCategories(this.businessId);
                 this.openDialog('Category', 'Category deleted successful', true, false, false);
                 window.scroll(0,0);
               }),
@@ -180,7 +180,7 @@ export class CategoriesComponent implements OnInit {
   }
 
   onCancel(){
-    this.categoryForm.reset({ CategoryId: "", CompanyId: this.companyId, Description: "", Status: 1 });
+    this.categoryForm.reset({ CategoryId: "", businessId: this.businessId, Description: "", Status: 1 });
   }
 
   onSubmit(){
@@ -194,7 +194,7 @@ export class CategoriesComponent implements OnInit {
       if (catId !== '' && catId !== null) {
         let dataForm =  { 
           "Description": this.categoryForm.value.Description,
-          "CompanyId": this.companyId,
+          "businessId": this.businessId,
           "UserId": userId,
           "Status": this.categoryForm.value.Status
         }
@@ -202,8 +202,8 @@ export class CategoriesComponent implements OnInit {
           tap(res => { 
             this.savingCategory = true;
             this.spinnerService.stop(spinnerRef);
-            this.categoryForm.reset({ CategoryId: "", CompanyId: this.companyId, Description: "", Status: 1 });
-            this.categories$ = this.categoryService.getCategories(this.companyId);
+            this.categoryForm.reset({ CategoryId: "", businessId: this.businessId, Description: "", Status: 1 });
+            this.categories$ = this.categoryService.getCategories(this.businessId);
             this.openDialog('Categories', 'Category updated successful', true, false, false);
           }),
           catchError(err => {
@@ -216,7 +216,7 @@ export class CategoriesComponent implements OnInit {
       } else {
         let dataForm =  { 
           "Description": this.categoryForm.value.Description,
-          "CompanyId": this.companyId,
+          "businessId": this.businessId,
           "UserId": userId,
           "Status": this.categoryForm.value.Status
         }
@@ -224,8 +224,8 @@ export class CategoriesComponent implements OnInit {
           tap(res => { 
             this.savingCategory = true;
             this.spinnerService.stop(spinnerRef);
-            this.categoryForm.reset({ CategoryId: "", CompanyId: this.companyId, Description: "", Status: 1 });
-            this.categories$ = this.categoryService.getCategories(this.companyId);
+            this.categoryForm.reset({ CategoryId: "", businessId: this.businessId, Description: "", Status: 1 });
+            this.categories$ = this.categoryService.getCategories(this.businessId);
             this.openDialog('Categories', 'Category created successful', true, false, false);
           }),
           catchError(err => {
