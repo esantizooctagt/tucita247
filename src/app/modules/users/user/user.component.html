@@ -8,19 +8,12 @@
         <div class="form-field pl-3 pr-3">
             <mat-form-field hintLabel="Email format">
                 <input matInput #Email placeholder="Email" maxlength="200" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" formControlName="Email"
-                    [errorStateMatcher]="confirmValidParentMatcher" required>
-                <mat-error *ngIf="f.Email.invalid && f.Email.touched">{{getErrorMessage('Email')}}</mat-error>
-            </mat-form-field>
-        </div>
-        <div class="form-field pl-3 pr-3">
-            <mat-form-field hintLabel="Min 5 characters">
-                <input matInput #UserName placeholder="Username" maxlength="50" minlength="5" formControlName="UserName"
-                    [errorStateMatcher]="confirmValidParentMatcher" (focusout)="checkUserNameAvailability($event)" required>
+                    [errorStateMatcher]="confirmValidParentMatcher" (focusout)="checkEmailAvailability($event)" required>
                 <mat-spinner matSuffix *ngIf="loadingUser" diameter="18" color="primary"></mat-spinner>
                 <ng-container matSuffix *ngIf="availability$ | async as result">
-                    <mat-icon *ngIf="userNameValidated" [ngClass]="{'icon-green':result.Available, 'icon-red':!result.Available}">{{result.Available ? 'check' : 'close' }}</mat-icon>
+                    <mat-icon *ngIf="emailValidated" [ngClass]="{'icon-green':result.Available, 'icon-red':!result.Available}">{{result.Available ? 'check' : 'close' }}</mat-icon>
                 </ng-container>
-                <mat-error *ngIf="f.UserName.invalid && f.UserName.touched">{{getErrorMessage('UserName')}}</mat-error>
+                <mat-error *ngIf="f.Email.invalid && f.Email.touched">{{getErrorMessage('Email')}}</mat-error>
             </mat-form-field>
         </div>
         <div class="form-field pl-3 pr-3">
@@ -53,17 +46,17 @@
                 </mat-error>
             </mat-form-field>
         </div>
-        <!-- <div class="form-field pl-3 pr-3">
+        <div class="form-field pl-3 pr-3">
             <mat-form-field>
-                <mat-label>Default Store:</mat-label>
-                <mat-select #stores formControlName="StoreId">
-                    <mat-option *ngFor="let res of stores$ | async" [value]="res.StoreId">
+                <mat-label>Default Location:</mat-label>
+                <mat-select #locations formControlName="LocationId">
+                    <mat-option *ngFor="let res of locations$ | async" [value]="res.LocationId">
                         {{res.Name}}
                     </mat-option>
                 </mat-select>
-                <mat-error *ngIf="f.StoreId.invalid && f.StoreId.touched">{{getErrorMessage('Store')}}</mat-error>
+                <mat-error *ngIf="f.LocationId.invalid && f.LocationId.touched">{{getErrorMessage('Location')}}</mat-error>
             </mat-form-field>
-        </div> -->
+        </div>
         <div class="form-field pl-3 pr-3">
             <mat-form-field>
                 <mat-label>Role:</mat-label>

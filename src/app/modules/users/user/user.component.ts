@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { User, Role } from '@app/_models';
 import { FormBuilder, Validators } from '@angular/forms';
-import { UserService, StoresService, RolesService } from "@app/services";
+import { UserService, LocationsService, RolesService } from "@app/services";
 import { AuthService } from '@core/services';
 import { Router } from '@angular/router';
 import { MonitorService } from "@shared/monitor.service";
@@ -30,14 +30,14 @@ export class UserComponent implements OnInit {
   userAct$: Observable<any>;
   companyId: string='';
   changesUser: Subscription;
-  // stores$: Observable<StoreDocto[]>;
+  locations$: Observable<any[]>; //StoreDocto
   roles$: Observable<Role[]>;
   displayForm: boolean = true;
   availability$: Observable<any>;
   userSave$: Observable<any>;
   user$: Observable<User>;
   hide = true;
-  userNameValidated: boolean = false;
+  emailValidated: boolean = false;
   loadingUser: boolean = false;
   savingUser: boolean = false;
 
@@ -49,7 +49,7 @@ export class UserComponent implements OnInit {
     private authService: AuthService,
     private usersService: UserService,
     private rolesService: RolesService,
-    private storeService: StoresService,
+    private locationService: LocationsService,
     private spinnerService: SpinnerService,
     private router: Router,
     private data: MonitorService,
@@ -60,12 +60,11 @@ export class UserComponent implements OnInit {
     UserId: [''],
     CompanyId: [''],
     Email: ['', [Validators.required, Validators.maxLength(200), Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
-    UserName: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
     First_Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     Last_Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     Password: ['',[Validators.minLength(8), Validators.maxLength(20), Validators.pattern("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!#$%&?])[a-zA-Z0-9!#$%&?]{8,}")]],
     Avatar: [''],
-    StoreId: [''],
+    LocationId: [''],
     RoleId: ['', [Validators.required]],
     MFact_Auth: [''],
     Is_Admin: [{value: 0, disabled: true}],
@@ -102,13 +101,6 @@ export class UserComponent implements OnInit {
         this.f.Email.hasError('maxlength') ? 'Maximun length 200' :
           this.f.Email.hasError('pattern') ? 'Invalid Email' :
           '';
-    }
-    if (component === 'UserName'){
-      return this.f.UserName.hasError('required') ? 'You must enter a value' :
-          this.f.UserName.hasError('minlength') ? 'Minimun length 5' :
-            this.f.UserName.hasError('maxlength') ? 'Maximun length 50' :
-              this.f.UserName.hasError('notUnique') ? 'Username already taken' :
-              '';
     }
     if (component === 'First_Name'){
       return this.f.First_Name.hasError('required') ? 'You must enter a value' :
@@ -152,7 +144,7 @@ export class UserComponent implements OnInit {
       this.statTemp = 0;
       var spinnerRef = this.spinnerService.start("Loading User...");
       let userResult = changes.user.currentValue;
-      this.userForm.reset({UserId:'', CompanyId: '', Email: '', UserName: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', StoreId: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
+      this.userForm.reset({UserId:'', CompanyId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', LocationId: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
       this.user$ = this.usersService.getUser(userResult.User_Id).
         pipe(
           tap(user => { 
@@ -166,13 +158,12 @@ export class UserComponent implements OnInit {
               UserId: user.User_Id,
               CompanyId: user.Company_Id,
               Email: user.Email,
-              UserName: user.User_Name,
               First_Name: user.First_Name,
               Last_Name: user.Last_Name,
               Password: '',
               Avatar: '',
-              // MFact_Auth: user.MFact_Auth,
-              // StoreId: user.Store_Id,
+              MFact_Auth: user.MFact_Auth,
+              LocationId: user.Location_Id,
               RoleId: (user.Is_Admin === 1 ? 'None' : user.Role_Id),
               Is_Admin: user.Is_Admin,
               Status: user.Status
@@ -190,7 +181,7 @@ export class UserComponent implements OnInit {
     } else {
       this.userData = '';
       this.statTemp = 0;
-      this.userForm.reset({UserId:'', CompanyId: '', Email: '', UserName: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', StoreId: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
+      this.userForm.reset({UserId:'', CompanyId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', LocationId: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
     }
   }
   
@@ -216,7 +207,7 @@ export class UserComponent implements OnInit {
           "First_Name": this.userForm.value.First_Name,
           "Last_Name": this.userForm.value.Last_Name,
           "Password": '', //this.userForm.value.Password,
-          "StoreId": this.userForm.value.StoreId,
+          "LocationId": this.userForm.value.LocationId,
           "UserLogId": userLoggedId,
           "RoleId": this.userForm.value.RoleId,
           "MFact_Auth": this.userForm.value.MFact_Auth,
@@ -227,11 +218,11 @@ export class UserComponent implements OnInit {
           tap(res => { 
             this.savingUser = true;
             this.spinnerService.stop(spinnerRef);
-            this.userNameValidated = false;
+            this.emailValidated = false;
             this.userForm.controls.UserName.enable();
             this.userData = '';
             this.statTemp = 0;
-            this.userForm.reset({UserId:'', CompanyId: '', Email: '', UserName: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', StoreId: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
+            this.userForm.reset({UserId:'', CompanyId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', LocationId: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
             this.data.changeData('users');
             this.openDialog('Users', 'User updated successful', true, false, false);
           }),
@@ -252,11 +243,10 @@ export class UserComponent implements OnInit {
         let dataForm = { 
           "CompanyId": this.companyId,
           "Email": this.userForm.value.Email,
-          "UserName": this.userForm.value.UserName,
           "First_Name": this.userForm.value.First_Name,
           "Last_Name": this.userForm.value.Last_Name,
           "Password": ctStr,
-          "StoreId": this.userForm.value.StoreId,
+          "LocationId": this.userForm.value.LocationId,
           "RoleId": this.userForm.value.RoleId,
           "MFact_Auth": this.userForm.value.MFact_Auth,
           "UserLogId": userLoggedId,
@@ -266,11 +256,11 @@ export class UserComponent implements OnInit {
           tap(res => { 
             this.savingUser = true;
             this.spinnerService.stop(spinnerRef);
-            this.userNameValidated = false;
+            this.emailValidated = false;
             this.userForm.controls.UserName.enable();
             this.userData = '';
             this.statTemp = 0;
-            this.userForm.reset({UserId:'', CompanyId: '', Email: '', UserName: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', StoreId: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
+            this.userForm.reset({UserId:'', CompanyId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', LocationId: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
             this.data.changeData('users');
             this.openDialog('Users', 'User created successful', true, false, false);
           }),
@@ -287,11 +277,11 @@ export class UserComponent implements OnInit {
 
   onCancel(){
     this.userForm.controls['RoleId'].setValidators([Validators.required]);
-    this.userNameValidated = false;
+    this.emailValidated = false;
     this.userData = '';
     this.statTemp = 0;
     this.userForm.controls.UserName.enable();
-    this.userForm.reset({UserId:'', CompanyId: '', Email: '', UserName: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', StoreId: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
+    this.userForm.reset({UserId:'', CompanyId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', LocationId: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
   }
 
   // allow only digits and dot
@@ -338,13 +328,13 @@ export class UserComponent implements OnInit {
     );
   }
 
-  checkUserNameAvailability(data) { 
-    this.userNameValidated = false;
+  checkEmailAvailability(data) { 
+    this.emailValidated = false;
     if (data.target.value != ''){
       this.loadingUser = true;
-      this.availability$ = this.usersService.validateUserName(data.target.value).pipe(
+      this.availability$ = this.usersService.validateEmail(data.target.value).pipe(
         tap((result: any) => { 
-          this.userNameValidated = true;
+          this.emailValidated = true;
           if (result.Available == 0){
             this.userForm.controls.UserName.setErrors({notUnique: true});
           }

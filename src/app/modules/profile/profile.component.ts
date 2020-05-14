@@ -3,7 +3,7 @@ import { User, Store } from '@app/_models';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 // import { NgxImageCompressService } from 'ngx-image-compress';
-import { UserService, StoresService } from "@app/services";
+import { UserService, LocationsService } from "@app/services";
 import { AuthService } from '@core/services';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { ConfirmValidParentMatcher } from '@app/validators';
@@ -18,7 +18,7 @@ import { SpinnerService } from '@app/shared/spinner.service';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  stores$: Observable<Store[]>;
+  locations$: Observable<Store[]>;
   user$: Observable<User>;
   userUpdate$: Observable<any>;
   imgAvatar$: Observable<any>;
@@ -42,7 +42,7 @@ export class ProfileComponent implements OnInit {
     private fb: FormBuilder,
     private dialog: MatDialog,
     private authService: AuthService,
-    private storeService: StoresService,
+    private locationService: LocationsService,
     private spinnerService: SpinnerService,
     private usersService: UserService,
     // private imageCompress: NgxImageCompressService
@@ -50,12 +50,10 @@ export class ProfileComponent implements OnInit {
 
   profileForm = this.fb.group({
     Email: [''],
-    User_Name: [''],
     First_Name: [''],
     Last_Name: [''],
     Avatar: [''],
-    Company_Name: [''],
-    StoreId: [''],
+    LocationId: [''],
     LanguageId: [''],
     MFact_Auth: [''],
     Password: ['']
@@ -74,14 +72,12 @@ export class ProfileComponent implements OnInit {
       tap(res => {
         this.profileForm.setValue({
           Email: res.Email,
-          User_Name: res.User_Name,
           First_Name: res.First_Name,
           Last_Name: res.Last_Name,
           Avatar: res.Avatar,
-          Company_Name: res.Company_Name,
-          // StoreId: res.Store_Id,
-          // LanguageId: res.Language_Id,
-          // MFact_Auth: res.MFact_Auth,
+          LocationId: res.Location_Id,
+          LanguageId: res.Language_Id,
+          MFact_Auth: res.MFact_Auth,
           Password: res.Password
         });
         this.spinnerService.stop(spinnerRef);
@@ -180,7 +176,7 @@ export class ProfileComponent implements OnInit {
       "Email": this.profileForm.value.Email,
       "First_Name": this.profileForm.value.First_Name,
       "Last_Name": this.profileForm.value.Last_Name,
-      "StoreId": this.profileForm.value.StoreId,
+      "LocationId": this.profileForm.value.LocationId,
       "MFact_Auth": (this.profileForm.value.MFact_Auth ? 1 : 0),
       "LanguageId": this.profileForm.value.LanguageId,
       "Password": '',

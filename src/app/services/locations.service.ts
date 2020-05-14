@@ -8,35 +8,25 @@ import { throwError, Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class StoresService {
+export class LocationsService {
   readonly apiURL = environment.apiUrl;
     constructor(private http: HttpClient) { }
 
     getStore(storeId, cashierId): Observable<any>{
-      return this.http.get<any>(this.apiURL + '/store/' + storeId + '/' + cashierId)
+      return this.http.get<any>(this.apiURL + '/location/' + storeId + '/' + cashierId)
                       .pipe(catchError(this.errorHandler));
     }
 
     getStores(companyId): Observable<Store[]> {
-        return this.http.get<Store[]>(this.apiURL + '/stores/' + companyId)
+        return this.http.get<Store[]>(this.apiURL + '/locations/' + companyId)
                         .pipe(catchError(this.errorHandler));
     }
 
-    // getStoresDoctos(companyId): Observable<StoreDocto[]> {
-    //   return this.http.get<StoreDocto[]>(this.apiURL + '/stores/company/' + companyId)
-    //                   .pipe(catchError(this.errorHandler));
-    // }
-
     updateStores(dataForm){
-      return this.http.patch(this.apiURL + '/stores', dataForm)
+      return this.http.patch(this.apiURL + '/locations', dataForm)
                       .pipe(catchError(this.errorHandler));
     }
 
-    updateStoreCashier(dataForm){
-      return this.http.put(this.apiURL + '/stores', dataForm)
-                      .pipe(catchError(this.errorHandler));
-    }
-    
     errorHandler(error) {
       return throwError(error || 'Server Error');
     }

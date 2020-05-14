@@ -42,8 +42,8 @@ export class UserService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  validateUserName(username){
-    return this.http.get(this.apiURL + '/user/validate/' + username)
+  validateEmail(email){
+    return this.http.get(this.apiURL + '/user/validate/' + email)
                     .pipe(catchError(this.errorHandler));
   }
 
