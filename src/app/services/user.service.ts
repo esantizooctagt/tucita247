@@ -12,8 +12,8 @@ export class UserService {
   readonly apiURL = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
-  getUser(userId): Observable<User> {
-    return this.http.get<User>(this.apiURL + '/user/' + userId)
+  getUser(userId, companyId): Observable<User> {
+    return this.http.get<User>(this.apiURL + '/user/' + userId + '/' + companyId)
                     .pipe(catchError(this.errorHandler));
   }
 
@@ -24,6 +24,11 @@ export class UserService {
 
   updateUser(userId, formData){
     return this.http.put(this.apiURL + '/user/' + userId, formData)
+                      .pipe(catchError(this.errorHandler));
+  }
+
+  updateProfile(userId, formData){
+    return this.http.put(this.apiURL + '/user/profile/' + userId, formData)
                       .pipe(catchError(this.errorHandler));
   }
 

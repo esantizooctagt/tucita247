@@ -55,8 +55,7 @@ export class ProfileComponent implements OnInit {
     Avatar: [''],
     LocationId: [''],
     LanguageId: [''],
-    MFact_Auth: [''],
-    Password: ['']
+    MFact_Auth: ['']
   })
 
   avatarForm = this.fb.group({
@@ -68,7 +67,7 @@ export class ProfileComponent implements OnInit {
     this.userId = this.authService.userId();
     var spinnerRef = this.spinnerService.start("Loading Profile...");
     // this.stores$ = this.storeService.getStores(this.companyId);
-    this.user$ = this.usersService.getUser(this.userId).pipe(
+    this.user$ = this.usersService.getUser(this.userId, this.companyId).pipe(
       tap(res => {
         this.profileForm.setValue({
           Email: res.Email,
@@ -78,7 +77,6 @@ export class ProfileComponent implements OnInit {
           LocationId: res.Location_Id,
           LanguageId: res.Language_Id,
           MFact_Auth: res.MFact_Auth,
-          Password: res.Password
         });
         this.spinnerService.stop(spinnerRef);
       }),
@@ -179,12 +177,9 @@ export class ProfileComponent implements OnInit {
       "LocationId": this.profileForm.value.LocationId,
       "MFact_Auth": (this.profileForm.value.MFact_Auth ? 1 : 0),
       "LanguageId": this.profileForm.value.LanguageId,
-      "Password": '',
-      "RoleId": 'None',
-      "Status": 1,
-      "UserLogId": this.userId
+      "BusinessId": this.companyId
     }
-    this.userUpdate$ = this.usersService.updateUser(this.userId, dataForm).pipe(
+    this.userUpdate$ = this.usersService.updateProfile(this.userId, dataForm).pipe(
       tap(res =>  {
         this.spinnerService.stop(spinnerRef);
         this.openDialog('User', 'User updated successful', true, false, false);

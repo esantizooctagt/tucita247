@@ -145,7 +145,7 @@ export class UserComponent implements OnInit {
       var spinnerRef = this.spinnerService.start("Loading User...");
       let userResult = changes.user.currentValue;
       this.userForm.reset({UserId:'', CompanyId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', LocationId: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
-      this.user$ = this.usersService.getUser(userResult.User_Id).
+      this.user$ = this.usersService.getUser(userResult.User_Id, this.companyId).
         pipe(
           tap(user => { 
             this.userForm.controls.UserName.disable();
