@@ -66,7 +66,6 @@ export class MainNavComponent implements OnInit {
   }
 
   ngOnInit(){
-    console.log(this.router.url);
     if (this.router.url != '/'){
       this.dispHome = false;
     }

@@ -21,7 +21,7 @@ export class VerificationComponent implements OnInit {
   loading = false;
   hide = true;
   hideconf = true;
-  userName: string = '';
+  email: string = '';
   code: string = '';
   userAct$: Observable<any>;
 
@@ -50,7 +50,7 @@ export class VerificationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userName = this.route.snapshot.paramMap.get('user');
+    this.email = this.route.snapshot.paramMap.get('user');
     this.code = this.route.snapshot.paramMap.get('code');
   }
 
@@ -99,13 +99,16 @@ export class VerificationComponent implements OnInit {
       var ctStr = ctObj.toString();
 
       dataForm = {
+        Email: this.email,
+        BusinessId: '',
         Password: ctStr
       }
     } else {
       dataForm = '';
+      return;
     }
     var spinnerRef = this.spinnerService.start("Activating account...");
-    this.userAct$ = this.usersService.putVerifCode(this.userName, this.code, dataForm).pipe(
+    this.userAct$ = this.usersService.putVerifCode(this.code, dataForm).pipe(
       tap((res: any) => { 
         if (res.Code == 200){
           this.spinnerService.stop(spinnerRef);

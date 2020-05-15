@@ -22,14 +22,14 @@ export class UserService {
                       .pipe(catchError(this.errorHandler));
   }
 
-  updateUser(userId, formData){
-    return this.http.put(this.apiURL + '/user/' + userId, formData)
-                      .pipe(catchError(this.errorHandler));
+  updateUser(formData){
+    return this.http.put(this.apiURL + '/user', formData)
+                    .pipe(catchError(this.errorHandler));
   }
 
   updateProfile(userId, formData){
     return this.http.put(this.apiURL + '/user/profile/' + userId, formData)
-                      .pipe(catchError(this.errorHandler));
+                    .pipe(catchError(this.errorHandler));
   }
 
   getUsers(formData): Observable<User[]> {
@@ -38,8 +38,8 @@ export class UserService {
   }
 
   postUser(formData) {
-      return this.http.post(this.apiURL + '/user', formData)
-                      .pipe(catchError(this.errorHandler));
+    return this.http.post(this.apiURL + '/user', formData)
+                    .pipe(catchError(this.errorHandler));
   }
 
   deleteUser(userId) {
@@ -62,8 +62,8 @@ export class UserService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  putVerifCode(userName, code, formData){
-    return this.http.put(this.apiURL + '/user/verification/' + userName + '/' + code, formData)
+  putVerifCode(code, formData){
+    return this.http.put(this.apiURL + '/user/verification/'+code, formData)
                     .pipe(catchError(this.errorHandler));
   }
 

@@ -95,9 +95,10 @@ export class UserComponent implements OnInit {
   getErrorMessage(component: string) {
     if (component === 'Email'){
       return this.f.Email.hasError('required') ? 'You must enter an Email' :
-        this.f.Email.hasError('maxlength') ? 'Maximun length 200' :
-          this.f.Email.hasError('pattern') ? 'Invalid Email' :
-          '';
+        this.f.Email.hasError('notUnique') ? 'Email already registered':
+          this.f.Email.hasError('maxlength') ? 'Maximun length 200' :
+            this.f.Email.hasError('pattern') ? 'Invalid Email' :
+            '';
     }
     if (component === 'First_Name'){
       return this.f.First_Name.hasError('required') ? 'You must enter a value' :
@@ -198,8 +199,9 @@ export class UserComponent implements OnInit {
       let userId = this.userForm.value.UserId;
       var spinnerRef = this.spinnerService.start("Saving User...");
       if (userId !== '' && userId !== null) {  
-        let userLoggedId = this.authService.userId();
         let dataForm =  {
+          "UserId": userId,
+          "BusinessId": this.businessId,
           "Email": this.userForm.value.Email,
           "First_Name": this.userForm.value.First_Name,
           "Last_Name": this.userForm.value.Last_Name,
@@ -207,10 +209,9 @@ export class UserComponent implements OnInit {
           "Phone": this.userForm.value.Phone,
           "RoleId": this.userForm.value.RoleId,
           "MFact_Auth": this.userForm.value.MFact_Auth,
-          "Status": (this.statTemp === 3 ? 3 : this.userForm.value.Status),
-          "LanguageId": ''
+          "Status": (this.statTemp === 3 ? 3 : this.userForm.value.Status)
         }
-        this.userSave$ = this.usersService.updateUser(userId, dataForm).pipe(
+        this.userSave$ = this.usersService.updateUser(dataForm).pipe(
           tap(res => { 
             this.savingUser = true;
             this.spinnerService.stop(spinnerRef);
@@ -244,9 +245,8 @@ export class UserComponent implements OnInit {
           "Password": ctStr,
           "Phone": this.userForm.value.Phone,
           "RoleId": this.userForm.value.RoleId,
-          "MFact_Auth": this.userForm.value.MFact_Auth,
-          "UserLogId": userLoggedId,
-          "LanguageId": ''
+          "MFact_Auth": 0
+          // this.userForm.value.MFact_Auth
         }
         this.userSave$ = this.usersService.postUser(dataForm).pipe(
           tap(res => { 
@@ -301,13 +301,19 @@ export class UserComponent implements OnInit {
 
   onSendCode(){
     let userId = this.userForm.value.UserId;
-    let userName = this.userData;
-    if (userName == '' && userId == '') {
+    let email = this.userData;
+    if (email == '' && userId == '') {
       return;
     }
     
     var spinnerRef = this.spinnerService.start("Sending activation code...");
-    this.userAct$ = this.usersService.putVerifCode(userName, '0', '').pipe(
+    let dataForm =  {
+      "Email": email,
+      "BusinessId": this.businessId,
+      "Password": ""
+    }
+    // userName, '0', 
+    this.userAct$ = this.usersService.putVerifCode('0', dataForm).pipe(
       tap((res: any) => { 
         this.spinnerService.stop(spinnerRef);
         if (res.Code == 200){
@@ -332,7 +338,9 @@ export class UserComponent implements OnInit {
         tap((result: any) => { 
           this.emailValidated = true;
           if (result.Available == 0){
-            this.userForm.controls.UserName.setErrors({notUnique: true});
+            this.userForm.controls.Email.setErrors({notUnique: true});
+          } else {
+            this.userForm.controls.Email.setErrors(null);
           }
           this.loadingUser = false;
           return result; 

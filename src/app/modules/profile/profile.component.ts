@@ -52,7 +52,7 @@ export class ProfileComponent implements OnInit {
     Last_Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     Avatar: [''],
     Phone: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(15)]],
-    LanguageId: [''],
+    Language: [''],
     MFact_Auth: ['']
   })
 
@@ -72,7 +72,7 @@ export class ProfileComponent implements OnInit {
           Last_Name: res.Last_Name,
           Avatar: res.Avatar,
           Phone: res.Phone,
-          LanguageId: res.Language,
+          Language: res.Language,
           MFact_Auth: res.MFact_Auth,
         });
         this.spinnerService.stop(spinnerRef);
@@ -178,7 +178,7 @@ export class ProfileComponent implements OnInit {
       "Last_Name": this.profileForm.value.Last_Name,
       "Phone": this.profileForm.value.Phone,
       "MFact_Auth": (this.profileForm.value.MFact_Auth ? 1 : 0),
-      "LanguageId": this.profileForm.value.LanguageId,
+      "Language": this.profileForm.value.Language,
       "BusinessId": this.businessId
     }
     this.userUpdate$ = this.usersService.updateProfile(this.userId, dataForm).pipe(
