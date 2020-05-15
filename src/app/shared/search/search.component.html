@@ -1,0 +1,28 @@
+<div class="search-bar pt-2 pb-2">
+    <div class="search-input">
+      <mat-form-field>
+        <mat-label>Search</mat-label>
+        <input matInput [placeholder]="placeholder" [(ngModel)]="searchValue" (keyup)="updateSearchUp($event, $event.target.value)">
+        <button mat-button *ngIf="searchValue" matSuffix mat-icon-button (click)="searchValue='';cleanValue();">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+    <span class="spacer"></span>
+    <button type="button" mat-icon-button (click)="changeView('list')">
+      <mat-icon>sort</mat-icon>
+    </button>
+    <button type="button" mat-icon-button (click)="changeView('grid')">
+      <mat-icon>apps</mat-icon>
+    </button>
+    <ng-container *ngIf="(isHandset$ | async); else isDesktop">
+      <button *ngIf="salesView" type="button" mat-raised-button color="primary" (click)="changeStep()">
+        <mat-icon>shopping_cart</mat-icon>
+      </button>
+    </ng-container>
+    <ng-template #isDesktop>
+      <button *ngIf="salesView" type="button" mat-raised-button color="primary" (click)="changeStep()">
+        <mat-icon>shopping_cart</mat-icon>Checkout
+      </button>
+    </ng-template>
+  </div>

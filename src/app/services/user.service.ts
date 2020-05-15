@@ -42,7 +42,7 @@ export class UserService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  deleteUser(userId) {
+  deleteUser(userId, businessId) {
     return this.http.delete(this.apiURL + '/user/' + userId)
                     .pipe(catchError(this.errorHandler));
   }

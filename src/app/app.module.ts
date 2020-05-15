@@ -49,6 +49,7 @@ import { RoleComponent } from './modules/roles/role/role.component';
 import { RoleListComponent } from './modules/roles/role-list/role-list.component';
 import { UserListComponent } from './modules/users/user-list/user-list.component';
 import { UserComponent } from './modules/users/user/user.component';
+import { SearchComponent } from './shared/search/search.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { UserComponent } from './modules/users/user/user.component';
     RoleComponent,
     RoleListComponent,
     UserListComponent,
-    UserComponent    
+    UserComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,

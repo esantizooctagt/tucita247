@@ -6,7 +6,7 @@ export * from './clients/clients.component';
 export * from './dashboard/dashboard.component';
 export * from './services/services.component';
 export * from './profile/profile.component';
-export * from './company/company.component';
+export * from './business/business.component';
 export * from './categories/categories.component';
 export * from './reports/reports.component';
 export * from './roles/roles.component';
