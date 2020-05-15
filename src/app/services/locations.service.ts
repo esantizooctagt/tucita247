@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
-import { Store } from '@app/_models';  //StoreDocto
+import { Location } from '@app/_models';  //StoreDocto
 import { catchError } from 'rxjs/operators';
 import { throwError, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class LocationsService {
+export class LocationService {
   readonly apiURL = environment.apiUrl;
     constructor(private http: HttpClient) { }
 
@@ -17,8 +17,8 @@ export class LocationsService {
                       .pipe(catchError(this.errorHandler));
     }
 
-    getStores(businessId): Observable<Store[]> {
-        return this.http.get<Store[]>(this.apiURL + '/locations/' + businessId)
+    getStores(businessId): Observable<Location[]> {
+        return this.http.get<Location[]>(this.apiURL + '/locations/' + businessId)
                         .pipe(catchError(this.errorHandler));
     }
 

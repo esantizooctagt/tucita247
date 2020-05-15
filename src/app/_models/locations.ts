@@ -1,9 +1,9 @@
 // import { Cashier } from './cashier';
 
-export class Store {
+export class Location {
     constructor (
-        public StoreId: string,
-        public businessId: string,
+        public LocationId: string,
+        public BusinessId: string,
         public Name: string,
         public Address: string,
         public Postal_Code: string,
