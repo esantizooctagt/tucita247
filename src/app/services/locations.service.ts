@@ -12,17 +12,17 @@ export class LocationService {
   readonly apiURL = environment.apiUrl;
     constructor(private http: HttpClient) { }
 
-    getStore(storeId, cashierId): Observable<any>{
+    getLocation(storeId, cashierId): Observable<any>{
       return this.http.get<any>(this.apiURL + '/location/' + storeId + '/' + cashierId)
                       .pipe(catchError(this.errorHandler));
     }
 
-    getStores(businessId): Observable<Location[]> {
+    getLocations(businessId): Observable<Location[]> {
         return this.http.get<Location[]>(this.apiURL + '/locations/' + businessId)
                         .pipe(catchError(this.errorHandler));
     }
 
-    updateStores(dataForm){
+    updateLocations(dataForm){
       return this.http.patch(this.apiURL + '/locations', dataForm)
                       .pipe(catchError(this.errorHandler));
     }
