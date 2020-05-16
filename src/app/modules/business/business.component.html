@@ -1,54 +1,51 @@
 <div class="container-fluid h-100">
     <div class="row row pl-2 pr-1">
         <div class="pl-15 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
-            <h4>Company</h4>
+            <h4>Business</h4>
         </div>
         <div class="pl-15 pt-1 col-md-12">
             <mat-horizontal-stepper labelPosition="bottom" linear #stepper>
-                <ng-template matStepperIcon="company">
+                <ng-template matStepperIcon="business">
                     <mat-icon>business</mat-icon>
                 </ng-template>
-                <ng-template matStepperIcon="store">
-                    <mat-icon>store</mat-icon>
-                </ng-template>
-                <ng-template matStepperIcon="cashier">
-                    <mat-icon>bus</mat-icon>
+                <ng-template matStepperIcon="location">
+                    <mat-icon>location</mat-icon>
                 </ng-template>
                 <!-- Custom icon with a context variable. -->
                 <ng-template matStepperIcon="number" let-index="index">
                     <mat-icon>business</mat-icon>
                     <!-- {{index + 10}} -->
                 </ng-template>
-                <ng-container *ngIf="(companySave$ | async) && savingCompany"></ng-container>
-                <mat-step [stepControl]="companyForm" step="company" *ngIf="(company$ | async) || displayCompany">
-                    <form [formGroup]="companyForm" (ngSubmit)="onSubmitCompany()">
-                        <ng-template matStepLabel>Company</ng-template>
+                <ng-container *ngIf="(businessSave$ | async) && savingBusiness"></ng-container>
+                <mat-step [stepControl]="businessForm" step="business" *ngIf="(business$ | async) || displayBusiness">
+                    <form [formGroup]="businessForm" (ngSubmit)="onSubmitBusiness()">
+                        <ng-template matStepLabel>Business</ng-template>
                         <mat-form-field>
-                            <input matInput placeholder="Company Name" maxlength="500" minlength="3" formControlName="Name" [errorStateMatcher]="confirmValidParentMatcher" required>
-                            <mat-error *ngIf="fCompany.Name.invalid && fCompany.Name.touched">{{getErrorMessage('Name')}}</mat-error>
+                            <input matInput placeholder="Business Name" maxlength="500" minlength="3" formControlName="Name" [errorStateMatcher]="confirmValidParentMatcher" required>
+                            <mat-error *ngIf="fBusiness.Name.invalid && fBusiness.Name.touched">{{getErrorMessage('Name')}}</mat-error>
                         </mat-form-field>
                         <mat-form-field>
                             <input matInput placeholder="Address" formControlName="Address" maxlength="500" minlength="3" [errorStateMatcher]="confirmValidParentMatcher" required>
-                            <mat-error *ngIf="fCompany.Address.invalid && fCompany.Address.touched">{{getErrorMessage('Address')}}</mat-error>
+                            <mat-error *ngIf="fBusiness.Address.invalid && fBusiness.Address.touched">{{getErrorMessage('Address')}}</mat-error>
                         </mat-form-field>
                         <div class="row">
                             <mat-form-field class="col-md-2">
                                 <input matInput placeholder="House No" formControlName="House_No" maxlength="10" minlength="2" [errorStateMatcher]="confirmValidParentMatcher">
-                                <mat-error *ngIf="fCompany.House_No.invalid && fCompany.House_No.touched">{{getErrorMessage('House_No')}}</mat-error>
+                                <mat-error *ngIf="fBusiness.House_No.invalid && fBusiness.House_No.touched">{{getErrorMessage('House_No')}}</mat-error>
                             </mat-form-field>
                             <mat-form-field class="col-md">
                                 <input matInput placeholder="Phone" formControlName="Phone" maxlength="30" minlength="3" [errorStateMatcher]="confirmValidParentMatcher">
-                                <mat-error *ngIf="fCompany.Phone.invalid && fCompany.Phone.touched">{{getErrorMessage('Phone')}}</mat-error>
+                                <mat-error *ngIf="fBusiness.Phone.invalid && fBusiness.Phone.touched">{{getErrorMessage('Phone')}}</mat-error>
                             </mat-form-field>
                             <mat-form-field class="col-md-4">
                                 <input matInput placeholder="Postal Code" formControlName="Postal_Code" maxlength="50" minlength="3" [errorStateMatcher]="confirmValidParentMatcher">
-                                <mat-error *ngIf="fCompany.Postal_Code.invalid && fCompany.Postal_Code.touched">{{getErrorMessage('Postal_Code')}}</mat-error>
+                                <mat-error *ngIf="fBusiness.Postal_Code.invalid && fBusiness.Postal_Code.touched">{{getErrorMessage('Postal_Code')}}</mat-error>
                             </mat-form-field>
                         </div>
                         <div class="row">
                             <mat-form-field class="col-md">
                                 <input type="text" placeholder="Country" matInput formControlName="Country" [matAutocomplete]="autoCountry" [errorStateMatcher]="confirmValidParentMatcher" required>
-                                <mat-error *ngIf="fCompany.Country.invalid && fCompany.Country.touched">{{getErrorMessage('Country')}}</mat-error>
+                                <mat-error *ngIf="fBusiness.Country.invalid && fBusiness.Country.touched">{{getErrorMessage('Country')}}</mat-error>
                                 <mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayFn" activeOption="activeOption">
                                     <mat-option *ngFor="let country of filteredCountries$ | async" [value]="country">
                                     {{country.n}}
@@ -57,25 +54,17 @@
                             </mat-form-field>
                             <mat-form-field class="col-md-4">
                                 <input matInput placeholder="State" formControlName="State" maxlength="100" minlength="3" [errorStateMatcher]="confirmValidParentMatcher" required>
-                                <mat-error *ngIf="fCompany.State.invalid && fCompany.State.touched">{{getErrorMessage('State')}}</mat-error>
+                                <mat-error *ngIf="fBusiness.State.invalid && fBusiness.State.touched">{{getErrorMessage('State')}}</mat-error>
                             </mat-form-field>
-                            <mat-form-field class="col-md-4">
-                                <input type="text" placeholder="Currency" matInput formControlName="Currency" [matAutocomplete]="autoCurrency" [errorStateMatcher]="confirmValidParentMatcher" required>
-                                <mat-error *ngIf="fCompany.Currency.invalid && fCompany.Currency.touched">{{getErrorMessage('Currency')}}</mat-error>
-                                <mat-autocomplete #autoCurrency="matAutocomplete" [displayWith]="displayFnCurrency" activeOption="activeOption">
-                                    <mat-option *ngFor="let currency of filteredCurrencies$ | async" [value]="currency">
-                                    {{ currency.name + ' - ' + currency.n}}
-                                    </mat-option>
-                                </mat-autocomplete>
-                            </mat-form-field>
+
                         </div>
                         <mat-form-field>
                             <input matInput placeholder="Tax Number" formControlName="Tax_Number" maxlength="50" minlength="2" [errorStateMatcher]="confirmValidParentMatcher" required>
-                            <mat-error *ngIf="fCompany.Tax_Number.invalid && fCompany.Tax_Number.touched">{{getErrorMessage('Tax_Number')}}</mat-error>
+                            <mat-error *ngIf="fBusiness.Tax_Number.invalid && fBusiness.Tax_Number.touched">{{getErrorMessage('Tax_Number')}}</mat-error>
                         </mat-form-field>
                         <mat-form-field>
                             <input matInput placeholder="Email" formControlName="Email" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" [errorStateMatcher]="confirmValidParentMatcher" required>
-                            <mat-error *ngIf="fCompany.Email.invalid && fCompany.Email.touched">{{getErrorMessage('Email')}}</mat-error>
+                            <mat-error *ngIf="fBusiness.Email.invalid && fBusiness.Email.touched">{{getErrorMessage('Email')}}</mat-error>
                         </mat-form-field>
                         <!-- <div class="form-field pr-3">
                             <mat-label class="">
@@ -84,25 +73,21 @@
                         </div> -->
                         <div class="form-field pr-3">
                             <mat-label class="">
-                                Number of Stores : 
-                            </mat-label>{{fCompany.Store_No.value}}
+                                Number of Locations : 
+                            </mat-label>{{fBusiness.Location_No.value}}
                         </div>
-                        <div class="form-field pr-3">
-                            <mat-label class="">
-                                Number of Cashiers : 
-                            </mat-label>{{fCompany.Cashier_No.value}}
-                        </div>
+                       
                         <div>
-                            <button class="mr-3 mt-2" mat-flat-button color="primary" [disabled]="companyForm.invalid" matStepperNext>Save / Next</button>
+                            <button class="mr-3 mt-2" mat-flat-button color="primary" [disabled]="businessForm.invalid" matStepperNext>Save / Next</button>
                         </div>
                     </form>
                 </mat-step>
-                <ng-container *ngIf="(storeSave$ | async) && savingStore"></ng-container>
-                <mat-step [stepControl]="storeForm" step="store" *ngIf="(store$ | async) || displayStore">
-                    <form [formGroup]="storeForm" (ngSubmit)="onSubmitStores()">
-                        <ng-template matStepLabel>Stores</ng-template>
+                <ng-container *ngIf="(locationSave$ | async) && savingLocation"></ng-container>
+                <mat-step [stepControl]="locationForm" step="location" *ngIf="(location$ | async) || displayLocation">
+                    <form [formGroup]="locationForm" (ngSubmit)="onSubmitLocations()">
+                        <ng-template matStepLabel>Locations</ng-template>
                         <mat-accordion>
-                            <ng-container class="" formArrayName="stores" *ngFor="let item of fStores.controls; let i = index;">
+                            <ng-container class="" formArrayName="locations" *ngFor="let item of fLocations.controls; let i = index;">
                                 <ng-container [formGroupName]="i">
                                     <mat-expansion-panel>
                                         <mat-expansion-panel-header>
@@ -114,7 +99,7 @@
                                             </mat-panel-description>
                                         </mat-expansion-panel-header>
                                         <mat-form-field>
-                                            <input matInput placeholder="Store Name" formControlName="Name" maxlength="500" minlength="3" [errorStateMatcher]="confirmValidParentMatcher" required>
+                                            <input matInput placeholder="Location Name" formControlName="Name" maxlength="500" minlength="3" [errorStateMatcher]="confirmValidParentMatcher" required>
                                             <mat-error *ngIf="item.get('Name').invalid">{{getErrorMessage('SName', i)}}</mat-error>
                                         </mat-form-field>
                                         <mat-form-field>
@@ -144,46 +129,9 @@
                         </mat-accordion>
                         <div>
                             <button class="mr-3 mt-2" mat-flat-button color="accent" matStepperPrevious>Back</button>
-                            <button class="mr-3 mt-2" mat-flat-button color="primary" [disabled]="storeForm.invalid" matStepperNext>Save / Next</button>
+                            <button class="mr-3 mt-2" mat-flat-button color="primary" [disabled]="locationForm.invalid" matStepperNext>Save / Next</button>
                         </div>
                     </form>
-                </mat-step>
-                <ng-container *ngIf="(cashierSave$ | async) && savingCashier"></ng-container>
-                <mat-step step="cashier">
-                    <form>
-                        <h4 class="">Assign Cashiers to Stores</h4>
-                        <mat-divider class="pb-4"></mat-divider>
-                        <ng-template matStepLabel>Cashiers</ng-template>
-                        <div class="dragdrop-container">
-                            <h5>Cashiers</h5>
-                            <div
-                              cdkDropList
-                              id="cashierList"
-                              [cdkDropListData]="listCashiers"
-                              [cdkDropListConnectedTo]="connectedTo"
-                              class="element-list"
-                              (cdkDropListDropped)="drop($event)">
-                              <div class="item-box" *ngFor="let item of listCashiers" cdkDrag>{{item.Description}}</div>
-                            </div>
-                        </div>
-                          
-                        <div class="dragdrop-container" *ngFor="let item of listStores">
-                            <h5>{{item.Name}}</h5>
-                            <div
-                              cdkDropList
-                              id="{{item.StoreId}}"
-                              [cdkDropListData]="item.Cashiers"
-                              [cdkDropListConnectedTo]="connectedTo"
-                              class="element-list"
-                              (cdkDropListDropped)="drop($event)">
-                              <div class="item-box" *ngFor="let det of item.Cashiers"  [cdkDragDisabled]="det.Disabled" cdkDrag>{{det.Description}}</div>
-                            </div>
-                        </div>
-                    </form>
-                  <div>
-                    <button class="mr-3 mt-2" mat-flat-button color="accent" matStepperPrevious>Back</button>
-                    <button type="button" class="mr-3 mt-2" mat-flat-button color="primary" (click)="onSubmitCashiers()">Save</button>
-                  </div>
                 </mat-step>
             </mat-horizontal-stepper>              
         </div>
