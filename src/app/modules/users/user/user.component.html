@@ -31,22 +31,24 @@
             </mat-form-field>
         </div>
         <div class="form-field pl-3 pr-3">
-            <mat-form-field hintLabel="Min 6 characters">
-                <input matInput #Phone placeholder="Phone" maxlength="15" formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher" required>
+            <mat-form-field>
+                <span matPrefix>+1 &nbsp;</span>
+                <input matInput #Phone placeholder="(555) 555-1234" appPhoneMask maxlength="15" formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher" required>
                 <mat-error *ngIf="f.Phone.invalid && f.Phone.touched">{{getErrorMessage('Phone')}}</mat-error>
             </mat-form-field>
         </div>
         <div class="form-field pl-3 pr-3">
             <mat-form-field hintLabel="Min 8 characters" *ngIf="f.UserId.value == ''">
                 <input matInput #Password placeholder="Password" maxlength="20" minlength="8" formControlName="Password"
-                    [errorStateMatcher]="confirmValidParentMatcher" [type]="hide ? 'password' : 'text'" pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!#$%&?])[a-zA-Z0-9!#$%&?]{8,}">
+                    [errorStateMatcher]="confirmValidParentMatcher" [type]="hide ? 'password' : 'text'" pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}">
+                    <!-- (?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!#$%&?])[a-zA-Z0-9!#$%&?]{8,} -->
                 <button mat-icon-button matSuffix type="button" (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                     <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
                 <mat-error *ngIf="f.Password.invalid && f.Password.touched && f.Password.errors?.minlength">Minimun length 8</mat-error>
                 <mat-error *ngIf="f.Password.invalid && f.Password.touched && f.Password.errors?.pattern">
                     <div>Require at least 1 number</div>
-                    <div>Require at least 1 special character !#$%&?</div>
+                    <!-- <div>Require at least 1 special character !#$%&?</div> -->
                     <div>Require at least 1 uppercase letters</div>
                     <div>Require at least 1 lowercase letters</div>
                 </mat-error>

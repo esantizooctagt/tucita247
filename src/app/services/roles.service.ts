@@ -17,8 +17,8 @@ export class RolesService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  getRole(roleId): Observable<Role>{
-    return this.http.get<Role>(this.apiURL + '/role/' + roleId)
+  getRole(roleId, businessId): Observable<Role>{
+    return this.http.get<Role>(this.apiURL + '/role/' + roleId + '/' + businessId)
                     .pipe(catchError(this.errorHandler));
   }
 

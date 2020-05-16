@@ -221,7 +221,7 @@ export class RoleComponent implements OnInit {
       let roleResult = changes.role.currentValue;
       this.roleForm.reset({RoleId: '', businessId: '', Name: '', Status: 1});
       this.g.clear();
-      this.role$ = this.roleService.getRole(roleResult.Role_Id).pipe(
+      this.role$ = this.roleService.getRole(roleResult.Role_Id, this.businessId).pipe(
         tap(res => {
           if (res != null) {
             this.roleForm.setValue({

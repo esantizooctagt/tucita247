@@ -43,7 +43,7 @@ export class UserService {
   }
 
   deleteUser(userId, businessId) {
-    return this.http.delete(this.apiURL + '/user/' + userId)
+    return this.http.delete(this.apiURL + '/user/' + userId + '/' + businessId)
                     .pipe(catchError(this.errorHandler));
   }
 

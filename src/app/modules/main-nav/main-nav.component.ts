@@ -80,7 +80,7 @@ export class MainNavComponent implements OnInit {
   }
 
   loadAccess(){
-    this.apps$ = this.roleService.getApplications((this.roleId != '' ? this.roleId : 0), this.businessId);
+    this.apps$ = this.roleService.getApplications((this.roleId != '' ? this.roleId : 1), this.businessId);
   }
 
   logout() {

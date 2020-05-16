@@ -95,7 +95,7 @@ export class UserListComponent implements OnInit {
           if (res.lastItem != ''){
             console.log(this._currentPage);
             this.length = (this.pageSize*this._page)+1;
-            this._currentPage.push({page: this._page+1, taxId: res.lastItem})
+            this._currentPage.push({page: this._page+1, userId: res.lastItem})
             console.log(this.length);
           }
           this.spinnerService.stop(spinnerRef);
@@ -116,7 +116,7 @@ export class UserListComponent implements OnInit {
     this._page = 1;
     this._currentPage.push({page: this._page, userId: ''});
     this.loadUsers(
-      this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].taxId
+      this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].userId
     );
   }
 
@@ -167,7 +167,7 @@ export class UserListComponent implements OnInit {
               this.displayYesNo = false;
               this.deletingUser = true;
               this.loadUsers(
-                this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].taxId
+                this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].userId
               );
               this.openDialog('User', 'User deleted successful', true, false, false);
               window.scroll(0,0);
