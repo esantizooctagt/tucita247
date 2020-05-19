@@ -37,8 +37,8 @@ export class RolesService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  updateRole(roleId, formData) {
-    return this.http.patch(this.apiURL + '/role/'  + roleId, formData)
+  updateRole(formData) {
+    return this.http.patch(this.apiURL + '/role', formData)
                     .pipe(catchError(this.errorHandler));
   }
 

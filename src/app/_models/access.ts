@@ -1,7 +1,8 @@
 export class Access {
     constructor (
-        public Application_Id: string,
+        public ApplicationId: string,
         public Name: string,
+        public Level_Access: Number,
         public Active: Number
     ){}
 }

@@ -57,7 +57,7 @@ export class RoleComponent implements OnInit {
   
   roleForm = this.fb.group({
     RoleId: [''],
-    businessId: [''],
+    BusinessId: [''],
     Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
     Access: this.fb.array([this.createAccess()]),
     Status: [1]
@@ -65,9 +65,10 @@ export class RoleComponent implements OnInit {
 
   createAccess(): FormGroup {
     const access = this.fb.group({
-      Application_Id: [''],
+      ApplicationId: [''],
       Name: [''],
-      Active: [0]
+      Level_Access: [0, [Validators.required]]
+      // Active: [0]
     });
     return access;
   }
@@ -98,33 +99,37 @@ export class RoleComponent implements OnInit {
   onCancel(){
     this.roleForm.patchValue({RoleId:''});
     this.loadAccess();
-    this.roleForm.reset({RoleId: '', businessId: '', Name: '', Status:1, Access: this.apps$});
+    this.roleForm.reset({RoleId: '', BusinessId: '', Name: '', Status:1, Access: this.apps$});
   }
 
   onSubmit(){
     if (this.roleForm.invalid) {
       return;
     }
+    let numberRecords = this.roleForm.value.Access.filter((s: any)=> s.Level_Access > 0);
+    if (numberRecords[0] == undefined) {
+      return;
+    }
     if (this.roleForm.touched){
       let roleId = this.roleForm.value.RoleId;
       var spinnerRef = this.spinnerService.start("Saving Role...");
-      let userId = this.authService.userId();
       if (roleId !== '' && roleId !== null) {
         let dataForm =  { 
+          "RoleId": this.roleForm.value.RoleId,
+          "BusinessId": this.businessId,
           "Name": this.roleForm.value.Name,
           "Status": this.roleForm.value.Status,
-          "User_Id": userId,
           "Access": []
         }
         let lines = this.roleForm.value.Access;
-        dataForm['Access'] = lines.filter((s: any)=> s.Active === true);
-        this.roleSave$ = this.roleService.updateRole(roleId, dataForm).pipe(
+        dataForm['Access'] = lines.filter((s: any)=> s.Level_Access > 0);
+        this.roleSave$ = this.roleService.updateRole(dataForm).pipe(
           tap(res => { 
             this.savingRole = true;
             this.spinnerService.stop(spinnerRef);
             this.roleForm.patchValue({RoleId: ''});
             this.loadAccess();
-            this.roleForm.reset({RoleId: '', businessId: this.businessId, Name: '', Status:1, Access: this.apps$});
+            this.roleForm.reset({RoleId: '', BusinessId: this.businessId, Name: '', Status:1, Access: this.apps$});
             this.data.changeData('roles');
             this.openDialog('Roles', 'Role updated successful', true, false, false);
           }),
@@ -136,23 +141,21 @@ export class RoleComponent implements OnInit {
           })
         );
       } else {
-        let perc = +this.roleForm.value.Percentage;
         let dataForm = { 
-          "Company_Id": this.businessId,
+          "BusinessId": this.businessId,
           "Name": this.roleForm.value.Name,
-          "User_Id": userId,
           "Status": 1,
           "Access": []
         }
         let lines = this.roleForm.value.Access;
-        dataForm['Access'] = lines.filter((s: any)=> s.Active === true);
+        dataForm['Access'] = lines.filter((s: any)=> s.Level_Access > 0);
         this.roleSave$ = this.roleService.postRole(dataForm).pipe(
           tap(res => { 
             this.savingRole = true;
             this.spinnerService.stop(spinnerRef);
             this.roleForm.patchValue({RoleId: ''});
             this.loadAccess();
-            this.roleForm.reset({RoleId: '', businessId: this.businessId, Name: '', Status:1, Access: this.apps$});
+            this.roleForm.reset({RoleId: '', BusinessId: this.businessId, Name: '', Status:1, Access: this.apps$});
             this.data.changeData('roles');
             this.openDialog('Roles', 'Role created successful', true, false, false);
           }),
@@ -178,21 +181,24 @@ export class RoleComponent implements OnInit {
       res.forEach(access => {
         formArray.push(
           this.fb.group({
-            Application_Id: access.Application_Id,
+            ApplicationId: access.ApplicationId,
             Name: access.Name,
-            Active: (access.Active === 1 ? true : false)
+            Level_Access: access.Level_Access
+            // Active: (access.Active === 1 ? true : false)
           }));
       })
     });
     return formArray;
   }
 
-  changeValue(option: MatListOption) {
-    const item = this.roleForm.controls.Access as FormArray;    
-    item.at(option.value).patchValue({'Active': option.selected});
-    item.markAsDirty();
-    item.markAsTouched();
-  }
+  // changeValue(option: MatListOption) {
+  //   console.log(option);
+  //   return;
+  //   const item = this.roleForm.controls.Access as FormArray;    
+  //   item.at(option.value).patchValue({'Level_Access': option.value});
+  //   item.markAsDirty();
+  //   item.markAsTouched();
+  // }
 
   getErrorMessage(component: string) {
     if (component === 'Name'){
@@ -219,7 +225,7 @@ export class RoleComponent implements OnInit {
     if (changes.role.currentValue != undefined) {
       var spinnerRef = this.spinnerService.start("Loading Role...");
       let roleResult = changes.role.currentValue;
-      this.roleForm.reset({RoleId: '', businessId: '', Name: '', Status: 1});
+      this.roleForm.reset({RoleId: '', BusinessId: '', Level_Access: '', Name: '', Status: 1});
       this.g.clear();
       this.role$ = this.roleService.getRole(roleResult.Role_Id, this.businessId).pipe(
         tap(res => {
@@ -227,7 +233,7 @@ export class RoleComponent implements OnInit {
             this.roleForm.setValue({
               RoleId: res.Role_Id,
               Name: res.Name,
-              businessId: res.Company_Id,
+              BusinessId: res.Company_Id,
               Status: res.Status,
               Access: []
             });
@@ -243,7 +249,7 @@ export class RoleComponent implements OnInit {
         })
       );
     } else {
-      this.roleForm.reset({RoleId: '', businessId: '', Name: '', Status: 1});
+      this.roleForm.reset({RoleId: '', BusinessId: '', Name: '', Status: 1});
       this.g.clear();
       this.loadAccess();
     }

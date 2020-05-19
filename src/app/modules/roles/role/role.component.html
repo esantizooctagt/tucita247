@@ -13,11 +13,35 @@
             </mat-form-field>
         </div>
         <div class="form-field">
-            <mat-selection-list #lstApps (selectionChange)=changeValue($event.option)>
+            <!-- <mat-selection-list #lstApps (selectionChange)=changeValue($event.option)>
                 <mat-list-option formArrayName="Access" *ngFor="let item of fAccess.controls; let i = index;" [value]="i" [selected]="item.value.Active">
                     {{item.value.Name}}
+                    <p matLine>
+                        <mat-radio-group aria-label="Select an option" formControlName="item.value.Level_Access">
+                            <mat-radio-button value="1">Full Access</mat-radio-button>
+                            <mat-radio-button value="2">Edit Access</mat-radio-button>
+                            <mat-radio-button value="3">Read Access</mat-radio-button>
+                        </mat-radio-group>
+                    </p>
                 </mat-list-option>
-            </mat-selection-list>
+            </mat-selection-list> -->
+            <mat-list #lstApps>
+                <mat-list-item formArrayName="Access" *ngFor="let item of fAccess.controls; let i = index;">
+                    <div [formGroupName]="i">
+                        <mat-form-field class="level-access-list pr-3">
+                            <mat-label>Level Access:</mat-label>
+                            <mat-select formControlName="Level_Access">
+                                <!--  (selectionChange)=changeValue($event.option) -->
+                                <mat-option value="0">N/A</mat-option>
+                                <mat-option value="1">Full Access</mat-option>
+                                <mat-option value="2">Edit Access</mat-option>
+                                <mat-option value="3">Read Access</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    {{item.value.Name}}                     
+                </mat-list-item>
+            </mat-list>
         </div>
         <div class="form-field-check ml-3 pr-3" *ngIf="roleForm.value.RoleId !== '' && roleForm.value.RoleId !== null">
             <mat-checkbox formControlName="Status">Status</mat-checkbox>
