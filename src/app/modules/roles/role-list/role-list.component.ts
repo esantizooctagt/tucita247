@@ -127,7 +127,7 @@ export class RoleListComponent implements OnInit {
         if (this.deleted){
           let delRole: Role;
           this.deleted = false; 
-          this.deleteRole$ = this.rolesService.deleteRole(role.Role_Id).pipe(
+          this.deleteRole$ = this.rolesService.deleteRole(role.Role_Id, this.businessId).pipe(
             tap(res => {
               this.roleSelected.emit(delRole);
               this.spinnerService.stop(spinnerRef);

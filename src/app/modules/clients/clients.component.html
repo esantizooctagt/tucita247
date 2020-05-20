@@ -1,1 +1,73 @@
 <p>clients works!</p>
+<div class="col-md-6">
+    <div class="row">
+        <mat-label class="col-md-1 ml-3 mr-6 dayText">Mon</mat-label>
+        <mat-checkbox checked="true" class="col-md-1 pr-2 pl-2 ml-3 mr-3 dayCheckBox"></mat-checkbox>
+        <div class="slider">
+            <ng5-slider [(value)]="minValue[0]" [(highValue)]="maxValue[0]" [options]="options"></ng5-slider>
+        </div>
+        <button mat-icon-button aria-label="" class="dayAdd">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+    <div class="row">
+        <mat-label class="col-md-1 ml-3 mr-6 dayText">Tue</mat-label>
+        <mat-checkbox checked="true" class="col-md-1 pr-2 pl-2 ml-3 mr-3 dayCheckBox"></mat-checkbox>
+        <div class="slider">
+            <ng5-slider [(value)]="minValue[1]" [(highValue)]="maxValue[1]" [options]="options"></ng5-slider>
+        </div>
+        <button mat-icon-button aria-label="" class="dayAdd">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+    <div class="row">
+        <mat-label class="col-md-1 ml-3 mr-6 dayText">Wed</mat-label>
+        <mat-checkbox checked="true" class="col-md-1 pr-2 pl-2 ml-3 mr-3 dayCheckBox"></mat-checkbox>
+        <div class="slider">
+            <ng5-slider [(value)]="minValue[2]" [(highValue)]="maxValue[2]" [options]="options"></ng5-slider>
+        </div>
+        <button mat-icon-button aria-label="" class="dayAdd">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+    <div class="row">
+        <mat-label class="col-md-1 ml-3 mr-6 dayText">Thu</mat-label>
+        <mat-checkbox checked="true" class="col-md-1 pr-2 pl-2 ml-3 mr-3 dayCheckBox"></mat-checkbox>
+        <div class="slider">
+            <ng5-slider [(value)]="minValue[3]" [(highValue)]="maxValue[3]" [options]="options"></ng5-slider>
+        </div>
+        <button mat-icon-button aria-label="" class="dayAdd">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+    <div class="row">
+        <mat-label class="col-md-1 ml-3 mr-6 dayText">Fri</mat-label>
+        <mat-checkbox checked="true" class="col-md-1 pr-2 pl-2 ml-3 mr-3 dayCheckBox"></mat-checkbox>
+        <div class="slider">
+            <ng5-slider [(value)]="minValue[4]" [(highValue)]="maxValue[4]" [options]="options"></ng5-slider>
+        </div>
+        <button mat-icon-button aria-label="" class="dayAdd">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+    <div class="row">
+        <mat-label class="col-md-1 ml-3 mr-6 dayText">Sat</mat-label>
+        <mat-checkbox class="col-md-1 pr-2 pl-2 ml-3 mr-3 dayCheckBox"></mat-checkbox>
+        <div class="slider">
+            <ng5-slider [(value)]="minValue[5]" [(highValue)]="maxValue[5]" [options]="optionsWeekend"></ng5-slider>
+        </div>
+        <button mat-icon-button aria-label="" class="dayAdd">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+    <div class="row">
+        <mat-label class="col-md-1 ml-3 mr-6 dayText">Sun</mat-label>
+        <mat-checkbox class="col-md-1 pr-2 pl-2 ml-3 mr-3 dayCheckBox"></mat-checkbox>
+        <div class="slider">
+            <ng5-slider [(value)]="minValue[6]" [(highValue)]="maxValue[6]" [options]="optionsWeekend"></ng5-slider>
+        </div>
+        <button mat-icon-button aria-label="" class="dayAdd">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+</div>

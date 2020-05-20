@@ -64,6 +64,7 @@ export class ProfileComponent implements OnInit {
     this.businessId = this.authService.businessId();
     this.userId = this.authService.userId();
     var spinnerRef = this.spinnerService.start("Loading Profile...");
+    this.profileForm.reset({Email:'', First_Name: '', Last_Name: '', Avatar: '', Phone: '', Language: '', MFact_Auth: ''});
     this.user$ = this.usersService.getUser(this.userId, this.businessId).pipe(
       tap(res => {
         this.profileForm.setValue({

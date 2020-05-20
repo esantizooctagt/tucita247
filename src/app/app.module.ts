@@ -27,8 +27,10 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSliderModule } from '@angular/material/slider';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Ng5SliderModule } from 'ng5-slider';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'; 
 
@@ -45,11 +47,14 @@ import { SpinnerComponent } from '@shared/spinner/spinner.component';
 import { DialogComponent } from './shared/dialog/dialog.component';
 
 import { LayoutModule } from '@angular/cdk/layout';
-import { RoleComponent } from './modules/roles/role/role.component';
-import { RoleListComponent } from './modules/roles/role-list/role-list.component';
-import { UserListComponent } from './modules/users/user-list/user-list.component';
-import { UserComponent } from './modules/users/user/user.component';
-import { SearchComponent } from './shared/search/search.component';
+import { RoleComponent } from '@modules/roles/role/role.component';
+import { RoleListComponent } from '@modules/roles/role-list/role-list.component';
+import { UserListComponent } from '@modules/users/user-list/user-list.component';
+import { UserComponent } from '@modules/users/user/user.component';
+import { SearchComponent } from '@shared/search/search.component';
+
+//Directives
+import { PhoneMaskDirective } from '@shared/phone-mask.directive';
 
 @NgModule({
   declarations: [
@@ -61,7 +66,8 @@ import { SearchComponent } from './shared/search/search.component';
     RoleListComponent,
     UserListComponent,
     UserComponent,
-    SearchComponent
+    SearchComponent,
+    PhoneMaskDirective
   ],
   imports: [
     BrowserModule,
@@ -93,9 +99,14 @@ import { SearchComponent } from './shared/search/search.component';
     MatChipsModule,
     MatSortModule,
     MatSlideToggleModule,
+    MatSliderModule,
     DragDropModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    Ng5SliderModule
+  ],
+  exports: [
+    PhoneMaskDirective
   ],
   providers: [
     SpinnerService,

@@ -42,8 +42,8 @@ export class RolesService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  deleteRole(roleId){
-    return this.http.delete(this.apiURL + '/role/' + roleId)
+  deleteRole(roleId, businessId){
+    return this.http.delete(this.apiURL + '/role/' + roleId + '/' + businessId)
                     .pipe(catchError(this.errorHandler));
   }
 

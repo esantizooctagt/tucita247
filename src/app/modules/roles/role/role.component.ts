@@ -67,8 +67,7 @@ export class RoleComponent implements OnInit {
     const access = this.fb.group({
       ApplicationId: [''],
       Name: [''],
-      Level_Access: [0, [Validators.required]]
-      // Active: [0]
+      Level_Access: ['0', [Validators.required]]
     });
     return access;
   }
@@ -184,21 +183,11 @@ export class RoleComponent implements OnInit {
             ApplicationId: access.ApplicationId,
             Name: access.Name,
             Level_Access: access.Level_Access
-            // Active: (access.Active === 1 ? true : false)
           }));
       })
     });
     return formArray;
   }
-
-  // changeValue(option: MatListOption) {
-  //   console.log(option);
-  //   return;
-  //   const item = this.roleForm.controls.Access as FormArray;    
-  //   item.at(option.value).patchValue({'Level_Access': option.value});
-  //   item.markAsDirty();
-  //   item.markAsTouched();
-  // }
 
   getErrorMessage(component: string) {
     if (component === 'Name'){
@@ -225,7 +214,7 @@ export class RoleComponent implements OnInit {
     if (changes.role.currentValue != undefined) {
       var spinnerRef = this.spinnerService.start("Loading Role...");
       let roleResult = changes.role.currentValue;
-      this.roleForm.reset({RoleId: '', BusinessId: '', Level_Access: '', Name: '', Status: 1});
+      this.roleForm.reset({RoleId: '', BusinessId: '', Name: '', Status: 1});
       this.g.clear();
       this.role$ = this.roleService.getRole(roleResult.Role_Id, this.businessId).pipe(
         tap(res => {
@@ -233,7 +222,7 @@ export class RoleComponent implements OnInit {
             this.roleForm.setValue({
               RoleId: res.Role_Id,
               Name: res.Name,
-              BusinessId: res.Company_Id,
+              BusinessId: res.Business_Id,
               Status: res.Status,
               Access: []
             });

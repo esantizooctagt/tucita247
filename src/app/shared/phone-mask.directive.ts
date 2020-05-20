@@ -2,7 +2,7 @@ import { Directive, HostListener } from '@angular/core';
 import { NgControl } from '@angular/forms';
 
 @Directive({
-  selector: '[appPhoneMask]'
+  selector: '[formControlName][appPhoneMask]'
 })
 export class PhoneMaskDirective {
 
@@ -18,6 +18,7 @@ export class PhoneMaskDirective {
     this.onInputChange(event.target.value, true);
   }
   
+
   onInputChange(event, backspace) {
     let newVal = event.replace(/\D/g, '');
     if (backspace && newVal.length <= 6) {
