@@ -1,19 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { AuthService } from '@core/services';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { Country, Location, Business } from '@app/_models';
+import { Country, Location, Business, Category } from '@app/_models';
 import { Observable, Subscription, throwError } from 'rxjs';
 import { startWith, map, shareReplay, catchError, tap, finalize } from 'rxjs/operators';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
-import { BusinessService, LocationService } from '@app/services/index';
+import { BusinessService, LocationService, CategoryService } from '@app/services/index';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { environment } from '@environments/environment';
+import { Options, LabelType } from 'ng5-slider';
+import {MatChipInputEvent} from '@angular/material/chips';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-business',
@@ -35,10 +38,44 @@ export class BusinessComponent implements OnInit {
   displayLocation: boolean = true;
 
   filteredCountries$: Observable<Country[]>;
+  filteredCategories$: Observable<Category[]>;
   businessSave$: Observable<object>;
   locationSave$: Observable<object>;
   business$: Observable<Business>;
   location$: Observable<Location[]>;
+  categories$: Observable<Category[]>;
+
+  public tags: any[]=[];
+  public categories: any[]=[];
+
+  visible = true;
+  selectable = true;
+  removable = true;
+  addOnBlur = true;
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+
+  genOption = {
+    floor: 0,
+    ceil: 24,
+    translate: (value: number, label: LabelType): string => {
+      switch (label) {
+        case LabelType.Low:
+          return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+        case LabelType.High:
+          return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+        default: 
+          return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+      }
+    }
+  };
+
+  optionsMon: Options = this.genOption;
+  optionsTue: Options = this.genOption;
+  optionsWed: Options = this.genOption;
+  optionsThu: Options = this.genOption;
+  optionsFri: Options = this.genOption;
+  optionsSat: Options = this.genOption;
+  optionsSun: Options = this.genOption;
 
   get fBusiness(){
     return this.businessForm.controls;
@@ -47,8 +84,6 @@ export class BusinessComponent implements OnInit {
   get fLocations(){
     return this.locationForm.get('locations') as FormArray;
   }
-
-
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -65,6 +100,7 @@ export class BusinessComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private businessService: BusinessService,
     private locationService: LocationService,
+    private categoryService: CategoryService,
     private spinnerService: SpinnerService,
     private breakpointObserver: BreakpointObserver
   ) { 
@@ -74,15 +110,35 @@ export class BusinessComponent implements OnInit {
   businessForm = this.fb.group({
     BusinessId: [''],
     Name: ['', [Validators.required, Validators.maxLength(500), Validators.minLength(3)]],
-    Address: ['', [Validators.required, Validators.maxLength(500), Validators.minLength(3)]],
-    House_No: ['', [Validators.maxLength(10), Validators.minLength(2)]],
     Country: ['', Validators.required],
-    State: ['', [Validators.required, Validators.maxLength(100), Validators.minLength(3)]],
-    Phone: ['', [Validators.maxLength(30), Validators.minLength(3)]],
-    Postal_Code: ['', [Validators.maxLength(50), Validators.minLength(3)]],
-    Tax_Number: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(2)]],
+    Address: ['', [Validators.required, Validators.maxLength(500), Validators.minLength(3)]],
+    City: ['', [Validators.maxLength(100), Validators.minLength(2)]],
+    ZipCode: ['', [Validators.maxLength(10), Validators.minLength(3)]],
+    Geolocation: ['', [Validators.maxLength(50), Validators.minLength(5)]],
+    Phone: ['', [Validators.maxLength(15), Validators.minLength(3)]],
+    WebSite: ['', [Validators.maxLength(150), Validators.minLength(4)]],
+    Facebook: ['', [Validators.maxLength(150), Validators.minLength(4)]],
+    Twitter: ['', [Validators.maxLength(150), Validators.minLength(4)]],
+    Instagram: ['', [Validators.maxLength(150), Validators.minLength(4)]],
     Email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
-    Location_No: ['']
+    OperationHours: [''],
+    Categories: [''],
+    Tags: [''],
+    Status: [''],
+    Mon: new FormControl([8, 17]),
+    MonEnabled: [0],
+    Tue: new FormControl([8, 17]),
+    TueEnabled: [0],
+    Wed: new FormControl([8, 17]),
+    WedEnabled: [0],
+    Thu: new FormControl([8, 17]),
+    ThuEnabled: [0],
+    Fri: new FormControl([8, 17]),
+    FriEnabled: [0],
+    Sat: new FormControl([8, 12]),
+    SatEnabled: [0],
+    Sun: new FormControl([8, 12]),
+    SunEnabled: [0]
   });
   locationForm = this.fb.group({ 
     locations : this.fb.array([this.createLocation()])
@@ -112,8 +168,14 @@ export class BusinessComponent implements OnInit {
         map(country => typeof country === 'string' ? country : country.n),
         map(country => country ? this._filter(country) : this.countries.slice())
       );
-    
-  
+
+    this.categoryService.getCategories();
+    this.filteredCategories$ = this.businessForm.get('Categories').valueChanges
+      .pipe(
+        startWith(''),
+        map(category => typeof category === 'string' ? category : category.Name)
+        // map(category => category ? this._filterCat(category) : this.categories$.slice())
+      );
 
     this.business$ = this.businessService.getBusiness(this.businessId).pipe(
       tap((res: any) => {
@@ -122,22 +184,53 @@ export class BusinessComponent implements OnInit {
           if (res.Country != '' && res.Country != undefined){
             countryValue = this.countries.filter(country => country.c.indexOf(res.Country) === 0);
           }
-         
+          var opeHour = JSON.parse(res.OperationHours);
           this.businessForm.patchValue({
             BusinessId: res.Business_Id,
             Name: res.Name,
-            Address: res.Address,
-            House_No: res.House_No,
             Country: (countryValue != undefined ? countryValue[0] : ''),
-            State: res.State,
+            Address: res.Address,
+            City: res.City,
+            ZipCode: res.ZipCode,
+            Geolocation: res.Geolocation,
             Phone: res.Phone,
-            Postal_Code: res.Postal_Code,
-            Tax_Number: res.Tax_Number,
+            WebSite: res.WebSite,
+            Facebook: res.Facebook,
+            Twitter: res.Twitter,
+            Instagram: res.Instagram,
             Email: res.Email,
-            Location_No: res.Location_No,
+            OperationHours: res.OperationHours,
+            Categories: res.Categories,
+            Tags: res.Tags,
             Status: res.Status,
+            Mon: ("MON" in opeHour ? [+opeHour.MON[0].I, +opeHour.MON[0].F] : [8, 12]),
+            MonEnabled: ("MON" in opeHour ? 1 : 0),
+            Tue: ("TUE" in opeHour ? [+opeHour.TUE[0].I, +opeHour.TUE[0].F] : [8, 12]),
+            TueEnabled: ("TUE" in opeHour ? 1 : 0),
+            Wed: ("WED" in opeHour ? [+opeHour.WED[0].I, +opeHour.WED[0].F] : [8, 12]),
+            WedEnabled: ("WED" in opeHour ? 1 : 0),
+            Thu: ("THU" in opeHour ? [+opeHour.THU[0].I, +opeHour.THU[0].F] : [8, 12]),
+            ThuEnabled: ("THU" in opeHour ? 1 : 0),
+            Fri: ("FRI" in opeHour ? [+opeHour.FRI[0].I, +opeHour.FRI[0].F] : [8, 12]),
+            FriEnabled: ("FRI" in opeHour ? 1 : 0),
+            Sat: ("SAT" in opeHour ? [+opeHour.SAT[0].I, +opeHour.SAT[0].F] : [8, 12]),
+            SatEnabled: ("SAT" in opeHour ? 1 : 0),
+            Sun: ("SUN" in opeHour ? [+opeHour.SUN[0].I, +opeHour.SUN[0].F] : [8, 12]),
+            SunEnabled: ("SUN" in opeHour ? 1 : 0),
           });
-          this.noLocations = res.Location_No;
+
+          this.optionsMon = Object.assign({}, this.optionsSat, {disabled: ("MON" in opeHour ? 0 : 1)});
+          this.optionsTue = Object.assign({}, this.optionsSat, {disabled: ("TUE" in opeHour ? 0 : 1)});
+          this.optionsWed = Object.assign({}, this.optionsSat, {disabled: ("WED" in opeHour ? 0 : 1)});
+          this.optionsThu = Object.assign({}, this.optionsSat, {disabled: ("THU" in opeHour ? 0 : 1)});
+          this.optionsFri = Object.assign({}, this.optionsSat, {disabled: ("FRI" in opeHour ? 0 : 1)});
+          this.optionsSat = Object.assign({}, this.optionsSat, {disabled: ("SAT" in opeHour ? 0 : 1)});
+          this.optionsSun = Object.assign({}, this.optionsSat, {disabled: ("SUN" in opeHour ? 0 : 1)});
+
+          this.categories = res.Categories;
+          // console.log(res.Tags);
+          this.tags = res.Tags.split('#');
+          this.spinnerService.stop(spinnerRef);
         } 
       }),
       catchError(err => {
@@ -147,45 +240,95 @@ export class BusinessComponent implements OnInit {
       })
     );
 
+  
     //Load Locations Stepper 2
-    this.location$ =  this.locationService.getLocations(this.businessId).pipe(
-      tap((res: any) => {
-        const item = this.locationForm.controls.locations as FormArray;
-        item.at(0).patchValue({
-          BusinessId: this.businessId
-        });
-        if (res != null){
-          this.listLocations = res.map(response => {
-            return {
-              LocationId: response.LocationId,
-              Name: response.Name
-            }
-          });
+  //   this.location$ =  this.locationService.getLocations(this.businessId).pipe(
+  //     tap((res: any) => {
+  //       const item = this.locationForm.controls.locations as FormArray;
+  //       item.at(0).patchValue({
+  //         BusinessId: this.businessId
+  //       });
+  //       if (res != null){
+  //         this.listLocations = res.map(response => {
+  //           return {
+  //             LocationId: response.LocationId,
+  //             Name: response.Name
+  //           }
+  //         });
 
-          //link location info to reactive form
-          this.locationForm.setControl('locations', this.setLocations(res));
+  //         //link location info to reactive form
+  //         this.locationForm.setControl('locations', this.setLocations(res));
 
-          //Drag & Drop connectedTo variable
-          this.listLocations.forEach(s=> {
-            this.connectedTo.push(s.LocationId);
-          });
+  //         //Drag & Drop connectedTo variable
+  //         this.listLocations.forEach(s=> {
+  //           this.connectedTo.push(s.LocationId);
+  //         });
           
-        }else{
-          //Add new locations to the view
-          if (this.noLocations > 1 && this.locationForm.value.locations.length == 1){
-            for(var i = 1; i <= this.noLocations-1; i++){
-              (<FormArray>this.locationForm.get('locations')).push(this.createLocation());
-            }
-          }
-        }
-        this.spinnerService.stop(spinnerRef);
-      }),
-      catchError(err => {
-        this.spinnerService.stop(spinnerRef);
-        this.openDialog('Error !', err.Message, false, true, false);
-        return throwError(err || err.message);
-      })
-    );
+  //       }else{
+  //         //Add new locations to the view
+  //         if (this.noLocations > 1 && this.locationForm.value.locations.length == 1){
+  //           for(var i = 1; i <= this.noLocations-1; i++){
+  //             (<FormArray>this.locationForm.get('locations')).push(this.createLocation());
+  //           }
+  //         }
+  //       }
+  //       this.spinnerService.stop(spinnerRef);
+  //     }),
+  //     catchError(err => {
+  //       this.spinnerService.stop(spinnerRef);
+  //       this.openDialog('Error !', err.Message, false, true, false);
+  //       return throwError(err || err.message);
+  //     })
+  //   );
+  }
+
+  onChangeDisabled(item: number, event: any){
+    switch (item) {
+      case 0:
+        this.optionsMon = Object.assign({}, this.optionsMon, {disabled: !event.checked});
+        break;
+      case 1:
+        this.optionsTue = Object.assign({}, this.optionsTue, {disabled: !event.checked});
+        break;
+      case 2:
+        this.optionsWed = Object.assign({}, this.optionsWed, {disabled: !event.checked});
+        break;
+      case 3:
+        this.optionsThu = Object.assign({}, this.optionsThu, {disabled: !event.checked});
+        break;
+      case 4:
+        this.optionsFri = Object.assign({}, this.optionsFri, {disabled: !event.checked});
+        break;
+      case 5:
+        this.optionsSat = Object.assign({}, this.optionsSat, {disabled: !event.checked});
+        break;
+      case 6:
+        this.optionsSun = Object.assign({}, this.optionsSun, {disabled: !event.checked});
+        break;
+    }
+  }
+
+  add(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    // Add our fruit
+    if ((value || '').trim()) {
+      this.tags.push(value.trim());
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  remove(tag: string): void {
+    const index = this.tags.indexOf(tag);
+
+    if (index >= 0) {
+      this.tags.splice(index, 1);
+    }
   }
 
   getErrorMessage(component: string, index: number=0) {
@@ -267,17 +410,6 @@ export class BusinessComponent implements OnInit {
     }
   }
 
-  drop(event: CdkDragDrop<string[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(event.previousContainer.data,
-                        event.container.data,
-                        event.previousIndex,
-                        event.currentIndex);
-    }
-  }
-
   setLocations(locations: Location[]): FormArray{
     const formLocationsArray = new FormArray([]);
     locations.forEach(s => {
@@ -320,14 +452,21 @@ export class BusinessComponent implements OnInit {
     return this.countries.filter(country => country.n.toLowerCase().indexOf(filterValue) === 0);
   }
 
- 
+  displayFnCat(category?: Category): string | undefined {
+    return category ? category.Name : undefined;
+  }
+
+  private _filterCat(value: string): Category[] {
+    let filterValue: string = '';
+    filterValue = value.toLowerCase();
+    return this.categories.filter(category => category.Name.toLowerCase().indexOf(filterValue) === 0);
+  }
 
   onValueChanges(): void {
     this.subsBusiness = this.businessForm.valueChanges.subscribe(val=>{
       if (val.Country === null){
         this.businessForm.controls["Country"].setValue('');
       }
-   
     });
   }
 
@@ -336,35 +475,35 @@ export class BusinessComponent implements OnInit {
       return;
     }
     if (this.businessForm.touched){
-      let countryId = this.businessForm.value.Country;
+      // let countryId = this.businessForm.value.Country;
     
-      let dataForm =  { 
-        "Name": this.businessForm.value.Name,
-        "Address": this.businessForm.value.Address,
-        "House_No": this.businessForm.value.House_No,
-        "Country": countryId.c,
-        "State": this.businessForm.value.State,
-        "Phone": this.businessForm.value.Phone,
-        "Postal_Code": this.businessForm.value.Postal_Code,
-        "Tax_Number": this.businessForm.value.Tax_Number,
-        "Email": this.businessForm.value.Email
-      }
-      var spinnerRef = this.spinnerService.start("Saving Business...");
-      this.businessSave$ = this.businessService.updateBusiness(this.businessId, dataForm).pipe(
-        tap(res => { 
-          this.spinnerService.stop(spinnerRef);
-          this.savingBusiness = true;
-          this.businessForm.markAsPristine();
-          this.businessForm.markAsUntouched();
-          this.openDialog('Business', 'Business updated successful', true, false, false);
-        }),
-        catchError(err => {
-          this.spinnerService.stop(spinnerRef);
-          this.savingBusiness = false;
-          this.openDialog('Error !', err.Message, false, true, false);
-          return throwError(err || err.message);
-        })
-      );
+      // let dataForm =  { 
+      //   "Name": this.businessForm.value.Name,
+      //   "Address": this.businessForm.value.Address,
+      //   "House_No": this.businessForm.value.House_No,
+      //   "Country": countryId.c,
+      //   "State": this.businessForm.value.State,
+      //   "Phone": this.businessForm.value.Phone,
+      //   "Postal_Code": this.businessForm.value.Postal_Code,
+      //   "Tax_Number": this.businessForm.value.Tax_Number,
+      //   "Email": this.businessForm.value.Email
+      // }
+      // var spinnerRef = this.spinnerService.start("Saving Business...");
+      // this.businessSave$ = this.businessService.updateBusiness(this.businessId, dataForm).pipe(
+      //   tap(res => { 
+      //     this.spinnerService.stop(spinnerRef);
+      //     this.savingBusiness = true;
+      //     this.businessForm.markAsPristine();
+      //     this.businessForm.markAsUntouched();
+      //     this.openDialog('Business', 'Business updated successful', true, false, false);
+      //   }),
+      //   catchError(err => {
+      //     this.spinnerService.stop(spinnerRef);
+      //     this.savingBusiness = false;
+      //     this.openDialog('Error !', err.Message, false, true, false);
+      //     return throwError(err || err.message);
+      //   })
+      // );
     }
   }
 
@@ -374,22 +513,22 @@ export class BusinessComponent implements OnInit {
     }
     // this.validCashier = false;
     if (this.locationForm.touched){
-      var spinnerRef = this.spinnerService.start("Saving Locations...");
-      this.locationSave$ = this.locationService.updateLocations(this.locationForm.value).pipe(
-        tap(res => {
-          this.spinnerService.stop(spinnerRef);
-          this.savingLocation = true;
-          this.locationForm.markAsPristine();
-          this.locationForm.markAsUntouched();
-          this.openDialog('Locations', 'Location created successful', true, false, false);
-        }),
-        catchError(err => {
-          this.spinnerService.stop(spinnerRef);
-          this.savingLocation = false;
-          this.openDialog('Error !', err.Message, false, true, false);
-          return throwError(err || err.message);
-        })
-      ); 
+      // var spinnerRef = this.spinnerService.start("Saving Locations...");
+      // this.locationSave$ = this.locationService.updateLocations(this.locationForm.value).pipe(
+      //   tap(res => {
+      //     this.spinnerService.stop(spinnerRef);
+      //     this.savingLocation = true;
+      //     this.locationForm.markAsPristine();
+      //     this.locationForm.markAsUntouched();
+      //     this.openDialog('Locations', 'Location created successful', true, false, false);
+      //   }),
+      //   catchError(err => {
+      //     this.spinnerService.stop(spinnerRef);
+      //     this.savingLocation = false;
+      //     this.openDialog('Error !', err.Message, false, true, false);
+      //     return throwError(err || err.message);
+      //   })
+      // ); 
     }
   }
 

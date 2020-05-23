@@ -90,7 +90,7 @@ export class CategoriesComponent implements OnInit {
   initData(){
     var spinnerRef = this.spinnerService.start("Loading Categories...");
     this.businessId = this.authService.businessId();
-    this.categories$ = this.categoryService.getCategories(this.businessId);
+    // this.categories$ = this.categoryService.getCategories(this.businessId);
     this.spinnerService.stop(spinnerRef);
   }
 
@@ -111,9 +111,9 @@ export class CategoriesComponent implements OnInit {
         tap(res => {
           if (res != null) {
             this.categoryForm.setValue({
-              CategoryId: res.Category_Id,
-              businessId: res.Company_Id,
-              Description: res.Description,
+              // CategoryId: res.Category_Id,
+              // businessId: res.Company_Id,
+              // Description: res.Description,
               Status: res.Status
             });
           }
@@ -161,7 +161,7 @@ export class CategoriesComponent implements OnInit {
                 this.spinnerService.stop(spinnerRef);
                 this.displayYesNo = false;
                 this.deletingCategory = true;
-                this.categories$ = this.categoryService.getCategories(this.businessId);
+                // this.categories$ = this.categoryService.getCategories(this.businessId);
                 this.openDialog('Category', 'Category deleted successful', true, false, false);
                 window.scroll(0,0);
               }),
@@ -203,7 +203,7 @@ export class CategoriesComponent implements OnInit {
             this.savingCategory = true;
             this.spinnerService.stop(spinnerRef);
             this.categoryForm.reset({ CategoryId: "", businessId: this.businessId, Description: "", Status: 1 });
-            this.categories$ = this.categoryService.getCategories(this.businessId);
+            // this.categories$ = this.categoryService.getCategories(this.businessId);
             this.openDialog('Categories', 'Category updated successful', true, false, false);
           }),
           catchError(err => {
@@ -225,7 +225,7 @@ export class CategoriesComponent implements OnInit {
             this.savingCategory = true;
             this.spinnerService.stop(spinnerRef);
             this.categoryForm.reset({ CategoryId: "", businessId: this.businessId, Description: "", Status: 1 });
-            this.categories$ = this.categoryService.getCategories(this.businessId);
+            // this.categories$ = this.categoryService.getCategories(this.businessId);
             this.openDialog('Categories', 'Category created successful', true, false, false);
           }),
           catchError(err => {
@@ -240,7 +240,7 @@ export class CategoriesComponent implements OnInit {
   }
 
   trackById(index: number, item: Category) {
-    return item.Category_Id;
+    // return item.Category_Id;
   }
   
   ngOnDestroy() {

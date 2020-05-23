@@ -29,20 +29,6 @@
                             <mat-error *ngIf="fBusiness.Address.invalid && fBusiness.Address.touched">{{getErrorMessage('Address')}}</mat-error>
                         </mat-form-field>
                         <div class="row">
-                            <mat-form-field class="col-md-2">
-                                <input matInput placeholder="House No" formControlName="House_No" maxlength="10" minlength="2" [errorStateMatcher]="confirmValidParentMatcher">
-                                <mat-error *ngIf="fBusiness.House_No.invalid && fBusiness.House_No.touched">{{getErrorMessage('House_No')}}</mat-error>
-                            </mat-form-field>
-                            <mat-form-field class="col-md">
-                                <input matInput placeholder="Phone" formControlName="Phone" maxlength="30" minlength="3" [errorStateMatcher]="confirmValidParentMatcher">
-                                <mat-error *ngIf="fBusiness.Phone.invalid && fBusiness.Phone.touched">{{getErrorMessage('Phone')}}</mat-error>
-                            </mat-form-field>
-                            <mat-form-field class="col-md-4">
-                                <input matInput placeholder="Postal Code" formControlName="Postal_Code" maxlength="50" minlength="3" [errorStateMatcher]="confirmValidParentMatcher">
-                                <mat-error *ngIf="fBusiness.Postal_Code.invalid && fBusiness.Postal_Code.touched">{{getErrorMessage('Postal_Code')}}</mat-error>
-                            </mat-form-field>
-                        </div>
-                        <div class="row">
                             <mat-form-field class="col-md">
                                 <input type="text" placeholder="Country" matInput formControlName="Country" [matAutocomplete]="autoCountry" [errorStateMatcher]="confirmValidParentMatcher" required>
                                 <mat-error *ngIf="fBusiness.Country.invalid && fBusiness.Country.touched">{{getErrorMessage('Country')}}</mat-error>
@@ -53,33 +39,149 @@
                                 </mat-autocomplete>
                             </mat-form-field>
                             <mat-form-field class="col-md-4">
-                                <input matInput placeholder="State" formControlName="State" maxlength="100" minlength="3" [errorStateMatcher]="confirmValidParentMatcher" required>
-                                <mat-error *ngIf="fBusiness.State.invalid && fBusiness.State.touched">{{getErrorMessage('State')}}</mat-error>
+                                <input matInput placeholder="City" formControlName="City" [errorStateMatcher]="confirmValidParentMatcher" required>
+                                <mat-error *ngIf="fBusiness.City.invalid && fBusiness.City.touched">{{getErrorMessage('City')}}</mat-error>
                             </mat-form-field>
+                        </div>
+                        <div class="row">
+                            <mat-form-field class="col-md-2">
+                                <input matInput placeholder="Zip Code" formControlName="ZipCode" maxlength="10" minlength="5" [errorStateMatcher]="confirmValidParentMatcher">
+                                <mat-error *ngIf="fBusiness.ZipCode.invalid && fBusiness.ZipCode.touched">{{getErrorMessage('ZipCode')}}</mat-error>
+                            </mat-form-field>
+                            <mat-form-field class="col-md">
+                                <span matPrefix>+1 &nbsp;</span>
+                                <input matInput appPhoneMask placeholder="Phone" formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher">
+                                <mat-error *ngIf="fBusiness.Phone.invalid && fBusiness.Phone.touched">{{getErrorMessage('Phone')}}</mat-error>
+                            </mat-form-field>
+                            <mat-form-field class="col-md-4">
+                                <input matInput placeholder="WebSite" formControlName="WebSite" [errorStateMatcher]="confirmValidParentMatcher">
+                                <mat-error *ngIf="fBusiness.WebSite.invalid && fBusiness.WebSite.touched">{{getErrorMessage('WebSite')}}</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="row">
+                            <mat-form-field class="col-md-4">
+                                <input matInput placeholder="Facebook" formControlName="Facebook" [errorStateMatcher]="confirmValidParentMatcher">
+                                <mat-error *ngIf="fBusiness.Facebook.invalid && fBusiness.Facebook.touched">{{getErrorMessage('Facebook')}}</mat-error>
+                            </mat-form-field>
+                            <mat-form-field class="col-md-4">
+                                <input matInput placeholder="Twitter" formControlName="Twitter" [errorStateMatcher]="confirmValidParentMatcher">
+                                <mat-error *ngIf="fBusiness.Twitter.invalid && fBusiness.Twitter.touched">{{getErrorMessage('Twitter')}}</mat-error>
+                            </mat-form-field>
+                            <mat-form-field class="col-md-4">
+                                <input matInput placeholder="Instagram" formControlName="Instagram" [errorStateMatcher]="confirmValidParentMatcher">
+                                <mat-error *ngIf="fBusiness.Instagram.invalid && fBusiness.Instagram.touched">{{getErrorMessage('Instagram')}}</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <mat-form-field>
+                            <input type="text" placeholder="Categories" matInput formControlName="Categories" [matAutocomplete]="autoCategories" [errorStateMatcher]="confirmValidParentMatcher" required>
+                            <mat-error *ngIf="fBusiness.Categories.invalid && fBusiness.Categories.touched">{{getErrorMessage('Categories')}}</mat-error>
+                            <mat-autocomplete #autoCategories="matAutocomplete" [displayWith]="displayFnCat" activeOption="activeOption">
+                                <mat-option *ngFor="let category of categories$ | async" [value]="category">
+                                {{category.Name}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                        <mat-chip-list>
+                            <mat-chip *ngFor="let item of categories">{{item.Name}}</mat-chip>
+                        </mat-chip-list>
+                        <!-- <mat-form-field>
+                            <input matInput placeholder="Tags" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" [errorStateMatcher]="confirmValidParentMatcher">
+                            <mat-error *ngIf="fBusiness.Tags.invalid && fBusiness.Tags.touched">{{getErrorMessage('Tags')}}</mat-error>
+                        </mat-form-field> -->
+                        <mat-form-field>
+                            <mat-chip-list #chipList>
+                                <mat-chip *ngFor="let item of tags" [selectable]="selectable"
+                                            [removable]="removable" (removed)="remove(item)">{{item}}
+                                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                </mat-chip>
+                                <input placeholder="New Tag..."
+                                        [matChipInputFor]="chipList"
+                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                        [matChipInputAddOnBlur]="addOnBlur"
+                                        (matChipInputTokenEnd)="add($event)">
+                            </mat-chip-list>
+                        </mat-form-field>
+                        <!-- <mat-form-field>
+                            <input matInput placeholder="OperationHours" formControlName="OperationHours" [errorStateMatcher]="confirmValidParentMatcher" required>
+                            <mat-error *ngIf="fBusiness.OperationHours.invalid && fBusiness.OperationHours.touched">{{getErrorMessage('OperationHours')}}</mat-error>
+                        </mat-form-field> -->
 
+                        <div class="col-md-6 mt-3 mb-3">
+                            <mat-label class="">Operation Hours</mat-label>
+                            <div class="row pb-2">
+                                <mat-label class="col-md-1 ml-3 mr-6 dayText">Mon</mat-label>
+                                <mat-checkbox formControlName="MonEnabled" class="col-md-1 pr-2 pl-2 ml-3 mr-3 dayCheckBox" (change)="onChangeDisabled(0, $event)"></mat-checkbox>
+                                <div class="slider">
+                                    <ng5-slider formControlName="Mon" [options]="optionsMon"></ng5-slider>
+                                </div>
+                                <button mat-icon-button aria-label="" class="dayAdd">
+                                    <mat-icon>add</mat-icon>
+                                </button>
+                            </div>
+                            <div class="row pb-2">
+                                <mat-label class="col-md-1 ml-3 mr-6 dayText">Tue</mat-label>
+                                <mat-checkbox formControlName="TueEnabled" class="col-md-1 pr-2 pl-2 ml-3 mr-3 dayCheckBox" (change)="onChangeDisabled(1, $event)"></mat-checkbox>
+                                <div class="slider">
+                                    <ng5-slider formControlName="Tue" [options]="optionsTue"></ng5-slider>
+                                </div>
+                                <button mat-icon-button aria-label="" class="dayAdd">
+                                    <mat-icon>add</mat-icon>
+                                </button>
+                            </div>
+                            <div class="row pb-2">
+                                <mat-label class="col-md-1 ml-3 mr-6 dayText">Wed</mat-label>
+                                <mat-checkbox formControlName="WedEnabled" class="col-md-1 pr-2 pl-2 ml-3 mr-3 dayCheckBox" (change)="onChangeDisabled(2, $event)"></mat-checkbox>
+                                <div class="slider">
+                                    <ng5-slider formControlName="Wed" [options]="optionsWed"></ng5-slider>
+                                </div>
+                                <button mat-icon-button aria-label="" class="dayAdd">
+                                    <mat-icon>add</mat-icon>
+                                </button>
+                            </div>
+                            <div class="row pb-2">
+                                <mat-label class="col-md-1 ml-3 mr-6 dayText">Thu</mat-label>
+                                <mat-checkbox formControlName="ThuEnabled" class="col-md-1 pr-2 pl-2 ml-3 mr-3 dayCheckBox" (change)="onChangeDisabled(3, $event)"></mat-checkbox>
+                                <div class="slider">
+                                    <ng5-slider formControlName="Thu" [options]="optionsThu"></ng5-slider>
+                                </div>
+                                <button mat-icon-button aria-label="" class="dayAdd">
+                                    <mat-icon>add</mat-icon>
+                                </button>
+                            </div>
+                            <div class="row pb-2">
+                                <mat-label class="col-md-1 ml-3 mr-6 dayText">Fri</mat-label>
+                                <mat-checkbox formControlName="FriEnabled" class="col-md-1 pr-2 pl-2 ml-3 mr-3 dayCheckBox" (change)="onChangeDisabled(4, $event)"></mat-checkbox>
+                                <div class="slider">
+                                    <ng5-slider formControlName="Fri" [options]="optionsFri"></ng5-slider>
+                                </div>
+                                <button mat-icon-button aria-label="" class="dayAdd">
+                                    <mat-icon>add</mat-icon>
+                                </button>
+                            </div>
+                            <div class="row pb-2">
+                                <mat-label class="col-md-1 ml-3 mr-6 dayText">Sat</mat-label>
+                                <mat-checkbox formControlName="SatEnabled" class="col-md-1 pr-2 pl-2 ml-3 mr-3 dayCheckBox" (change)="onChangeDisabled(5, $event)"></mat-checkbox>
+                                <div class="slider">
+                                    <ng5-slider formControlName="Sat" [options]="optionsSat"></ng5-slider>
+                                </div>
+                                <button mat-icon-button aria-label="" class="dayAdd">
+                                    <mat-icon>add</mat-icon>
+                                </button>
+                            </div>
+                            <div class="row pb-2">
+                                <mat-label class="col-md-1 ml-3 mr-6 dayText">Sun</mat-label>
+                                <mat-checkbox formControlName="SunEnabled" class="col-md-1 pr-2 pl-2 ml-3 mr-3 dayCheckBox" (change)="onChangeDisabled(6, $event)"></mat-checkbox>
+                                <div class="slider">
+                                    <ng5-slider formControlName="Sun" [options]="optionsSun"></ng5-slider>
+                                </div>
+                                <button mat-stroked-button color="primary">+ Intervalo Adicional</button>
+                            </div>
                         </div>
-                        <mat-form-field>
-                            <input matInput placeholder="Tax Number" formControlName="Tax_Number" maxlength="50" minlength="2" [errorStateMatcher]="confirmValidParentMatcher" required>
-                            <mat-error *ngIf="fBusiness.Tax_Number.invalid && fBusiness.Tax_Number.touched">{{getErrorMessage('Tax_Number')}}</mat-error>
-                        </mat-form-field>
-                        <mat-form-field>
-                            <input matInput placeholder="Email" formControlName="Email" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" [errorStateMatcher]="confirmValidParentMatcher" required>
-                            <mat-error *ngIf="fBusiness.Email.invalid && fBusiness.Email.touched">{{getErrorMessage('Email')}}</mat-error>
-                        </mat-form-field>
-                        <!-- <div class="form-field pr-3">
-                            <mat-label class="">
-                                Language : 
-                            </mat-label>English
-                        </div> -->
-                        <div class="form-field pr-3">
-                            <mat-label class="">
-                                Number of Locations : 
-                            </mat-label>{{fBusiness.Location_No.value}}
-                        </div>
-                       
                         <div>
                             <button class="mr-3 mt-2" mat-flat-button color="primary" [disabled]="businessForm.invalid" matStepperNext>Save / Next</button>
                         </div>
+                        {{ businessForm.value | json }}
+                        {{ tags | json}}
                     </form>
                 </mat-step>
                 <ng-container *ngIf="(locationSave$ | async) && savingLocation"></ng-container>

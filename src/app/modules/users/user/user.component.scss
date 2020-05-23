@@ -6,6 +6,7 @@
 }
 mat-card{
     margin-left:0px;
+    border-radius: 0px;
 }
 :host ::ng-deep .mat-form-field {
     .mat-form-field-wrapper {
@@ -24,6 +25,9 @@ mat-card{
             min-height: calc(1em + 1px);
         }
     }
+}
+:host::ng-deep .mat-form-field-underline {
+    background-color: #B6B6B6 !important;
 }
 @media only screen and (max-width: 600px) {
     mat-card{

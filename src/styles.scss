@@ -11,19 +11,45 @@
 @import './assets/scss/reset.scss';
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: Montserrat, "Helvetica Neue", sans-serif; }
 
 button:focus, button:active:focus, button.active:focus {
     outline: none !important;
     outline-style: none !important;
 }
-
-button:focus, button:active:focus, button.active:focus {
-    outline: none !important;
-    outline-style: none !important;
+button.mat-flat-button {
+    border-radius: 0;
 }
-.mat-form-field{
+button.mat-stroked-button{
+    border-radius: 0;
+}
+.mat-flat-button.mat-primary{
+    color: #ffffff;
+}
+.mat-stroked-button:not([disabled]){
+    border-color:#ff4f00;
+}
+.mat-form-field {
+    font-size: inherit;
+    font-weight: 400;
+    line-height: 1.125;
+    font-family: Montserrat;
+    letter-spacing: 0px;
     width:100%;
+}
+.mat-form-field-appearance-legacy .mat-form-field-label{
+    color: #ff4f00;
+    font-size: 14px;
+    position: absolute;
+    top: 0px;
+    font-weight: 500;
+}
+.mat-form-field-prefix{
+    color: #ff4f00;
+    font-size: 14px;
+    position: relative;
+    top: -22px;
+    font-weight: 500;
 }
 .mat-checkbox{
     margin-top: 0.3rem;
@@ -78,7 +104,6 @@ button:focus, button:active:focus, button.active:focus {
     width: 100%; 
     display: flex; 
 }
-
 @import '~@angular/material/theming';
 
 //Barra de mensajes de alerte igual a Google

@@ -1,44 +1,44 @@
-.ng5-slider {
-    width: 300px;
-}
-.dayText{
-    top:20px;
-}
-.dayCheckBox{
-    top:16px;
-}
-.dayAdd{
-    top:16px;
-}
-::ng-deep .ng5-slider .ng5-slider-bar {
-    height: 50px;
-}
-::ng-deep .ng5-slider .ng5-slider-selection {
-    background: #ff4f00 !important;
-}
-::ng-deep .ng5-slider .ng5-slider-bar {
-    left: 0;
-    width: 100%;
-    height: 9px !important;
-    z-index: 1;
-    background: #e4e4e4;
-    border-radius: 10px !important;
-    border: 1px solid #898989;
-}
-::ng-deep .ng5-slider[disabled] .ng5-slider-selection {
-    background: #d8e0f3 !important;
-}
-::ng-deep .ng5-slider .ng5-slider-pointer {
-    background: #ff4f00 !important;
-    width: 26px !important;
-    height: 26px !important;
-    top: -9px !important;
-    border: solid 1px #898989;
-}
-::ng-deep .ng5-slider[disabled] .ng5-slider-pointer {
-    cursor: not-allowed;
-    background-color: #d8e0f3 !important;
-}
-::ng-deep .ng5-slider .ng5-slider-pointer:after {
-    display: none;
-}
+// .ng5-slider {
+//     width: 300px;
+// }
+// .dayText{
+//     top:20px;
+// }
+// .dayCheckBox{
+//     top:16px;
+// }
+// .dayAdd{
+//     top:16px;
+// }
+// ::ng-deep .ng5-slider .ng5-slider-bar {
+//     height: 50px;
+// }
+// ::ng-deep .ng5-slider .ng5-slider-selection {
+//     background: #ff4f00 !important;
+// }
+// ::ng-deep .ng5-slider .ng5-slider-bar {
+//     left: 0;
+//     width: 100%;
+//     height: 9px !important;
+//     z-index: 1;
+//     background: #e4e4e4;
+//     border-radius: 10px !important;
+//     border: 1px solid #898989;
+// }
+// ::ng-deep .ng5-slider[disabled] .ng5-slider-selection {
+//     background: #d8e0f3 !important;
+// }
+// ::ng-deep .ng5-slider .ng5-slider-pointer {
+//     background: #ff4f00 !important;
+//     width: 26px !important;
+//     height: 26px !important;
+//     top: -9px !important;
+//     border: solid 1px #898989;
+// }
+// ::ng-deep .ng5-slider[disabled] .ng5-slider-pointer {
+//     cursor: not-allowed;
+//     background-color: #d8e0f3 !important;
+// }
+// ::ng-deep .ng5-slider .ng5-slider-pointer:after {
+//     display: none;
+// }
