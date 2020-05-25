@@ -28,6 +28,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
+
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Ng5SliderModule } from 'ng5-slider';
@@ -55,6 +56,8 @@ import { SearchComponent } from '@shared/search/search.component';
 
 //Directives
 import { PhoneMaskDirective } from '@shared/phone-mask.directive';
+
+import { AgmCoreModule } from '@agm/core';
 
 @NgModule({
   declarations: [
@@ -103,7 +106,10 @@ import { PhoneMaskDirective } from '@shared/phone-mask.directive';
     DragDropModule,
     HttpClientModule,
     FormsModule,
-    Ng5SliderModule
+    Ng5SliderModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyCyKdLcjPnI3n5Eb2VmMJk-sgan83LEsCM'
+    })
   ],
   exports: [
     PhoneMaskDirective

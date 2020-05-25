@@ -190,10 +190,15 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-10 mt-3 mb-3">
+                            <agm-map [latitude]="lat" [zoom]="zoom" [longitude]="lng">
+                                <agm-marker  [latitude]="lat" [longitude]="lng" [markerDraggable]="true" (dragEnd)="markerDragEnd($event)"></agm-marker>
+                            </agm-map>
+                        </div>
                         <div>
                             <button class="mr-3 mt-2" mat-flat-button color="primary" [disabled]="businessForm.invalid" matStepperNext>Save / Next</button>
                         </div>
-                        {{ businessForm.value | json }}
+                        <!-- {{ businessForm.value | json }} -->
                         <!--{{ tags | json}} -->
                     </form>
                 </mat-step>
@@ -213,6 +218,9 @@
                                                 {{ 'Location Name : ' + item.value.Name }}
                                             </mat-panel-title>
                                         </mat-expansion-panel-header>
+                                        <div>
+                                            <button *ngIf="item.get('LocationId').value == ''" class="mr-3 mt-2 mb-2" type="button" mat-flat-button color="primary" matStepperNext (click)="delLocation(i)">- Delete Location</button>
+                                        </div>
                                         <mat-form-field>
                                             <input matInput placeholder="Location Name" formControlName="Name" maxlength="500" minlength="3" [errorStateMatcher]="confirmValidParentMatcher" required>
                                             <mat-error *ngIf="item.get('Name').invalid">{{getErrorMessage('SName', i)}}</mat-error>
@@ -351,6 +359,11 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-md-10 mt-3 mb-3">
+                                            <agm-map [latitude]="latLoc[i]" [zoom]="zoom" [longitude]="lngLoc[i]">
+                                                <agm-marker  [latitude]="latLoc[i]" [longitude]="lngLoc[i]" [markerDraggable]="true" (dragEnd)="markerDragEndLoc($event, i)"></agm-marker>
+                                            </agm-map>
+                                        </div>
                                         <div class="form-field-check">
                                             <mat-checkbox formControlName="Open">Open</mat-checkbox>
                                         </div>
@@ -366,7 +379,7 @@
                             <button class="mr-3 mt-2" mat-flat-button color="primary" matStepperNext>Save</button>
                             <!-- [disabled]="locationForm.invalid" -->
                         </div>
-                        {{ locationForm.value | json }}
+                        <!-- {{ locationForm.value | json }} -->
                     </form>
                 </mat-step>
             </mat-horizontal-stepper>              

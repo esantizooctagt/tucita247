@@ -1,3 +1,28 @@
 .level-access-list{
     width: 125px;
 }
+mat-card{
+    margin-left:0px;
+    border-radius: 0px;
+}
+:host ::ng-deep .mat-form-field {
+    .mat-form-field-wrapper {
+        padding-bottom: 0;
+        .mat-form-field-underline {
+            position: initial !important;
+            display: block;
+            margin-top: -1px;
+        }
+        .mat-form-field-subscript-wrapper,
+        .mat-form-field-ripple {
+            position: initial !important;
+            display: table;
+        }
+        .mat-form-field-subscript-wrapper {
+            min-height: calc(1em + 1px);
+        }
+    }
+}
+:host::ng-deep .mat-form-field-underline {
+    background-color: #B6B6B6 !important;
+}

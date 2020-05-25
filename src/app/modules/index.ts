@@ -15,3 +15,4 @@ export * from './reset/reset.component';
 export * from './verification/verification.component';
 export * from './forgotpass/forgotpass.component';
 export * from './home/home.component';
+export * from './host/host.component';
