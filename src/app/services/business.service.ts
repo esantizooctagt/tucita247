@@ -19,7 +19,7 @@ export class BusinessService {
   }
 
   updateBusiness(businessId, dataForm) {
-    return this.http.patch(this.apiURL + '/business/' + businessId, dataForm)
+    return this.http.put(this.apiURL + '/business/' + businessId, dataForm)
                     .pipe(catchError(this.errorHandler));
   }
 

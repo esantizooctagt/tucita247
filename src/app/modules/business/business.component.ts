@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { AuthService } from '@core/services';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
@@ -15,8 +15,9 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { environment } from '@environments/environment';
 import { Options, LabelType } from 'ng5-slider';
-import {MatChipInputEvent} from '@angular/material/chips';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-business',
@@ -28,32 +29,48 @@ export class BusinessComponent implements OnInit {
   countries: Country[]=environment.countries; //[{"n":"Afghanistan","c":"AFA"},{"n":"Åland Islands","c":"ALA"},{"n":"Albania","c":"ALB"},{"n":"Algeria","c":"DZA"},{"n":"American Samoa","c":"ASM"},{"n":"Andorra","c":"AND"},{"n":"Angola","c":"AGO"},{"n":"Anguilla","c":"AIA"},{"n":"Antarctica","c":"ATA"},{"n":"Antigua and Barbuda","c":"ATG"},{"n":"Argentina","c":"ARG"},{"n":"Armenia","c":"ARM"},{"n":"Aruba","c":"ABW"},{"n":"Australia","c":"AUS"},{"n":"Austria","c":"AUT"},{"n":"Azerbaijan","c":"AZE"},{"n":"Bahamas","c":"BHS"},{"n":"Bahrain","c":"BHR"},{"n":"Bangladesh","c":"BGD"},{"n":"Barbados","c":"BRB"},{"n":"Belarus","c":"BLR"},{"n":"Belgium","c":"BEL"},{"n":"Belize","c":"BLZ"},{"n":"Benin","c":"BEN"},{"n":"Bermuda","c":"BMU"},{"n":"Bhutan","c":"BTN"},{"n":"Bolivia (Plurinational State of)","c":"BOL"},{"n":"Bonaire, Sint Eustatius and Saba","c":"BES"},{"n":"Bosnia and Herzegovina","c":"BIH"},{"n":"Botswana","c":"BWA"},{"n":"Bouvet Island","c":"BVT"},{"n":"Brazil","c":"BRA"},{"n":"British Indian Ocean Territory","c":"IOT"},{"n":"Brunei Darussalam","c":"BRN"},{"n":"Bulgaria","c":"BGR"},{"n":"Burkina Faso","c":"BFA"},{"n":"Burundi","c":"BDI"},{"n":"Cabo Verde","c":"CPV"},{"n":"Cambodia","c":"KHM"},{"n":"Cameroon","c":"CMR"},{"n":"Canada","c":"CAN"},{"n":"Cayman Islands","c":"CYM"},{"n":"Central African Republic","c":"CAF"},{"n":"Chad","c":"TCD"},{"n":"Chile","c":"CHL"},{"n":"China","c":"CHN"},{"n":"Christmas Island","c":"CXR"},{"n":"Cocos (Keeling) Islands","c":"CCK"},{"n":"Colombia","c":"COL"},{"n":"Comoros","c":"COM"},{"n":"Congo","c":"COG"},{"n":"Congo, Democratic Republic of the","c":"COD"},{"n":"Cook Islands","c":"COK"},{"n":"Costa Rica","c":"CRI"},{"n":"Côte d'Ivoire","c":"CIV"},{"n":"Croatia","c":"HRV"},{"n":"Cuba","c":"CUB"},{"n":"Curaçao","c":"CUW"},{"n":"Cyprus","c":"CYP"},{"n":"Czechia","c":"CZE"},{"n":"Denmark","c":"DNK"},{"n":"Djibouti","c":"DJI"},{"n":"Dominica","c":"DMA"},{"n":"Dominican Republic","c":"DOM"},{"n":"Ecuador","c":"ECU"},{"n":"Egypt","c":"EGY"},{"n":"El Salvador","c":"SLV"},{"n":"Equatorial Guinea","c":"GNQ"},{"n":"Eritrea","c":"ERI"},{"n":"Estonia","c":"EST"},{"n":"Eswatini","c":"SWZ"},{"n":"Ethiopia","c":"ETH"},{"n":"Falkland Islands (Malvinas)","c":"FLK"},{"n":"Faroe Islands","c":"FRO"},{"n":"Fiji","c":"FJI"},{"n":"Finland","c":"FIN"},{"n":"France","c":"FRA"},{"n":"French Guiana","c":"GUF"},{"n":"French Polynesia","c":"PYF"},{"n":"French Southern Territories","c":"ATF"},{"n":"Gabon","c":"GAB"},{"n":"Gambia","c":"GMB"},{"n":"Georgia","c":"GEO"},{"n":"Germany","c":"DEU"},{"n":"Ghana","c":"GHA"},{"n":"Gibraltar","c":"GIB"},{"n":"Greece","c":"GRC"},{"n":"Greenland","c":"GRL"},{"n":"Grenada","c":"GRD"},{"n":"Guadeloupe","c":"GLP"},{"n":"Guam","c":"GUM"},{"n":"Guatemala","c":"GTM"},{"n":"Guernsey","c":"GGY"},{"n":"Guinea","c":"GIN"},{"n":"Guinea-Bissau","c":"GNB"},{"n":"Guyana","c":"GUY"},{"n":"Haiti","c":"HTI"},{"n":"Heard Island and McDonald Islands","c":"HMD"},{"n":"Holy See","c":"VAT"},{"n":"Honduras","c":"HND"},{"n":"Hong Kong","c":"HKG"},{"n":"Hungary","c":"HUN"},{"n":"Iceland","c":"ISL"},{"n":"India","c":"IND"},{"n":"Indonesia","c":"IDN"},{"n":"Iran (Islamic Republic of)","c":"IRN"},{"n":"Iraq","c":"IRQ"},{"n":"Ireland","c":"IRL"},{"n":"Isle of Man","c":"IMN"},{"n":"Israel","c":"ISR"},{"n":"Italy","c":"ITA"},{"n":"Jamaica","c":"JAM"},{"n":"Japan","c":"JPN"},{"n":"Jersey","c":"JEY"},{"n":"Jordan","c":"JOR"},{"n":"Kazakhstan","c":"KAZ"},{"n":"Kenya","c":"KEN"},{"n":"Kiribati","c":"KIR"},{"n":"Korea (Democratic People's Republic of)","c":"PRK"},{"n":"Korea, Republic of","c":"KOR"},{"n":"Kuwait","c":"KWT"},{"n":"Kyrgyzstan","c":"KGZ"},{"n":"Lao People's Democratic Republic","c":"LAO"},{"n":"Latvia","c":"LVA"},{"n":"Lebanon","c":"LBN"},{"n":"Lesotho","c":"LSO"},{"n":"Liberia","c":"LBR"},{"n":"Libya","c":"LBY"},{"n":"Liechtenstein","c":"LIE"},{"n":"Lithuania","c":"LTU"},{"n":"Luxembourg","c":"LUX"},{"n":"Macao","c":"MAC"},{"n":"Madagascar","c":"MDG"},{"n":"Malawi","c":"MWI"},{"n":"Malaysia","c":"MYS"},{"n":"Maldives","c":"MDV"},{"n":"Mali","c":"MLI"},{"n":"Malta","c":"MLT"},{"n":"Marshall Islands","c":"MHL"},{"n":"Martinique","c":"MTQ"},{"n":"Mauritania","c":"MRT"},{"n":"Mauritius","c":"MUS"},{"n":"Mayotte","c":"MYT"},{"n":"Mexico","c":"MEX"},{"n":"Micronesia (Federated States of)","c":"FSM"},{"n":"Moldova, Republic of","c":"MDA"},{"n":"Monaco","c":"MCO"},{"n":"Mongolia","c":"MNG"},{"n":"Montenegro","c":"MNE"},{"n":"Montserrat","c":"MSR"},{"n":"Morocco","c":"MAR"},{"n":"Mozambique","c":"MOZ"},{"n":"Myanmar","c":"MMR"},{"n":"Namibia","c":"NAM"},{"n":"Nauru","c":"NRU"},{"n":"Nepal","c":"NPL"},{"n":"Netherlands","c":"NLD"},{"n":"New Caledonia","c":"NCL"},{"n":"New Zealand","c":"NZL"},{"n":"Nicaragua","c":"NIC"},{"n":"Niger","c":"NER"},{"n":"Nigeria","c":"NGA"},{"n":"Niue","c":"NIU"},{"n":"Norfolk Island","c":"NFK"},{"n":"North Macedonia","c":"MKD"},{"n":"Northern Mariana Islands","c":"MNP"},{"n":"Norway","c":"NOR"},{"n":"Oman","c":"OMN"},{"n":"Pakistan","c":"PAK"},{"n":"Palau","c":"PLW"},{"n":"Palestine, State of","c":"PSE"},{"n":"Panama","c":"PAN"},{"n":"Papua New Guinea","c":"PNG"},{"n":"Paraguay","c":"PRY"},{"n":"Peru","c":"PER"},{"n":"Philippines","c":"PHL"},{"n":"Pitcairn","c":"PCN"},{"n":"Poland","c":"POL"},{"n":"Portugal","c":"PRT"},{"n":"Puerto Rico","c":"PRI"},{"n":"Qatar","c":"QAT"},{"n":"Réunion","c":"REU"},{"n":"Romania","c":"ROU"},{"n":"Russian Federation","c":"RUS"},{"n":"Rwanda","c":"RWA"},{"n":"Saint Barthélemy","c":"BLM"},{"n":"Saint Helena, Ascension and Tristan da Cunha","c":"SHN"},{"n":"Saint Kitts and Nevis","c":"KNA"},{"n":"Saint Lucia","c":"LCA"},{"n":"Saint Martin (French part)","c":"MAF"},{"n":"Saint Pierre and Miquelon","c":"SPM"},{"n":"Saint Vincent and the Grenadines","c":"VCT"},{"n":"Samoa","c":"WSM"},{"n":"San Marino","c":"SMR"},{"n":"Sao Tome and Principe","c":"STP"},{"n":"Saudi Arabia","c":"SAU"},{"n":"Senegal","c":"SEN"},{"n":"Serbia","c":"SRB"},{"n":"Seychelles","c":"SYC"},{"n":"Sierra Leone","c":"SLE"},{"n":"Singapore","c":"SGP"},{"n":"Sint Maarten (Dutch part)","c":"SXM"},{"n":"Slovakia","c":"SVK"},{"n":"Slovenia","c":"SVN"},{"n":"Solomon Islands","c":"SLB"},{"n":"Somalia","c":"SOM"},{"n":"South Africa","c":"ZAF"},{"n":"South Georgia and the South Sandwich Islands","c":"SGS"},{"n":"South Sudan","c":"SSD"},{"n":"Spain","c":"ESP"},{"n":"Sri Lanka","c":"LKA"},{"n":"Sudan","c":"SDN"},{"n":"Surin","c":"SUR"},{"n":"Svalbard and Jan Mayen","c":"SJM"},{"n":"Sweden","c":"SWE"},{"n":"Switzerland","c":"CHE"},{"n":"Syrian Arab Republic","c":"SYR"},{"n":"Taiwan, Province of China","c":"TWN"},{"n":"Tajikistan","c":"TJK"},{"n":"Tanzania, United Republic of","c":"TZA"},{"n":"Thailand","c":"THA"},{"n":"Timor-Leste","c":"TLS"},{"n":"Togo","c":"TGO"},{"n":"Tokelau","c":"TKL"},{"n":"Tonga","c":"TON"},{"n":"Trinidad and Tobago","c":"TTO"},{"n":"Tunisia","c":"TUN"},{"n":"Turkey","c":"TUR"},{"n":"Turkmenistan","c":"TKM"},{"n":"Turks and Caicos Islands","c":"TCA"},{"n":"Tuvalu","c":"TUV"},{"n":"Uganda","c":"UGA"},{"n":"Ukraine","c":"UKR"},{"n":"United Arab Emirates","c":"ARE"},{"n":"United Kingdom of Great Britain and Northern Ireland","c":"GBR"},{"n":"United States of America","c":"USA"},{"n":"United States Minor Outlying Islands","c":"UMI"},{"n":"Uruguay","c":"URY"},{"n":"Uzbekistan","c":"UZB"},{"n":"Vanuatu","c":"VUT"},{"n":"Venezuela (Bolivarian Republic of)","c":"VEN"},{"n":"Viet Nam","c":"VNM"},{"n":"Virgin Islands (British)","c":"VGB"},{"n":"Virgin Islands (U.S.)","c":"VIR"},{"n":"Wallis and Futuna","c":"WLF"},{"n":"Western Sahara","c":"ESH"},{"n":"Yemen","c":"YEM"},{"n":"Zambia","c":"ZMB"},{"n":"Zimbabwe","c":"ZWE"}];
    
   subsBusiness: Subscription;
-  noLocations: number=0;
+  // noLocations: number=0;
 
-  listLocations: Location[]=[];
-  connectedTo: string[] =[];
+  // listLocations: Location[]=[];
+  // connectedTo: string[] =[];
+  
+  //Filtered Countries
+  filteredCountries$: Observable<Country[]>;
+
+  //Save Data Business and Location
+  businessSave$: Observable<object>;
+  locationSave$: Observable<object>;
+  business$: Observable<Business>;
+  location$: Observable<Location[]>;
   savingBusiness: boolean = false;
   savingLocation: boolean = false;
   displayBusiness: boolean = true;
   displayLocation: boolean = true;
 
-  filteredCountries$: Observable<Country[]>;
-  filteredCategories$: Observable<Category[]>;
-  businessSave$: Observable<object>;
-  locationSave$: Observable<object>;
-  business$: Observable<Business>;
-  location$: Observable<Location[]>;
-  categories$: Observable<Category[]>;
-
   public tags: any[]=[];
-  public categories: any[]=[];
+  
+  //Categories
+  visibleCategory = true;
+  selectableCategory = true;
+  removableCategory = true;
+  categories: Category[]=[];
+  categories$: Observable<Category[]>;
+  filteredCategories$: Observable<Category[]>;
+  allCategories: Category[]=[];
+  @ViewChild('categoryInput') categoryInput: ElementRef<HTMLInputElement>;
+  @ViewChild('autoCategory') matAutocomplete: MatAutocomplete;
 
-  visible = true;
+  //Doors
+  noItemsLoc = 0;
+  subsItems: Subscription;
+  doors: any[] = [];
   selectable = true;
   removable = true;
   addOnBlur = true;
+
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
+  //Generic Option for ng5-slider
   genOption = {
     floor: 0,
     ceil: 24,
@@ -68,14 +85,29 @@ export class BusinessComponent implements OnInit {
       }
     }
   };
+  //Business Operation Hours
+  options: Options[] = [];
+  options02: Options[] = [];
+  newInterval: any[] = [];
 
-  optionsMon: Options = this.genOption;
-  optionsTue: Options = this.genOption;
-  optionsWed: Options = this.genOption;
-  optionsThu: Options = this.genOption;
-  optionsFri: Options = this.genOption;
-  optionsSat: Options = this.genOption;
-  optionsSun: Options = this.genOption;
+  //Location Operation Hours
+  optionsMonLoc: Options[]= [];
+  optionsTueLoc: Options[]= [];
+  optionsWedLoc: Options[]= [];
+  optionsThuLoc: Options[]= [];
+  optionsFriLoc: Options[]= [];
+  optionsSatLoc: Options[]= [];
+  optionsSunLoc: Options[]= [];
+
+  optionsMonLoc02: Options[]=[];
+  optionsTueLoc02: Options[]=[];
+  optionsWedLoc02: Options[]=[];
+  optionsThuLoc02: Options[]=[];
+  optionsFriLoc02: Options[]=[];
+  optionsSatLoc02: Options[]=[];
+  optionsSunLoc02: Options[]=[];
+
+  newIntervalLoc: any[][] = [];
 
   get fBusiness(){
     return this.businessForm.controls;
@@ -103,8 +135,7 @@ export class BusinessComponent implements OnInit {
     private categoryService: CategoryService,
     private spinnerService: SpinnerService,
     private breakpointObserver: BreakpointObserver
-  ) { 
-
+  ) {
   }
 
   businessForm = this.fb.group({
@@ -121,25 +152,33 @@ export class BusinessComponent implements OnInit {
     Twitter: ['', [Validators.maxLength(150), Validators.minLength(4)]],
     Instagram: ['', [Validators.maxLength(150), Validators.minLength(4)]],
     Email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
-    OperationHours: [''],
-    Categories: [''],
+    OperationHours: ['', [Validators.required]],
+    Categories: ['', [Validators.required]],
     Tags: [''],
     Status: [''],
     Mon: new FormControl([8, 17]),
+    Mon02: new FormControl([8, 17]),
     MonEnabled: [0],
     Tue: new FormControl([8, 17]),
+    Tue02: new FormControl([8, 17]),
     TueEnabled: [0],
     Wed: new FormControl([8, 17]),
+    Wed02: new FormControl([8, 17]),
     WedEnabled: [0],
     Thu: new FormControl([8, 17]),
+    Thu02: new FormControl([8, 17]),
     ThuEnabled: [0],
     Fri: new FormControl([8, 17]),
+    Fri02: new FormControl([8, 17]),
     FriEnabled: [0],
     Sat: new FormControl([8, 12]),
+    Sat02: new FormControl([8, 17]),
     SatEnabled: [0],
     Sun: new FormControl([8, 12]),
+    Sun02: new FormControl([8, 17]),
     SunEnabled: [0]
   });
+
   locationForm = this.fb.group({ 
     locations : this.fb.array([this.createLocation()])
   });
@@ -150,33 +189,120 @@ export class BusinessComponent implements OnInit {
       BusinessId: [this.businessId],
       Name: ['', [Validators.required, Validators.maxLength(500), Validators.minLength(3)]],
       Address: ['', [Validators.required, Validators.maxLength(500), Validators.minLength(3)]],
-      Postal_Code: ['', [Validators.maxLength(50), Validators.minLength(3)]],
-      Tax_Number: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(2)]],
-      Status: [1]
+      Geolocation: ['', [Validators.maxLength(50), Validators.minLength(5)]],
+      ParentLocation: [''],
+      TotalPiesTransArea: ['',[Validators.required]],
+      LocationDensity: ['',[Validators.required, Validators.min(1)]],
+      MaxNumberEmployeesLocation: ['',[Validators.required, Validators.min(1)]],
+      MaxConcurrentCustomerLocation:['',[Validators.required, Validators.min(1)]],
+      Open: [''],
+      BucketInterval: ['',[Validators.required, Validators.min(0.5), Validators.max(5)]],
+      TotalCustPerBucketInter: ['',[Validators.required, Validators.min(1)]],
+      Doors: ['',[Validators.required]],
+      Status: [1],
+      OperationHours: ['', [Validators.required]],
+      Mon: new FormControl([8, 17]),
+      Mon02: new FormControl([0, 0]),
+      MonEnabled: [0],
+      Tue: new FormControl([8, 17]),
+      Tue02: new FormControl([0, 0]),
+      TueEnabled: [0],
+      Wed: new FormControl([8, 17]),
+      Wed02: new FormControl([0, 0]),
+      WedEnabled: [0],
+      Thu: new FormControl([8, 17]),
+      Thu02: new FormControl([0, 0]),
+      ThuEnabled: [0],
+      Fri: new FormControl([8, 17]),
+      Fri02: new FormControl([0, 0]),
+      FriEnabled: [0],
+      Sat: new FormControl([8, 12]),
+      Sat02: new FormControl([0, 0]),
+      SatEnabled: [0],
+      Sun: new FormControl([8, 12]),
+      Sun02: new FormControl([0, 0]),
+      SunEnabled: [0]
     });
+    let gens
+    gens = Object.assign({}, this.genOption, {disabled: 1});
+    this.doors[this.noItemsLoc] = "";
+    this.optionsMonLoc.push(gens);
+    this.optionsTueLoc.push(gens);
+    this.optionsWedLoc.push(gens);
+    this.optionsThuLoc.push(gens);
+    this.optionsFriLoc.push(gens);
+    this.optionsSatLoc.push(gens);
+    this.optionsSunLoc.push(gens);
+
+    this.optionsMonLoc02.push(gens);
+    this.optionsTueLoc02.push(gens);
+    this.optionsWedLoc02.push(gens);
+    this.optionsThuLoc02.push(gens);
+    this.optionsFriLoc02.push(gens);
+    this.optionsSatLoc02.push(gens);
+    this.optionsSunLoc02.push(gens);
+
+    console.log(this.newIntervalLoc);
+    this.newIntervalLoc.push([]);
+    this.newIntervalLoc[this.noItemsLoc].push("0","0","0","0","0","0","0");
+    console.log(this.newIntervalLoc);
+
+    this.noItemsLoc = this.noItemsLoc+1;
+
+    this.subsItems = items.valueChanges
+      .subscribe(data => this.onValueChanged(data));
     return items;
   }
 
   ngOnInit() {
     var spinnerRef = this.spinnerService.start("Loading Business...");
     this.businessId = this.authService.businessId();
+    this.options[0] = Object.assign({}, this.genOption);
+    this.options[1] = Object.assign({}, this.genOption);
+    this.options[2] = Object.assign({}, this.genOption);
+    this.options[3] = Object.assign({}, this.genOption);
+    this.options[4] = Object.assign({}, this.genOption);
+    this.options[5] = Object.assign({}, this.genOption);
+    this.options[6] = Object.assign({}, this.genOption);
+
+    this.options02[0] = Object.assign({}, this.genOption);
+    this.options02[1] = Object.assign({}, this.genOption);
+    this.options02[2] = Object.assign({}, this.genOption);
+    this.options02[3] = Object.assign({}, this.genOption);
+    this.options02[4] = Object.assign({}, this.genOption);
+    this.options02[5] = Object.assign({}, this.genOption);
+    this.options02[6] = Object.assign({}, this.genOption);
+
+    this.newInterval[0] = "0";
+    this.newInterval[1] = "0";
+    this.newInterval[2] = "0";
+    this.newInterval[3] = "0";
+    this.newInterval[4] = "0";
+    this.newInterval[5] = "0";
+    this.newInterval[6] = "0";
+
     this.onValueChanges();
+
+    this.categories$ = this.categoryService.getCategories().pipe(
+      map(res => {
+        this.allCategories = res;
+        this.filteredCategories$ = this.businessForm.get('Categories').valueChanges
+          .pipe(
+            startWith(null),
+            map((category: Category | null) => category ? this._filterCategory(category) : this.allCategories.slice())
+        );
+        return this.allCategories;
+      })
+    ); 
 
     this.filteredCountries$ = this.businessForm.get('Country').valueChanges
       .pipe(
         startWith(''),
         map(country => typeof country === 'string' ? country : country.n),
-        map(country => country ? this._filter(country) : this.countries.slice())
+        map(country => country ? this._filterCountry(country) : this.countries.slice())
       );
-
-    this.categoryService.getCategories();
-    this.filteredCategories$ = this.businessForm.get('Categories').valueChanges
-      .pipe(
-        startWith(''),
-        map(category => typeof category === 'string' ? category : category.Name)
-        // map(category => category ? this._filterCat(category) : this.categories$.slice())
-      );
-
+    
+    this.businessForm.reset({BusinessId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', OperationHours: '', Tags: '', Status: 1, Mon:[8,17], Mon02:[18,24], MonEnabled: 0, Tue:[8,17], Tue02:[18,24], TueEnabled: 0, Wed:[8,17], Wed02:[18,24], WedEnabled: 0, Thu:[8,17], Thu02:[18,24], ThuEnabled: 0, Fri:[8,17], Fri02:[18,24], FriEnabled: 0, Sat:[8,17], Sat02:[18,24], SatEnabled: 0, Sun:[8,17], Sun02:[18,24], SunEnabled: 0});
     this.business$ = this.businessService.getBusiness(this.businessId).pipe(
       tap((res: any) => {
         if (res != null){
@@ -185,7 +311,7 @@ export class BusinessComponent implements OnInit {
             countryValue = this.countries.filter(country => country.c.indexOf(res.Country) === 0);
           }
           var opeHour = JSON.parse(res.OperationHours);
-          this.businessForm.patchValue({
+          this.businessForm.setValue({
             BusinessId: res.Business_Id,
             Name: res.Name,
             Country: (countryValue != undefined ? countryValue[0] : ''),
@@ -204,43 +330,289 @@ export class BusinessComponent implements OnInit {
             Tags: res.Tags,
             Status: res.Status,
             Mon: ("MON" in opeHour ? [+opeHour.MON[0].I, +opeHour.MON[0].F] : [8, 12]),
+            Mon02: ("MON" in opeHour ? (opeHour.MON.length > 1 ? [+opeHour.MON[1].I, +opeHour.MON[1].F] : [0,0]) : [0, 0]),
             MonEnabled: ("MON" in opeHour ? 1 : 0),
             Tue: ("TUE" in opeHour ? [+opeHour.TUE[0].I, +opeHour.TUE[0].F] : [8, 12]),
+            Tue02: ("TUE" in opeHour ? (opeHour.TUE.length > 1 ? [+opeHour.TUE[1].I, +opeHour.TUE[1].F] : [0,0]) : [0, 0]),
             TueEnabled: ("TUE" in opeHour ? 1 : 0),
             Wed: ("WED" in opeHour ? [+opeHour.WED[0].I, +opeHour.WED[0].F] : [8, 12]),
+            Wed02: ("WED" in opeHour ? (opeHour.WED.length > 1 ? [+opeHour.WED[1].I, +opeHour.WED[1].F] : [0,0]) : [0, 0]),
             WedEnabled: ("WED" in opeHour ? 1 : 0),
             Thu: ("THU" in opeHour ? [+opeHour.THU[0].I, +opeHour.THU[0].F] : [8, 12]),
+            Thu02: ("THU" in opeHour ? (opeHour.THU.length > 1 ? [+opeHour.THU[1].I, +opeHour.THU[1].F] : [0,0]) : [0, 0]),
             ThuEnabled: ("THU" in opeHour ? 1 : 0),
             Fri: ("FRI" in opeHour ? [+opeHour.FRI[0].I, +opeHour.FRI[0].F] : [8, 12]),
+            Fri02: ("FRI" in opeHour ? (opeHour.FRI.length > 1 ? [+opeHour.FRI[1].I, +opeHour.FRI[1].F] : [0,0]) : [0, 0]),
             FriEnabled: ("FRI" in opeHour ? 1 : 0),
             Sat: ("SAT" in opeHour ? [+opeHour.SAT[0].I, +opeHour.SAT[0].F] : [8, 12]),
+            Sat02: ("SAT" in opeHour ? (opeHour.SAT.length > 1 ? [+opeHour.SAT[1].I, +opeHour.SAT[1].F] : [0,0]) : [0, 0]),
             SatEnabled: ("SAT" in opeHour ? 1 : 0),
             Sun: ("SUN" in opeHour ? [+opeHour.SUN[0].I, +opeHour.SUN[0].F] : [8, 12]),
+            Sun02: ("SUN" in opeHour ? (opeHour.SUN.length > 1 ? [+opeHour.SUN[1].I, +opeHour.TUE[1].F] : [0,0]) : [0, 0]),
             SunEnabled: ("SUN" in opeHour ? 1 : 0),
           });
 
-          this.optionsMon = Object.assign({}, this.optionsSat, {disabled: ("MON" in opeHour ? 0 : 1)});
-          this.optionsTue = Object.assign({}, this.optionsSat, {disabled: ("TUE" in opeHour ? 0 : 1)});
-          this.optionsWed = Object.assign({}, this.optionsSat, {disabled: ("WED" in opeHour ? 0 : 1)});
-          this.optionsThu = Object.assign({}, this.optionsSat, {disabled: ("THU" in opeHour ? 0 : 1)});
-          this.optionsFri = Object.assign({}, this.optionsSat, {disabled: ("FRI" in opeHour ? 0 : 1)});
-          this.optionsSat = Object.assign({}, this.optionsSat, {disabled: ("SAT" in opeHour ? 0 : 1)});
-          this.optionsSun = Object.assign({}, this.optionsSat, {disabled: ("SUN" in opeHour ? 0 : 1)});
+          if (this.businessForm.value.Mon02[0] > 0){
+            this.newInterval[0] = "1";
+            let iniGenOption = {
+              floor: 0,
+              ceil: this.businessForm.value.Mon02[0]-1,
+              translate: (value: number, label: LabelType): string => {
+                switch (label) {
+                  case LabelType.Low:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  case LabelType.High:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  default: 
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                }
+              }
+            };
+            let locGenOption = {
+              floor: this.businessForm.value.Mon02[0],
+              ceil: 24,
+              translate: (value: number, label: LabelType): string => {
+                switch (label) {
+                  case LabelType.Low:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  case LabelType.High:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  default: 
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                }
+              }
+            };
+            this.options[0] = Object.assign({}, iniGenOption, {disabled: ("MON" in opeHour ? 0 : 1)});
+            this.options02[0] = Object.assign({}, locGenOption, {disabled: ("MON" in opeHour ? 0 : 1)});
+          } else {
+            this.options[0] = Object.assign({}, this.genOption, {disabled: ("MON" in opeHour ? 0 : 1)});
+          }
+          if (this.businessForm.value.Tue02[0] > 0){
+            this.newInterval[1] = "1";
+            let iniGenOption = {
+              floor: 0,
+              ceil: this.businessForm.value.Tue02[0]-1,
+              translate: (value: number, label: LabelType): string => {
+                switch (label) {
+                  case LabelType.Low:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  case LabelType.High:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  default: 
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                }
+              }
+            };
+            let locGenOption = {
+              floor: this.businessForm.value.Tue02[0],
+              ceil: 24,
+              translate: (value: number, label: LabelType): string => {
+                switch (label) {
+                  case LabelType.Low:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  case LabelType.High:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  default: 
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                }
+              }
+            };
+            this.options[1] = Object.assign({}, iniGenOption, {disabled: ("TUE" in opeHour ? 0 : 1)});
+            this.options02[1] = Object.assign({}, locGenOption, {disabled: ("TUE" in opeHour ? 0 : 1)});
+          } else {
+            this.options[1] = Object.assign({}, this.genOption, {disabled: ("TUE" in opeHour ? 0 : 1)});
+          }
+          if (this.businessForm.value.Wed02[0] > 0){
+            this.newInterval[2] = "1";
+            let iniGenOption = {
+              floor: 0,
+              ceil: this.businessForm.value.Wed02[0]-1,
+              translate: (value: number, label: LabelType): string => {
+                switch (label) {
+                  case LabelType.Low:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  case LabelType.High:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  default: 
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                }
+              }
+            };
+            let locGenOption = {
+              floor: this.businessForm.value.Wed02[0],
+              ceil: 24,
+              translate: (value: number, label: LabelType): string => {
+                switch (label) {
+                  case LabelType.Low:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  case LabelType.High:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  default: 
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                }
+              }
+            };
+            this.options[2] = Object.assign({}, iniGenOption, {disabled: ("WED" in opeHour ? 0 : 1)});
+            this.options02[2] = Object.assign({}, locGenOption, {disabled: ("WED" in opeHour ? 0 : 1)});
+          } else {
+            this.options[2] = Object.assign({}, this.genOption, {disabled: ("WED" in opeHour ? 0 : 1)});
+          }
+          if (this.businessForm.value.Thu02[0] > 0){
+            this.newInterval[3] = "1";
+            let iniGenOption = {
+              floor: 0,
+              ceil: this.businessForm.value.Thu02[0]-1,
+              translate: (value: number, label: LabelType): string => {
+                switch (label) {
+                  case LabelType.Low:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  case LabelType.High:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  default: 
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                }
+              }
+            };
+            let locGenOption = {
+              floor: this.businessForm.value.Thu02[0],
+              ceil: 24,
+              translate: (value: number, label: LabelType): string => {
+                switch (label) {
+                  case LabelType.Low:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  case LabelType.High:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  default: 
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                }
+              }
+            };
+            this.options[3] = Object.assign({}, iniGenOption, {disabled: ("THU" in opeHour ? 0 : 1)});
+            this.options02[3] = Object.assign({}, locGenOption, {disabled: ("THU" in opeHour ? 0 : 1)});
+          } else {
+            this.options[3] = Object.assign({}, this.genOption, {disabled: ("THU" in opeHour ? 0 : 1)});
+          }
+          if (this.businessForm.value.Fri02[0] > 0){
+            this.newInterval[4] = "1";
+            let iniGenOption = {
+              floor: 0,
+              ceil: this.businessForm.value.Fri02[0]-1,
+              translate: (value: number, label: LabelType): string => {
+                switch (label) {
+                  case LabelType.Low:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  case LabelType.High:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  default: 
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                }
+              }
+            };
+            let locGenOption = {
+              floor: this.businessForm.value.Fri02[0],
+              ceil: 24,
+              translate: (value: number, label: LabelType): string => {
+                switch (label) {
+                  case LabelType.Low:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  case LabelType.High:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  default: 
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                }
+              }
+            };
+            this.options[4] = Object.assign({}, iniGenOption, {disabled: ("FRI" in opeHour ? 0 : 1)});
+            this.options02[4] = Object.assign({}, locGenOption, {disabled: ("FRI" in opeHour ? 0 : 1)});
+          } else {
+            this.options[4] = Object.assign({}, this.genOption, {disabled: ("FRI" in opeHour ? 0 : 1)});
+          }
+          if (this.businessForm.value.Sat02[0] > 0){
+            this.newInterval[5] = "1";
+            let iniGenOption = {
+              floor: 0,
+              ceil: this.businessForm.value.Sat02[0]-1,
+              translate: (value: number, label: LabelType): string => {
+                switch (label) {
+                  case LabelType.Low:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  case LabelType.High:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  default: 
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                }
+              }
+            };
+            let locGenOption = {
+              floor: this.businessForm.value.Sat02[0],
+              ceil: 24,
+              translate: (value: number, label: LabelType): string => {
+                switch (label) {
+                  case LabelType.Low:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  case LabelType.High:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  default: 
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                }
+              }
+            };
+            this.options[5] = Object.assign({}, iniGenOption, {disabled: ("SAT" in opeHour ? 0 : 1)});
+            this.options02[5] = Object.assign({}, locGenOption, {disabled: ("SAT" in opeHour ? 0 : 1)});
+          } else {
+            this.options[5] = Object.assign({}, this.genOption, {disabled: ("SAT" in opeHour ? 0 : 1)});
+          }
+          if (this.businessForm.value.Sun02[0] > 0){
+            this.newInterval[6] = "1";
+            let iniGenOption = {
+              floor: 0,
+              ceil: this.businessForm.value.Sun02[0]-1,
+              translate: (value: number, label: LabelType): string => {
+                switch (label) {
+                  case LabelType.Low:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  case LabelType.High:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  default: 
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                }
+              }
+            };
+            let locGenOption = {
+              floor: this.businessForm.value.Sun02[0],
+              ceil: 24,
+              translate: (value: number, label: LabelType): string => {
+                switch (label) {
+                  case LabelType.Low:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  case LabelType.High:
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                  default: 
+                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                }
+              }
+            };
+            this.options[6] = Object.assign({}, iniGenOption, {disabled: ("SUN" in opeHour ? 0 : 1)});
+            this.options02[6] = Object.assign({}, locGenOption, {disabled: ("SUN" in opeHour ? 0 : 1)});
+          } else {
+            this.options[6] = Object.assign({}, this.genOption, {disabled: ("SUN" in opeHour ? 0 : 1)});
+          }
 
           this.categories = res.Categories;
-          // console.log(res.Tags);
           this.tags = res.Tags.split('#');
           this.spinnerService.stop(spinnerRef);
-        } 
+        } else {
+          this.spinnerService.stop(spinnerRef);
+          this.businessForm.reset({BusinessId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', OperationHours: '', Tags: '', Status: 1, Mon:[8,17], Mon02:[18,24], MonEnabled: 0, Tue:[8,17], Tue02:[18,24], TueEnabled: 0, Wed:[8,17], Wed02:[18,24], WedEnabled: 0, Thu:[8,17], Thu02:[18,24], ThuEnabled: 0, Fri:[8,17], Fri02:[18,24], FriEnabled: 0, Sat:[8,17], Sat02:[18,24], SatEnabled: 0, Sun:[8,17], Sun02:[18,24], SunEnabled: 0});
+        }
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
+        this.businessForm.reset({BusinessId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', OperationHours: '', Tags: '', Status: 1, Mon:[8,17], Mon02:[18,24], MonEnabled: 0, Tue:[8,17], Tue02:[18,24], TueEnabled: 0, Wed:[8,17], Wed02:[18,24], WedEnabled: 0, Thu:[8,17], Thu02:[18,24], ThuEnabled: 0, Fri:[8,17], Fri02:[18,24], FriEnabled: 0, Sat:[8,17], Sat02:[18,24], SatEnabled: 0, Sun:[8,17], Sun02:[18,24], SunEnabled: 0});
         this.openDialog('Error !', err.Message, false, true, false);
         return throwError(err || err.message);
       })
     );
-
-  
     //Load Locations Stepper 2
   //   this.location$ =  this.locationService.getLocations(this.businessId).pipe(
   //     tap((res: any) => {
@@ -282,53 +654,119 @@ export class BusinessComponent implements OnInit {
   //   );
   }
 
+  // private markFormGroupTouched() {
+  //   const invalid = [];
+  //   const invalida = [];
+  //   const invalida2 = [];
+  //   const controls = this.businessForm.controls;
+  //   for (const name in controls) {
+  //     // controls[name].markAsUntouched({ onlySelf: true });
+  //     // controls[name].markAsPristine({ onlySelf: true });
+  //     if (controls[name].markAsTouched) {
+  //       invalid.push(name);
+  //     }
+  //     if (controls[name].markAsDirty){
+  //       invalida.push(name);
+  //     }
+  //     if (controls[name].markAsPristine){
+  //       invalida2.push(name);
+  //     }
+  //   }
+  //   // this.businessForm.markAsUntouched({ onlySelf: true });
+  //   console.log("mark as touch");
+  //   console.log(invalid);
+  //   console.log("mark as dirty");
+  //   console.log(invalida);
+  //   console.log("mark as pristine");
+  //   console.log(invalida2);
+  //   console.log("form touched");
+  //   console.log(this.businessForm.touched);
+  // }
+
+
   onChangeDisabled(item: number, event: any){
-    switch (item) {
-      case 0:
-        this.optionsMon = Object.assign({}, this.optionsMon, {disabled: !event.checked});
-        break;
-      case 1:
-        this.optionsTue = Object.assign({}, this.optionsTue, {disabled: !event.checked});
-        break;
-      case 2:
-        this.optionsWed = Object.assign({}, this.optionsWed, {disabled: !event.checked});
-        break;
-      case 3:
-        this.optionsThu = Object.assign({}, this.optionsThu, {disabled: !event.checked});
-        break;
-      case 4:
-        this.optionsFri = Object.assign({}, this.optionsFri, {disabled: !event.checked});
-        break;
-      case 5:
-        this.optionsSat = Object.assign({}, this.optionsSat, {disabled: !event.checked});
-        break;
-      case 6:
-        this.optionsSun = Object.assign({}, this.optionsSun, {disabled: !event.checked});
-        break;
+    this.options[item] = Object.assign({}, this.genOption, {disabled: !event.checked});
+    if (event.checked == false){
+      this.newInterval[item] = "0";
     }
   }
 
-  add(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
-
-    // Add our fruit
-    if ((value || '').trim()) {
-      this.tags.push(value.trim());
-    }
-
-    // Reset the input value
-    if (input) {
-      input.value = '';
-    }
-  }
-
-  remove(tag: string): void {
-    const index = this.tags.indexOf(tag);
-
+  removeCategory(category: Category): void {
+    const index = this.categories.findIndex(res => res.Name ===category.Name); 
     if (index >= 0) {
-      this.tags.splice(index, 1);
+      this.categories.splice(index, 1);
     }
+  }
+
+  selectedCategory(event: MatAutocompleteSelectedEvent): void {
+    this.categories.push({CategoryId: event.option.value, Name: event.option.viewValue});
+    this.categoryInput.nativeElement.value = '';
+    this.businessForm.get('Categories').setValue(this.categories);
+  }
+
+  private _filterCategory(value: Category): Category[] {
+    const filterValue = value[0].CategoryId;
+    return this.allCategories.filter(category => category.CategoryId.indexOf(filterValue) === 0);
+  }
+
+  displayFn(country?: Country): string | undefined {
+    return country ? country.n : undefined;
+  }
+
+  private _filterCountry(value: string): Country[] {
+    let filterValue: string = '';
+    filterValue = value.toLowerCase();
+    return this.countries.filter(country => country.n.toLowerCase().indexOf(filterValue) === 0);
+  }
+
+  onValueChanges(): void {
+    this.subsBusiness = this.businessForm.valueChanges.subscribe(val=>{
+      if (val.Country === null){
+        this.businessForm.controls["Country"].setValue('');
+      }
+      if (val.MonEnabled === true) {
+        this.businessForm.controls["MonEnabled"].setValue(1);
+      }
+      if (val.MonEnabled === false){
+        this.businessForm.controls["MonEnabled"].setValue(0);
+      }
+      if (val.TueEnabled === true) {
+        this.businessForm.controls["TueEnabled"].setValue(1);
+      }
+      if (val.TueEnabled === false){
+        this.businessForm.controls["TueEnabled"].setValue(0);
+      }
+      if (val.WedEnabled === true) {
+        this.businessForm.controls["WedEnabled"].setValue(1);
+      }
+      if (val.WedEnabled === false){
+        this.businessForm.controls["WedEnabled"].setValue(0);
+      }
+      if (val.ThuEnabled === true) {
+        this.businessForm.controls["ThuEnabled"].setValue(1);
+      }
+      if (val.ThuEnabled === false){
+        this.businessForm.controls["ThuEnabled"].setValue(0);
+      }
+      if (val.FriEnabled === true) {
+        this.businessForm.controls["FriEnabled"].setValue(1);
+      }
+      if (val.FriEnabled === false){
+        this.businessForm.controls["FriEnabled"].setValue(0);
+      }
+      if (val.SatEnabled === true) {
+        this.businessForm.controls["SatEnabled"].setValue(1);
+      }
+      if (val.SatEnabled === false){
+        this.businessForm.controls["SatEnabled"].setValue(0);
+      }
+      if (val.SunEnabled === true) {
+        this.businessForm.controls["SunEnabled"].setValue(1);
+      }
+      if (val.SunEnabled === false){
+        this.businessForm.controls["SunEnabled"].setValue(0);
+      }
+    });
   }
 
   getErrorMessage(component: string, index: number=0) {
@@ -338,47 +776,69 @@ export class BusinessComponent implements OnInit {
           this.fBusiness.Name.hasError('maxlength') ? 'Maximum length 500' :
             '';
     }
+    if (component === 'Country'){
+      return this.fBusiness.Country.hasError('required') ? 'You must select a valid value' :
+        this.fBusiness.Country.hasError('validObject') ? 'Invalid value' :
+          '';
+    }
     if (component === 'Address'){
       return this.fBusiness.Address.hasError('required') ? 'You must enter a value' :
         this.fBusiness.Address.hasError('minlength') ? 'Minimun length 3' :
           this.fBusiness.Address.hasError('maxlength') ? 'Maximum length 500' :
             '';
     }
-    if (component === 'House_No'){
-      return this.fBusiness.House_No.hasError('maxlength') ? 'Maximun length 10' :
-        this.fBusiness.House_No.hasError('minlength') ? 'Minimun length 2' :
-        '';
-    }
-    if (component === 'Country'){
-      return this.fBusiness.Country.hasError('required') ? 'You must select a valid value' :
-        this.fBusiness.Country.hasError('validObject') ? 'Invalid value' :
-          '';
-    }
-    if (component === 'State'){
+    if (component === 'City'){
       return this.fBusiness.State.hasError('required') ? 'You must enter a value' :
         this.fBusiness.State.hasError('maxlength') ? 'Maximun length 100' :
-          this.fBusiness.State.hasError('minlength') ? 'Minimun length 3' :
+          this.fBusiness.State.hasError('minlength') ? 'Minimun length 2' :
           '';
     }
+    if (component === 'ZipCode'){
+      return this.fBusiness.ZipCode.hasError('maxlength') ? 'Maximun length 10' :
+        this.fBusiness.ZipCode.hasError('minlength') ? 'Minimun length 3' :
+        '';
+    }
+    if (component === 'Geolocation'){
+      return this.fBusiness.House_No.hasError('maxlength') ? 'Maximun length 50' :
+        this.fBusiness.House_No.hasError('minlength') ? 'Minimun length 5' :
+        '';
+    }
     if (component === 'Phone'){
-      return this.fBusiness.Phone.hasError('maxlength') ? 'Maximun length 30' :
+      return this.fBusiness.Phone.hasError('maxlength') ? 'Maximun length 15' :
         this.fBusiness.Phone.hasError('minlength') ? 'Minimun length 3' :
         '';
     }
-    if (component === 'Postal_Code'){
-      return this.fBusiness.Postal_Code.hasError('maxlength') ? 'Maximun length 50' :
-        this.fBusiness.Postal_Code.hasError('minlength') ? 'Minimun length 3' :
+    if (component === 'Website'){
+      return this.fBusiness.Phone.hasError('maxlength') ? 'Maximun length 150' :
+        this.fBusiness.Phone.hasError('minlength') ? 'Minimun length 4' :
         '';
     }
-    if (component === 'Tax_Number'){
-      return this.fBusiness.Tax_Number.hasError('required') ? 'You must enter a value' :
-        this.fBusiness.Tax_Number.hasError('minlength') ? 'Minimun length 2' :
-          this.fBusiness.Tax_Number.hasError('maxlength') ? 'Maximun length 50' :
-            '';
+    if (component === 'Facebook'){
+      return this.fBusiness.Phone.hasError('maxlength') ? 'Maximun length 150' :
+        this.fBusiness.Phone.hasError('minlength') ? 'Minimun length 4' :
+        '';
+    }
+    if (component === 'Twitter'){
+      return this.fBusiness.Phone.hasError('maxlength') ? 'Maximun length 150' :
+        this.fBusiness.Phone.hasError('minlength') ? 'Minimun length 4' :
+        '';
+    }
+    if (component === 'Instagram'){
+      return this.fBusiness.Phone.hasError('maxlength') ? 'Maximun length 150' :
+        this.fBusiness.Phone.hasError('minlength') ? 'Minimun length 4' :
+        '';
     }
     if (component === 'Email'){
       return this.fBusiness.Email.hasError('required') ? 'You must enter a value' :
         this.fBusiness.Email.hasError('pattern') ? 'Email invalid' :
+        '';
+    }
+    if (component === 'OperationHours'){
+      return this.fBusiness.OperationHours.hasError('required') ? 'You must enter a value' :
+        '';
+    }
+    if (component === 'Categories'){
+      return this.fBusiness.OperationHours.hasError('required') ? 'You must enter a value' :
         '';
     }
     if (component === 'SName'){
@@ -395,18 +855,37 @@ export class BusinessComponent implements OnInit {
           sAddress.hasError('maxlength') ? 'Maximum length 500' :
             '';
     }
-    if (component === 'SPostal_Code'){
-      let sPostal = (<FormArray>this.locationForm.get('locations')).controls[index].get('Postal_Code');
-      return sPostal.hasError('maxlength') ? 'Maximun length 50' :
-        sPostal.hasError('minlength') ? 'Minimun length 3' :
+    if (component === 'TotalPiesTransArea'){
+      let totalPiesTransArea = (<FormArray>this.locationForm.get('locations')).controls[index].get('TotalPiesTransArea');
+      return totalPiesTransArea.hasError('required') ? 'You must enter a value':
         '';
     }
-    if (component === 'STax_Number'){
-      let sTax = (<FormArray>this.locationForm.get('locations')).controls[index].get('Tax_Number');
-      return sTax.hasError('required') ? 'You must enter a value' :
-        sTax.hasError('minlength') ? 'Minimun length 2' :
-          sTax.hasError('maxlength') ? 'Maximun length 50' :
-            '';
+    if (component === 'LocationDensity'){
+      let locationDensity = (<FormArray>this.locationForm.get('locations')).controls[index].get('LocationDensity');
+      return locationDensity.hasError('required') ? 'You must enter a value' :
+        locationDensity.hasError('min') ? 'Minimun value 2' :
+          '';
+    }
+    if (component === 'MaxNumberEmployeesLocation'){
+      let maxNumberEmployeesLocation = (<FormArray>this.locationForm.get('locations')).controls[index].get('MaxNumberEmployeesLocation');
+      return maxNumberEmployeesLocation.hasError('required') ? 'You must enter a value' :
+        maxNumberEmployeesLocation.hasError('min') ? 'Minimun value 1' :
+          '';
+    }
+    if (component === 'MaxConcurrentCustomerLocation'){
+      let maxConcurrentCustomerLocation = (<FormArray>this.locationForm.get('locations')).controls[index].get('MaxConcurrentCustomerLocation');
+      return maxConcurrentCustomerLocation.hasError('required') ? 'You must enter a value':
+        '';
+    }
+    if (component === 'BucketInterval'){
+      let bucketInterval = (<FormArray>this.locationForm.get('locations')).controls[index].get('BucketInterval');
+      return bucketInterval.hasError('required') ? 'You must enter a value':
+        '';
+    }
+    if (component === 'TotalCustPerBucketInter'){
+      let totalCustPerBucketInter = (<FormArray>this.locationForm.get('locations')).controls[index].get('TotalCustPerBucketInter');
+      return totalCustPerBucketInter.hasError('required') ? 'You must enter a value':
+        '';
     }
   }
 
@@ -442,32 +921,69 @@ export class BusinessComponent implements OnInit {
     this.dialog.open(DialogComponent, dialogConfig);
   }
 
-  displayFn(country?: Country): string | undefined {
-    return country ? country.n : undefined;
+  onAddInterval(dayNum: number){
+    let maxValue;
+    switch (dayNum) {
+      case 0: maxValue = this.businessForm.value.Mon[1]; break;
+      case 1: maxValue = this.businessForm.value.Tue[1]; break;
+      case 2: maxValue = this.businessForm.value.Wed[1]; break;
+      case 3: maxValue = this.businessForm.value.Thu[1]; break;
+      case 4: maxValue = this.businessForm.value.Fri[1]; break;
+      case 5: maxValue = this.businessForm.value.Sat[1]; break;
+      case 6: maxValue = this.businessForm.value.Sun[1]; break;
+    }
+    if (maxValue < 23){
+      this.newInterval[dayNum] = "1";
+      let iniGenOption = {
+        floor: 0,
+        ceil: maxValue,
+        translate: (value: number, label: LabelType): string => {
+          switch (label) {
+            case LabelType.Low:
+              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+            case LabelType.High:
+              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+            default: 
+              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+          }
+        }
+      };
+      let locGenOption = {
+        floor: maxValue+1,
+        ceil: 24,
+        translate: (value: number, label: LabelType): string => {
+          switch (label) {
+            case LabelType.Low:
+              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+            case LabelType.High:
+              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+            default: 
+              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+          }
+        }
+      };
+      this.options02[dayNum] = Object.assign({}, locGenOption, {disabled: 0});
+      this.options[dayNum] = Object.assign({}, iniGenOption, {disabled: 0});
+    }
   }
 
-  private _filter(value: string): Country[] {
-    let filterValue: string = '';
-    filterValue = value.toLowerCase();
-    return this.countries.filter(country => country.n.toLowerCase().indexOf(filterValue) === 0);
-  }
-
-  displayFnCat(category?: Category): string | undefined {
-    return category ? category.Name : undefined;
-  }
-
-  private _filterCat(value: string): Category[] {
-    let filterValue: string = '';
-    filterValue = value.toLowerCase();
-    return this.categories.filter(category => category.Name.toLowerCase().indexOf(filterValue) === 0);
-  }
-
-  onValueChanges(): void {
-    this.subsBusiness = this.businessForm.valueChanges.subscribe(val=>{
-      if (val.Country === null){
-        this.businessForm.controls["Country"].setValue('');
+  onRemInterval(dayNum: number){
+    this.newInterval[dayNum] = "0";
+    let locGenOption = {
+      floor: 0,
+      ceil: 24,
+      translate: (value: number, label: LabelType): string => {
+        switch (label) {
+          case LabelType.Low:
+            return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+          case LabelType.High:
+            return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+          default: 
+            return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+        }
       }
-    });
+    };
+    this.options[dayNum] = Object.assign({}, locGenOption, {disabled: 0});
   }
 
   onSubmitBusiness(){
@@ -475,35 +991,305 @@ export class BusinessComponent implements OnInit {
       return;
     }
     if (this.businessForm.touched){
-      // let countryId = this.businessForm.value.Country;
-    
-      // let dataForm =  { 
-      //   "Name": this.businessForm.value.Name,
-      //   "Address": this.businessForm.value.Address,
-      //   "House_No": this.businessForm.value.House_No,
-      //   "Country": countryId.c,
-      //   "State": this.businessForm.value.State,
-      //   "Phone": this.businessForm.value.Phone,
-      //   "Postal_Code": this.businessForm.value.Postal_Code,
-      //   "Tax_Number": this.businessForm.value.Tax_Number,
-      //   "Email": this.businessForm.value.Email
-      // }
-      // var spinnerRef = this.spinnerService.start("Saving Business...");
-      // this.businessSave$ = this.businessService.updateBusiness(this.businessId, dataForm).pipe(
-      //   tap(res => { 
-      //     this.spinnerService.stop(spinnerRef);
-      //     this.savingBusiness = true;
-      //     this.businessForm.markAsPristine();
-      //     this.businessForm.markAsUntouched();
-      //     this.openDialog('Business', 'Business updated successful', true, false, false);
-      //   }),
-      //   catchError(err => {
-      //     this.spinnerService.stop(spinnerRef);
-      //     this.savingBusiness = false;
-      //     this.openDialog('Error !', err.Message, false, true, false);
-      //     return throwError(err || err.message);
-      //   })
-      // );
+      let countryId = this.businessForm.value.Country;
+      let mon: any[] = [];
+      let tue: any[] = [];
+      let wed: any[] = [];
+      let thu: any[] = [];
+      let fri: any[] = [];
+      let sat: any[] = [];
+      let sun: any[] = [];
+
+      let opeHours = {}
+      if (this.businessForm.value.MonEnabled === 1) {
+        mon.push({"I": this.businessForm.value.Mon[0].toString(), "F": this.businessForm.value.Mon[1].toString()});
+        if (this.newInterval[0] == "1"){
+          mon.push({"I": this.businessForm.value.Mon02[0].toString(), "F": this.businessForm.value.Mon02[1].toString()});
+        }
+        opeHours["MON"] = mon
+      }
+      if (this.businessForm.value.TueEnabled === 1) {
+        tue.push({"I": this.businessForm.value.Tue[0].toString(), "F": this.businessForm.value.Tue[1].toString()});
+        if (this.newInterval[1] == "1"){
+          tue.push({"I": this.businessForm.value.Tue02[0].toString(), "F": this.businessForm.value.Tue02[1].toString()});
+        }
+        opeHours["TUE"] = tue
+      }
+      if (this.businessForm.value.WedEnabled === 1) {
+        wed.push({"I": this.businessForm.value.Wed[0].toString(), "F": this.businessForm.value.Wed[1].toString()});
+        if (this.newInterval[2] == "1"){
+          wed.push({"I": this.businessForm.value.Wed02[0].toString(), "F": this.businessForm.value.Wed02[1].toString()});
+        }
+        opeHours["WED"] = wed
+      }
+      if (this.businessForm.value.ThuEnabled === 1) {
+        thu.push({"I": this.businessForm.value.Thu[0].toString(), "F": this.businessForm.value.Thu[1].toString()});
+        if (this.newInterval[3] == "1"){
+          thu.push({"I": this.businessForm.value.Thu02[0].toString(), "F": this.businessForm.value.Thu02[1].toString()});
+        }
+        opeHours["THU"] = thu
+      }
+      if (this.businessForm.value.FriEnabled === 1) {
+        fri.push({"I": this.businessForm.value.Fri[0].toString(), "F": this.businessForm.value.Fri[1].toString()});
+        if (this.newInterval[4] == "1"){
+          fri.push({"I": this.businessForm.value.Fri02[0].toString(), "F": this.businessForm.value.Fri02[1].toString()});
+        }
+        opeHours["FRI"] = fri
+      }
+      if (this.businessForm.value.SatEnabled === 1) {
+        sat.push({"I": this.businessForm.value.Sat[0].toString(), "F": this.businessForm.value.Sat[1].toString()});
+        if (this.newInterval[5] == "1"){
+          sat.push({"I": this.businessForm.value.Sat02[0].toString(), "F": this.businessForm.value.Sat02[1].toString()});
+        }
+        opeHours["SAT"] = sat
+      }
+      if (this.businessForm.value.SunEnabled === 1) {
+        sun.push({"I": this.businessForm.value.Sun[0].toString(), "F": this.businessForm.value.Sun[1].toString()});
+        if (this.newInterval[6] == "1"){
+          sun.push({"I": this.businessForm.value.Sun02[0].toString(), "F": this.businessForm.value.Sun02[1].toString()});
+        }
+        opeHours["SUN"] = sun
+      }
+      
+      let dataForm =  { 
+        "Name": this.businessForm.value.Name,
+        "Country": countryId.c,
+        "Address": this.businessForm.value.Address,
+        "City": this.businessForm.value.City,
+        "ZipCode": this.businessForm.value.ZipCode,
+        "Geolocation": this.businessForm.value.Geolocation,
+        "Phone": this.businessForm.value.Phone.replace('+1',''),
+        "Website": this.businessForm.value.WebSite,
+        "Facebook": this.businessForm.value.Facebook,
+        "Twitter": this.businessForm.value.Twitter,
+        "Instagram": this.businessForm.value.Instagram,
+        "Email": this.businessForm.value.Email,
+        "OperationHours": JSON.stringify(opeHours),
+        "Tags": this.businessForm.value.Tags,
+        "Categories": this.businessForm.value.Categories
+      }
+      console.log(dataForm);
+      return;
+      var spinnerRef = this.spinnerService.start("Saving Business...");
+      this.businessSave$ = this.businessService.updateBusiness(this.businessId, dataForm).pipe(
+        tap(res => { 
+          this.spinnerService.stop(spinnerRef);
+          this.savingBusiness = true;
+          this.businessForm.markAsPristine();
+          this.businessForm.markAsUntouched();
+          this.openDialog('Business', 'Business updated successful', true, false, false);
+        }),
+        catchError(err => {
+          this.spinnerService.stop(spinnerRef);
+          this.savingBusiness = false;
+          this.openDialog('Error !', err.Message, false, true, false);
+          return throwError(err || err.message);
+        })
+      );
+    }
+  }
+
+  addLocation(){
+    (<FormArray>this.locationForm.get('locations')).push(this.createLocation());
+  }
+
+  onValueChanged(data?: any): void {
+    if (data['MonEnabled'] == true) {
+      data['MonEnabled'] = 1;
+    } else {
+      data['MonEnabled'] = 0;
+    }
+    if (data['TueEnabled'] == true) {
+      data['TueEnabled'] = 1;
+    } else {
+      data['TueEnabled'] = 0;
+    }
+    if (data['WedEnabled'] == true) {
+      data['WedEnabled'] = 1;
+    } else {
+      data['WedEnabled'] = 0;
+    }
+    if (data['ThuEnabled'] == true) {
+      data['ThuEnabled'] = 1;
+    } else {
+      data['ThuEnabled'] = 0;
+    }
+    if (data['FriEnabled'] == true) {
+      data['FriEnabled'] = 1;
+    } else {
+      data['FriEnabled'] = 0;
+    }
+    if (data['SatEnabled'] == true) {
+      data['SatEnabled'] = 1;
+    } else {
+      data['SatEnabled'] = 0;
+    }
+    if (data['SunEnabled'] == true) {
+      data['SunEnabled'] = 1;
+    } else {
+      data['SunEnabled'] = 0;
+    }
+  }
+
+  onChangeDisabledLoc(item: number, i: number, event: any){
+    switch (item) {
+      case 0:
+        this.optionsMonLoc[i] = Object.assign({}, this.optionsMonLoc[i], {disabled: !event.checked});
+        break;
+      case 1:
+        this.optionsTueLoc[i] = Object.assign({}, this.optionsTueLoc[i], {disabled: !event.checked});
+        break;
+      case 2:
+        this.optionsWedLoc[i] = Object.assign({}, this.optionsWedLoc[i], {disabled: !event.checked});
+        break;
+      case 3:
+        this.optionsThuLoc[i] = Object.assign({}, this.optionsThuLoc[i], {disabled: !event.checked});
+        break;
+      case 4:
+        this.optionsFriLoc[i] = Object.assign({}, this.optionsFriLoc[i], {disabled: !event.checked});
+        break;
+      case 5:
+        this.optionsSatLoc[i] = Object.assign({}, this.optionsSatLoc[i], {disabled: !event.checked});
+        break;
+      case 6:
+        this.optionsSunLoc[i] = Object.assign({}, this.optionsSunLoc[i], {disabled: !event.checked});
+        break;
+    }
+    if (event.checked == false){
+      this.newIntervalLoc[i][item] = "0";
+    }
+  }
+
+  removeDoor(door: string, i: number): void {
+    const index = this.doors[i].indexOf(door);
+    if (index > 0) {
+      this.doors[i] = this.doors[i].replace(','+door,'');
+    } else if (index == 0) {
+      if (this.doors[i].length > index+door.length) {
+        this.doors[i] = this.doors[i].replace(door+',','');
+      } else {
+        this.doors[i] = this.doors[i].replace(door,'');
+      }
+    } else {
+      this.doors[i] = this.doors[i].replace(door,'');
+    }
+  }
+
+  addDoor(event: MatChipInputEvent, i: number): void {
+    const input = event.input;
+    const value = event.value;
+
+    if ((value || '').trim()) {
+      if (this.doors[i] != ''){
+        this.doors[i] = this.doors[i] + ',' + value;
+      } else {
+        this.doors[i] = value;
+      }
+    }
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  onAddIntervalLoc(dayNum: number, index: number){
+    let maxValue;
+    let loca =  this.locationForm.get('locations') as FormArray;
+    switch (dayNum) {
+      case 0: maxValue = loca.at(index).value.Mon[1]; break;
+      case 1: maxValue = loca.at(index).value.Tue[1]; break;
+      case 2: maxValue = loca.at(index).value.Wed[1]; break;
+      case 3: maxValue = loca.at(index).value.Thu[1]; break;
+      case 4: maxValue = loca.at(index).value.Fri[1]; break;
+      case 5: maxValue = loca.at(index).value.Sat[1]; break;
+      case 6: maxValue = loca.at(index).value.Sun[1]; break;
+    }
+    if (maxValue < 23){
+      this.newIntervalLoc[index][dayNum] = "1";
+      let iniGenOption = {
+        floor: 0,
+        ceil: maxValue,
+        translate: (value: number, label: LabelType): string => {
+          switch (label) {
+            case LabelType.Low:
+              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+            case LabelType.High:
+              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+            default: 
+              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+          }
+        }
+      };
+      let locGenOption = {
+        floor: maxValue+1,
+        ceil: 24,
+        translate: (value: number, label: LabelType): string => {
+          switch (label) {
+            case LabelType.Low:
+              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+            case LabelType.High:
+              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+            default: 
+              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+          }
+        }
+      };
+      switch (dayNum){
+        case 0: 
+          this.optionsMonLoc[dayNum] = Object.assign({}, iniGenOption, {disabled: 0});
+          this.optionsMonLoc02[dayNum] = Object.assign({}, locGenOption, {disabled: 0});
+          break;
+        case 1: 
+          this.optionsTueLoc[dayNum] = Object.assign({}, iniGenOption, {disabled: 0});
+          this.optionsTueLoc02[dayNum] = Object.assign({}, locGenOption, {disabled: 0});
+          break;
+        case 2: 
+          this.optionsWedLoc[dayNum] = Object.assign({}, iniGenOption, {disabled: 0});
+          this.optionsWedLoc02[dayNum] = Object.assign({}, locGenOption, {disabled: 0});
+          break;
+        case 3: 
+          this.optionsThuLoc[dayNum] = Object.assign({}, iniGenOption, {disabled: 0});
+          this.optionsThuLoc02[dayNum] = Object.assign({}, locGenOption, {disabled: 0});
+          break;
+        case 4: 
+          this.optionsFriLoc[dayNum] = Object.assign({}, iniGenOption, {disabled: 0});
+          this.optionsFriLoc02[dayNum] = Object.assign({}, locGenOption, {disabled: 0});
+          break;
+        case 5: 
+          this.optionsSatLoc[dayNum] = Object.assign({}, iniGenOption, {disabled: 0});
+          this.optionsSatLoc02[dayNum] = Object.assign({}, locGenOption, {disabled: 0});
+          break;
+        case 6: 
+          this.optionsSunLoc[dayNum] = Object.assign({}, iniGenOption, {disabled: 0});
+          this.optionsSunLoc02[dayNum] = Object.assign({}, locGenOption, {disabled: 0});
+          break;
+      }
+    }
+  }
+
+  onRemIntervalLoc(dayNum: number, index: number){
+    this.newInterval[index][dayNum] = "0";
+    let locGenOption = {
+      floor: 0,
+      ceil: 24,
+      translate: (value: number, label: LabelType): string => {
+        switch (label) {
+          case LabelType.Low:
+            return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+          case LabelType.High:
+            return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+          default: 
+            return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+        }
+      }
+    };
+    switch (dayNum){
+      case 0: this.optionsMonLoc[dayNum] = Object.assign({}, locGenOption, {disabled: 0}); break;
+      case 1: this.optionsTueLoc[dayNum] = Object.assign({}, locGenOption, {disabled: 0}); break;
+      case 2: this.optionsWedLoc[dayNum] = Object.assign({}, locGenOption, {disabled: 0}); break;
+      case 3: this.optionsThuLoc[dayNum] = Object.assign({}, locGenOption, {disabled: 0}); break;
+      case 4: this.optionsFriLoc[dayNum] = Object.assign({}, locGenOption, {disabled: 0}); break;
+      case 5: this.optionsSatLoc[dayNum] = Object.assign({}, locGenOption, {disabled: 0}); break;
+      case 6: this.optionsSunLoc[dayNum] = Object.assign({}, locGenOption, {disabled: 0}); break;
     }
   }
 
@@ -532,11 +1318,12 @@ export class BusinessComponent implements OnInit {
     }
   }
 
-  
-
   ngOnDestroy() {
     if (this.subsBusiness){
       this.subsBusiness.unsubscribe();
+    }
+    if (this.subsItems){
+      this.subsItems.unsubscribe();
     }
   }
 
