@@ -54,7 +54,7 @@ export class BusinessComponent implements OnInit {
   @ViewChild('categoryInput') categoryInput: ElementRef<HTMLInputElement>;
   @ViewChild('autoCategory') matAutocomplete: MatAutocomplete;
 
-  //Maps
+  //Maps  API KEY colocarlo en app.modules  AIzaSyCyKdLcjPnI3n5Eb2VmMJk-sgan83LEsCM
   lat: number = 0;
   lng: number = 0;
   latLoc: any[] = [];

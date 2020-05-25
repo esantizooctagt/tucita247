@@ -108,7 +108,7 @@ import { AgmCoreModule } from '@agm/core';
     FormsModule,
     Ng5SliderModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyCyKdLcjPnI3n5Eb2VmMJk-sgan83LEsCM'
+      apiKey: 'API_KEY'
     })
   ],
   exports: [
