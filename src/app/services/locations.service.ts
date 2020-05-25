@@ -22,8 +22,8 @@ export class LocationService {
                         .pipe(catchError(this.errorHandler));
     }
 
-    updateLocations(dataForm){
-      return this.http.patch(this.apiURL + '/locations', dataForm)
+    updateLocations(dataForm, businessId){
+      return this.http.put(this.apiURL + '/locations/'+businessId, dataForm)
                       .pipe(catchError(this.errorHandler));
     }
 

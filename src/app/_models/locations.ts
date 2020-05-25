@@ -6,10 +6,17 @@ export class Location {
         public BusinessId: string,
         public Name: string,
         public Address: string,
-        public Postal_Code: string,
-        public Tax_Number: string,
-        public Status: number,
-        public Cashier_No: number
-        // public Cashiers?: Cashier[]
+        public Geolocation: string,
+        public ParentLocation: string,
+        public TotalPiesTransArea: number,
+        public LocationDensity: number,
+        public MaxNumberEmployeesLocation: number,
+        public MaxConcurrentCustomerLocation: number,
+        public Open: string,
+        public BucketInterval: number,
+        public TotalCustPerBucketInter: number,
+        public OperationHours: string,
+        public Doors: string,
+        public Status: number
     ){}
 }

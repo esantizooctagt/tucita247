@@ -1,16 +1,14 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { AuthService } from '@core/services';
-import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Country, Location, Business, Category } from '@app/_models';
 import { Observable, Subscription, throwError } from 'rxjs';
-import { startWith, map, shareReplay, catchError, tap, finalize } from 'rxjs/operators';
+import { startWith, map, shareReplay, catchError, tap } from 'rxjs/operators';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { BusinessService, LocationService, CategoryService } from '@app/services/index';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { environment } from '@environments/environment';
@@ -62,7 +60,7 @@ export class BusinessComponent implements OnInit {
 
   //Doors
   noItemsLoc = 0;
-  subsItems: Subscription;
+  // subsItems: Subscription;
   doors: any[] = [];
   selectable = true;
   removable = true;
@@ -186,10 +184,10 @@ export class BusinessComponent implements OnInit {
   createLocation(): FormGroup {
     const items = this.fb.group({
       LocationId: [''],
-      BusinessId: [this.businessId],
+      BusinessId: [''],
       Name: ['', [Validators.required, Validators.maxLength(500), Validators.minLength(3)]],
       Address: ['', [Validators.required, Validators.maxLength(500), Validators.minLength(3)]],
-      Geolocation: ['', [Validators.maxLength(50), Validators.minLength(5)]],
+      Geolocation: ['{0.00,0.00}', [Validators.maxLength(50), Validators.minLength(5)]],
       ParentLocation: [''],
       TotalPiesTransArea: ['',[Validators.required]],
       LocationDensity: ['',[Validators.required, Validators.min(1)]],
@@ -200,28 +198,28 @@ export class BusinessComponent implements OnInit {
       TotalCustPerBucketInter: ['',[Validators.required, Validators.min(1)]],
       Doors: ['',[Validators.required]],
       Status: [1],
-      OperationHours: ['', [Validators.required]],
+      OperationHours: [''],
       Mon: new FormControl([8, 17]),
       Mon02: new FormControl([0, 0]),
-      MonEnabled: [0],
+      MonEnabled: [false],
       Tue: new FormControl([8, 17]),
       Tue02: new FormControl([0, 0]),
-      TueEnabled: [0],
+      TueEnabled: [false],
       Wed: new FormControl([8, 17]),
       Wed02: new FormControl([0, 0]),
-      WedEnabled: [0],
+      WedEnabled: [false],
       Thu: new FormControl([8, 17]),
       Thu02: new FormControl([0, 0]),
-      ThuEnabled: [0],
+      ThuEnabled: [false],
       Fri: new FormControl([8, 17]),
       Fri02: new FormControl([0, 0]),
-      FriEnabled: [0],
+      FriEnabled: [false],
       Sat: new FormControl([8, 12]),
       Sat02: new FormControl([0, 0]),
-      SatEnabled: [0],
+      SatEnabled: [false],
       Sun: new FormControl([8, 12]),
       Sun02: new FormControl([0, 0]),
-      SunEnabled: [0]
+      SunEnabled: [false]
     });
     let gens
     gens = Object.assign({}, this.genOption, {disabled: 1});
@@ -242,15 +240,9 @@ export class BusinessComponent implements OnInit {
     this.optionsSatLoc02.push(gens);
     this.optionsSunLoc02.push(gens);
 
-    console.log(this.newIntervalLoc);
     this.newIntervalLoc.push([]);
     this.newIntervalLoc[this.noItemsLoc].push("0","0","0","0","0","0","0");
-    console.log(this.newIntervalLoc);
-
     this.noItemsLoc = this.noItemsLoc+1;
-
-    this.subsItems = items.valueChanges
-      .subscribe(data => this.onValueChanged(data));
     return items;
   }
 
@@ -613,45 +605,78 @@ export class BusinessComponent implements OnInit {
         return throwError(err || err.message);
       })
     );
-    //Load Locations Stepper 2
-  //   this.location$ =  this.locationService.getLocations(this.businessId).pipe(
-  //     tap((res: any) => {
-  //       const item = this.locationForm.controls.locations as FormArray;
-  //       item.at(0).patchValue({
-  //         BusinessId: this.businessId
-  //       });
-  //       if (res != null){
-  //         this.listLocations = res.map(response => {
-  //           return {
-  //             LocationId: response.LocationId,
-  //             Name: response.Name
-  //           }
-  //         });
 
-  //         //link location info to reactive form
-  //         this.locationForm.setControl('locations', this.setLocations(res));
-
-  //         //Drag & Drop connectedTo variable
-  //         this.listLocations.forEach(s=> {
-  //           this.connectedTo.push(s.LocationId);
-  //         });
-          
-  //       }else{
-  //         //Add new locations to the view
-  //         if (this.noLocations > 1 && this.locationForm.value.locations.length == 1){
-  //           for(var i = 1; i <= this.noLocations-1; i++){
-  //             (<FormArray>this.locationForm.get('locations')).push(this.createLocation());
-  //           }
-  //         }
-  //       }
-  //       this.spinnerService.stop(spinnerRef);
-  //     }),
-  //     catchError(err => {
-  //       this.spinnerService.stop(spinnerRef);
-  //       this.openDialog('Error !', err.Message, false, true, false);
-  //       return throwError(err || err.message);
-  //     })
-  //   );
+    //LOAD LOCATIONS
+    this.location$ =  this.locationService.getLocations(this.businessId).pipe(
+      tap((res: any) => {
+        if (res != null){
+          let index = 0;
+          res.Locations.forEach(s => {
+            const item = this.locationForm.controls.locations as FormArray;
+            if (index > 0){
+              this.createLocation();
+            }
+            var opeHour = JSON.parse(s.OperationHours);
+            item.at(index).setValue({
+              BusinessId: s.BusinessId,
+              LocationId: s.LocationId,
+              Name: s.Name,
+              Address: s.Address,
+              Geolocation: s.Geolocation,
+              ParentLocation: s.ParentLocation,
+              TotalPiesTransArea: s.TotalPiesTransArea,
+              LocationDensity: s.LocationDensity,
+              MaxNumberEmployeesLocation: s.MaxNumberEmployeesLocation,
+              MaxConcurrentCustomerLocation: s.MaxConcurrentCustomerLocation,
+              Open: s.Open,
+              BucketInterval: s.BucketInterval,
+              TotalCustPerBucketInter: s.TotalCustPerBucketInter,
+              OperationHours: s.OperationHours,
+              Doors: '',
+              Status: s.Status,
+              Mon: ("MON" in opeHour ? [+opeHour.MON[0].I, +opeHour.MON[0].F] : [8, 12]),
+              Mon02: ("MON" in opeHour ? (opeHour.MON.length > 1 ? [+opeHour.MON[1].I, +opeHour.MON[1].F] : [0,0]) : [0, 0]),
+              MonEnabled: ("MON" in opeHour ? 1 : 0),
+              Tue: ("TUE" in opeHour ? [+opeHour.TUE[0].I, +opeHour.TUE[0].F] : [8, 12]),
+              Tue02: ("TUE" in opeHour ? (opeHour.TUE.length > 1 ? [+opeHour.TUE[1].I, +opeHour.TUE[1].F] : [0,0]) : [0, 0]),
+              TueEnabled: ("TUE" in opeHour ? 1 : 0),
+              Wed: ("WED" in opeHour ? [+opeHour.WED[0].I, +opeHour.WED[0].F] : [8, 12]),
+              Wed02: ("WED" in opeHour ? (opeHour.WED.length > 1 ? [+opeHour.WED[1].I, +opeHour.WED[1].F] : [0,0]) : [0, 0]),
+              WedEnabled: ("WED" in opeHour ? 1 : 0),
+              Thu: ("THU" in opeHour ? [+opeHour.THU[0].I, +opeHour.THU[0].F] : [8, 12]),
+              Thu02: ("THU" in opeHour ? (opeHour.THU.length > 1 ? [+opeHour.THU[1].I, +opeHour.THU[1].F] : [0,0]) : [0, 0]),
+              ThuEnabled: ("THU" in opeHour ? 1 : 0),
+              Fri: ("FRI" in opeHour ? [+opeHour.FRI[0].I, +opeHour.FRI[0].F] : [8, 12]),
+              Fri02: ("FRI" in opeHour ? (opeHour.FRI.length > 1 ? [+opeHour.FRI[1].I, +opeHour.FRI[1].F] : [0,0]) : [0, 0]),
+              FriEnabled: ("FRI" in opeHour ? 1 : 0),
+              Sat: ("SAT" in opeHour ? [+opeHour.SAT[0].I, +opeHour.SAT[0].F] : [8, 12]),
+              Sat02: ("SAT" in opeHour ? (opeHour.SAT.length > 1 ? [+opeHour.SAT[1].I, +opeHour.SAT[1].F] : [0,0]) : [0, 0]),
+              SatEnabled: ("SAT" in opeHour ? 1 : 0),
+              Sun: ("SUN" in opeHour ? [+opeHour.SUN[0].I, +opeHour.SUN[0].F] : [8, 12]),
+              Sun02: ("SUN" in opeHour ? (opeHour.SUN.length > 1 ? [+opeHour.SUN[1].I, +opeHour.TUE[1].F] : [0,0]) : [0, 0]),
+              SunEnabled: ("SUN" in opeHour ? 1 : 0)
+            });
+            
+            this.doors[index] = s.Doors;
+            index = index+1;
+          });
+        }
+        // else{
+        //   //Add new locations to the view
+        //   if (this.noLocations > 1 && this.locationForm.value.locations.length == 1){
+        //     for(var i = 1; i <= this.noLocations-1; i++){
+        //       (<FormArray>this.locationForm.get('locations')).push(this.createLocation());
+        //     }
+        //   }
+        // }
+        this.spinnerService.stop(spinnerRef);
+      }),
+      catchError(err => {
+        this.spinnerService.stop(spinnerRef);
+        this.openDialog('Error !', err.Message, false, true, false);
+        return throwError(err || err.message);
+      })
+    );
   }
 
   // private markFormGroupTouched() {
@@ -890,17 +915,30 @@ export class BusinessComponent implements OnInit {
   }
 
   setLocations(locations: Location[]): FormArray{
+    console.log(locations);
     const formLocationsArray = new FormArray([]);
+    let index = 0;
     locations.forEach(s => {
       formLocationsArray.push(this.fb.group({
+        BusinessId: s.BusinessId,
         LocationId: s.LocationId,
         Name: s.Name,
-        BusinessId: this.businessId,
         Address: s.Address,
-        Postal_Code: s.Postal_Code,
-        Tax_Number: s.Tax_Number,
+        Geolocation: s.Geolocation,
+        ParentLocation: s.ParentLocation,
+        TotalPiesTransArea: s.TotalPiesTransArea,
+        LocationDensity: s.LocationDensity,
+        MaxNumberEmployeesLocation: s.MaxNumberEmployeesLocation,
+        MaxConcurrentCustomerLocation: s.MaxConcurrentCustomerLocation,
+        Open: s.Open,
+        BucketInterval: s.BucketInterval,
+        TotalCustPerBucketInter: s.TotalCustPerBucketInter,
+        OperationHours: s.OperationHours,
+        Doors: '',
         Status: s.Status
       }));
+      this.doors[index] = s.Doors;
+      index = index+1;
     });
     return formLocationsArray;
   }
@@ -1093,44 +1131,6 @@ export class BusinessComponent implements OnInit {
     (<FormArray>this.locationForm.get('locations')).push(this.createLocation());
   }
 
-  onValueChanged(data?: any): void {
-    if (data['MonEnabled'] == true) {
-      data['MonEnabled'] = 1;
-    } else {
-      data['MonEnabled'] = 0;
-    }
-    if (data['TueEnabled'] == true) {
-      data['TueEnabled'] = 1;
-    } else {
-      data['TueEnabled'] = 0;
-    }
-    if (data['WedEnabled'] == true) {
-      data['WedEnabled'] = 1;
-    } else {
-      data['WedEnabled'] = 0;
-    }
-    if (data['ThuEnabled'] == true) {
-      data['ThuEnabled'] = 1;
-    } else {
-      data['ThuEnabled'] = 0;
-    }
-    if (data['FriEnabled'] == true) {
-      data['FriEnabled'] = 1;
-    } else {
-      data['FriEnabled'] = 0;
-    }
-    if (data['SatEnabled'] == true) {
-      data['SatEnabled'] = 1;
-    } else {
-      data['SatEnabled'] = 0;
-    }
-    if (data['SunEnabled'] == true) {
-      data['SunEnabled'] = 1;
-    } else {
-      data['SunEnabled'] = 0;
-    }
-  }
-
   onChangeDisabledLoc(item: number, i: number, event: any){
     switch (item) {
       case 0:
@@ -1194,6 +1194,7 @@ export class BusinessComponent implements OnInit {
   onAddIntervalLoc(dayNum: number, index: number){
     let maxValue;
     let loca =  this.locationForm.get('locations') as FormArray;
+
     switch (dayNum) {
       case 0: maxValue = loca.at(index).value.Mon[1]; break;
       case 1: maxValue = loca.at(index).value.Tue[1]; break;
@@ -1203,6 +1204,7 @@ export class BusinessComponent implements OnInit {
       case 5: maxValue = loca.at(index).value.Sat[1]; break;
       case 6: maxValue = loca.at(index).value.Sun[1]; break;
     }
+
     if (maxValue < 23){
       this.newIntervalLoc[index][dayNum] = "1";
       let iniGenOption = {
@@ -1235,39 +1237,39 @@ export class BusinessComponent implements OnInit {
       };
       switch (dayNum){
         case 0: 
-          this.optionsMonLoc[dayNum] = Object.assign({}, iniGenOption, {disabled: 0});
-          this.optionsMonLoc02[dayNum] = Object.assign({}, locGenOption, {disabled: 0});
+          this.optionsMonLoc[index] = Object.assign({}, iniGenOption, {disabled: 0});
+          this.optionsMonLoc02[index] = Object.assign({}, locGenOption, {disabled: 0});
           break;
         case 1: 
-          this.optionsTueLoc[dayNum] = Object.assign({}, iniGenOption, {disabled: 0});
-          this.optionsTueLoc02[dayNum] = Object.assign({}, locGenOption, {disabled: 0});
+          this.optionsTueLoc[index] = Object.assign({}, iniGenOption, {disabled: 0});
+          this.optionsTueLoc02[index] = Object.assign({}, locGenOption, {disabled: 0});
           break;
         case 2: 
-          this.optionsWedLoc[dayNum] = Object.assign({}, iniGenOption, {disabled: 0});
-          this.optionsWedLoc02[dayNum] = Object.assign({}, locGenOption, {disabled: 0});
+          this.optionsWedLoc[index] = Object.assign({}, iniGenOption, {disabled: 0});
+          this.optionsWedLoc02[index] = Object.assign({}, locGenOption, {disabled: 0});
           break;
         case 3: 
-          this.optionsThuLoc[dayNum] = Object.assign({}, iniGenOption, {disabled: 0});
-          this.optionsThuLoc02[dayNum] = Object.assign({}, locGenOption, {disabled: 0});
+          this.optionsThuLoc[index] = Object.assign({}, iniGenOption, {disabled: 0});
+          this.optionsThuLoc02[index] = Object.assign({}, locGenOption, {disabled: 0});
           break;
         case 4: 
-          this.optionsFriLoc[dayNum] = Object.assign({}, iniGenOption, {disabled: 0});
-          this.optionsFriLoc02[dayNum] = Object.assign({}, locGenOption, {disabled: 0});
+          this.optionsFriLoc[index] = Object.assign({}, iniGenOption, {disabled: 0});
+          this.optionsFriLoc02[index] = Object.assign({}, locGenOption, {disabled: 0});
           break;
         case 5: 
-          this.optionsSatLoc[dayNum] = Object.assign({}, iniGenOption, {disabled: 0});
-          this.optionsSatLoc02[dayNum] = Object.assign({}, locGenOption, {disabled: 0});
+          this.optionsSatLoc[index] = Object.assign({}, iniGenOption, {disabled: 0});
+          this.optionsSatLoc02[index] = Object.assign({}, locGenOption, {disabled: 0});
           break;
         case 6: 
-          this.optionsSunLoc[dayNum] = Object.assign({}, iniGenOption, {disabled: 0});
-          this.optionsSunLoc02[dayNum] = Object.assign({}, locGenOption, {disabled: 0});
+          this.optionsSunLoc[index] = Object.assign({}, iniGenOption, {disabled: 0});
+          this.optionsSunLoc02[index] = Object.assign({}, locGenOption, {disabled: 0});
           break;
       }
     }
   }
 
   onRemIntervalLoc(dayNum: number, index: number){
-    this.newInterval[index][dayNum] = "0";
+    this.newIntervalLoc[index][dayNum] = "0";
     let locGenOption = {
       floor: 0,
       ceil: 24,
@@ -1283,47 +1285,127 @@ export class BusinessComponent implements OnInit {
       }
     };
     switch (dayNum){
-      case 0: this.optionsMonLoc[dayNum] = Object.assign({}, locGenOption, {disabled: 0}); break;
-      case 1: this.optionsTueLoc[dayNum] = Object.assign({}, locGenOption, {disabled: 0}); break;
-      case 2: this.optionsWedLoc[dayNum] = Object.assign({}, locGenOption, {disabled: 0}); break;
-      case 3: this.optionsThuLoc[dayNum] = Object.assign({}, locGenOption, {disabled: 0}); break;
-      case 4: this.optionsFriLoc[dayNum] = Object.assign({}, locGenOption, {disabled: 0}); break;
-      case 5: this.optionsSatLoc[dayNum] = Object.assign({}, locGenOption, {disabled: 0}); break;
-      case 6: this.optionsSunLoc[dayNum] = Object.assign({}, locGenOption, {disabled: 0}); break;
+      case 0: this.optionsMonLoc[index] = Object.assign({}, locGenOption, {disabled: 0}); break;
+      case 1: this.optionsTueLoc[index] = Object.assign({}, locGenOption, {disabled: 0}); break;
+      case 2: this.optionsWedLoc[index] = Object.assign({}, locGenOption, {disabled: 0}); break;
+      case 3: this.optionsThuLoc[index] = Object.assign({}, locGenOption, {disabled: 0}); break;
+      case 4: this.optionsFriLoc[index] = Object.assign({}, locGenOption, {disabled: 0}); break;
+      case 5: this.optionsSatLoc[index] = Object.assign({}, locGenOption, {disabled: 0}); break;
+      case 6: this.optionsSunLoc[index] = Object.assign({}, locGenOption, {disabled: 0}); break;
     }
   }
 
   onSubmitLocations(){
-    if (!this.locationForm.valid){ // && this.validCashier === false){
-      return;
-    }
-    // this.validCashier = false;
+    // if (this.locationForm.invalid){ 
+    //   return;
+    // }
     if (this.locationForm.touched){
-      // var spinnerRef = this.spinnerService.start("Saving Locations...");
-      // this.locationSave$ = this.locationService.updateLocations(this.locationForm.value).pipe(
-      //   tap(res => {
-      //     this.spinnerService.stop(spinnerRef);
-      //     this.savingLocation = true;
-      //     this.locationForm.markAsPristine();
-      //     this.locationForm.markAsUntouched();
-      //     this.openDialog('Locations', 'Location created successful', true, false, false);
-      //   }),
-      //   catchError(err => {
-      //     this.spinnerService.stop(spinnerRef);
-      //     this.savingLocation = false;
-      //     this.openDialog('Error !', err.Message, false, true, false);
-      //     return throwError(err || err.message);
-      //   })
-      // ); 
+      let mon: any[] = [];
+      let tue: any[] = [];
+      let wed: any[] = [];
+      let thu: any[] = [];
+      let fri: any[] = [];
+      let sat: any[] = [];
+      let sun: any[] = [];
+
+      let loca =  this.locationForm.get('locations') as FormArray;
+      let items: any[] = [];
+      for (var i = 0; i < this.noItemsLoc; i++) {
+        let opeHours = {}
+        let item = loca.at(i);
+        if (item.value.MonEnabled == true){
+          mon.push({"I": item.value.Mon[0].toString(), "F": item.value.Mon[1].toString()});
+          if (this.newIntervalLoc[i][0] == "1"){
+            mon.push({"I": item.value.Mon02[0].toString(), "F": item.value.Mon02[1].toString()});
+          }
+          opeHours["MON"] = mon;
+        }
+        if (item.value.TueEnabled == true){
+          tue.push({"I": item.value.Tue[0].toString(), "F": item.value.Tue[1].toString()});
+          if (this.newIntervalLoc[i][1] == "1"){
+            tue.push({"I": item.value.Tue02[0].toString(), "F": item.value.Tue02[1].toString()});
+          }
+          opeHours["TUE"] = tue;
+        }
+        if (item.value.WedEnabled == true){
+          wed.push({"I": item.value.Wed[0].toString(), "F": item.value.Wed[1].toString()});
+          if (this.newIntervalLoc[i][2] == "1"){
+            wed.push({"I": item.value.Wed02[0].toString(), "F": item.value.Wed02[1].toString()});
+          }
+          opeHours["WED"] = wed;
+        }
+        if (item.value.ThuEnabled == true){
+          thu.push({"I": item.value.Thu[0].toString(), "F": item.value.Thu[1].toString()});
+          if (this.newIntervalLoc[i][3] == "1"){
+            thu.push({"I": item.value.Thu02[0].toString(), "F": item.value.Thu02[1].toString()});
+          }
+          opeHours["THU"] = thu;
+        }
+        if (item.value.FriEnabled == true){
+          fri.push({"I": item.value.Fri[0].toString(), "F": item.value.Fri[1].toString()});
+          if (this.newIntervalLoc[i][4] == "1"){
+            fri.push({"I": item.value.Fri02[0].toString(), "F": item.value.Fri02[1].toString()});
+          }
+          opeHours["FRI"] = fri;
+        }
+        if (item.value.SatEnabled == true){
+          sat.push({"I": item.value.Sat[0].toString(), "F": item.value.Sat[1].toString()});
+          if (this.newIntervalLoc[i][5] == "1"){
+            sat.push({"I": item.value.Sat02[0].toString(), "F": item.value.Sat02[1].toString()});
+          }
+          opeHours["SAT"] = sat;
+        }
+        if (item.value.SunEnabled == true){
+          sun.push({"I": item.value.Sun[0].toString(), "F": item.value.Sun[1].toString()});
+          if (this.newIntervalLoc[i][6] == "1"){
+            sun.push({"I": item.value.Sun02[0].toString(), "F": item.value.Sun02[1].toString()});
+          }
+          opeHours["SUN"] = sun;
+        }
+        let location = {
+          LocationId: item.value.LocationId,
+          Name: item.value.Name,
+          Address: item.value.Address,
+          Geolocation: item.value.Geolocation,
+          ParentLocation: item.value.ParentLocation,
+          TotalPiesTransArea: item.value.TotalPiesTransArea,
+          LocationDensity: item.value.LocationDensity,
+          MaxNumberEmployeesLocation: item.value.MaxNumberEmployeesLocation,
+          MaxConcurrentCustomerLocation: item.value.MaxConcurrentCustomerLocation,
+          Open: (item.value.Open == true ? 1 : 0),
+          BucketInterval: item.value.BucketInterval,
+          TotalCustPerBucketInter: item.value.TotalCustPerBucketInter,
+          Status: item.value.Status,
+          Doors: this.doors[i],
+          OperationHours: JSON.stringify(opeHours)
+        }
+        items.push(location);
+      }
+      let dataForm = {
+        Locs: items
+      }
+      var spinnerRef = this.spinnerService.start("Saving Locations...");
+      this.locationSave$ = this.locationService.updateLocations(dataForm, this.businessId).pipe(
+        tap(res => {
+          this.spinnerService.stop(spinnerRef);
+          this.savingLocation = true;
+          this.locationForm.markAsPristine();
+          this.locationForm.markAsUntouched();
+          this.openDialog('Locations', 'Location created successful', true, false, false);
+        }),
+        catchError(err => {
+          this.spinnerService.stop(spinnerRef);
+          this.savingLocation = false;
+          this.openDialog('Error !', err.Message, false, true, false);
+          return throwError(err || err.message);
+        })
+      ); 
     }
   }
 
   ngOnDestroy() {
     if (this.subsBusiness){
       this.subsBusiness.unsubscribe();
-    }
-    if (this.subsItems){
-      this.subsItems.unsubscribe();
     }
   }
 

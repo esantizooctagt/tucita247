@@ -193,7 +193,7 @@
                         <div>
                             <button class="mr-3 mt-2" mat-flat-button color="primary" [disabled]="businessForm.invalid" matStepperNext>Save / Next</button>
                         </div>
-                        <!-- {{ businessForm.value | json }} -->
+                        {{ businessForm.value | json }}
                         <!--{{ tags | json}} -->
                     </form>
                 </mat-step>
@@ -265,11 +265,9 @@
                                                            [matChipInputAddOnBlur]="addOnBlur"
                                                            (matChipInputTokenEnd)="addDoor($event,i)">
                                                   </mat-chip-list>
-                                                <!-- <input matInput placeholder="Doors" formControlName="Doors" [errorStateMatcher]="confirmValidParentMatcher" required>
-                                                <mat-error *ngIf="item.get('Doors').invalid">{{getErrorMessage('Doors', i)}}</mat-error> -->
                                             </mat-form-field>
                                             <mat-form-field class="col-md-6">
-                                                <input matInput placeholder="ParentLocation" formControlName="ParentLocation" [errorStateMatcher]="confirmValidParentMatcher" required>
+                                                <input matInput placeholder="ParentLocation" formControlName="ParentLocation" [errorStateMatcher]="confirmValidParentMatcher">
                                                 <mat-error *ngIf="item.get('ParentLocation').invalid">{{getErrorMessage('ParentLocation', i)}}</mat-error>
                                             </mat-form-field>
                                         </div>
@@ -280,7 +278,7 @@
                                                 <div class="slider col-md-4">
                                                     <ng5-slider formControlName="Mon" [options]="optionsMonLoc[i]" class="ml-1"></ng5-slider>
                                                 </div>
-                                                <button [disabled]="item.get('MonEnabled').value == 0" *ngIf="newIntervalLoc[i][0] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(0, i)">+ Add Interval</button>
+                                                <button [disabled]="item.get('MonEnabled').value == false" *ngIf="newIntervalLoc[i][0] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(0, i)">+ Add Interval</button>
                                                 <button *ngIf="newIntervalLoc[i][0] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(0, i)">- Del Interval</button>
                                                 <div class="slider col-md" *ngIf="newIntervalLoc[i][0] == '1'">
                                                     <ng5-slider formControlName="Mon02" [options]="optionsMonLoc02[i]" class="ml-1"></ng5-slider>
@@ -291,7 +289,7 @@
                                                 <div class="slider col-md-4">
                                                     <ng5-slider formControlName="Tue" [options]="optionsTueLoc[i]" class="ml-1"></ng5-slider>
                                                 </div>
-                                                <button [disabled]="item.get('TueEnabled').value == 0" *ngIf="newIntervalLoc[i][1] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(1, i)">+ Add Interval</button>
+                                                <button [disabled]="item.get('TueEnabled').value == false" *ngIf="newIntervalLoc[i][1] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(1, i)">+ Add Interval</button>
                                                 <button *ngIf="newIntervalLoc[i][1] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(1, i)">- Del Interval</button>
                                                 <div class="slider col-md" *ngIf="newIntervalLoc[i][1] == '1'">
                                                     <ng5-slider formControlName="Tue02" [options]="optionsTueLoc02[i]" class="ml-1"></ng5-slider>
@@ -302,7 +300,7 @@
                                                 <div class="slider col-md-4">
                                                     <ng5-slider formControlName="Wed" [options]="optionsWedLoc[i]" class="ml-1"></ng5-slider>
                                                 </div>
-                                                <button [disabled]="item.get('WedEnabled').value == 0" *ngIf="newIntervalLoc[i][2] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(2, i)">+ Add Interval</button>
+                                                <button [disabled]="item.get('WedEnabled').value == false" *ngIf="newIntervalLoc[i][2] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(2, i)">+ Add Interval</button>
                                                 <button *ngIf="newIntervalLoc[i][2] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(2, i)">- Del Interval</button>
                                                 <div class="slider col-md" *ngIf="newIntervalLoc[i][2] == '1'">
                                                     <ng5-slider formControlName="Wed02" [options]="optionsWedLoc02[i]" class="ml-1"></ng5-slider>
@@ -313,7 +311,7 @@
                                                 <div class="slider col-md-4">
                                                     <ng5-slider formControlName="Thu" [options]="optionsThuLoc[i]" class="ml-1"></ng5-slider>
                                                 </div>
-                                                <button [disabled]="item.get('ThuEnabled').value == 0" *ngIf="newIntervalLoc[i][3] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(3, i)">+ Add Interval</button>
+                                                <button [disabled]="item.get('ThuEnabled').value == false" *ngIf="newIntervalLoc[i][3] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(3, i)">+ Add Interval</button>
                                                 <button *ngIf="newIntervalLoc[i][3] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(3, i)">- Del Interval</button>
                                                 <div class="slider col-md" *ngIf="newIntervalLoc[i][3] == '1'">
                                                     <ng5-slider formControlName="Thu02" [options]="optionsThuLoc02[i]" class="ml-1"></ng5-slider>
@@ -324,7 +322,7 @@
                                                 <div class="slider col-md-4">
                                                     <ng5-slider formControlName="Fri" [options]="optionsFriLoc[i]" class="ml-1"></ng5-slider>
                                                 </div>
-                                                <button [disabled]="item.get('FriEnabled').value == 0" *ngIf="newIntervalLoc[i][4] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(4, i)">+ Add Interval</button>
+                                                <button [disabled]="item.get('FriEnabled').value == false" *ngIf="newIntervalLoc[i][4] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(4, i)">+ Add Interval</button>
                                                 <button *ngIf="newIntervalLoc[i][4] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(4, i)">- Del Interval</button>
                                                 <div class="slider col-md" *ngIf="newIntervalLoc[i][4] == '1'">
                                                     <ng5-slider formControlName="Fri02" [options]="optionsFriLoc02[i]" class="ml-1"></ng5-slider>
@@ -335,7 +333,7 @@
                                                 <div class="slider col-md-4">
                                                     <ng5-slider formControlName="Sat" [options]="optionsSatLoc[i]" class="ml-1"></ng5-slider>
                                                 </div>
-                                                <button [disabled]="item.get('SatEnabled').value == 0" *ngIf="newIntervalLoc[i][5] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(5, i)">+ Add Interval</button>
+                                                <button [disabled]="item.get('SatEnabled').value == false" *ngIf="newIntervalLoc[i][5] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(5, i)">+ Add Interval</button>
                                                 <button *ngIf="newIntervalLoc[i][5] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(5, i)">- Del Interval</button>
                                                 <div class="slider col-md" *ngIf="newIntervalLoc[i][5] == '1'">
                                                     <ng5-slider formControlName="Sat02" [options]="optionsSatLoc02[i]" class="ml-1"></ng5-slider>
@@ -346,20 +344,12 @@
                                                 <div class="slider col-md-4">
                                                     <ng5-slider formControlName="Sun" [options]="optionsSunLoc[i]" class="ml-1"></ng5-slider>
                                                 </div>
-                                                <button [disabled]="item.get('SunEnabled').value == 0" *ngIf="newIntervalLoc[i][6] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(6, i)">+ Add Interval</button>
+                                                <button [disabled]="item.get('SunEnabled').value == false" *ngIf="newIntervalLoc[i][6] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(6, i)">+ Add Interval</button>
                                                 <button *ngIf="newIntervalLoc[i][6] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(6, i)">- Del Interval</button>
                                                 <div class="slider col-md" *ngIf="newIntervalLoc[i][6] == '1'">
                                                     <ng5-slider formControlName="Sun02" [options]="optionsSunLoc02[i]" class="ml-1"></ng5-slider>
                                                 </div>
                                             </div>
-                                            
-                                            <!-- <div class="row pb-2">
-                                                <mat-checkbox formControlName="SunEnabled" class="col-md pl-4 mt-4" (change)="onChangeDisabledLoc(6, i, $event)">Sun</mat-checkbox>
-                                                <div class="slider">
-                                                    <ng5-slider formControlName="Sun" [options]="optionsSunLoc[i]" class="ml-1"></ng5-slider>
-                                                </div>
-                                                <button mat-stroked-button color="primary" class="ml-4 addSlider">+ Intervalo Adicional</button>
-                                            </div> -->
                                         </div>
                                         <div class="form-field-check">
                                             <mat-checkbox formControlName="Open">Open</mat-checkbox>
@@ -373,7 +363,8 @@
                         </mat-accordion>
                         <div>
                             <button class="mr-3 mt-2" mat-flat-button color="accent" matStepperPrevious>Back</button>
-                            <button class="mr-3 mt-2" mat-flat-button color="primary" [disabled]="locationForm.invalid" matStepperNext>Save / Next</button>
+                            <button class="mr-3 mt-2" mat-flat-button color="primary" matStepperNext>Save</button>
+                            <!-- [disabled]="locationForm.invalid" -->
                         </div>
                         {{ locationForm.value | json }}
                     </form>
