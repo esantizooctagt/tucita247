@@ -6,3 +6,4 @@ export * from './role';
 export * from './category';
 export * from './countries';
 export * from './business';
+export * from './appointment';

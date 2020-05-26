@@ -93,10 +93,8 @@ export class UserListComponent implements OnInit {
       map((res: any) => {
         if (res != null) {
           if (res.lastItem != ''){
-            console.log(this._currentPage);
             this.length = (this.pageSize*this._page)+1;
-            this._currentPage.push({page: this._page+1, userId: res.lastItem})
-            console.log(this.length);
+            this._currentPage.push({page: this._page+1, userId: res.lastItem});
           }
           this.spinnerService.stop(spinnerRef);
         }

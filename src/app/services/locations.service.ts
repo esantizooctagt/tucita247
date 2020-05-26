@@ -10,24 +10,30 @@ import { throwError, Observable } from 'rxjs';
 })
 export class LocationService {
   readonly apiURL = environment.apiUrl;
-    constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-    getLocation(storeId, cashierId): Observable<any>{
-      return this.http.get<any>(this.apiURL + '/location/' + storeId + '/' + cashierId)
+  getLocation(storeId, cashierId): Observable<any>{
+    return this.http.get<any>(this.apiURL + '/location/' + storeId + '/' + cashierId)
+                    .pipe(catchError(this.errorHandler));
+  }
+
+  getLocations(businessId): Observable<Location[]> {
+      return this.http.get<Location[]>(this.apiURL + '/locations/' + businessId)
                       .pipe(catchError(this.errorHandler));
-    }
+  }
 
-    getLocations(businessId): Observable<Location[]> {
-        return this.http.get<Location[]>(this.apiURL + '/locations/' + businessId)
-                        .pipe(catchError(this.errorHandler));
-    }
+  updateLocations(dataForm, businessId){
+    return this.http.put(this.apiURL + '/locations/'+businessId, dataForm)
+                    .pipe(catchError(this.errorHandler));
+  }
 
-    updateLocations(dataForm, businessId){
-      return this.http.put(this.apiURL + '/locations/'+businessId, dataForm)
-                      .pipe(catchError(this.errorHandler));
-    }
+  getLocationsHost(businessId): Observable<Location[]> {
+    return this.http.get<Location[]>(this.apiURL + '/locations/host/' + businessId)
+                    .pipe(catchError(this.errorHandler));
+  }
 
-    errorHandler(error) {
-      return throwError(error || 'Server Error');
-    }
+  errorHandler(error) {
+    return throwError(error || 'Server Error');
+  }
+  
 }

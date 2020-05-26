@@ -3,16 +3,92 @@
         <div class="pl-0 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
             <h4>Check In</h4>
         </div>
+        <h5 class="col-md-1 pl-0 pr-0 pt-3 pb-2">Location : </h5><span class="col-md-3 pt-3 pb-2 pl-0 pr-0 mb-2">
+            <mat-select (selectionChange)="setLocation($event.value)">
+                <mat-option class="mat-small" *ngFor="let res of locations$ | async" [value]="res">{{res.Name}}
+                </mat-option>
+            </mat-select>
+        </span>
+        <span class="col-md"></span>
+        <h5 class="col-md-1 pl-0 pr-0 pt-3 pb-2">Door : </h5><span class="col-md-1 pt-3 pb-2 pl-0 pr-0 mb-2">
+            <mat-select (selectionChange)="setDoor($event)">
+                <mat-option class="mat-small" *ngFor="let res of doors" [value]="res">{{res}}
+                </mat-option>
+            </mat-select>
+        </span>
+        <ng-container *ngIf="appointments$ | async"></ng-container>
         <mat-card class="col-sm col-md col-lg-12">
             <div class="row">
-                <div class="col-md-4 plan">
-
+                <div class="col-md ml-2 mr-2">
+                    <div class="title-log">
+                        <p class="">Schedule App</p>
+                    </div>
                 </div>
-                <div class="col-md-4 walkin">
-
+                <div class="col-md ml-2 mr-2">
+                    <div class="title-log">
+                        <p class="">Walk-Ins</p>
+                    </div>
+                    <div class="addApp">
+                        <button class="mr-0 mt-0 mb-2" type="button" mat-flat-button color="primary" (click)="addAppointment()">+ Appointment</button>
+                    </div>
                 </div>
-                <div class="col-md-4 precheck">
-
+                <div class="col-md ml-2 mr-2">
+                    <div class="title-log">
+                        <p class="">Pre Check-In</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div cdkDropList
+                     #scheduleList="cdkDropList"
+                     [cdkDropListConnectedTo]="[preCheckInList]"
+                     (cdkDropListDropped)="drop($event)"
+                     [cdkDropListData]="schedule"
+                     class="col-md ml-2 mr-2 plan">
+                    <mat-card class="mt-2 appCard" *ngFor="let item of schedule" cdkDrag>
+                        <mat-card-content>
+                            <p>{{item.Name}}</p>
+                            <P>{{item.Phone}}</P>
+                        </mat-card-content>
+                        <mat-card-actions>
+                            <button mat-button (click)="onCancelApp(item.AppId)">CANCEL</button>
+                            <button mat-button (click)="onChangeApp(item.AppId)">SCHEDULE</button>
+                        </mat-card-actions>
+                    </mat-card>
+                </div>
+                <div cdkDropList
+                     #walkInsList="cdkDropList"
+                     [cdkDropListConnectedTo]="[preCheckInList]"
+                     (cdkDropListDropped)="drop($event)"
+                     [cdkDropListData]="walkIns"
+                     class="col-md ml-2 mr-2 walkin">
+                    <mat-card class="mt-2 appCard" *ngFor="let item of walkIns" cdkDrag>
+                        <mat-card-content>
+                            <p>{{item.Name}}</p>
+                            <P>{{item.Phone}}</P>
+                        </mat-card-content>
+                        <mat-card-actions>
+                            <button mat-button (click)="onCancelApp(item.AppId)">CANCEL</button>
+                            <button mat-button (click)="onChangeApp(item.AppId)">SCHEDULE</button>
+                        </mat-card-actions>
+                    </mat-card>
+                </div>
+                <div cdkDropList
+                     #preCheckInList="cdkDropList"
+                     (cdkDropListDropped)="drop($event)"
+                     [cdkDropListData]="preCheckIn"
+                     class="col-md ml-2 mr-2 precheck">
+                    <mat-card class="mt-2 appCard" *ngFor="let item of preCheckIn">
+                        <mat-card-content>
+                            <p>{{item.Name}}</p>
+                            <P>{{item.Phone}}</P>
+                        </mat-card-content>
+                        <mat-card-actions>
+                            <button mat-button (click)="onCancelApp(item.AppId)">CANCEL</button>
+                            <button mat-button (click)="onNotifyApp(item.AppId)">NOTIFY</button>
+                            <button mat-button (click)="onCheckInApp(item.AppId)">CHECK-IN</button>
+                        </mat-card-actions>
+                    </mat-card>
                 </div>
             </div>
         </mat-card>
