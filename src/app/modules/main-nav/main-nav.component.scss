@@ -24,13 +24,13 @@
   color:black !important;
 }
 .item-list{
-  background-color: #FF4F00;
-  color: white;
+  // background-color: #FF4F00;
+  color: #898989;
   height: 40px !important;
 }
 .item-list:hover{
-  background-color: #FF4F00;
-  color: white;
+  // background-color: #FF4F00;
+  color: #FF4F00;
   cursor: context-menu;
   height: 40px;
 }
@@ -46,6 +46,19 @@
 .list-item:focus{
   background: none;
 }
+.list-item-2{
+  text-transform: uppercase;
+  color: #898989;
+  font-size: 14px;
+}
+.list-item-2:hover{
+  text-transform: uppercase;
+  color: #FF4F00;
+  background: none;
+}
+.list-item-2:focus{
+  background: none;
+}
 .menu-active{
   border-color: #FF4F00 !important;
   border-left: 3px solid;
@@ -57,4 +70,8 @@
 .main-logo{
   background: url('../../../assets/images/logo.svg') no-repeat left center;
   height: 100px;
+}
+.mat-toolbar-main {
+  background: #ff4f00;
+  color: white;
 }

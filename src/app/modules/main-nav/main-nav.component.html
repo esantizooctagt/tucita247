@@ -18,18 +18,18 @@
         </ng-container>
         <div *ngIf="isAdmin">
           <mat-divider></mat-divider>
-          <a mat-list-item class="item-list">{{ (!collapse ? 'Settings' : '' ) }}</a><!-- <mat-icon class="mr-2">settings</mat-icon> -->
-          <a mat-list-item class="list-item" [routerLink]="['/company']" routerLinkActive="menu-active" (click)="displayHome('Company')">{{ (!collapse ? 'Company' : '') }}</a> <!-- <mat-icon class="mr-2">location_city</mat-icon> -->
+          <a mat-list-item class="item-list">{{ (!collapse ? 'SETTINGS' : '' ) }}</a><!-- <mat-icon class="mr-2">settings</mat-icon> -->
+          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/company']" routerLinkActive="menu-active" (click)="displayHome('Company')">{{ (!collapse ? 'Company' : '') }}</a> <!-- <mat-icon class="mr-2">location_city</mat-icon> -->
           <!-- <a mat-list-item [routerLink]="['/documents']" routerLinkActive="menu-active" (click)="displayHome('Documents')"><mat-icon class="mr-2">folder</mat-icon>{{ (!collapse ? 'Documents' : '') }}</a>
           <a mat-list-item [routerLink]="['/inventory']" routerLinkActive="menu-active" (click)="displayHome('Inventory')"><mat-icon class="mr-2">store</mat-icon>{{ (!collapse ? 'Inventory' : '') }}</a>
           <a mat-list-item [routerLink]="['/taxes']" routerLinkActive="menu-active" (click)="displayHome('Taxes')"><mat-icon class="mr-2">local_atm</mat-icon>{{ (!collapse ? 'Taxes' :'') }} </a> -->
-          <a mat-list-item class="list-item" [routerLink]="['/users']" routerLinkActive="menu-active" (click)="displayHome('Users')">{{ (!collapse ? 'Users' :'') }}</a><!-- <mat-icon class="mr-2">person</mat-icon>-->
-          <a mat-list-item class="list-item" [routerLink]="['/roles']" routerLinkActive="menu-active" (click)="displayHome('Roles')">{{ (!collapse ? 'Roles' : '') }}</a><!-- <mat-icon class="mr-2">security</mat-icon>-->
+          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/users']" routerLinkActive="menu-active" (click)="displayHome('Users')">{{ (!collapse ? 'Users' :'') }}</a><!-- <mat-icon class="mr-2">person</mat-icon>-->
+          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/roles']" routerLinkActive="menu-active" (click)="displayHome('Roles')">{{ (!collapse ? 'Roles' : '') }}</a><!-- <mat-icon class="mr-2">security</mat-icon>-->
         </div>
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content [ngStyle]="{'margin-left': collapse === true ? '45px' : '200px'}">
-      <mat-toolbar>
+      <mat-toolbar class="mat-toolbar-main">
         <button
           type="button"
           aria-label="Toggle sidenav"

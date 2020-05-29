@@ -55,8 +55,8 @@ export class BusinessComponent implements OnInit {
   @ViewChild('autoCategory') matAutocomplete: MatAutocomplete;
 
   //Maps  API KEY colocarlo en app.modules  AIzaSyCyKdLcjPnI3n5Eb2VmMJk-sgan83LEsCM
-  lat: number = 0;
-  lng: number = 0;
+  lat: number = 18.3796538;
+  lng: number = -66.1989426;
   latLoc: any[] = [];
   lngLoc: any[] = [];
   zoom: number = 15;
@@ -243,8 +243,8 @@ export class BusinessComponent implements OnInit {
     this.optionsSunLoc02.push(gens);
 
     this.newIntervalLoc.push([]);
-    this.latLoc[this.noItemsLoc] = 0;
-    this.lngLoc[this.noItemsLoc] = 0;
+    this.latLoc[this.noItemsLoc] = 18.3796538;
+    this.lngLoc[this.noItemsLoc] = -66.1989426;
 
     this.newIntervalLoc[this.noItemsLoc].push("0","0","0","0","0","0","0");
     this.noItemsLoc = this.noItemsLoc+1;

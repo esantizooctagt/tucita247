@@ -33,7 +33,7 @@
         <div class="form-field pl-3 pr-3">
             <mat-form-field>
                 <span matPrefix>+1 &nbsp;</span>
-                <input matInput #Phone placeholder="(555) 555-1234" appPhoneMask maxlength="15" formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher" required>
+                <input matInput #Phone placeholder="(555) 555-1234" appPhoneMask maxlength="14" formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher" required>
                 <mat-error *ngIf="f.Phone.invalid && f.Phone.touched">{{getErrorMessage('Phone')}}</mat-error>
             </mat-form-field>
         </div>
@@ -78,9 +78,6 @@
             <button mat-icon-button class="pl-4" type="button" *ngIf="userForm.value.Status === 3" (click)="onSendCode()">
                 <mat-icon>autorenew</mat-icon> Re-Send Verification Code
             </button>
-        </div>
-        <div class="">
-            
         </div>
         <!-- {{ userForm.value | json }} -->
     </form>

@@ -12,9 +12,34 @@ export class AppointmentService {
   readonly apiURL = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
-  getLocations(businessId, locationId, dateAppo): Observable<Appointment[]> {
-      return this.http.get<Appointment[]>(this.apiURL + '/appointments/' + businessId + '/' + locationId + '/' + dateAppo)
+  getAppointments(businessId, locationId, dateAppo, dateAppoFin, status, statusFin): Observable<Appointment[]> {
+      return this.http.get<Appointment[]>(this.apiURL + '/appointments/' + businessId + '/' + locationId + '/' + dateAppo + '/' + dateAppoFin + '/' + status + '/' + statusFin + '/_/_')
                       .pipe(catchError(this.errorHandler));
+  }
+
+  updateAppointment(appointmentId, formData) {
+    return this.http.put(this.apiURL + '/appointment/' + appointmentId, formData)
+                    .pipe(catchError(this.errorHandler));
+  }
+
+  getHostLocations(businessId, userId): Observable<any[]> {
+    return this.http.get<any[]>(this.apiURL + '/host/' + businessId + '/' + userId)
+                    .pipe(catchError(this.errorHandler));
+  }
+
+  postNewAppointment(formData){
+    return this.http.post(this.apiURL + '/appointment/host', formData)
+                    .pipe(catchError(this.errorHandler));
+  }
+
+  putMessage(appointmentId, type, formData){
+    return this.http.put(this.apiURL + '/appointment/chat/' + appointmentId + '/' + type, formData)
+                    .pipe(catchError(this.errorHandler));
+  }
+
+  getMessages(appointmentId): Observable<any[]> {
+    return this.http.get<any[]>(this.apiURL + '/appointment/messages/' + appointmentId)
+                    .pipe(catchError(this.errorHandler));
   }
 
   errorHandler(error) {

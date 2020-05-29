@@ -62,7 +62,7 @@ export class UserComponent implements OnInit {
     Last_Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     Password: ['',[Validators.minLength(8), Validators.maxLength(20), Validators.pattern("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}")]],
     Avatar: [''],
-    Phone: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(15)]],
+    Phone: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(14)]],
     RoleId: ['', [Validators.required]],
     MFact_Auth: [''],
     Is_Admin: [{value: 0, disabled: true}],
@@ -113,8 +113,8 @@ export class UserComponent implements OnInit {
               '';
     }
     if (component === 'Phone'){
-      return this.f.Last_Name.hasError('minlength') ? 'Minimun length 6' :
-            this.f.Last_Name.hasError('maxlength') ? 'Maximun length 15' :
+      return this.f.Phone.hasError('minlength') ? 'Minimun length 6' :
+            this.f.Phone.hasError('maxlength') ? 'Maximun length 14' :
               '';
     }
     if (component === 'RoleId'){

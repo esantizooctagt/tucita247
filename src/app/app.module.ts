@@ -58,6 +58,7 @@ import { SearchComponent } from '@shared/search/search.component';
 import { PhoneMaskDirective } from '@shared/phone-mask.directive';
 
 import { AgmCoreModule } from '@agm/core';
+import { PhonePipe } from './shared/phone.pipe';
 
 @NgModule({
   declarations: [
@@ -70,7 +71,8 @@ import { AgmCoreModule } from '@agm/core';
     UserListComponent,
     UserComponent,
     SearchComponent,
-    PhoneMaskDirective
+    PhoneMaskDirective,
+    PhonePipe
   ],
   imports: [
     BrowserModule,
@@ -108,7 +110,7 @@ import { AgmCoreModule } from '@agm/core';
     FormsModule,
     Ng5SliderModule,
     AgmCoreModule.forRoot({
-      apiKey: 'API_KEY'
+      apiKey: 'AIzaSyCyKdLcjPnI3n5Eb2VmMJk-sgan83LEsCM'
     })
   ],
   exports: [

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocationService } from '@app/services';
 import { AuthService } from '@app/core/services';
@@ -8,6 +8,10 @@ import { SpinnerService } from '@app/shared/spinner.service';
 import { map, catchError } from 'rxjs/operators';
 import { AppointmentService } from '@app/services/appointment.service';
 import { Appointment } from '@app/_models';
+import { FormBuilder, Validators } from '@angular/forms';
+import { ConfirmValidParentMatcher } from '@app/validators';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { DialogComponent } from '@app/shared/dialog/dialog.component';
 
 @Component({
   selector: 'app-host',
@@ -17,131 +21,465 @@ import { Appointment } from '@app/_models';
 export class HostComponent implements OnInit {
   locations$: Observable<Location[]>;
   appointments$: Observable<Appointment[]>;
+  messages$: Observable<any>;
+  newAppointment$: Observable<any>;
+  updAppointment$: Observable<any>;
+  getMessages$: Observable<any[]>;
+  HostLocations: Subscription;
+  commentsSubs: Subscription;
+
+  showMessageSche=[];
+  showMessageWalk=[];
+  showMessagePre=[];
+
+  getCommentsSche=[];
+  getCommentsWalk=[];
+  getCommentsPre=[];
 
   doors: string[]=[];
   businessId: string = '';
+  userId: string = '';
+  showDoorInfo: boolean = false;
+  showApp: boolean = false;
 
   locationId: string = '';
   doorId: string = '';
 
   onError: string = '';
 
+  get f(){
+    return this.clientForm.controls;
+  }
+
+  confirmValidParentMatcher = new ConfirmValidParentMatcher();
+  
   constructor(
     private spinnerService: SpinnerService,
     private _snackBar: MatSnackBar,
     private authService: AuthService,
     private appointmentService: AppointmentService,
-    private locationService: LocationService
-  ) { }
+    private locationService: LocationService,
+    private fb: FormBuilder,
+    private dialog: MatDialog
+  ) { 
+  }
+
+  clientForm = this.fb.group({
+    Phone: ['',[Validators.maxLength(14)]],
+    Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
+    Email: ['', [Validators.maxLength(200), Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
+    DOB: [''],
+    Gender: [''],
+    Preference: [''],
+    Disability: [''],
+    Companions: ['']
+  })
+
   schedule = [
     {
       AppId: "12345",
+      ClientId: "55555",
       Name: "ERICK SANTIZO",
-      Phone: "+1 (900) 900 9282",
-      OnBehalf: 0
+      Phone: "9009009282",
+      OnBehalf: 0,
+      Companions: 1,
+      DateAppo: "09:00",
+      Door: "LEVEL 1",
+      Disability: "",
+      DateFull: "2020-05-25-09-00",
+      Unread: "0"
     },
     {
       AppId: "67890",
+      ClientId: "55555",
       Name: "LUIS PEREZ",
-      Phone: "+1 (123) 900 9282",
-      OnBehalf: 0
-    }
+      Phone: "1239009282",
+      OnBehalf: 0,
+      Companions: 1,
+      DateAppo: "09:00",
+      Door: "LEVEL 1",
+      Disability: "",
+      DateFull: "2020-05-25-09-00",
+      Unread: "0"
+    },
+    {
+      AppId: "67895",
+      ClientId: "55555",
+      Name: "J. SMITH",
+      Phone: "9899109282",
+      OnBehalf: 0,
+      Companions: 1,
+      DateAppo: "09:00",
+      Door: "LEVEL 1",
+      Disability: "",
+      DateFull: "2020-05-25-09-00",
+      Unread: "0"
+    },
+    {
+      AppId: "69998",
+      ClientId: "55555",
+      Name: "LUISA MARTINEZ",
+      Phone: "2333339132",
+      OnBehalf: 0,
+      Companions: 1,
+      DateAppo: "09:00",
+      Door: "LEVEL 1",
+      Disability: "",
+      DateFull: "2020-05-25-09-00",
+      Unread: "0"
+    },
+    {
+      AppId: "69890",
+      ClientId: "55555",
+      Name: "L. FERGUSON",
+      Phone: "1233449282",
+      OnBehalf: 0,
+      Companions: 1,
+      DateAppo: "10:00",
+      Door: "LEVEL 1",
+      Disability: "",
+      DateFull: "2020-05-25-10-00",
+      Unread: "0"
+    },
+    {
+      AppId: "69095",
+      ClientId: "55555",
+      Name: "AUSTIN SMITH",
+      Phone: "4549109282",
+      OnBehalf: 0,
+      Companions: 1,
+      DateAppo: "10:00",
+      Door: "LEVEL 1",
+      Disability: "",
+      DateFull: "2020-05-25-10-00",
+      Unread: "0"
+    },
   ];
   walkIns = [
     {
       AppId: "45456",
+      ClientId: "55555",
       Name: "VALERIE SANTIZO",
-      Phone: "+1 (123) 900 9282",
-      OnBehalf: 0
+      Phone: "1239009282",
+      OnBehalf: 0,
+      Companions: 1,
+      DateAppo: "10:00",
+      Door: "LEVEL 1",
+      Disability: "",
+      DateFull: "2020-05-25-10-00",
+      Unread: "0"
     }
   ]
   preCheckIn =[
     {
       AppId: "34256",
+      ClientId: "55555",
       Name: "MELANIE SANTIZO",
-      Phone: "+1 (456) 900 9282",
-      OnBehalf: 0
+      Phone: "4569009282",
+      OnBehalf: 0,
+      Companions: 1,
+      DateAppo: "10:00",
+      Door: "LEVEL 1",
+      Disability: "",
+      DateFull: "2020-05-25-10-00",
+      Unread: "0"
     }
   ]
 
-  ngOnInit(): void {
-    var spinnerRef = this.spinnerService.start("Loading Appointments...");
-    this.businessId = this.authService.businessId();
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 2000,
+    });
+  }
 
-    this.locations$ = this.locationService.getLocationsHost(this.businessId).pipe(
+  openDialog(header: string, message: string, success: boolean, error: boolean, warn: boolean): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      header: header, 
+      message: message, 
+      success: success, 
+      error: error, 
+      warn: warn
+    };
+    dialogConfig.width ='280px';
+    dialogConfig.minWidth = '280px';
+    dialogConfig.maxWidth = '280px';
+    this.dialog.open(DialogComponent, dialogConfig);
+  }
+
+  ngOnInit(): void {
+    this.businessId = this.authService.businessId();
+    this.userId = this.authService.userId();
+
+    this.HostLocations = this.appointmentService.getHostLocations(this.businessId, this.userId).subscribe((res: any) => {
+      if (res.Locs != null){
+        this.locationId = res.Locs.LocationId;
+        this.doorId = res.Locs.Door;
+        this.getAppointments();
+      } else {
+        this.showDoorInfo = true;
+        this.locations$ = this.locationService.getLocationsHost(this.businessId).pipe(
+          map((res: any) => {
+            return res.Locs;
+          }),
+          catchError(err => {
+            this.onError = err.Message;
+            return this.onError;
+          })
+        );
+      }
+    });
+      
+  }
+
+  addAppointment(){
+    //AGREGAR WALK IN Y APPOINTMENT
+    let dobClient: Date = this.clientForm.value.DOB;
+    let dob: string = '';
+    if (dobClient.toString() == '') {
+      dob = '';
+    } else {
+      let month = ((dobClient.getMonth()+1).toString().length > 1 ? (dobClient.getMonth()+1).toString() : '0'+(dobClient.getMonth()+1).toString()); 
+      let day = (dobClient.getDate().toString().length > 1 ? dobClient.getDate().toString() : '0'+dobClient.getDate().toString());
+      dob = dobClient.getUTCFullYear().toString() + '-' + month + '-' + day;
+    }
+    let phoneNumber = this.clientForm.value.Phone.toString().replace('(','').replace(')','').replace(' ','').replace('-','');
+    let formData = {
+      BusinessId: this.businessId,
+      LocationId: this.locationId,
+      Door: this.doorId,
+      Phone: (phoneNumber == '' ?  '0000000000' : phoneNumber),
+      Name: this.clientForm.value.Name,
+      Email: (this.clientForm.value.Email == '' ? '' : this.clientForm.value.Email),
+      DOB: dob,
+      Gender: (this.clientForm.value.Gender == '' ? '': this.clientForm.value.Gender),
+      Preference: (this.clientForm.value.Preference == '' ? '': this.clientForm.value.Preference),
+      Disability: (this.clientForm.value.Disability == null ? '': this.clientForm.value.Disability),
+      Companions: (this.clientForm.value.Companions == null ? '': this.clientForm.value.Companions)
+    }
+    var spinnerRef = this.spinnerService.start("Adding Appointment...");
+    this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
       map((res: any) => {
-        if (res != null) {
-          // console.log(res.Locs);
-          // console.log(res.Locs.Doors);
-          // if (res.Locs.Doors != ''){
-          //   this.doors = res.Locs.Doors.split(',');
-          // }
-          this.spinnerService.stop(spinnerRef);
+        if (res.Code == 200){
+          this.walkIns.push(res.Appointment);
         }
-        return res.Locs;
+        this.spinnerService.stop(spinnerRef);
+        this.clientForm.reset({Phone:'',Name:'',Email:'',DOB:'',Gender:'',Preference:''});
+        this.showApp = false;
+        return res.Code;
       }),
       catchError(err => {
-        this.onError = err.Message;
         this.spinnerService.stop(spinnerRef);
+        this.onError = err.Message;
+        this.openDialog('Error !', "Error on created appointment, try again", false, true, false);
         return this.onError;
       })
     );
   }
 
-  addAppointment(){
-    //AGREGAR WALK IN
+  showAppointment(){
+    this.showApp = !this.showApp;
+    if (this.showApp){
+      this.clientForm.reset({Phone:'',Name:'',Email:'',DOB:'',Gender:'',Preference:''});
+    }
   }
 
-  onCancelApp(i: string){
+  onCancelAddAppointment(){
+    this.clientForm.reset({Phone:'',Name:'',Email:'',DOB:'',Gender:'',Preference:''});
+    this.showApp = false;
+  }
+
+  getErrorMessage(component: string){
+    if (component === 'Email'){
+      return this.f.Email.hasError('required') ? 'You must enter an Email' :
+        this.f.Email.hasError('maxlength') ? 'Maximun length 200' :
+          this.f.Email.hasError('pattern') ? 'Invalid Email' :
+          '';
+    }
+    if (component === 'Name'){
+      return this.f.Name.hasError('required') ? 'You must enter a value' :
+        this.f.Name.hasError('minlength') ? 'Minimun length 3' :
+          this.f.Name.hasError('maxlength') ? 'Maximun length 100' :
+            '';
+    }
+    if (component === 'Phone'){
+      return this.f.Phone.hasError('minlength') ? 'Minimun length 6' :
+        this.f.Phone.hasError('maxlength') ? 'Maximun length 14' :
+          '';
+    }
+    if (component === 'Companions'){
+      return this.f.Companions.hasError('maxlength') ? 'Maximun length 2' :
+        this.f.Companions.hasError('min') ? 'Minimun value 1' :
+          this.f.Companions.hasError('max') ? 'Maximun value 20' :
+            '';
+    }
+  }
+
+  onCancelApp(appo: any){
     //CANCELAR APPOINTMENT
-  }
-
-  onChangeApp(i: string){
-    //CHANGE APPOINTMENT --> CANCEL CURRENT, CREATE NEW ONE WITH THE SAME PARAMETERS
-  }
-
-  onNotifyApp(i: string){
-    //RE-SEND NOTIFICATION TO APPOINTMENT
+    let formData = {
+      Status: 5,
+      DateAppo: appo.DateFull
+    }
+    this.updAppointment$ = this.appointmentService.updateAppointment(appo.AppId, formData).pipe(
+      map((res: any) => {
+        if (res.Code == 200){
+          var data = this.preCheckIn.findIndex(e => e.AppId === appo.AppId);
+          this.preCheckIn.splice(data, 1);
+          
+          this.openSnackBar("La Cita cancelled successfull","Cancel");
+        }
+      }),
+      catchError(err => {
+        this.onError = err.Message;
+        this.openSnackBar("Something goes wrong try again","Transfer");
+        return this.onError;
+      })
+    );
   }
 
   onCheckInApp(i: string){
     //READ QR CODE AND CHECK-IN PROCESS
   }
 
+  onMessageApp(appointmentId: string, value: string, i: number, qeue: string){
+    //GET MESSAGES APPOINTMENT
+    let formData = {
+      Message: value
+    }
+    this.messages$ = this.appointmentService.putMessage(appointmentId, '1', formData).pipe(
+      map((res:any) => {
+        if (res != null){
+          if (res.Code == 200){
+            if (qeue == 'schedule'){
+              this.showMessageSche[i] = false;
+            }
+            if (qeue == 'walkin'){
+              this.showMessageWalk[i] = false;
+            }
+            if (qeue == 'precheck'){
+              this.showMessagePre[i] = false;
+            }
+            this.openSnackBar("Messages send successfull","Messages");
+          } else {
+            this.openSnackBar("Something goes wrong try again","Messages");
+          }
+        } else {
+          this.openSnackBar("Something goes wrong try again","Messages");
+        }
+      }),
+      catchError(err => {
+        this.openSnackBar("Something goes wrong try again","Messages");
+        this.onError = err.Message;
+        return this.onError;
+      })
+    );
+  }
+
+  onShowMessage(appointmentId: string, i: number, type: string){
+    this.commentsSubs = this.appointmentService.getMessages(appointmentId).subscribe((res: any) => {
+        if (res != null){
+          if (res.Code == 200){
+            if (type == 'schedule'){
+              this.getCommentsSche[i] = res.Messages;
+            }
+            if (type == 'walkin'){
+              this.getCommentsWalk[i] = res.Messages;
+            }
+            if (type == 'pre'){
+              this.getCommentsPre[i] = res.Messages;
+            }
+          } else {
+            this.openSnackBar("Something goes wrong try again","Messages");
+          }
+        }
+      });
+  }
+
+  onReadyCheckIn(appo: any, tipo: number){
+    //MOVE TO READY TO CHECK-IN INSTEAD OF DRAG AND DROP
+    let formData = {
+      Status: 2,
+      DateAppo: appo.DateFull
+    }
+    this.updAppointment$ = this.appointmentService.updateAppointment(appo.AppId, formData).pipe(
+      map((res: any) => {
+        if (res.Code == 200){
+          if (tipo == 1) { 
+            var data = this.schedule.findIndex(e => e.AppId === appo.AppId);
+            this.schedule.splice(data, 1);
+          } else {
+            var data = this.walkIns.findIndex(e => e.AppId === appo.AppId);
+            this.walkIns.splice(data, 1);
+          }
+          this.preCheckIn.push(appo);
+          this.openSnackBar("Ready to check-in successfull","Ready to Check-In");
+        }
+      }),
+      catchError(err => {
+        this.onError = err.Message;
+        this.openSnackBar("Something goes wrong try again","Transfer");
+        return this.onError;
+      })
+    );
+  }
+
   setLocation(event){
     this.doors = event.Doors.split(',');
     this.locationId = event.LocationId;
+    this.getAppointments();
+  }
+
+  getAppointments(){
     let dateAppo = new Date();
-    let dateAppoStr = dateAppo.getFullYear() + '-' + (dateAppo.getMonth() < 10 ? '0' + dateAppo.getMonth().toString() : dateAppo.getMonth().toString()) + (dateAppo.getDate() < 10 ? '0' + dateAppo.getDate().toString() : dateAppo.getDate().toString())
+    //let dateAppoStr = dateAppo.getFullYear() + '-' + (dateAppo.getMonth()+1 < 10 ? '0' + (dateAppo.getMonth()+1).toString() : dateAppo.getMonth()+1) + '-' + (dateAppo.getDate() < 10 ? '0' + dateAppo.getDate().toString() : dateAppo.getDate().toString());
+    let dateAppoStr = '2020-05-25-09-00';
+    let dateAppoFinStr = '2020-05-25-23-00';
     var spinnerRef = this.spinnerService.start("Loading Appointments...");
-    this.appointments$ = this.appointmentService.getLocations(this.businessId, this.locationId, dateAppoStr).pipe(
+    this.appointments$ = this.appointmentService.getAppointments(this.businessId, this.locationId, dateAppoStr, dateAppoFinStr, 1, 2).pipe(
       map((res: any) => {
         if (res != null) {
-          res.Appos.forEach(item => {
-            //CONSULTAR SI SE DEJAN HORAS VIEJAS O SOLO DE LA HORA ACTUAL EN ADELANTE
+          res['Appos-01'].forEach(item => {
+            let hora = item['DateAppo'].substring(11,16).replace('-',':');
+            hora = (+hora.substring(0,2) > 12 ? (+hora.substring(0,2)-12).toString() : hora.substring(0,2)) + ':' + hora.substring(3).toString() + (+hora.substring(0,2) > 12 ? ' PM' : ' AM');
+            let data = {
+              AppId: item['AppointmentId'],
+              ClientId: item['ClienteId'],
+              Name: item['Name'],
+              OnBehalf: item['OnBehalf'],
+              Companions: item['Companions'],
+              Door: item['Door'],
+              Disability: item['Disability'],
+              Phone: item['Phone'],
+              DateFull: item['DateAppo'],
+              DateAppo: hora,
+              Unread: item['Unread']
+            }
             if (item['Type'] == 1 && item['Status'] == 1){
-              this.schedule.push({
-                AppId: item['AppointmentId'],
-                Name: item['FirstName'] + ' ' + item['LastName'],
-                OnBehalf: item['OnBehalf'],
-                Phone: item['Phone']
-              });
+              this.schedule.push(data);
             }
             if (item['Type'] == 2 && item['Status'] == 1){
-              this.walkIns.push({
-                AppId: item['AppointmentId'],
-                Name: item['FirstName'] + ' ' + item['LastName'],
-                OnBehalf: item['OnBehalf'],
-                Phone: item['Phone']
-              })
+              this.walkIns.push(data);
             }
-            if (item['Type'] == 3 && item['Status'] == 1){
-              this.preCheckIn.push({
-                AppId: item['AppointmentId'],
-                Name: item['FirstName'] + ' ' + item['LastName'],
-                OnBehalf: item['OnBehalf'],
-                Phone: item['Phone']
-              })
+          });
+          res['Appos-02'].forEach(item => {
+            let hora = item['DateAppo'].substring(11,16).replace('-',':');
+            let data = {
+              AppId: item['AppointmentId'],
+              ClientId: item['ClienteId'],
+              Name: item['Name'],
+              OnBehalf: item['OnBehalf'],
+              Companions: item['Companions'],
+              Door: item['Door'],
+              Disability: item['Disability'],
+              Phone: item['Phone'],
+              DateFull: item['DateAppo'],
+              DateAppo: hora,
+              Unread: item['Unread']
+            }
+            if (item['Status'] == 2){
+              this.preCheckIn.push(data);
             }
           });
           this.spinnerService.stop(spinnerRef);
@@ -161,13 +499,45 @@ export class HostComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    if (event.previousContainer === event.container) {
-      // moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(event.previousContainer.data,
-                        event.container.data,
-                        event.previousIndex,
-                        event.currentIndex);
+    if (event.previousContainer != event.container) {
+      let appo = event.previousContainer.data[event.previousIndex];
+      let container = event.previousContainer.id;
+      let formData = {
+        Status: 2,
+        DateAppo: appo['DateFull']
+      }
+      transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
+      this.updAppointment$ = this.appointmentService.updateAppointment(appo['AppId'], formData).pipe(
+        map((res: any) => {
+          if (res.Code == 200){
+            this.openSnackBar("Ready to check-in successfull","Ready to Check-In");
+          }
+        }),
+        catchError(err => {
+          var data = this.preCheckIn.findIndex(e => e.AppId === appo['AppId']);
+          this.preCheckIn.splice(data, 1);
+
+          if (container == "cdk-drop-list-0"){ 
+            this.schedule.push(JSON.parse(appo));
+          } else {
+            this.walkIns.push(JSON.parse(appo));
+          }
+
+          this.onError = err.Message;
+          this.openSnackBar("Something goes wrong try again","Transfer");
+          return this.onError;
+        })
+      );
     }
   }
+
+  ngOnDestroy() {
+    if (this.HostLocations){
+      this.HostLocations.unsubscribe();
+    }
+    if (this.commentsSubs){
+      this.commentsSubs.unsubscribe();
+    }
+  }
+
 }

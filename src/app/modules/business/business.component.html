@@ -118,10 +118,10 @@
                                     <ng5-slider formControlName="Mon" [options]="options[0]" class="ml-1"></ng5-slider>
                                 </div>
                                 <button [disabled]="fBusiness.MonEnabled.value == 0" *ngIf="newInterval[0] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(0)">+ Add Interval</button>
-                                <button *ngIf="newInterval[0] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(0)">- Del Interval</button>
-                                <div class="slider col-md-5" *ngIf="newInterval[0] == '1'">
+                                <div class="slider col-md-4" *ngIf="newInterval[0] == '1'">
                                     <ng5-slider formControlName="Mon02" [options]="options02[0]" class="ml-1"></ng5-slider>
                                 </div>
+                                <button *ngIf="newInterval[0] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(0)">- Delete</button>
                             </div>
                             <div class="row pb-2">
                                 <mat-checkbox formControlName="TueEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabled(1, $event)">Tue</mat-checkbox>
@@ -129,10 +129,10 @@
                                     <ng5-slider formControlName="Tue" [options]="options[1]" class="ml-1"></ng5-slider>
                                 </div>
                                 <button [disabled]="fBusiness.TueEnabled.value == 0" *ngIf="newInterval[1] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(1)">+ Add Interval</button>
-                                <button *ngIf="newInterval[1] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(1)">- Del Interval</button>
-                                <div class="slider col-md-5" *ngIf="newInterval[1] == '1'">
+                                <div class="slider col-md-4" *ngIf="newInterval[1] == '1'">
                                     <ng5-slider formControlName="Tue02" [options]="options02[1]" class="ml-1"></ng5-slider>
                                 </div>
+                                <button *ngIf="newInterval[1] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(1)">- Delete</button>
                             </div>
                             <div class="row pb-2">
                                 <mat-checkbox formControlName="WedEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabled(2, $event)">Wed</mat-checkbox>
@@ -140,10 +140,10 @@
                                     <ng5-slider formControlName="Wed" [options]="options[2]" class="ml-1"></ng5-slider>
                                 </div>
                                 <button [disabled]="fBusiness.WedEnabled.value == 0" *ngIf="newInterval[2] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(2)">+ Add Interval</button>
-                                <button *ngIf="newInterval[2] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(2)">- Del Interval</button>
-                                <div class="slider col-md-5" *ngIf="newInterval[2] == '1'">
+                                <div class="slider col-md-4" *ngIf="newInterval[2] == '1'">
                                     <ng5-slider formControlName="Wed02" [options]="options02[2]" class="ml-1"></ng5-slider>
                                 </div>
+                                <button *ngIf="newInterval[2] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(2)">- Delete</button>
                             </div>
                             <div class="row pb-2">
                                 <mat-checkbox formControlName="ThuEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabled(3, $event)">Thu</mat-checkbox>
@@ -151,10 +151,10 @@
                                     <ng5-slider formControlName="Thu" [options]="options[3]" class="ml-1"></ng5-slider>
                                 </div>
                                 <button [disabled]="fBusiness.ThuEnabled.value == 0" *ngIf="newInterval[3] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(3)">+ Add Interval</button>
-                                <button *ngIf="newInterval[3] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(3)">- Del Interval</button>
-                                <div class="slider col-md-5" *ngIf="newInterval[3] == '1'">
+                                <div class="slider col-md-4" *ngIf="newInterval[3] == '1'">
                                     <ng5-slider formControlName="Thu02" [options]="options02[3]" class="ml-1"></ng5-slider>
                                 </div>
+                                <button *ngIf="newInterval[3] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(3)">- Delete</button>
                             </div>
                             <div class="row pb-2">
                                 <mat-checkbox formControlName="FriEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabled(4, $event)">Fri</mat-checkbox>
@@ -162,10 +162,10 @@
                                     <ng5-slider formControlName="Fri" [options]="options[4]" class="ml-1"></ng5-slider>
                                 </div>
                                 <button [disabled]="fBusiness.FriEnabled.value == 0" *ngIf="newInterval[4] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(4)">+ Add Interval</button>
-                                <button *ngIf="newInterval[4] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(4)">- Del Interval</button>
-                                <div class="slider col-md-5" *ngIf="newInterval[4] == '1'">
+                                <div class="slider col-md-4" *ngIf="newInterval[4] == '1'">
                                     <ng5-slider formControlName="Fri02" [options]="options02[4]" class="ml-1"></ng5-slider>
                                 </div>
+                                <button *ngIf="newInterval[4] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(4)">- Delete</button>
                             </div>
                             <div class="row pb-2">
                                 <mat-checkbox formControlName="SatEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabled(5, $event)">Sat</mat-checkbox>
@@ -173,10 +173,10 @@
                                     <ng5-slider formControlName="Sat" [options]="options[5]" class="ml-1"></ng5-slider>
                                 </div>
                                 <button [disabled]="fBusiness.SatEnabled.value == 0" *ngIf="newInterval[5] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(5)">+ Add Interval</button>
-                                <button *ngIf="newInterval[5] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(5)">- Del Interval</button>
-                                <div class="slider col-md-5" *ngIf="newInterval[5] == '1'">
+                                <div class="slider col-md-4" *ngIf="newInterval[5] == '1'">
                                     <ng5-slider formControlName="Sat02" [options]="options02[5]" class="ml-1"></ng5-slider>
                                 </div>
+                                <button *ngIf="newInterval[5] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(5)">- Delete</button>
                             </div>
                             <div class="row pb-2">
                                 <mat-checkbox formControlName="SunEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabled(6, $event)">Sun</mat-checkbox>
@@ -184,10 +184,10 @@
                                     <ng5-slider formControlName="Sun" [options]="options[6]" class="ml-1"></ng5-slider>
                                 </div>
                                 <button [disabled]="fBusiness.SunEnabled.value == 0" *ngIf="newInterval[6] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(6)">+ Add Interval</button>
-                                <button *ngIf="newInterval[6] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(6)">- Del Interval</button>
-                                <div class="slider col-md-5" *ngIf="newInterval[6] == '1'">
+                                <div class="slider col-md-4" *ngIf="newInterval[6] == '1'">
                                     <ng5-slider formControlName="Sun02" [options]="options02[6]" class="ml-1"></ng5-slider>
                                 </div>
+                                <button *ngIf="newInterval[6] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(6)">- Delete</button>
                             </div>
                         </div>
                         <div class="col-md-10 mt-3 mb-3">
@@ -283,80 +283,80 @@
                                             <mat-label class="">Operation Hours</mat-label>
                                             <div class="row pb-2">
                                                 <mat-checkbox formControlName="MonEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabledLoc(0, i, $event)">Mon</mat-checkbox>
-                                                <div class="slider col-md-4">
+                                                <div class="slider col-md-4 pl-0 pr-0">
                                                     <ng5-slider formControlName="Mon" [options]="optionsMonLoc[i]" class="ml-1"></ng5-slider>
                                                 </div>
                                                 <button [disabled]="item.get('MonEnabled').value == false" *ngIf="newIntervalLoc[i][0] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(0, i)">+ Add Interval</button>
-                                                <button *ngIf="newIntervalLoc[i][0] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(0, i)">- Del Interval</button>
-                                                <div class="slider col-md" *ngIf="newIntervalLoc[i][0] == '1'">
+                                                <div class="slider col-md-4 pl-0 pr-0" *ngIf="newIntervalLoc[i][0] == '1'">
                                                     <ng5-slider formControlName="Mon02" [options]="optionsMonLoc02[i]" class="ml-1"></ng5-slider>
                                                 </div>
+                                                <button *ngIf="newIntervalLoc[i][0] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(0, i)">- Delete</button>
                                             </div>
                                             <div class="row pb-2">
                                                 <mat-checkbox formControlName="TueEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabledLoc(1, i, $event)">Tue</mat-checkbox>
-                                                <div class="slider col-md-4">
+                                                <div class="slider col-md-4 pl-0 pr-0">
                                                     <ng5-slider formControlName="Tue" [options]="optionsTueLoc[i]" class="ml-1"></ng5-slider>
                                                 </div>
-                                                <button [disabled]="item.get('TueEnabled').value == false" *ngIf="newIntervalLoc[i][1] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(1, i)">+ Add Interval</button>
-                                                <button *ngIf="newIntervalLoc[i][1] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(1, i)">- Del Interval</button>
-                                                <div class="slider col-md" *ngIf="newIntervalLoc[i][1] == '1'">
+                                                <button [disabled]="item.get('TueEnabled').value == false" *ngIf="newIntervalLoc[i][1] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(1, i)">+ Add Interval</button>                                                
+                                                <div class="slider col-md-4 pl-0 pr-0" *ngIf="newIntervalLoc[i][1] == '1'">
                                                     <ng5-slider formControlName="Tue02" [options]="optionsTueLoc02[i]" class="ml-1"></ng5-slider>
                                                 </div>
+                                                <button *ngIf="newIntervalLoc[i][1] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(1, i)">- Delete</button>
                                             </div>
                                             <div class="row pb-2">
                                                 <mat-checkbox formControlName="WedEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabledLoc(2, i, $event)">Wed</mat-checkbox>
-                                                <div class="slider col-md-4">
+                                                <div class="slider col-md-4 pl-0 pr-0">
                                                     <ng5-slider formControlName="Wed" [options]="optionsWedLoc[i]" class="ml-1"></ng5-slider>
                                                 </div>
                                                 <button [disabled]="item.get('WedEnabled').value == false" *ngIf="newIntervalLoc[i][2] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(2, i)">+ Add Interval</button>
-                                                <button *ngIf="newIntervalLoc[i][2] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(2, i)">- Del Interval</button>
-                                                <div class="slider col-md" *ngIf="newIntervalLoc[i][2] == '1'">
+                                                <div class="slider col-md-4 pl-0 pr-0" *ngIf="newIntervalLoc[i][2] == '1'">
                                                     <ng5-slider formControlName="Wed02" [options]="optionsWedLoc02[i]" class="ml-1"></ng5-slider>
                                                 </div>
+                                                <button *ngIf="newIntervalLoc[i][2] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(2, i)">- Delete</button>
                                             </div>
                                             <div class="row pb-2">
                                                 <mat-checkbox formControlName="ThuEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabledLoc(3, i, $event)">Thu</mat-checkbox>
-                                                <div class="slider col-md-4">
+                                                <div class="slider col-md-4 pl-0 pr-0">
                                                     <ng5-slider formControlName="Thu" [options]="optionsThuLoc[i]" class="ml-1"></ng5-slider>
                                                 </div>
                                                 <button [disabled]="item.get('ThuEnabled').value == false" *ngIf="newIntervalLoc[i][3] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(3, i)">+ Add Interval</button>
-                                                <button *ngIf="newIntervalLoc[i][3] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(3, i)">- Del Interval</button>
-                                                <div class="slider col-md" *ngIf="newIntervalLoc[i][3] == '1'">
+                                                <div class="slider col-md-4 pl-0 pr-0" *ngIf="newIntervalLoc[i][3] == '1'">
                                                     <ng5-slider formControlName="Thu02" [options]="optionsThuLoc02[i]" class="ml-1"></ng5-slider>
                                                 </div>
+                                                <button *ngIf="newIntervalLoc[i][3] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(3, i)">- Delete</button>
                                             </div>
                                             <div class="row pb-2">
                                                 <mat-checkbox formControlName="FriEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabledLoc(4, i, $event)">Fri</mat-checkbox>
-                                                <div class="slider col-md-4">
+                                                <div class="slider col-md-4 pl-0 pr-0">
                                                     <ng5-slider formControlName="Fri" [options]="optionsFriLoc[i]" class="ml-1"></ng5-slider>
                                                 </div>
                                                 <button [disabled]="item.get('FriEnabled').value == false" *ngIf="newIntervalLoc[i][4] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(4, i)">+ Add Interval</button>
-                                                <button *ngIf="newIntervalLoc[i][4] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(4, i)">- Del Interval</button>
-                                                <div class="slider col-md" *ngIf="newIntervalLoc[i][4] == '1'">
+                                                <div class="slider col-md-4 pl-0 pr-0" *ngIf="newIntervalLoc[i][4] == '1'">
                                                     <ng5-slider formControlName="Fri02" [options]="optionsFriLoc02[i]" class="ml-1"></ng5-slider>
                                                 </div>
+                                                <button *ngIf="newIntervalLoc[i][4] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(4, i)">- Delete</button>
                                             </div>
                                             <div class="row pb-2">
                                                 <mat-checkbox formControlName="SatEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabledLoc(5, i, $event)">Sat</mat-checkbox>
-                                                <div class="slider col-md-4">
+                                                <div class="slider col-md-4 pl-0 pr-0">
                                                     <ng5-slider formControlName="Sat" [options]="optionsSatLoc[i]" class="ml-1"></ng5-slider>
                                                 </div>
                                                 <button [disabled]="item.get('SatEnabled').value == false" *ngIf="newIntervalLoc[i][5] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(5, i)">+ Add Interval</button>
-                                                <button *ngIf="newIntervalLoc[i][5] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(5, i)">- Del Interval</button>
-                                                <div class="slider col-md" *ngIf="newIntervalLoc[i][5] == '1'">
+                                                <div class="slider col-md-4 pl-0 pr-0" *ngIf="newIntervalLoc[i][5] == '1'">
                                                     <ng5-slider formControlName="Sat02" [options]="optionsSatLoc02[i]" class="ml-1"></ng5-slider>
                                                 </div>
+                                                <button *ngIf="newIntervalLoc[i][5] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(5, i)">- Delete</button>
                                             </div>
                                             <div class="row pb-2">
                                                 <mat-checkbox formControlName="SunEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabledLoc(6, i, $event)">Sun</mat-checkbox>
-                                                <div class="slider col-md-4">
+                                                <div class="slider col-md-4 pl-0 pr-0">
                                                     <ng5-slider formControlName="Sun" [options]="optionsSunLoc[i]" class="ml-1"></ng5-slider>
                                                 </div>
                                                 <button [disabled]="item.get('SunEnabled').value == false" *ngIf="newIntervalLoc[i][6] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(6, i)">+ Add Interval</button>
-                                                <button *ngIf="newIntervalLoc[i][6] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(6, i)">- Del Interval</button>
-                                                <div class="slider col-md" *ngIf="newIntervalLoc[i][6] == '1'">
+                                                <div class="slider col-md-4 pl-0 pr-0" *ngIf="newIntervalLoc[i][6] == '1'">
                                                     <ng5-slider formControlName="Sun02" [options]="optionsSunLoc02[i]" class="ml-1"></ng5-slider>
                                                 </div>
+                                                <button *ngIf="newIntervalLoc[i][6] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(6, i)">- Delete</button>
                                             </div>
                                         </div>
                                         <div class="col-md-10 mt-3 mb-3">

@@ -1,76 +1,170 @@
-<div class="container-fluid h-100">
+<div class="container-fluid h-100 host-container">
     <div class="row pl-2 pr-1">
-        <div class="pl-0 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
-            <h4>Check In</h4>
-        </div>
-        <h5 class="col-md-1 pl-0 pr-0 pt-3 pb-2">Location : </h5><span class="col-md-3 pt-3 pb-2 pl-0 pr-0 mb-2">
-            <mat-select (selectionChange)="setLocation($event.value)">
-                <mat-option class="mat-small" *ngFor="let res of locations$ | async" [value]="res">{{res.Name}}
-                </mat-option>
-            </mat-select>
-        </span>
-        <span class="col-md"></span>
-        <h5 class="col-md-1 pl-0 pr-0 pt-3 pb-2">Door : </h5><span class="col-md-1 pt-3 pb-2 pl-0 pr-0 mb-2">
-            <mat-select (selectionChange)="setDoor($event)">
-                <mat-option class="mat-small" *ngFor="let res of doors" [value]="res">{{res}}
-                </mat-option>
-            </mat-select>
-        </span>
+        <ng-container *ngIf="showDoorInfo">
+            <h5 class="col-md-1 pl-0 pr-0 pt-3 pb-2">Location : </h5>
+            <span class="col-md-3 pt-3 pb-2 pl-0 pr-0 mb-2">
+                <mat-select (selectionChange)="setLocation($event.value)">
+                    <mat-option *ngFor="let res of locations$ | async" [value]="res">{{res.Name}}
+                    </mat-option>
+                </mat-select>
+            </span>
+            <span class="col-md"></span>
+            <h5 class="col-md-1 pl-0 pr-0 pt-3 pb-2">Door : </h5>
+            <span class="col-md-1 pt-3 pb-2 pl-0 pr-0 mb-2">
+                <mat-select (selectionChange)="setDoor($event)">
+                    <mat-option *ngFor="let res of doors" [value]="res">{{res}}
+                    </mat-option>
+                </mat-select>
+            </span>
+        </ng-container>
         <ng-container *ngIf="appointments$ | async"></ng-container>
-        <mat-card class="col-sm col-md col-lg-12">
-            <div class="row">
-                <div class="col-md ml-2 mr-2">
-                    <div class="title-log">
-                        <p class="">Schedule App</p>
-                    </div>
+        <ng-container *ngIf="updAppointment$ | async"></ng-container>
+        <div class="col-sm col-md col-lg-12">
+            <div class="row mb-2">
+                <div class="col-md ml-2 mr-2 mt-2 title-qeue">
+                    Schedule App
                 </div>
-                <div class="col-md ml-2 mr-2">
-                    <div class="title-log">
-                        <p class="">Walk-Ins</p>
-                    </div>
-                    <div class="addApp">
-                        <button class="mr-0 mt-0 mb-2" type="button" mat-flat-button color="primary" (click)="addAppointment()">+ Appointment</button>
-                    </div>
+                <div class="col-md ml-2 mr-2 mt-2 title-qeue">
+                    Walk-Ins
+                    <button mat-mini-fab class="add_client" (click)="showAppointment()">
+                        <mat-icon>add</mat-icon>
+                    </button>
                 </div>
-                <div class="col-md ml-2 mr-2">
-                    <div class="title-log">
-                        <p class="">Pre Check-In</p>
-                    </div>
+                <div class="col-md ml-2 mr-2 mt-2 title-qeue">
+                    Ready To Check-In
                 </div>
             </div>
+            <ng-container *ngIf="messages$ | async"></ng-container>
             <div class="row">
                 <div cdkDropList
-                     #scheduleList="cdkDropList"
                      [cdkDropListConnectedTo]="[preCheckInList]"
-                     (cdkDropListDropped)="drop($event)"
                      [cdkDropListData]="schedule"
                      class="col-md ml-2 mr-2 plan">
-                    <mat-card class="mt-2 appCard" *ngFor="let item of schedule" cdkDrag>
+                     <mat-card class="mt-2 appCard">
+                        <mat-card-content>
+                            <p>+ Pending Citas from period 09:00 - 11:00 (20,000)</p>
+                        </mat-card-content>
+                    </mat-card>
+                     <mat-card class="mt-2 appCard" *ngFor="let item of schedule;let i=index" cdkDrag>
                         <mat-card-content>
                             <p>{{item.Name}}</p>
-                            <P>{{item.Phone}}</P>
+                            <p>+1 {{item.Phone | phone}}</p>
+                            <p>{{item.DateAppo}}</p>
                         </mat-card-content>
-                        <mat-card-actions>
-                            <button mat-button (click)="onCancelApp(item.AppId)">CANCEL</button>
-                            <button mat-button (click)="onChangeApp(item.AppId)">SCHEDULE</button>
+                        <mat-card-actions class="mb-0">
+                            <button mat-button (click)="showMessageSche[i] = !showMessageSche[i]; onShowMessage(item.AppId, i, 'schedule');">MESSAGE</button>
+                            <button mat-button (click)="onReadyCheckIn(item, 1)">READY TO CHECK IN</button>
                         </mat-card-actions>
+                        <mat-card-content [hidden]="!showMessageSche[i]">
+                            <textarea class="col-md-10" #messageText matInput placeholder="Write a comment..."></textarea>
+                            <button class="col-md button-send" mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageText.value ,i, 'schedule')">
+                                <mat-icon class="send_icon">send</mat-icon>
+                            </button>
+                            <mat-list>
+                                <ng-container *ngFor="let item of getCommentsSche[i]">
+                                    <mat-list-item *ngIf="item.U != undefined" >{{'User: ' + item.U}}</mat-list-item>
+                                    <mat-list-item *ngIf="item.H != undefined" >{{'Host: ' + item.H}}</mat-list-item>
+                                </ng-container>
+                            </mat-list>
+                        </mat-card-content>
                     </mat-card>
                 </div>
-                <div cdkDropList
-                     #walkInsList="cdkDropList"
+                <div cdkDropList 
                      [cdkDropListConnectedTo]="[preCheckInList]"
-                     (cdkDropListDropped)="drop($event)"
                      [cdkDropListData]="walkIns"
                      class="col-md ml-2 mr-2 walkin">
-                    <mat-card class="mt-2 appCard" *ngFor="let item of walkIns" cdkDrag>
+                    <mat-card *ngIf="showApp" class="card-Appointment mt-2">
+                        <ng-container *ngIf="newAppointment$ | async"></ng-container>
+                        <form [formGroup]="clientForm" (ngSubmit)="addAppointment()">
+                            <div class="form-field pl-3 pr-3">
+                                <mat-form-field hintLabel="Phone number">
+                                    <span matPrefix>+1 &nbsp;</span>
+                                    <input matInput #Phone placeholder="(555) 555-1234" appPhoneMask maxlength="14" formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher">
+                                    <mat-error *ngIf="f.Phone.invalid && f.Phone.touched">{{getErrorMessage('Phone')}}</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="form-field pl-3 pr-3">
+                                <mat-form-field hintLabel="Name">
+                                    <input matInput #Name placeholder="Name" maxlength="100" minlength="3" formControlName="Name"
+                                        [errorStateMatcher]="confirmValidParentMatcher" required>
+                                    <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{getErrorMessage('Name')}}</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="form-field pl-3 pr-3">
+                                <mat-form-field hintLabel="Email">
+                                    <input matInput #Email placeholder="Email" maxlength="200" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" formControlName="Email"
+                                        [errorStateMatcher]="confirmValidParentMatcher">
+                                    <mat-error *ngIf="f.Email.invalid && f.Email.touched">{{getErrorMessage('Email')}}</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="form-field pl-3 pr-3">
+                                <mat-form-field hintLabel="Companions">
+                                    <input matInput #Companions placeholder="Companions" maxlength="2" min="1" max="20" formControlName="Companions"
+                                        [errorStateMatcher]="confirmValidParentMatcher">
+                                    <mat-error *ngIf="f.Companions.invalid && f.Companions.touched">{{getErrorMessage('Companions')}}</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="form-field pl-3 pr-3">
+                                <mat-form-field hintLabel="Date of birth">
+                                    <mat-label>Date of birth</mat-label>
+                                    <input matInput [matDatepicker]="dobClient" formControlName="DOB">
+                                    <mat-datepicker-toggle matSuffix [for]="dobClient"></mat-datepicker-toggle>
+                                    <mat-datepicker #dobClient></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="form-field pl-3 pr-3">
+                                <label>Gender</label>
+                                <mat-radio-group aria-label="Select an option" formControlName="Gender" class="client_gender mt-0">
+                                    <mat-radio-button matLine value="M">Male</mat-radio-button>
+                                    <mat-radio-button matLine value="F">Female</mat-radio-button>
+                                    <mat-radio-button matLine value="NA">Doesn't want to answer</mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                            <div class="form-field pl-3 pr-3">
+                                <label>Disability</label>
+                                <mat-radio-group aria-label="Select an option" formControlName="Disability" class="client_gender mt-0">
+                                    <mat-radio-button matLine value="1">Elderly</mat-radio-button>
+                                    <mat-radio-button matLine value="2">Pregnant</mat-radio-button>
+                                    <mat-radio-button matLine value="3">Disable</mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                            <div class="form-field pl-3 pr-3">
+                                <label>Preference</label>
+                                <mat-radio-group aria-label="Select an option" formControlName="Preference" class="client_gender mt-0">
+                                    <mat-radio-button matLine value="1">SMS</mat-radio-button>
+                                    <mat-radio-button matLine value="2">Email</mat-radio-button>
+                                    <mat-radio-button matLine value="3">Push Notification</mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                            <div>
+                                <button mat-flat-button color="primary" id="save" [disabled]="!clientForm.valid" class="ml-3 mr-3 mt-2">Save</button>
+                                <button mat-flat-button color="accent" id="cancel" type="button" (click)="onCancelAddAppointment()" class="mt-2">Cancel</button>
+                            </div>
+                            <!-- {{ clientForm.value | json }} -->
+                        </form>
+                    </mat-card>
+                    <mat-card class="mt-2 appCard" *ngFor="let item of walkIns;let i=index" cdkDrag>
                         <mat-card-content>
                             <p>{{item.Name}}</p>
-                            <P>{{item.Phone}}</P>
+                            <p>+1 {{item.Phone | phone}}</p>
+                            <p>{{item.DateAppo}}</p>
                         </mat-card-content>
                         <mat-card-actions>
-                            <button mat-button (click)="onCancelApp(item.AppId)">CANCEL</button>
-                            <button mat-button (click)="onChangeApp(item.AppId)">SCHEDULE</button>
+                            <button mat-button (click)="showMessageWalk[i] = !showMessageWalk[i]; onShowMessage(item.AppId, i, 'walkin');">MESSAGE</button>
+                            <button mat-button (click)="onReadyCheckIn(item, 2)">READY TO CHECK IN</button>
                         </mat-card-actions>
+                        <mat-card-content [hidden]="!showMessageWalk[i]">
+                            <textarea class="col-md-10" #messageText matInput placeholder="Write a comment..."></textarea>
+                            <button class="col-md button-send" mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageText.value ,i, 'walkin')">
+                                <mat-icon class="send_icon">send</mat-icon>
+                            </button>
+                            <mat-list>
+                                <ng-container *ngFor="let item of getCommentsWalk[i]">
+                                    <mat-list-item *ngIf="item.U != undefined" >{{'User: ' + item.U}}</mat-list-item>
+                                    <mat-list-item *ngIf="item.H != undefined" >{{'Host: ' + item.H}}</mat-list-item>
+                                </ng-container>
+                            </mat-list>
+                        </mat-card-content>
                     </mat-card>
                 </div>
                 <div cdkDropList
@@ -78,19 +172,32 @@
                      (cdkDropListDropped)="drop($event)"
                      [cdkDropListData]="preCheckIn"
                      class="col-md ml-2 mr-2 precheck">
-                    <mat-card class="mt-2 appCard" *ngFor="let item of preCheckIn">
+                    <mat-card class="mt-2 appCard" *ngFor="let item of preCheckIn;let i=index">
                         <mat-card-content>
                             <p>{{item.Name}}</p>
-                            <P>{{item.Phone}}</P>
+                            <p>+1 {{item.Phone | phone}}</p>
+                            <p>{{item.DateAppo}}</p>
                         </mat-card-content>
                         <mat-card-actions>
-                            <button mat-button (click)="onCancelApp(item.AppId)">CANCEL</button>
-                            <button mat-button (click)="onNotifyApp(item.AppId)">NOTIFY</button>
+                            <button mat-button (click)="onCancelApp(item)">CANCEL</button>
+                            <button mat-button (click)="showMessagePre[i] = !showMessagePre[i]; onShowMessage(item.AppId, i, 'pre');">MESSAGE</button>
                             <button mat-button (click)="onCheckInApp(item.AppId)">CHECK-IN</button>
                         </mat-card-actions>
+                        <mat-card-content [hidden]="!showMessagePre[i]">
+                            <textarea class="col-md-10" #messageText matInput placeholder="Write a comment..."></textarea>
+                            <button class="col-md button-send" mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageText.value ,i, 'precheck')">
+                                <mat-icon class="send_icon">send</mat-icon>
+                            </button>
+                            <mat-list>
+                                <ng-container *ngFor="let item of getCommentsPre[i]">
+                                    <mat-list-item *ngIf="item.U != undefined" >{{'User: ' + item.U}}</mat-list-item>
+                                    <mat-list-item *ngIf="item.H != undefined" >{{'Host: ' + item.H}}</mat-list-item>
+                                </ng-container>
+                            </mat-list>
+                        </mat-card-content>
                     </mat-card>
                 </div>
             </div>
-        </mat-card>
+        </div>
     </div>
 </div>
