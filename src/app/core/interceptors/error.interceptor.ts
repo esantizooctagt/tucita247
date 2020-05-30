@@ -7,7 +7,7 @@ import {
     HttpEvent
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/internal/operators';
+import { catchError } from 'rxjs/operators';
 
 import { AuthService } from '@core/services';
 
@@ -45,7 +45,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                         'Message': message,
                         'Status': err.status
                     };
-                    return throwError(err);
+                    return throwError(error);
                 })
             );
     }

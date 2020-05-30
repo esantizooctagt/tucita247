@@ -46,7 +46,6 @@ export class AuthService {
     return this.http.post<any>(this.apiURL + '/user/login', { "Email": email, "Password": password, "MFact_Auth": authCode })
       .pipe(
           map(user => {
-            console.log("entro 00");
               if (user && user.token && user.Code == 100) {
                   // store user details in local storage to keep user logged in
                   sessionStorage.setItem('TC247_USS', JSON.stringify(user.user));
@@ -63,7 +62,6 @@ export class AuthService {
   }
 
   errorHandler(error) {
-    console.log(error);
     return throwError(error || 'Server Error');
   }
 
