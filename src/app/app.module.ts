@@ -58,7 +58,7 @@ import { SearchComponent } from '@shared/search/search.component';
 import { PhoneMaskDirective } from '@shared/phone-mask.directive';
 
 import { AgmCoreModule } from '@agm/core';
-import { PhonePipe } from './shared/phone.pipe';
+import { PhonePipe } from '@shared/phone.pipe';
 
 @NgModule({
   declarations: [

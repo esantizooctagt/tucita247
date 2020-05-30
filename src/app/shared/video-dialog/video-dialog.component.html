@@ -1,0 +1,38 @@
+<div mat-dialog-content>
+    <div class="card" class="col-md-12 pl-2 pr-2">
+        <mat-card>
+            <mat-card-content>
+                <div class="row">
+                    <!-- Video -->
+                    <div class="video-row">
+                        <video class="video" id="video" #video autoplay playsinline></video>
+                    </div>
+                    <!-- Canvas -->
+                    <div style="display:none">
+                        <canvas class="video" id="canvas" #canvas></canvas>
+                    </div>
+                    <!-- Button -->
+                    <div>
+                        <ng-container *ngIf="!videoStart">
+                            <button mat-fab class="mat-elevation-z1" (click)="toggleVideoMedia()"
+                                [disabled]="videoStart" color="secondary" aria-label="videocam icon-button">
+                                <mat-icon>videocam</mat-icon>
+                            </button>
+                        </ng-container>
+                        <ng-container *ngIf="videoStart">
+                            <button mat-fab (click)="toggleVideoMedia()" [disabled]="!videoStart" color="warn"
+                                aria-label="videocam icon-button">
+                                <mat-icon>videocam_off</mat-icon>
+                            </button>
+                        </ng-container>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <input matInput [(ngModel)]="qrCode">
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button [mat-dialog-close]="qrCode" cdkFocusInitial>Ok</button>
+</div>

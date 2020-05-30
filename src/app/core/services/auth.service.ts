@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 import { User } from '@app/_models';
 import { environment } from '@environments/environment';
@@ -46,6 +46,7 @@ export class AuthService {
     return this.http.post<any>(this.apiURL + '/user/login', { "Email": email, "Password": password, "MFact_Auth": authCode })
       .pipe(
           map(user => {
+            console.log("entro 00");
               if (user && user.token && user.Code == 100) {
                   // store user details in local storage to keep user logged in
                   sessionStorage.setItem('TC247_USS', JSON.stringify(user.user));
@@ -56,8 +57,14 @@ export class AuthService {
                   this.currentAccessTknSubject.next(user.access);
               }
               return user;
-          })
+          }),
+          catchError(this.errorHandler)
       );
+  }
+
+  errorHandler(error) {
+    console.log(error);
+    return throwError(error || 'Server Error');
   }
 
   businessId() {

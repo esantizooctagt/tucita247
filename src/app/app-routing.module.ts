@@ -4,6 +4,7 @@ import { AuthGuard } from '@modules/authentication/guards/auth.guard';
 
 /**Main Components**/
 import { MainNavComponent, NotFoundComponent, LoginComponent, UsersComponent, ClientsComponent, DashboardComponent, ServicesComponent, ProfileComponent, BusinessComponent, CategoriesComponent, ReportsComponent, RolesComponent, HelpComponent, ResetComponent, VerificationComponent, ForgotpassComponent, HomeComponent, HostComponent } from '@modules/index';
+import { VideoDialogComponent } from '@shared/video-dialog/video-dialog.component';
 
 const routes: Routes = [
   { 
@@ -67,5 +68,6 @@ export const routingComponents = [
   RolesComponent,
   HelpComponent,
   HomeComponent,
-  HostComponent
+  HostComponent,
+  VideoDialogComponent
 ]

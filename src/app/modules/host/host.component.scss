@@ -89,3 +89,17 @@ mat-icon.mat-icon.notranslate.material-icons.mat-icon-no-color {
     position: relative;
     top: -14px;
 }
+.card {
+    padding-top: 14px;
+}
+.video {
+    width: 100%;
+    object-fit: cover;
+}
+.video-row {
+    padding-bottom: 10px;
+    border: 1px solid #ff4f00;
+}
+#canvas {
+    width: 100%;
+}

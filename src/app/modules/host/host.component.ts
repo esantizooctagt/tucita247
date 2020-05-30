@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Observable, Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -12,6 +12,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
+import { VideoDialogComponent } from '@app/shared/video-dialog/video-dialog.component';
 
 @Component({
   selector: 'app-host',
@@ -44,6 +45,7 @@ export class HostComponent implements OnInit {
 
   locationId: string = '';
   doorId: string = '';
+  qrCode: string = '';
 
   onError: string = '';
 
@@ -52,7 +54,7 @@ export class HostComponent implements OnInit {
   }
 
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
-  
+
   constructor(
     private spinnerService: SpinnerService,
     private _snackBar: MatSnackBar,
@@ -62,6 +64,21 @@ export class HostComponent implements OnInit {
     private fb: FormBuilder,
     private dialog: MatDialog
   ) { 
+  }
+
+  openVideoDialog(): void {
+    const dialogRef = this.dialog.open(VideoDialogComponent, {
+      width: '450px',
+      height: '450px',
+      data: {qrCode: ''}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (this.qrCode != undefined) {
+        this.qrCode = result;
+        console.log(this.qrCode);
+      }
+    });
   }
 
   clientForm = this.fb.group({
@@ -341,6 +358,7 @@ export class HostComponent implements OnInit {
 
   onCheckInApp(i: string){
     //READ QR CODE AND CHECK-IN PROCESS
+    this.openVideoDialog();
   }
 
   onMessageApp(appointmentId: string, value: string, i: number, qeue: string){
