@@ -28,6 +28,7 @@ export class HostComponent implements OnInit {
   newAppointment$: Observable<any>;
   updAppointment$: Observable<any>;
   getMessages$: Observable<any[]>;
+  checkIn$: Observable<any>;
   HostLocations: Subscription;
   commentsSubs: Subscription;
   reasonsSub: Subscription;
@@ -87,21 +88,6 @@ export class HostComponent implements OnInit {
     this.matIconRegistry.addSvgIcon('pregnant',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/pregnant.svg'));
     this.matIconRegistry.addSvgIcon('readycheck',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/readycheck.svg'));
     this.matIconRegistry.addSvgIcon('sms',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/sms.svg'));
-  }
-
-  openVideoDialog(): void {
-    const dialogRef = this.dialog.open(VideoDialogComponent, {
-      width: '450px',
-      height: '450px',
-      data: {qrCode: ''}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (this.qrCode != undefined) {
-        this.qrCode = result;
-        console.log(this.qrCode);
-      }
-    });
   }
 
   clientForm = this.fb.group({
@@ -210,21 +196,20 @@ export class HostComponent implements OnInit {
       Unread: "0"
     }
   ]
-  preCheckIn =[
-    {
-      AppId: "34256",
-      ClientId: "55555",
-      Name: "MELANIE SANTIZO",
-      Phone: "4569009282",
-      OnBehalf: 0,
-      Companions: 1,
-      DateAppo: "10:00",
-      Door: "LEVEL 1",
-      Disability: "",
-      DateFull: "2020-05-25-10-00",
-      Unread: "0"
-    }
-  ]
+  preCheckIn =[]
+  // {
+  //   AppId: "34256",
+  //   ClientId: "55555",
+  //   Name: "MELANIE SANTIZO",
+  //   Phone: "4569009282",
+  //   OnBehalf: 0,
+  //   Companions: 1,
+  //   DateAppo: "10:00",
+  //   Door: "LEVEL 1",
+  //   Disability: "",
+  //   DateFull: "2020-05-25-10-00",
+  //   Unread: "0"
+  // }
 
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
@@ -369,7 +354,7 @@ export class HostComponent implements OnInit {
     }
   }
 
-  onCancelApp(appo: any, reasonId: string){
+  onCancelApp(appo: any, reasonId: string, index: number){
     //CANCELAR APPOINTMENT
     if (reasonId == undefined){
       this.openSnackBar("You must select a reason","Cancel Appointment");
@@ -384,21 +369,64 @@ export class HostComponent implements OnInit {
         if (res.Code == 200){
           var data = this.preCheckIn.findIndex(e => e.AppId === appo.AppId);
           this.preCheckIn.splice(data, 1);
-          
+          this.showCancelOptions[index] = false;
+          this.selected[index] = undefined; 
           this.openSnackBar("La Cita cancelled successfull","Cancel");
         }
       }),
       catchError(err => {
         this.onError = err.Message;
-        this.openSnackBar("Something goes wrong try again","Transfer");
+        this.openSnackBar("Something goes wrong try again","Cancel");
         return this.onError;
       })
     );
   }
 
-  onCheckInApp(i: string){
+  onCheckInApp(appo: any){
     //READ QR CODE AND CHECK-IN PROCESS
-    this.openVideoDialog();
+    if (appo.Phone != '0000000000') {
+      const dialogRef = this.dialog.open(VideoDialogComponent, {
+        width: '450px',
+        height: '570px',
+        data: {qrCode: ''}
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result != undefined) {
+          this.qrCode = result;
+          this.checkInAppointment(this.qrCode, appo);
+        }
+      });
+    } else {
+      this.checkInAppointment('VALID', appo);
+    }
+  }
+
+  checkInAppointment(qrCode: string, appo: any){
+    let formData = {
+      Status: 3,
+      DateAppo: appo.DateFull,
+      qrCode: qrCode
+    }
+    this.checkIn$ = this.appointmentService.updateAppointment(appo.AppId, formData).pipe(
+      map((res: any) => {
+        if (res.Code == 200){
+          var data = this.preCheckIn.findIndex(e => e.AppId === appo.AppId);
+          this.preCheckIn.splice(data, 1);
+          
+          this.openSnackBar("La Cita check-in successfull","Check-In");
+        }
+      }),
+      catchError(err => {
+        if (err.Status == 404){
+          this.openSnackBar("Invalid qr code","Check-in");
+          return err.Message;
+        }
+        this.onError = err.Message;
+        this.openSnackBar("Something goes wrong try again","Check-in");
+        return this.onError;
+      })
+    );
   }
 
   onMessageApp(appointmentId: string, value: string, i: number, qeue: string){
@@ -435,8 +463,11 @@ export class HostComponent implements OnInit {
     );
   }
 
-  onShowMessage(appointmentId: string, i: number, type: string){
-    this.commentsSubs = this.appointmentService.getMessages(appointmentId, 'H').subscribe((res: any) => {
+  onShowMessage(appo: any, i: number, type: string){
+    if (appo.Unread == 'H') {
+      appo.Unread = '0';
+    }
+    this.commentsSubs = this.appointmentService.getMessages(appo.AppId, 'H').subscribe((res: any) => {
         if (res != null){
           if (res.Code == 200){
             if (type == 'schedule'){
@@ -564,7 +595,10 @@ export class HostComponent implements OnInit {
         Status: 2,
         DateAppo: appo['DateFull']
       }
-      transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
+
+      console.log(this.preCheckIn.length);
+      transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, this.preCheckIn.length);
+      console.log(this.preCheckIn);
       this.updAppointment$ = this.appointmentService.updateAppointment(appo['AppId'], formData).pipe(
         map((res: any) => {
           if (res.Code == 200){

@@ -62,22 +62,24 @@ export class VideoDialogComponent {
     const HEIGHT = this.videoElm.nativeElement.clientHeight;
     this.canvasElm.nativeElement.width  = WIDTH;
     this.canvasElm.nativeElement.height = HEIGHT;
+    if (WIDTH > 0) {
+      const ctx = this.canvasElm.nativeElement.getContext('2d') as CanvasRenderingContext2D;
 
-    const ctx = this.canvasElm.nativeElement.getContext('2d') as CanvasRenderingContext2D;
+      ctx.drawImage(this.videoElm.nativeElement, 0, 0, WIDTH, HEIGHT)
+      const imageData = ctx.getImageData(0, 0, WIDTH, HEIGHT)
+      const code = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: "dontInvert" })
 
-    ctx.drawImage(this.videoElm.nativeElement, 0, 0, WIDTH, HEIGHT)
-    const imageData = ctx.getImageData(0, 0, WIDTH, HEIGHT)
-    const code = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: "dontInvert" })
-
-    if (code) {
-        this.qrCode = code.data;
-    } else {
-        setTimeout(() => { this.checkImage(); }, 100)
+      if (code) {
+          this.qrCode = code.data;
+      } else {
+          setTimeout(() => { this.checkImage(); }, 100)
+      }
     }
   }
 
   onNoClick(): void {
+    if (this.videoStart) { this.stopVideo(); }
+    this.qrCode = '';
     this.dialogRef.close();
   }
-
 }
