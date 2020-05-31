@@ -596,9 +596,7 @@ export class HostComponent implements OnInit {
         DateAppo: appo['DateFull']
       }
 
-      console.log(this.preCheckIn.length);
       transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, this.preCheckIn.length);
-      console.log(this.preCheckIn);
       this.updAppointment$ = this.appointmentService.updateAppointment(appo['AppId'], formData).pipe(
         map((res: any) => {
           if (res.Code == 200){
