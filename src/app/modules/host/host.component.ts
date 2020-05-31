@@ -633,4 +633,8 @@ export class HostComponent implements OnInit {
     }
   }
 
+  onLoadMoreAppointments(){
+    console.log("fire more appos");
+  }
+
 }

@@ -39,7 +39,11 @@
                 <div cdkDropList
                      [cdkDropListConnectedTo]="[preCheckInList]"
                      [cdkDropListData]="schedule"
-                     class="col-md ml-2 mr-2 plan">
+                     class="col-md ml-2 mr-2 plan"
+                     infiniteScroll
+                     [infiniteScrollDistance]="2"
+                     [infiniteScrollThrottle]="50"
+                     (scrolled)="onLoadMoreAppointments()">
                      <mat-card class="mt-2 appCard">
                         <mat-card-content>
                             <p>+ Pending Citas from period 09:00 - 11:00 (20,000)</p>

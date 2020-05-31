@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -112,6 +113,7 @@ import { PhonePipe } from '@shared/phone.pipe';
     FormsModule,
     Ng5SliderModule,
     MatBadgeModule,
+    InfiniteScrollModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyCyKdLcjPnI3n5Eb2VmMJk-sgan83LEsCM'
     })
