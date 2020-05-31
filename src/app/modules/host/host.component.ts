@@ -2,17 +2,19 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Observable, Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { LocationService } from '@app/services';
+import { LocationService, ReasonsService } from '@app/services';
 import { AuthService } from '@app/core/services';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { map, catchError } from 'rxjs/operators';
 import { AppointmentService } from '@app/services/appointment.service';
-import { Appointment } from '@app/_models';
+import { Appointment, Reason } from '@app/_models';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { VideoDialogComponent } from '@app/shared/video-dialog/video-dialog.component';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-host',
@@ -28,6 +30,7 @@ export class HostComponent implements OnInit {
   getMessages$: Observable<any[]>;
   HostLocations: Subscription;
   commentsSubs: Subscription;
+  reasonsSub: Subscription;
 
   showMessageSche=[];
   showMessageWalk=[];
@@ -36,6 +39,15 @@ export class HostComponent implements OnInit {
   getCommentsSche=[];
   getCommentsWalk=[];
   getCommentsPre=[];
+
+  showDetailsSche=[];
+  showDetailsWalk=[];
+  showDetailsPre=[];
+  showCancelOptions=[];
+  
+  selected=[];
+
+  reasons: Reason[]=[];
 
   doors: string[]=[];
   businessId: string = '';
@@ -56,14 +68,25 @@ export class HostComponent implements OnInit {
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
   constructor(
+    private domSanitizer: DomSanitizer,
     private spinnerService: SpinnerService,
     private _snackBar: MatSnackBar,
     private authService: AuthService,
     private appointmentService: AppointmentService,
+    private reasonService: ReasonsService,
     private locationService: LocationService,
     private fb: FormBuilder,
-    private dialog: MatDialog
-  ) { 
+    private dialog: MatDialog,
+    private matIconRegistry: MatIconRegistry
+  ) {
+    this.matIconRegistry.addSvgIcon('cancel',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/cancel.svg'));
+    this.matIconRegistry.addSvgIcon('clock',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/clock.svg'));
+    this.matIconRegistry.addSvgIcon('expand',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/expand.svg'));
+    this.matIconRegistry.addSvgIcon('handicap',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/handicap.svg'));
+    this.matIconRegistry.addSvgIcon('older',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/older.svg'));
+    this.matIconRegistry.addSvgIcon('pregnant',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/pregnant.svg'));
+    this.matIconRegistry.addSvgIcon('readycheck',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/readycheck.svg'));
+    this.matIconRegistry.addSvgIcon('sms',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/sms.svg'));
   }
 
   openVideoDialog(): void {
@@ -247,7 +270,20 @@ export class HostComponent implements OnInit {
         );
       }
     });
-      
+
+    this.reasonsSub = this.reasonService.getReasons(this.businessId).subscribe(
+      (res: any) => {
+        if (res != null ){
+          if (res.Code == 200){
+            this.reasons = res.Reasons;
+            return res.Reasons;
+          }
+        }
+      },
+      error => {
+        //save error
+        this.openSnackBar("An error ocurred, try again","Error");
+      });
   }
 
   addAppointment(){
@@ -333,11 +369,15 @@ export class HostComponent implements OnInit {
     }
   }
 
-  onCancelApp(appo: any){
+  onCancelApp(appo: any, reasonId: string){
     //CANCELAR APPOINTMENT
+    if (reasonId == undefined){
+      this.openSnackBar("You must select a reason","Cancel Appointment");
+    }
     let formData = {
       Status: 5,
-      DateAppo: appo.DateFull
+      DateAppo: appo.DateFull,
+      Reason: reasonId
     }
     this.updAppointment$ = this.appointmentService.updateAppointment(appo.AppId, formData).pipe(
       map((res: any) => {
@@ -396,7 +436,7 @@ export class HostComponent implements OnInit {
   }
 
   onShowMessage(appointmentId: string, i: number, type: string){
-    this.commentsSubs = this.appointmentService.getMessages(appointmentId).subscribe((res: any) => {
+    this.commentsSubs = this.appointmentService.getMessages(appointmentId, 'H').subscribe((res: any) => {
         if (res != null){
           if (res.Code == 200){
             if (type == 'schedule'){
@@ -464,10 +504,10 @@ export class HostComponent implements OnInit {
             let data = {
               AppId: item['AppointmentId'],
               ClientId: item['ClienteId'],
-              Name: item['Name'],
+              Name: item['Name'].toLowerCase().substring(0, 24)+(item['Name'].length > 24 ? '...' : ''),
               OnBehalf: item['OnBehalf'],
               Companions: item['Companions'],
-              Door: item['Door'],
+              Door: item['Door'].substring(0,40)+(item['Door'].length > 40 ? '...' : ''),
               Disability: item['Disability'],
               Phone: item['Phone'],
               DateFull: item['DateAppo'],
@@ -555,6 +595,9 @@ export class HostComponent implements OnInit {
     }
     if (this.commentsSubs){
       this.commentsSubs.unsubscribe();
+    }
+    if (this.reasonsSub){
+      this.reasonsSub.unsubscribe();
     }
   }
 

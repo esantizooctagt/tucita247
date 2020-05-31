@@ -28,6 +28,9 @@
   color: #898989;
   height: 40px !important;
 }
+.item-list:focus{
+  background: none !important;
+}
 .item-list:hover{
   // background-color: #FF4F00;
   color: #FF4F00;

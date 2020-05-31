@@ -28,6 +28,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatBadgeModule } from '@angular/material/badge';
+
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -109,6 +111,7 @@ import { PhonePipe } from '@shared/phone.pipe';
     HttpClientModule,
     FormsModule,
     Ng5SliderModule,
+    MatBadgeModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyCyKdLcjPnI3n5Eb2VmMJk-sgan83LEsCM'
     })

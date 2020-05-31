@@ -37,8 +37,8 @@ export class AppointmentService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  getMessages(appointmentId): Observable<any[]> {
-    return this.http.get<any[]>(this.apiURL + '/appointment/messages/' + appointmentId)
+  getMessages(appointmentId, type): Observable<any[]> {
+    return this.http.get<any[]>(this.apiURL + '/appointment/messages/' + appointmentId + '/' + type)
                     .pipe(catchError(this.errorHandler));
   }
 

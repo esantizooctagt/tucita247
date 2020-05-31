@@ -11,34 +11,55 @@
     left: 50%;
     top: 50%;
 }
-.overlay-forgot{
-    height:100%;
-    width:100%;
+.overlay-login{
+    height: 550px;
+    width: 677px;
     background-color:rgba(0, 0, 0, 0.418);
-    z-index:    10;
-    top:        0; 
-    left:       0; 
+    z-index: 10;
     position: absolute;
 }
-.img-back{
-    // background-image: url('https://previews.123rf.com/images/melpomen/melpomen1902/melpomen190200571/116956656-online-shopping-theme-with-woman-using-her-smartphone-in-a-living-room.jpg');
-    // filter: blur(8px);
-    // -webkit-filter: blur(1px);
-    background-position: right;
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 100%;
-    width: 100%;
-}
-.login-form{
-    position: absolute; 
-    background-color: white;
-}
-.login-forgot{
+.forgot-form{
     text-align: right;
     cursor: pointer;
+    width: 550px;
+    margin: 0 auto;
+    position: relative;
+    text-align: center;
+}
+.main-form{
+    width: 677px;
+    height: 550px;
+    background: #FA8D5D;
 }
 .alert-danger{
-    color: red;
+    color: #fff;
     font-weight: 500;
+}
+.main-content{
+    background-color: #C4C4C4;
+}
+.main-logo{
+    background: url('../../../assets/images/logo-txtwhite.svg') no-repeat center center;
+    height: 115px;
+}
+.login-form{
+    width: 550px;
+    height: 200px;
+    background-color: #fff;
+    margin: 0 auto;
+    position: relative;
+}
+.sign-in{
+    color: #6F6F6F;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 24px;
+}
+.text-forgot{
+    color: #fff !important;
+}
+:host::ng-deep .mat-form-field-underline {
+    background-color: #B6B6B6 !important;
 }

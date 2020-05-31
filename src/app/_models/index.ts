@@ -7,3 +7,4 @@ export * from './category';
 export * from './countries';
 export * from './business';
 export * from './appointment';
+export * from './reason';
