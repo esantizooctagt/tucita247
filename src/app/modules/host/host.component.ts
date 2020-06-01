@@ -30,6 +30,7 @@ export class HostComponent implements OnInit {
   newAppointment$: Observable<any>;
   updAppointment$: Observable<any>;
   getMessages$: Observable<any[]>;
+  quantityPeople$: Observable<any>;
   checkIn$: Observable<any>;
   HostLocations: Subscription;
   commentsSubs: Subscription;
@@ -53,6 +54,7 @@ export class HostComponent implements OnInit {
 
   buckets=[];
   currHour: number = 0;
+  qtyPeople: string = '';
   reasons: Reason[]=[];
 
   doors: string[]=[];
@@ -354,6 +356,21 @@ export class HostComponent implements OnInit {
         this.openSnackBar("An error ocurred, try again","Error");
       });
 
+    setInterval(() => { 
+      this.quantityPeople$ = this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
+          map((res: any) => {
+            if (res != null){
+              this.qtyPeople = res.Quantity;
+              return res.Quantity.toString();
+            }
+          }),
+          catchError(err => {
+            this.onError = err.Message;
+            return '0';
+          })
+        );
+    }, 30000);
+
     setInterval(() => {
       this.preCheckIn.forEach(res => {
         let options = {
@@ -366,9 +383,8 @@ export class HostComponent implements OnInit {
         formatter = new Intl.DateTimeFormat([], options);
         var actual = formatter.format(new Date());
         var d = new Date();
-        console.log(res);
-        d.setHours(+res.CheckInTime.substring(11,12));
-        d.setMinutes(+res.CheckInTime.substring(14,15));
+        d.setHours(+res.CheckInTime.substring(11,13));
+        d.setMinutes(+res.CheckInTime.substring(14,16));
         
         var a = new Date();
         a.setHours(+actual.substring(0,2));
@@ -382,6 +398,12 @@ export class HostComponent implements OnInit {
       });
 
     }, 60000);
+  
+    setInterval(() => {
+      this.getAppointmentsSche();
+      this.getAppointmentsWalk();
+      this.getAppointmentsPre();
+    }, 3500000);
   }
 
   getOperationHours(businessId: string, locationId: string){
@@ -549,9 +571,11 @@ export class HostComponent implements OnInit {
     let formData = {
       Status: 3,
       DateAppo: appo.DateFull,
-      qrCode: qrCode
+      qrCode: qrCode,
+      BusinessId: this.businessId,
+      LocationId: this.locationId
     }
-    this.checkIn$ = this.appointmentService.updateAppointment(appo.AppId, formData).pipe(
+    this.checkIn$ = this.appointmentService.updateAppointmentCheckIn(appo.AppId, formData).pipe(
       map((res: any) => {
         if (res.Code == 200){
           var data = this.preCheckIn.findIndex(e => e.AppId === appo.AppId);
@@ -646,7 +670,7 @@ export class HostComponent implements OnInit {
             var data = this.walkIns.findIndex(e => e.AppId === appo.AppId);
             this.walkIns.splice(data, 1);
           }
-          appo.CheckInTime = appoObj['TIMECHEK'];
+          appo.CheckInTime = appoObj['Attributes']['TIMECHEK'];
           appo.ElapsedTime = "0";
           this.preCheckIn.push(appo);
           this.openSnackBar("Ready to check-in successfull","Ready to Check-In");
@@ -684,7 +708,7 @@ export class HostComponent implements OnInit {
             hora = (+hora.substring(0,2) > 12 ? (+hora.substring(0,2)-12).toString() : hora.substring(0,2)) + ':' + hora.substring(3).toString() + (+hora.substring(0,2) > 12 ? ' PM' : ' AM');
             let data = {
               AppId: item['AppointmentId'],
-              ClientId: item['ClienteId'],
+              ClientId: item['ClientId'],
               Name: item['Name'].toLowerCase().substring(0, 24)+(item['Name'].length > 24 ? '...' : ''),
               OnBehalf: item['OnBehalf'],
               Companions: item['Companions'],
@@ -725,7 +749,7 @@ export class HostComponent implements OnInit {
             hora = (+hora.substring(0,2) > 12 ? (+hora.substring(0,2)-12).toString() : hora.substring(0,2)) + ':' + hora.substring(3).toString() + (+hora.substring(0,2) > 12 ? ' PM' : ' AM');
             let data = {
               AppId: item['AppointmentId'],
-              ClientId: item['ClienteId'],
+              ClientId: item['ClientId'],
               Name: item['Name'].toLowerCase().substring(0, 24)+(item['Name'].length > 24 ? '...' : ''),
               OnBehalf: item['OnBehalf'],
               Companions: item['Companions'],
@@ -766,7 +790,7 @@ export class HostComponent implements OnInit {
             hora = (+hora.substring(0,2) > 12 ? (+hora.substring(0,2)-12).toString() : hora.substring(0,2)) + ':' + hora.substring(3).toString() + (+hora.substring(0,2) > 12 ? ' PM' : ' AM');
             let data = {
               AppId: item['AppointmentId'],
-              ClientId: item['ClienteId'],
+              ClientId: item['ClientId'],
               Name: item['Name'].toLowerCase().substring(0, 24)+(item['Name'].length > 24 ? '...' : ''),
               OnBehalf: item['OnBehalf'],
               Companions: item['Companions'],
@@ -804,9 +828,8 @@ export class HostComponent implements OnInit {
     formatter = new Intl.DateTimeFormat([], options);
     var actual = formatter.format(new Date());
     var d = new Date();
-    console.log(cardTime);
-    d.setHours(+cardTime.substring(11,12));
-    d.setMinutes(+cardTime.substring(14,15));
+    d.setHours(+cardTime.substring(11,13));
+    d.setMinutes(+cardTime.substring(14,16));
     
     var a = new Date();
     a.setHours(+actual.substring(0,2));
@@ -837,8 +860,9 @@ export class HostComponent implements OnInit {
         map((res: any) => {
           if (res.Code == 200){
             let appoObj = res.Appo;
-            this.preCheckIn[this.preCheckIn.length].CheckInTime = appoObj['TIMECHEK'];
-            this.preCheckIn[this.preCheckIn.length].ElapsedTime = "0";
+            let appoGet = this.preCheckIn[this.preCheckIn.length-1];
+            appoGet.CheckInTime = appoObj['Attributes']['TIMECHEK'];
+            appoGet.ElapsedTime = "0";
             this.openSnackBar("Ready to check-in successfull","Ready to Check-In");
           }
         }),

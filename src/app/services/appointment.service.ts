@@ -22,6 +22,11 @@ export class AppointmentService {
                     .pipe(catchError(this.errorHandler));
   }
 
+  updateAppointmentCheckIn(appointmentId, formData) {
+    return this.http.put(this.apiURL + '/appointment/checkin/' + appointmentId, formData)
+                    .pipe(catchError(this.errorHandler));
+  }
+
   getHostLocations(businessId, userId): Observable<any[]> {
     return this.http.get<any[]>(this.apiURL + '/host/' + businessId + '/' + userId)
                     .pipe(catchError(this.errorHandler));

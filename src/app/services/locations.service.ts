@@ -32,6 +32,11 @@ export class LocationService {
                     .pipe(catchError(this.errorHandler));
   }
 
+  getLocationQuantity(businessId, locationId): Observable<any>{
+    return this.http.get<any>(this.apiURL + '/location/checkin/' + businessId + '/' + locationId)
+                    .pipe(catchError(this.errorHandler));
+  }
+
   errorHandler(error) {
     return throwError(error || 'Server Error');
   }

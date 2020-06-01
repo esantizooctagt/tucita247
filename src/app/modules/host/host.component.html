@@ -35,6 +35,9 @@
             </div>
             <ng-container *ngIf="messages$ | async"></ng-container>
             <div class="row">
+                <div class="col-md-12" *ngIf="quantityPeople$ | async">{{qtyPeople}}</div>
+            </div>
+            <div class="row">
                 <div cdkDropList
                     [cdkDropListConnectedTo]="[preCheckInList]"
                     [cdkDropListData]="schedule" class="col-md">
@@ -290,11 +293,17 @@
                         <mat-card class="mt-2 appCard" *ngFor="let item of preCheckIn;let i=index">
                             <div class="row pr-3 pl-3">
                                 <div class="card-user col-md-9 pl-0 pr-0">{{item.Name}}</div>
-                                <div class="card-time col-md pr-0 pl-0">{{item.ElapsedTime}}</div>
+                                <div class="col-md pr-0 pl-0">
+                                    <mat-icon class="elapsed-clock" *ngIf="item.ElapsedTime != ''" svgIcon="clock"></mat-icon>
+                                    <div class="elapsed-time">
+                                        {{item.ElapsedTime}}
+                                    </div>
+                                    <div class="elapsed-tag">{{ (item.ElapsedTime > 1 ? 'mins' : 'min') }}</div>
+                                </div>
                             </div>
                             <div class="row pr-3 pl-3">
                                 <div class="card-phone col-md-9 pl-0 pr-0">+1 {{item.Phone | phone}}</div>
-                                <div class="card-disability col-md pr-0 pl-0">
+                                <div class="card-disability-pre col-md pr-0 pl-0">
                                     <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
                                     <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
                                     <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
