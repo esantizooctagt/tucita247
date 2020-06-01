@@ -12,8 +12,8 @@ export class AppointmentService {
   readonly apiURL = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
-  getAppointments(businessId, locationId, dateAppo, dateAppoFin, status, statusFin): Observable<Appointment[]> {
-      return this.http.get<Appointment[]>(this.apiURL + '/appointments/' + businessId + '/' + locationId + '/' + dateAppo + '/' + dateAppoFin + '/' + status + '/' + statusFin + '/_/_')
+  getAppointments(businessId, locationId, dateAppoIni, dateAppoFin, status, type, lastItem, appId): Observable<Appointment[]> {
+      return this.http.get<Appointment[]>(this.apiURL + '/appointments/' + businessId + '/' + locationId + '/' + dateAppoIni + '/' + dateAppoFin + '/' + status + '/' + type + '/' + lastItem + '/' + appId)
                       .pipe(catchError(this.errorHandler));
   }
 

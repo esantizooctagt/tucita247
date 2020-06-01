@@ -18,6 +18,11 @@ export class BusinessService {
                     .pipe(catchError(this.errorHandler));
   }
 
+  getBusinessOpeHours(businessId, locationId): Observable<any> {
+    return this.http.get<any>(this.apiURL + '/business/opehours/' + businessId + '/' + locationId)
+                    .pipe(catchError(this.errorHandler));
+  }
+
   updateBusiness(businessId, dataForm) {
     return this.http.put(this.apiURL + '/business/' + businessId, dataForm)
                     .pipe(catchError(this.errorHandler));
