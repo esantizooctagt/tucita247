@@ -37,6 +37,10 @@ export class LocationService {
                     .pipe(catchError(this.errorHandler));
   }
 
+  getLocationCheckIn(businessId, locationId, dateAppo, lastItem, appoId): Observable<any[]>{
+    return this.http.get<any[]>(this.apiURL + '/location/checkin/' + businessId + '/' + locationId + '/' + dateAppo + '/' + lastItem + '/' + appoId)
+                    .pipe(catchError(this.errorHandler));
+  }
   errorHandler(error) {
     return throwError(error || 'Server Error');
   }

@@ -26,6 +26,7 @@ export class HostComponent implements OnInit {
   appointmentsSche$: Observable<Appointment[]>;
   appointmentsWalk$: Observable<Appointment[]>;
   appointmentsPre$: Observable<Appointment[]>;
+  getCheckIns$: Observable<any[]>;
   messages$: Observable<any>;
   newAppointment$: Observable<any>;
   updAppointment$: Observable<any>;
@@ -49,11 +50,14 @@ export class HostComponent implements OnInit {
   showDetailsWalk=[];
   showDetailsPre=[];
   showCancelOptions=[];
+
+  // checkIns=[];
   
   selected=[];
 
   buckets=[];
   currHour: number = 0;
+  bucketInterval: number = 0;
   qtyPeople: string = '';
   reasons: Reason[]=[];
 
@@ -69,12 +73,14 @@ export class HostComponent implements OnInit {
 
   onError: string = '';
 
-  lastItemWalk: string = '_'
+  lastItemWalk: string = '_';
   lastItemPre: string = '_';
   lastItem: string = '_';
-  appoIdWalk: string = '_'
-  appoIdPre: string = '_'
-  appoIdSche: string = '_'
+  appoIdWalk: string = '_';
+  appoIdPre: string = '_';
+  appoIdSche: string = '_';
+  lastItemCheckIn: string = '_';
+  appoIdCheckIn: string = '_';
 
   get f(){
     return this.clientForm.controls;
@@ -325,9 +331,6 @@ export class HostComponent implements OnInit {
         this.locationId = res.Locs.LocationId;
         this.doorId = res.Locs.Door;
         this.getOperationHours(this.businessId, this.locationId);
-        this.getAppointmentsSche();
-        this.getAppointmentsWalk();
-        this.getAppointmentsPre();
       } else {
         this.showDoorInfo = true;
         this.locations$ = this.locationService.getLocationsHost(this.businessId).pipe(
@@ -341,6 +344,26 @@ export class HostComponent implements OnInit {
         );
       }
     });
+
+    setTimeout(() => {
+      if (this.locationId != '') {
+        this.getAppointmentsSche();
+        this.getAppointmentsWalk();
+        this.getAppointmentsPre();
+        this.quantityPeople$ = this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
+          map((res: any) => {
+            if (res != null){
+              this.qtyPeople = res.Quantity;
+              return res.Quantity.toString();
+            }
+          }),
+          catchError(err => {
+            this.onError = err.Message;
+            return '0';
+          })
+        );
+      }
+    }, 3000);
 
     this.reasonsSub = this.reasonService.getReasons(this.businessId).subscribe(
       (res: any) => {
@@ -406,18 +429,49 @@ export class HostComponent implements OnInit {
     }, 3500000);
   }
 
+  getLocationCheckIn(){
+    let dateAppo = '2020-05-25';
+    // let yearCurr = this.getYear();
+    // let monthCurr = this.getMonth();
+    // let dayCurr = this.getDay();
+    // let dateAppo = yearCurr + '-' + monthCurr + '-' + dayCurr;
+
+    this.getCheckIns$ = this.locationService.getLocationCheckIn(this.businessId, this.locationId, dateAppo, this.lastItemCheckIn, this.appoIdCheckIn).pipe(
+      map((res: any) => {
+        if (res.Code == 200){
+          this.lastItemCheckIn = res['lastItem'].toString().replace('3#DT#','');
+          this.appoIdCheckIn = res['AppId'];
+          // res['Appos'].forEach(item => {
+          //   let data = {
+          //     AppId: item['AppointmentId'],
+          //     Name: item['Name'],
+          //     Phone: item['Phone'],
+          //     Door: item['Door']
+          //   }
+          //   this.checkIns.push(data);
+          // });
+          return res.Appos;
+        }
+      }),
+      catchError(err => {
+        this.onError = err.Message;
+        return this.onError;
+      })
+    );
+  }
+
   getOperationHours(businessId: string, locationId: string){
     this.opeHoursSub = this.businessService.getBusinessOpeHours(businessId, locationId).subscribe((res: any) =>{
       if (res != null) {
         if (res.Code == 200) {
-          let bucketInterval = parseFloat(res.BucketInterval);
+          this.bucketInterval = parseFloat(res.BucketInterval);
           this.currHour = parseFloat(res.CurrHour);
           let hours = res.Hours;
           this.buckets = [];
           for (var i=0; i<=hours.length-1; i++){
             let horaIni = parseFloat(hours[i].HoraIni);
             let horaFin = parseFloat(hours[i].HoraFin);
-            for (var x=horaIni; x<=horaFin; x+=bucketInterval){
+            for (var x=horaIni; x<=horaFin; x+=this.bucketInterval){
               let hora = '';
               if (x % 1 != 0){
                 hora = (x - (x%1)).toString().padStart(2,'0') + ':30';
@@ -670,7 +724,7 @@ export class HostComponent implements OnInit {
             var data = this.walkIns.findIndex(e => e.AppId === appo.AppId);
             this.walkIns.splice(data, 1);
           }
-          appo.CheckInTime = appoObj['Attributes']['TIMECHEK'];
+          appo.CheckInTime = appoObj['TIMECHEK'];
           appo.ElapsedTime = "0";
           this.preCheckIn.push(appo);
           this.openSnackBar("Ready to check-in successfull","Ready to Check-In");
@@ -692,11 +746,91 @@ export class HostComponent implements OnInit {
     this.getAppointmentsPre();
   }
 
+  getTime(): string{
+    let options = {
+      timeZone: 'America/Puerto_Rico',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: false,
+    },
+    formatter = new Intl.DateTimeFormat([], options);
+    var actual = formatter.format(new Date());
+    var actualTime = '';
+    var a = new Date();
+    var hour: number = +actual.substring(0,2);
+    var min: number = (+actual.substring(3,5) > 30 ? 0.5 : 0);
+    if (+actual.substring(3,5) > 30){
+      if (hour+1 > 24){
+        hour = 1;
+        min = 0;
+      } else {
+        hour = hour+1;
+        min = 0;
+      }
+    }
+    var actTime: number = 0;
+    if (this.bucketInterval == 0.5){
+      actTime = hour+min;
+    } else {
+      actTime = hour;
+    }
+    let iniTime = '';
+    for (var i=0; i<= this.buckets.length-1; i++){
+      if (this.buckets[i].Time == actTime){
+        actualTime = this.buckets[i].TimeFormat;
+        break;
+      }
+    }
+    return actualTime;
+  }
+
+  getYear(): string{
+    let options = {
+      timeZone: 'America/Puerto_Rico',
+      year: 'numeric'
+    },
+    formatter = new Intl.DateTimeFormat([], options);
+    var actual = formatter.format(new Date());
+    return actual;
+  }
+
+  getMonth(): string{
+    let options = {
+      timeZone: 'America/Puerto_Rico',
+      month: 'numeric'
+    },
+    formatter = new Intl.DateTimeFormat([], options);
+    var actual = formatter.format(new Date());
+    return actual.padStart(2,'0');
+  }
+
+  getDay(): string{
+    let options = {
+      timeZone: 'America/Puerto_Rico',
+      day: 'numeric'
+    },
+    formatter = new Intl.DateTimeFormat([], options);
+    var actual = formatter.format(new Date());
+    return actual.padStart(2,'0');
+  }
+
   getAppointmentsSche(){
-    let dateAppo = new Date();
-    //let dateAppoStr = dateAppo.getFullYear() + '-' + (dateAppo.getMonth()+1 < 10 ? '0' + (dateAppo.getMonth()+1).toString() : dateAppo.getMonth()+1) + '-' + (dateAppo.getDate() < 10 ? '0' + dateAppo.getDate().toString() : dateAppo.getDate().toString());
     let dateAppoStr = '2020-05-25-09-00';
     let dateAppoFinStr = '2020-05-25-23-00';
+    // let getHours = this.getTime();
+    // let hourIni = '00-00';
+    // let hourFin = '00-00';
+    // if (getHours.length > 0) {
+    //   hourIni = getHours.replace(':','-');
+    //   hourFin = getHours.replace(':','-');
+    // }
+    // let yearCurr = this.getYear();
+    // let monthCurr = this.getMonth();
+    // let dayCurr = this.getDay();
+    // let dateAppoStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourIni;
+    // let dateAppoFinStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourFin;
+
     var spinnerRef = this.spinnerService.start("Loading Appointments...");
     this.appointmentsSche$ = this.appointmentService.getAppointments(this.businessId, this.locationId, dateAppoStr, dateAppoFinStr, 1, 1, this.lastItem, this.appoIdSche).pipe(
       map((res: any) => {
@@ -734,10 +868,21 @@ export class HostComponent implements OnInit {
   }
 
   getAppointmentsWalk(){
-    let dateAppo = new Date();
-    //let dateAppoStr = dateAppo.getFullYear() + '-' + (dateAppo.getMonth()+1 < 10 ? '0' + (dateAppo.getMonth()+1).toString() : dateAppo.getMonth()+1) + '-' + (dateAppo.getDate() < 10 ? '0' + dateAppo.getDate().toString() : dateAppo.getDate().toString());
     let dateAppoStr = '2020-05-25-09-00';
     let dateAppoFinStr = '2020-05-25-23-00';
+    // let getHours = this.getTime();
+    // let hourIni = '00-00';
+    // let hourFin = '00-00';
+    // if (getHours.length > 0) {
+    //   hourIni = getHours.replace(':','-');
+    //   hourFin = getHours.replace(':','-');
+    // }
+    // let yearCurr = this.getYear();
+    // let monthCurr = this.getMonth();
+    // let dayCurr = this.getDay();
+    // let dateAppoStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourIni;
+    // let dateAppoFinStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourFin;
+
     var spinnerRef = this.spinnerService.start("Loading Appointments...");
     this.appointmentsWalk$ = this.appointmentService.getAppointments(this.businessId, this.locationId, dateAppoStr, dateAppoFinStr, 1, 2, this.lastItemWalk, this.appoIdWalk).pipe(
       map((res: any) => {
@@ -775,10 +920,20 @@ export class HostComponent implements OnInit {
   }
 
   getAppointmentsPre(){
-    let dateAppo = new Date();
-    //let dateAppoStr = dateAppo.getFullYear() + '-' + (dateAppo.getMonth()+1 < 10 ? '0' + (dateAppo.getMonth()+1).toString() : dateAppo.getMonth()+1) + '-' + (dateAppo.getDate() < 10 ? '0' + dateAppo.getDate().toString() : dateAppo.getDate().toString());
     let dateAppoStr = '2020-05-25-09-00';
     let dateAppoFinStr = '2020-05-25-23-00';
+    // let getHours = this.getTime();
+    // let hourIni = '00-00';
+    // let hourFin = '00-00';
+    // if (getHours.length > 0) {
+    //   hourIni = getHours.replace(':','-');
+    //   hourFin = getHours.replace(':','-');
+    // }
+    // let yearCurr = this.getYear();
+    // let monthCurr = this.getMonth();
+    // let dayCurr = this.getDay();
+    // let dateAppoStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourIni;
+    // let dateAppoFinStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourFin;
     var spinnerRef = this.spinnerService.start("Loading Appointments...");
     this.appointmentsPre$ = this.appointmentService.getAppointments(this.businessId, this.locationId, dateAppoStr, dateAppoFinStr, 2, '_', this.lastItemPre, this.appoIdPre).pipe(
       map((res: any) => {
@@ -861,7 +1016,7 @@ export class HostComponent implements OnInit {
           if (res.Code == 200){
             let appoObj = res.Appo;
             let appoGet = this.preCheckIn[this.preCheckIn.length-1];
-            appoGet.CheckInTime = appoObj['Attributes']['TIMECHEK'];
+            appoGet.CheckInTime = appoObj['TIMECHEK'];
             appoGet.ElapsedTime = "0";
             this.openSnackBar("Ready to check-in successfull","Ready to Check-In");
           }
@@ -904,12 +1059,10 @@ export class HostComponent implements OnInit {
   }
 
   onScrollWalk(){
-    console.log("fire more appos walks");
     this.getAppointmentsWalk();
   }
 
   onScrollPre(){
-    console.log("fire more appos pre");
     this.getAppointmentsPre();
   }
 }

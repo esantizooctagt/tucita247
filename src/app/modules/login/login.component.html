@@ -1,55 +1,36 @@
-<div class="main-content container-fluid h-100">
-    <div class="row h-100 justify-content-center align-items-center">
-        <div class="col-6">
-            <div class="overlay-login" *ngIf="loading">
-                <mat-progress-spinner class="spinner-login" matSuffix [diameter]="60" mode="indeterminate">
-                </mat-progress-spinner>
+<div class="overlay-login" *ngIf="loading">
+    <mat-progress-spinner class="spinner-login" matSuffix [diameter]="60" mode="indeterminate">
+    </mat-progress-spinner>
+</div>
+<div class="container login-container">
+    <form [formGroup]="loginForm" class="loginForm" (ngSubmit)="onSubmit()">
+        <div class="main-logo mb-5 mt-5"></div>
+        <div class="login-form">
+            <h3 class="sign-in pt-4 pl-4 pb-2">Sign In</h3>
+            <div class="form-field mb-0 pl-4 pb-2 pr-4 pt-3">
+                <mat-form-field>
+                    <mat-label>Email</mat-label>
+                    <input matInput placeholder="Email" formControlName="email"
+                        [errorStateMatcher]="confirmValidParentMatcher" required>
+                    <mat-error *ngIf="f.email.invalid">{{getErrorMessage('Email')}}</mat-error>
+                </mat-form-field>
             </div>
-            <div class="main-form">
-                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-                    <ng-container *ngIf="!showAuth">
-                        <div class="row">
-                            <div class="main-logo col align-self-center mb-4 mt-5"></div>
-                        </div>
-                        <div class="login-form">
-                            <h3 class="sign-in pt-4 pl-4 pb-2">Sign In</h3>
-                            <div class="form-field mb-0 pl-4 pb-2 pr-4 pt-3">
-                                <mat-form-field>
-                                    <mat-label>Email</mat-label>
-                                    <input matInput placeholder="Email" formControlName="email"
-                                        [errorStateMatcher]="confirmValidParentMatcher" required>
-                                    <mat-error *ngIf="f.email.invalid">{{getErrorMessage('Email')}}</mat-error>
-                                </mat-form-field>
-                            </div>
-                            <div class="form-field mb-0 pl-4 pb-2 pr-4 pt-3">
-                                <mat-form-field>
-                                    <mat-label>Password</mat-label>
-                                    <input type="password" matInput placeholder="Password" formControlName="password"
-                                        [errorStateMatcher]="confirmValidParentMatcher" required>
-                                    <mat-error *ngIf="f.password.invalid">{{getErrorMessage('Password')}}</mat-error>
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="forgot-form mt-3 mb-3"><a class="text-forgot" [routerLink]="['/forgotpassword']">Forgot your password ?</a></div>
-                    </ng-container>
-                    <ng-container *ngIf="showAuth">
-                        <h2>Type Key</h2>
-                        <div class="mb-0 form-field">
-                            <mat-form-field>
-                                <mat-label>Auth Code</mat-label>
-                                <input matInput placeholder="" formControlName="authcode" max="999999" min="000001" maxlength="6" minlength="6"
-                                    [errorStateMatcher]="confirmValidParentMatcher" required>
-                                <mat-error *ngIf="f.authcode.invalid">{{getErrorMessage('AuthCode')}}</mat-error>
-                            </mat-form-field>
-                        </div>
-                    </ng-container>
-                    <div class="forgot-form mt-3 mb-3">
-                        <button mat-flat-button color="primary" id="save" [disabled]="loading" class="w-100">Sign Up
-                    </button>
-                        <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
-                    </div>
-                </form>
+            <div class="form-field mb-0 pl-4 pb-2 pr-4 pt-3">
+                <mat-form-field>
+                    <mat-label>Password</mat-label>
+                    <input type="password" matInput placeholder="Password" formControlName="password"
+                        [errorStateMatcher]="confirmValidParentMatcher" required>
+                    <mat-error *ngIf="f.password.invalid">{{getErrorMessage('Password')}}</mat-error>
+                </mat-form-field>
             </div>
         </div>
-    </div>
+        <div class="forgot-form mt-3 mb-3"><a class="text-forgot" [routerLink]="['/forgotpassword']">Forgot your
+                password ?</a>
+        </div>
+        <div class="forgot-form mt-3 mb-3">
+            <button mat-flat-button color="primary" id="save" [disabled]="loading" class="text-left w-100">Sign Up
+            </button>
+            <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+        </div>
+    </form>
 </div>

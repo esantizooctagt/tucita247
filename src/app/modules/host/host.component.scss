@@ -1,5 +1,6 @@
 mat-card{
     margin-left:0px;
+    padding: 5px 8px;
     background: #FFFFFF;
     box-shadow: -3px 1px 4px rgba(0, 0, 0, 0.25) !important;
     border-radius: 0px; //10px;
@@ -25,23 +26,28 @@ mat-card{
 :host::ng-deep .mat-form-field-underline {
     background-color: #B6B6B6 !important;
 }
+.drop-qeue{
+    height: calc(100vh - 161px); //125
+    padding-right: 2px;
+    padding-left: 1px;
+}
 .plan{
     min-height: 500px;
-    max-height: 100vh;
+    height: 100%;
     width: 100%;
     overflow: auto;
     border: dashed 1px #ff4f00;
 }
 .walkin{
     min-height: 500px;
-    max-height: 100vh;
+    height: 100%;
     width: 100%;
     overflow: auto;
     border: dashed 1px #ff4f00;
 }
 .precheck{
     min-height: 500px;
-    max-height: 100vh;
+    height: 100%;
     width: 100%;
     overflow: auto;
     border: dashed 1px #ff4f00;
@@ -206,3 +212,51 @@ mat-icon.mat-icon.notranslate.material-icons.mat-icon-no-color {
     width: 18px;
     left: 20px;
 }
+.checkin-list{
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1px;
+    text-align: right;
+}
+mat-menu{
+    overflow: auto;
+    height: 250px;
+    width: 300px;
+}
+@media (max-width: 1024px){
+    .title-qeue{
+        font-size: 20px;
+    }
+    .card-user{
+        font-size: 15px;
+    }
+    .card-time{
+        font-size: 13px;
+    }
+    .card-phone{
+        font-size: 15px;
+    }
+    .elapsed-time{
+        font-size: 20px;
+        line-height: 1px;
+    }
+    .elapsed-tag{
+        font-size:13px;
+    }
+    .elapsed-clock{
+        height: 16px;
+        width: 16px;
+        left: 0px;
+        top: -3px;
+    }
+    .card-contentprio{
+        line-height: 12px;
+        font-size: 13px;
+    }
+    .card-resultprio{
+        line-height: 12px;
+        font-size: 13px;
+    }
+} 
