@@ -824,7 +824,7 @@ export class HostComponent implements OnInit {
     // let dateAppoStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + time.replace(':','-');
 
     var spinnerRef = this.spinnerService.start("Loading Appointments...");
-    this.appointmentsPrevious$ = this.appointmentService.getPreviousAppointments(this.businessId, this.locationId, dateAppo, 1, 1).pipe(
+    this.appointmentsPrevious$ = this.appointmentService.getPreviousAppointments(this.businessId, this.locationId, dateAppo, 1).pipe(
       map((res: any) => {
         if (res != null) {
           res['Appos'].forEach(item => {
