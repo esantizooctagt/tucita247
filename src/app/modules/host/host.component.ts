@@ -123,183 +123,183 @@ export class HostComponent implements OnInit {
     Companions: ['']
   })
 
-  schedule = [
-    {
-      AppId: "12345",
-      ClientId: "55555",
-      Name: "ERICK SANTIZO",
-      Phone: "9009009282",
-      OnBehalf: 0,
-      Companions: 1,
-      DateAppo: "09:00",
-      Door: "LEVEL 1",
-      Disability: "",
-      DateFull: "2020-05-25-09-00",
-      Unread: "0"
-    },
-    {
-      AppId: "67890",
-      ClientId: "55555",
-      Name: "LUIS PEREZ",
-      Phone: "1239009282",
-      OnBehalf: 0,
-      Companions: 1,
-      DateAppo: "09:00",
-      Door: "LEVEL 1",
-      Disability: "",
-      DateFull: "2020-05-25-09-00",
-      Unread: "0"
-    },
-    {
-      AppId: "67895",
-      ClientId: "55555",
-      Name: "J. SMITH",
-      Phone: "9899109282",
-      OnBehalf: 0,
-      Companions: 1,
-      DateAppo: "09:00",
-      Door: "LEVEL 1",
-      Disability: "",
-      DateFull: "2020-05-25-09-00",
-      Unread: "0"
-    },
-    {
-      AppId: "69998",
-      ClientId: "55555",
-      Name: "LUISA MARTINEZ",
-      Phone: "2333339132",
-      OnBehalf: 0,
-      Companions: 1,
-      DateAppo: "09:00",
-      Door: "LEVEL 1",
-      Disability: "",
-      DateFull: "2020-05-25-09-00",
-      Unread: "0"
-    },
-    {
-      AppId: "69890",
-      ClientId: "55555",
-      Name: "L. FERGUSON",
-      Phone: "1233449282",
-      OnBehalf: 0,
-      Companions: 1,
-      DateAppo: "10:00",
-      Door: "LEVEL 1",
-      Disability: "",
-      DateFull: "2020-05-25-10-00",
-      Unread: "0"
-    },
-    {
-      AppId: "69095",
-      ClientId: "55555",
-      Name: "AUSTIN SMITH",
-      Phone: "4549109282",
-      OnBehalf: 0,
-      Companions: 1,
-      DateAppo: "10:00",
-      Door: "LEVEL 1",
-      Disability: "",
-      DateFull: "2020-05-25-10-00",
-      Unread: "0"
-    },
-    {
-      AppId: "69090",
-      ClientId: "55555",
-      Name: "L SMITH",
-      Phone: "4549109452",
-      OnBehalf: 0,
-      Companions: 1,
-      DateAppo: "10:00",
-      Door: "LEVEL 1",
-      Disability: "",
-      DateFull: "2020-05-25-10-00",
-      Unread: "0"
-    },
-    {
-      AppId: "62395",
-      ClientId: "55555",
-      Name: "J SMITH",
-      Phone: "4549359282",
-      OnBehalf: 0,
-      Companions: 1,
-      DateAppo: "10:00",
-      Door: "LEVEL 1",
-      Disability: "",
-      DateFull: "2020-05-25-10-00",
-      Unread: "0"
-    },
-    {
-      AppId: "34095",
-      ClientId: "55555",
-      Name: "M SMITH",
-      Phone: "4549103482",
-      OnBehalf: 0,
-      Companions: 1,
-      DateAppo: "10:00",
-      Door: "LEVEL 1",
-      Disability: "",
-      DateFull: "2020-05-25-10-00",
-      Unread: "0"
-    },
-    {
-      AppId: "67895",
-      ClientId: "55555",
-      Name: "SS SMITH",
-      Phone: "4549359282",
-      OnBehalf: 0,
-      Companions: 1,
-      DateAppo: "10:00",
-      Door: "LEVEL 1",
-      Disability: "",
-      DateFull: "2020-05-25-10-00",
-      Unread: "0"
-    },
-    {
-      AppId: "36795",
-      ClientId: "55555",
-      Name: "M Bsm",
-      Phone: "4549103482",
-      OnBehalf: 0,
-      Companions: 1,
-      DateAppo: "10:00",
-      Door: "LEVEL 1",
-      Disability: "",
-      DateFull: "2020-05-25-10-00",
-      Unread: "0"
-    }
-  ];
-  walkIns = [
-    {
-      AppId: "45456",
-      ClientId: "55555",
-      Name: "VALERIE SANTIZO",
-      Phone: "1239009282",
-      OnBehalf: 0,
-      Companions: 1,
-      DateAppo: "10:00",
-      Door: "LEVEL 1",
-      Disability: "",
-      DateFull: "2020-05-25-10-00",
-      Unread: "0"
-    }
-  ]
-  preCheckIn =[
-    {
-      AppId: "34256",
-      ClientId: "55555",
-      Name: "MELANIE SANTIZO",
-      Phone: "4569009282",
-      OnBehalf: 0,
-      Companions: 1,
-      DateAppo: "10:00",
-      Door: "LEVEL 1",
-      Disability: "",
-      DateFull: "2020-05-25-10-00",
-      Unread: "0",
-      CheckInTime: "2020-05-25-10-00",
-      ElapsedTime: ""
-    }
-  ]
+  schedule = [];
+  //   {
+  //     AppId: "12345",
+  //     ClientId: "55555",
+  //     Name: "ERICK SANTIZO",
+  //     Phone: "9009009282",
+  //     OnBehalf: 0,
+  //     Companions: 1,
+  //     DateAppo: "09:00",
+  //     Door: "LEVEL 1",
+  //     Disability: "",
+  //     DateFull: "2020-05-25-09-00",
+  //     Unread: "0"
+  //   },
+  //   {
+  //     AppId: "67890",
+  //     ClientId: "55555",
+  //     Name: "LUIS PEREZ",
+  //     Phone: "1239009282",
+  //     OnBehalf: 0,
+  //     Companions: 1,
+  //     DateAppo: "09:00",
+  //     Door: "LEVEL 1",
+  //     Disability: "",
+  //     DateFull: "2020-05-25-09-00",
+  //     Unread: "0"
+  //   },
+  //   {
+  //     AppId: "67895",
+  //     ClientId: "55555",
+  //     Name: "J. SMITH",
+  //     Phone: "9899109282",
+  //     OnBehalf: 0,
+  //     Companions: 1,
+  //     DateAppo: "09:00",
+  //     Door: "LEVEL 1",
+  //     Disability: "",
+  //     DateFull: "2020-05-25-09-00",
+  //     Unread: "0"
+  //   },
+  //   {
+  //     AppId: "69998",
+  //     ClientId: "55555",
+  //     Name: "LUISA MARTINEZ",
+  //     Phone: "2333339132",
+  //     OnBehalf: 0,
+  //     Companions: 1,
+  //     DateAppo: "09:00",
+  //     Door: "LEVEL 1",
+  //     Disability: "",
+  //     DateFull: "2020-05-25-09-00",
+  //     Unread: "0"
+  //   },
+  //   {
+  //     AppId: "69890",
+  //     ClientId: "55555",
+  //     Name: "L. FERGUSON",
+  //     Phone: "1233449282",
+  //     OnBehalf: 0,
+  //     Companions: 1,
+  //     DateAppo: "10:00",
+  //     Door: "LEVEL 1",
+  //     Disability: "",
+  //     DateFull: "2020-05-25-10-00",
+  //     Unread: "0"
+  //   },
+  //   {
+  //     AppId: "69095",
+  //     ClientId: "55555",
+  //     Name: "AUSTIN SMITH",
+  //     Phone: "4549109282",
+  //     OnBehalf: 0,
+  //     Companions: 1,
+  //     DateAppo: "10:00",
+  //     Door: "LEVEL 1",
+  //     Disability: "",
+  //     DateFull: "2020-05-25-10-00",
+  //     Unread: "0"
+  //   },
+  //   {
+  //     AppId: "69090",
+  //     ClientId: "55555",
+  //     Name: "L SMITH",
+  //     Phone: "4549109452",
+  //     OnBehalf: 0,
+  //     Companions: 1,
+  //     DateAppo: "10:00",
+  //     Door: "LEVEL 1",
+  //     Disability: "",
+  //     DateFull: "2020-05-25-10-00",
+  //     Unread: "0"
+  //   },
+  //   {
+  //     AppId: "62395",
+  //     ClientId: "55555",
+  //     Name: "J SMITH",
+  //     Phone: "4549359282",
+  //     OnBehalf: 0,
+  //     Companions: 1,
+  //     DateAppo: "10:00",
+  //     Door: "LEVEL 1",
+  //     Disability: "",
+  //     DateFull: "2020-05-25-10-00",
+  //     Unread: "0"
+  //   },
+  //   {
+  //     AppId: "34095",
+  //     ClientId: "55555",
+  //     Name: "M SMITH",
+  //     Phone: "4549103482",
+  //     OnBehalf: 0,
+  //     Companions: 1,
+  //     DateAppo: "10:00",
+  //     Door: "LEVEL 1",
+  //     Disability: "",
+  //     DateFull: "2020-05-25-10-00",
+  //     Unread: "0"
+  //   },
+  //   {
+  //     AppId: "67895",
+  //     ClientId: "55555",
+  //     Name: "SS SMITH",
+  //     Phone: "4549359282",
+  //     OnBehalf: 0,
+  //     Companions: 1,
+  //     DateAppo: "10:00",
+  //     Door: "LEVEL 1",
+  //     Disability: "",
+  //     DateFull: "2020-05-25-10-00",
+  //     Unread: "0"
+  //   },
+  //   {
+  //     AppId: "36795",
+  //     ClientId: "55555",
+  //     Name: "M Bsm",
+  //     Phone: "4549103482",
+  //     OnBehalf: 0,
+  //     Companions: 1,
+  //     DateAppo: "10:00",
+  //     Door: "LEVEL 1",
+  //     Disability: "",
+  //     DateFull: "2020-05-25-10-00",
+  //     Unread: "0"
+  //   }
+  // ];
+  walkIns = [];
+  //   {
+  //     AppId: "45456",
+  //     ClientId: "55555",
+  //     Name: "VALERIE SANTIZO",
+  //     Phone: "1239009282",
+  //     OnBehalf: 0,
+  //     Companions: 1,
+  //     DateAppo: "10:00",
+  //     Door: "LEVEL 1",
+  //     Disability: "",
+  //     DateFull: "2020-05-25-10-00",
+  //     Unread: "0"
+  //   }
+  // ]
+  preCheckIn =[];
+  //   {
+  //     AppId: "34256",
+  //     ClientId: "55555",
+  //     Name: "MELANIE SANTIZO",
+  //     Phone: "4569009282",
+  //     OnBehalf: 0,
+  //     Companions: 1,
+  //     DateAppo: "10:00",
+  //     Door: "LEVEL 1",
+  //     Disability: "",
+  //     DateFull: "2020-05-25-10-00",
+  //     Unread: "0",
+  //     CheckInTime: "2020-05-25-10-00",
+  //     ElapsedTime: ""
+  //   }
+  // ]
 
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
@@ -817,11 +817,11 @@ export class HostComponent implements OnInit {
   }
 
   getPreviousAppos(time: string){
-    let dateAppo = '2020-05-25-10-00';
-    // let yearCurr = this.getYear();
-    // let monthCurr = this.getMonth();
-    // let dayCurr = this.getDay();
-    // let dateAppoStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + time.replace(':','-');
+    // let dateAppo = '2020-05-25-10-00';
+    let yearCurr = this.getYear();
+    let monthCurr = this.getMonth();
+    let dayCurr = this.getDay();
+    let dateAppoStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + time.replace(':','-');
 
     var spinnerRef = this.spinnerService.start("Loading Appointments...");
     this.appointmentsPrevious$ = this.appointmentService.getPreviousAppointments(this.businessId, this.locationId, dateAppo, 1).pipe(
@@ -858,20 +858,20 @@ export class HostComponent implements OnInit {
   }
 
   getAppointmentsSche(){
-    let dateAppoStr = '2020-05-25-09-00';
-    let dateAppoFinStr = '2020-05-25-23-00';
-    // let getHours = this.getTime();
-    // let hourIni = '00-00';
-    // let hourFin = '00-00';
-    // if (getHours.length > 0) {
-    //   hourIni = getHours.replace(':','-');
-    //   hourFin = getHours.replace(':','-');
-    // }
-    // let yearCurr = this.getYear();
-    // let monthCurr = this.getMonth();
-    // let dayCurr = this.getDay();
-    // let dateAppoStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourIni;
-    // let dateAppoFinStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourFin;
+    // let dateAppoStr = '2020-05-25-09-00';
+    // let dateAppoFinStr = '2020-05-25-23-00';
+    let getHours = this.getTime();
+    let hourIni = '00-00';
+    let hourFin = '00-00';
+    if (getHours.length > 0) {
+      hourIni = getHours.replace(':','-');
+      hourFin = getHours.replace(':','-');
+    }
+    let yearCurr = this.getYear();
+    let monthCurr = this.getMonth();
+    let dayCurr = this.getDay();
+    let dateAppoStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourIni;
+    let dateAppoFinStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourFin;
 
     var spinnerRef = this.spinnerService.start("Loading Appointments...");
     this.appointmentsSche$ = this.appointmentService.getAppointments(this.businessId, this.locationId, dateAppoStr, dateAppoFinStr, 1, 1, this.lastItem, this.appoIdSche).pipe(
@@ -910,20 +910,20 @@ export class HostComponent implements OnInit {
   }
 
   getAppointmentsWalk(){
-    let dateAppoStr = '2020-05-25-09-00';
-    let dateAppoFinStr = '2020-05-25-23-00';
-    // let getHours = this.getTime();
-    // let hourIni = '00-00';
-    // let hourFin = '00-00';
-    // if (getHours.length > 0) {
-    //   hourIni = getHours.replace(':','-');
-    //   hourFin = getHours.replace(':','-');
-    // }
-    // let yearCurr = this.getYear();
-    // let monthCurr = this.getMonth();
-    // let dayCurr = this.getDay();
-    // let dateAppoStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourIni;
-    // let dateAppoFinStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourFin;
+    // let dateAppoStr = '2020-05-25-09-00';
+    // let dateAppoFinStr = '2020-05-25-23-00';
+    let getHours = this.getTime();
+    let hourIni = '00-00';
+    let hourFin = '00-00';
+    if (getHours.length > 0) {
+      hourIni = getHours.replace(':','-');
+      hourFin = getHours.replace(':','-');
+    }
+    let yearCurr = this.getYear();
+    let monthCurr = this.getMonth();
+    let dayCurr = this.getDay();
+    let dateAppoStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourIni;
+    let dateAppoFinStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourFin;
 
     var spinnerRef = this.spinnerService.start("Loading Appointments...");
     this.appointmentsWalk$ = this.appointmentService.getAppointments(this.businessId, this.locationId, dateAppoStr, dateAppoFinStr, 1, 2, this.lastItemWalk, this.appoIdWalk).pipe(
@@ -962,20 +962,20 @@ export class HostComponent implements OnInit {
   }
 
   getAppointmentsPre(){
-    let dateAppoStr = '2020-05-25-09-00';
-    let dateAppoFinStr = '2020-05-25-23-00';
-    // let getHours = this.getTime();
-    // let hourIni = '00-00';
-    // let hourFin = '00-00';
-    // if (getHours.length > 0) {
-    //   hourIni = getHours.replace(':','-');
-    //   hourFin = getHours.replace(':','-');
-    // }
-    // let yearCurr = this.getYear();
-    // let monthCurr = this.getMonth();
-    // let dayCurr = this.getDay();
-    // let dateAppoStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourIni;
-    // let dateAppoFinStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourFin;
+    // let dateAppoStr = '2020-05-25-09-00';
+    // let dateAppoFinStr = '2020-05-25-23-00';
+    let getHours = this.getTime();
+    let hourIni = '00-00';
+    let hourFin = '00-00';
+    if (getHours.length > 0) {
+      hourIni = getHours.replace(':','-');
+      hourFin = getHours.replace(':','-');
+    }
+    let yearCurr = this.getYear();
+    let monthCurr = this.getMonth();
+    let dayCurr = this.getDay();
+    let dateAppoStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourIni;
+    let dateAppoFinStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourFin;
     var spinnerRef = this.spinnerService.start("Loading Appointments...");
     this.appointmentsPre$ = this.appointmentService.getAppointments(this.businessId, this.locationId, dateAppoStr, dateAppoFinStr, 2, '_', this.lastItemPre, this.appoIdPre).pipe(
       map((res: any) => {
