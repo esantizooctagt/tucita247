@@ -17,6 +17,11 @@ export class AppointmentService {
                       .pipe(catchError(this.errorHandler));
   }
 
+  getPreviousAppointments(businessId, locationId, dateAppo, status, type): Observable<Appointment[]> {
+    return this.http.get<Appointment[]>(this.apiURL + '/appointments/previous/' + businessId + '/' + locationId + '/' + dateAppo + '/' + status + '/' + type)
+                    .pipe(catchError(this.errorHandler));
+  }
+
   updateAppointment(appointmentId, formData) {
     return this.http.put(this.apiURL + '/appointment/' + appointmentId, formData)
                     .pipe(catchError(this.errorHandler));

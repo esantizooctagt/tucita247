@@ -216,14 +216,11 @@ mat-icon.mat-icon.notranslate.material-icons.mat-icon-no-color {
     font-family: Montserrat;
     font-style: normal;
     font-weight: 500;
-    font-size: 16px;
-    line-height: 1px;
-    text-align: right;
+    font-size: 15px;
+    text-align: left;
 }
 mat-menu{
     overflow: auto;
-    height: 250px;
-    width: 300px;
 }
 @media (max-width: 1024px){
     .title-qeue{

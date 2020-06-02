@@ -26,6 +26,7 @@ export class HostComponent implements OnInit {
   appointmentsSche$: Observable<Appointment[]>;
   appointmentsWalk$: Observable<Appointment[]>;
   appointmentsPre$: Observable<Appointment[]>;
+  appointmentsPrevious$: Observable<Appointment[]>;
   getCheckIns$: Observable<any[]>;
   messages$: Observable<any>;
   newAppointment$: Observable<any>;
@@ -51,8 +52,8 @@ export class HostComponent implements OnInit {
   showDetailsPre=[];
   showCancelOptions=[];
 
-  // checkIns=[];
-  
+  showPrevious: boolean = false;
+  previous=[];
   selected=[];
 
   buckets=[];
@@ -813,6 +814,47 @@ export class HostComponent implements OnInit {
     formatter = new Intl.DateTimeFormat([], options);
     var actual = formatter.format(new Date());
     return actual.padStart(2,'0');
+  }
+
+  getPreviousAppos(time: string){
+    let dateAppo = '2020-05-25-10-00';
+    // let yearCurr = this.getYear();
+    // let monthCurr = this.getMonth();
+    // let dayCurr = this.getDay();
+    // let dateAppoStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + time.replace(':','-');
+
+    var spinnerRef = this.spinnerService.start("Loading Appointments...");
+    this.appointmentsPrevious$ = this.appointmentService.getPreviousAppointments(this.businessId, this.locationId, dateAppo, 1, 1).pipe(
+      map((res: any) => {
+        if (res != null) {
+          res['Appos'].forEach(item => {
+            let hora = item['DateAppo'].substring(11,16).replace('-',':');
+            hora = (+hora.substring(0,2) > 12 ? (+hora.substring(0,2)-12).toString() : hora.substring(0,2)) + ':' + hora.substring(3).toString() + (+hora.substring(0,2) > 12 ? ' PM' : ' AM');
+            let data = {
+              AppId: item['AppointmentId'],
+              ClientId: item['ClientId'],
+              Name: item['Name'].toLowerCase().substring(0, 24)+(item['Name'].length > 24 ? '...' : ''),
+              OnBehalf: item['OnBehalf'],
+              Companions: item['Companions'],
+              Door: item['Door'].substring(0,40)+(item['Door'].length > 40 ? '...' : ''),
+              Disability: item['Disability'],
+              Phone: item['Phone'],
+              DateFull: item['DateAppo'],
+              DateAppo: hora,
+              Unread: item['Unread']
+            }
+            this.previous.push(data);
+          });
+          this.spinnerService.stop(spinnerRef);
+        }
+        return res.Appos;
+      }),
+      catchError(err => {
+        this.onError = err.Message;
+        this.spinnerService.stop(spinnerRef);
+        return this.onError;
+      })
+    );
   }
 
   getAppointmentsSche(){
