@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, OnDestroy, Input } from '@angular/core';
+import { Component, Output, EventEmitter, OnDestroy, Input, SimpleChanges } from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -12,14 +12,16 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 })
 export class SearchComponent implements OnDestroy {
   @Input() readonly placeholder: string = '';
-  @Input() salesView: boolean = false;
+  // @Input() setForm: string;
+
   @Output() setValue: EventEmitter<string> = new EventEmitter();
   @Output() view: EventEmitter<string> = new EventEmitter();
-  @Output() searchStep: EventEmitter<string> = new EventEmitter();
 
   private _searchSubject: Subject<string> = new Subject();
   public loading:boolean = false;
   public searchValue: string='';
+  public contentButton: string = '+ Add';
+  private changeText: boolean = true;
   
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -43,14 +45,36 @@ export class SearchComponent implements OnDestroy {
     });
   }
 
-  changeView(value: string){
+  changeView(){
+    this.changeText = !this.changeText;
+    if (!this.changeText) {
+      this.contentButton = 'Search';
+    } else {
+      this.contentButton = '+ Add'
+    }
+    let value = '';
+    if (!this.changeText){
+      value = 'Add';
+    } else {
+      value = 'Search';
+    }
     this.view.emit( value );
+    console.log('search emits ' + value);
   }
 
-  changeStep(){
-    this.searchStep.emit ( '2' );
-  }
-
+  // ngOnChanges(changes: SimpleChanges) {
+  //   console.log(changes.setForm.currentValue);
+  //   if (changes.setForm.currentValue != undefined){
+  //     this.view.emit(changes.setForm.currentValue);
+  //     this.changeText = !this.changeText;
+  //     if (!this.changeText) {
+  //       this.contentButton = 'Search';
+  //     } else {
+  //       this.contentButton = '+ Add'
+  //     }
+  //   }
+  // }
+  
   public updateSearchUp(event, searchTextValue: string) {
     this.loading = true;
     debounceTime(500);

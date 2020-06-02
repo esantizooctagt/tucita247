@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ɵConsole } from '@angular/core';
 import { User } from '@app/_models';
 import { AuthService } from '@app/core/services';
 import { Router } from '@angular/router';
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-users',
@@ -10,7 +11,9 @@ import { Router } from '@angular/router';
 })
 export class UsersComponent implements OnInit {
   public clickedUser: User;
-  
+  public displayForm: string = 'Search';
+  public filterData: string = undefined;
+  public valueForm: string = undefined;
   constructor(
     private authService: AuthService,
     private router: Router
@@ -25,7 +28,23 @@ export class UsersComponent implements OnInit {
   }
 
   onSelected(user: User) {
-    this.clickedUser = user;
+    console.log("Comp user - click on edit");
+    console.log(user);
+    // (async () => {
+    //   this.valueForm = '';
+    //   this.clickedUser = undefined;
+    //   await delay(20);
+    //   this.valueForm = 'Add';
+    //   this.clickedUser = user;
+    // })();
+    
   }
 
+  getForm(value){
+    this.displayForm= value;
+  }
+
+  filterList(value){
+    this.filterData = value;
+  }
 }

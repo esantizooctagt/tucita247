@@ -58,6 +58,8 @@ export class HostComponent implements OnInit {
 
   buckets=[];
   currHour: number = 0;
+  prevHour: number = 0;
+  firstHour: number = 0;
   bucketInterval: number = 0;
   qtyPeople: string = '';
   reasons: Reason[]=[];
@@ -422,6 +424,17 @@ export class HostComponent implements OnInit {
       });
 
     }, 60000);
+
+    setInterval(() => {
+      for (var i=0; i<=this.buckets.length-1; i++){
+        if (this.buckets[i].Time == this.currHour){
+          this.currHour = this.buckets[i].Time;
+          if (i-1 >= 0){
+            this.prevHour = this.buckets[i-1].Time;
+          }
+        }
+      }
+    }, 1200000);
   
     setInterval(() => {
       this.getAppointmentsSche();
@@ -472,6 +485,9 @@ export class HostComponent implements OnInit {
           for (var i=0; i<=hours.length-1; i++){
             let horaIni = parseFloat(hours[i].HoraIni);
             let horaFin = parseFloat(hours[i].HoraFin);
+            if (i ==0){
+              this.firstHour = horaIni;
+            }
             for (var x=horaIni; x<=horaFin; x+=this.bucketInterval){
               let hora = '';
               if (x % 1 != 0){
@@ -480,6 +496,11 @@ export class HostComponent implements OnInit {
                 hora = x.toString().padStart(2, '0') + ':00';
               }
               this.buckets.push({ TimeFormat: hora, Time: x });
+              if (x == this.currHour) {
+                if (x-this.bucketInterval>= horaIni){
+                  this.prevHour = this.currHour-this.bucketInterval;
+                }
+              }
             }
           }
         }
@@ -776,7 +797,6 @@ export class HostComponent implements OnInit {
     } else {
       actTime = hour;
     }
-    let iniTime = '';
     for (var i=0; i<= this.buckets.length-1; i++){
       if (this.buckets[i].Time == actTime){
         actualTime = this.buckets[i].TimeFormat;
@@ -816,13 +836,19 @@ export class HostComponent implements OnInit {
     return actual.padStart(2,'0');
   }
 
-  getPreviousAppos(time: string){
+  getPreviousAppos(x: number){
     // let dateAppo = '2020-05-25-10-00';
+    if (this.showPrevious == false) {return;}
+    let time: string = '';
+    if (x % 1 != 0){
+      time = (x - (x%1)).toString().padStart(2,'0') + ':30';
+    } else {
+      time = x.toString().padStart(2, '0') + ':00';
+    }
     let yearCurr = this.getYear();
     let monthCurr = this.getMonth();
     let dayCurr = this.getDay();
-    let dateAppoStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + time.replace(':','-');
-
+    let dateAppo = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + time.replace(':','-');
     var spinnerRef = this.spinnerService.start("Loading Appointments...");
     this.appointmentsPrevious$ = this.appointmentService.getPreviousAppointments(this.businessId, this.locationId, dateAppo, 1).pipe(
       map((res: any) => {
@@ -915,9 +941,15 @@ export class HostComponent implements OnInit {
     let getHours = this.getTime();
     let hourIni = '00-00';
     let hourFin = '00-00';
+    if (this.firstHour % 1 != 0){
+      hourIni = (this.firstHour - (this.firstHour%1)).toString().padStart(2,'0') + '-30';
+    } else {
+      hourIni = this.firstHour.toString().padStart(2, '0') + '-00';
+    }
     if (getHours.length > 0) {
-      hourIni = getHours.replace(':','-');
       hourFin = getHours.replace(':','-');
+    } else {
+      hourFin = this.currHour.toString() + '-00';
     }
     let yearCurr = this.getYear();
     let monthCurr = this.getMonth();

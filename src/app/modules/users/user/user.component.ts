@@ -70,6 +70,7 @@ export class UserComponent implements OnInit {
   })
 
   ngOnInit(): void {
+    console.log("entro");
     this.businessId = this.authService.businessId();
     this.message$ = this.data.monitorMessage;
     this.loadRoles();
@@ -142,7 +143,12 @@ export class UserComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     // changes.prop contains the old and the new value...
+    console.log("change on user compo");
+    console.log(changes);
     if (changes.user.currentValue != undefined) {
+      if (this.businessId == ''){
+        this.businessId = this.authService.businessId();
+      }
       this.userData = '';
       this.statTemp = 0;
       var spinnerRef = this.spinnerService.start("Loading User...");

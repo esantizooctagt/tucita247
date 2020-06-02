@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
 import { AuthService } from '@core/services';
 import { User } from '@app/_models';
 import { UserService } from "@app/services";
@@ -9,6 +9,8 @@ import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { Observable, throwError } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 import { SpinnerService } from '@app/shared/spinner.service';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-user-list',
@@ -17,6 +19,7 @@ import { SpinnerService } from '@app/shared/spinner.service';
 })
 export class UserListComponent implements OnInit {
   @Output() userSelected = new EventEmitter<User>();
+  @Input() filterValue: string;
   public length: number = 0;
   public pageSize: number = 10;
   public users: User[] = [];
@@ -38,12 +41,17 @@ export class UserListComponent implements OnInit {
   users$: Observable<User[]>;
 
   constructor(
+    private domSanitizer: DomSanitizer,
     private authService: AuthService,
     private data: MonitorService,
     private userService: UserService,
     private spinnerService: SpinnerService,
-    private dialog: MatDialog
-  ) { }
+    private dialog: MatDialog,
+    private matIconRegistry: MatIconRegistry
+  ) { 
+    this.matIconRegistry.addSvgIcon('edit',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/edit.svg'));
+    this.matIconRegistry.addSvgIcon('delete',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/delete.svg'));
+  }
 
   openDialog(header: string, message: string, success: boolean, error: boolean, warn: boolean): void {
     const dialogConfig = new MatDialogConfig();
@@ -80,8 +88,9 @@ export class UserListComponent implements OnInit {
   }
 
   ngAfterViewChecked() {
+    //change style page number
     const list = document.getElementsByClassName('mat-paginator-range-label');
-    list[0].innerHTML = 'Page: ' + this._page.toString();
+    list[0].innerHTML = this._page.toString();
   }
 
   loadUsers(crPage, crNumber, crValue, crItem) {
@@ -108,29 +117,44 @@ export class UserListComponent implements OnInit {
     );
   }
 
-  public filterList(searchParam: string): void {
-    this._currentSearchValue = searchParam;
-    this._currentPage = [];
-    this._page = 1;
-    this._currentPage.push({page: this._page, userId: ''});
-    this.loadUsers(
-      this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].userId
-    );
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.filterValue.currentValue != undefined){
+      this._currentSearchValue = changes.filterValue.currentValue;
+      this._currentPage = [];
+      this._page = 1;
+      this._currentPage.push({page: this._page, userId: ''});
+      this.loadUsers(
+        this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].userId
+      );
+    }
   }
 
+  // public filterList(searchParam: string): void {
+  //   this._currentSearchValue = searchParam;
+  //   this._currentPage = [];
+  //   this._page = 1;
+  //   this._currentPage.push({page: this._page, userId: ''});
+  //   this.loadUsers(
+  //     this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].userId
+  //   );
+  // }
+
   onSelect(user: User) {
-    if (this.lastUser != user){
-      this.userSelected.emit(user);
-      this.lastUser = user;
-    } else {
-      let defUser: User;
-      (async () => {
-        this.userSelected.emit(defUser);
-        await delay(20);
-        this.userSelected.emit(user);
-      })();
-    }
-    window.scroll(0,0);
+    console.log('Comp listuser - onselect');
+    console.log(user);
+    this.userSelected.emit(user);
+    // if (this.lastUser != user){
+    //   this.userSelected.emit(user);
+    //   this.lastUser = user;
+    // } else {
+    //   let defUser: User;
+    //   (async () => {
+    //     this.userSelected.emit(defUser);
+    //     await delay(20);
+    //     this.userSelected.emit(user);
+    //   })();
+    // }
+    // window.scroll(0,0);
   }
 
   onDelete(user: User) {
@@ -196,14 +220,6 @@ export class UserListComponent implements OnInit {
       this._currentSearchValue,
       this._currentPage[this._page-1].userId
     );
-  }
-
-  public setView(value){
-    if (value === 'list'){
-      this.listView = true;
-    } else {
-      this.listView = false;
-    }
   }
 
   trackById(index: number, item: User) {

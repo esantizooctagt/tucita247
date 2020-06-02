@@ -1,53 +1,27 @@
-<app-search placeholder="Search by name" (setValue)="filterList($event)" (view)="setView($event)">
-</app-search>
 <ng-container *ngIf="(deleteUser$ | async) && deletingUser"></ng-container>
-<div class="list-cards" *ngIf="listView">
+<div class="pl-0 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
+    <h3>USERS</h3>
+</div>
+<div class="list-cards">
     <ng-container *ngIf="message$ | async">
-        <mat-list *ngIf="onError==''">
+        <mat-list *ngIf="onError==''" class="items-list">
             <ng-container *ngFor="let user of users$ | async; trackBy: trackById">
                 <mat-list-item>
-                    <div class="pr-0 pl-0">
-                        <h3 class="mb-1" mat-line>{{ user.First_Name }}</h3>
-                        <p class="mb-1" mat-line>{{ user.Last_Name }}</p>
-                        <p class="mb-1" mat-line>{{ user.User_Name }}</p>
-                        <mat-action-list class="" mat-line>
-                            <button mat-icon-button color="primary" (click)="onSelect(user)">
-                                <mat-icon>edit</mat-icon>
-                            </button>
-                            <button mat-icon-button color="warn" (click)="onDelete(user)">
-                                <mat-icon>delete</mat-icon>
-                            </button>
-                        </mat-action-list>
+                    <div class="pr-0 pl-0 col-md-6">
+                        <p class="mb-1" mat-line>{{ user.First_Name + ' ' + user.Last_Name}}</p>
+                    </div>
+                    <div class="pr-0 pl-0 col-md">
+                        <button mat-icon-button color="primary" (click)="onSelect(user)">
+                            <mat-icon class="action-btn" svgIcon="edit"></mat-icon>
+                        </button>
+                        <button mat-icon-button color="warn" (click)="onDelete(user)">
+                            <mat-icon class="action-btn" svgIcon="delete"></mat-icon>
+                        </button>
                     </div>
                 </mat-list-item>
                 <mat-divider></mat-divider>
             </ng-container>
         </mat-list>
-        <div *ngIf="onError!=''">
-            <span>{{onError}}</span>
-        </div>
-    </ng-container>
-</div>
-<div class="card-columns mx-auto p-md-0 justify-content-center col-md-12" *ngIf="!listView">
-    <ng-container *ngIf="message$ | async">
-        <ng-container *ngIf="onError==''">
-            <ng-container *ngFor="let user of users$ | async; trackBy: trackById">
-                <mat-card class="card grid-card mt-1 mb-1 mr-2">
-                    <mat-card-content>
-                        <mat-card-title>{{ user.First_Name + ' ' + user.Last_Name }}</mat-card-title>
-                        <p>{{ user.User_Name }}</p>
-                    </mat-card-content>
-                    <mat-card-actions align="end">
-                        <button mat-icon-button color="primary" (click)="onSelect(user)">
-                            <mat-icon>edit</mat-icon>
-                        </button>
-                        <button mat-icon-button color="warn" (click)="onDelete(user)">
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                    </mat-card-actions>
-                </mat-card>
-            </ng-container>
-        </ng-container>
         <div *ngIf="onError!=''">
             <span>{{onError}}</span>
         </div>

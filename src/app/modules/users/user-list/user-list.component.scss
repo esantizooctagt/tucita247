@@ -1,0 +1,18 @@
+.action-btn{
+    height: 30px;
+    width: 30px;
+}
+.items-list{
+    background: #FFFFFF;
+    box-shadow: -2px 2px 6px rgba(0, 0, 0, 0.16);
+}
+mat-list-item{
+    background: #fff;
+}
+mat-paginator{
+    background: #FFFFFF;
+    box-shadow: -2px 2px 6px rgba(0, 0, 0, 0.16);
+}
+:host ::ng-deep .mat-paginator-page-size{
+    display: none;
+}

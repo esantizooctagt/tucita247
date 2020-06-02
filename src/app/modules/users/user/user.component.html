@@ -1,10 +1,10 @@
 <div class="pl-0 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
-    <h4>Users</h4>
+    <h3>USERS</h3>
 </div>
 <ng-container *ngIf="(userSave$ | async) && savingUser"></ng-container>
 <ng-container *ngIf="userAct$ | async"></ng-container>
 <mat-card class="col-sm col-md col-lg-7" *ngIf="(user$ | async) || displayForm">
-    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="mt-4">
         <div class="form-field pl-3 pr-3">
             <mat-form-field hintLabel="Email format">
                 <input matInput #Email placeholder="Email" maxlength="200" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" formControlName="Email"
