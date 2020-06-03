@@ -41,20 +41,30 @@ export class HostComponent implements OnInit {
 
   showMessageSche=[];
   showMessageWalk=[];
-  showMessagePre=[];
+  showMessageCheck=[];
+  showMessagePrev=[];
 
   getCommentsSche=[];
   getCommentsWalk=[];
-  getCommentsPre=[];
+  getCommentsCheck=[];
+  getCommentsPrev=[];
 
   showDetailsSche=[];
   showDetailsWalk=[];
-  showDetailsPre=[];
-  showCancelOptions=[];
+  showDetailsCheck=[];
+  showDetailsPrev=[];
+
+  showCancelOptionsCheck=[];
+  showCancelOptionsWalk=[];
+  showCancelOptionsSche=[];
+  showCancelOptionsPrev=[];
 
   showPrevious: boolean = false;
-  previous=[];
-  selected=[];
+  
+  selectedCheck=[];
+  selectedWalk=[];
+  selectedSche=[];
+  selectedPrev=[];
 
   buckets=[];
   currHour: number = 0;
@@ -112,6 +122,8 @@ export class HostComponent implements OnInit {
     this.matIconRegistry.addSvgIcon('pregnant',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/pregnant.svg'));
     this.matIconRegistry.addSvgIcon('readycheck',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/readycheck.svg'));
     this.matIconRegistry.addSvgIcon('sms',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/sms.svg'));
+    this.matIconRegistry.addSvgIcon('mas',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/mas.svg'));
+    this.matIconRegistry.addSvgIcon('menos',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/menos.svg'));
   }
 
   clientForm = this.fb.group({
@@ -285,23 +297,25 @@ export class HostComponent implements OnInit {
   //     Unread: "0"
   //   }
   // ]
-  preCheckIn =[];
-  //   {
-  //     AppId: "34256",
-  //     ClientId: "55555",
-  //     Name: "MELANIE SANTIZO",
-  //     Phone: "4569009282",
-  //     OnBehalf: 0,
-  //     Companions: 1,
-  //     DateAppo: "10:00",
-  //     Door: "LEVEL 1",
-  //     Disability: "",
-  //     DateFull: "2020-05-25-10-00",
-  //     Unread: "0",
-  //     CheckInTime: "2020-05-25-10-00",
-  //     ElapsedTime: ""
-  //   }
-  // ]
+  preCheckIn =[
+    {
+      AppId: "34256",
+      ClientId: "55555",
+      Name: "MELANIE SANTIZO",
+      Phone: "4569009282",
+      OnBehalf: 0,
+      Companions: 1,
+      DateAppo: "10:00",
+      Door: "LEVEL 1",
+      Disability: "",
+      DateFull: "2020-06-03-09-00",
+      Unread: "0",
+      CheckInTime: "2020-06-03-09-05",
+      ElapsedTime: ""
+    }
+  ]
+
+  previous=[];
 
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
@@ -444,11 +458,11 @@ export class HostComponent implements OnInit {
   }
 
   getLocationCheckIn(){
-    let dateAppo = '2020-05-25';
-    // let yearCurr = this.getYear();
-    // let monthCurr = this.getMonth();
-    // let dayCurr = this.getDay();
-    // let dateAppo = yearCurr + '-' + monthCurr + '-' + dayCurr;
+    // let dateAppo = '2020-05-25';
+    let yearCurr = this.getYear();
+    let monthCurr = this.getMonth();
+    let dayCurr = this.getDay();
+    let dateAppo = yearCurr + '-' + monthCurr + '-' + dayCurr;
 
     this.getCheckIns$ = this.locationService.getLocationCheckIn(this.businessId, this.locationId, dateAppo, this.lastItemCheckIn, this.appoIdCheckIn).pipe(
       map((res: any) => {
@@ -595,7 +609,7 @@ export class HostComponent implements OnInit {
     }
   }
 
-  onCancelApp(appo: any, reasonId: string, index: number){
+  onCancelApp(appo: any, reasonId: string, index: number, origin: string){
     //CANCELAR APPOINTMENT
     if (reasonId == undefined){
       this.openSnackBar("You must select a reason","Cancel Appointment");
@@ -608,10 +622,30 @@ export class HostComponent implements OnInit {
     this.updAppointment$ = this.appointmentService.updateAppointment(appo.AppId, formData).pipe(
       map((res: any) => {
         if (res.Code == 200){
-          var data = this.preCheckIn.findIndex(e => e.AppId === appo.AppId);
-          this.preCheckIn.splice(data, 1);
-          this.showCancelOptions[index] = false;
-          this.selected[index] = undefined; 
+          if (origin == 'checkin'){
+            var data = this.preCheckIn.findIndex(e => e.AppId === appo.AppId);
+            this.preCheckIn.splice(data, 1);
+            this.showCancelOptionsCheck[index] = false;
+            this.selectedCheck[index] = undefined; 
+          }
+          if (origin == 'walkin'){
+            var data = this.walkIns.findIndex(e => e.AppId === appo.AppId);
+            this.walkIns.splice(data, 1);
+            this.showCancelOptionsWalk[index] = false;
+            this.selectedWalk[index] = undefined; 
+          }
+          if (origin == 'schedule'){
+            var data = this.schedule.findIndex(e => e.AppId === appo.AppId);
+            this.schedule.splice(data, 1);
+            this.showCancelOptionsSche[index] = false;
+            this.selectedSche[index] = undefined; 
+          }
+          if (origin == 'previous'){
+            var data = this.previous.findIndex(e => e.AppId === appo.AppId);
+            this.previous.splice(data, 1);
+            this.showCancelOptionsPrev[index] = false;
+            this.selectedPrev[index] = undefined; 
+          }
           this.openSnackBar("La Cita cancelled successfull","Cancel");
         }
       }),
@@ -687,8 +721,11 @@ export class HostComponent implements OnInit {
             if (qeue == 'walkin'){
               this.showMessageWalk[i] = false;
             }
-            if (qeue == 'precheck'){
-              this.showMessagePre[i] = false;
+            if (qeue == 'checkin'){
+              this.showMessageCheck[i] = false;
+            }
+            if (qeue == 'previous'){
+              this.showMessagePrev[i] = false;
             }
             this.openSnackBar("Messages send successfull","Messages");
           } else {
@@ -719,8 +756,11 @@ export class HostComponent implements OnInit {
             if (type == 'walkin'){
               this.getCommentsWalk[i] = res.Messages;
             }
-            if (type == 'pre'){
-              this.getCommentsPre[i] = res.Messages;
+            if (type == 'checkin'){
+              this.getCommentsCheck[i] = res.Messages;
+            }
+            if (type == 'previous'){
+              this.getCommentsPrev[i] = res.Messages;
             }
           } else {
             this.openSnackBar("Something goes wrong try again","Messages");
@@ -739,10 +779,15 @@ export class HostComponent implements OnInit {
       map((res: any) => {
         if (res.Code == 200){
           let appoObj = res.Appo;
+          if (tipo == 0){
+            var data = this.previous.findIndex(e => e.AppId === appo.AppId);
+            this.previous.splice(data, 1);
+          }
           if (tipo == 1) { 
             var data = this.schedule.findIndex(e => e.AppId === appo.AppId);
             this.schedule.splice(data, 1);
-          } else {
+          }
+          if (tipo == 2) {
             var data = this.walkIns.findIndex(e => e.AppId === appo.AppId);
             this.walkIns.splice(data, 1);
           }
@@ -853,16 +898,17 @@ export class HostComponent implements OnInit {
     this.appointmentsPrevious$ = this.appointmentService.getPreviousAppointments(this.businessId, this.locationId, dateAppo, 1).pipe(
       map((res: any) => {
         if (res != null) {
+          this.previous = [];
           res['Appos'].forEach(item => {
             let hora = item['DateAppo'].substring(11,16).replace('-',':');
-            hora = (+hora.substring(0,2) > 12 ? (+hora.substring(0,2)-12).toString() : hora.substring(0,2)) + ':' + hora.substring(3).toString() + (+hora.substring(0,2) > 12 ? ' PM' : ' AM');
+            hora = (+hora.substring(0,2) > 12 ? (+hora.substring(0,2)-12).toString().padStart(2,'0') : hora.substring(0,2)) + ':' + hora.substring(3).toString() + (+hora.substring(0,2) > 12 ? ' PM' : ' AM');
             let data = {
               AppId: item['AppointmentId'],
               ClientId: item['ClientId'],
-              Name: item['Name'].toLowerCase().substring(0, 24)+(item['Name'].length > 24 ? '...' : ''),
+              Name: item['Name'].toLowerCase(),
               OnBehalf: item['OnBehalf'],
               Companions: item['Companions'],
-              Door: item['Door'].substring(0,40)+(item['Door'].length > 40 ? '...' : ''),
+              Door: item['Door'],
               Disability: item['Disability'],
               Phone: item['Phone'],
               DateFull: item['DateAppo'],
@@ -907,14 +953,14 @@ export class HostComponent implements OnInit {
           this.appoIdSche = res['AppId'].toString();
           res['Appos'].forEach(item => {
             let hora = item['DateAppo'].substring(11,16).replace('-',':');
-            hora = (+hora.substring(0,2) > 12 ? (+hora.substring(0,2)-12).toString() : hora.substring(0,2)) + ':' + hora.substring(3).toString() + (+hora.substring(0,2) > 12 ? ' PM' : ' AM');
+            hora = (+hora.substring(0,2) > 12 ? (+hora.substring(0,2)-12).toString().padStart(2,'0') : hora.substring(0,2)) + ':' + hora.substring(3).toString() + (+hora.substring(0,2) > 12 ? ' PM' : ' AM');
             let data = {
               AppId: item['AppointmentId'],
               ClientId: item['ClientId'],
-              Name: item['Name'].toLowerCase().substring(0, 24)+(item['Name'].length > 24 ? '...' : ''),
+              Name: item['Name'].toLowerCase(),
               OnBehalf: item['OnBehalf'],
               Companions: item['Companions'],
-              Door: item['Door'].substring(0,40)+(item['Door'].length > 40 ? '...' : ''),
+              Door: item['Door'],
               Disability: item['Disability'],
               Phone: item['Phone'],
               DateFull: item['DateAppo'],
@@ -965,14 +1011,14 @@ export class HostComponent implements OnInit {
           this.appoIdWalk = res['AppId'].toString();
           res['Appos'].forEach(item => {
             let hora = item['DateAppo'].substring(11,16).replace('-',':');
-            hora = (+hora.substring(0,2) > 12 ? (+hora.substring(0,2)-12).toString() : hora.substring(0,2)) + ':' + hora.substring(3).toString() + (+hora.substring(0,2) > 12 ? ' PM' : ' AM');
+            hora = (+hora.substring(0,2) > 12 ? (+hora.substring(0,2)-12).toString().padStart(2,'0') : hora.substring(0,2)) + ':' + hora.substring(3).toString() + (+hora.substring(0,2) > 12 ? ' PM' : ' AM');
             let data = {
               AppId: item['AppointmentId'],
               ClientId: item['ClientId'],
-              Name: item['Name'].toLowerCase().substring(0, 24)+(item['Name'].length > 24 ? '...' : ''),
+              Name: item['Name'].toLowerCase(),
               OnBehalf: item['OnBehalf'],
               Companions: item['Companions'],
-              Door: item['Door'].substring(0,40)+(item['Door'].length > 40 ? '...' : ''),
+              Door: item['Door'],
               Disability: item['Disability'],
               Phone: item['Phone'],
               DateFull: item['DateAppo'],
@@ -1000,7 +1046,7 @@ export class HostComponent implements OnInit {
     let hourIni = '00-00';
     let hourFin = '00-00';
     if (getHours.length > 0) {
-      hourIni = getHours.replace(':','-');
+      // hourIni = getHours.replace(':','-');
       hourFin = getHours.replace(':','-');
     }
     let yearCurr = this.getYear();
@@ -1016,14 +1062,14 @@ export class HostComponent implements OnInit {
           this.appoIdPre = res['AppId'].toString();
           res['Appos'].forEach(item => {
             let hora = item['DateAppo'].substring(11,16).replace('-',':');
-            hora = (+hora.substring(0,2) > 12 ? (+hora.substring(0,2)-12).toString() : hora.substring(0,2)) + ':' + hora.substring(3).toString() + (+hora.substring(0,2) > 12 ? ' PM' : ' AM');
+            hora = (+hora.substring(0,2) > 12 ? (+hora.substring(0,2)-12).toString().padStart(2,'0') : hora.substring(0,2)) + ':' + hora.substring(3).toString() + (+hora.substring(0,2) > 12 ? ' PM' : ' AM');
             let data = {
               AppId: item['AppointmentId'],
               ClientId: item['ClientId'],
-              Name: item['Name'].toLowerCase().substring(0, 24)+(item['Name'].length > 24 ? '...' : ''),
+              Name: item['Name'].toLowerCase(),
               OnBehalf: item['OnBehalf'],
               Companions: item['Companions'],
-              Door: item['Door'].substring(0,40)+(item['Door'].length > 40 ? '...' : ''),
+              Door: item['Door'],
               Disability: item['Disability'],
               Phone: item['Phone'],
               DateFull: item['DateAppo'],

@@ -30,7 +30,7 @@
         <div class="col-sm col-md col-lg-12">
             <div class="row mb-2">
                 <div class="col-md ml-2 mr-2 mt-2 title-qeue">
-                    Schedule App
+                    Citas
                 </div>
                 <div class="col-md ml-2 mr-2 mt-2 title-qeue">
                     Walk-Ins
@@ -55,18 +55,20 @@
                         (scrolled)="onScrollSche()"
                         [scrollWindow]="false" 
                         class="col-md ml-2 mr-2 plan">
-                        <!-- <ng-container *ngFor="let item of buckets; let i=index"> -->
-                        <mat-card class="mt-2 appCard" *ngIf="prevHour > 0">
+                        <mat-card class="mt-2 card-pending" *ngIf="prevHour > 0">
                             <mat-card-content>
-                                <div (click)="showPrevious = !showPrevious; getPreviousAppos(prevHour)">{{ (showPrevious ? '-' : '+') + ' Pending Citas from previous periods ' }}</div>
+                                <div class="card-previous" (click)="showPrevious = !showPrevious; getPreviousAppos(prevHour)">
+                                    <mat-icon *ngIf="showPrevious" svgIcon="menos"></mat-icon>
+                                    <mat-icon *ngIf="!showPrevious" svgIcon="mas"></mat-icon> Pending Citas from previous periods</div>
                             </mat-card-content>
                         </mat-card>
                         <ng-container *ngIf="appointmentsPrevious$ | async"></ng-container>
                         <ng-container class="" *ngIf="showPrevious">
                             <mat-card class="mt-2 appCard" *ngFor="let item of previous;let i=index" cdkDrag>
                                 <div class="row pr-3 pl-3">
-                                    <div class="card-user col-md-9 pl-0 pr-0">{{item.Name}}</div>
-                                    <div class="card-time col-md pr-0 pl-0">{{item.DateAppo}}</div>
+                                    <div *ngIf="!showDetailsPrev[i]" class="card-user col-md-9 pl-0 pr-0">{{item.Name}}</div>
+                                    <div *ngIf="showDetailsPrev[i]" class="card-user-disp col-md-9 pl-0 pr-0">{{item.Name}}</div>
+                                    <div class="card-time col-md pr-0 pl-0">{{item.DateAppo.substring(0,2) + item.DateAppo.substring(5,8)}}</div>
                                 </div>
                                 <div class="row pr-3 pl-3">
                                     <div class="card-phone col-md-9 pl-0 pr-0">+1 {{item.Phone | phone}}</div>
@@ -76,45 +78,67 @@
                                         <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
                                     </div>
                                 </div>
-                                <ng-container *ngIf="showDetailsSche[i]">
+                                <ng-container *ngIf="showDetailsPrev[i]">
                                     <div class="row pr-3 pl-3 mt-2 mb-2">
                                         <div class="card-contentprio col-md-6 pl-0">Companions: </div><div class="card-resultprio col-md">{{item.Companions}}</div>
                                     </div>
                                     <div class="row pr-3 pl-3 mt-2 mb-2">
-                                        <div class="card-contentprio col-md-6 pl-0">Door: </div><div class="card-resultprio col-md">{{item.Door}}</div>
+                                        <div class="card-contentprio col-md-6 pl-0">Door: </div><div class="card-resultprio-door col-md">{{item.Door}}</div>
                                     </div>
                                     <div class="row pr-3 pl-3 mt-2 mb-2">
                                         <div class="card-contentprio col-md-6 pl-0">On Behalf: </div><div class="card-resultprio col-md">{{item.OnBehalf == '0' ? 'No' : 'Yes'}}</div>
                                     </div>
                                 </ng-container>
                                 <div class="row mb-0 mt-2">
-                                    <div class="card-actions-left col-md-4">
-                                        <button mat-icon-button color="secondary" (click)="showMessageSche[i] = !showMessageSche[i]; onShowMessage(item, i, 'schedule');">
+                                    <div class="card-actions-center col-sm-3 p-0">
+                                        <button mat-icon-button color="secondary" (click)="showCancelOptionsPrev[i] = !showCancelOptionsPrev[i]">
+                                            <mat-icon svgIcon="cancel"></mat-icon>
+                                        </button>
+                                    </div>
+                                    <div class="card-actions-center col-sm-3 p-0">
+                                        <button mat-icon-button color="secondary" (click)="showMessagePrev[i] = !showMessagePrev[i]; onShowMessage(item, i, 'previous');">
                                             <mat-icon [matBadgeHidden]="item.Unread != 'H'" matBadgeSize="small" matBadge="*" matBadgePosition="after" matBadgeColor="warn" matBadgeOverlap="true" svgIcon="sms"></mat-icon>
                                         </button>
                                     </div>
-                                    <div class="card-actions-center col-md-4">
-                                        <button mat-icon-button color="secondary" (click)="onReadyCheckIn(item, 1)">
+                                    <div class="card-actions-center col-sm-3 p-0">
+                                        <button mat-icon-button color="secondary" (click)="onReadyCheckIn(item, 0)">
                                             <mat-icon svgIcon="readycheck"></mat-icon>
                                         </button>
                                     </div>
-                                    <div class="card-actions-right col-md-4">
-                                        <button mat-icon-button color="secondary" (click)="showDetailsSche[i] = !showDetailsSche[i]">
+                                    <div class="card-actions-center col-sm-3 p-0">
+                                        <button mat-icon-button color="secondary" (click)="showDetailsPrev[i] = !showDetailsPrev[i]">
                                             <mat-icon svgIcon="expand"></mat-icon>
                                         </button>
                                     </div>
                                 </div>
-                                <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showMessageSche[i]">
-                                    <div class="col-md-11 pl-0 pr-0">
+                                <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showCancelOptionsPrev[i]">
+                                    <div class="col-md-12 pl-0 pr-0">
+                                        <mat-form-field>
+                                            <mat-label>Cancel reasons</mat-label>
+                                            <mat-select [(value)]="selectedPrev[i]">
+                                                <mat-option *ngFor="let reason of reasons" [value]="reason.ReasonId">
+                                                    {{reason.Description}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-12 pl-0 pr-0 mt-2 mb-2">
+                                        <button mat-flat-button type="button" color="primary" (click)="onCancelApp(item, selectedPrev[i], i, 'previous')" [disabled]="selectedPrev[i] == undefined">
+                                            Cancel Appointment
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showMessagePrev[i]">
+                                    <div class="col-sm-10 pl-0 pr-0">
                                         <textarea class="card-text" #messageText matInput placeholder="Write a comment..."></textarea>
                                     </div>
                                     <div class="button-send col-md pr-0 pl-0">
-                                        <button mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageText.value ,i, 'schedule')">
+                                        <button mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageText.value ,i, 'previous')">
                                             <mat-icon class="send_icon">send</mat-icon>
                                         </button>
                                     </div>
                                     <div class="card-chat pl-3 pr-3 mb-0 mt-3 col-md-12">
-                                        <ng-container *ngFor="let item of getCommentsSche[i]">
+                                        <ng-container *ngFor="let item of getCommentsPrev[i]">
                                             <div class="row row justify-content-start" *ngIf="item.U != undefined">
                                                 <div class="card-chat-user col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
                                                     <div class="card-chat-time">{{item.T}}</div>
@@ -132,11 +156,11 @@
                                 </div>
                             </mat-card>
                         </ng-container>
-                        <!-- </ng-container> -->
                         <mat-card class="mt-2 appCard" *ngFor="let item of schedule;let i=index" cdkDrag>
                             <div class="row pr-3 pl-3">
-                                <div class="card-user col-md-9 pl-0 pr-0">{{item.Name}}</div>
-                                <div class="card-time col-md pr-0 pl-0">{{item.DateAppo}}</div>
+                                <div *ngIf="!showDetailsSche[i]" class="card-user col-md-9 pl-0 pr-0">{{item.Name}}</div>
+                                <div *ngIf="showDetailsSche[i]" class="card-user-disp col-md-9 pl-0 pr-0">{{item.Name}}</div>
+                                <div class="card-time col-md pr-0 pl-0">{{item.DateAppo.substring(0,2) + item.DateAppo.substring(5,8)}}</div>
                             </div>
                             <div class="row pr-3 pl-3">
                                 <div class="card-phone col-md-9 pl-0 pr-0">+1 {{item.Phone | phone}}</div>
@@ -151,31 +175,53 @@
                                     <div class="card-contentprio col-md-6 pl-0">Companions: </div><div class="card-resultprio col-md">{{item.Companions}}</div>
                                 </div>
                                 <div class="row pr-3 pl-3 mt-2 mb-2">
-                                    <div class="card-contentprio col-md-6 pl-0">Door: </div><div class="card-resultprio col-md">{{item.Door}}</div>
+                                    <div class="card-contentprio col-md-6 pl-0">Door: </div><div class="card-resultprio-door col-md">{{item.Door}}</div>
                                 </div>
                                 <div class="row pr-3 pl-3 mt-2 mb-2">
                                     <div class="card-contentprio col-md-6 pl-0">On Behalf: </div><div class="card-resultprio col-md">{{item.OnBehalf == '0' ? 'No' : 'Yes'}}</div>
                                 </div>
                             </ng-container>
                             <div class="row mb-0 mt-2">
-                                <div class="card-actions-left col-md-4">
+                                <div class="card-actions-center col-sm-3 p-0">
+                                    <button mat-icon-button color="secondary" (click)="showCancelOptionsSche[i] = !showCancelOptionsSche[i]">
+                                        <mat-icon svgIcon="cancel"></mat-icon>
+                                    </button>
+                                </div>
+                                <div class="card-actions-center col-sm-3 p-0">
                                     <button mat-icon-button color="secondary" (click)="showMessageSche[i] = !showMessageSche[i]; onShowMessage(item, i, 'schedule');">
                                         <mat-icon [matBadgeHidden]="item.Unread != 'H'" matBadgeSize="small" matBadge="*" matBadgePosition="after" matBadgeColor="warn" matBadgeOverlap="true" svgIcon="sms"></mat-icon>
                                     </button>
                                 </div>
-                                <div class="card-actions-center col-md-4">
+                                <div class="card-actions-center col-sm-3 p-0">
                                     <button mat-icon-button color="secondary" (click)="onReadyCheckIn(item, 1)">
                                         <mat-icon svgIcon="readycheck"></mat-icon>
                                     </button>
                                 </div>
-                                <div class="card-actions-right col-md-4">
+                                <div class="card-actions-center col-sm-3 p-0">
                                     <button mat-icon-button color="secondary" (click)="showDetailsSche[i] = !showDetailsSche[i]">
                                         <mat-icon svgIcon="expand"></mat-icon>
                                     </button>
                                 </div>
                             </div>
+                            <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showCancelOptionsSche[i]">
+                                <div class="col-md-12 pl-0 pr-0">
+                                    <mat-form-field>
+                                        <mat-label>Cancel reasons</mat-label>
+                                        <mat-select [(value)]="selectedSche[i]">
+                                            <mat-option *ngFor="let reason of reasons" [value]="reason.ReasonId">
+                                                {{reason.Description}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-12 pl-0 pr-0 mt-2 mb-2">
+                                    <button mat-flat-button type="button" color="primary" (click)="onCancelApp(item, selectedSche[i], i, 'schedule')" [disabled]="selectedSche[i] == undefined">
+                                        Cancel Appointment
+                                    </button>
+                                </div>
+                            </div>
                             <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showMessageSche[i]">
-                                <div class="col-md-11 pl-0 pr-0">
+                                <div class="col-sm-10 pl-0 pr-0">
                                     <textarea class="card-text" #messageText matInput placeholder="Write a comment..."></textarea>
                                 </div>
                                 <div class="button-send col-md pr-0 pl-0">
@@ -286,8 +332,9 @@
                         </mat-card>
                         <mat-card class="mt-2 appCard" *ngFor="let item of walkIns;let i=index" cdkDrag>
                             <div class="row pr-3 pl-3">
-                                <div class="card-user col-md-9 pl-0 pr-0">{{item.Name}}</div>
-                                <div class="card-time col-md pr-0 pl-0">{{item.DateAppo}}</div>
+                                <div *ngIf="!showDetailsWalk[i]" class="card-user col-md-9 pl-0 pr-0">{{item.Name}}</div>
+                                <div *ngIf="showDetailsWalk[i]" class="card-user-disp col-md-9 pl-0 pr-0">{{item.Name}}</div>
+                                <div class="card-time col-md pr-0 pl-0">{{item.DateAppo.substring(0,2) + item.DateAppo.substring(5,8)}}</div>
                             </div>
                             <div class="row pr-3 pl-3">
                                 <div class="card-phone col-md-9 pl-0 pr-0">+1 {{item.Phone | phone}}</div>
@@ -302,31 +349,53 @@
                                     <div class="card-contentprio col-md-6 pl-0">Companions: </div><div class="card-resultprio col-md">{{item.Companions}}</div>
                                 </div>
                                 <div class="row pr-3 pl-3 mt-2 mb-2">
-                                    <div class="card-contentprio col-md-6 pl-0">Door: </div><div class="card-resultprio col-md">{{item.Door}}</div>
+                                    <div class="card-contentprio col-md-6 pl-0">Door: </div><div class="card-resultprio-door col-md">{{item.Door}}</div>
                                 </div>
                                 <div class="row pr-3 pl-3 mt-2 mb-2">
                                     <div class="card-contentprio col-md-6 pl-0">On Behalf: </div><div class="card-resultprio col-md">{{item.OnBehalf == '0' ? 'No' : 'Yes'}}</div>
                                 </div>
                             </ng-container>
                             <div class="row mb-0 mt-2">
-                                <div class="card-actions-left col-md-4">
+                                <div class="card-actions-center col-sm-3 p-0">
+                                    <button mat-icon-button color="secondary" (click)="showCancelOptionsWalk[i] = !showCancelOptionsWalk[i]">
+                                        <mat-icon svgIcon="cancel"></mat-icon>
+                                    </button>
+                                </div>
+                                <div class="card-actions-center col-sm-3 p-0">
                                     <button mat-icon-button color="secondary" (click)="showMessageWalk[i] = !showMessageWalk[i]; onShowMessage(item, i, 'walkin');">
                                     <mat-icon [matBadgeHidden]="item.Unread != 'H'" matBadgeSize="small" matBadge="*" matBadgePosition="after" matBadgeColor="warn" matBadgeOverlap="true" svgIcon="sms"></mat-icon>
                                     </button>
                                 </div>
-                                <div class="card-actions-center col-md-4">
+                                <div class="card-actions-center col-sm-3 p-0">
                                     <button mat-icon-button color="secondary" (click)="onReadyCheckIn(item, 2)">
                                         <mat-icon svgIcon="readycheck"></mat-icon>
                                     </button>
                                 </div>
-                                <div class="card-actions-right col-md-4">
+                                <div class="card-actions-center col-sm-3 p-0">
                                     <button mat-icon-button color="secondary" (click)="showDetailsWalk[i] = !showDetailsWalk[i]">
                                         <mat-icon svgIcon="expand"></mat-icon>
                                     </button>
                                 </div>
                             </div>
+                            <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showCancelOptionsWalk[i]">
+                                <div class="col-md-12 pl-0 pr-0">
+                                    <mat-form-field>
+                                        <mat-label>Cancel reasons</mat-label>
+                                        <mat-select [(value)]="selectedWalk[i]">
+                                            <mat-option *ngFor="let reason of reasons" [value]="reason.ReasonId">
+                                                {{reason.Description}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-12 pl-0 pr-0 mt-2 mb-2">
+                                    <button mat-flat-button type="button" color="primary" (click)="onCancelApp(item, selectedWalk[i], i, 'walkin')" [disabled]="selectedWalk[i] == undefined">
+                                        Cancel Appointment
+                                    </button>
+                                </div>
+                            </div>
                             <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showMessageWalk[i]">
-                                <div class="col-md-11 pl-0 pr-0">
+                                <div class="col-sm-10 pl-0 pr-0">
                                     <textarea class="card-text" #messageText matInput placeholder="Write a comment..."></textarea>
                                 </div>
                                 <div class="button-send col-md pr-0 pl-0">
@@ -369,7 +438,8 @@
                         <ng-container *ngIf="checkIn$ | async"></ng-container>
                         <mat-card class="mt-2 appCard" *ngFor="let item of preCheckIn;let i=index">
                             <div class="row pr-3 pl-3">
-                                <div class="card-user col-md-9 pl-0 pr-0">{{item.Name}}</div>
+                                <div *ngIf="!showDetailsCheck[i]" class="card-user col-md-9 pl-0 pr-0">{{item.Name}}</div>
+                                <div *ngIf="showDetailsCheck[i]" class="card-user-disp col-md-9 pl-0 pr-0">{{item.Name}}</div>
                                 <div class="col-md pr-0 pl-0">
                                     <mat-icon class="elapsed-clock" *ngIf="item.ElapsedTime != ''" svgIcon="clock"></mat-icon>
                                     <div class="elapsed-time">
@@ -386,44 +456,44 @@
                                     <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
                                 </div>
                             </div>
-                            <ng-container *ngIf="showDetailsPre[i]">
+                            <ng-container *ngIf="showDetailsCheck[i]">
                                 <div class="row pr-3 pl-3 mt-2 mb-2">
                                     <div class="card-contentprio col-md-6 pl-0">Companions: </div><div class="card-resultprio col-md">{{item.Companions}}</div>
                                 </div>
                                 <div class="row pr-3 pl-3 mt-2 mb-2">
-                                    <div class="card-contentprio col-md-6 pl-0">Door: </div><div class="card-resultprio col-md">{{item.Door}}</div>
+                                    <div class="card-contentprio col-md-6 pl-0">Door: </div><div class="card-resultprio-door col-md">{{item.Door}}</div>
                                 </div>
                                 <div class="row pr-3 pl-3 mt-2 mb-2">
                                     <div class="card-contentprio col-md-6 pl-0">On Behalf: </div><div class="card-resultprio col-md">{{item.OnBehalf == '0' ? 'No' : 'Yes'}}</div>
                                 </div>
                             </ng-container>
-                            <div class="row mb-0 mt-2">
-                                <div class="card-actions-center col-md-3">
-                                    <button mat-icon-button color="secondary" (click)="showCancelOptions[i] = !showCancelOptions[i]">
+                            <div class="row mb-0 mt-2 p-0">
+                                <div class="card-actions-center col-sm-3 p-0">
+                                    <button mat-icon-button color="secondary" (click)="showCancelOptionsCheck[i] = !showCancelOptionsCheck[i]">
                                         <mat-icon svgIcon="cancel"></mat-icon>
                                     </button>
                                 </div>
-                                <div class="card-actions-center col-md-3">
-                                    <button mat-icon-button color="secondary" (click)="showMessagePre[i] = !showMessagePre[i]; onShowMessage(item, i, 'pre');">
+                                <div class="card-actions-center col-sm-3 p-0">
+                                    <button mat-icon-button color="secondary" (click)="showMessageCheck[i] = !showMessageCheck[i]; onShowMessage(item, i, 'checkin');">
                                     <mat-icon [matBadgeHidden]="item.Unread != 'H'" matBadgeSize="small" matBadge="*" matBadgePosition="after" matBadgeColor="warn" matBadgeOverlap="true" svgIcon="sms"></mat-icon>
                                     </button>
                                 </div>
-                                <div class="card-actions-center col-md-3">
+                                <div class="card-actions-center col-sm-3 p-0">
                                     <button mat-icon-button color="secondary" (click)="onCheckInApp(item)">
                                         <mat-icon svgIcon="readycheck"></mat-icon>
                                     </button>
                                 </div>
-                                <div class="card-actions-center col-md-3">
-                                    <button mat-icon-button color="secondary" (click)="showDetailsPre[i] = !showDetailsPre[i]">
+                                <div class="card-actions-center col-sm-3 p-0">
+                                    <button mat-icon-button color="secondary" (click)="showDetailsCheck[i] = !showDetailsCheck[i]">
                                         <mat-icon svgIcon="expand"></mat-icon>
                                     </button>
                                 </div>
                             </div>
-                            <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showCancelOptions[i]">
+                            <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showCancelOptionsCheck[i]">
                                 <div class="col-md-12 pl-0 pr-0">
                                     <mat-form-field>
                                         <mat-label>Cancel reasons</mat-label>
-                                        <mat-select [(value)]="selected[i]">
+                                        <mat-select [(value)]="selectedCheck[i]">
                                             <mat-option *ngFor="let reason of reasons" [value]="reason.ReasonId">
                                                 {{reason.Description}}
                                             </mat-option>
@@ -431,22 +501,22 @@
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-12 pl-0 pr-0 mt-2 mb-2">
-                                    <button mat-flat-button type="button" color="primary" (click)="onCancelApp(item, selected[i], i)" [disabled]="selected[i] == undefined">
+                                    <button mat-flat-button type="button" color="primary" (click)="onCancelApp(item, selectedCheck[i], i, 'checkin')" [disabled]="selectedCheck[i] == undefined">
                                         Cancel Appointment
                                     </button>
                                 </div>
                             </div>
-                            <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showMessagePre[i]">
-                                <div class="col-md-11 pl-0 pr-0">
+                            <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showMessageCheck[i]">
+                                <div class="col-sm-10 pl-0 pr-0">
                                     <textarea class="card-text" #messageText matInput placeholder="Write a comment..."></textarea>
                                 </div>
                                 <div class="button-send col-md pr-0 pl-0">
-                                    <button mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageText.value ,i, 'precheck')">
+                                    <button mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageText.value ,i, 'checkin')">
                                         <mat-icon class="send_icon">send</mat-icon>
                                     </button>
                                 </div>
                                 <div class="card-chat pl-3 pr-3 mb-0 mt-3 col-md-12">
-                                    <ng-container *ngFor="let item of getCommentsPre[i]">
+                                    <ng-container *ngFor="let item of getCommentsCheck[i]">
                                         <div class="row row justify-content-start" *ngIf="item.U != undefined">
                                             <div class="card-chat-user col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
                                                 <div class="card-chat-time">{{item.T}}</div>

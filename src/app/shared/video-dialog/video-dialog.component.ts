@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, Inject } from '@angular/core';
+import { Component, ViewChild, ElementRef, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import jsQR, { QRCode } from 'jsqr';
 import { DialogData } from '../dialog/dialog.component';
@@ -8,7 +8,7 @@ import { DialogData } from '../dialog/dialog.component';
   templateUrl: './video-dialog.component.html',
   styleUrls: ['./video-dialog.component.scss']
 })
-export class VideoDialogComponent {
+export class VideoDialogComponent implements OnInit {
   @ViewChild('video', {static: true}) videoElm: ElementRef;
   @ViewChild('canvas', {static: true}) canvasElm: ElementRef;
 
@@ -25,6 +25,10 @@ export class VideoDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) { }
 
+  ngOnInit(): void {
+    this.startVideo();
+  }
+  
   toggleVideoMedia() {
     if (this.videoStart) {
       this.stopVideo();

@@ -42,7 +42,7 @@ export class ProfileComponent implements OnInit {
     private dialog: MatDialog,
     private authService: AuthService,
     private spinnerService: SpinnerService,
-    private usersService: UserService,
+    private usersService: UserService
     // private imageCompress: NgxImageCompressService
   ) { }
 
@@ -141,6 +141,8 @@ export class ProfileComponent implements OnInit {
           this.openDialog('User', 'File exced maximun allowed', false, true, false);
           return;
         }
+        this.fileString = reader.result;
+        this.onSubmitAvatar();
         // this.imageCompress.compressFile(reader.result, -1, dimX, dimY).then(
         //   compress => {
         //     this.fileString = compress;
@@ -209,7 +211,7 @@ export class ProfileComponent implements OnInit {
     if (type === 'png;'){
       type = '.png';
     }
-    this.imgAvatar$ = this.usersService.uploadImage(this.userId, formData).pipe(
+    this.imgAvatar$ = this.usersService.uploadImage(this.userId, this.businessId, formData).pipe(
       tap(response =>  {
           this.spinnerService.stop(spinnerRef);
           this.profileForm.patchValue({'Avatar': this.businessId+'/img/avatars/'+this.userId+type});

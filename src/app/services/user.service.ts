@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
-import { User } from '@app/_models';
+import { User, Business } from '@app/_models';
 import { catchError } from 'rxjs/operators';
 import { throwError, Observable } from 'rxjs';
 
@@ -17,8 +17,8 @@ export class UserService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  uploadImage(userId, formData){
-    return this.http.patch(this.apiURL + '/user/' + userId, formData)
+  uploadImage(userId, businessId, formData){
+    return this.http.put(this.apiURL + '/user/avatar/' + userId + '/' + businessId, formData)
                       .pipe(catchError(this.errorHandler));
   }
 
