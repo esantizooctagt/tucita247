@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { User, Role } from '@app/_models';
 import { FormBuilder, Validators } from '@angular/forms';
 import { UserService, RolesService } from "@app/services";
@@ -18,8 +18,6 @@ import { SpinnerService } from '@app/shared/spinner.service';
   styleUrls: ['./user.component.scss']
 })
 export class UserComponent implements OnInit {
-  @Input() user: User;
-
   get f(){
     return this.userForm.controls;
   }
@@ -39,6 +37,7 @@ export class UserComponent implements OnInit {
   emailValidated: boolean = false;
   loadingUser: boolean = false;
   savingUser: boolean = false;
+  userDataList: User;
 
   //variable to handle errors on inputs components
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
@@ -70,11 +69,12 @@ export class UserComponent implements OnInit {
   })
 
   ngOnInit(): void {
-    console.log("entro");
     this.businessId = this.authService.businessId();
     this.message$ = this.data.monitorMessage;
     this.loadRoles();
     this.onValueChanges();
+    this.data.objectMessage.subscribe(res => this.userDataList = res);
+    this.onDisplay();
   }
 
   openDialog(header: string, message: string, success: boolean, error: boolean, warn: boolean): void {
@@ -141,18 +141,14 @@ export class UserComponent implements OnInit {
     })
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    // changes.prop contains the old and the new value...
-    console.log("change on user compo");
-    console.log(changes);
-    if (changes.user.currentValue != undefined) {
+  onDisplay(){
+    if (this.userDataList != undefined){
       if (this.businessId == ''){
         this.businessId = this.authService.businessId();
       }
-      this.userData = '';
       this.statTemp = 0;
       var spinnerRef = this.spinnerService.start("Loading User...");
-      let userResult = changes.user.currentValue;
+      let userResult = this.userDataList;
       this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
       this.user$ = this.usersService.getUser(userResult.User_Id, this.businessId).
         pipe(
@@ -186,12 +182,8 @@ export class UserComponent implements OnInit {
             return throwError(err || err.Message);
           })
         );
-    } else {
-      this.userData = '';
-      this.statTemp = 0;
-      this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
     }
-  }  
+  }
 
   loadRoles(){
     this.roles$ = this.rolesService.getRoles(this.businessId);
@@ -284,6 +276,7 @@ export class UserComponent implements OnInit {
     this.statTemp = 0;
     this.userForm.controls.Email.enable();
     this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
+    this.data.setData(undefined);
   }
 
   // allow only digits and dot

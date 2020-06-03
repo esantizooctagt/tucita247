@@ -8,5 +8,5 @@
     </button>
   </mat-form-field>
   <span class="spacer"></span>
-  <button mat-flat-button color="primary" class="btn-add" (click)="changeView()">{{contentButton}}</button>
+  <button mat-flat-button color="primary" class="btn-add" (click)="changeView()">{{(changeData == 'Add' ? 'Search' : '+ Add')}}</button>
 </div>

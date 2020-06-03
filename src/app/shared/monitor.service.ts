@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { User } from '@app/_models';
 
 @Injectable({
   providedIn: 'root'
@@ -7,9 +8,11 @@ import { BehaviorSubject } from 'rxjs';
 export class MonitorService {
   private monitorSource = new BehaviorSubject('');
   private handleSource = new BehaviorSubject('');
+  private objectSource = new BehaviorSubject<User>(new User());
 
   handleMessage = this.handleSource.asObservable();
   monitorMessage = this.monitorSource.asObservable();
+  objectMessage = this.objectSource.asObservable();
 
   constructor() { }
 
@@ -19,5 +22,9 @@ export class MonitorService {
 
   handleData(message: string){
     this.handleSource.next(message);
+  }
+
+  setData(message: any){
+    this.objectSource.next(message);
   }
 }

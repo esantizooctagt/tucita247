@@ -1,9 +1,8 @@
-import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { AuthService } from '@core/services';
 import { User } from '@app/_models';
 import { UserService } from "@app/services";
 import { MonitorService } from "@shared/monitor.service";
-import { delay } from 'q';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { Observable, throwError } from 'rxjs';
@@ -18,7 +17,6 @@ import { DomSanitizer } from '@angular/platform-browser';
   styleUrls: ['./user-list.component.scss']
 })
 export class UserListComponent implements OnInit {
-  @Output() userSelected = new EventEmitter<User>();
   @Input() filterValue: string;
   public length: number = 0;
   public pageSize: number = 10;
@@ -39,6 +37,8 @@ export class UserListComponent implements OnInit {
   message$: Observable<string>;
   deleteUser$: Observable<any>;
   users$: Observable<User[]>;
+  changeData: string;
+  userData: User;
 
   constructor(
     private domSanitizer: DomSanitizer,
@@ -75,6 +75,10 @@ export class UserListComponent implements OnInit {
     this._page = 1;
     this._currentPage.push({page: this._page, userId: ''});
     this.loadUsers(this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].userId);
+
+    this.data.handleMessage.subscribe(res => this.changeData = res);
+    this.data.objectMessage.subscribe(res => this.userData = res);
+    this.data.setData(undefined);
     this.message$ = this.data.monitorMessage.pipe(
       map(res => {
         this.message = 'init';
@@ -129,32 +133,9 @@ export class UserListComponent implements OnInit {
     }
   }
 
-  // public filterList(searchParam: string): void {
-  //   this._currentSearchValue = searchParam;
-  //   this._currentPage = [];
-  //   this._page = 1;
-  //   this._currentPage.push({page: this._page, userId: ''});
-  //   this.loadUsers(
-  //     this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].userId
-  //   );
-  // }
-
   onSelect(user: User) {
-    console.log('Comp listuser - onselect');
-    console.log(user);
-    this.userSelected.emit(user);
-    // if (this.lastUser != user){
-    //   this.userSelected.emit(user);
-    //   this.lastUser = user;
-    // } else {
-    //   let defUser: User;
-    //   (async () => {
-    //     this.userSelected.emit(defUser);
-    //     await delay(20);
-    //     this.userSelected.emit(user);
-    //   })();
-    // }
-    // window.scroll(0,0);
+    this.data.setData(user);
+    this.data.handleData('Add');
   }
 
   onDelete(user: User) {
@@ -184,7 +165,6 @@ export class UserListComponent implements OnInit {
           this.deleted = false; 
           this.deleteUser$ = this.userService.deleteUser(user.User_Id, this.businessId).pipe(
             tap(res => {
-              this.userSelected.emit(delUser);
               this.spinnerService.stop(spinnerRef);
               this.displayYesNo = false;
               this.deletingUser = true;

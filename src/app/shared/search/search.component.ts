@@ -1,27 +1,25 @@
-import { Component, Output, EventEmitter, OnDestroy, Input, SimpleChanges } from '@angular/core';
+import { Component, Output, EventEmitter, OnDestroy, Input, SimpleChanges, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { shareReplay, map } from 'rxjs/operators';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { MonitorService } from '../monitor.service';
 
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss']
 })
-export class SearchComponent implements OnDestroy {
+export class SearchComponent implements OnInit, OnDestroy {
   @Input() readonly placeholder: string = '';
-  // @Input() setForm: string;
-
   @Output() setValue: EventEmitter<string> = new EventEmitter();
-  @Output() view: EventEmitter<string> = new EventEmitter();
 
   private _searchSubject: Subject<string> = new Subject();
   public loading:boolean = false;
   public searchValue: string='';
   public contentButton: string = '+ Add';
-  private changeText: boolean = true;
+  changeData: string = '';
   
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -30,7 +28,8 @@ export class SearchComponent implements OnDestroy {
     );
 
   constructor(
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private monitorService: MonitorService
   ) {
     this._setSearchSubscription();
    }
@@ -45,35 +44,19 @@ export class SearchComponent implements OnDestroy {
     });
   }
 
+  ngOnInit(){
+    this.monitorService.handleMessage.subscribe(res => this.changeData = res);
+  }
+
   changeView(){
-    this.changeText = !this.changeText;
-    if (!this.changeText) {
-      this.contentButton = 'Search';
-    } else {
-      this.contentButton = '+ Add'
-    }
     let value = '';
-    if (!this.changeText){
+    if (this.changeData == 'Search'){
       value = 'Add';
     } else {
       value = 'Search';
     }
-    this.view.emit( value );
-    console.log('search emits ' + value);
+    this.monitorService.handleData(value);
   }
-
-  // ngOnChanges(changes: SimpleChanges) {
-  //   console.log(changes.setForm.currentValue);
-  //   if (changes.setForm.currentValue != undefined){
-  //     this.view.emit(changes.setForm.currentValue);
-  //     this.changeText = !this.changeText;
-  //     if (!this.changeText) {
-  //       this.contentButton = 'Search';
-  //     } else {
-  //       this.contentButton = '+ Add'
-  //     }
-  //   }
-  // }
   
   public updateSearchUp(event, searchTextValue: string) {
     this.loading = true;

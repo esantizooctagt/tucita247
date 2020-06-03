@@ -1,8 +1,7 @@
-import { Component, OnInit, ɵConsole } from '@angular/core';
-import { User } from '@app/_models';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '@app/core/services';
 import { Router } from '@angular/router';
-import { delay } from 'rxjs/operators';
+import { MonitorService } from '@app/shared/monitor.service';
 
 @Component({
   selector: 'app-users',
@@ -10,13 +9,12 @@ import { delay } from 'rxjs/operators';
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
-  public clickedUser: User;
-  public displayForm: string = 'Search';
   public filterData: string = undefined;
-  public valueForm: string = undefined;
+  changeData: string;
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private monitorService: MonitorService
   ) { }
 
   ngOnInit(): void {
@@ -25,23 +23,8 @@ export class UsersComponent implements OnInit {
     if (roleId != '' && isAdmin != 1){
       this.router.navigate(['/']);
     }
-  }
-
-  onSelected(user: User) {
-    console.log("Comp user - click on edit");
-    console.log(user);
-    // (async () => {
-    //   this.valueForm = '';
-    //   this.clickedUser = undefined;
-    //   await delay(20);
-    //   this.valueForm = 'Add';
-    //   this.clickedUser = user;
-    // })();
-    
-  }
-
-  getForm(value){
-    this.displayForm= value;
+    this.monitorService.handleData('Search');
+    this.monitorService.handleMessage.subscribe(res => this.changeData = res);
   }
 
   filterList(value){
