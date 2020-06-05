@@ -1,58 +1,62 @@
-// .dragdrop-container {
-//   width: 150px;
-//   max-width: 100%;
-//   margin: 0 25px 25px 0;
-//   display: inline-block;
-//   vertical-align: top;
-// }  
-// .element-list {
-//   border: solid 1px #ccc;
-//   min-height: 60px;
-//   background: white;
-//   border-radius: 4px;
-//   overflow: hidden;
-//   display: block;
-// }
-// .item-box {
-//   padding: 20px 10px;
-//   border-bottom: solid 1px #ccc;
-//   color: rgba(0, 0, 0, 0.87);
-//   display: flex;
-//   flex-direction: row;
-//   align-items: center;
-//   justify-content: space-between;
-//   box-sizing: border-box;
-//   cursor: move;
-//   background: white;
-//   font-size: 14px;
-// }  
-// .cdk-drag-preview {
-//   box-sizing: border-box;
-//   border-radius: 4px;
-//   box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-//               0 8px 10px 1px rgba(0, 0, 0, 0.14),
-//               0 3px 14px 2px rgba(0, 0, 0, 0.12);
-// }
-// .cdk-drag-placeholder {
-//   opacity: 0;
-// }
-// .cdk-drag-animating {
-//   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-// }
-// .item-box:last-child {
-//   border: none;
-// }
-// .element-list.cdk-drop-list-dragging .item-box:not(.cdk-drag-placeholder) {
-//   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-// }
-// .cdk-drag.item-box.cdk-drag-disabled.ng-star-inserted{
-//   background: #abc6ff;
-//   color: black;
-//   font-weight: 500;
-// }
-
 .ng5-slider {
   width: 300px;
+}
+.default-image {
+  height: 200px;
+  width: 50%;
+  background: lightgray;
+}
+.sector {
+  overflow: hidden;
+  width: 50%;
+  height: 120px;
+  border: 3px solid #ff4f00;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+}
+.fill-overlay{
+  overflow: hidden;
+  width: 100%;
+  height: 120px;
+  margin: 0 auto;
+  text-align: center;
+  background-color: #ff4f00;
+  color: #fff;
+}
+.default-overlay {
+  overflow: hidden;
+  width: 100%;
+  height: 120px;
+  margin: 0 auto;
+  text-align: center;
+  opacity: 0;
+  transition: 0.5s ease;
+  background-color: black;
+  top: -2.3%;
+  position: absolute;
+  z-index: 100;
+}
+.sector:hover button{
+  display: block;
+}
+.sector button{
+  display: none;
+}
+.sector:hover .default-overlay {
+  opacity: 0.58;
+}
+.camera-avatar {
+  margin: 0 auto;
+  color: white;
+}
+.imgbusiness-pic {
+  width: 100%; 
+  height: 120px;
+}
+.mat-icon-button:hover .mat-button-focus-overlay {
+  opacity: 1 !important;
 }
 ::ng-deep .ng5-slider .ng5-slider-bar {
   height: 50px;

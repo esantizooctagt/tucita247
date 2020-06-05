@@ -1,0 +1,87 @@
+<p>userloc works!</p>
+
+
+<mat-table [dataSource]="fUsers.controls" formArrayName="users" [trackBy]="trackRow"
+    class="w-100 mt-4 mb-4 mat-elevation-z8">
+    <!-- Position Column -->
+    <ng-container matColumnDef="Name">
+        <mat-header-cell *matHeaderCellDef class="col-md-7 mat-column-th-Name"> Name </mat-header-cell>
+        <mat-cell *matCellDef="let element;let i=index" class="col-md-7 mat-column-td-Name"> {{element.value.Name}}
+        </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="Unit_Price">
+        <mat-header-cell *matHeaderCellDef class="col-md-1 mat-column-th-Unit_Price"> Price </mat-header-cell>
+        <mat-cell *matCellDef="let element; let i = index" class="col-md-1 mat-column-td-Unit_Price"
+            [formGroup]="element">
+            <mat-form-field floatLabel="never" *ngIf="(element.value.Type === 'services'); else Services">
+                <input matInput type="number" min="0.01" max="99999999.90"
+                    (keypress)="onKeyPress($event, $event.target.value)" pattern="^[0-9]{0,8}\.?[0-9]{0,4}$"
+                    [errorStateMatcher]="confirmValidParentMatcher" formControlName="Unit_Price"
+                    class="values-right-align" required>
+            </mat-form-field>
+            <ng-template #Services>
+                <span>{{element.value.Unit_Price | number: '.2' }}</span>
+            </ng-template>
+        </mat-cell>
+    </ng-container>
+    <ng-template #Services>
+        <ng-container matColumnDef="Unit_Price">
+            <mat-header-cell *matHeaderCellDef class="col-md-1 mat-column-th-Unit_Price"> Price </mat-header-cell>
+            <mat-cell *matCellDef="let element; let i = index" class="col-md-1 mat-column-td-Unit_Price"
+                [formGroup]="element">
+                <mat-form-field floatLabel="never">
+                    <input matInput type="number" min="0.01" max="99999999.90"
+                        (keypress)="onKeyPress($event, $event.target.value)" pattern="^[0-9]{0,8}\.?[0-9]{0,4}$"
+                        [errorStateMatcher]="confirmValidParentMatcher" formControlName="Unit_Price"
+                        class="values-right-align" required>
+                </mat-form-field>
+            </mat-cell>
+        </ng-container>
+    </ng-template>
+    <!-- Position Column  -->
+    <ng-container matColumnDef="Qty">
+        <mat-header-cell *matHeaderCellDef class="col-md-1 mat-column-th-Qty"> Qty </mat-header-cell>
+        <mat-cell *matCellDef="let element; let i = index" class="col-md-1 mat-column-td-Qty" [formGroup]="element">
+            <mat-form-field floatLabel="never">
+                <input matInput type="number" min="0.0001" max="99999999.9990"
+                    (keypress)="onKeyPress($event, $event.target.value)" pattern="^[0-9]{0,8}\.?[0-9]{0,4}$"
+                    [errorStateMatcher]="confirmValidParentMatcher" formControlName="Qty" class="values-right-align"
+                    required>
+            </mat-form-field>
+        </mat-cell>
+    </ng-container>
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="Delivery_Date">
+        <mat-header-cell *matHeaderCellDef class="col-md-1 mat-column-th-Delivery"> Delivery Date </mat-header-cell>
+        <mat-cell *matCellDef="let element; let i = index" class="col-md-1 mat-column-td-Delivery"
+            [formGroup]="element">
+            <mat-form-field floatLabel="never">
+                <input matInput [matDatepicker]="picker" minDate="minDeliveryDate" formControlName="Delivery_Date">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker disabled="false"></mat-datepicker>
+            </mat-form-field>
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-cell *matHeaderCellDef class="col-md-1 mat-column-th-Tax"> Tax Id </mat-header-cell>
+    <mat-cell *matCellDef="let element; let i = index" class="col-md-1 mat-column-td-Tax" [formGroup]="element">
+        <mat-select formControlName="Tax_Id" (selectionChange)="changeTax($event, i)">
+            <mat-option *ngFor="let res of taxes$ | async" [value]="res.Tax_Id">
+                {{res.Name}}
+            </mat-option>
+        </mat-select>
+    </mat-cell>
+
+    <ng-container matColumnDef="Actions">
+        <mat-header-cell *matHeaderCellDef class="col-md-1"> Actions </mat-header-cell>
+        <mat-cell *matCellDef="let element; let i = index" class="col-md-1 mat-column-Actions">
+            <button mat-icon-button color="warn" (click)="removeItem(i)">
+                <mat-icon>check_circle_outline</mat-icon>
+            </button>
+        </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns; let i=index" (click)="selection.toggle(row)"></mat-row>
+</mat-table>

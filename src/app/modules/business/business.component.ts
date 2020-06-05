@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@ang
 import { AuthService } from '@core/services';
 import { Country, Location, Business, Category } from '@app/_models';
 import { Observable, Subscription, throwError } from 'rxjs';
-import { startWith, map, shareReplay, catchError, tap } from 'rxjs/operators';
+import { startWith, map, shareReplay, catchError, tap, switchMap } from 'rxjs/operators';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { BusinessService, LocationService, CategoryService } from '@app/services/index';
@@ -34,8 +34,9 @@ export class BusinessComponent implements OnInit {
   //Save Data Business and Location
   businessSave$: Observable<object>;
   locationSave$: Observable<object>;
+  imgBusiness$: Observable<any>;
   business$: Observable<Business>;
-  location$: Observable<Location[]>;
+  location$: Observable<any>;
   savingBusiness: boolean = false;
   savingLocation: boolean = false;
   displayBusiness: boolean = true;
@@ -49,6 +50,8 @@ export class BusinessComponent implements OnInit {
   removableCategory = true;
   categories: Category[]=[];
   categories$: Observable<Category[]>;
+  sectors$: Observable<any[]>;
+  parentBus$: Observable<any[]>;
   filteredCategories$: Observable<Category[]>;
   allCategories: Category[]=[];
   @ViewChild('categoryInput') categoryInput: ElementRef<HTMLInputElement>;
@@ -60,6 +63,14 @@ export class BusinessComponent implements OnInit {
   latLoc: any[] = [];
   lngLoc: any[] = [];
   zoom: number = 15;
+
+  fileName: string= '';
+  fileString: any;
+  readonly imgPath = environment.bucket;
+
+  cities = [];
+  sectors = [];
+  countryCode = '';
 
   //Doors
   noItemsLoc = 0;
@@ -109,12 +120,18 @@ export class BusinessComponent implements OnInit {
 
   newIntervalLoc: any[][] = [];
 
+  businessParent = [];
+
   get fBusiness(){
     return this.businessForm.controls;
   }
 
   get fLocations(){
     return this.locationForm.get('locations') as FormArray;
+  }
+
+  get fImage(){
+    return this.imageForm.controls;
   }
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
@@ -152,8 +169,12 @@ export class BusinessComponent implements OnInit {
     Twitter: ['', [Validators.maxLength(150), Validators.minLength(4)]],
     Instagram: ['', [Validators.maxLength(150), Validators.minLength(4)]],
     Email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
+    LongDescription: ['', [Validators.required, Validators.maxLength(255), Validators.minLength(10)]],
+    ShortDescription: ['', [Validators.required, Validators.maxLength(75), Validators.minLength(10)]],
     OperationHours: ['', [Validators.required]],
     Categories: ['', [Validators.required]],
+    ParentBusiness: [''],
+    Imagen: [''],
     Tags: [''],
     Status: [''],
     Mon: new FormControl([8, 17]),
@@ -179,6 +200,10 @@ export class BusinessComponent implements OnInit {
     SunEnabled: [0]
   });
 
+  imageForm = this.fb.group({
+    Imagen: [null, Validators.required]
+  });
+
   locationForm = this.fb.group({ 
     locations : this.fb.array([this.createLocation()])
   });
@@ -188,14 +213,15 @@ export class BusinessComponent implements OnInit {
       LocationId: [''],
       BusinessId: [''],
       Name: ['', [Validators.required, Validators.maxLength(500), Validators.minLength(3)]],
+      City: ['', Validators.required],
+      Sector: ['', Validators.required],
       Address: ['', [Validators.required, Validators.maxLength(500), Validators.minLength(3)]],
       Geolocation: ['{0.00,0.00}', [Validators.maxLength(50), Validators.minLength(5)]],
-      ParentLocation: [''],
+      ParentLocation: ['0', Validators.required],
       TotalPiesTransArea: ['',[Validators.required]],
       LocationDensity: ['',[Validators.required, Validators.min(1)]],
       MaxNumberEmployeesLocation: ['',[Validators.required, Validators.min(1)]],
       MaxConcurrentCustomerLocation:['',[Validators.required, Validators.min(1)]],
-      Open: [''],
       BucketInterval: ['',[Validators.required, Validators.min(0.5), Validators.max(5)]],
       TotalCustPerBucketInter: ['',[Validators.required, Validators.min(1)]],
       Doors: ['',[Validators.required]],
@@ -292,6 +318,19 @@ export class BusinessComponent implements OnInit {
       })
     ); 
 
+    this.parentBus$ = this.businessService.getBusinessParent().pipe(
+      map(res => {
+        if (res != null){
+          this.businessParent.push({BusinessId: "0", Name: "N/A"});
+          this.businessParent.push(res[0]);
+          return res;
+        }
+      })
+    );
+
+    this.cities.push({CityId: "0", Name: "N/A"});
+    this.sectors.push({SectorId: "0", Name: "N/A"});
+
     this.filteredCountries$ = this.businessForm.get('Country').valueChanges
       .pipe(
         startWith(''),
@@ -299,7 +338,7 @@ export class BusinessComponent implements OnInit {
         map(country => country ? this._filterCountry(country) : this.countries.slice())
       );
     
-    this.businessForm.reset({BusinessId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', OperationHours: '', Tags: '', Status: 1, Mon:[8,17], Mon02:[18,24], MonEnabled: 0, Tue:[8,17], Tue02:[18,24], TueEnabled: 0, Wed:[8,17], Wed02:[18,24], WedEnabled: 0, Thu:[8,17], Thu02:[18,24], ThuEnabled: 0, Fri:[8,17], Fri02:[18,24], FriEnabled: 0, Sat:[8,17], Sat02:[18,24], SatEnabled: 0, Sun:[8,17], Sun02:[18,24], SunEnabled: 0});
+    this.businessForm.reset({BusinessId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', OperationHours: '', Tags: '', LongDescription: '', ShortDescription: '', Imagen: '', ParentBusiness: 0, Status: 1, Mon:[8,17], Mon02:[18,24], MonEnabled: 0, Tue:[8,17], Tue02:[18,24], TueEnabled: 0, Wed:[8,17], Wed02:[18,24], WedEnabled: 0, Thu:[8,17], Thu02:[18,24], ThuEnabled: 0, Fri:[8,17], Fri02:[18,24], FriEnabled: 0, Sat:[8,17], Sat02:[18,24], SatEnabled: 0, Sun:[8,17], Sun02:[18,24], SunEnabled: 0});
     this.business$ = this.businessService.getBusiness(this.businessId).pipe(
       tap((res: any) => {
         if (res != null){
@@ -319,7 +358,7 @@ export class BusinessComponent implements OnInit {
           } else {
             this.lng = 0;
           }
-          
+          this.countryCode = (countryValue != undefined ? countryValue[0].c : '')
           this.businessForm.setValue({
             BusinessId: res.Business_Id,
             Name: res.Name,
@@ -336,6 +375,10 @@ export class BusinessComponent implements OnInit {
             Email: res.Email,
             OperationHours: res.OperationHours,
             Categories: res.Categories,
+            LongDescription: res.LongDescription, 
+            ShortDescription: res.ShortDescription,
+            Imagen: res.Imagen,
+            ParentBusiness: res.ParentBusiness,
             Tags: res.Tags,
             Status: res.Status,
             Mon: ("MON" in opeHour ? [+opeHour.MON[0].I, +opeHour.MON[0].F] : [8, 12]),
@@ -612,12 +655,22 @@ export class BusinessComponent implements OnInit {
           this.spinnerService.stop(spinnerRef);
         } else {
           this.spinnerService.stop(spinnerRef);
-          this.businessForm.reset({BusinessId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', OperationHours: '', Tags: '', Status: 1, Mon:[8,17], Mon02:[18,24], MonEnabled: 0, Tue:[8,17], Tue02:[18,24], TueEnabled: 0, Wed:[8,17], Wed02:[18,24], WedEnabled: 0, Thu:[8,17], Thu02:[18,24], ThuEnabled: 0, Fri:[8,17], Fri02:[18,24], FriEnabled: 0, Sat:[8,17], Sat02:[18,24], SatEnabled: 0, Sun:[8,17], Sun02:[18,24], SunEnabled: 0});
+          this.businessForm.reset({BusinessId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', OperationHours: '', LongDescription: '', ShortDescription: '', Imagen:'', Tags: '', ParentBusiness: 0, Status: 1, Mon:[8,17], Mon02:[18,24], MonEnabled: 0, Tue:[8,17], Tue02:[18,24], TueEnabled: 0, Wed:[8,17], Wed02:[18,24], WedEnabled: 0, Thu:[8,17], Thu02:[18,24], ThuEnabled: 0, Fri:[8,17], Fri02:[18,24], FriEnabled: 0, Sat:[8,17], Sat02:[18,24], SatEnabled: 0, Sun:[8,17], Sun02:[18,24], SunEnabled: 0});
         }
       }),
+      switchMap(val => this.locationService.getCities(this.countryCode).pipe(
+        map(res => {
+          if (res != null){
+            res.forEach(element => {
+              this.cities.push(element);
+            });  
+            return res;
+          }
+        })
+      )),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
-        this.businessForm.reset({BusinessId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', OperationHours: '', Tags: '', Status: 1, Mon:[8,17], Mon02:[18,24], MonEnabled: 0, Tue:[8,17], Tue02:[18,24], TueEnabled: 0, Wed:[8,17], Wed02:[18,24], WedEnabled: 0, Thu:[8,17], Thu02:[18,24], ThuEnabled: 0, Fri:[8,17], Fri02:[18,24], FriEnabled: 0, Sat:[8,17], Sat02:[18,24], SatEnabled: 0, Sun:[8,17], Sun02:[18,24], SunEnabled: 0});
+        this.businessForm.reset({BusinessId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', OperationHours: '', LongDescription: '', ShortDescription: '', Imagen:'', Tags: '', ParentBusiness: 0, Status: 1, Mon:[8,17], Mon02:[18,24], MonEnabled: 0, Tue:[8,17], Tue02:[18,24], TueEnabled: 0, Wed:[8,17], Wed02:[18,24], WedEnabled: 0, Thu:[8,17], Thu02:[18,24], ThuEnabled: 0, Fri:[8,17], Fri02:[18,24], FriEnabled: 0, Sat:[8,17], Sat02:[18,24], SatEnabled: 0, Sun:[8,17], Sun02:[18,24], SunEnabled: 0});
         this.openDialog('Error !', err.Message, false, true, false);
         return throwError(err || err.message);
       })
@@ -654,9 +707,10 @@ export class BusinessComponent implements OnInit {
               ParentLocation: s.ParentLocation,
               TotalPiesTransArea: s.TotalPiesTransArea,
               LocationDensity: s.LocationDensity,
+              City: s.City,
+              Sector: s.Sector,
               MaxNumberEmployeesLocation: s.MaxNumberEmployeesLocation,
               MaxConcurrentCustomerLocation: s.MaxConcurrentCustomerLocation,
-              Open: (s.Open == "1" ? true : false),
               BucketInterval: s.BucketInterval,
               TotalCustPerBucketInter: s.TotalCustPerBucketInter,
               OperationHours: s.OperationHours,
@@ -941,10 +995,88 @@ export class BusinessComponent implements OnInit {
             this.doors[index] = s.Doors;
             index = index+1;
           });
+          return res;
         }
         this.spinnerService.stop(spinnerRef);
       }),
       catchError(err => {
+        this.spinnerService.stop(spinnerRef);
+        this.openDialog('Error !', err.Message, false, true, false);
+        return throwError(err || err.message);
+      })
+    );
+  }
+
+  // loadSectorsByLine(index: number, cityId: string) {
+  //   var loc$: Observable<any>;
+  //   loc$: this.locationService.getSectors(this.countryCode, cityId).pipe(
+  //     map(res => {
+  //       if (res != null){
+  //         this.sectors[index] = [];
+  //         this.sectors[index].push({SectorId: "0", Name: "N/A"});
+  //         res.forEach(element => {
+  //           this.sectors[index].push(element);
+  //         });
+  //         console.log(this.sectors);
+  //         return res;
+  //       }
+  //     })
+  //   );
+  //   return loc$;
+  // }
+
+  onSearchImage(){
+    const fileUpload = document.getElementById('fileUpload') as HTMLInputElement;
+    fileUpload.onchange = () => {
+      const file = fileUpload.files[0];
+      if (file === undefined) {return;}
+      this.fileName = file['name'];
+      if (file['type'] != "image/png" && file['type'] != "image/jpg" && file['type'] != "image/jpeg") { 
+        this.openDialog('User', 'File extension not allowed', false, true, false);
+        return; 
+      }
+      
+      const reader: FileReader = new FileReader();
+      reader.onload = (event: Event) => {
+        let dimX = 75;
+        let dimY = 75;
+        if (file['size'] > 60000){
+          this.openDialog('User', 'File exced maximun allowed', false, true, false);
+          return;
+        }
+        this.fileString = reader.result;
+        this.onSubmitImage();
+      }
+      reader.readAsDataURL(fileUpload.files[0]);
+    };
+    fileUpload.click();
+  }
+
+  onSubmitImage(){
+    const formData: FormData = new FormData();
+    var spinnerRef = this.spinnerService.start("Loading Profile Image...");
+    formData.append('Image', this.fileString);
+    let type: string ='';
+    if (this.fileString.toString().indexOf('data:image/') >= 0){
+      type = this.fileString.toString().substring(11,15);
+    }
+    if (type === 'jpeg' || type === 'jpg;'){
+      type = '.jpg';
+    }
+    if (type === 'png;'){
+      type = '.png';
+    }
+    this.imgBusiness$ = this.businessService.uploadBusinessImg(this.businessId, formData).pipe(
+      tap(response =>  {
+          this.spinnerService.stop(spinnerRef);
+          this.businessForm.patchValue({'Imagen': this.businessId+'/img/mobile/'+this.businessId+type});
+          this.authService.setUserAvatar(this.businessId+'/img/mobile/'+this.businessId+type);
+          this.imageForm.reset({'Imagen':null});
+          this.fileString = null;
+          this.openDialog('Business', 'Image uploaded successful', true, false, false);
+        }
+      ),
+      catchError(err => { 
         this.spinnerService.stop(spinnerRef);
         this.openDialog('Error !', err.Message, false, true, false);
         return throwError(err || err.message);
@@ -1085,6 +1217,18 @@ export class BusinessComponent implements OnInit {
           this.fBusiness.Address.hasError('maxlength') ? 'Maximum length 500' :
             '';
     }
+    if (component === 'LongDescription'){
+      return this.fBusiness.LongDescription.hasError('required') ? 'You must enter a value' :
+        this.fBusiness.LongDescription.hasError('minlength') ? 'Minimun length 10' :
+          this.fBusiness.LongDescription.hasError('maxlength') ? 'Maximum length 255' :
+            '';
+    }
+    if (component === 'ShortDescription'){
+      return this.fBusiness.ShortDescription.hasError('required') ? 'You must enter a value' :
+        this.fBusiness.ShortDescription.hasError('minlength') ? 'Minimun length 10' :
+          this.fBusiness.ShortDescription.hasError('maxlength') ? 'Maximum length 100' :
+            '';
+    }
     if (component === 'City'){
       return this.fBusiness.State.hasError('required') ? 'You must enter a value' :
         this.fBusiness.State.hasError('maxlength') ? 'Maximun length 100' :
@@ -1152,6 +1296,21 @@ export class BusinessComponent implements OnInit {
         sAddress.hasError('minlength') ? 'Minimun length 3' :
           sAddress.hasError('maxlength') ? 'Maximum length 500' :
             '';
+    }
+    if (component === 'SCity'){
+      let sCity = (<FormArray>this.locationForm.get('locations')).controls[index].get('City');
+      return sCity.hasError('required') ? 'You must enter a value' :
+        '';
+    }
+    if (component === 'Sector'){
+      let sSector = (<FormArray>this.locationForm.get('locations')).controls[index].get('Sector');
+      return sSector.hasError('required') ? 'You must enter a value' :
+        '';
+    }
+    if (component === 'ParentLocation'){
+      let sParentLocation = (<FormArray>this.locationForm.get('locations')).controls[index].get('ParentLocation');
+      return sParentLocation.hasError('required') ? 'You must enter a value' :
+        '';
     }
     if (component === 'TotalPiesTransArea'){
       let totalPiesTransArea = (<FormArray>this.locationForm.get('locations')).controls[index].get('TotalPiesTransArea');
@@ -1341,6 +1500,8 @@ export class BusinessComponent implements OnInit {
         "ZipCode": this.businessForm.value.ZipCode,
         "Geolocation": '{"LAT": '+ this.lat+',"LNG": '+this.lng+'}',
         "Phone": this.businessForm.value.Phone.replace('+1',''),
+        "LongDescription": this.businessForm.value.LongDescription, 
+        "ShortDescription": this.businessForm.value.ShortDescription,
         "Website": this.businessForm.value.WebSite,
         "Facebook": this.businessForm.value.Facebook,
         "Twitter": this.businessForm.value.Twitter,
@@ -1348,10 +1509,9 @@ export class BusinessComponent implements OnInit {
         "Email": this.businessForm.value.Email,
         "OperationHours": JSON.stringify(opeHours),
         "Tags": this.businessForm.value.Tags,
-        "Categories": this.businessForm.value.Categories
+        "Categories": this.businessForm.value.Categories,
+        "ParentBusiness": (this.businessForm.value.ParentBusiness ? 1 : 0)
       }
-      console.log(dataForm);
-      return;
       var spinnerRef = this.spinnerService.start("Saving Business...");
       this.businessSave$ = this.businessService.updateBusiness(this.businessId, dataForm).pipe(
         tap(res => { 
@@ -1369,6 +1529,26 @@ export class BusinessComponent implements OnInit {
         })
       );
     }
+  }
+
+  loadSectors(cityId: string){
+    console.log("cambio " + cityId);
+    this.sectors$ = this.locationService.getSectors(this.countryCode, cityId).pipe(
+      map(res => {
+        if (res != null){
+          this.sectors= [];
+          this.sectors.push({SectorId: "0", Name: "N/A"});
+          res.forEach(element => {
+            this.sectors.push(element);
+          });
+          console.log(this.sectors);
+          return res;
+        }
+      }),
+      catchError(err => {
+        return throwError(err || err.message);
+      })
+    )
   }
 
   addLocation(){
@@ -1549,9 +1729,9 @@ export class BusinessComponent implements OnInit {
   }
 
   onSubmitLocations(){
-    // if (this.locationForm.invalid){ 
-    //   return;
-    // }
+    if (this.locationForm.invalid){ 
+      return;
+    }
     if (this.locationForm.touched){
       let loca =  this.locationForm.get('locations') as FormArray;
       let items: any[] = [];
@@ -1619,6 +1799,8 @@ export class BusinessComponent implements OnInit {
           LocationId: item.value.LocationId,
           Name: item.value.Name,
           Address: item.value.Address,
+          City: item.value.City,
+          Sector: item.value.Sector,
           Geolocation: '{"LAT": '+ this.latLoc[i]+',"LNG": '+this.lngLoc[i]+'}',
           ParentLocation: item.value.ParentLocation,
           TotalPiesTransArea: item.value.TotalPiesTransArea,

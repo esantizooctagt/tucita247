@@ -37,6 +37,16 @@ export class UserService {
                     .pipe(catchError(this.errorHandler));
   }
 
+  getUsersLoc(businessId): Observable<User[]> {
+    return this.http.get<User[]>(this.apiURL + '/users/location/' + businessId)
+                    .pipe(catchError(this.errorHandler));
+  }
+
+  updateUsersLocs(businessId, formData): Observable<any[]>{
+    return this.http.put<any[]>(this.apiURL + '/users/location/' + businessId, formData)
+                    .pipe(catchError(this.errorHandler));
+  }
+
   postUser(formData) {
     return this.http.post(this.apiURL + '/user', formData)
                     .pipe(catchError(this.errorHandler));

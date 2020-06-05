@@ -12,11 +12,6 @@ export class LocationService {
   readonly apiURL = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
-  getLocation(storeId, cashierId): Observable<any>{
-    return this.http.get<any>(this.apiURL + '/location/' + storeId + '/' + cashierId)
-                    .pipe(catchError(this.errorHandler));
-  }
-
   getLocations(businessId): Observable<Location[]> {
       return this.http.get<Location[]>(this.apiURL + '/locations/' + businessId)
                       .pipe(catchError(this.errorHandler));
@@ -42,8 +37,23 @@ export class LocationService {
                     .pipe(catchError(this.errorHandler));
   }
 
+  getLocationsCode(businessId): Observable<any[]>{
+    return this.http.get<any[]>(this.apiURL + '/locations/Codes/' + businessId)
+                    .pipe(catchError(this.errorHandler));
+  }
+
   getLocationQuantity(businessId, locationId): Observable<any>{
     return this.http.get<any>(this.apiURL + '/location/checkin/' + businessId + '/' + locationId)
+                    .pipe(catchError(this.errorHandler));
+  }
+
+  getCities(countryId): Observable<any>{
+    return this.http.get<any>(this.apiURL + '/locations/cities/' + countryId)
+                    .pipe(catchError(this.errorHandler));
+  }
+
+  getSectors(countryId, cityId): Observable<any>{
+    return this.http.get<any>(this.apiURL + '/locations/sectors/' + countryId + '/' + cityId)
                     .pipe(catchError(this.errorHandler));
   }
 

@@ -60,6 +60,9 @@ import { RoleListComponent } from '@modules/roles/role-list/role-list.component'
 import { UserListComponent } from '@modules/users/user-list/user-list.component';
 import { UserComponent } from '@modules/users/user/user.component';
 import { SearchComponent } from '@shared/search/search.component';
+import { PollComponent } from '@modules/polls/poll/poll.component';
+import { PollListComponent } from '@modules/polls/poll-list/poll-list.component';
+import { UserlocComponent } from '@modules/userloc/userloc.component';
 
 //Directives
 import { PhoneMaskDirective } from '@shared/phone-mask.directive';
@@ -81,7 +84,10 @@ import { PhonePipe } from '@shared/phone.pipe';
     SearchComponent,
     PhoneMaskDirective,
     PhonePipe,
-    DirDialogComponent
+    DirDialogComponent,
+    UserlocComponent,
+    PollComponent,
+    PollListComponent
   ],
   imports: [
     BrowserModule,

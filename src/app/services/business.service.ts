@@ -23,8 +23,18 @@ export class BusinessService {
                     .pipe(catchError(this.errorHandler));
   }
 
+  getBusinessParent(): Observable<any[]>{
+    return this.http.get<any[]>(this.apiURL + '/business/parents')
+                    .pipe(catchError(this.errorHandler));
+  }
+
   updateBusiness(businessId, dataForm) {
     return this.http.put(this.apiURL + '/business/' + businessId, dataForm)
+                    .pipe(catchError(this.errorHandler));
+  }
+
+  uploadBusinessImg(businessId, dataForm){
+    return this.http.put(this.apiURL + '/business/imagen/' + businessId, dataForm)
                     .pipe(catchError(this.errorHandler));
   }
 

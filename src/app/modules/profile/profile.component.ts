@@ -29,7 +29,6 @@ export class ProfileComponent implements OnInit {
   displayForm: boolean=true;
 
   readonly imgPath = environment.bucket;
-  public qrCode: string = null;
 
   get f(){
     return this.profileForm.controls;

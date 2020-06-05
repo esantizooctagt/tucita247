@@ -8,3 +8,5 @@ export * from './countries';
 export * from './business';
 export * from './appointment';
 export * from './reason';
+export * from './polls';
+export * from './questions';

@@ -4,3 +4,4 @@ export * from './roles.service';
 export * from './category.service';
 export * from './business.service';
 export * from './reasons.service';
+export * from './polls.service';

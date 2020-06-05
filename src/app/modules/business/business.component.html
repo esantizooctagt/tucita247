@@ -11,16 +11,16 @@
                 <mat-step [stepControl]="businessForm" step="business" *ngIf="(business$ | async) || displayBusiness">
                     <form [formGroup]="businessForm" (ngSubmit)="onSubmitBusiness()">
                         <ng-template matStepLabel>Business</ng-template>
-                        <mat-form-field>
+                        <mat-form-field hintLabel="Name">
                             <input matInput placeholder="Business Name" maxlength="500" minlength="3" formControlName="Name" [errorStateMatcher]="confirmValidParentMatcher" required>
                             <mat-error *ngIf="fBusiness.Name.invalid && fBusiness.Name.touched">{{getErrorMessage('Name')}}</mat-error>
                         </mat-form-field>
-                        <mat-form-field>
+                        <mat-form-field hintLabel="Address">
                             <input matInput placeholder="Address" formControlName="Address" maxlength="500" minlength="3" [errorStateMatcher]="confirmValidParentMatcher" required>
                             <mat-error *ngIf="fBusiness.Address.invalid && fBusiness.Address.touched">{{getErrorMessage('Address')}}</mat-error>
                         </mat-form-field>
                         <div class="row">
-                            <mat-form-field class="col-md">
+                            <mat-form-field class="col-md" hintLabel="Country">
                                 <input type="text" placeholder="Country" matInput formControlName="Country" [matAutocomplete]="autoCountry" [errorStateMatcher]="confirmValidParentMatcher" required>
                                 <mat-error *ngIf="fBusiness.Country.invalid && fBusiness.Country.touched">{{getErrorMessage('Country')}}</mat-error>
                                 <mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayFn" activeOption="activeOption">
@@ -29,36 +29,36 @@
                                     </mat-option>
                                 </mat-autocomplete>
                             </mat-form-field>
-                            <mat-form-field class="col-md-4">
+                            <mat-form-field class="col-md-4" hintLabel="City">
                                 <input matInput placeholder="City" formControlName="City" maxlength="100" minlength="2" [errorStateMatcher]="confirmValidParentMatcher" required>
                                 <mat-error *ngIf="fBusiness.City.invalid && fBusiness.City.touched">{{getErrorMessage('City')}}</mat-error>
                             </mat-form-field>
                         </div>
                         <div class="row">
-                            <mat-form-field class="col-md-2">
+                            <mat-form-field class="col-md-2" hintLabel="Zip Code">
                                 <input matInput placeholder="Zip Code" formControlName="ZipCode" maxlength="10" minlength="3" [errorStateMatcher]="confirmValidParentMatcher">
                                 <mat-error *ngIf="fBusiness.ZipCode.invalid && fBusiness.ZipCode.touched">{{getErrorMessage('ZipCode')}}</mat-error>
                             </mat-form-field>
-                            <mat-form-field class="col-md">
+                            <mat-form-field class="col-md" hintLabel="Phone">
                                 <span matPrefix>+1 &nbsp;</span>
                                 <input matInput appPhoneMask placeholder="Phone" formControlName="Phone" maxlength="15" minlength="3" [errorStateMatcher]="confirmValidParentMatcher">
                                 <mat-error *ngIf="fBusiness.Phone.invalid && fBusiness.Phone.touched">{{getErrorMessage('Phone')}}</mat-error>
                             </mat-form-field>
-                            <mat-form-field class="col-md-4">
+                            <mat-form-field class="col-md-4" hintLabel="WebSite">
                                 <input matInput placeholder="WebSite" formControlName="WebSite" maxlength="150" minlength="4" [errorStateMatcher]="confirmValidParentMatcher">
                                 <mat-error *ngIf="fBusiness.WebSite.invalid && fBusiness.WebSite.touched">{{getErrorMessage('WebSite')}}</mat-error>
                             </mat-form-field>
                         </div>
                         <div class="row">
-                            <mat-form-field class="col-md-4">
+                            <mat-form-field class="col-md-4" hintLabel="Facebook">
                                 <input matInput placeholder="Facebook" maxlength="150" minlength="4" formControlName="Facebook" [errorStateMatcher]="confirmValidParentMatcher">
                                 <mat-error *ngIf="fBusiness.Facebook.invalid && fBusiness.Facebook.touched">{{getErrorMessage('Facebook')}}</mat-error>
                             </mat-form-field>
-                            <mat-form-field class="col-md-4">
+                            <mat-form-field class="col-md-4" hintLabel="Twitter">
                                 <input matInput placeholder="Twitter" maxlength="150" minlength="4" formControlName="Twitter" [errorStateMatcher]="confirmValidParentMatcher">
                                 <mat-error *ngIf="fBusiness.Twitter.invalid && fBusiness.Twitter.touched">{{getErrorMessage('Twitter')}}</mat-error>
                             </mat-form-field>
-                            <mat-form-field class="col-md-4">
+                            <mat-form-field class="col-md-4" hintLabel="Instagram">
                                 <input matInput placeholder="Instagram" maxlength="150" minlength="4" formControlName="Instagram" [errorStateMatcher]="confirmValidParentMatcher">
                                 <mat-error *ngIf="fBusiness.Instagram.invalid && fBusiness.Instagram.touched">{{getErrorMessage('Instagram')}}</mat-error>
                             </mat-form-field>
@@ -69,7 +69,7 @@
                                 <mat-error *ngIf="fBusiness.Email.invalid && fBusiness.Email.touched">{{getErrorMessage('Email')}}</mat-error>
                             </mat-form-field>
                         </div>
-                        <mat-form-field>
+                        <mat-form-field hintLabel="Categories">
                             <ng-container *ngIf="categories$ | async"></ng-container>
                             <mat-chip-list #chipCategoriesList formControlName="Categories">
                                 <mat-chip
@@ -195,18 +195,50 @@
                                 <agm-marker  [latitude]="lat" [longitude]="lng" [markerDraggable]="true" (dragEnd)="markerDragEnd($event)"></agm-marker>
                             </agm-map>
                         </div>
-                        <div>
-                            <button class="mr-3 mt-2" mat-flat-button color="primary" [disabled]="businessForm.invalid" matStepperNext>Save / Next</button>
+                        <mat-form-field hintLabel="Long description for mobile app">
+                            <input matInput placeholder="Long Description" maxlength="255" minlength="10" formControlName="LongDescription" [errorStateMatcher]="confirmValidParentMatcher" required>
+                            <mat-error *ngIf="fBusiness.LongDescription.invalid && fBusiness.LongDescription.touched">{{getErrorMessage('LongDescription')}}</mat-error>
+                        </mat-form-field>
+                        <mat-form-field hintLabel="Short description for mobile app">
+                            <input matInput placeholder="Short Description" maxlength="75" minlength="10" formControlName="ShortDescription" [errorStateMatcher]="confirmValidParentMatcher" required>
+                            <mat-error *ngIf="fBusiness.ShortDescription.invalid && fBusiness.ShortDescription.touched">{{getErrorMessage('ShortDescription')}}</mat-error>
+                        </mat-form-field>
+                        <div class="form-field-check">
+                            <mat-checkbox formControlName="ParentBusiness">Parent Business</mat-checkbox>
                         </div>
                         <!-- {{ businessForm.value | json }} -->
                         <!--{{ tags | json}} -->
                     </form>
+                    <ng-container *ngIf="imgBusiness$ | async"></ng-container>
+                    <div class="image-business">
+                        <form [formGroup]="imageForm" autocomplete="off" (ngSubmit)="onSubmitImage()">
+                            <div class="sector">
+                                <!-- User Profile Image -->
+                                <img *ngIf="fBusiness.Imagen.value; else isIcon" class="imgbusiness-pic" [src]="imgPath+fBusiness.Imagen.value">
+                                <ng-template #isIcon>
+                                    <!-- Default Image -->
+                                    <div class="fill-overlay">IMAGE MOBILE APP</div>
+                                </ng-template>
+                                <div class="default-overlay">
+                                    <button type="button" class="camera-avatar" mat-icon-button (click)="onSearchImage()">
+                                        <mat-icon>add_a_photo</mat-icon>
+                                    </button>
+                                    <input id="fileUpload" name="fileUpload" type="file" accept="image/*" style="display:none;"/>
+                                </div>                  
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <button class="mr-3 mt-2" mat-flat-button color="primary" [disabled]="businessForm.invalid" matStepperNext>Save / Next</button>
+                    </div>
                 </mat-step>
                 <ng-container *ngIf="(locationSave$ | async) && savingLocation"></ng-container>
-                <mat-step [stepControl]="locationForm" step="location" *ngIf="(location$ | async) || displayLocation">
+                <ng-container *ngIf="location$ | async"></ng-container>
+                <mat-step [stepControl]="locationForm" step="location" *ngIf="displayLocation">
                     <div>
                         <button class="mr-3 mt-2 mb-2" type="button" mat-flat-button color="primary" matStepperNext (click)="addLocation()">+ Location</button>
                     </div>
+                    <ng-container *ngIf="parentBus$ | async"></ng-container>
                     <form [formGroup]="locationForm" (ngSubmit)="onSubmitLocations()">
                         <ng-template matStepLabel>Locations</ng-template>
                         <mat-accordion>
@@ -221,44 +253,63 @@
                                         <div>
                                             <button *ngIf="item.get('LocationId').value == ''" class="mr-3 mt-2 mb-2" type="button" mat-flat-button color="primary" matStepperNext (click)="delLocation(i)">- Delete Location</button>
                                         </div>
-                                        <mat-form-field>
+                                        <mat-form-field hintLabel="Name">
                                             <input matInput placeholder="Location Name" formControlName="Name" maxlength="500" minlength="3" [errorStateMatcher]="confirmValidParentMatcher" required>
                                             <mat-error *ngIf="item.get('Name').invalid">{{getErrorMessage('SName', i)}}</mat-error>
                                         </mat-form-field>
-                                        <mat-form-field>
+                                        <mat-form-field hintLabel="Address">
                                             <input matInput placeholder="Address" formControlName="Address" maxlength="500" minlength="3" [errorStateMatcher]="confirmValidParentMatcher" required>
                                             <mat-error *ngIf="item.get('Address').invalid">{{getErrorMessage('SAddress', i)}}</mat-error>
                                         </mat-form-field>
                                         <div class="row">
-                                            <mat-form-field class="col-md-4">
+                                            <ng-container *ngIf="sectors$ | async"></ng-container>
+                                            <mat-form-field class="col-md-5" hintLabel="City">
+                                                <mat-select formControlName="City" (selectionChange)="loadSectors($event.value)" required>
+                                                    <mat-option *ngFor="let city of cities" [value]="city.CityId">
+                                                    {{city.Name}}
+                                                    </mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="item.get('City').invalid">{{getErrorMessage('SCity', i)}}</mat-error>
+                                            </mat-form-field>
+                                            <mat-form-field class="col-md" hintLabel="Sector">
+                                                <mat-select formControlName="Sector" required>
+                                                    <mat-option *ngFor="let sector of sectors" [value]="sector.SectorId">
+                                                    {{sector.Name}}
+                                                    </mat-option>
+                                                </mat-select>
+                                                <mat-error *ngIf="item.get('Sector').invalid">{{getErrorMessage('Sector', i)}}</mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="row">
+                                            <mat-form-field class="col-md-4" hintLabel="Total foot by transitable area">
                                                 <input matInput placeholder="Total foot by transitable area" formControlName="TotalPiesTransArea" [errorStateMatcher]="confirmValidParentMatcher" required>
                                                 <mat-error *ngIf="item.get('TotalPiesTransArea').invalid">{{getErrorMessage('TotalPiesTransArea', i)}}</mat-error>
                                             </mat-form-field>
-                                            <mat-form-field class="col-md-4">
+                                            <mat-form-field class="col-md-4" hintLabel="Location density">
                                                 <input matInput placeholder="Location Density" formControlName="LocationDensity" min="2" [errorStateMatcher]="confirmValidParentMatcher" required>
                                                 <mat-error *ngIf="item.get('LocationDensity').invalid">{{getErrorMessage('LocationDensity', i)}}</mat-error>
                                             </mat-form-field>
-                                            <mat-form-field class="col-md">
+                                            <mat-form-field class="col-md" hintLabel="Max number of employees per location">
                                                 <input matInput placeholder="Max Number of Employees x Location" formControlName="MaxNumberEmployeesLocation" min="1" [errorStateMatcher]="confirmValidParentMatcher" required>
                                                 <mat-error *ngIf="item.get('MaxNumberEmployeesLocation').invalid">{{getErrorMessage('MaxNumberEmployeesLocation', i)}}</mat-error>
                                             </mat-form-field>
                                         </div>
                                         <div class="row">
-                                            <mat-form-field class="col-md-3">
+                                            <mat-form-field class="col-md-3" hintLabel="Max concurrent customer per location">
                                                 <input matInput placeholder="Max Concurrent Customers x Location" formControlName="MaxConcurrentCustomerLocation" [errorStateMatcher]="confirmValidParentMatcher" required>
                                                 <mat-error *ngIf="item.get('MaxConcurrentCustomerLocation').invalid">{{getErrorMessage('MaxConcurrentCustomerLocation', i)}}</mat-error>
                                             </mat-form-field>
-                                            <mat-form-field class="col-md">
+                                            <mat-form-field class="col-md" hintLabel="Bucket interval">
                                                 <input matInput placeholder="Bucket Interval" formControlName="BucketInterval" [errorStateMatcher]="confirmValidParentMatcher" required>
                                                 <mat-error *ngIf="item.get('BucketInterval').invalid">{{getErrorMessage('BucketInterval', i)}}</mat-error>
                                             </mat-form-field>
-                                            <mat-form-field class="col-md-3">
+                                            <mat-form-field class="col-md-3" hintLabel="Total customer per bucket interval">
                                                 <input matInput placeholder="Total Customer per Bucket Interval" formControlName="TotalCustPerBucketInter" [errorStateMatcher]="confirmValidParentMatcher" required>
                                                 <mat-error *ngIf="item.get('TotalCustPerBucketInter').invalid">{{getErrorMessage('TotalCustPerBucketInter', i)}}</mat-error>
                                             </mat-form-field>
                                         </div>
                                         <div class="row">
-                                            <mat-form-field class="col-md">
+                                            <mat-form-field class="col-md" hintLabel="Doors">
                                                 <mat-chip-list #chipDoors>
                                                     <ng-container *ngIf="doors[i].length > 0">
                                                         <mat-chip *ngFor="let door of doors[i].split(',')" [selectable]="selectable"
@@ -274,8 +325,12 @@
                                                            (matChipInputTokenEnd)="addDoor($event,i)">
                                                   </mat-chip-list>
                                             </mat-form-field>
-                                            <mat-form-field class="col-md-6">
-                                                <input matInput placeholder="ParentLocation" formControlName="ParentLocation" [errorStateMatcher]="confirmValidParentMatcher">
+                                            <mat-form-field class="col-md-6" hintLabel="Parent location">
+                                                <mat-select formControlName="ParentLocation" required>
+                                                    <mat-option *ngFor="let parentBus of businessParent" [value]="parentBus.BusinessId">
+                                                    {{parentBus.Name}}
+                                                    </mat-option>
+                                                </mat-select>
                                                 <mat-error *ngIf="item.get('ParentLocation').invalid">{{getErrorMessage('ParentLocation', i)}}</mat-error>
                                             </mat-form-field>
                                         </div>
@@ -373,8 +428,7 @@
                         </mat-accordion>
                         <div>
                             <button class="mr-3 mt-2" mat-flat-button color="accent" matStepperPrevious>Back</button>
-                            <button class="mr-3 mt-2" mat-flat-button color="primary" matStepperNext>Save</button>
-                            <!-- [disabled]="locationForm.invalid" -->
+                            <button class="mr-3 mt-2" mat-flat-button color="primary" [disabled]="locationForm.invalid" matStepperNext>Save</button>
                         </div>
                         <!-- {{ locationForm.value | json }} -->
                     </form>
