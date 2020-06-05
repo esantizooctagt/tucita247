@@ -1,32 +1,37 @@
 <div class="container-fluid host-container">
     <div class="row pl-2 pr-2">
-        <ng-container *ngIf="showDoorInfo">
-            <h5 class="col-md-1 pl-0 pr-0 pt-3 pb-2">Location : </h5>
-            <span class="col-md-3 pt-3 pb-2 pl-0 pr-0 mb-2">
-                <mat-select (selectionChange)="setLocation($event.value)">
-                    <mat-option *ngFor="let res of locations$ | async" [value]="res">{{res.Name}}
-                    </mat-option>
-                </mat-select>
-            </span>
-            <span class="col-md"></span>
-            <h5 class="col-md-1 pl-0 pr-0 pt-3 pb-2">Door : </h5>
-            <span class="col-md-1 pt-3 pb-2 pl-0 pr-0 mb-2">
-                <mat-select (selectionChange)="setDoor($event)">
-                    <mat-option *ngFor="let res of doors" [value]="res">{{res}}
-                    </mat-option>
-                </mat-select>
-            </span>
-        </ng-container>
         <ng-container *ngIf="updAppointment$ | async"></ng-container>
+        <ng-container *ngIf="openLoc$ | async"></ng-container>
+        <ng-container *ngIf="closedLoc$ | async"></ng-container>
         <div class="col-md-12">
+            <div class="row mt-2">
+                <div class="col-sm-9 p-0">
+                    <button mat-flat-button class="action-buttons-init" *ngIf="locationStatus == 0" color="primary" type="button" (click)="openLocation()">Open</button>
+                    <button mat-flat-button class="action-buttons-init" *ngIf="locationStatus == 1" color="primary" type="button" (click)="closedLocation()">Closed</button>
+                    <button mat-flat-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 0" color="primary" type="button" (click)="getWalkInsCheckOut()">Walk-Ins Check Out</button>
+                    <ng-container *ngIf="getWalkIns$ | async"></ng-container>
+                    <ng-container *ngIf="manualCheckOut$ | async"></ng-container>
+                    <button mat-flat-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 1" color="primary" type="button" (click)="setManualCheckOut()">Manual Check Out</button>
+                    <button mat-flat-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 0" color="primary" type="button" (click)="checkOutQR()">QR Check Out</button>
+                </div>
+            </div>
             <div class="row">
-                <button mat-flat-button color="primary" type="button" class="col-md-1" [matMenuTriggerFor]="menu" (click)="getLocationCheckIn()">View</button>
-                <mat-menu #menu="matMenu" xPosition="before">
-                    <div mat-menu-item *ngFor="let item of getCheckIns$ | async;let i=index" class="checkin-list">{{item.Name}}</div>
-                </mat-menu>
-                <div class="col-md-2" *ngIf="quantityPeople$ | async">{{qtyPeople}}</div>
+                <ng-container *ngIf="quantityPeople$ | async"></ng-container>
+                <div class="col-md-2" [ngClass]="{
+                    'qty-people-white': perLocation < 80,
+                    'qty-people-black': perLocation < 95,
+                    'qty-people-white-02': perLocation >= 95}">{{qtyPeople}}</div>
+                <mat-progress-bar class="ml-2" [ngClass]="{
+                    'green-bar': perLocation < 80,
+                    'yellow-bar': perLocation < 95,
+                    'red-bar': perLocation >= 95
+                  }" mode="determinate" [value]="perLocation"></mat-progress-bar>
             </div>
         </div>
+        <ng-container *ngIf="comments$ | async"></ng-container>
+        <ng-container *ngIf="opeHours$ | async"></ng-container>
+        <ng-container *ngIf="getLocInfo$ | async"></ng-container>
+        <ng-container *ngIf="reasons$ | async"></ng-container>
         <div class="col-sm col-md col-lg-12">
             <div class="row mb-2">
                 <div class="col-md ml-2 mr-2 mt-2 title-qeue">
@@ -285,9 +290,9 @@
                                     </mat-form-field>
                                 </div>
                                 <div class="form-field pl-3 pr-3">
-                                    <mat-form-field hintLabel="Companions">
-                                        <input matInput #Companions placeholder="Companions" maxlength="2" min="1" max="20" formControlName="Companions"
-                                            [errorStateMatcher]="confirmValidParentMatcher">
+                                    <mat-form-field hintLabel="No of People">
+                                        <input matInput #Companions placeholder="No of People" maxlength="2" min="1" max="20" formControlName="Companions"
+                                            [errorStateMatcher]="confirmValidParentMatcher" required>
                                         <mat-error *ngIf="f.Companions.invalid && f.Companions.touched">{{getErrorMessage('Companions')}}</mat-error>
                                     </mat-form-field>
                                 </div>

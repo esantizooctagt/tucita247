@@ -29,8 +29,12 @@
         <mat-label>Type QR Code</mat-label>
         <input matInput placeholder="QR Code" [(ngModel)]="qrCode">
     </mat-form-field>
+    <mat-form-field class="pt-3">
+        <mat-label>Number of People</mat-label>
+        <input matInput placeholder="Number of People" [(ngModel)]="companions">
+    </mat-form-field>
     <div>
         <button mat-flat-button class="mr-3 btn-cancel" (click)="onNoClick()">Cancel</button>
-        <button mat-flat-button color="primary" class="btn-ok" [mat-dialog-close]="qrCode" cdkFocusInitial>Ok</button>
+        <button mat-flat-button color="primary" class="btn-ok" (click)="onOK()" cdkFocusInitial>Ok</button>
     </div>
 </div>

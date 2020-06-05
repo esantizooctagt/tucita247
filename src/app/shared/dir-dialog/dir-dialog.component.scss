@@ -1,0 +1,12 @@
+::ng-deep .mat-tab-label, ::ng-deep .mat-tab-label-active{
+    min-width: 45px!important;
+    padding: 0px!important;
+}
+::ng-deep.mat-tab-group-dynamic-height .mat-tab-body-content{
+    transform: none;
+    overflow-y: auto!important;
+    height: 400px !important;
+}
+mat-tab-group{
+    height: 450px;
+}

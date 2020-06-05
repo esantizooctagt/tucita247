@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocationService, ReasonsService, BusinessService } from '@app/services';
 import { AuthService } from '@app/core/services';
 import { SpinnerService } from '@app/shared/spinner.service';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, switchMap } from 'rxjs/operators';
 import { AppointmentService } from '@app/services/appointment.service';
 import { Appointment, Reason } from '@app/_models';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -15,6 +15,8 @@ import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { VideoDialogComponent } from '@app/shared/video-dialog/video-dialog.component';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
+import { DirDialogComponent } from '@app/shared/dir-dialog/dir-dialog.component';
 
 @Component({
   selector: 'app-host',
@@ -27,17 +29,20 @@ export class HostComponent implements OnInit {
   appointmentsWalk$: Observable<Appointment[]>;
   appointmentsPre$: Observable<Appointment[]>;
   appointmentsPrevious$: Observable<Appointment[]>;
-  getCheckIns$: Observable<any[]>;
+  getWalkIns$: Observable<any[]>;
   messages$: Observable<any>;
   newAppointment$: Observable<any>;
   updAppointment$: Observable<any>;
   getMessages$: Observable<any[]>;
   quantityPeople$: Observable<any>;
   checkIn$: Observable<any>;
-  HostLocations: Subscription;
-  commentsSubs: Subscription;
-  reasonsSub: Subscription;
-  opeHoursSub: Subscription;
+  comments$: Observable<any>;
+  opeHours$: Observable<any>;
+  getLocInfo$: Observable<any>;
+  reasons$: Observable<any>;
+  openLoc$: Observable<any>;
+  closedLoc$: Observable<any>;
+  manualCheckOut$: Observable<any>;
 
   showMessageSche=[];
   showMessageWalk=[];
@@ -66,12 +71,17 @@ export class HostComponent implements OnInit {
   selectedSche=[];
   selectedPrev=[];
 
+  getWalkInstoCheckOut=[];
+
   buckets=[];
   currHour: number = 0;
   prevHour: number = 0;
   firstHour: number = 0;
   bucketInterval: number = 0;
+  manualCheckOut: number = 0;
   qtyPeople: string = '';
+  perLocation: number = 0;
+  totLocation: number = 0;
   reasons: Reason[]=[];
 
   doors: string[]=[];
@@ -79,6 +89,8 @@ export class HostComponent implements OnInit {
   userId: string = '';
   showDoorInfo: boolean = false;
   showApp: boolean = false;
+  locationStatus: number = 0;
+  closedLoc: number = 0;
 
   locationId: string = '';
   doorId: string = '';
@@ -92,8 +104,6 @@ export class HostComponent implements OnInit {
   appoIdWalk: string = '_';
   appoIdPre: string = '_';
   appoIdSche: string = '_';
-  lastItemCheckIn: string = '_';
-  appoIdCheckIn: string = '_';
 
   get f(){
     return this.clientForm.controls;
@@ -112,7 +122,8 @@ export class HostComponent implements OnInit {
     private locationService: LocationService,
     private fb: FormBuilder,
     private dialog: MatDialog,
-    private matIconRegistry: MatIconRegistry
+    private matIconRegistry: MatIconRegistry,
+    private router: Router
   ) {
     this.matIconRegistry.addSvgIcon('cancel',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/cancel.svg'));
     this.matIconRegistry.addSvgIcon('clock',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/clock.svg'));
@@ -134,7 +145,7 @@ export class HostComponent implements OnInit {
     Gender: [''],
     Preference: [''],
     Disability: [''],
-    Companions: ['']
+    Companions: ['1', [Validators.required, Validators.max(99), Validators.min(1)]]
   })
 
   schedule = [];
@@ -343,64 +354,102 @@ export class HostComponent implements OnInit {
     this.businessId = this.authService.businessId();
     this.userId = this.authService.userId();
 
-    this.HostLocations = this.appointmentService.getHostLocations(this.businessId, this.userId).subscribe((res: any) => {
-      if (res.Locs != null){
-        this.locationId = res.Locs.LocationId;
-        this.doorId = res.Locs.Door;
-        this.getOperationHours(this.businessId, this.locationId);
-      } else {
-        this.showDoorInfo = true;
-        this.locations$ = this.locationService.getLocationsHost(this.businessId).pipe(
-          map((res: any) => {
-            return res.Locs;
-          }),
-          catchError(err => {
-            this.onError = err.Message;
-            return this.onError;
-          })
-        );
-      }
-    });
-
-    setTimeout(() => {
-      if (this.locationId != '') {
-        this.getAppointmentsSche();
-        this.getAppointmentsWalk();
-        this.getAppointmentsPre();
-        this.quantityPeople$ = this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
-          map((res: any) => {
-            if (res != null){
-              this.qtyPeople = res.Quantity;
-              return res.Quantity.toString();
+    var spinnerRef = this.spinnerService.start("Loading Locations Data...");
+    this.getLocInfo$ = this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
+      map((res: any) => {
+        if (res.Locs != null){
+          this.locationId = res.Locs.LocationId;
+          this.doorId = res.Locs.Door;
+          this.locationStatus = res.Locs.Open;
+          this.manualCheckOut = res.Locs.ManualCheckOut;
+          this.closedLoc = res.Locs.Closed;
+          this.totLocation = res.Locs.MaxCustomers;
+          return res;
+        } else {
+          this.spinnerService.stop(spinnerRef);
+          this.openDialog('Error !', "User must have a location assigned, try again", false, true, false);
+          this.router.navigate(['/']);
+          return;
+        }
+      }),
+      switchMap(val => val = this.businessService.getBusinessOpeHours(this.businessId, this.locationId)),
+      map((res: any) => {
+        if (res.Code == 200) {
+          this.bucketInterval = parseFloat(res.BucketInterval);
+          this.currHour = parseFloat(res.CurrHour);
+          let hours = res.Hours;
+          this.buckets = [];
+          for (var i=0; i<=hours.length-1; i++){
+            let horaIni = parseFloat(hours[i].HoraIni);
+            let horaFin = parseFloat(hours[i].HoraFin);
+            if (i ==0){
+              this.firstHour = horaIni;
             }
-          }),
-          catchError(err => {
-            this.onError = err.Message;
-            return '0';
-          })
-        );
-      }
-    }, 3000);
+            for (var x=horaIni; x<=horaFin; x+=this.bucketInterval){
+              let hora = '';
+              if (x % 1 != 0){
+                hora = (x - (x%1)).toString().padStart(2,'0') + ':30';
+              } else {
+                hora = x.toString().padStart(2, '0') + ':00';
+              }
+              this.buckets.push({ TimeFormat: hora, Time: x });
+              if (x == this.currHour) {
+                if (x-this.bucketInterval>= horaIni){
+                  this.prevHour = this.currHour-this.bucketInterval;
+                }
+              }
+            }
+          }
+          this.spinnerService.stop(spinnerRef);
+        } else {
+          this.spinnerService.stop(spinnerRef);
+          return;
+        }
+      }),
+      switchMap((value: any) => {
+        value = this.locationService.getLocationQuantity(this.businessId, this.locationId);
+        return value;
+      }),
+      map((res: any) => {
+        this.qtyPeople = res.Quantity;
+        this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+      }),
+      map(_ => {
+        if (this.locationId != '' && this.locationStatus == 1 && this.closedLoc == 0){
+          this.getAppointmentsSche();
+          this.getAppointmentsWalk();
+          this.getAppointmentsPre();
+        }
+      }),
+      catchError(err => {
+        this.spinnerService.stop(spinnerRef);
+        this.onError = err.Message;
+        return '0';
+      })
+    );
 
-    this.reasonsSub = this.reasonService.getReasons(this.businessId).subscribe(
-      (res: any) => {
+    this.reasons$ = this.reasonService.getReasons(this.businessId).pipe(
+      map((res: any) => {
         if (res != null ){
           if (res.Code == 200){
             this.reasons = res.Reasons;
             return res.Reasons;
           }
         }
-      },
-      error => {
-        //save error
-        this.openSnackBar("An error ocurred, try again","Error");
-      });
+      }),
+      catchError(err => {
+        this.onError = err.Message;
+        return '0';
+      })
+    );
 
     setInterval(() => { 
-      this.quantityPeople$ = this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
+      if (this.locationId != '' && this.locationStatus == 1 && this.closedLoc == 0){
+        this.quantityPeople$ = this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
           map((res: any) => {
             if (res != null){
               this.qtyPeople = res.Quantity;
+              this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
               return res.Quantity.toString();
             }
           }),
@@ -409,6 +458,7 @@ export class HostComponent implements OnInit {
             return '0';
           })
         );
+      }
     }, 30000);
 
     setInterval(() => {
@@ -451,79 +501,148 @@ export class HostComponent implements OnInit {
     }, 1200000);
   
     setInterval(() => {
-      this.getAppointmentsSche();
-      this.getAppointmentsWalk();
-      this.getAppointmentsPre();
+      if (this.locationId != '' && this.locationStatus == 1 && this.closedLoc == 0){
+        this.getAppointmentsSche();
+        this.getAppointmentsWalk();
+        this.getAppointmentsPre();
+      }
     }, 3500000);
   }
 
-  getLocationCheckIn(){
-    // let dateAppo = '2020-05-25';
-    let yearCurr = this.getYear();
-    let monthCurr = this.getMonth();
-    let dayCurr = this.getDay();
-    let dateAppo = yearCurr + '-' + monthCurr + '-' + dayCurr;
-
-    this.getCheckIns$ = this.locationService.getLocationCheckIn(this.businessId, this.locationId, dateAppo, this.lastItemCheckIn, this.appoIdCheckIn).pipe(
+  openLocation(){
+    var spinnerRef = this.spinnerService.start("Loading Open Location...");
+    this.openLoc$ = this.locationService.updateOpenLocation(this.locationId, this.businessId).pipe(
       map((res: any) => {
-        if (res.Code == 200){
-          this.lastItemCheckIn = res['lastItem'].toString().replace('3#DT#','');
-          this.appoIdCheckIn = res['AppId'];
-          // res['Appos'].forEach(item => {
-          //   let data = {
-          //     AppId: item['AppointmentId'],
-          //     Name: item['Name'],
-          //     Phone: item['Phone'],
-          //     Door: item['Door']
-          //   }
-          //   this.checkIns.push(data);
-          // });
-          return res.Appos;
+        if (res != null){
+          if (res['Business'].OPEN == 1){
+            this.locationStatus = 1;
+            this.closedLoc = 0;
+            this.spinnerService.stop(spinnerRef);
+            this.getAppointmentsSche();
+            this.getAppointmentsWalk();
+            this.getAppointmentsPre();
+          }
         }
       }),
       catchError(err => {
+        this.spinnerService.stop(spinnerRef);
+        this.locationStatus = 0;
         this.onError = err.Message;
         return this.onError;
       })
     );
   }
 
-  getOperationHours(businessId: string, locationId: string){
-    this.opeHoursSub = this.businessService.getBusinessOpeHours(businessId, locationId).subscribe((res: any) =>{
-      if (res != null) {
-        if (res.Code == 200) {
-          this.bucketInterval = parseFloat(res.BucketInterval);
-          this.currHour = parseFloat(res.CurrHour);
-          let hours = res.Hours;
-          this.buckets = [];
-          for (var i=0; i<=hours.length-1; i++){
-            let horaIni = parseFloat(hours[i].HoraIni);
-            let horaFin = parseFloat(hours[i].HoraFin);
-            if (i ==0){
-              this.firstHour = horaIni;
-            }
-            for (var x=horaIni; x<=horaFin; x+=this.bucketInterval){
-              let hora = '';
-              if (x % 1 != 0){
-                hora = (x - (x%1)).toString().padStart(2,'0') + ':30';
-              } else {
-                hora = x.toString().padStart(2, '0') + ':00';
-              }
-              this.buckets.push({ TimeFormat: hora, Time: x });
-              if (x == this.currHour) {
-                if (x-this.bucketInterval>= horaIni){
-                  this.prevHour = this.currHour-this.bucketInterval;
-                }
-              }
-            }
+  closedLocation(){
+    var spinnerRef = this.spinnerService.start("Closing Location...");
+    this.closedLoc$ = this.locationService.updateClosedLocation(this.locationId, this.businessId).pipe(
+      map((res: any) => {
+        if (res != null){
+          if (res['Business'].OPEN == 0){
+            this.locationStatus = 0;
+            this.spinnerService.stop(spinnerRef);
+            this.previous = [];
+            this.schedule = [];
+            this.walkIns = [];
+            this.preCheckIn = [];
           }
         }
-      }
-    },
-    error => {
-      //save error
-      this.openSnackBar("An error ocurred, try again","Error");
+      }),
+      catchError(err => {
+        this.spinnerService.stop(spinnerRef);
+        this.locationStatus = 1;
+        this.onError = err.Message;
+        return this.onError;
+      })
+    );
+  }
+
+  checkOutQR(){
+    const dialogRef = this.dialog.open(VideoDialogComponent, {
+      width: '450px',
+      height: '570px',
+      data: {qrCode: ''}
     });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != undefined) {
+        this.qrCode = result;
+        this.checkOutAppointment(this.qrCode);
+      }
+    });
+  }
+
+  checkOutAppointment(qrCode: string){
+    let formData = {
+      Status: 4,
+      qrCode: qrCode,
+      BusinessId: this.businessId,
+      LocationId: this.locationId
+    }
+    this.checkIn$ = this.appointmentService.updateAppointmentCheckOut(formData).pipe(
+      map((res: any) => {
+        if (res.Code == 200){
+          this.openSnackBar("La Cita check-out successfull","Check-Out");
+        }
+      }),
+      catchError(err => {
+        if (err.Status == 404){
+          this.openSnackBar("Invalid qr code","Check-out");
+          return err.Message;
+        }
+        this.onError = err.Message;
+        this.openSnackBar("Something goes wrong try again","Check-out");
+        return this.onError;
+      })
+    );
+  }
+
+  setManualCheckOut(){
+    this.manualCheckOut$ = this.appointmentService.updateManualCheckOut(this.businessId, this.locationId).pipe(
+      map((res: any) => {
+        if (res.Code == 200){
+          this.openSnackBar("La Cita check-out successfull","Check-Out");
+        }
+      }),
+      catchError(err => {
+        this.onError = err.Message;
+        this.openSnackBar("Something goes wrong try again","Check-out");
+        return this.onError;
+      })
+    );
+  }
+
+  getWalkInsCheckOut(){
+    let yearCurr = this.getYear();
+    let monthCurr = this.getMonth();
+    let dayCurr = this.getDay();
+    let dateAppo = yearCurr + '-' + monthCurr + '-' + dayCurr;
+
+    var spinnerRef = this.spinnerService.start("Loading Walk-Ins...");
+    this.getWalkIns$ = this.locationService.getWalkInsCheckOut(this.businessId, this.locationId, dateAppo).pipe(
+      map((res: any) => {
+        if (res.Code == 200){
+          this.spinnerService.stop(spinnerRef);
+
+          const dialogConfig = new MatDialogConfig();
+          dialogConfig.data = { 
+            walkIns : res['Appos'],
+            businessId: this.businessId,
+            locationId: this.locationId
+          };
+          dialogConfig.width ='80%';
+          dialogConfig.minWidth = '80%';
+          dialogConfig.height = '600px';
+          this.dialog.open(DirDialogComponent, dialogConfig);
+          return res.Appos;
+        }
+      }),
+      catchError(err => {
+        this.spinnerService.stop(spinnerRef);
+        this.onError = err.Message;
+        return this.onError;
+      })
+    );
   }
 
   addAppointment(){
@@ -549,7 +668,7 @@ export class HostComponent implements OnInit {
       Gender: (this.clientForm.value.Gender == '' ? '': this.clientForm.value.Gender),
       Preference: (this.clientForm.value.Preference == '' ? '': this.clientForm.value.Preference),
       Disability: (this.clientForm.value.Disability == null ? '': this.clientForm.value.Disability),
-      Companions: (this.clientForm.value.Companions == null ? '': this.clientForm.value.Companions)
+      Companions: this.clientForm.value.Companions
     }
     var spinnerRef = this.spinnerService.start("Adding Appointment...");
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
@@ -558,7 +677,7 @@ export class HostComponent implements OnInit {
           this.walkIns.push(res.Appointment);
         }
         this.spinnerService.stop(spinnerRef);
-        this.clientForm.reset({Phone:'',Name:'',Email:'',DOB:'',Gender:'',Preference:''});
+        this.clientForm.reset({Phone:'',Name:'',Email:'',DOB:'',Gender:'',Preference:'', Disability:'', Companions: 1});
         this.showApp = false;
         return res.Code;
       }),
@@ -602,9 +721,10 @@ export class HostComponent implements OnInit {
           '';
     }
     if (component === 'Companions'){
-      return this.f.Companions.hasError('maxlength') ? 'Maximun length 2' :
+      return this.f.Companions.hasError('required') ? 'You must enter a value' :
+      this.f.Companions.hasError('maxlength') ? 'Maximun length 2' :
         this.f.Companions.hasError('min') ? 'Minimun value 1' :
-          this.f.Companions.hasError('max') ? 'Maximun value 20' :
+          this.f.Companions.hasError('max') ? 'Maximun value 99' :
             '';
     }
   }
@@ -662,26 +782,29 @@ export class HostComponent implements OnInit {
     if (appo.Phone != '0000000000') {
       const dialogRef = this.dialog.open(VideoDialogComponent, {
         width: '450px',
-        height: '570px',
-        data: {qrCode: ''}
+        height: '645px'
       });
 
       dialogRef.afterClosed().subscribe(result => {
         if (result != undefined) {
-          this.qrCode = result;
-          this.checkInAppointment(this.qrCode, appo);
+          this.qrCode = result.qrCode;
+          let companionsAppo = result.Companions;
+          if (this.qrCode != '' && companionsAppo > 0){
+            this.checkInAppointment(this.qrCode, appo, companionsAppo);
+          }
         }
       });
     } else {
-      this.checkInAppointment('VALID', appo);
+      this.checkInAppointment('VALID', appo, appo.Companions);
     }
   }
 
-  checkInAppointment(qrCode: string, appo: any){
+  checkInAppointment(qrCode: string, appo: any, companions: number){
     let formData = {
       Status: 3,
       DateAppo: appo.DateFull,
       qrCode: qrCode,
+      Companions: companions,
       BusinessId: this.businessId,
       LocationId: this.locationId
     }
@@ -747,7 +870,8 @@ export class HostComponent implements OnInit {
     if (appo.Unread == 'H') {
       appo.Unread = '0';
     }
-    this.commentsSubs = this.appointmentService.getMessages(appo.AppId, 'H').subscribe((res: any) => {
+    this.comments$ = this.appointmentService.getMessages(appo.AppId, 'H').pipe(
+      map((res: any) => {
         if (res != null){
           if (res.Code == 200){
             if (type == 'schedule'){
@@ -766,7 +890,12 @@ export class HostComponent implements OnInit {
             this.openSnackBar("Something goes wrong try again","Messages");
           }
         }
-      });
+      }),
+      catchError(err => {
+        this.onError = err.Message;
+        return this.onError;
+      })
+    );
   }
 
   onReadyCheckIn(appo: any, tipo: number){
@@ -803,14 +932,6 @@ export class HostComponent implements OnInit {
         return this.onError;
       })
     );
-  }
-
-  setLocation(event){
-    this.doors = event.Doors.split(',');
-    this.locationId = event.LocationId;
-    this.getAppointmentsSche();
-    this.getAppointmentsWalk();
-    this.getAppointmentsPre();
   }
 
   getTime(): string{
@@ -1160,18 +1281,6 @@ export class HostComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    if (this.HostLocations){
-      this.HostLocations.unsubscribe();
-    }
-    if (this.commentsSubs){
-      this.commentsSubs.unsubscribe();
-    }
-    if (this.reasonsSub){
-      this.reasonsSub.unsubscribe();
-    }
-    if (this.opeHoursSub){
-      this.opeHoursSub.unsubscribe();
-    }
   }
 
   onScrollSche(){

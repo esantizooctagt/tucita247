@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>Select walk-ins to check out</h1>
+<mat-tab-group (selectedTabChange)="filterLetter($event)" dynamicHeight>
+    <ng-container *ngFor="let item of letter_arr">
+        <div mat-dialog-content>
+            <mat-tab [disabled]="item.disabled" [label]="item.text">
+                <div class="pl-5 mt-2" *ngFor="let appo of filterData; let i=index">
+                    <mat-checkbox [(ngModel)]="filterData[i].CheckOut" [id]="filterData[i].AppointmentId">
+                        {{ appo.NoPeople + ' - ' +  appo.Name }}
+                    </mat-checkbox>
+                </div>
+            </mat-tab>
+        </div>
+    </ng-container>
+</mat-tab-group>
+<mat-dialog-actions align="end">
+    <ng-container *ngIf="getLocInfo$ | async"></ng-container>
+    <button mat-flat-button color="primary" type="button" (click)="checkOutWalkIn()">Check Out</button>
+</mat-dialog-actions>

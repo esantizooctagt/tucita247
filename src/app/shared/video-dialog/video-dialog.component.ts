@@ -1,7 +1,6 @@
-import { Component, ViewChild, ElementRef, Inject, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 import jsQR, { QRCode } from 'jsqr';
-import { DialogData } from '../dialog/dialog.component';
 
 @Component({
   selector: 'app-video-dialog',
@@ -13,7 +12,8 @@ export class VideoDialogComponent implements OnInit {
   @ViewChild('canvas', {static: true}) canvasElm: ElementRef;
 
   qrCode: string = '';
-
+  checkInValues: any;
+  companions: number = 0;
   videoStart = false;
   medias: MediaStreamConstraints = {
     audio: false,
@@ -21,8 +21,7 @@ export class VideoDialogComponent implements OnInit {
   };
 
   constructor(
-    public dialogRef: MatDialogRef<VideoDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData
+    public dialogRef: MatDialogRef<VideoDialogComponent>
   ) { }
 
   ngOnInit(): void {
@@ -35,7 +34,6 @@ export class VideoDialogComponent implements OnInit {
     } else {
       this.startVideo()
     }
-    // this.videoStart ? this.stopVideo() : this.startVideo()
   }
 
   startVideo() {
@@ -79,6 +77,14 @@ export class VideoDialogComponent implements OnInit {
           setTimeout(() => { this.checkImage(); }, 100)
       }
     }
+  }
+
+  onOK(): void{
+    let checkInValues ={
+      qrCode : this.qrCode,
+      Companions : this.companions
+    }
+    this.dialogRef.close(checkInValues);
   }
 
   onNoClick(): void {

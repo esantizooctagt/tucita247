@@ -32,6 +32,21 @@ export class AppointmentService {
                     .pipe(catchError(this.errorHandler));
   }
 
+  updateAppointmentCheckOut(formData){
+    return this.http.put(this.apiURL + '/appointment/checkout', formData)
+                    .pipe(catchError(this.errorHandler));
+  }
+
+  updateAppointmentWalkInsCheckOut(formData){
+    return this.http.put(this.apiURL + '/appointment/checkout/walkins', formData)
+                    .pipe(catchError(this.errorHandler));
+  }
+
+  updateManualCheckOut(businessId, locationId){
+    return this.http.put(this.apiURL + '/appointment/checkout/manual/' + businessId + '/' + locationId,'')
+                    .pipe(catchError(this.errorHandler));
+  }
+
   getHostLocations(businessId, userId): Observable<any[]> {
     return this.http.get<any[]>(this.apiURL + '/host/' + businessId + '/' + userId)
                     .pipe(catchError(this.errorHandler));

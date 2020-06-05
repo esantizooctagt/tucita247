@@ -23,10 +23,20 @@ export class LocationService {
   }
 
   updateLocations(dataForm, businessId){
-    return this.http.put(this.apiURL + '/locations/'+businessId, dataForm)
+    return this.http.put(this.apiURL + '/locations/' +businessId, dataForm)
                     .pipe(catchError(this.errorHandler));
   }
 
+  updateOpenLocation(locationId, businessId){
+    return this.http.put(this.apiURL + '/location/open/' + locationId + '/' + businessId, '')
+                    .pipe(catchError(this.errorHandler))
+  }
+
+  updateClosedLocation(locationId, businessId){
+    return this.http.put(this.apiURL + '/location/closed/' + locationId + '/' + businessId, '')
+                    .pipe(catchError(this.errorHandler))
+  }
+  
   getLocationsHost(businessId): Observable<Location[]> {
     return this.http.get<Location[]>(this.apiURL + '/locations/host/' + businessId)
                     .pipe(catchError(this.errorHandler));
@@ -37,8 +47,8 @@ export class LocationService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  getLocationCheckIn(businessId, locationId, dateAppo, lastItem, appoId): Observable<any[]>{
-    return this.http.get<any[]>(this.apiURL + '/location/checkin/' + businessId + '/' + locationId + '/' + dateAppo + '/' + lastItem + '/' + appoId)
+  getWalkInsCheckOut(businessId, locationId, dateAppo): Observable<any[]>{
+    return this.http.get<any[]>(this.apiURL + '/location/walkins/' + businessId + '/' + locationId + '/' + dateAppo)
                     .pipe(catchError(this.errorHandler));
   }
   errorHandler(error) {

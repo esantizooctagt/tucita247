@@ -30,6 +30,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -47,7 +50,9 @@ import { AppRoutingModule, routingComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SpinnerComponent } from '@shared/spinner/spinner.component';
-import { DialogComponent } from './shared/dialog/dialog.component';
+import { DialogComponent } from '@shared/dialog/dialog.component';
+import { VideoDialogComponent } from '@shared/video-dialog/video-dialog.component';
+import { DirDialogComponent } from '@shared/dir-dialog/dir-dialog.component';
 
 import { LayoutModule } from '@angular/cdk/layout';
 import { RoleComponent } from '@modules/roles/role/role.component';
@@ -68,13 +73,15 @@ import { PhonePipe } from '@shared/phone.pipe';
     routingComponents,
     SpinnerComponent,
     DialogComponent,
+    VideoDialogComponent,
     RoleComponent,
     RoleListComponent,
     UserListComponent,
     UserComponent,
     SearchComponent,
     PhoneMaskDirective,
-    PhonePipe
+    PhonePipe,
+    DirDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -112,6 +119,9 @@ import { PhonePipe } from '@shared/phone.pipe';
     FormsModule,
     Ng5SliderModule,
     MatBadgeModule,
+    MatProgressBarModule,
+    MatButtonToggleModule,
+    MatTabsModule,
     InfiniteScrollModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyCyKdLcjPnI3n5Eb2VmMJk-sgan83LEsCM'
@@ -127,7 +137,9 @@ import { PhonePipe } from '@shared/phone.pipe';
   ],
   entryComponents: [
     SpinnerComponent,
-    DialogComponent
+    DialogComponent,
+    DirDialogComponent,
+    VideoDialogComponent
   ],
   bootstrap: [AppComponent]
 })

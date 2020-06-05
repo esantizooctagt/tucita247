@@ -1625,7 +1625,6 @@ export class BusinessComponent implements OnInit {
           LocationDensity: item.value.LocationDensity,
           MaxNumberEmployeesLocation: item.value.MaxNumberEmployeesLocation,
           MaxConcurrentCustomerLocation: item.value.MaxConcurrentCustomerLocation,
-          Open: (item.value.Open == true ? 1 : 0),
           BucketInterval: item.value.BucketInterval,
           TotalCustPerBucketInter: item.value.TotalCustPerBucketInter,
           Status: (item.value.Status == true ? 1: 0),
