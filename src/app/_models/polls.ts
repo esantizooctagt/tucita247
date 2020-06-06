@@ -5,6 +5,7 @@ export class Poll {
         public PollId: string,
         public BusinessId: string,
         public Name: string,
+        public DatePoll: string,
         public Status?: number,
         public Questions?: Question[],
     ){}

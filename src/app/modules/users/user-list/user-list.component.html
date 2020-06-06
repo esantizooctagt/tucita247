@@ -11,10 +11,10 @@
                         <p class="mb-1" mat-line>{{ user.First_Name + ' ' + user.Last_Name}}</p>
                     </div>
                     <div class="pr-0 pl-0 col-md">
-                        <button mat-icon-button color="primary" (click)="onSelect(user)">
+                        <button mat-icon-button (click)="onSelect(user)">
                             <mat-icon class="action-btn" svgIcon="edit"></mat-icon>
                         </button>
-                        <button mat-icon-button color="warn" (click)="onDelete(user)">
+                        <button mat-icon-button (click)="onDelete(user)">
                             <mat-icon class="action-btn" svgIcon="delete"></mat-icon>
                         </button>
                     </div>

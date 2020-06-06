@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { Poll } from '@app/_models';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthService } from '@app/core/services';
 import { MonitorService } from '@app/shared/monitor.service';
@@ -8,9 +8,10 @@ import { SpinnerService } from '@app/shared/spinner.service';
 import { MatIconRegistry } from '@angular/material/icon';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, map } from 'rxjs/operators';
 import { throwError, Observable } from 'rxjs';
 import { PollsService } from '@app/services';
+import { MatTable } from '@angular/material/table';
 
 @Component({
   selector: 'app-poll-list',
@@ -19,7 +20,10 @@ import { PollsService } from '@app/services';
 })
 export class PollListComponent implements OnInit {
   @Input() filterValue: string;
+  @ViewChild(MatTable) pollTable :MatTable<any>;
+  
   deletePoll$: Observable<any>;
+  polls$: Observable<Poll[]>;
   public onError: string='';
 
 
@@ -31,7 +35,7 @@ export class PollListComponent implements OnInit {
 
   displayYesNo: boolean = false;
 
-  displayedColumns = ['Description', 'DatePoll', 'Happy', 'Neutral', 'Angry', 'Actions'];
+  displayedColumns = ['Name', 'DatePoll', 'Actions'];
   businessId: string = '';
   changeData: string;
   pollData: Poll;
@@ -41,19 +45,15 @@ export class PollListComponent implements OnInit {
   }
 
   pollForm = this.fb.group({
-    PollId: [''],
-    Name: ['', [Validators.required, Validators.maxLength(100), Validators.minLength(3)]],
-    DatePoll: ['', Validators.required],
-    Questions: this.fb.array([this.createQuestion()]),
-    Status: [false]
+    Polls: this.fb.array([this.addPolls()])
   });
 
-  createQuestion(): FormGroup {
-    const items = this.fb.group({
-        QuestionId: [''],
-        Description: ['']
-    })
-    return items;
+  addPolls(): FormGroup{
+    return this.fb.group({
+      PollId: [''],
+      Name: ['', [Validators.required, Validators.maxLength(100), Validators.minLength(3)]],
+      DatePoll: ['', Validators.required]
+    });
   }
 
   constructor(
@@ -90,7 +90,10 @@ export class PollListComponent implements OnInit {
   ngOnInit(): void {
     this.businessId = this.authService.businessId();
     this._page = 1;
-    this._currentPage.push({page: this._page, userId: ''});
+    this._currentPage.push({page: this._page, pollId: ''});
+    this.loadPolls(
+      this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].pollId
+    );
 
     this.data.handleMessage.subscribe(res => this.changeData = res);
     this.data.objectMessage.subscribe(res => this.pollData = res);
@@ -108,11 +111,50 @@ export class PollListComponent implements OnInit {
       this._currentSearchValue = changes.filterValue.currentValue;
       this._currentPage = [];
       this._page = 1;
-      this._currentPage.push({page: this._page, userId: ''});
-      // this.loadUsers(
-      //   this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].userId
-      // );
+      this._currentPage.push({page: this._page, pollId: ''});
+      this.loadPolls(
+        this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].pollId
+      );
     }
+  }
+
+  loadPolls(crPage, crItems, crSearch, crlastItem) {
+    this.onError = '';
+    var spinnerRef = this.spinnerService.start("Loading Polls...");
+    let data = this.businessId + "/" + crItems + (crSearch === '' ? '/_' : '/' + crSearch) + (crlastItem === '' ? '/_' : '/' +  crlastItem);
+
+    this.polls$ = this.pollService.getPolls(data).pipe(
+      map((res: any) => {
+        if (res != null) {
+          if (res.lastItem != ''){
+            this.length = (this.pageSize*this._page)+1;
+            this._currentPage.push({page: this._page+1, pollId: res.lastItem});
+          }
+        }
+        this.pollForm.setControl('Polls', this.setExistingPolls(res.polls));
+        this.spinnerService.stop(spinnerRef);
+        return res.polls;
+      }),
+      catchError(err => {
+        this.onError = err.Message;
+        this.spinnerService.stop(spinnerRef);
+        return this.onError;
+      })
+    );
+  }
+
+  setExistingPolls(polls: Poll[]): FormArray{
+    const formArray = new FormArray([]);
+    polls.forEach(res => {
+      formArray.push(this.fb.group({
+          PollId: res.PollId,
+          Name: res.Name,
+          DatePoll: res.DatePoll
+        })
+      );
+      this.pollTable.renderRows();
+    });
+    return formArray;
   }
 
   viewDetail(poll: any){
@@ -126,14 +168,12 @@ export class PollListComponent implements OnInit {
     } else {
       this._page = page+1;
     }
-    // this.loadUsers(
-    //   this.pageSize,
-    //   this._currentPage[this._page-1].userId
-    // );
-  }
-
-  addQuestion(){
-    this.createQuestion();
+    this.loadPolls(
+      this._currentPage[this._page-1].page,
+      this.pageSize,
+      this._currentSearchValue,
+      this._currentPage[this._page-1].userId
+    );
   }
 
   onSelect(poll: any){
@@ -147,8 +187,8 @@ export class PollListComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = false;
     dialogConfig.data = {
-      header: 'User', 
-      message: 'Are you sure to delete this User?', 
+      header: 'Poll', 
+      message: 'Are you sure to delete this Poll?', 
       success: false, 
       error: false, 
       warn: false,
@@ -161,25 +201,20 @@ export class PollListComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
       if(result != undefined){
-        var spinnerRef = this.spinnerService.start("Deleting User...");
-        if (result){
-          // let delUser: User;
-          // this.deleted = false; 
+        var spinnerRef = this.spinnerService.start("Deleting Poll...");
+        if (result){ 
           this.deletePoll$ = this.pollService.deletePoll(poll.PollId, this.businessId).pipe(
             tap(res => {
               this.spinnerService.stop(spinnerRef);
-              // this.displayYesNo = false;
-              // this.deletingUser = true;
-              // this.loadUsers(
-              //   this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].userId
-              // );
-              this.openDialog('User', 'User deleted successful', true, false, false);
-              window.scroll(0,0);
+              this.displayYesNo = false;
+              this.loadPolls(
+                this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].pollId
+              );
+              this.openDialog('Polls', 'Poll deleted successful', true, false, false);
             }),
             catchError(err => {
-              // this.deletingUser = false;
-              // this.spinnerService.stop(spinnerRef);
-              // this.displayYesNo = false;
+              this.spinnerService.stop(spinnerRef);
+              this.displayYesNo = false;
               this.openDialog('Error ! ', err.Message, false, true, false);
               return throwError (err || err.message);
             })

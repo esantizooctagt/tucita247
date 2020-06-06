@@ -1,7 +1,5 @@
-
 import { FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-
 /**
  * Custom ErrorStateMatcher which returns true (error exists) when the parent form group is invalid and the control has been touched
  */

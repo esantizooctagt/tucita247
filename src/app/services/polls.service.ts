@@ -17,8 +17,8 @@ export class PollsService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  getPolls(businessId): Observable<Poll[]> {
-      return this.http.get<Poll[]>(this.apiURL + '/polls/' + businessId)
+  getPolls(queryStr): Observable<Poll[]> {
+      return this.http.get<Poll[]>(this.apiURL + '/polls/' + queryStr)
                       .pipe(catchError(this.errorHandler));
   }
 
