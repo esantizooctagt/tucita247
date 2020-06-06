@@ -8,7 +8,7 @@ import { User } from '@app/_models';
 export class MonitorService {
   private monitorSource = new BehaviorSubject('');
   private handleSource = new BehaviorSubject('');
-  private objectSource = new BehaviorSubject<User>(new User());
+  private objectSource = new BehaviorSubject<any>(null);
 
   handleMessage = this.handleSource.asObservable();
   monitorMessage = this.monitorSource.asObservable();

@@ -1,1 +1,44 @@
-<p>poll works!</p>
+<div class="pl-0 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
+    <h3>POLLS</h3>
+</div>
+<!-- <ng-container *ngIf="(pollSave$ | async) && savingPoll"></ng-container>
+<ng-container *ngIf="pollAct$ | async"></ng-container>
+<ng-container *ngIf="poll$ | async"></ng-container> -->
+
+<mat-card class="col-sm col-md col-lg-7">
+    <form [formGroup]="pollForm" (ngSubmit)="onSubmit()" class="mt-4">
+        <div class="form-field pl-3 pr-3">
+            <mat-form-field hintLabel="Name">
+                <input matInput #Name placeholder="Name" maxlength="100" minlength="3" formControlName="Name"
+                    [errorStateMatcher]="confirmValidParentMatcher" required>
+                <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{getErrorMessage('Name')}}</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="form-field pl-3 pr-3">
+            <mat-form-field hintLabel="Init poll date">
+                <mat-label>Choose a init date</mat-label>
+                <input matInput formControlName="DatePoll" [min]="minDate" [matDatepicker]="picker" required>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="f.DatePoll.invalid && f.DatePoll.touched">{{getErrorMessage('DatePoll')}}</mat-error>
+            </mat-form-field>
+        </div>
+        <button mat-flat-button color="secondary" id="add" (click)="addQuestion()" class="ml-3 mr-3 mt-2">Add</button>
+        <div formArrayName="Questions">
+            <div *ngFor="let item of fQuestions.controls; let i=index">
+                <input matInput placeholder="Question description" maxlength="100" minlength="3" formControlName="Description"
+                    [errorStateMatcher]="confirmValidParentMatcher" required>
+              <!-- <button (click)="removePhone(i)">X</button> -->
+              <!-- <phone-detail [group]="ctrl"></phone-detail> -->
+            </div>
+          </div>
+        <div class="form-field-check ml-3 pr-3" *ngIf="pollForm.value.PollId !== '' && pollForm.value.PollId !== null">
+            <mat-checkbox formControlName="Status">Status</mat-checkbox>
+        </div>
+        <div>
+            <button mat-flat-button color="primary" id="save" [disabled]="!pollForm.valid" class="ml-3 mr-3 mt-2">Save</button>
+            <button mat-flat-button color="accent" id="cancel" type="button" (click)="onCancel()" class="mt-2">Cancel</button>
+        </div>
+        <!-- {{ userForm.value | json }} -->
+    </form>
+</mat-card>

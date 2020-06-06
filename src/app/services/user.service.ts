@@ -37,8 +37,8 @@ export class UserService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  getUsersLoc(businessId): Observable<User[]> {
-    return this.http.get<User[]>(this.apiURL + '/users/location/' + businessId)
+  getUsersLoc(pathParams): Observable<any[]> {
+    return this.http.get<any[]>(this.apiURL + '/users/location/' + pathParams)
                     .pipe(catchError(this.errorHandler));
   }
 
