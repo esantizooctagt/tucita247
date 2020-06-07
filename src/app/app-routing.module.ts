@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '@modules/authentication/guards/auth.guard';
 
 /**Main Components**/
-import { MainNavComponent, NotFoundComponent, LoginComponent, UsersComponent, ClientsComponent, DashboardComponent, ServicesComponent, ProfileComponent, BusinessComponent, CategoriesComponent, ReportsComponent, RolesComponent, HelpComponent, ResetComponent, VerificationComponent, ForgotpassComponent, HomeComponent, HostComponent, UserlocComponent, PollsComponent } from '@modules/index';
+import { MainNavComponent, NotFoundComponent, LoginComponent, UsersComponent, ClientsComponent, DashboardComponent, ServicesComponent, ProfileComponent, BusinessComponent, CategoriesComponent, ReportsComponent, RolesComponent, HelpComponent, ResetComponent, VerificationComponent, ForgotpassComponent, HomeComponent, HostComponent, UserlocComponent, PollsComponent, PollRespComponent } from '@modules/index';
 
 const routes: Routes = [
   { 
@@ -41,6 +41,10 @@ const routes: Routes = [
     component: VerificationComponent
   },
   { 
+    path: 'poll-response/:pollId/:custId', 
+    component: PollRespComponent 
+  },
+  { 
     path: '**', 
     component: NotFoundComponent //redirectTo: '' 
   }
@@ -68,6 +72,7 @@ export const routingComponents = [
   ServicesComponent,
   BusinessComponent,
   CategoriesComponent,
+  PollRespComponent,
   RolesComponent,
   HelpComponent,
   HomeComponent,

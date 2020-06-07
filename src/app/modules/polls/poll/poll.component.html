@@ -1,63 +1,88 @@
 <div class="pl-0 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
     <h3>POLLS</h3>
 </div>
-<!-- <ng-container *ngIf="poll$ | async"></ng-container> -->
+<ng-container *ngIf="poll$ | async"></ng-container>
 <ng-container *ngIf="savePoll$ | async"></ng-container>
-<mat-card class="col-sm col-md col-lg-7">
-    <form [formGroup]="pollForm" (ngSubmit)="onSubmit()" class="mt-4">
-        <div class="form-field pl-3 pr-3">
-            <mat-form-field hintLabel="Name">
-                <input matInput #Name placeholder="Name" maxlength="100" minlength="3" formControlName="Name"
-                    [errorStateMatcher]="confirmValidParentMatcher" required>
-                <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{getErrorMessage('Name')}}</mat-error>
-            </mat-form-field>
-        </div>
-        <div class="form-field pl-3 pr-3">
-            <mat-form-field hintLabel="Location">
-                <mat-select formControlName="LocationId">
-                    <mat-option *ngFor="let res of locs$ | async" [value]="res.LocationId">
-                        {{res.Name}}
-                    </mat-option>
-                </mat-select>
-                <mat-error *ngIf="f.LocationId.invalid && f.LocationId.touched">{{getErrorMessage('LocationId')}}</mat-error>
-            </mat-form-field>
-        </div>
-        <div class="form-field pl-3 pr-3">
-            <mat-form-field hintLabel="Init poll date">
-                <mat-label>Choose a init date</mat-label>
-                <input matInput formControlName="DatePoll" [min]="minDate" [matDatepicker]="picker" required>
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-                <mat-error *ngIf="f.DatePoll.invalid && f.DatePoll.touched">{{getErrorMessage('DatePoll')}}</mat-error>
-            </mat-form-field>
-        </div>
-        <div class="panel-array col-md p-0 pt-3">
-            <button mat-flat-button color="primary" id="add" (click)="onAddQuestion()" class="ml-3 mt-0 pl-3 mb-4">+
-                Add</button>
-            <ng-container formArrayName="Questions" *ngFor="let item of fQuestions.controls; let i=index">
-                <ng-container [formGroupName]="i">
-                    <div class="form-field row pl-3 pr-3">
-                        <mat-form-field hintLabel="Question description" class="col-md-11">
-                            <input matInput placeholder="Question description" maxlength="100" minlength="3"
-                                formControlName="Description" [errorStateMatcher]="confirmValidParentMatcher" required>
-                            <mat-error *ngIf="item.get('Description').invalid && item.get('Description').touched">{{getErrorMessage('QDescription', i)}}</mat-error>
-                        </mat-form-field>
-                        <button mat-icon-button class="col-md" (click)="onRemoveQuestion(i)" [disabled]="minDate<todayDate">
-                            <mat-icon [ngClass]="{'icon-active': minDate>=todayDate, 'icon-inactive': minDate<todayDate}" svgIcon="delete"></mat-icon>
-                        </button>
-                    </div>
-                </ng-container>
-            </ng-container>
-            <div class="form-field-check ml-3 pr-3" *ngIf="pollForm.value.PollId !== '' && pollForm.value.PollId !== null">
-                <mat-checkbox formControlName="Status">Status</mat-checkbox>
+<div class="row p-0 m-0">
+    <mat-card class="col-sm col-md col-lg-7">
+        <form [formGroup]="pollForm" (ngSubmit)="onSubmit()" class="mt-4">
+            <div class="form-field pl-3 pr-3">
+                <mat-form-field hintLabel="Name">
+                    <input matInput #Name placeholder="Name" maxlength="100" minlength="3" formControlName="Name"
+                        [errorStateMatcher]="confirmValidParentMatcher" required>
+                    <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{getErrorMessage('Name')}}</mat-error>
+                </mat-form-field>
             </div>
+            <div class="form-field pl-3 pr-3">
+                <mat-form-field hintLabel="Location">
+                    <mat-select formControlName="LocationId">
+                        <mat-option *ngFor="let res of locs$ | async" [value]="res.LocationId">
+                            {{res.Name}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="f.LocationId.invalid && f.LocationId.touched">{{getErrorMessage('LocationId')}}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="form-field pl-3 pr-3">
+                <mat-form-field hintLabel="Init poll date">
+                    <mat-label>Choose a init date</mat-label>
+                    <input matInput formControlName="DatePoll" [min]="minDate" [disabled]="f.DatePoll.value<minDate"
+                        [matDatepicker]="picker" required>
+                    <mat-datepicker-toggle matSuffix [for]="picker" [disabled]="f.DatePoll.value<minDate">
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-error *ngIf="f.DatePoll.invalid && f.DatePoll.touched">{{getErrorMessage('DatePoll')}}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="panel-array col-md p-0 pt-3">
+                <button mat-flat-button color="primary" id="add" (click)="onAddQuestion()" class="ml-3 mt-0 pl-3 mb-4">+
+                    Add</button>
+                <ng-container formArrayName="Questions" *ngFor="let item of fQuestions.controls; let i=index">
+                    <ng-container [formGroupName]="i">
+                        <div class="form-field row pl-3 pr-3" *ngIf="item.get('Status').value == 1">
+                            <mat-form-field hintLabel="Question description" class="col-md-10">
+                                <input matInput placeholder="Question description" maxlength="100" minlength="3"
+                                    formControlName="Description" [errorStateMatcher]="confirmValidParentMatcher"
+                                    required>
+                                <mat-error *ngIf="item.get('Description').invalid && item.get('Description').touched">
+                                    {{getErrorMessage('QDescription', i)}}</mat-error>
+                            </mat-form-field>
+                            <button mat-icon-button type="button"
+                                [ngClass]="{'icon-active': minDate<=f.DatePoll.value, 'icon-inactive': minDate>f.DatePoll.value}"
+                                (click)="onRemoveQuestion(i)" [disabled]="f.DatePoll.value<minDate">
+                                <mat-icon svgIcon="delete"></mat-icon>
+                            </button>
+                            <button mat-icon-button type="button" class="icon-active"
+                                (click)="displayRes =!displayRes; showScore(item);">
+                                <mat-icon class="icon-smile">insert_emoticon</mat-icon>
+                            </button>
+                        </div>
+                    </ng-container>
+                </ng-container>
+            </div>
+            <div>
+                <button mat-flat-button color="primary" id="save" [disabled]="!pollForm.valid"
+                    class="ml-3 mr-3 mt-2">Save</button>
+                <button mat-flat-button color="accent" id="cancel" type="button" (click)="onCancel()"
+                    class="mt-2">Cancel</button>
+            </div>
+            <!-- {{ pollForm.value | json }} -->
+        </form>
+    </mat-card>
+    <mat-card class="col-sm col-md-4 col-lg-4" *ngIf="displayRes">
+        <div class="">
+            Question: {{ fDescription }}
         </div>
         <div>
-            <button mat-flat-button color="primary" id="save" [disabled]="!pollForm.valid"
-                class="ml-3 mr-3 mt-2">Save</button>
-            <button mat-flat-button color="accent" id="cancel" type="button" (click)="onCancel()"
-                class="mt-2">Cancel</button>
+            Happy: {{ fHappy }}
         </div>
-        {{ pollForm.value | json }}
-    </form>
-</mat-card>
+        <div>
+            Neutral: {{ fNeutral }}
+        </div>
+        <div class="">
+            Angry: {{ fAngry }}
+        </div>
+    </mat-card>
+</div>

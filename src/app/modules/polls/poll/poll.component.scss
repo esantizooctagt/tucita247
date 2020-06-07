@@ -8,10 +8,17 @@ mat-option{
     font-family: Montserrat;
 }
 .icon-inactive{
-    stroke: #898989
+    color: #898989;
+    height: 40px;
+    width: 40px;
 }
 .icon-active{
-    stroke: #FF4F00;
+    color: #FF4F00;
+    height: 40px;
+    width: 40px;
+}
+.icon-smile{
+    color: #FF4F00;
 }
 mat-card{
     margin-left:0px;

@@ -18,3 +18,4 @@ export * from './home/home.component';
 export * from './host/host.component';
 export * from './userloc/userloc.component';
 export * from './polls/polls.component';
+export * from './poll-resp/poll-resp.component';

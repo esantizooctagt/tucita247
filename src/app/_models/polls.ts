@@ -3,9 +3,9 @@ import { Question } from './questions';
 export class Poll {
     constructor (
         public PollId: string,
-        public BusinessId: string,
         public Name: string,
         public DatePoll: string,
+        public LocationId?: string,
         public Status?: number,
         public Questions?: Question[],
     ){}

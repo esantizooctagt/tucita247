@@ -12,8 +12,8 @@ export class PollsService {
   readonly apiURL = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
-  getPoll(pollId): Observable<Poll[]>{
-    return this.http.get<Poll[]>(this.apiURL + '/poll/' + pollId)
+  getPoll(pollId): Observable<Poll>{
+    return this.http.get<Poll>(this.apiURL + '/poll/' + pollId)
                     .pipe(catchError(this.errorHandler));
   }
 
@@ -27,8 +27,13 @@ export class PollsService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  deletePoll(pollId, businessId) {
-    return this.http.delete(this.apiURL + '/poll/' + pollId + '/' + businessId)
+  postPollUser(formData) {
+    return this.http.post(this.apiURL + '/poll/user', formData)
+                    .pipe(catchError(this.errorHandler));
+  }
+
+  deletePoll(pollId, businessId, datePoll) {
+    return this.http.delete(this.apiURL + '/poll/' + pollId + '/' + businessId + '/' + datePoll)
                     .pipe(catchError(this.errorHandler));
   }
 

@@ -28,6 +28,9 @@ mat-paginator{
     background: #FFFFFF;
     box-shadow: -2px 2px 6px rgba(0, 0, 0, 0.16);
 }
+.icon-active{
+    color: #FF4F00;
+}
 :host ::ng-deep .mat-paginator-page-size{
     display: none;
 }

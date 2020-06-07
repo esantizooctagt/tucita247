@@ -26,7 +26,6 @@ export class PollListComponent implements OnInit {
   polls$: Observable<Poll[]>;
   public onError: string='';
 
-
   public length: number = 0;
   public pageSize: number = 10;
   public _page: number;
@@ -41,7 +40,7 @@ export class PollListComponent implements OnInit {
   pollData: Poll;
 
   get fPolls(){
-    return this.pollForm.controls;
+    return this.pollForm.get('Polls') as FormArray;
   }
 
   pollForm = this.fb.group({
@@ -157,10 +156,6 @@ export class PollListComponent implements OnInit {
     return formArray;
   }
 
-  viewDetail(poll: any){
-    console.log(poll);
-  }
-
   public goToPage(page: number, elements: number): void {
     if (this.pageSize != elements){
       this.pageSize = elements;
@@ -181,9 +176,9 @@ export class PollListComponent implements OnInit {
     this.data.handleData('Add');
   }
 
-  onDelete(poll: any){
+  onDelete(poll: any,i: number){
     this.displayYesNo = true;
-
+    console.log(i);
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = false;
     dialogConfig.data = {
@@ -203,7 +198,7 @@ export class PollListComponent implements OnInit {
       if(result != undefined){
         var spinnerRef = this.spinnerService.start("Deleting Poll...");
         if (result){ 
-          this.deletePoll$ = this.pollService.deletePoll(poll.PollId, this.businessId).pipe(
+          this.deletePoll$ = this.pollService.deletePoll(poll.value.PollId, this.businessId, poll.value.DatePoll).pipe(
             tap(res => {
               this.spinnerService.stop(spinnerRef);
               this.displayYesNo = false;

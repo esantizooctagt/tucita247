@@ -2,7 +2,7 @@
   <mat-form-field class="input-search" appearance="outline">
     <mat-label>Search</mat-label>
     <input matInput [placeholder]="placeholder" [(ngModel)]="searchValue"
-      (keyup)="updateSearchUp($event, $event.target.value)">
+      (keyup)="updateSearchUp($event, $event.target.value)" [disabled]="changeData=='Add'">
     <button mat-button *ngIf="searchValue" matSuffix mat-icon-button (click)="searchValue='';cleanValue();">
       <mat-icon>close</mat-icon>
     </button>
