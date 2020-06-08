@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@ang
 import { AuthService } from '@core/services';
 import { Country, Location, Business, Category } from '@app/_models';
 import { Observable, Subscription, throwError } from 'rxjs';
-import { startWith, map, shareReplay, catchError, tap, switchMap } from 'rxjs/operators';
+import { startWith, map, shareReplay, catchError, tap, switchMap, mergeMap } from 'rxjs/operators';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { BusinessService, LocationService, CategoryService } from '@app/services/index';
@@ -35,7 +35,7 @@ export class BusinessComponent implements OnInit {
   businessSave$: Observable<object>;
   locationSave$: Observable<object>;
   imgBusiness$: Observable<any>;
-  business$: Observable<Business>;
+  business$: Observable<any>;
   location$: Observable<any>;
   savingBusiness: boolean = false;
   savingLocation: boolean = false;
@@ -272,6 +272,9 @@ export class BusinessComponent implements OnInit {
     this.latLoc[this.noItemsLoc] = 18.3796538;
     this.lngLoc[this.noItemsLoc] = -66.1989426;
 
+    this.sectors[this.noItemsLoc] = [];
+    this.sectors[this.noItemsLoc].push({SectorId: "0", Name: "N/A"});
+    
     this.newIntervalLoc[this.noItemsLoc].push("0","0","0","0","0","0","0");
     this.noItemsLoc = this.noItemsLoc+1;
     return items;
@@ -304,6 +307,10 @@ export class BusinessComponent implements OnInit {
     this.newInterval[5] = "0";
     this.newInterval[6] = "0";
 
+    this.sectors[0] = [];
+    this.sectors[0].push({SectorId: "0", Name: "N/A"});
+    this.cities.push({CityId: "0", Name: "N/A"});
+
     this.onValueChanges();
 
     this.categories$ = this.categoryService.getCategories().pipe(
@@ -328,9 +335,6 @@ export class BusinessComponent implements OnInit {
       })
     );
 
-    this.cities.push({CityId: "0", Name: "N/A"});
-    this.sectors.push({SectorId: "0", Name: "N/A"});
-
     this.filteredCountries$ = this.businessForm.get('Country').valueChanges
       .pipe(
         startWith(''),
@@ -338,6 +342,7 @@ export class BusinessComponent implements OnInit {
         map(country => country ? this._filterCountry(country) : this.countries.slice())
       );
     
+    let item = 0;
     this.businessForm.reset({BusinessId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', OperationHours: '', Tags: '', LongDescription: '', ShortDescription: '', Imagen: '', ParentBusiness: 0, Status: 1, Mon:[8,17], Mon02:[18,24], MonEnabled: 0, Tue:[8,17], Tue02:[18,24], TueEnabled: 0, Wed:[8,17], Wed02:[18,24], WedEnabled: 0, Thu:[8,17], Thu02:[18,24], ThuEnabled: 0, Fri:[8,17], Fri02:[18,24], FriEnabled: 0, Sat:[8,17], Sat02:[18,24], SatEnabled: 0, Sun:[8,17], Sun02:[18,24], SunEnabled: 0});
     this.business$ = this.businessService.getBusiness(this.businessId).pipe(
       tap((res: any) => {
@@ -668,6 +673,16 @@ export class BusinessComponent implements OnInit {
           }
         })
       )),
+      switchMap(v => this.locationService.getLocations(this.businessId, this.countryCode).pipe(
+        tap((res: any) => {
+          if (res != null){
+            this.locationForm.setControl('locations', this.setLocations(res.Locations));
+            this.loadScheduleDays(this.locationForm.value.locations);
+          }
+          this.spinnerService.stop(spinnerRef);
+          return v;
+        })
+      )),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
         this.businessForm.reset({BusinessId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', OperationHours: '', LongDescription: '', ShortDescription: '', Imagen:'', Tags: '', ParentBusiness: 0, Status: 1, Mon:[8,17], Mon02:[18,24], MonEnabled: 0, Tue:[8,17], Tue02:[18,24], TueEnabled: 0, Wed:[8,17], Wed02:[18,24], WedEnabled: 0, Thu:[8,17], Thu02:[18,24], ThuEnabled: 0, Fri:[8,17], Fri02:[18,24], FriEnabled: 0, Sat:[8,17], Sat02:[18,24], SatEnabled: 0, Sun:[8,17], Sun02:[18,24], SunEnabled: 0});
@@ -675,355 +690,388 @@ export class BusinessComponent implements OnInit {
         return throwError(err || err.message);
       })
     );
-
-    //LOAD LOCATIONS
-    this.location$ =  this.locationService.getLocations(this.businessId).pipe(
-      tap((res: any) => {
-        if (res != null){
-          let index = 0;
-          res.Locations.forEach(s => {
-            const item = this.locationForm.controls.locations as FormArray;
-            if (index > 0){
-              (<FormArray>this.locationForm.get('locations')).push(this.createLocation());
-            }
-            var opeHour = JSON.parse(s.OperationHours);
-            var locMap = JSON.parse(s.Geolocation);
-            if ("LAT" in locMap) {
-              this.latLoc[index] = locMap['LAT'];
-            } else {
-              this.latLoc[index] = 0;
-            }
-            if ("LNG" in locMap){
-              this.lngLoc[index] = locMap['LNG'];
-            } else {
-              this.lngLoc[index] = 0;
-            }
-            item.at(index).patchValue({
-              BusinessId: s.BusinessId,
-              LocationId: s.LocationId,
-              Name: s.Name,
-              Address: s.Address,
-              Geolocation: s.Geolocation,
-              ParentLocation: s.ParentLocation,
-              TotalPiesTransArea: s.TotalPiesTransArea,
-              LocationDensity: s.LocationDensity,
-              City: s.City,
-              Sector: s.Sector,
-              MaxNumberEmployeesLocation: s.MaxNumberEmployeesLocation,
-              MaxConcurrentCustomerLocation: s.MaxConcurrentCustomerLocation,
-              BucketInterval: s.BucketInterval,
-              TotalCustPerBucketInter: s.TotalCustPerBucketInter,
-              OperationHours: s.OperationHours,
-              Doors: '',
-              Status: (s.Status == "1" ? true : false),
-              Mon: ("MON" in opeHour ? [+opeHour.MON[0].I, +opeHour.MON[0].F] : [8, 12]),
-              Mon02: ("MON" in opeHour ? (opeHour.MON.length > 1 ? [+opeHour.MON[1].I, +opeHour.MON[1].F] : [0,0]) : [0, 0]),
-              MonEnabled: ("MON" in opeHour ? true : false),
-              Tue: ("TUE" in opeHour ? [+opeHour.TUE[0].I, +opeHour.TUE[0].F] : [8, 12]),
-              Tue02: ("TUE" in opeHour ? (opeHour.TUE.length > 1 ? [+opeHour.TUE[1].I, +opeHour.TUE[1].F] : [0,0]) : [0, 0]),
-              TueEnabled: ("TUE" in opeHour ? true : false),
-              Wed: ("WED" in opeHour ? [+opeHour.WED[0].I, +opeHour.WED[0].F] : [8, 12]),
-              Wed02: ("WED" in opeHour ? (opeHour.WED.length > 1 ? [+opeHour.WED[1].I, +opeHour.WED[1].F] : [0,0]) : [0, 0]),
-              WedEnabled: ("WED" in opeHour ? true : false),
-              Thu: ("THU" in opeHour ? [+opeHour.THU[0].I, +opeHour.THU[0].F] : [8, 12]),
-              Thu02: ("THU" in opeHour ? (opeHour.THU.length > 1 ? [+opeHour.THU[1].I, +opeHour.THU[1].F] : [0,0]) : [0, 0]),
-              ThuEnabled: ("THU" in opeHour ? true : false),
-              Fri: ("FRI" in opeHour ? [+opeHour.FRI[0].I, +opeHour.FRI[0].F] : [8, 12]),
-              Fri02: ("FRI" in opeHour ? (opeHour.FRI.length > 1 ? [+opeHour.FRI[1].I, +opeHour.FRI[1].F] : [0,0]) : [0, 0]),
-              FriEnabled: ("FRI" in opeHour ? true : false),
-              Sat: ("SAT" in opeHour ? [+opeHour.SAT[0].I, +opeHour.SAT[0].F] : [8, 12]),
-              Sat02: ("SAT" in opeHour ? (opeHour.SAT.length > 1 ? [+opeHour.SAT[1].I, +opeHour.SAT[1].F] : [0,0]) : [0, 0]),
-              SatEnabled: ("SAT" in opeHour ? true : false),
-              Sun: ("SUN" in opeHour ? [+opeHour.SUN[0].I, +opeHour.SUN[0].F] : [8, 12]),
-              Sun02: ("SUN" in opeHour ? (opeHour.SUN.length > 1 ? [+opeHour.SUN[1].I, +opeHour.TUE[1].F] : [0,0]) : [0, 0]),
-              SunEnabled: ("SUN" in opeHour ? true : false)
-            });
-            ("MON" in opeHour ? (opeHour.MON.length > 1 ? this.newIntervalLoc[index][0] = "1" : this.newIntervalLoc[index][0] = "0") : this.newIntervalLoc[index][0] = "0");
-            ("TUE" in opeHour ? (opeHour.TUE.length > 1 ? this.newIntervalLoc[index][1] = "1" : this.newIntervalLoc[index][1] = "0") : this.newIntervalLoc[index][1] = "0");
-            ("WED" in opeHour ? (opeHour.WED.length > 1 ? this.newIntervalLoc[index][2] = "1" : this.newIntervalLoc[index][2] = "0") : this.newIntervalLoc[index][2] = "0");
-            ("THU" in opeHour ? (opeHour.THU.length > 1 ? this.newIntervalLoc[index][3] = "1" : this.newIntervalLoc[index][3] = "0") : this.newIntervalLoc[index][3] = "0");
-            ("FRI" in opeHour ? (opeHour.FRI.length > 1 ? this.newIntervalLoc[index][4] = "1" : this.newIntervalLoc[index][4] = "0") : this.newIntervalLoc[index][4] = "0");
-            ("SAT" in opeHour ? (opeHour.SAT.length > 1 ? this.newIntervalLoc[index][5] = "1" : this.newIntervalLoc[index][5] = "0") : this.newIntervalLoc[index][5] = "0");
-            ("SUN" in opeHour ? (opeHour.SUN.length > 1 ? this.newIntervalLoc[index][6] = "1" : this.newIntervalLoc[index][6] = "0") : this.newIntervalLoc[index][6] = "0");
-
-            if (item.value[index].Mon02[0] > 0){
-              this.newIntervalLoc[index][0] = "1";
-              let iniGenOption = {
-                floor: 0,
-                ceil: item.value[index].Mon02[0]-1,
-                translate: (value: number, label: LabelType): string => {
-                  switch (label) {
-                    case LabelType.Low:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    case LabelType.High:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    default: 
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
-                  }
-                }
-              };
-              let locGenOption = {
-                floor: item.value[index].Mon02[0],
-                ceil: 24,
-                translate: (value: number, label: LabelType): string => {
-                  switch (label) {
-                    case LabelType.Low:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    case LabelType.High:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    default: 
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
-                  }
-                }
-              };
-              this.optionsMonLoc[index] = Object.assign({}, iniGenOption, {disabled: ("MON" in opeHour ? 0 : 1)});
-              this.optionsMonLoc02[index] = Object.assign({}, locGenOption, {disabled: ("MON" in opeHour ? 0 : 1)});
-            } else {
-              this.optionsMonLoc[index] = Object.assign({}, this.genOption, {disabled: ("MON" in opeHour ? 0 : 1)});
-            }
-            if (item.value[index].Tue02[0] > 0){
-              this.newIntervalLoc[index][1] = "1";
-              let iniGenOption = {
-                floor: 0,
-                ceil: item.value[index].Tue02[0]-1,
-                translate: (value: number, label: LabelType): string => {
-                  switch (label) {
-                    case LabelType.Low:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    case LabelType.High:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    default: 
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
-                  }
-                }
-              };
-              let locGenOption = {
-                floor: item.value[index].Tue02[0],
-                ceil: 24,
-                translate: (value: number, label: LabelType): string => {
-                  switch (label) {
-                    case LabelType.Low:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    case LabelType.High:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    default: 
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
-                  }
-                }
-              };
-              this.optionsTueLoc[index] = Object.assign({}, iniGenOption, {disabled: ("TUE" in opeHour ? 0 : 1)});
-              this.optionsTueLoc02[index] = Object.assign({}, locGenOption, {disabled: ("TUE" in opeHour ? 0 : 1)});
-            } else {
-              this.optionsTueLoc[index] = Object.assign({}, this.genOption, {disabled: ("TUE" in opeHour ? 0 : 1)});
-            }
-            if (item.value[index].Wed02[0] > 0){
-              this.newIntervalLoc[index][2] = "1";
-              let iniGenOption = {
-                floor: 0,
-                ceil: item.value[index].Wed02[0]-1,
-                translate: (value: number, label: LabelType): string => {
-                  switch (label) {
-                    case LabelType.Low:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    case LabelType.High:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    default: 
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
-                  }
-                }
-              };
-              let locGenOption = {
-                floor: item.value[index].Wed02[0],
-                ceil: 24,
-                translate: (value: number, label: LabelType): string => {
-                  switch (label) {
-                    case LabelType.Low:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    case LabelType.High:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    default: 
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
-                  }
-                }
-              };
-              this.optionsWedLoc[index] = Object.assign({}, iniGenOption, {disabled: ("WED" in opeHour ? 0 : 1)});
-              this.optionsWedLoc02[index] = Object.assign({}, locGenOption, {disabled: ("WED" in opeHour ? 0 : 1)});
-            } else {
-              this.optionsWedLoc[index] = Object.assign({}, this.genOption, {disabled: ("WED" in opeHour ? 0 : 1)});
-            }
-            if (item.value[index].Thu02[0] > 0){
-              this.newIntervalLoc[index][3] = "1";
-              let iniGenOption = {
-                floor: 0,
-                ceil: item.value[index].Thu02[0]-1,
-                translate: (value: number, label: LabelType): string => {
-                  switch (label) {
-                    case LabelType.Low:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    case LabelType.High:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    default: 
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
-                  }
-                }
-              };
-              let locGenOption = {
-                floor: item.value[index].Thu02[0],
-                ceil: 24,
-                translate: (value: number, label: LabelType): string => {
-                  switch (label) {
-                    case LabelType.Low:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    case LabelType.High:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    default: 
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
-                  }
-                }
-              };
-              this.optionsThuLoc[index] = Object.assign({}, iniGenOption, {disabled: ("THU" in opeHour ? 0 : 1)});
-              this.optionsThuLoc02[index] = Object.assign({}, locGenOption, {disabled: ("THU" in opeHour ? 0 : 1)});
-            } else {
-              this.optionsThuLoc[index] = Object.assign({}, this.genOption, {disabled: ("THU" in opeHour ? 0 : 1)});
-            }
-            if (item.value[index].Fri02[0] > 0){
-              this.newIntervalLoc[index][4] = "1";
-              let iniGenOption = {
-                floor: 0,
-                ceil: item.value[index].Fri02[0]-1,
-                translate: (value: number, label: LabelType): string => {
-                  switch (label) {
-                    case LabelType.Low:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    case LabelType.High:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    default: 
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
-                  }
-                }
-              };
-              let locGenOption = {
-                floor: item.value[index].Fri02[0],
-                ceil: 24,
-                translate: (value: number, label: LabelType): string => {
-                  switch (label) {
-                    case LabelType.Low:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    case LabelType.High:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    default: 
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
-                  }
-                }
-              };
-              this.optionsFriLoc[index] = Object.assign({}, iniGenOption, {disabled: ("FRI" in opeHour ? 0 : 1)});
-              this.optionsFriLoc02[index] = Object.assign({}, locGenOption, {disabled: ("FRI" in opeHour ? 0 : 1)});
-            } else {
-              this.optionsFriLoc[index] = Object.assign({}, this.genOption, {disabled: ("FRI" in opeHour ? 0 : 1)});
-            }
-            if (item.value[index].Sat02[0] > 0){
-              this.newIntervalLoc[index][5] = "1";
-              let iniGenOption = {
-                floor: 0,
-                ceil: item.value[index].Sat02[0]-1,
-                translate: (value: number, label: LabelType): string => {
-                  switch (label) {
-                    case LabelType.Low:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    case LabelType.High:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    default: 
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
-                  }
-                }
-              };
-              let locGenOption = {
-                floor: item.value[index].Sat02[0],
-                ceil: 24,
-                translate: (value: number, label: LabelType): string => {
-                  switch (label) {
-                    case LabelType.Low:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    case LabelType.High:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    default: 
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
-                  }
-                }
-              };
-              this.optionsSatLoc[index] = Object.assign({}, iniGenOption, {disabled: ("SAT" in opeHour ? 0 : 1)});
-              this.optionsSatLoc02[index] = Object.assign({}, locGenOption, {disabled: ("SAT" in opeHour ? 0 : 1)});
-            } else {
-              this.optionsSatLoc[index] = Object.assign({}, this.genOption, {disabled: ("SAT" in opeHour ? 0 : 1)});
-            }
-            if (item.value[index].Sun02[0] > 0){
-              this.newIntervalLoc[index][6] = "1";
-              let iniGenOption = {
-                floor: 0,
-                ceil: item.value[index].Sun02[0]-1,
-                translate: (value: number, label: LabelType): string => {
-                  switch (label) {
-                    case LabelType.Low:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    case LabelType.High:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    default: 
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
-                  }
-                }
-              };
-              let locGenOption = {
-                floor: item.value[index].Sun02[0],
-                ceil: 24,
-                translate: (value: number, label: LabelType): string => {
-                  switch (label) {
-                    case LabelType.Low:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    case LabelType.High:
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
-                    default: 
-                      return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
-                  }
-                }
-              };
-              this.optionsSunLoc[index] = Object.assign({}, iniGenOption, {disabled: ("SUN" in opeHour ? 0 : 1)});
-              this.optionsSunLoc02[index] = Object.assign({}, locGenOption, {disabled: ("SUN" in opeHour ? 0 : 1)});
-            } else {
-              this.optionsSunLoc[index] = Object.assign({}, this.genOption, {disabled: ("SUN" in opeHour ? 0 : 1)});
-            }
-            
-            this.doors[index] = s.Doors;
-            index = index+1;
-          });
-          return res;
-        }
-        this.spinnerService.stop(spinnerRef);
-      }),
-      catchError(err => {
-        this.spinnerService.stop(spinnerRef);
-        this.openDialog('Error !', err.Message, false, true, false);
-        return throwError(err || err.message);
-      })
-    );
   }
 
-  // loadSectorsByLine(index: number, cityId: string) {
-  //   var loc$: Observable<any>;
-  //   loc$: this.locationService.getSectors(this.countryCode, cityId).pipe(
-  //     map(res => {
-  //       if (res != null){
-  //         this.sectors[index] = [];
-  //         this.sectors[index].push({SectorId: "0", Name: "N/A"});
-  //         res.forEach(element => {
-  //           this.sectors[index].push(element);
-  //         });
-  //         console.log(this.sectors);
-  //         return res;
-  //       }
-  //     })
-  //   );
-  //   return loc$;
-  // }
+  setLocations(res: Observable<any[]>){
+    const formArray = new FormArray([]);
+    let index: number =0;
+    res.forEach((s: any) => {
+      var opeHour = JSON.parse(s.OperationHours);
+      var locMap = JSON.parse(s.Geolocation);
+      if ("LAT" in locMap) {
+        this.latLoc[index] = locMap['LAT'];
+      } else {
+        this.latLoc[index] = 0;
+      }
+      if ("LNG" in locMap){
+        this.lngLoc[index] = locMap['LNG'];
+      } else {
+        this.lngLoc[index] = 0;
+      }
+      if (index > 0){
+        let gens
+        gens = Object.assign({}, this.genOption, {disabled: 1});
+        this.doors[this.noItemsLoc] = "";
+        this.optionsMonLoc.push(gens);
+        this.optionsTueLoc.push(gens);
+        this.optionsWedLoc.push(gens);
+        this.optionsThuLoc.push(gens);
+        this.optionsFriLoc.push(gens);
+        this.optionsSatLoc.push(gens);
+        this.optionsSunLoc.push(gens);
+
+        this.optionsMonLoc02.push(gens);
+        this.optionsTueLoc02.push(gens);
+        this.optionsWedLoc02.push(gens);
+        this.optionsThuLoc02.push(gens);
+        this.optionsFriLoc02.push(gens);
+        this.optionsSatLoc02.push(gens);
+        this.optionsSunLoc02.push(gens);
+
+        this.newIntervalLoc.push([]);
+        this.latLoc[this.noItemsLoc] = 18.3796538;
+        this.lngLoc[this.noItemsLoc] = -66.1989426;
+
+        this.sectors[this.noItemsLoc] = [];
+
+        this.newIntervalLoc[this.noItemsLoc].push("0","0","0","0","0","0","0");
+        this.noItemsLoc = this.noItemsLoc+1;
+      }
+      
+      this.sectors[index] = s.Sectors;
+      this.sectors[index].push({SectorId: "0", Name: "N/A"});
+      console.log(this.sectors[index]);
+
+      formArray.push(
+        this.fb.group({
+          BusinessId: s.BusinessId,
+          LocationId: s.LocationId,
+          Name: s.Name,
+          Address: s.Address,
+          Geolocation: s.Geolocation,
+          ParentLocation: s.ParentLocation,
+          TotalPiesTransArea: s.TotalPiesTransArea,
+          LocationDensity: s.LocationDensity,
+          City: s.City,
+          Sector: s.Sector,
+          MaxNumberEmployeesLocation: s.MaxNumberEmployeesLocation,
+          MaxConcurrentCustomerLocation: s.MaxConcurrentCustomerLocation,
+          BucketInterval: s.BucketInterval,
+          TotalCustPerBucketInter: s.TotalCustPerBucketInter,
+          OperationHours: s.OperationHours,
+          Doors: '',
+          Status: (s.Status == "1" ? true : false),
+          Mon: new FormControl("MON" in opeHour ? [+opeHour.MON[0].I, +opeHour.MON[0].F] : [8, 12]),
+          Mon02: new FormControl("MON" in opeHour ? (opeHour.MON.length > 1 ? [+opeHour.MON[1].I, +opeHour.MON[1].F] : [0,0]) : [0, 0]),
+          MonEnabled: ("MON" in opeHour ? true : false),
+          Tue: new FormControl("TUE" in opeHour ? [+opeHour.TUE[0].I, +opeHour.TUE[0].F] : [8, 12]),
+          Tue02: new FormControl("TUE" in opeHour ? (opeHour.TUE.length > 1 ? [+opeHour.TUE[1].I, +opeHour.TUE[1].F] : [0,0]) : [0, 0]),
+          TueEnabled: ("TUE" in opeHour ? true : false),
+          Wed: new FormControl("WED" in opeHour ? [+opeHour.WED[0].I, +opeHour.WED[0].F] : [8, 12]),
+          Wed02: new FormControl("WED" in opeHour ? (opeHour.WED.length > 1 ? [+opeHour.WED[1].I, +opeHour.WED[1].F] : [0,0]) : [0, 0]),
+          WedEnabled: ("WED" in opeHour ? true : false),
+          Thu: new FormControl("THU" in opeHour ? [+opeHour.THU[0].I, +opeHour.THU[0].F] : [8, 12]),
+          Thu02: new FormControl("THU" in opeHour ? (opeHour.THU.length > 1 ? [+opeHour.THU[1].I, +opeHour.THU[1].F] : [0,0]) : [0, 0]),
+          ThuEnabled: ("THU" in opeHour ? true : false),
+          Fri: new FormControl("FRI" in opeHour ? [+opeHour.FRI[0].I, +opeHour.FRI[0].F] : [8, 12]),
+          Fri02: new FormControl("FRI" in opeHour ? (opeHour.FRI.length > 1 ? [+opeHour.FRI[1].I, +opeHour.FRI[1].F] : [0,0]) : [0, 0]),
+          FriEnabled: ("FRI" in opeHour ? true : false),
+          Sat: new FormControl("SAT" in opeHour ? [+opeHour.SAT[0].I, +opeHour.SAT[0].F] : [8, 12]),
+          Sat02: new FormControl("SAT" in opeHour ? (opeHour.SAT.length > 1 ? [+opeHour.SAT[1].I, +opeHour.SAT[1].F] : [0,0]) : [0, 0]),
+          SatEnabled: ("SAT" in opeHour ? true : false),
+          Sun: new FormControl("SUN" in opeHour ? [+opeHour.SUN[0].I, +opeHour.SUN[0].F] : [8, 12]),
+          Sun02: new FormControl("SUN" in opeHour ? (opeHour.SUN.length > 1 ? [+opeHour.SUN[1].I, +opeHour.TUE[1].F] : [0,0]) : [0, 0]),
+          SunEnabled: ("SUN" in opeHour ? true : false)
+        })
+      );
+      this.doors[index] = s.Doors;
+      index = index+1;
+    });
+    return formArray;
+  }
+
+  loadScheduleDays(res: any){
+    let index = 0;
+    res.forEach(s => {
+      var opeHour = JSON.parse(s.OperationHours);
+      //POSTERIOR A SETEAR DATOS 
+      ("MON" in opeHour ? (opeHour.MON.length > 1 ? this.newIntervalLoc[index][0] = "1" : this.newIntervalLoc[index][0] = "0") : this.newIntervalLoc[index][0] = "0");
+      ("TUE" in opeHour ? (opeHour.TUE.length > 1 ? this.newIntervalLoc[index][1] = "1" : this.newIntervalLoc[index][1] = "0") : this.newIntervalLoc[index][1] = "0");
+      ("WED" in opeHour ? (opeHour.WED.length > 1 ? this.newIntervalLoc[index][2] = "1" : this.newIntervalLoc[index][2] = "0") : this.newIntervalLoc[index][2] = "0");
+      ("THU" in opeHour ? (opeHour.THU.length > 1 ? this.newIntervalLoc[index][3] = "1" : this.newIntervalLoc[index][3] = "0") : this.newIntervalLoc[index][3] = "0");
+      ("FRI" in opeHour ? (opeHour.FRI.length > 1 ? this.newIntervalLoc[index][4] = "1" : this.newIntervalLoc[index][4] = "0") : this.newIntervalLoc[index][4] = "0");
+      ("SAT" in opeHour ? (opeHour.SAT.length > 1 ? this.newIntervalLoc[index][5] = "1" : this.newIntervalLoc[index][5] = "0") : this.newIntervalLoc[index][5] = "0");
+      ("SUN" in opeHour ? (opeHour.SUN.length > 1 ? this.newIntervalLoc[index][6] = "1" : this.newIntervalLoc[index][6] = "0") : this.newIntervalLoc[index][6] = "0");
+
+      if (s.Mon02[0] > 0){
+        this.newIntervalLoc[index][0] = "1";
+        let iniGenOption = {
+          floor: 0,
+          ceil: s.Mon02[0]-1,
+          translate: (value: number, label: LabelType): string => {
+            switch (label) {
+              case LabelType.Low:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              case LabelType.High:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              default: 
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+            }
+          }
+        };
+        let locGenOption = {
+          floor: s.Mon02[0],
+          ceil: 24,
+          translate: (value: number, label: LabelType): string => {
+            switch (label) {
+              case LabelType.Low:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              case LabelType.High:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              default: 
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+            }
+          }
+        };
+        this.optionsMonLoc[index] = Object.assign({}, iniGenOption, {disabled: ("MON" in opeHour ? 0 : 1)});
+        this.optionsMonLoc02[index] = Object.assign({}, locGenOption, {disabled: ("MON" in opeHour ? 0 : 1)});
+      } else {
+        this.optionsMonLoc[index] = Object.assign({}, this.genOption, {disabled: ("MON" in opeHour ? 0 : 1)});
+      }
+      if (s.Tue02[0] > 0){
+        this.newIntervalLoc[index][1] = "1";
+        let iniGenOption = {
+          floor: 0,
+          ceil: s.Tue02[0]-1,
+          translate: (value: number, label: LabelType): string => {
+            switch (label) {
+              case LabelType.Low:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              case LabelType.High:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              default: 
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+            }
+          }
+        };
+        let locGenOption = {
+          floor: s.Tue02[0],
+          ceil: 24,
+          translate: (value: number, label: LabelType): string => {
+            switch (label) {
+              case LabelType.Low:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              case LabelType.High:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              default: 
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+            }
+          }
+        };
+        this.optionsTueLoc[index] = Object.assign({}, iniGenOption, {disabled: ("TUE" in opeHour ? 0 : 1)});
+        this.optionsTueLoc02[index] = Object.assign({}, locGenOption, {disabled: ("TUE" in opeHour ? 0 : 1)});
+      } else {
+        this.optionsTueLoc[index] = Object.assign({}, this.genOption, {disabled: ("TUE" in opeHour ? 0 : 1)});
+      }
+      if (s.Wed02[0] > 0){
+        this.newIntervalLoc[index][2] = "1";
+        let iniGenOption = {
+          floor: 0,
+          ceil: s.Wed02[0]-1,
+          translate: (value: number, label: LabelType): string => {
+            switch (label) {
+              case LabelType.Low:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              case LabelType.High:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              default: 
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+            }
+          }
+        };
+        let locGenOption = {
+          floor: s.Wed02[0],
+          ceil: 24,
+          translate: (value: number, label: LabelType): string => {
+            switch (label) {
+              case LabelType.Low:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              case LabelType.High:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              default: 
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+            }
+          }
+        };
+        this.optionsWedLoc[index] = Object.assign({}, iniGenOption, {disabled: ("WED" in opeHour ? 0 : 1)});
+        this.optionsWedLoc02[index] = Object.assign({}, locGenOption, {disabled: ("WED" in opeHour ? 0 : 1)});
+      } else {
+        this.optionsWedLoc[index] = Object.assign({}, this.genOption, {disabled: ("WED" in opeHour ? 0 : 1)});
+      }
+      if (s.Thu02[0] > 0){
+        this.newIntervalLoc[index][3] = "1";
+        let iniGenOption = {
+          floor: 0,
+          ceil: s.Thu02[0]-1,
+          translate: (value: number, label: LabelType): string => {
+            switch (label) {
+              case LabelType.Low:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              case LabelType.High:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              default: 
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+            }
+          }
+        };
+        let locGenOption = {
+          floor: s.Thu02[0],
+          ceil: 24,
+          translate: (value: number, label: LabelType): string => {
+            switch (label) {
+              case LabelType.Low:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              case LabelType.High:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              default: 
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+            }
+          }
+        };
+        this.optionsThuLoc[index] = Object.assign({}, iniGenOption, {disabled: ("THU" in opeHour ? 0 : 1)});
+        this.optionsThuLoc02[index] = Object.assign({}, locGenOption, {disabled: ("THU" in opeHour ? 0 : 1)});
+      } else {
+        this.optionsThuLoc[index] = Object.assign({}, this.genOption, {disabled: ("THU" in opeHour ? 0 : 1)});
+      }
+      if (s.Fri02[0] > 0){
+        this.newIntervalLoc[index][4] = "1";
+        let iniGenOption = {
+          floor: 0,
+          ceil: s.Fri02[0]-1,
+          translate: (value: number, label: LabelType): string => {
+            switch (label) {
+              case LabelType.Low:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              case LabelType.High:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              default: 
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+            }
+          }
+        };
+        let locGenOption = {
+          floor: s.Fri02[0],
+          ceil: 24,
+          translate: (value: number, label: LabelType): string => {
+            switch (label) {
+              case LabelType.Low:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              case LabelType.High:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              default: 
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+            }
+          }
+        };
+        this.optionsFriLoc[index] = Object.assign({}, iniGenOption, {disabled: ("FRI" in opeHour ? 0 : 1)});
+        this.optionsFriLoc02[index] = Object.assign({}, locGenOption, {disabled: ("FRI" in opeHour ? 0 : 1)});
+      } else {
+        this.optionsFriLoc[index] = Object.assign({}, this.genOption, {disabled: ("FRI" in opeHour ? 0 : 1)});
+      }
+      if (s.Sat02[0] > 0){
+        this.newIntervalLoc[index][5] = "1";
+        let iniGenOption = {
+          floor: 0,
+          ceil: s.Sat02[0]-1,
+          translate: (value: number, label: LabelType): string => {
+            switch (label) {
+              case LabelType.Low:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              case LabelType.High:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              default: 
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+            }
+          }
+        };
+        let locGenOption = {
+          floor: s.Sat02[0],
+          ceil: 24,
+          translate: (value: number, label: LabelType): string => {
+            switch (label) {
+              case LabelType.Low:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              case LabelType.High:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              default: 
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+            }
+          }
+        };
+        this.optionsSatLoc[index] = Object.assign({}, iniGenOption, {disabled: ("SAT" in opeHour ? 0 : 1)});
+        this.optionsSatLoc02[index] = Object.assign({}, locGenOption, {disabled: ("SAT" in opeHour ? 0 : 1)});
+      } else {
+        this.optionsSatLoc[index] = Object.assign({}, this.genOption, {disabled: ("SAT" in opeHour ? 0 : 1)});
+      }
+      if (s.Sun02[0] > 0){
+        this.newIntervalLoc[index][6] = "1";
+        let iniGenOption = {
+          floor: 0,
+          ceil: s.Sun02[0]-1,
+          translate: (value: number, label: LabelType): string => {
+            switch (label) {
+              case LabelType.Low:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              case LabelType.High:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              default: 
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+            }
+          }
+        };
+        let locGenOption = {
+          floor: s.Sun02[0],
+          ceil: 24,
+          translate: (value: number, label: LabelType): string => {
+            switch (label) {
+              case LabelType.Low:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              case LabelType.High:
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              default: 
+                return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+            }
+          }
+        };
+        this.optionsSunLoc[index] = Object.assign({}, iniGenOption, {disabled: ("SUN" in opeHour ? 0 : 1)});
+        this.optionsSunLoc02[index] = Object.assign({}, locGenOption, {disabled: ("SUN" in opeHour ? 0 : 1)});
+      } else {
+        this.optionsSunLoc[index] = Object.assign({}, this.genOption, {disabled: ("SUN" in opeHour ? 0 : 1)});
+      }
+      index= index +1;
+    });
+  }
+
+  loadSectorsInit(locs: Observable<any>){
+    let index  = 0;
+    this.sectors[index] = [];
+    // console.log(locs);
+    locs.forEach((s: any) => {
+      this.locationService.getSectors(this.countryCode, s.City).pipe(
+        map(res => {
+          if (res != null){
+            this.sectors[index] = [];
+            this.sectors[index].push({SectorId: "0", Name: "N/A"});
+            res.forEach(element => {
+              this.sectors[index].push(element);
+            });
+            return res;
+          }
+        })
+      );
+      index = index + 1;
+    })
+  }
 
   onSearchImage(){
     const fileUpload = document.getElementById('fileUpload') as HTMLInputElement;
@@ -1083,36 +1131,6 @@ export class BusinessComponent implements OnInit {
       })
     );
   }
-
-  // private markFormGroupTouched() {
-  //   const invalid = [];
-  //   const invalida = [];
-  //   const invalida2 = [];
-  //   const controls = this.businessForm.controls;
-  //   for (const name in controls) {
-  //     // controls[name].markAsUntouched({ onlySelf: true });
-  //     // controls[name].markAsPristine({ onlySelf: true });
-  //     if (controls[name].markAsTouched) {
-  //       invalid.push(name);
-  //     }
-  //     if (controls[name].markAsDirty){
-  //       invalida.push(name);
-  //     }
-  //     if (controls[name].markAsPristine){
-  //       invalida2.push(name);
-  //     }
-  //   }
-  //   // this.businessForm.markAsUntouched({ onlySelf: true });
-  //   console.log("mark as touch");
-  //   console.log(invalid);
-  //   console.log("mark as dirty");
-  //   console.log(invalida);
-  //   console.log("mark as pristine");
-  //   console.log(invalida2);
-  //   console.log("form touched");
-  //   console.log(this.businessForm.touched);
-  // }
-
 
   onChangeDisabled(item: number, event: any){
     this.options[item] = Object.assign({}, this.genOption, {disabled: !event.checked});
@@ -1531,17 +1549,15 @@ export class BusinessComponent implements OnInit {
     }
   }
 
-  loadSectors(cityId: string){
-    console.log("cambio " + cityId);
+  loadSectors(cityId: string, i: number){
     this.sectors$ = this.locationService.getSectors(this.countryCode, cityId).pipe(
       map(res => {
         if (res != null){
-          this.sectors= [];
-          this.sectors.push({SectorId: "0", Name: "N/A"});
+          this.sectors[i]= [];
+          this.sectors[i].push({SectorId: "0", Name: "N/A"});
           res.forEach(element => {
-            this.sectors.push(element);
+            this.sectors[i].push(element);
           });
-          console.log(this.sectors);
           return res;
         }
       }),

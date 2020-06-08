@@ -26,7 +26,7 @@
                 <button mat-icon-button class="icon-active" (click)="onSelect(element.value.PollId)">
                     <mat-icon svgIcon="edit"></mat-icon>
                 </button>
-                <button mat-icon-button class="icon-active" (click)="onDelete(element, i)">
+                <button mat-icon-button class="icon-active" (click)="onDelete(element)">
                     <mat-icon svgIcon="delete"></mat-icon>
                 </button>
             </mat-cell>
@@ -37,7 +37,7 @@
     <div *ngIf="onError!=''">
         <span>{{onError}}</span>
     </div>
-</form>  
+</form>
 <mat-paginator [length]="length"
               [pageSize]="pageSize"
               [pageSizeOptions]= "[5, 10, 25, 100]"

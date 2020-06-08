@@ -1,58 +1,76 @@
-.panel-lt-reset{
+.panel-lt-login{
     width: 100%;
-    min-height: 180px;
 }
-.panel-rt-reset{
+.panel-rt-login{
     width: 100%;;
-    min-height: 280px;
 }
-.spinner-reset{
+.spinner-login{
     position: absolute;
     left: 50%;
     top: 50%;
 }
-.overlay-reset{
-    height:100%;
-    width:100%;
+.overlay-login{
+    width: 100%;
+    height: 100%;
     background-color:rgba(0, 0, 0, 0.418);
-    z-index:    10;
-    top:        0; 
-    left:       0; 
+    z-index: 10;
     position: absolute;
 }
-.img-back{
-    // background-image: url('https://previews.123rf.com/images/melpomen/melpomen1902/melpomen190200571/116956656-online-shopping-theme-with-woman-using-her-smartphone-in-a-living-room.jpg');
-    // filter: blur(8px);
-    // -webkit-filter: blur(1px);
-    background-position: right;
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 100%;
+.forgot-form{
+    text-align: right;
+    cursor: pointer;
+    max-width: 550px;
     width: 100%;
-}
-.reset-form{
-    position: absolute; 
-    background-color: white;
+    margin: 0 auto;
+    position: relative;
+    text-align: center;
 }
 .alert-danger{
-    color: red;
+    color: #fff;
     font-weight: 500;
 }
-:host ::ng-deep .mat-form-field {
-    .mat-form-field-wrapper {
-        padding-bottom: 0;
-        .mat-form-field-underline {
-            position: initial !important;
-            display: block;
-            margin-top: -1px;
-        }
-        .mat-form-field-subscript-wrapper,
-        .mat-form-field-ripple {
-            position: initial !important;
-            display: table;
-        }
-        .mat-form-field-subscript-wrapper {
-            min-height: calc(1em + 1px);
-        }
-    }
+.sign-in{
+    color: #6F6F6F;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 24px;
+}
+.text-forgot{
+    color: #fff !important;
+}
+.login-container {
+    position: relative;
+    height: 100vh;
+}
+.loginForm {
+    width: 100%;
+    height: 627px;
+    max-width: 677px;
+    max-height: 627px;
+    background: #FA8D5D;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    top: 50%;
+    left: 50%;
+}
+.main-logo{
+    background: url('../../../assets/images/logo-txtwhite.svg') no-repeat center center;
+    height: 115px;
+}
+.login-form{
+    width: 100%;
+    max-width: 550px;
+    min-height: 251px;
+    max-height: 251px;
+    background-color: #fff;
+    margin: auto;
+}
+:host::ng-deep .mat-form-field-underline {
+    background-color: #B6B6B6 !important;
+}
+::ng-deep .page-form-main {
+    background-color: #C4C4C4;
+    position: relative;
 }

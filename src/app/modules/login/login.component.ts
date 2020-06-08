@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { AuthService } from '@core/services';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +20,8 @@ export class LoginComponent implements OnInit {
   showAuth: boolean =false;
 
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
+
+  readonly passKey = environment.passKey;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -57,7 +60,7 @@ export class LoginComponent implements OnInit {
 
     var CryptoJS = require("crypto-js");
     var data = this.f.password.value;
-    var password = "K968G66S4dC1Y5tNA5zKGT5KIjeMcpc8";
+    var password = this.passKey;
     var ctObj = CryptoJS.AES.encrypt(data, password);
     var ctStr = ctObj.toString();
 

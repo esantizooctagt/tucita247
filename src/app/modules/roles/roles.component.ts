@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Role } from '@app/_models';
 import { AuthService } from '@app/core/services';
 import { Router } from '@angular/router';
+import { MonitorService } from '@app/shared/monitor.service';
 
 @Component({
   selector: 'app-roles',
@@ -9,11 +9,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./roles.component.scss']
 })
 export class RolesComponent implements OnInit {
-  public clickedRole: Role;
-
+  public filterData: string = undefined;
+  changeData: string;
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private monitorService: MonitorService
   ) { }
 
   ngOnInit(): void {
@@ -22,10 +23,12 @@ export class RolesComponent implements OnInit {
     if (roleId != '' && isAdmin != 1){
       this.router.navigate(['/']);
     }
+    this.monitorService.handleData('Search');
+    this.monitorService.handleMessage.subscribe(res => this.changeData = res);
   }
 
-  roleClicked(role: Role) {
-    this.clickedRole = role;
+  filterList(value){
+    this.filterData = value;
   }
 
 }

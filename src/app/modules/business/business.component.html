@@ -264,7 +264,7 @@
                                         <div class="row">
                                             <ng-container *ngIf="sectors$ | async"></ng-container>
                                             <mat-form-field class="col-md-5" hintLabel="City">
-                                                <mat-select formControlName="City" (selectionChange)="loadSectors($event.value)" required>
+                                                <mat-select formControlName="City" (selectionChange)="loadSectors($event.value, i)" required>
                                                     <mat-option *ngFor="let city of cities" [value]="city.CityId">
                                                     {{city.Name}}
                                                     </mat-option>
@@ -273,7 +273,7 @@
                                             </mat-form-field>
                                             <mat-form-field class="col-md" hintLabel="Sector">
                                                 <mat-select formControlName="Sector" required>
-                                                    <mat-option *ngFor="let sector of sectors" [value]="sector.SectorId">
+                                                    <mat-option *ngFor="let sector of sectors[i]" [value]="sector.SectorId">
                                                     {{sector.Name}}
                                                     </mat-option>
                                                 </mat-select>
@@ -428,9 +428,9 @@
                         </mat-accordion>
                         <div>
                             <button class="mr-3 mt-2" mat-flat-button color="accent" matStepperPrevious>Back</button>
-                            <button class="mr-3 mt-2" mat-flat-button color="primary" [disabled]="locationForm.invalid" matStepperNext>Save</button>
+                            <button class="mr-3 mt-2" mat-flat-button color="primary" [disabled]="!locationForm.valid" matStepperNext>Save</button>
                         </div>
-                        <!-- {{ locationForm.value | json }} -->
+                         <!-- {{ locationForm.value | json }}  -->
                     </form>
                 </mat-step>
             </mat-horizontal-stepper>              

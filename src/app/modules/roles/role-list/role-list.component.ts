@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges } from '@angular/core';
 import { MonitorService } from "@shared/monitor.service";
 import { Role } from '@app/_models';
 import { Observable, throwError } from 'rxjs';
@@ -8,6 +8,10 @@ import { delay, map, catchError, tap } from 'rxjs/operators';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
+import { MatTable } from '@angular/material/table';
+import { FormArray, FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
+import { MatIconRegistry } from '@angular/material/icon';
 
 @Component({
   selector: 'app-role-list',
@@ -15,28 +19,54 @@ import { DialogComponent } from '@app/shared/dialog/dialog.component';
   styleUrls: ['./role-list.component.scss']
 })
 export class RoleListComponent implements OnInit {
-  @Output() roleSelected = new EventEmitter<Role>();
-  
-  public onError: string='';
-  
-  businessId: string = '';
-  message: string = '';
-  lastRole: Role;
-  deletingRole: boolean = false;
-  deleted: boolean = false;
-  displayYesNo: boolean = false;
+  @Input() filterValue: string;
+  @ViewChild(MatTable) pollTable :MatTable<any>;
   
   deleteRole$: Observable<any>;
-  message$: Observable<string>;
   roles$: Observable<Role[]>;
+  public onError: string='';
+  
+  public length: number = 0;
+  public pageSize: number = 10;
+  public _page: number;
+  private _currentPage: any[] = [];
+  private _currentSearchValue: string = '';
+
+  displayYesNo: boolean = false;
+  
+  displayedColumns = ['Name', 'Actions'];
+  businessId: string = '';
+  changeData: string;
+  roleData: Role;
+  
+  get fRoles(){
+    return this.roleForm.get('Roles') as FormArray;
+  }
+
+  roleForm = this.fb.group({
+    Roles: this.fb.array([this.addRoles()])
+  });
+
+  addRoles(): FormGroup{
+    return this.fb.group({
+      RoleId: [''],
+      Name: ['', [Validators.required, Validators.maxLength(100), Validators.minLength(3)]]
+    });
+  }
 
   constructor(
+    private fb: FormBuilder,
+    private domSanitizer: DomSanitizer,
     private authService: AuthService,
     private data: MonitorService,
     private spinnerService: SpinnerService,
+    private dialog: MatDialog,
     private rolesService: RolesService,
-    private dialog: MatDialog
-  ) { }
+    private matIconRegistry: MatIconRegistry
+  ) {
+    this.matIconRegistry.addSvgIcon('edit',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/edit.svg'));
+    this.matIconRegistry.addSvgIcon('delete',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/delete.svg'));
+   }
 
   openDialog(header: string, message: string, success: boolean, error: boolean, warn: boolean): void {
     const dialogConfig = new MatDialogConfig();
@@ -57,27 +87,51 @@ export class RoleListComponent implements OnInit {
 
   ngOnInit(): void {
     this.businessId = this.authService.businessId();
-    this.loadRoles();
-    this.message$ = this.data.monitorMessage.pipe(
-      map(res => {
-        this.message = 'init';
-        if (res === 'roles') {
-          this.message = res;
-          this.loadRoles();
-        }
-        return this.message;
-      })
+    this._page = 1;
+    this._currentPage.push({page: this._page, roleId: ''});
+    this.loadRoles(
+      this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].roleId
     );
+
+    this.data.handleMessage.subscribe(res => this.changeData = res);
+    this.data.objectMessage.subscribe(res => this.roleData = res);
+    this.data.setData(undefined);
   }
 
-  loadRoles(){
+  ngAfterViewChecked() {
+    //change style page number
+    const list = document.getElementsByClassName('mat-paginator-range-label');
+    list[0].innerHTML = this._page.toString();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.filterValue.currentValue != undefined){
+      this._currentSearchValue = changes.filterValue.currentValue;
+      this._currentPage = [];
+      this._page = 1;
+      this._currentPage.push({page: this._page, pollId: ''});
+      this.loadRoles(
+        this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].roleId
+      );
+    }
+  }
+
+  loadRoles(crPage, crItems, crSearch, crlastItem) {
+    this.onError = '';
     var spinnerRef = this.spinnerService.start("Loading Roles...");
-    this.roles$ = this.rolesService.getRoles(this.businessId).pipe(
+    let data = this.businessId + "/" + crItems + (crSearch === '' ? '/_' : '/' + crSearch) + (crlastItem === '' ? '/_' : '/' +  crlastItem);
+
+    this.roles$ = this.rolesService.getRoles(data).pipe(
       map((res: any) => {
         if (res != null) {
-          this.spinnerService.stop(spinnerRef);
+          if (res.lastItem != ''){
+            this.length = (this.pageSize*this._page)+1;
+            this._currentPage.push({page: this._page+1, roleId: res.lastItem});
+          }
         }
-        return res;
+        this.roleForm.setControl('Roles', this.setExistingRoles(res.roles));
+        this.spinnerService.stop(spinnerRef);
+        return res.polls;
       }),
       catchError(err => {
         this.onError = err.Message;
@@ -87,24 +141,41 @@ export class RoleListComponent implements OnInit {
     );
   }
 
-  onSelect(role: Role) {
-    if (this.lastRole != role){
-      this.roleSelected.emit(role);
-      this.lastRole = role;
+  setExistingRoles(roles: Role[]): FormArray{
+    const formArray = new FormArray([]);
+    roles.forEach(res => {
+      formArray.push(this.fb.group({
+          RoleId: res.Role_Id,
+          Name: res.Name
+        })
+      );
+      this.pollTable.renderRows();
+    });
+    return formArray;
+  }
+
+  public goToPage(page: number, elements: number): void {
+    if (this.pageSize != elements){
+      this.pageSize = elements;
+      this._page = 1;
     } else {
-      let defRole: Role;
-      (async () => {
-        this.roleSelected.emit(defRole);
-        await delay(40);
-        this.roleSelected.emit(role);
-      })();
+      this._page = page+1;
     }
-    window.scroll(0,0);
+    this.loadRoles(
+      this._currentPage[this._page-1].page,
+      this.pageSize,
+      this._currentSearchValue,
+      this._currentPage[this._page-1].roleId
+    );
+  }
+
+  onSelect(role: any){
+    this.data.setData(role);
+    this.data.handleData('Add');
   }
 
   onDelete(role: Role){
     this.displayYesNo = true;
-
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = false;
     dialogConfig.data = {
@@ -122,23 +193,18 @@ export class RoleListComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
       if(result != undefined){
-        this.deleted = result;
         var spinnerRef = this.spinnerService.start("Deleting Role...");
-        if (this.deleted){
-          let delRole: Role;
-          this.deleted = false; 
+        if (result){
           this.deleteRole$ = this.rolesService.deleteRole(role.Role_Id, this.businessId).pipe(
             tap(res => {
-              this.roleSelected.emit(delRole);
               this.spinnerService.stop(spinnerRef);
               this.displayYesNo = false;
-              this.deletingRole = true;
-              this.loadRoles();
+              this.loadRoles(
+                this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].roleId
+              );
               this.openDialog('Role', 'Role deleted successful', true, false, false);
-              window.scroll(0,0);
             }),
             catchError(err => {
-              this.deletingRole = false;
               this.spinnerService.stop(spinnerRef);
               this.displayYesNo = false;
               this.openDialog('Error ! ', err.Message, false, true, false);
@@ -150,7 +216,7 @@ export class RoleListComponent implements OnInit {
     });
   }
 
-  trackById(index: number, item: Role) {
+  trackRow(index: number, item: Role) {
     return item.Role_Id;
   }
 

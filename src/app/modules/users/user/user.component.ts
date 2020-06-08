@@ -11,6 +11,7 @@ import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { Subscription, Observable, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { SpinnerService } from '@app/shared/spinner.service';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-user',
@@ -39,6 +40,7 @@ export class UserComponent implements OnInit {
   savingUser: boolean = false;
   userDataList: User;
 
+  readonly passKey = environment.passKey;
   //variable to handle errors on inputs components
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
@@ -63,7 +65,6 @@ export class UserComponent implements OnInit {
     Avatar: [''],
     Phone: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(14)]],
     RoleId: ['', [Validators.required]],
-    MFact_Auth: [''],
     Is_Admin: [{value: 0, disabled: true}],
     Status: [1]
   })
@@ -149,7 +150,7 @@ export class UserComponent implements OnInit {
       this.statTemp = 0;
       var spinnerRef = this.spinnerService.start("Loading User...");
       let userResult = this.userDataList;
-      this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
+      this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', Is_Admin: 0, Status: 1});
       this.user$ = this.usersService.getUser(userResult.User_Id, this.businessId).
         pipe(
           tap(user => { 
@@ -168,7 +169,6 @@ export class UserComponent implements OnInit {
               Password: '',
               Avatar: '',
               Phone: user.Phone,
-              MFact_Auth: user.MFact_Auth,
               RoleId: (user.Is_Admin === 1 ? 'None' : user.Role_Id),
               Is_Admin: user.Is_Admin,
               Status: user.Status
@@ -206,7 +206,6 @@ export class UserComponent implements OnInit {
           "Password": '', //this.userForm.value.Password,
           "Phone": this.userForm.value.Phone,
           "RoleId": this.userForm.value.RoleId,
-          "MFact_Auth": this.userForm.value.MFact_Auth,
           "Status": (this.statTemp === 3 ? 3 : this.userForm.value.Status)
         }
         this.userSave$ = this.usersService.updateUser(dataForm).pipe(
@@ -217,7 +216,7 @@ export class UserComponent implements OnInit {
             this.userForm.controls.Email.enable();
             this.userData = '';
             this.statTemp = 0;
-            this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
+            this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', Is_Admin: 0, Status: 1});
             this.data.changeData('users');
             this.openDialog('Users', 'User updated successful', true, false, false);
           }),
@@ -232,7 +231,7 @@ export class UserComponent implements OnInit {
         let userLoggedId = this.authService.userId();
         var CryptoJS = require("crypto-js");
         var data = this.userForm.value.Password;
-        var password = "K968G66S4dC1Y5tNA5zKGT5KIjeMcpc8";
+        var password = this.passKey;
         var ctObj = CryptoJS.AES.encrypt(data, password);
         var ctStr = ctObj.toString();
         let dataForm = { 
@@ -242,9 +241,7 @@ export class UserComponent implements OnInit {
           "Last_Name": this.userForm.value.Last_Name,
           "Password": ctStr,
           "Phone": this.userForm.value.Phone,
-          "RoleId": this.userForm.value.RoleId,
-          "MFact_Auth": 0
-          // this.userForm.value.MFact_Auth
+          "RoleId": this.userForm.value.RoleId
         }
         this.userSave$ = this.usersService.postUser(dataForm).pipe(
           tap(res => { 
@@ -254,7 +251,7 @@ export class UserComponent implements OnInit {
             this.userForm.controls.Email.enable();
             this.userData = '';
             this.statTemp = 0;
-            this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
+            this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', Is_Admin: 0, Status: 1});
             this.data.changeData('users');
             this.openDialog('Users', 'User created successful', true, false, false);
           }),
@@ -275,7 +272,7 @@ export class UserComponent implements OnInit {
     this.userData = '';
     this.statTemp = 0;
     this.userForm.controls.Email.enable();
-    this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', MFact_Auth: '', Is_Admin: 0, Status: 1});
+    this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', Is_Admin: 0, Status: 1});
     this.data.setData(undefined);
   }
 

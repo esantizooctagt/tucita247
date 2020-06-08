@@ -6,7 +6,6 @@ export class User {
     Last_Name?: string;
     Password?: string;
     Phone?: string;
-    MFact_Auth?: number;
     Language?: string;
     Avatar?: string;
     Is_Admin?: number;

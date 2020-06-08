@@ -9,6 +9,7 @@ import { AuthService } from '@core/services';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-reset',
@@ -29,6 +30,8 @@ export class ResetComponent implements OnInit {
 
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
+  readonly passKey = environment.passKey;
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -44,8 +47,8 @@ export class ResetComponent implements OnInit {
 
     this.resetForm = this.fb.group({
       Passwords : this.fb.group({
-        password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!#$%&?])[a-zA-Z0-9!#$%&?]{8,}")]],
-        confpassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!#$%&?])[a-zA-Z0-9!#$%&?]{8,}")]]
+        password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}")]],
+        confpassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}")]]
       }, {validator: this.checkPasswords})
     });
   }
@@ -92,7 +95,7 @@ export class ResetComponent implements OnInit {
       if (this.userId !== '') {  
         var CryptoJS = require("crypto-js");
         var data = this.resetForm.get('Passwords.password').value;
-        var password = "K968G66S4dC1Y5tNA5zKGT5KIjeMcpc8";
+        var password = this.passKey;
         var ctObj = CryptoJS.AES.encrypt(data, password);
         var ctStr = ctObj.toString();
 

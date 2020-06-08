@@ -37,7 +37,7 @@ const routes: Routes = [
     component: ResetComponent
   },
   {
-    path: 'verification/:user/:code',
+    path: 'verification/:userId/:code',
     component: VerificationComponent
   },
   { 

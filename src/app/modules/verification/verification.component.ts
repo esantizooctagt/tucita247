@@ -9,6 +9,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { throwError, Observable } from 'rxjs';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-verification',
@@ -21,9 +22,11 @@ export class VerificationComponent implements OnInit {
   loading = false;
   hide = true;
   hideconf = true;
-  email: string = '';
+  userId: string = '';
   code: string = '';
   userAct$: Observable<any>;
+
+  readonly passKey = environment.passKey;
 
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
@@ -43,14 +46,14 @@ export class VerificationComponent implements OnInit {
     this.verifForm = this.fb.group({
       userCode: ['', [Validators.required]],
       Passwords : this.fb.group({
-        password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!#$%&?])[a-zA-Z0-9!#$%&?]{8,}")]],
-        confpassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!#$%&?])[a-zA-Z0-9!#$%&?]{8,}")]]
+        password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}")]],
+        confpassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}")]]
       }, {validator: this.checkPasswords})
     });
   }
 
   ngOnInit(): void {
-    this.email = this.route.snapshot.paramMap.get('user');
+    this.userId = this.route.snapshot.paramMap.get('userId');
     this.code = this.route.snapshot.paramMap.get('code');
   }
 
@@ -94,13 +97,12 @@ export class VerificationComponent implements OnInit {
       if (this.verifForm.invalid) { return; }
       var CryptoJS = require("crypto-js");
       var data = this.verifForm.get('Passwords.password').value;
-      var password = "K968G66S4dC1Y5tNA5zKGT5KIjeMcpc8";
+      var password = this.passKey;
       var ctObj = CryptoJS.AES.encrypt(data, password);
       var ctStr = ctObj.toString();
 
       dataForm = {
-        Email: this.email,
-        BusinessId: '',
+        UserId: this.userId,
         Password: ctStr
       }
     } else {

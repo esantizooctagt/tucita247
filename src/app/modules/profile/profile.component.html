@@ -1,63 +1,72 @@
 <div class="container-fluid h-100">
-    <div class="row pl-2 pr-1">
-        <div class="pl-15 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
-            <h4>Profile</h4>
-        </div>
-        <ng-container *ngIf="userUpdate$ | async"></ng-container>
-        <ng-container *ngIf="imgAvatar$ | async"></ng-container>
-        <mat-card class="col-sm col-md col-lg-7" *ngIf="(user$ | async) && displayForm">
-            <form [formGroup]="avatarForm" autocomplete="off" (ngSubmit)="onSubmitAvatar()">
-                <div class="circle">
-                    <!-- User Profile Image -->
-                    <img *ngIf="f.Avatar.value; else isIcon" class="profile-pic" style="width: 100%; max-width: 250px;" [src]="imgPath+f.Avatar.value">
-                    <ng-template #isIcon>
-                        <!-- Default Image -->
-                        <mat-icon class="profile-avatar">perm_identity</mat-icon>
-                    </ng-template>
-                    <div class="circle-overlay">
-                        <button type="button" class="camera-avatar" mat-icon-button (click)="onClick()">
-                            <mat-icon>add_a_photo</mat-icon>
-                        </button>
-                        <input id="fileUpload" name="fileUpload" type="file" accept="image/*" style="display:none;"/>
-                    </div>                  
-                </div>
-            </form>
-            <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
-                <div class="form-field pl-3 pr-3">
-                    <mat-label class="">
-                        Email :
-                    </mat-label>
-                    {{f.Email.value}}
-                </div>
-                <div class="form-field pl-3 pr-3">
-                    <mat-form-field hintLabel="Min 3 characters">
-                        <input matInput #Name placeholder="First Name" maxlength="100" formControlName="First_Name" [errorStateMatcher]="confirmValidParentMatcher" required>
-                        <mat-error *ngIf="f.First_Name.invalid && f.First_Name.touched">{{getErrorMessage('First_Name')}}</mat-error>
-                    </mat-form-field>
-                </div>
-                <div class="form-field pl-3 pr-3">
-                    <mat-form-field hintLabel="Min 3 characters">
-                        <input matInput #Name placeholder="Last Name" maxlength="100" formControlName="Last_Name" [errorStateMatcher]="confirmValidParentMatcher" required>
-                        <mat-error *ngIf="f.Last_Name.invalid && f.Last_Name.touched">{{getErrorMessage('Last_Name')}}</mat-error>
-                    </mat-form-field>
-                </div>
-                <div class="form-field pl-3 pr-3">
-                    <mat-form-field>
-                        <span matPrefix>+1 &nbsp;</span>
-                        <input matInput #Phone placeholder="(555) 555-1234" appPhoneMask maxlength="15" formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher" required>
-                        <mat-error *ngIf="f.Phone.invalid && f.Phone.touched">{{getErrorMessage('Phone')}}</mat-error>
-                    </mat-form-field>
-                </div>
-                <div class="form-field pl-3 pr-3">
-                    <mat-label class="">
-                        Language :
-                    </mat-label>
-                    <mat-radio-group aria-label="Select an option" formControlName="Language">
-                        <mat-radio-button value="EN">English</mat-radio-button>
-                        <mat-radio-button value="ES">Español</mat-radio-button>
-                    </mat-radio-group>
-                </div>
-                <!-- <div class="form-field pl-3 pr-3">
+    <div class="row p-0">
+        <div class="list-form col-md-12 pl-4 m-0">
+            <div class="pl-0 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
+                <h3>PROFILE</h3>
+            </div>
+            <ng-container *ngIf="userUpdate$ | async"></ng-container>
+            <ng-container *ngIf="imgAvatar$ | async"></ng-container>
+            <mat-card class="col-sm col-md col-lg-7" *ngIf="(user$ | async) && displayForm">
+                <form [formGroup]="avatarForm" autocomplete="off" (ngSubmit)="onSubmitAvatar()">
+                    <div class="circle">
+                        <!-- User Profile Image -->
+                        <img *ngIf="f.Avatar.value; else isIcon" class="profile-pic"
+                            style="width: 100%; max-width: 250px;" [src]="imgPath+f.Avatar.value">
+                        <ng-template #isIcon>
+                            <!-- Default Image -->
+                            <mat-icon class="profile-avatar">perm_identity</mat-icon>
+                        </ng-template>
+                        <div class="circle-overlay">
+                            <button type="button" class="camera-avatar" mat-icon-button (click)="onClick()">
+                                <mat-icon>add_a_photo</mat-icon>
+                            </button>
+                            <input id="fileUpload" name="fileUpload" type="file" accept="image/*"
+                                style="display:none;" />
+                        </div>
+                    </div>
+                </form>
+                <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+                    <div class="form-field pl-3 pr-3">
+                        <mat-label class="">
+                            Email :
+                        </mat-label>
+                        {{f.Email.value}}
+                    </div>
+                    <div class="form-field pl-3 pr-3">
+                        <mat-form-field hintLabel="Min 3 characters">
+                            <input matInput #Name placeholder="First Name" maxlength="100" formControlName="First_Name"
+                                [errorStateMatcher]="confirmValidParentMatcher" required>
+                            <mat-error *ngIf="f.First_Name.invalid && f.First_Name.touched">
+                                {{getErrorMessage('First_Name')}}</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-field pl-3 pr-3">
+                        <mat-form-field hintLabel="Min 3 characters">
+                            <input matInput #Name placeholder="Last Name" maxlength="100" formControlName="Last_Name"
+                                [errorStateMatcher]="confirmValidParentMatcher" required>
+                            <mat-error *ngIf="f.Last_Name.invalid && f.Last_Name.touched">
+                                {{getErrorMessage('Last_Name')}}</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-field pl-3 pr-3">
+                        <mat-form-field>
+                            <span matPrefix>+1 &nbsp;</span>
+                            <input matInput #Phone placeholder="(555) 555-1234" appPhoneMask maxlength="15"
+                                formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher" required>
+                            <mat-error *ngIf="f.Phone.invalid && f.Phone.touched">{{getErrorMessage('Phone')}}
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="form-field pl-3 pr-3">
+                        <mat-label class="">
+                            Language :
+                        </mat-label>
+                        <mat-radio-group aria-label="Select an option" formControlName="Language">
+                            <mat-radio-button value="EN">English</mat-radio-button>
+                            <mat-radio-button value="ES">Español</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                    <!-- <div class="form-field pl-3 pr-3">
                     <mat-slide-toggle formControlName="MFact_Auth">{{ '2 Factor authentication ' + (f.MFact_Auth.value ? ' enabled' : ' disabled') }}</mat-slide-toggle>
                     <div *ngIf="f.MFact_Auth.value" class="profile-qr">
                         <qrcode [qrdata]="qrCode" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
@@ -66,10 +75,12 @@
                         </mat-label>
                     </div>
                 </div> -->
-                <div class="form-field pl-3 pr-3">
-                    <button mat-flat-button color="primary" id="save" [disabled]="!profileForm.valid" class="mr-3 mt-2">Save</button>
-                </div>
-            </form>
-        </mat-card>
+                    <div class="form-field pl-3 pr-3">
+                        <button mat-flat-button color="primary" id="save" [disabled]="!profileForm.valid"
+                            class="mr-3 mt-2">Save</button>
+                    </div>
+                </form>
+            </mat-card>
+        </div>
     </div>
-</div>    
+</div>

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { Poll } from '@app/_models';
-import { FormBuilder, Validators, FormGroup, FormControl, FormArray } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthService } from '@app/core/services';
 import { MonitorService } from '@app/shared/monitor.service';
@@ -167,7 +167,7 @@ export class PollListComponent implements OnInit {
       this._currentPage[this._page-1].page,
       this.pageSize,
       this._currentSearchValue,
-      this._currentPage[this._page-1].userId
+      this._currentPage[this._page-1].pollId
     );
   }
 
@@ -176,9 +176,8 @@ export class PollListComponent implements OnInit {
     this.data.handleData('Add');
   }
 
-  onDelete(poll: any,i: number){
+  onDelete(poll: any){
     this.displayYesNo = true;
-    console.log(i);
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = false;
     dialogConfig.data = {

@@ -32,6 +32,7 @@ export class RoleComponent implements OnInit {
   businessId: string = '';
   displayForm: boolean = true;
   savingRole: boolean=false;
+  roleDataList: Role;
 
   role$: Observable<Role>;
   roleSave$: Observable<any>;
@@ -93,6 +94,43 @@ export class RoleComponent implements OnInit {
     this.message$ = this.data.monitorMessage;
     this.onValueChanges();
     this.loadAccess();
+
+    this.data.objectMessage.subscribe(res => this.roleDataList = res);
+    this.onDisplay();
+  }
+
+  onDisplay(){
+    // changes.prop contains the old and the new value...
+    if (this.roleDataList != undefined) {
+      var spinnerRef = this.spinnerService.start("Loading Role...");
+      this.roleForm.reset({RoleId: '', BusinessId: '', Name: '', Status: 1});
+      this.g.clear();
+      this.role$ = this.roleService.getRole(this.roleDataList, this.businessId).pipe(
+        tap(res => {
+          if (res != null) {
+            this.roleForm.setValue({
+              RoleId: res.Role_Id,
+              Name: res.Name,
+              BusinessId: res.Business_Id,
+              Status: res.Status,
+              Access: []
+            });
+            this.loadAccess();
+            this.roleForm.patchValue({Access: this.apps$});
+          }
+          this.spinnerService.stop(spinnerRef);
+        }),
+        catchError(err => {
+          this.spinnerService.stop(spinnerRef);
+          this.openDialog('Error !', err.Message, false, true, false);
+          return throwError(err || err.message);
+        })
+      );
+    } else {
+      this.roleForm.reset({RoleId: '', BusinessId: '', Name: '', Status: 1});
+      this.g.clear();
+      this.loadAccess();
+    }
   }
 
   onCancel(){
@@ -207,41 +245,6 @@ export class RoleComponent implements OnInit {
         this.roleForm.controls["Status"].setValue(0);
       }
     });
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    // changes.prop contains the old and the new value...
-    if (changes.role.currentValue != undefined) {
-      var spinnerRef = this.spinnerService.start("Loading Role...");
-      let roleResult = changes.role.currentValue;
-      this.roleForm.reset({RoleId: '', BusinessId: '', Name: '', Status: 1});
-      this.g.clear();
-      this.role$ = this.roleService.getRole(roleResult.Role_Id, this.businessId).pipe(
-        tap(res => {
-          if (res != null) {
-            this.roleForm.setValue({
-              RoleId: res.Role_Id,
-              Name: res.Name,
-              BusinessId: res.Business_Id,
-              Status: res.Status,
-              Access: []
-            });
-            this.loadAccess();
-            this.roleForm.patchValue({Access: this.apps$});
-          }
-          this.spinnerService.stop(spinnerRef);
-        }),
-        catchError(err => {
-          this.spinnerService.stop(spinnerRef);
-          this.openDialog('Error !', err.Message, false, true, false);
-          return throwError(err || err.message);
-        })
-      );
-    } else {
-      this.roleForm.reset({RoleId: '', BusinessId: '', Name: '', Status: 1});
-      this.g.clear();
-      this.loadAccess();
-    }
   }
 
   ngOnDestroy() {

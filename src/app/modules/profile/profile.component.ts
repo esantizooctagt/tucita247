@@ -21,6 +21,7 @@ export class ProfileComponent implements OnInit {
   user$: Observable<User>;
   userUpdate$: Observable<any>;
   imgAvatar$: Observable<any>;
+  imgValue: any;
 
   businessId: string = '';
   userId: string = '';
@@ -51,8 +52,7 @@ export class ProfileComponent implements OnInit {
     Last_Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     Avatar: [''],
     Phone: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(15)]],
-    Language: [''],
-    MFact_Auth: ['']
+    Language: ['']
   })
 
   avatarForm = this.fb.group({
@@ -62,8 +62,9 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.businessId = this.authService.businessId();
     this.userId = this.authService.userId();
+
     var spinnerRef = this.spinnerService.start("Loading Profile...");
-    this.profileForm.reset({Email:'', First_Name: '', Last_Name: '', Avatar: '', Phone: '', Language: '', MFact_Auth: ''});
+    this.profileForm.reset({Email:'', First_Name: '', Last_Name: '', Avatar: '', Phone: '', Language: ''});
     this.user$ = this.usersService.getUser(this.userId, this.businessId).pipe(
       tap(res => {
         this.profileForm.setValue({
@@ -72,8 +73,7 @@ export class ProfileComponent implements OnInit {
           Last_Name: res.Last_Name,
           Avatar: res.Avatar,
           Phone: res.Phone,
-          Language: res.Language,
-          MFact_Auth: res.MFact_Auth,
+          Language: res.Language
         });
         this.spinnerService.stop(spinnerRef);
       }),
@@ -179,7 +179,6 @@ export class ProfileComponent implements OnInit {
       "First_Name": this.profileForm.value.First_Name,
       "Last_Name": this.profileForm.value.Last_Name,
       "Phone": this.profileForm.value.Phone,
-      "MFact_Auth": (this.profileForm.value.MFact_Auth ? 1 : 0),
       "Language": this.profileForm.value.Language,
       "BusinessId": this.businessId
     }
