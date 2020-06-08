@@ -1,18 +1,32 @@
-.action-btn{
+mat-header-cell{
+    font-size: 14px;
+    font-weight: 600;
+    color: #FF4F00;
+    font-family: Montserrat;
+}
+mat-cell{
+    font-family: Montserrat;
+}
+mat-icon{
+    color: #FF4F00;
     height: 30px;
     width: 30px;
 }
-.items-list{
-    background: #FFFFFF;
+mat-header-row{
+    border-bottom: 1px solid #18A0FB;
+}
+mat-select{
+    font-family: Montserrat;
+}
+mat-option{
+    font-family: Montserrat;
+}
+mat-table{
+    background: #fff;
     box-shadow: -2px 2px 6px rgba(0, 0, 0, 0.16);
 }
-.icon-active{
-    color: #FF4F00;
-}
-mat-list-item{
-    background: #fff;
-}
 mat-paginator{
+    margin-top: 3px;
     background: #FFFFFF;
     box-shadow: -2px 2px 6px rgba(0, 0, 0, 0.16);
 }

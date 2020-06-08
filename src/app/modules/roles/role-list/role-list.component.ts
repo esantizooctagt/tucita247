@@ -174,7 +174,7 @@ export class RoleListComponent implements OnInit {
     this.data.handleData('Add');
   }
 
-  onDelete(role: Role){
+  onDelete(role: any){
     this.displayYesNo = true;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = false;
@@ -195,7 +195,7 @@ export class RoleListComponent implements OnInit {
       if(result != undefined){
         var spinnerRef = this.spinnerService.start("Deleting Role...");
         if (result){
-          this.deleteRole$ = this.rolesService.deleteRole(role.Role_Id, this.businessId).pipe(
+          this.deleteRole$ = this.rolesService.deleteRole(role, this.businessId).pipe(
             tap(res => {
               this.spinnerService.stop(spinnerRef);
               this.displayYesNo = false;

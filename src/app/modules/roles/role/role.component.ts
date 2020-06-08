@@ -1,4 +1,4 @@
-import { Component, OnInit, SimpleChanges, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Observable, Subscription, throwError } from 'rxjs';
 import { Access, Role } from '@app/_models';
 import { RolesService } from '@app/services';
@@ -8,8 +8,8 @@ import { AuthService } from '@app/core/services';
 import { MonitorService } from '@app/shared/monitor.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
-import { tap, catchError } from 'rxjs/operators';
-import { MatListOption, MatSelectionList } from '@angular/material/list';
+import { tap, catchError, map } from 'rxjs/operators';
+import { MatSelectionList } from '@angular/material/list';
 import { SpinnerService } from '@app/shared/spinner.service';
 
 @Component({
@@ -37,7 +37,6 @@ export class RoleComponent implements OnInit {
   role$: Observable<Role>;
   roleSave$: Observable<any>;
   apps$: Observable<Access[]>;
-  message$: Observable<string>;
   subsRoles: Subscription;
 
   //variable to handle errors on inputs components
@@ -91,7 +90,6 @@ export class RoleComponent implements OnInit {
 
   ngOnInit(): void {
     this.businessId = this.authService.businessId();
-    this.message$ = this.data.monitorMessage;
     this.onValueChanges();
     this.loadAccess();
 
@@ -208,22 +206,30 @@ export class RoleComponent implements OnInit {
   }
 
   loadAccess(){
-    this.apps$ = this.roleService.getApplications(this.roleForm.get('RoleId').value, this.businessId);
-    this.roleForm.setControl('Access', this.setExistingApps(this.apps$));
+    this.apps$ = this.roleService.getApplications(this.roleForm.get('RoleId').value, this.businessId).pipe(
+      map((res: any)=>{
+        if (res != null){
+          this.roleForm.setControl('Access', this.setExistingApps(res));
+        }
+        return res;
+      }),
+      catchError(err => {
+        return err;
+      })
+    );
+    
   }
 
-  setExistingApps(apps: Observable<Access[]>){
+  setExistingApps(apps: Access[]){
     const formArray = new FormArray([]);
-    apps.forEach(res => {
-      res.forEach(access => {
-        formArray.push(
-          this.fb.group({
-            ApplicationId: access.ApplicationId,
-            Name: access.Name,
-            Level_Access: access.Level_Access
-          }));
-      })
-    });
+    apps.forEach(access => {
+      formArray.push(
+        this.fb.group({
+          ApplicationId: access.ApplicationId,
+          Name: access.Name,
+          Level_Access: access.Level_Access
+        }));
+    })
     return formArray;
   }
 

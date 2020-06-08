@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormGroup, FormBuilder } from '@angular/forms';
 import { UserService, LocationService } from '@app/services';
 import { AuthService } from '@app/core/services';
-import { map, catchError, mergeMap } from 'rxjs/operators';
+import { map, catchError, mergeMap, switchMap } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { MatTable } from '@angular/material/table';
@@ -15,10 +15,10 @@ import { User } from '@app/_models';
   styleUrls: ['./userloc.component.scss']
 })
 export class UserlocComponent implements OnInit {
-  @ViewChild(MatTable) userTable :MatTable<any>;
+  @ViewChild(MatTable) userTable: MatTable<any>;
 
   businessId: string = '';
-  locs$: Observable<any[]>;
+  locs$: Observable<any>;
   users$: Observable<any[]>;
   saveUser$: Observable<any[]>;
 
@@ -27,12 +27,12 @@ export class UserlocComponent implements OnInit {
   public _page: number;
   private _currentPage: any[] = [];
 
-  door=[];
-  locations=[];
-  
+  door = [];
+  locations = [];
+
   displayedColumns = ['Name', 'Email', 'Location', 'Door', 'Actions'];
-  
-  get fUsers(){
+
+  get fUsers() {
     return this.usersForm.get('users') as FormArray;
   }
 
@@ -42,11 +42,11 @@ export class UserlocComponent implements OnInit {
 
   addUserLoc(): FormGroup {
     const items = this.fb.group({
-        UserId: [''],
-        Name: [''],
-        Email: [''],
-        LocationId: [''],
-        Door: ['']
+      UserId: [''],
+      Name: [''],
+      Email: [''],
+      LocationId: [''],
+      Door: ['']
     })
     return items;
   }
@@ -59,7 +59,7 @@ export class UserlocComponent implements OnInit {
     private spinnerService: SpinnerService,
     private authService: AuthService
   ) { }
-  
+
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 2000,
@@ -70,25 +70,29 @@ export class UserlocComponent implements OnInit {
     var spinnerRef = this.spinnerService.start("Loading Users...");
     this.businessId = this.authService.businessId();
     this._page = 1;
-    this._currentPage.push({page: this._page, userId: ''});
+    this._currentPage.push({ page: this._page, userId: '' });
     this.locs$ = this.locationService.getLocationsCode(this.businessId).pipe(
       map((res: any) => {
-        if (res != null){
+        if (res != null) {
           this.locations = res.locs;
           return res.locs;
         }
       }),
-      mergeMap(v=> this.userService.getUsersLoc(this.businessId + "/10/_").pipe(
-        map((res: any) =>{
-          if (res.lastItem != ''){
-            this.length = (this.pageSize*this._page)+1;
-            this._currentPage.push({page: this._page+1, userId: res.lastItem});
-          }
-          this.spinnerService.stop(spinnerRef);
-          this.usersForm.setControl('users', this.setUsers(res.users));
-          return v;
-        })
-      )),
+      switchMap(v => 
+        this.userService.getUsersLoc(this.businessId + "/10/_").pipe(
+          map((res: any) => {
+            if (res != null){
+              if (res.lastItem != '') {
+                this.length = (this.pageSize * this._page) + 1;
+                this._currentPage.push({ page: this._page + 1, userId: res.lastItem });
+              }
+              this.spinnerService.stop(spinnerRef);
+              this.usersForm.setControl('users', this.setUsers(res.users));
+              return res.users;
+            }
+          })
+        )
+      ),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
         return throwError(err || err.message);
@@ -102,13 +106,16 @@ export class UserlocComponent implements OnInit {
     list[0].innerHTML = this._page.toString();
   }
 
-  setUsers(usrs: Observable<any[]>){
+  setUsers(usrs: any[]) {
     const formArray = new FormArray([]);
     var spinnerRef = this.spinnerService.start("Loading Users...");
-    let i: number =0;
+    let i: number = 0;
     usrs.forEach((res: any) => {
-      let i: number = 0;
-      this.door[i] = this.locations.filter(x => x.LocationId == res.LocationId)[0].Door;
+      if (res.LocationId != "") {
+        this.door[i] = this.locations.filter(x => x.LocationId == res.LocationId)[0].Door;
+      } else {
+        this.door[i] = [];
+      }
       formArray.push(
         this.fb.group({
           UserId: res.UserId,
@@ -120,13 +127,13 @@ export class UserlocComponent implements OnInit {
         })
       );
       this.userTable.renderRows();
-      i = i+1;
+      i = i + 1;
     });
     this.spinnerService.stop(spinnerRef);
     return formArray;
   }
 
-  changeLocation(event: any, i: number){
+  changeLocation(event: any, i: number) {
     const item = this.usersForm.controls.users as FormArray;
     item.at(i).patchValue({
       Door: ''
@@ -134,52 +141,52 @@ export class UserlocComponent implements OnInit {
     this.door[i] = this.locations.filter(x => x.LocationId == event.value)[0].Door;
   }
 
-  changeData(i: number, element: any){
-    if (element.value.Door == "") {return;}
-    if (element.value.LocationId == "") {return;}
+  changeData(i: number, element: any) {
+    if (element.value.Door == "") { return; }
+    if (element.value.LocationId == "") { return; }
 
     let formData = {
-      UserId: element.value.UserId, 
-      LocationId: element.value.LocationId, 
+      UserId: element.value.UserId,
+      LocationId: element.value.LocationId,
       Door: element.value.Door
     }
     this.saveUser$ = this.userService.updateUsersLocs(this.businessId, formData).pipe(
       map((res: any) => {
-        if (res != null){
-          this.openSnackBar("User updated successfully","User Location");
+        if (res != null) {
+          this.openSnackBar("User updated successfully", "User Location");
           return res.locs;
         }
       }),
       catchError(err => {
-        this.openSnackBar("Something goes wrong, try again","User Location");
+        this.openSnackBar("Something goes wrong, try again", "User Location");
         return throwError(err || err.message);
       })
     );
   }
 
   public goToPage(page: number, elements: number): void {
-    if (this.pageSize != elements){
+    if (this.pageSize != elements) {
       this.pageSize = elements;
       this._page = 1;
     } else {
-      this._page = page+1;
+      this._page = page + 1;
     }
     this.loadUsers(
       this.pageSize,
-      this._currentPage[this._page-1].userId
+      this._currentPage[this._page - 1].userId
     );
   }
 
-  loadUsers(crNumber: number, crItem: string){
+  loadUsers(crNumber: number, crItem: string) {
     var spinnerRef = this.spinnerService.start("Loading Users...");
-    let data = this.businessId + "/" + crNumber + (crItem === '' ? '/_' : '/' +  crItem);
+    let data = this.businessId + "/" + crNumber + (crItem === '' ? '/_' : '/' + crItem);
 
     this.users$ = this.userService.getUsersLoc(data).pipe(
-      map((res: any) =>{
+      map((res: any) => {
         this.spinnerService.stop(spinnerRef);
-        if (res.lastItem != ''){
-          this.length = (this.pageSize*this._page)+1;
-          this._currentPage.push({page: this._page+1, userId: res.lastItem});
+        if (res.lastItem != '') {
+          this.length = (this.pageSize * this._page) + 1;
+          this._currentPage.push({ page: this._page + 1, userId: res.lastItem });
         }
         this.usersForm.setControl('users', this.setUsers(res.users));
         return res.users;

@@ -12,8 +12,8 @@ export class RolesService {
   readonly apiURL = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
-  getRoles(businessId): Observable<Role[]> {
-    return this.http.get<Role[]>(this.apiURL + '/roles/' + businessId)
+  getRoles(data): Observable<Role[]> {
+    return this.http.get<Role[]>(this.apiURL + '/roles/' + data)
                     .pipe(catchError(this.errorHandler));
   }
 

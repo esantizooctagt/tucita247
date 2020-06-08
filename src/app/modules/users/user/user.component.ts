@@ -9,7 +9,7 @@ import { ConfirmValidParentMatcher } from '@app/validators';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { Subscription, Observable, throwError } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import { tap, catchError, map, switchMap } from 'rxjs/operators';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { environment } from '@environments/environment';
 
@@ -25,12 +25,10 @@ export class UserComponent implements OnInit {
 
   userData: string = '';
   statTemp: number = 0;
-  message$: Observable<string>;
   userAct$: Observable<any>;
   businessId: string='';
   changesUser: Subscription;
   roles$: Observable<Role[]>;
-  displayForm: boolean = true;
   availability$: Observable<any>;
   userSave$: Observable<any>;
   user$: Observable<User>;
@@ -70,10 +68,25 @@ export class UserComponent implements OnInit {
   })
 
   ngOnInit(): void {
+    var spinnerRef = this.spinnerService.start("Loading User...");
     this.businessId = this.authService.businessId();
-    this.message$ = this.data.monitorMessage;
-    this.loadRoles();
+
+    this.roles$ = this.rolesService.getRoles(this.businessId + '/10/_/_').pipe(
+      map((res: any) => {
+        if (res != null) {
+          this.spinnerService.stop(spinnerRef);
+          return res.roles;
+        }
+      }),
+      catchError(err => {
+        this.spinnerService.stop(spinnerRef);
+        this.openDialog('Error !', err.Message, false, true, false);
+        return throwError(err || err.Message);
+      })
+    );
+    
     this.onValueChanges();
+
     this.data.objectMessage.subscribe(res => this.userDataList = res);
     this.onDisplay();
   }
@@ -149,44 +162,39 @@ export class UserComponent implements OnInit {
       }
       this.statTemp = 0;
       var spinnerRef = this.spinnerService.start("Loading User...");
-      let userResult = this.userDataList;
       this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', Is_Admin: 0, Status: 1});
-      this.user$ = this.usersService.getUser(userResult.User_Id, this.businessId).
-        pipe(
-          tap(user => { 
-            this.userForm.controls.Email.disable();
-            if (user.Is_Admin === 1){
-              this.userForm.controls['RoleId'].clearValidators();
-            } else {
-              this.userForm.controls['RoleId'].setValidators([Validators.required]);
-            }
-            this.userForm.setValue({
-              UserId: user.User_Id,
-              BusinessId: user.Business_Id,
-              Email: user.Email,
-              First_Name: user.First_Name,
-              Last_Name: user.Last_Name,
-              Password: '',
-              Avatar: '',
-              Phone: user.Phone,
-              RoleId: (user.Is_Admin === 1 ? 'None' : user.Role_Id),
-              Is_Admin: user.Is_Admin,
-              Status: user.Status
-            });
-            this.statTemp = user.Status;
-            this.spinnerService.stop(spinnerRef);
-          }),
-          catchError(err => {
-            this.spinnerService.stop(spinnerRef);
-            this.openDialog('Error !', err.Message, false, true, false);
-            return throwError(err || err.Message);
-          })
-        );
+      this.user$ = this.usersService.getUser(this.userDataList, this.businessId).pipe(
+        tap(user => { 
+          this.userForm.controls.Email.disable();
+          if (user.Is_Admin === 1){
+            this.userForm.controls['RoleId'].clearValidators();
+          } else {
+            this.userForm.controls['RoleId'].setValidators([Validators.required]);
+          }
+          this.userForm.setValue({
+            UserId: user.User_Id,
+            BusinessId: user.Business_Id,
+            Email: user.Email,
+            First_Name: user.First_Name,
+            Last_Name: user.Last_Name,
+            Password: '',
+            Avatar: '',
+            Phone: user.Phone,
+            RoleId: (user.Is_Admin === 1 ? 'None' : user.Role_Id),
+            Is_Admin: user.Is_Admin,
+            Status: user.Status
+          });
+          this.statTemp = user.Status;
+          this.spinnerService.stop(spinnerRef);
+          return user;   
+        }),
+        catchError(err => {
+          this.spinnerService.stop(spinnerRef);
+          this.openDialog('Error !', err.Message, false, true, false);
+          return throwError(err || err.Message);
+        })
+      );
     }
-  }
-
-  loadRoles(){
-    this.roles$ = this.rolesService.getRoles(this.businessId);
   }
 
   onSubmit(){

@@ -27,10 +27,11 @@
                     <ng-container matColumnDef="Location">
                         <mat-header-cell *matHeaderCellDef class="col-md-2"> Location
                         </mat-header-cell>
+                        <ng-container *ngIf="locs$ | async"></ng-container>
                         <mat-cell *matCellDef="let element; let i = index" class="col-md-2"
                             [formGroup]="element">
                             <mat-select formControlName="LocationId" (selectionChange)="changeLocation($event, i)">
-                                <mat-option *ngFor="let res of locs$ | async" [value]="res.LocationId">
+                                <mat-option *ngFor="let res of locations" [value]="res.LocationId">
                                     {{res.Name}}
                                 </mat-option>
                             </mat-select>
@@ -60,7 +61,7 @@
                     <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
                     <mat-row *matRowDef="let row; columns: displayedColumns; let i=index"></mat-row>
                 </mat-table>
-            </form>            
+            </form>
             <mat-paginator [length]="length"
                 [pageSize]="pageSize"
                 [pageSizeOptions]= "[5, 10, 25, 100]"

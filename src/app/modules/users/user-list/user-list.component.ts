@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { AuthService } from '@core/services';
 import { User } from '@app/_models';
 import { UserService } from "@app/services";
@@ -10,6 +10,8 @@ import { map, tap, catchError } from 'rxjs/operators';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { MatTable } from '@angular/material/table';
+import { FormArray, FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-user-list',
@@ -18,35 +20,50 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class UserListComponent implements OnInit {
   @Input() filterValue: string;
-  public length: number = 0;
-  public pageSize: number = 10;
-  public users: User[] = [];
-  public listView:boolean=true;
+  @ViewChild(MatTable) pollTable :MatTable<any>;
+  
+  deleteUser$: Observable<any>;
+  users$: Observable<User[]>;
   public onError: string='';
 
+  public length: number = 0;
+  public pageSize: number = 10;
   public _page: number;
   private _currentPage: any[] = [];
   private _currentSearchValue: string = '';
 
-  businessId: string = '';
-  message: string;
-  lastUser: User;
-  deleted: boolean = false;
   displayYesNo: boolean = false;
-  deletingUser: boolean = false;
-  message$: Observable<string>;
-  deleteUser$: Observable<any>;
-  users$: Observable<User[]>;
+
+  displayedColumns = ['Name', 'Email', 'Actions'];
+  businessId: string = '';
   changeData: string;
+
   userData: User;
 
+  get fUsers(){
+    return this.userForm.get('Users') as FormArray;
+  }
+
+  userForm = this.fb.group({
+    Users: this.fb.array([this.addUsers()])
+  });
+
+  addUsers(): FormGroup{
+    return this.fb.group({
+      UserId: [''],
+      Name: [''],
+      Email: ['']
+    });
+  }
+
   constructor(
+    private fb: FormBuilder,
     private domSanitizer: DomSanitizer,
     private authService: AuthService,
     private data: MonitorService,
-    private userService: UserService,
     private spinnerService: SpinnerService,
     private dialog: MatDialog,
+    private userService: UserService,
     private matIconRegistry: MatIconRegistry
   ) { 
     this.matIconRegistry.addSvgIcon('edit',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/edit.svg'));
@@ -74,51 +91,19 @@ export class UserListComponent implements OnInit {
     this.businessId = this.authService.businessId();
     this._page = 1;
     this._currentPage.push({page: this._page, userId: ''});
-    this.loadUsers(this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].userId);
+    this.loadUsers(
+      this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].userId
+    );
 
     this.data.handleMessage.subscribe(res => this.changeData = res);
     this.data.objectMessage.subscribe(res => this.userData = res);
     this.data.setData(undefined);
-    this.message$ = this.data.monitorMessage.pipe(
-      map(res => {
-        this.message = 'init';
-        if (res === 'users') {
-          this.message = res;
-          this.loadUsers(this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].userId);
-        }
-        return this.message;
-      })
-    );
   }
 
   ngAfterViewChecked() {
     //change style page number
     const list = document.getElementsByClassName('mat-paginator-range-label');
     list[0].innerHTML = this._page.toString();
-  }
-
-  loadUsers(crPage, crNumber, crValue, crItem) {
-    this.onError = '';
-    var spinnerRef = this.spinnerService.start("Loading Users...");
-    let data = this.businessId + "/" + crNumber + (crValue === '' ? '/_' : '/' + crValue) + (crItem === '' ? '/_' : '/' +  crItem);
-
-    this.users$ = this.userService.getUsers(data).pipe(
-      map((res: any) => {
-        if (res != null) {
-          if (res.lastItem != ''){
-            this.length = (this.pageSize*this._page)+1;
-            this._currentPage.push({page: this._page+1, userId: res.lastItem});
-          }
-          this.spinnerService.stop(spinnerRef);
-        }
-        return res.users;
-      }),
-      catchError(err => {
-        this.onError = err.Message;
-        this.spinnerService.stop(spinnerRef);
-        return this.onError;
-      })
-    );
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -133,12 +118,66 @@ export class UserListComponent implements OnInit {
     }
   }
 
+  loadUsers(crPage, crItems, crSearch, crlastItem) {
+    this.onError = '';
+    var spinnerRef = this.spinnerService.start("Loading Users...");
+    let data = this.businessId + "/" + crItems + (crSearch === '' ? '/_' : '/' + crSearch) + (crlastItem === '' ? '/_' : '/' +  crlastItem);
+
+    this.users$ = this.userService.getUsers(data).pipe(
+      map((res: any) => {
+        if (res != null) {
+          if (res.lastItem != ''){
+            this.length = (this.pageSize*this._page)+1;
+            this._currentPage.push({page: this._page+1, userId: res.lastItem});
+          }
+        }
+        this.userForm.setControl('Users', this.setExistingUsers(res.users));
+        this.spinnerService.stop(spinnerRef);
+        return res.users;
+      }),
+      catchError(err => {
+        this.onError = err.Message;
+        this.spinnerService.stop(spinnerRef);
+        return this.onError;
+      })
+    );
+  }
+
+  setExistingUsers(users: User[]): FormArray{
+    const formArray = new FormArray([]);
+    users.forEach(res => {
+      formArray.push(this.fb.group({
+          UserId: res.User_Id,
+          Name: res.First_Name + ' ' + res.Last_Name,
+          Email: res.Email
+        })
+      );
+      this.pollTable.renderRows();
+    });
+    return formArray;
+  }
+
+  public goToPage(page: number, elements: number): void {
+    if (this.pageSize != elements){
+      this.pageSize = elements;
+      this._page = 1;
+    } else {
+      this._page = page+1;
+    }
+    this.loadUsers(
+      this._currentPage[this._page-1].page,
+      this.pageSize,
+      this._currentSearchValue,
+      this._currentPage[this._page-1].userId
+    );
+  }
+
   onSelect(user: User) {
     this.data.setData(user);
     this.data.handleData('Add');
   }
 
-  onDelete(user: User) {
+  onDelete(user: any) {
     this.displayYesNo = true;
 
     const dialogConfig = new MatDialogConfig();
@@ -158,24 +197,18 @@ export class UserListComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
       if(result != undefined){
-        this.deleted = result;
         var spinnerRef = this.spinnerService.start("Deleting User...");
-        if (this.deleted){
-          let delUser: User;
-          this.deleted = false; 
-          this.deleteUser$ = this.userService.deleteUser(user.User_Id, this.businessId).pipe(
+        if (result){
+          this.deleteUser$ = this.userService.deleteUser(user, this.businessId).pipe(
             tap(res => {
               this.spinnerService.stop(spinnerRef);
               this.displayYesNo = false;
-              this.deletingUser = true;
               this.loadUsers(
                 this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].userId
               );
               this.openDialog('User', 'User deleted successful', true, false, false);
-              window.scroll(0,0);
             }),
             catchError(err => {
-              this.deletingUser = false;
               this.spinnerService.stop(spinnerRef);
               this.displayYesNo = false;
               this.openDialog('Error ! ', err.Message, false, true, false);
@@ -187,22 +220,7 @@ export class UserListComponent implements OnInit {
     });
   }
 
-  public goToPage(page: number, elements: number): void {
-    if (this.pageSize != elements){
-      this.pageSize = elements;
-      this._page = 1;
-    } else {
-      this._page = page+1;
-    }
-    this.loadUsers(
-      this._currentPage[this._page-1].page,
-      this.pageSize,
-      this._currentSearchValue,
-      this._currentPage[this._page-1].userId
-    );
-  }
-
-  trackById(index: number, item: User) {
+  trackRow(index: number, item: User) {
     return item.User_Id;
   }
 
