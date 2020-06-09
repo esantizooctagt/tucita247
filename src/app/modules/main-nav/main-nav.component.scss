@@ -71,10 +71,14 @@
   // background-color: #e3e7ef;
 }
 .main-logo{
-  background: url('../../../assets/images/logo.svg') no-repeat left center;
+  background: url('../../../assets/images/logoTuCita247.pnh') no-repeat left center;
   height: 100px;
 }
 .mat-toolbar-main {
   background: #ff4f00;
   color: white;
+  position: sticky;
+  position: -webkit-sticky; /* For macOS/iOS Safari */
+  top: 0; /* Sets the sticky toolbar to be on top */
+  z-index: 1000; /* Ensure that your app's content doesn't overlap the toolbar */
 }

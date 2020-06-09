@@ -9,7 +9,7 @@
                 <ng-template matStepLabel>Location</ng-template>
                 <ng-container *ngIf="(businessSave$ | async) && savingBusiness"></ng-container>
                 <mat-step [stepControl]="businessForm" step="business" *ngIf="(business$ | async) || displayBusiness">
-                    <form [formGroup]="businessForm" (ngSubmit)="onSubmitBusiness()">
+                    <form [formGroup]="businessForm">
                         <ng-template matStepLabel>Business</ng-template>
                         <mat-form-field hintLabel="Name">
                             <input matInput placeholder="Business Name" maxlength="500" minlength="3" formControlName="Name" [errorStateMatcher]="confirmValidParentMatcher" required>
@@ -93,6 +93,24 @@
                                 </mat-option>
                             </mat-autocomplete>
                         </mat-form-field>
+                        <div class="row">
+                            <mat-form-field class="col-md-12" hintLabel="Tags">
+                                <mat-chip-list #chipTags>
+                                    <ng-container *ngIf="tags.length > 0">
+                                        <mat-chip *ngFor="let tag of tags" [selectable]="selectable"
+                                                [removable]="removable" (removed)="removeTag(tag)">
+                                        {{tag}}
+                                        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                        </mat-chip>
+                                    </ng-container>
+                                    <input placeholder="New Tag..."
+                                           [matChipInputFor]="chipTags"
+                                           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                           [matChipInputAddOnBlur]="addOnBlur"
+                                           (matChipInputTokenEnd)="addTag($event)">
+                                  </mat-chip-list>
+                            </mat-form-field>
+                        </div>
                         <!-- <mat-form-field>
                             <input matInput placeholder="Tags" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" [errorStateMatcher]="confirmValidParentMatcher">
                             <mat-error *ngIf="fBusiness.Tags.invalid && fBusiness.Tags.touched">{{getErrorMessage('Tags')}}</mat-error>
@@ -206,8 +224,8 @@
                         <div class="form-field-check">
                             <mat-checkbox formControlName="ParentBusiness">Parent Business</mat-checkbox>
                         </div>
-                        <!-- {{ businessForm.value | json }} -->
-                        <!--{{ tags | json}} -->
+                        {{ businessForm.value | json }}
+                        {{ tags | json}}
                     </form>
                     <ng-container *ngIf="imgBusiness$ | async"></ng-container>
                     <div class="image-business">
@@ -229,7 +247,7 @@
                         </form>
                     </div>
                     <div>
-                        <button class="mr-3 mt-2" mat-flat-button color="primary" [disabled]="businessForm.invalid" matStepperNext>Save / Next</button>
+                        <button class="mr-3 mt-2" mat-flat-button color="primary" [disabled]="businessForm.invalid" matStepperNext (click)="onSubmitBusiness()">Save / Next</button>
                     </div>
                 </mat-step>
                 <ng-container *ngIf="(locationSave$ | async) && savingLocation"></ng-container>

@@ -1,0 +1,86 @@
+.circle-red {
+    background-color: transparent;
+    border: 7px solid red;
+    border-radius: 140px;
+    box-shadow: 0 0 2px #888;
+    min-height: 140px;
+    max-height: 140px;
+    max-width: 140px;
+    text-align: center;
+    display: block;
+    line-height: 126px;
+    font-size: 30px;
+    font-family: Montserrat;
+    font-weight: 700;
+    margin: 0 auto;
+    padding: 0;
+}
+.circle-yellow {
+    background-color: transparent;
+    border: 7px solid yellow;
+    border-radius: 140px;
+    box-shadow: 0 0 2px #888;
+    min-height: 140px;
+    max-height: 140px;
+    max-width: 140px;
+    text-align: center;
+    display: block;
+    line-height: 126px;
+    font-size: 30px;
+    font-family: Montserrat;
+    font-weight: 700;
+    margin: 0 auto;
+    padding: 0;
+}
+.circle-green {
+    background-color: transparent;
+    border: 7px solid green;
+    border-radius: 140px;
+    box-shadow: 0 0 2px #888;
+    min-height: 140px;
+    max-height: 140px;
+    max-width: 140px;
+    text-align: center;
+    display: block;
+    line-height: 126px;
+    font-size: 30px;
+    font-family: Montserrat;
+    font-weight: 700;
+    margin: 0 auto;
+    padding: 0;
+}
+.circle-gray{
+    background-color: transparent;
+    border: 7px solid #c9c9c9;
+    border-radius: 140px;
+    box-shadow: 0 0 2px #888;
+    min-height: 140px;
+    max-height: 140px;
+    max-width: 140px;
+    text-align: center;
+    display: block;
+    line-height: 126px;
+    font-size: 30px;
+    font-family: Montserrat;
+    font-weight: 700;
+    margin: 0 auto;
+    padding: 0;
+}
+.location-name{
+    line-height: 17px;
+    vertical-align: middle;
+    display: flex;
+    font-size: 15px;
+    font-family: Montserrat;
+    font-weight: 600;
+    text-align: left;
+}
+:host::ng-deep .mat-form-field-underline {
+    background-color: #B6B6B6 !important;
+}
+h2{
+    font-family: Montserrat;
+}
+.loc-center{
+    align-self: center;
+}

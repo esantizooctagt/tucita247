@@ -42,7 +42,8 @@ export class BusinessComponent implements OnInit {
   displayBusiness: boolean = true;
   displayLocation: boolean = true;
 
-  public tags: any[]=[];
+  //Tags
+  public tags =[];
   
   //Categories
   visibleCategory = true;
@@ -78,7 +79,7 @@ export class BusinessComponent implements OnInit {
   selectable = true;
   removable = true;
   addOnBlur = true;
-
+  
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
   //Generic Option for ng5-slider
@@ -656,7 +657,7 @@ export class BusinessComponent implements OnInit {
           }
 
           this.categories = res.Categories;
-          this.tags = res.Tags.split('#');
+          this.tags = res.Tags.split(',');
           this.spinnerService.stop(spinnerRef);
         } else {
           this.spinnerService.stop(spinnerRef);
@@ -740,7 +741,6 @@ export class BusinessComponent implements OnInit {
       
       this.sectors[index] = s.Sectors;
       this.sectors[index].push({SectorId: "0", Name: "N/A"});
-      console.log(this.sectors[index]);
 
       formArray.push(
         this.fb.group({
@@ -1449,104 +1449,105 @@ export class BusinessComponent implements OnInit {
     if (!this.businessForm.valid){
       return;
     }
-    if (this.businessForm.touched){
-      let countryId = this.businessForm.value.Country;
-      let mon: any[] = [];
-      let tue: any[] = [];
-      let wed: any[] = [];
-      let thu: any[] = [];
-      let fri: any[] = [];
-      let sat: any[] = [];
-      let sun: any[] = [];
+    console.log("entro business");
+    // if (this.businessForm.touched){
+    let countryId = this.businessForm.value.Country;
+    let mon: any[] = [];
+    let tue: any[] = [];
+    let wed: any[] = [];
+    let thu: any[] = [];
+    let fri: any[] = [];
+    let sat: any[] = [];
+    let sun: any[] = [];
 
-      let opeHours = {}
-      if (this.businessForm.value.MonEnabled === 1) {
-        mon.push({"I": this.businessForm.value.Mon[0].toString(), "F": this.businessForm.value.Mon[1].toString()});
-        if (this.newInterval[0] == "1"){
-          mon.push({"I": this.businessForm.value.Mon02[0].toString(), "F": this.businessForm.value.Mon02[1].toString()});
-        }
-        opeHours["MON"] = mon
+    let opeHours = {}
+    if (this.businessForm.value.MonEnabled === 1) {
+      mon.push({"I": this.businessForm.value.Mon[0].toString(), "F": this.businessForm.value.Mon[1].toString()});
+      if (this.newInterval[0] == "1"){
+        mon.push({"I": this.businessForm.value.Mon02[0].toString(), "F": this.businessForm.value.Mon02[1].toString()});
       }
-      if (this.businessForm.value.TueEnabled === 1) {
-        tue.push({"I": this.businessForm.value.Tue[0].toString(), "F": this.businessForm.value.Tue[1].toString()});
-        if (this.newInterval[1] == "1"){
-          tue.push({"I": this.businessForm.value.Tue02[0].toString(), "F": this.businessForm.value.Tue02[1].toString()});
-        }
-        opeHours["TUE"] = tue
-      }
-      if (this.businessForm.value.WedEnabled === 1) {
-        wed.push({"I": this.businessForm.value.Wed[0].toString(), "F": this.businessForm.value.Wed[1].toString()});
-        if (this.newInterval[2] == "1"){
-          wed.push({"I": this.businessForm.value.Wed02[0].toString(), "F": this.businessForm.value.Wed02[1].toString()});
-        }
-        opeHours["WED"] = wed
-      }
-      if (this.businessForm.value.ThuEnabled === 1) {
-        thu.push({"I": this.businessForm.value.Thu[0].toString(), "F": this.businessForm.value.Thu[1].toString()});
-        if (this.newInterval[3] == "1"){
-          thu.push({"I": this.businessForm.value.Thu02[0].toString(), "F": this.businessForm.value.Thu02[1].toString()});
-        }
-        opeHours["THU"] = thu
-      }
-      if (this.businessForm.value.FriEnabled === 1) {
-        fri.push({"I": this.businessForm.value.Fri[0].toString(), "F": this.businessForm.value.Fri[1].toString()});
-        if (this.newInterval[4] == "1"){
-          fri.push({"I": this.businessForm.value.Fri02[0].toString(), "F": this.businessForm.value.Fri02[1].toString()});
-        }
-        opeHours["FRI"] = fri
-      }
-      if (this.businessForm.value.SatEnabled === 1) {
-        sat.push({"I": this.businessForm.value.Sat[0].toString(), "F": this.businessForm.value.Sat[1].toString()});
-        if (this.newInterval[5] == "1"){
-          sat.push({"I": this.businessForm.value.Sat02[0].toString(), "F": this.businessForm.value.Sat02[1].toString()});
-        }
-        opeHours["SAT"] = sat
-      }
-      if (this.businessForm.value.SunEnabled === 1) {
-        sun.push({"I": this.businessForm.value.Sun[0].toString(), "F": this.businessForm.value.Sun[1].toString()});
-        if (this.newInterval[6] == "1"){
-          sun.push({"I": this.businessForm.value.Sun02[0].toString(), "F": this.businessForm.value.Sun02[1].toString()});
-        }
-        opeHours["SUN"] = sun
-      }
-      
-      let dataForm =  { 
-        "Name": this.businessForm.value.Name,
-        "Country": countryId.c,
-        "Address": this.businessForm.value.Address,
-        "City": this.businessForm.value.City,
-        "ZipCode": this.businessForm.value.ZipCode,
-        "Geolocation": '{"LAT": '+ this.lat+',"LNG": '+this.lng+'}',
-        "Phone": this.businessForm.value.Phone.replace('+1',''),
-        "LongDescription": this.businessForm.value.LongDescription, 
-        "ShortDescription": this.businessForm.value.ShortDescription,
-        "Website": this.businessForm.value.WebSite,
-        "Facebook": this.businessForm.value.Facebook,
-        "Twitter": this.businessForm.value.Twitter,
-        "Instagram": this.businessForm.value.Instagram,
-        "Email": this.businessForm.value.Email,
-        "OperationHours": JSON.stringify(opeHours),
-        "Tags": this.businessForm.value.Tags,
-        "Categories": this.businessForm.value.Categories,
-        "ParentBusiness": (this.businessForm.value.ParentBusiness ? 1 : 0)
-      }
-      var spinnerRef = this.spinnerService.start("Saving Business...");
-      this.businessSave$ = this.businessService.updateBusiness(this.businessId, dataForm).pipe(
-        tap(res => { 
-          this.spinnerService.stop(spinnerRef);
-          this.savingBusiness = true;
-          this.businessForm.markAsPristine();
-          this.businessForm.markAsUntouched();
-          this.openDialog('Business', 'Business updated successful', true, false, false);
-        }),
-        catchError(err => {
-          this.spinnerService.stop(spinnerRef);
-          this.savingBusiness = false;
-          this.openDialog('Error !', err.Message, false, true, false);
-          return throwError(err || err.message);
-        })
-      );
+      opeHours["MON"] = mon
     }
+    if (this.businessForm.value.TueEnabled === 1) {
+      tue.push({"I": this.businessForm.value.Tue[0].toString(), "F": this.businessForm.value.Tue[1].toString()});
+      if (this.newInterval[1] == "1"){
+        tue.push({"I": this.businessForm.value.Tue02[0].toString(), "F": this.businessForm.value.Tue02[1].toString()});
+      }
+      opeHours["TUE"] = tue
+    }
+    if (this.businessForm.value.WedEnabled === 1) {
+      wed.push({"I": this.businessForm.value.Wed[0].toString(), "F": this.businessForm.value.Wed[1].toString()});
+      if (this.newInterval[2] == "1"){
+        wed.push({"I": this.businessForm.value.Wed02[0].toString(), "F": this.businessForm.value.Wed02[1].toString()});
+      }
+      opeHours["WED"] = wed
+    }
+    if (this.businessForm.value.ThuEnabled === 1) {
+      thu.push({"I": this.businessForm.value.Thu[0].toString(), "F": this.businessForm.value.Thu[1].toString()});
+      if (this.newInterval[3] == "1"){
+        thu.push({"I": this.businessForm.value.Thu02[0].toString(), "F": this.businessForm.value.Thu02[1].toString()});
+      }
+      opeHours["THU"] = thu
+    }
+    if (this.businessForm.value.FriEnabled === 1) {
+      fri.push({"I": this.businessForm.value.Fri[0].toString(), "F": this.businessForm.value.Fri[1].toString()});
+      if (this.newInterval[4] == "1"){
+        fri.push({"I": this.businessForm.value.Fri02[0].toString(), "F": this.businessForm.value.Fri02[1].toString()});
+      }
+      opeHours["FRI"] = fri
+    }
+    if (this.businessForm.value.SatEnabled === 1) {
+      sat.push({"I": this.businessForm.value.Sat[0].toString(), "F": this.businessForm.value.Sat[1].toString()});
+      if (this.newInterval[5] == "1"){
+        sat.push({"I": this.businessForm.value.Sat02[0].toString(), "F": this.businessForm.value.Sat02[1].toString()});
+      }
+      opeHours["SAT"] = sat
+    }
+    if (this.businessForm.value.SunEnabled === 1) {
+      sun.push({"I": this.businessForm.value.Sun[0].toString(), "F": this.businessForm.value.Sun[1].toString()});
+      if (this.newInterval[6] == "1"){
+        sun.push({"I": this.businessForm.value.Sun02[0].toString(), "F": this.businessForm.value.Sun02[1].toString()});
+      }
+      opeHours["SUN"] = sun
+    }
+    
+    let dataForm =  { 
+      "Name": this.businessForm.value.Name,
+      "Country": countryId.c,
+      "Address": this.businessForm.value.Address,
+      "City": this.businessForm.value.City,
+      "ZipCode": this.businessForm.value.ZipCode,
+      "Geolocation": '{"LAT": '+ this.lat+',"LNG": '+this.lng+'}',
+      "Phone": this.businessForm.value.Phone.replace('+1',''),
+      "LongDescription": this.businessForm.value.LongDescription, 
+      "ShortDescription": this.businessForm.value.ShortDescription,
+      "Website": this.businessForm.value.WebSite,
+      "Facebook": this.businessForm.value.Facebook,
+      "Twitter": this.businessForm.value.Twitter,
+      "Instagram": this.businessForm.value.Instagram,
+      "Email": this.businessForm.value.Email,
+      "OperationHours": JSON.stringify(opeHours),
+      "Tags": this.tags.toString(),
+      "Categories": this.businessForm.value.Categories,
+      "ParentBusiness": (this.businessForm.value.ParentBusiness ? 1 : 0)
+    }
+    var spinnerRef = this.spinnerService.start("Saving Business...");
+    this.businessSave$ = this.businessService.updateBusiness(this.businessId, dataForm).pipe(
+      tap(res => { 
+        this.spinnerService.stop(spinnerRef);
+        this.savingBusiness = true;
+        this.businessForm.markAsPristine();
+        this.businessForm.markAsUntouched();
+        this.openDialog('Business', 'Business updated successful', true, false, false);
+      }),
+      catchError(err => {
+        this.spinnerService.stop(spinnerRef);
+        this.savingBusiness = false;
+        this.openDialog('Error !', err.Message, false, true, false);
+        return throwError(err || err.message);
+      })
+    );
+    // }
   }
 
   loadSectors(cityId: string, i: number){
@@ -1624,6 +1625,11 @@ export class BusinessComponent implements OnInit {
     }
   }
 
+  removeTag(tag: string){
+    var data = this.tags.findIndex(e => e === tag);
+    this.tags.splice(data, 1);
+  }
+
   addDoor(event: MatChipInputEvent, i: number): void {
     const input = event.input;
     const value = event.value;
@@ -1634,6 +1640,18 @@ export class BusinessComponent implements OnInit {
       } else {
         this.doors[i] = value;
       }
+    }
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  addTag(event: MatChipInputEvent){
+    const input = event.input;
+    const value = event.value;
+
+    if ((value || '').trim()) {
+      this.tags.push(value);
     }
     if (input) {
       input.value = '';
@@ -1748,7 +1766,7 @@ export class BusinessComponent implements OnInit {
     if (this.locationForm.invalid){ 
       return;
     }
-    if (this.locationForm.touched){
+    // if (this.locationForm.touched){
       let loca =  this.locationForm.get('locations') as FormArray;
       let items: any[] = [];
       for (var i = 0; i < this.noItemsLoc; i++) {
@@ -1826,7 +1844,7 @@ export class BusinessComponent implements OnInit {
           BucketInterval: item.value.BucketInterval,
           TotalCustPerBucketInter: item.value.TotalCustPerBucketInter,
           Status: (item.value.Status == true ? 1: 0),
-          Doors: this.doors[i],
+          Doors: this.doors[i].toString(),
           OperationHours: JSON.stringify(opeHours)
         }
         items.push(location);
@@ -1850,7 +1868,7 @@ export class BusinessComponent implements OnInit {
           return throwError(err || err.message);
         })
       ); 
-    }
+    // }
   }
 
   markerDragEnd($event: MouseEvent) {

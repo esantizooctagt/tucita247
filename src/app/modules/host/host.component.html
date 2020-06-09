@@ -4,15 +4,15 @@
         <ng-container *ngIf="openLoc$ | async"></ng-container>
         <ng-container *ngIf="closedLoc$ | async"></ng-container>
         <div class="col-md-12">
-            <div class="row mt-2">
+            <div class="row mt-2 mb-2">
                 <div class="col-sm-9 p-0">
-                    <button mat-flat-button class="action-buttons-init" *ngIf="locationStatus == 0" color="primary" type="button" (click)="openLocation()">Open</button>
-                    <button mat-flat-button class="action-buttons-init" *ngIf="locationStatus == 1" color="primary" type="button" (click)="closedLocation()">Closed</button>
-                    <button mat-flat-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 0" color="primary" type="button" (click)="getWalkInsCheckOut()">Walk-Ins Check Out</button>
+                    <button mat-stroked-button class="action-buttons-init" *ngIf="locationStatus == 0" color="primary" type="button" (click)="openLocation()">Open</button>
+                    <button mat-stroked-button class="action-buttons-init" *ngIf="locationStatus == 1" color="primary" type="button" (click)="closedLocation()">Closed</button>
+                    <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 0" color="primary" type="button" (click)="getWalkInsCheckOut()">Walk-Ins Check Out</button>
                     <ng-container *ngIf="getWalkIns$ | async"></ng-container>
                     <ng-container *ngIf="manualCheckOut$ | async"></ng-container>
-                    <button mat-flat-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 1" color="primary" type="button" (click)="setManualCheckOut()">Manual Check Out</button>
-                    <button mat-flat-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 0" color="primary" type="button" (click)="checkOutQR()">QR Check Out</button>
+                    <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 1" color="primary" type="button" (click)="setManualCheckOut()">Manual Check Out</button>
+                    <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 0" color="primary" type="button" (click)="checkOutQR()">QR Check Out</button>
                 </div>
             </div>
             <div class="row">

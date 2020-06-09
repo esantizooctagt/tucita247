@@ -13,6 +13,8 @@
         </button>
       </mat-toolbar>
       <mat-nav-list color="primary">
+        <a class="list-item">Las Americass</a>
+        <mat-divider></mat-divider>
         <ng-container class="" *ngFor="let item of apps$ | async">
           <a class="list-item" *ngIf="item.Active" mat-list-item [routerLink]="['/'+item.Route]" routerLinkActive="menu-active" (click)="displayHome(item.Name)">{{ (!collapse ? item.Name : '') }}</a> <!-- <mat-icon class="mr-2">{{item.Icon}}</mat-icon> -->
         </ng-container>

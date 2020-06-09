@@ -1,1 +1,29 @@
-<p>dashboard works!</p>
+<div class="container-fluid h-100 main-background">
+    <div class="row p-0">
+        <div class="col-md-12 pl-4 m-0">
+            <div class="pl-0 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
+                <h3>DASHBOARD</h3>
+            </div>
+            <div class="row p-0 m-0">
+                <mat-card class="col-sm col-md-4 col-lg-4">
+                    <div class="row ml-2 mb-2">
+                        <h2>Total visitors by Location</h2>
+                    </div>
+                    <ng-container *ngIf="quantityPeople$ | async"></ng-container>
+                    <ng-container *ngFor="let item of perLocation; let i=index">
+                        <div class="row pl-3 pb-3">
+                            <div class="col-md-6" [ngClass]="{
+                                        'circle-gray': perLocation[i] = 0,
+                                        'circle-green': perLocation[i] < 80,
+                                        'circle-yellow': perLocation[i] < 95,
+                                        'circle-red': perLocation[i] >= 95}">{{qtyPeople[i]}}</div>
+                            <div class="col-md-6 location-name">
+                                <span class="loc-center">{{LocationName[i]}}</span>
+                            </div>
+                        </div>
+                    </ng-container>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>
