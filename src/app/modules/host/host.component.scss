@@ -62,13 +62,33 @@ mat-card{
 ::ng-deep .mat-progress-bar-buffer {
     background: #E4E8EB;
 }
-
 ::ng-deep .mat-progress-bar {
     border-radius: 15px;
     height: 20px !important;
 }
+/* Use the button type you're using here */
+button.mat-icon-button
+{
+    &.cdk-program-focused 
+    {
+        ::ng-deep .mat-button-focus-overlay
+        {
+            opacity: 0;  // hide overlay
+        }
+    }
+}
+button.mat-stroked-button
+{
+    &.cdk-program-focused 
+    {
+        ::ng-deep .mat-button-focus-overlay
+        {
+            opacity: 0;  // hide overlay
+        }
+    }
+}
 .drop-qeue{
-    height: calc(100vh - 212px); //209.33
+    height: calc(100vh - 228px); //209.33
     padding-right: 2px;
     padding-left: 1px;
 }
@@ -125,7 +145,6 @@ mat-card{
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-
 }
 .card-pending{
     width: 100%;

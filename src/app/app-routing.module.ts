@@ -3,10 +3,10 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '@modules/authentication/guards/auth.guard';
 
 /**Main Components**/
-import { MainNavComponent, NotFoundComponent, LoginComponent, UsersComponent, ClientsComponent, DashboardComponent, ServicesComponent, ProfileComponent, BusinessComponent, CategoriesComponent, ReportsComponent, RolesComponent, HelpComponent, ResetComponent, VerificationComponent, ForgotpassComponent, HomeComponent, HostComponent, UserlocComponent, PollsComponent, PollRespComponent } from '@modules/index';
+import { MainNavComponent, NotFoundComponent, LoginComponent, UsersComponent, ClientsComponent, DashboardComponent, ServicesComponent, ProfileComponent, BusinessComponent, CategoriesComponent, ReportsComponent, RolesComponent, HelpComponent, ResetComponent, VerificationComponent, ForgotpassComponent, HomeComponent, HostComponent, UserlocComponent, PollsComponent, PollRespComponent, QuickCheckinComponent } from '@modules/index';
 
 const routes: Routes = [
-  { 
+  {
     path: '', component: MainNavComponent, canActivate: [AuthGuard],
     children: [
       { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
@@ -15,6 +15,7 @@ const routes: Routes = [
       { path: 'polls', component: PollsComponent, canActivate: [AuthGuard] },
       { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
       { path: 'host', component: HostComponent, canActivate: [AuthGuard] },
+      { path: 'quick-checkin', component: QuickCheckinComponent, canActivate: [AuthGuard] },
       { path: 'services', component: ServicesComponent, canActivate: [AuthGuard] },
       { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
       { path: 'company', component: BusinessComponent, canActivate: [AuthGuard] },
@@ -24,9 +25,9 @@ const routes: Routes = [
       { path: 'help', component: HelpComponent, canActivate: [AuthGuard] }
     ]
   },
-  { 
-    path: 'login', 
-    component: LoginComponent 
+  {
+    path: 'login',
+    component: LoginComponent
   },
   {
     path: 'forgotpassword',
@@ -40,12 +41,12 @@ const routes: Routes = [
     path: 'verification/:userId/:code',
     component: VerificationComponent
   },
-  { 
-    path: 'poll-response/:pollId/:custId', 
-    component: PollRespComponent 
+  {
+    path: 'poll-response/:pollId/:custId',
+    component: PollRespComponent
   },
-  { 
-    path: '**', 
+  {
+    path: '**',
     component: NotFoundComponent //redirectTo: '' 
   }
 ];
@@ -76,5 +77,6 @@ export const routingComponents = [
   RolesComponent,
   HelpComponent,
   HomeComponent,
-  HostComponent
+  HostComponent,
+  QuickCheckinComponent
 ]

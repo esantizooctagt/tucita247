@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocationService, ReasonsService, BusinessService } from '@app/services';
 import { AuthService } from '@app/core/services';
 import { SpinnerService } from '@app/shared/spinner.service';
-import { map, catchError, switchMap } from 'rxjs/operators';
+import { map, catchError, switchMap, mergeMap } from 'rxjs/operators';
 import { AppointmentService } from '@app/services/appointment.service';
 import { Appointment, Reason } from '@app/_models';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -145,7 +145,7 @@ export class HostComponent implements OnInit {
     Gender: [''],
     Preference: [''],
     Disability: [''],
-    Companions: ['1', [Validators.required, Validators.max(99), Validators.min(1)]]
+    Guests: ['1', [Validators.required, Validators.max(99), Validators.min(1)]]
   })
 
   schedule = [];
@@ -312,16 +312,16 @@ export class HostComponent implements OnInit {
     {
       AppId: "34256",
       ClientId: "55555",
-      Name: "MELANIE SANTIZO",
+      Name: "Natalie Merk",
       Phone: "4569009282",
       OnBehalf: 0,
-      Companions: 1,
+      Guests: 1,
       DateAppo: "10:00",
       Door: "LEVEL 1",
       Disability: "",
-      DateFull: "2020-06-03-09-00",
+      DateFull: "2020-06-10-09-00",
       Unread: "0",
-      CheckInTime: "2020-06-03-09-05",
+      CheckInTime: "2020-06-10-10-10",
       ElapsedTime: ""
     }
   ]
@@ -443,23 +443,23 @@ export class HostComponent implements OnInit {
       })
     );
 
-    setInterval(() => { 
-      if (this.locationId != '' && this.locationStatus == 1 && this.closedLoc == 0){
-        this.quantityPeople$ = this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
-          map((res: any) => {
-            if (res != null){
-              this.qtyPeople = res.Quantity;
-              this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
-              return res.Quantity.toString();
-            }
-          }),
-          catchError(err => {
-            this.onError = err.Message;
-            return '0';
-          })
-        );
-      }
-    }, 30000);
+    // setInterval(() => { 
+    //   if (this.locationId != '' && this.locationStatus == 1 && this.closedLoc == 0){
+    //     this.quantityPeople$ = this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
+    //       map((res: any) => {
+    //         if (res != null){
+    //           this.qtyPeople = res.Quantity;
+    //           this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+    //           return res.Quantity.toString();
+    //         }
+    //       }),
+    //       catchError(err => {
+    //         this.onError = err.Message;
+    //         return '0';
+    //       })
+    //     );
+    //   }
+    // }, 30000);
 
     setInterval(() => {
       this.preCheckIn.forEach(res => {
@@ -560,8 +560,8 @@ export class HostComponent implements OnInit {
   checkOutQR(){
     const dialogRef = this.dialog.open(VideoDialogComponent, {
       width: '450px',
-      height: '570px',
-      data: {qrCode: ''}
+      height: '595px',
+      data: {guests: 0, title: 'Check-Out', tipo: 2}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -585,6 +585,18 @@ export class HostComponent implements OnInit {
           this.openSnackBar("La Cita check-out successfull","Check-Out");
         }
       }),
+      mergeMap(v => 
+        //ACTUALIZA NUMERO DE PERSONAS
+        this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
+          map((res: any) => {
+            if (res != null){
+              this.qtyPeople = res.Quantity;
+              this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+              return res.Quantity.toString();
+            }
+          })
+        )
+      ),
       catchError(err => {
         if (err.Status == 404){
           this.openSnackBar("Invalid qr code","Check-out");
@@ -604,6 +616,18 @@ export class HostComponent implements OnInit {
           this.openSnackBar("La Cita check-out successfull","Check-Out");
         }
       }),
+      mergeMap(v =>
+        //ACTUALIZA NUMERO DE PERSONAS
+        this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
+          map((res: any) => {
+            if (res != null){
+              this.qtyPeople = res.Quantity;
+              this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+              return res.Quantity.toString();
+            }
+          })
+        )
+      ),
       catchError(err => {
         this.onError = err.Message;
         this.openSnackBar("Something goes wrong try again","Check-out");
@@ -634,6 +658,25 @@ export class HostComponent implements OnInit {
           dialogConfig.minWidth = '80%';
           dialogConfig.height = '600px';
           this.dialog.open(DirDialogComponent, dialogConfig);
+
+          this.dialog.afterAllClosed.subscribe(
+            () =>{
+              //ACTUALIZA NUMERO DE PERSONAS
+              this.quantityPeople$ = this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
+                map((res: any) => {
+                  if (res != null){
+                    this.qtyPeople = res.Quantity;
+                    this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+                    return res.Quantity.toString();
+                  }
+                }),
+                catchError(err => {
+                  this.onError = err.Message;
+                  return '0';
+                })
+              )
+            }
+          );
           return res.Appos;
         }
       }),
@@ -668,7 +711,7 @@ export class HostComponent implements OnInit {
       Gender: (this.clientForm.value.Gender == '' ? '': this.clientForm.value.Gender),
       Preference: (this.clientForm.value.Preference == '' ? '': this.clientForm.value.Preference),
       Disability: (this.clientForm.value.Disability == null ? '': this.clientForm.value.Disability),
-      Companions: this.clientForm.value.Companions
+      Guests: this.clientForm.value.Guests
     }
     var spinnerRef = this.spinnerService.start("Adding Appointment...");
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
@@ -677,7 +720,7 @@ export class HostComponent implements OnInit {
           this.walkIns.push(res.Appointment);
         }
         this.spinnerService.stop(spinnerRef);
-        this.clientForm.reset({Phone:'',Name:'',Email:'',DOB:'',Gender:'',Preference:'', Disability:'', Companions: 1});
+        this.clientForm.reset({Phone:'',Name:'',Email:'',DOB:'',Gender:'',Preference:'', Disability:'', Guests: 1});
         this.showApp = false;
         return res.Code;
       }),
@@ -720,11 +763,11 @@ export class HostComponent implements OnInit {
         this.f.Phone.hasError('maxlength') ? 'Maximun length 14' :
           '';
     }
-    if (component === 'Companions'){
-      return this.f.Companions.hasError('required') ? 'You must enter a value' :
-      this.f.Companions.hasError('maxlength') ? 'Maximun length 2' :
-        this.f.Companions.hasError('min') ? 'Minimun value 1' :
-          this.f.Companions.hasError('max') ? 'Maximun value 99' :
+    if (component === 'Guests'){
+      return this.f.Guests.hasError('required') ? 'You must enter a value' :
+      this.f.Guests.hasError('maxlength') ? 'Maximun length 2' :
+        this.f.Guests.hasError('min') ? 'Minimun value 1' :
+          this.f.Guests.hasError('max') ? 'Maximun value 99' :
             '';
     }
   }
@@ -782,29 +825,30 @@ export class HostComponent implements OnInit {
     if (appo.Phone != '0000000000') {
       const dialogRef = this.dialog.open(VideoDialogComponent, {
         width: '450px',
-        height: '645px'
+        height: '675px',
+        data: {guests: appo.Guests, title: 'Check-In', tipo: 1 }
       });
 
       dialogRef.afterClosed().subscribe(result => {
         if (result != undefined) {
           this.qrCode = result.qrCode;
-          let companionsAppo = result.Companions;
-          if (this.qrCode != '' && companionsAppo > 0){
-            this.checkInAppointment(this.qrCode, appo, companionsAppo);
+          let guestsAppo = result.Guests;
+          if (this.qrCode != '' && guestsAppo > 0){
+            this.checkInAppointment(this.qrCode, appo, guestsAppo);
           }
         }
       });
     } else {
-      this.checkInAppointment('VALID', appo, appo.Companions);
+      this.checkInAppointment('VALID', appo, appo.Guests);
     }
   }
 
-  checkInAppointment(qrCode: string, appo: any, companions: number){
+  checkInAppointment(qrCode: string, appo: any, guests: number){
     let formData = {
       Status: 3,
       DateAppo: appo.DateFull,
       qrCode: qrCode,
-      Companions: companions,
+      Guests: guests,
       BusinessId: this.businessId,
       LocationId: this.locationId
     }
@@ -817,6 +861,18 @@ export class HostComponent implements OnInit {
           this.openSnackBar("La Cita check-in successfull","Check-In");
         }
       }),
+      mergeMap(v => 
+        //ACTUALIZA NUMERO DE PERSONAS
+        this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
+          map((res: any) => {
+            if (res != null){
+              this.qtyPeople = res.Quantity;
+              this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+              return res.Quantity.toString();
+            }
+          })
+        )
+      ),
       catchError(err => {
         if (err.Status == 404){
           this.openSnackBar("Invalid qr code","Check-in");
@@ -1028,7 +1084,7 @@ export class HostComponent implements OnInit {
               ClientId: item['ClientId'],
               Name: item['Name'].toLowerCase(),
               OnBehalf: item['OnBehalf'],
-              Companions: item['Companions'],
+              Guests: item['Guests'],
               Door: item['Door'],
               Disability: item['Disability'],
               Phone: item['Phone'],
@@ -1080,7 +1136,7 @@ export class HostComponent implements OnInit {
               ClientId: item['ClientId'],
               Name: item['Name'].toLowerCase(),
               OnBehalf: item['OnBehalf'],
-              Companions: item['Companions'],
+              Guests: item['Guests'],
               Door: item['Door'],
               Disability: item['Disability'],
               Phone: item['Phone'],
@@ -1138,7 +1194,7 @@ export class HostComponent implements OnInit {
               ClientId: item['ClientId'],
               Name: item['Name'].toLowerCase(),
               OnBehalf: item['OnBehalf'],
-              Companions: item['Companions'],
+              Guests: item['Guests'],
               Door: item['Door'],
               Disability: item['Disability'],
               Phone: item['Phone'],
@@ -1189,7 +1245,7 @@ export class HostComponent implements OnInit {
               ClientId: item['ClientId'],
               Name: item['Name'].toLowerCase(),
               OnBehalf: item['OnBehalf'],
-              Companions: item['Companions'],
+              Guests: item['Guests'],
               Door: item['Door'],
               Disability: item['Disability'],
               Phone: item['Phone'],

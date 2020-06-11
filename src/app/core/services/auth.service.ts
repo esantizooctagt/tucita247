@@ -70,6 +70,10 @@ export class AuthService {
     return user.Business_Id;
   }
 
+  businessName(){
+    let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
+    return user.Business_Name;
+  }
   userId(){
     let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
     return user.User_Id;

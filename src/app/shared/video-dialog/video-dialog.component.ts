@@ -1,6 +1,12 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, ViewChild, ElementRef, OnInit, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import jsQR, { QRCode } from 'jsqr';
+
+export interface DialogData {
+  guests: number;
+  title: string;
+  tipo: number;
+}
 
 @Component({
   selector: 'app-video-dialog',
@@ -13,7 +19,6 @@ export class VideoDialogComponent implements OnInit {
 
   qrCode: string = '';
   checkInValues: any;
-  companions: number = 0;
   videoStart = false;
   medias: MediaStreamConstraints = {
     audio: false,
@@ -21,7 +26,8 @@ export class VideoDialogComponent implements OnInit {
   };
 
   constructor(
-    public dialogRef: MatDialogRef<VideoDialogComponent>
+    public dialogRef: MatDialogRef<VideoDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) { }
 
   ngOnInit(): void {
@@ -82,7 +88,7 @@ export class VideoDialogComponent implements OnInit {
   onOK(): void{
     let checkInValues ={
       qrCode : this.qrCode,
-      Companions : this.companions
+      Guests : this.data.guests
     }
     this.dialogRef.close(checkInValues);
   }

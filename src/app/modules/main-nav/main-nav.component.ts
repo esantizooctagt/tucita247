@@ -19,12 +19,12 @@ import { RolesService } from '@app/services';
 export class MainNavComponent implements OnInit {
   public online: boolean = true;
   businessId: string='';
+  businessName: string = '';
   userId: string='';
   avatar: string='';
   roleId: string='';
   language: string='';
   isAdmin: boolean=false;
-  collapse: boolean=false;
   dispHome: boolean=true;
 
   apps$: Observable<Access[]>;
@@ -70,6 +70,7 @@ export class MainNavComponent implements OnInit {
       this.dispHome = false;
     }
     this.businessId = this.authService.businessId();
+    this.businessName = this.authService.businessName();
     this.roleId = this.authService.roleId();
     this.userId = this.authService.userId();
     this.isAdmin = this.authService.isAdmin();
@@ -86,10 +87,6 @@ export class MainNavComponent implements OnInit {
   logout() {
     this.authService.logout();
     this.router.navigate(['/login']);
-  }
-
-  OnCollapse(){
-    this.collapse = !this.collapse;
   }
 
   displayHome(event){

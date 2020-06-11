@@ -13,8 +13,8 @@ export class CategoryService {
   readonly apiURL = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
-  getCategories(): Observable<Category[]> {
-    return this.http.get<Category[]>(this.apiURL + '/categories')
+  getCategories(language): Observable<Category[]> {
+    return this.http.get<Category[]>(this.apiURL + '/categories/'+language)
                     .pipe(catchError(this.errorHandler));
   }
 

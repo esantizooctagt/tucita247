@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { AuthService } from '@core/services';
-import { Country, Location, Business, Category } from '@app/_models';
+import { Country, Category } from '@app/_models';
 import { Observable, Subscription, throwError } from 'rxjs';
 import { startWith, map, shareReplay, catchError, tap, switchMap, mergeMap } from 'rxjs/operators';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -45,6 +45,8 @@ export class BusinessComponent implements OnInit {
   //Tags
   public tags =[];
   
+  language: string = 'EN';
+
   //Categories
   visibleCategory = true;
   selectableCategory = true;
@@ -219,12 +221,10 @@ export class BusinessComponent implements OnInit {
       Address: ['', [Validators.required, Validators.maxLength(500), Validators.minLength(3)]],
       Geolocation: ['{0.00,0.00}', [Validators.maxLength(50), Validators.minLength(5)]],
       ParentLocation: ['0', Validators.required],
-      TotalPiesTransArea: ['',[Validators.required]],
-      LocationDensity: ['',[Validators.required, Validators.min(1)]],
-      MaxNumberEmployeesLocation: ['',[Validators.required, Validators.min(1)]],
-      MaxConcurrentCustomerLocation:['',[Validators.required, Validators.min(1)]],
+      MaxConcurrentCustomer:['',[Validators.required, Validators.min(1)]],
       BucketInterval: ['',[Validators.required, Validators.min(0.5), Validators.max(5)]],
       TotalCustPerBucketInter: ['',[Validators.required, Validators.min(1)]],
+      ManualCheckOut: [''],
       Doors: ['',[Validators.required]],
       Status: [1],
       OperationHours: [''],
@@ -314,7 +314,7 @@ export class BusinessComponent implements OnInit {
 
     this.onValueChanges();
 
-    this.categories$ = this.categoryService.getCategories().pipe(
+    this.categories$ = this.categoryService.getCategories(this.language).pipe(
       map(res => {
         this.allCategories = res;
         this.filteredCategories$ = this.businessForm.get('Categories').valueChanges
@@ -664,7 +664,7 @@ export class BusinessComponent implements OnInit {
           this.businessForm.reset({BusinessId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', OperationHours: '', LongDescription: '', ShortDescription: '', Imagen:'', Tags: '', ParentBusiness: 0, Status: 1, Mon:[8,17], Mon02:[18,24], MonEnabled: 0, Tue:[8,17], Tue02:[18,24], TueEnabled: 0, Wed:[8,17], Wed02:[18,24], WedEnabled: 0, Thu:[8,17], Thu02:[18,24], ThuEnabled: 0, Fri:[8,17], Fri02:[18,24], FriEnabled: 0, Sat:[8,17], Sat02:[18,24], SatEnabled: 0, Sun:[8,17], Sun02:[18,24], SunEnabled: 0});
         }
       }),
-      switchMap(val => this.locationService.getCities(this.countryCode).pipe(
+      switchMap(val => this.locationService.getCities(this.countryCode, this.language).pipe(
         map(res => {
           if (res != null){
             res.forEach(element => {
@@ -674,7 +674,7 @@ export class BusinessComponent implements OnInit {
           }
         })
       )),
-      switchMap(v => this.locationService.getLocations(this.businessId, this.countryCode).pipe(
+      switchMap(v => this.locationService.getLocations(this.businessId, this.countryCode, this.language).pipe(
         tap((res: any) => {
           if (res != null){
             this.locationForm.setControl('locations', this.setLocations(res.Locations));
@@ -750,15 +750,13 @@ export class BusinessComponent implements OnInit {
           Address: s.Address,
           Geolocation: s.Geolocation,
           ParentLocation: s.ParentLocation,
-          TotalPiesTransArea: s.TotalPiesTransArea,
-          LocationDensity: s.LocationDensity,
           City: s.City,
           Sector: s.Sector,
-          MaxNumberEmployeesLocation: s.MaxNumberEmployeesLocation,
-          MaxConcurrentCustomerLocation: s.MaxConcurrentCustomerLocation,
+          MaxConcurrentCustomer: s.MaxConcurrentCustomer,
           BucketInterval: s.BucketInterval,
           TotalCustPerBucketInter: s.TotalCustPerBucketInter,
           OperationHours: s.OperationHours,
+          ManualCheckOut: s.ManualCheckOut,
           Doors: '',
           Status: (s.Status == "1" ? true : false),
           Mon: new FormControl("MON" in opeHour ? [+opeHour.MON[0].I, +opeHour.MON[0].F] : [8, 12]),
@@ -1057,7 +1055,7 @@ export class BusinessComponent implements OnInit {
     this.sectors[index] = [];
     // console.log(locs);
     locs.forEach((s: any) => {
-      this.locationService.getSectors(this.countryCode, s.City).pipe(
+      this.locationService.getSectors(this.countryCode, s.City, this.language).pipe(
         map(res => {
           if (res != null){
             this.sectors[index] = [];
@@ -1330,26 +1328,9 @@ export class BusinessComponent implements OnInit {
       return sParentLocation.hasError('required') ? 'You must enter a value' :
         '';
     }
-    if (component === 'TotalPiesTransArea'){
-      let totalPiesTransArea = (<FormArray>this.locationForm.get('locations')).controls[index].get('TotalPiesTransArea');
-      return totalPiesTransArea.hasError('required') ? 'You must enter a value':
-        '';
-    }
-    if (component === 'LocationDensity'){
-      let locationDensity = (<FormArray>this.locationForm.get('locations')).controls[index].get('LocationDensity');
-      return locationDensity.hasError('required') ? 'You must enter a value' :
-        locationDensity.hasError('min') ? 'Minimun value 2' :
-          '';
-    }
-    if (component === 'MaxNumberEmployeesLocation'){
-      let maxNumberEmployeesLocation = (<FormArray>this.locationForm.get('locations')).controls[index].get('MaxNumberEmployeesLocation');
-      return maxNumberEmployeesLocation.hasError('required') ? 'You must enter a value' :
-        maxNumberEmployeesLocation.hasError('min') ? 'Minimun value 1' :
-          '';
-    }
-    if (component === 'MaxConcurrentCustomerLocation'){
-      let maxConcurrentCustomerLocation = (<FormArray>this.locationForm.get('locations')).controls[index].get('MaxConcurrentCustomerLocation');
-      return maxConcurrentCustomerLocation.hasError('required') ? 'You must enter a value':
+    if (component === 'MaxConcurrentCustomer'){
+      let maxConcurrentCustomer = (<FormArray>this.locationForm.get('locations')).controls[index].get('MaxConcurrentCustomer');
+      return maxConcurrentCustomer.hasError('required') ? 'You must enter a value':
         '';
     }
     if (component === 'BucketInterval'){
@@ -1551,7 +1532,7 @@ export class BusinessComponent implements OnInit {
   }
 
   loadSectors(cityId: string, i: number){
-    this.sectors$ = this.locationService.getSectors(this.countryCode, cityId).pipe(
+    this.sectors$ = this.locationService.getSectors(this.countryCode, cityId, this.language).pipe(
       map(res => {
         if (res != null){
           this.sectors[i]= [];
@@ -1837,13 +1818,11 @@ export class BusinessComponent implements OnInit {
           Sector: item.value.Sector,
           Geolocation: '{"LAT": '+ this.latLoc[i]+',"LNG": '+this.lngLoc[i]+'}',
           ParentLocation: item.value.ParentLocation,
-          TotalPiesTransArea: item.value.TotalPiesTransArea,
-          LocationDensity: item.value.LocationDensity,
-          MaxNumberEmployeesLocation: item.value.MaxNumberEmployeesLocation,
-          MaxConcurrentCustomerLocation: item.value.MaxConcurrentCustomerLocation,
+          MaxConcurrentCustomer: item.value.MaxConcurrentCustomer,
           BucketInterval: item.value.BucketInterval,
           TotalCustPerBucketInter: item.value.TotalCustPerBucketInter,
           Status: (item.value.Status == true ? 1: 0),
+          ManualCheckOut: (item.value.ManualCheckOut == true ? 1: 0),
           Doors: this.doors[i].toString(),
           OperationHours: JSON.stringify(opeHours)
         }

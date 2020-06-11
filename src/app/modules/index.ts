@@ -19,3 +19,4 @@ export * from './host/host.component';
 export * from './userloc/userloc.component';
 export * from './polls/polls.component';
 export * from './poll-resp/poll-resp.component';
+export * from './quick-checkin/quick-checkin.component';

@@ -46,6 +46,20 @@
   color: #FF4F00;
   background: none;
 }
+.list-item-business{
+  font-weight: 600;
+  cursor: none;
+  color: #898989;
+  text-transform: uppercase;
+  line-height: 22px;
+}
+.list-item-business:hover{
+  font-weight: 600;
+  cursor: none;
+  color: #898989;
+  text-transform: uppercase;
+  background: none;
+}
 .list-item:focus{
   background: none;
 }
@@ -71,8 +85,13 @@
   // background-color: #e3e7ef;
 }
 .main-logo{
-  background: url('../../../assets/images/logoTuCita247.pnh') no-repeat left center;
-  height: 100px;
+  height: 102px;
+  background: url('../../../assets/images/logoTuCita247.svg');
+  width: 180px;
+  background-repeat: no-repeat;
+  background-position: left;
+  background-size: cover;
+  margin: 0 auto;
 }
 .mat-toolbar-main {
   background: #ff4f00;

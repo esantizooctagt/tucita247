@@ -56,8 +56,15 @@
     left: 50%;
 }
 .main-logo{
-    background: url('../../../assets/images/logoTuCita247WH.png') no-repeat center center;
+    // background: url('../../../assets/images/logoTuCita247WH.png') no-repeat center center;
     height: 115px;
+    background: url('../../../assets/images/logoTuCita247WH.svg');
+    // height: 115px;
+    width: 220px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin: 0 auto;
 }
 .login-form{
     width: 100%;

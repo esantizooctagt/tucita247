@@ -77,7 +77,7 @@
                                     [selectable]="selectableCategory"
                                     [removable]="removableCategory"
                                     (removed)="removeCategory(category)">
-                                    {{category.Name}}
+                                    {{ category.Name }}
                                     <mat-icon matChipRemove *ngIf="removableCategory">cancel</mat-icon>
                                 </mat-chip>
                                 <input
@@ -89,7 +89,7 @@
                             </mat-chip-list>
                             <mat-autocomplete #autoCategory="matAutocomplete" (optionSelected)="selectedCategory($event)">
                                 <mat-option *ngFor="let category of filteredCategories$ | async" [value]="category.CategoryId">
-                                    {{category.Name}}
+                                    {{ category.Name }}
                                 </mat-option>
                             </mat-autocomplete>
                         </mat-form-field>
@@ -284,7 +284,7 @@
                                             <mat-form-field class="col-md-5" hintLabel="City">
                                                 <mat-select formControlName="City" (selectionChange)="loadSectors($event.value, i)" required>
                                                     <mat-option *ngFor="let city of cities" [value]="city.CityId">
-                                                    {{city.Name}}
+                                                    {{ city.Name }}
                                                     </mat-option>
                                                 </mat-select>
                                                 <mat-error *ngIf="item.get('City').invalid">{{getErrorMessage('SCity', i)}}</mat-error>
@@ -292,37 +292,23 @@
                                             <mat-form-field class="col-md" hintLabel="Sector">
                                                 <mat-select formControlName="Sector" required>
                                                     <mat-option *ngFor="let sector of sectors[i]" [value]="sector.SectorId">
-                                                    {{sector.Name}}
+                                                    {{ sector.Name }}
                                                     </mat-option>
                                                 </mat-select>
                                                 <mat-error *ngIf="item.get('Sector').invalid">{{getErrorMessage('Sector', i)}}</mat-error>
                                             </mat-form-field>
                                         </div>
                                         <div class="row">
-                                            <mat-form-field class="col-md-4" hintLabel="Total foot by transitable area">
-                                                <input matInput placeholder="Total foot by transitable area" formControlName="TotalPiesTransArea" [errorStateMatcher]="confirmValidParentMatcher" required>
-                                                <mat-error *ngIf="item.get('TotalPiesTransArea').invalid">{{getErrorMessage('TotalPiesTransArea', i)}}</mat-error>
+                                            <mat-form-field class="col-md-3" hintLabel="Max concurrent customer">
+                                                <input matInput placeholder="Max Concurrent Customers" formControlName="MaxConcurrentCustomer" [errorStateMatcher]="confirmValidParentMatcher" required>
+                                                <mat-error *ngIf="item.get('MaxConcurrentCustomer').invalid">{{getErrorMessage('MaxConcurrentCustomer', i)}}</mat-error>
                                             </mat-form-field>
-                                            <mat-form-field class="col-md-4" hintLabel="Location density">
-                                                <input matInput placeholder="Location Density" formControlName="LocationDensity" min="2" [errorStateMatcher]="confirmValidParentMatcher" required>
-                                                <mat-error *ngIf="item.get('LocationDensity').invalid">{{getErrorMessage('LocationDensity', i)}}</mat-error>
-                                            </mat-form-field>
-                                            <mat-form-field class="col-md" hintLabel="Max number of employees per location">
-                                                <input matInput placeholder="Max Number of Employees x Location" formControlName="MaxNumberEmployeesLocation" min="1" [errorStateMatcher]="confirmValidParentMatcher" required>
-                                                <mat-error *ngIf="item.get('MaxNumberEmployeesLocation').invalid">{{getErrorMessage('MaxNumberEmployeesLocation', i)}}</mat-error>
-                                            </mat-form-field>
-                                        </div>
-                                        <div class="row">
-                                            <mat-form-field class="col-md-3" hintLabel="Max concurrent customer per location">
-                                                <input matInput placeholder="Max Concurrent Customers x Location" formControlName="MaxConcurrentCustomerLocation" [errorStateMatcher]="confirmValidParentMatcher" required>
-                                                <mat-error *ngIf="item.get('MaxConcurrentCustomerLocation').invalid">{{getErrorMessage('MaxConcurrentCustomerLocation', i)}}</mat-error>
-                                            </mat-form-field>
-                                            <mat-form-field class="col-md" hintLabel="Bucket interval">
-                                                <input matInput placeholder="Bucket Interval" formControlName="BucketInterval" [errorStateMatcher]="confirmValidParentMatcher" required>
+                                            <mat-form-field class="col-md" hintLabel="Service Time interval">
+                                                <input matInput placeholder="Service Time Interval" formControlName="BucketInterval" [errorStateMatcher]="confirmValidParentMatcher" required>
                                                 <mat-error *ngIf="item.get('BucketInterval').invalid">{{getErrorMessage('BucketInterval', i)}}</mat-error>
                                             </mat-form-field>
-                                            <mat-form-field class="col-md-3" hintLabel="Total customer per bucket interval">
-                                                <input matInput placeholder="Total Customer per Bucket Interval" formControlName="TotalCustPerBucketInter" [errorStateMatcher]="confirmValidParentMatcher" required>
+                                            <mat-form-field class="col-md-3" hintLabel="Number of appointments by service interval">
+                                                <input matInput placeholder="Number of appointments by service interval" formControlName="TotalCustPerBucketInter" [errorStateMatcher]="confirmValidParentMatcher" required>
                                                 <mat-error *ngIf="item.get('TotalCustPerBucketInter').invalid">{{getErrorMessage('TotalCustPerBucketInter', i)}}</mat-error>
                                             </mat-form-field>
                                         </div>
@@ -436,6 +422,9 @@
                                             <agm-map [latitude]="latLoc[i]" [zoom]="zoom" [longitude]="lngLoc[i]">
                                                 <agm-marker  [latitude]="latLoc[i]" [longitude]="lngLoc[i]" [markerDraggable]="true" (dragEnd)="markerDragEndLoc($event, i)"></agm-marker>
                                             </agm-map>
+                                        </div>
+                                        <div class="form-field-check">
+                                            <mat-checkbox formControlName="ManualCheckOut">Manual Check Out</mat-checkbox>
                                         </div>
                                         <div class="form-field-check">
                                             <mat-checkbox formControlName="Status">Status</mat-checkbox>

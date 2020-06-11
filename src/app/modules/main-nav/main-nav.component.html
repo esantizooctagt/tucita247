@@ -2,35 +2,25 @@
     <mat-sidenav #drawer class="sidenav" fixedInViewport
         [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
         [mode]="(isHandset$ | async) ? 'over' : 'side'"
-        [opened]="(isHandset$ | async) === false"
-        [ngStyle]="{'width': collapse === true ? '60px' : '200px'}">
-      <mat-toolbar class="main-logo">{{ (!collapse ? '' : '') }}
-        <!-- <button mat-icon-button *ngIf="!collapse" (click)="OnCollapse()">
-          <mat-icon class="mr-2">arrow_left</mat-icon>
-        </button> -->
-        <button mat-icon-button *ngIf="collapse" (click)="OnCollapse()">
-          <mat-icon class="mr-2">arrow_right</mat-icon>
-        </button>
+        [opened]="(isHandset$ | async) === false">
+      <mat-toolbar class="main-logo">
       </mat-toolbar>
       <mat-nav-list color="primary">
-        <a class="list-item">Las Americass</a>
+        <a class="list-item-business" mat-list-item pt-2 mb-2>{{businessName}}</a>
         <mat-divider></mat-divider>
         <ng-container class="" *ngFor="let item of apps$ | async">
-          <a class="list-item" *ngIf="item.Active" mat-list-item [routerLink]="['/'+item.Route]" routerLinkActive="menu-active" (click)="displayHome(item.Name)">{{ (!collapse ? item.Name : '') }}</a> <!-- <mat-icon class="mr-2">{{item.Icon}}</mat-icon> -->
+          <a class="list-item" *ngIf="item.Active" mat-list-item [routerLink]="['/'+item.Route]" routerLinkActive="menu-active" (click)="displayHome(item.Name)">{{ item.Name }}</a> <!-- <mat-icon class="mr-2">{{item.Icon}}</mat-icon> -->
         </ng-container>
         <div *ngIf="isAdmin">
           <mat-divider></mat-divider>
-          <a mat-list-item class="item-list">{{ (!collapse ? 'SETTINGS' : '' ) }}</a><!-- <mat-icon class="mr-2">settings</mat-icon> -->
-          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/company']" routerLinkActive="menu-active" (click)="displayHome('Company')">{{ (!collapse ? 'Company' : '') }}</a> <!-- <mat-icon class="mr-2">location_city</mat-icon> -->
-          <!-- <a mat-list-item [routerLink]="['/documents']" routerLinkActive="menu-active" (click)="displayHome('Documents')"><mat-icon class="mr-2">folder</mat-icon>{{ (!collapse ? 'Documents' : '') }}</a>
-          <a mat-list-item [routerLink]="['/inventory']" routerLinkActive="menu-active" (click)="displayHome('Inventory')"><mat-icon class="mr-2">store</mat-icon>{{ (!collapse ? 'Inventory' : '') }}</a>
-          <a mat-list-item [routerLink]="['/taxes']" routerLinkActive="menu-active" (click)="displayHome('Taxes')"><mat-icon class="mr-2">local_atm</mat-icon>{{ (!collapse ? 'Taxes' :'') }} </a> -->
-          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/users']" routerLinkActive="menu-active" (click)="displayHome('Users')">{{ (!collapse ? 'Users' :'') }}</a><!-- <mat-icon class="mr-2">person</mat-icon>-->
-          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/roles']" routerLinkActive="menu-active" (click)="displayHome('Roles')">{{ (!collapse ? 'Roles' : '') }}</a><!-- <mat-icon class="mr-2">security</mat-icon>-->
+          <a mat-list-item class="item-list">{{ 'SETTINGS'}}</a>
+          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/company']" routerLinkActive="menu-active" (click)="displayHome('Company')">{{ 'Company'}}</a> <!-- <mat-icon class="mr-2">location_city</mat-icon> -->
+          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/users']" routerLinkActive="menu-active" (click)="displayHome('Users')">{{ 'Users' }}</a><!-- <mat-icon class="mr-2">person</mat-icon>-->
+          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/roles']" routerLinkActive="menu-active" (click)="displayHome('Roles')">{{ 'Roles' }}</a><!-- <mat-icon class="mr-2">security</mat-icon>-->
         </div>
       </mat-nav-list>
     </mat-sidenav>
-    <mat-sidenav-content [ngStyle]="{'margin-left': collapse === true ? '45px' : '200px'}">
+    <mat-sidenav-content>
       <mat-toolbar class="mat-toolbar-main">
         <button
           type="button"
@@ -45,7 +35,7 @@
           mat-icon-button
           (click)="drawer.toggle()"
           *ngIf="!(isHandset$ | async)">
-          <mat-icon>blur_on</mat-icon>
+          <mat-icon>dehaze</mat-icon>
         </button>
         <!-- <span></span> -->
         <span class="spacer"></span>
