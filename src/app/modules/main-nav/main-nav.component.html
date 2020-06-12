@@ -9,14 +9,14 @@
         <a class="list-item-business" mat-list-item pt-2 mb-2>{{businessName}}</a>
         <mat-divider></mat-divider>
         <ng-container class="" *ngFor="let item of apps$ | async">
-          <a class="list-item" *ngIf="item.Active" mat-list-item [routerLink]="['/'+item.Route]" routerLinkActive="menu-active" (click)="displayHome(item.Name)">{{ item.Name }}</a> <!-- <mat-icon class="mr-2">{{item.Icon}}</mat-icon> -->
+          <a class="list-item" *ngIf="item.Active == '1'" mat-list-item [routerLink]="['/'+item.Route]" routerLinkActive="menu-active" (click)="displayHome(item.Name)">{{ item.Name }}</a>
         </ng-container>
         <div *ngIf="isAdmin">
           <mat-divider></mat-divider>
           <a mat-list-item class="item-list">{{ 'SETTINGS'}}</a>
-          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/company']" routerLinkActive="menu-active" (click)="displayHome('Company')">{{ 'Company'}}</a> <!-- <mat-icon class="mr-2">location_city</mat-icon> -->
-          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/users']" routerLinkActive="menu-active" (click)="displayHome('Users')">{{ 'Users' }}</a><!-- <mat-icon class="mr-2">person</mat-icon>-->
-          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/roles']" routerLinkActive="menu-active" (click)="displayHome('Roles')">{{ 'Roles' }}</a><!-- <mat-icon class="mr-2">security</mat-icon>-->
+          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/company']" routerLinkActive="menu-active" (click)="displayHome('Company')">{{ 'Company'}}</a>
+          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/users']" routerLinkActive="menu-active" (click)="displayHome('Users')">{{ 'Users' }}</a>
+          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/roles']" routerLinkActive="menu-active" (click)="displayHome('Roles')">{{ 'Roles' }}</a>
         </div>
       </mat-nav-list>
     </mat-sidenav>

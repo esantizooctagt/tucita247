@@ -11,256 +11,402 @@
                 <mat-step [stepControl]="businessForm" step="business" *ngIf="(business$ | async) || displayBusiness">
                     <form [formGroup]="businessForm">
                         <ng-template matStepLabel>Business</ng-template>
-                        <mat-form-field hintLabel="Name">
-                            <input matInput placeholder="Business Name" maxlength="500" minlength="3" formControlName="Name" [errorStateMatcher]="confirmValidParentMatcher" required>
-                            <mat-error *ngIf="fBusiness.Name.invalid && fBusiness.Name.touched">{{getErrorMessage('Name')}}</mat-error>
-                        </mat-form-field>
-                        <mat-form-field hintLabel="Address">
-                            <input matInput placeholder="Address" formControlName="Address" maxlength="500" minlength="3" [errorStateMatcher]="confirmValidParentMatcher" required>
-                            <mat-error *ngIf="fBusiness.Address.invalid && fBusiness.Address.touched">{{getErrorMessage('Address')}}</mat-error>
-                        </mat-form-field>
-                        <div class="row">
-                            <mat-form-field class="col-md" hintLabel="Country">
-                                <input type="text" placeholder="Country" matInput formControlName="Country" [matAutocomplete]="autoCountry" [errorStateMatcher]="confirmValidParentMatcher" required>
-                                <mat-error *ngIf="fBusiness.Country.invalid && fBusiness.Country.touched">{{getErrorMessage('Country')}}</mat-error>
-                                <mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayFn" activeOption="activeOption">
-                                    <mat-option *ngFor="let country of filteredCountries$ | async" [value]="country">
-                                    {{country.n}}
-                                    </mat-option>
-                                </mat-autocomplete>
-                            </mat-form-field>
-                            <mat-form-field class="col-md-4" hintLabel="City">
-                                <input matInput placeholder="City" formControlName="City" maxlength="100" minlength="2" [errorStateMatcher]="confirmValidParentMatcher" required>
-                                <mat-error *ngIf="fBusiness.City.invalid && fBusiness.City.touched">{{getErrorMessage('City')}}</mat-error>
-                            </mat-form-field>
-                        </div>
-                        <div class="row">
-                            <mat-form-field class="col-md-2" hintLabel="Zip Code">
-                                <input matInput placeholder="Zip Code" formControlName="ZipCode" maxlength="10" minlength="3" [errorStateMatcher]="confirmValidParentMatcher">
-                                <mat-error *ngIf="fBusiness.ZipCode.invalid && fBusiness.ZipCode.touched">{{getErrorMessage('ZipCode')}}</mat-error>
-                            </mat-form-field>
-                            <mat-form-field class="col-md" hintLabel="Phone">
-                                <span matPrefix>+1 &nbsp;</span>
-                                <input matInput appPhoneMask placeholder="Phone" formControlName="Phone" maxlength="15" minlength="3" [errorStateMatcher]="confirmValidParentMatcher">
-                                <mat-error *ngIf="fBusiness.Phone.invalid && fBusiness.Phone.touched">{{getErrorMessage('Phone')}}</mat-error>
-                            </mat-form-field>
-                            <mat-form-field class="col-md-4" hintLabel="WebSite">
-                                <input matInput placeholder="WebSite" formControlName="WebSite" maxlength="150" minlength="4" [errorStateMatcher]="confirmValidParentMatcher">
-                                <mat-error *ngIf="fBusiness.WebSite.invalid && fBusiness.WebSite.touched">{{getErrorMessage('WebSite')}}</mat-error>
-                            </mat-form-field>
-                        </div>
-                        <div class="row">
-                            <mat-form-field class="col-md-4" hintLabel="Facebook">
-                                <input matInput placeholder="Facebook" maxlength="150" minlength="4" formControlName="Facebook" [errorStateMatcher]="confirmValidParentMatcher">
-                                <mat-error *ngIf="fBusiness.Facebook.invalid && fBusiness.Facebook.touched">{{getErrorMessage('Facebook')}}</mat-error>
-                            </mat-form-field>
-                            <mat-form-field class="col-md-4" hintLabel="Twitter">
-                                <input matInput placeholder="Twitter" maxlength="150" minlength="4" formControlName="Twitter" [errorStateMatcher]="confirmValidParentMatcher">
-                                <mat-error *ngIf="fBusiness.Twitter.invalid && fBusiness.Twitter.touched">{{getErrorMessage('Twitter')}}</mat-error>
-                            </mat-form-field>
-                            <mat-form-field class="col-md-4" hintLabel="Instagram">
-                                <input matInput placeholder="Instagram" maxlength="150" minlength="4" formControlName="Instagram" [errorStateMatcher]="confirmValidParentMatcher">
-                                <mat-error *ngIf="fBusiness.Instagram.invalid && fBusiness.Instagram.touched">{{getErrorMessage('Instagram')}}</mat-error>
-                            </mat-form-field>
-                        </div>
-                        <div class="row">
-                            <mat-form-field class="col-md-12" hintLabel="Email format">
-                                <input matInput placeholder="Email" maxlength="200" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" formControlName="Email" [errorStateMatcher]="confirmValidParentMatcher" required>
-                                <mat-error *ngIf="fBusiness.Email.invalid && fBusiness.Email.touched">{{getErrorMessage('Email')}}</mat-error>
-                            </mat-form-field>
-                        </div>
-                        <mat-form-field hintLabel="Categories">
-                            <ng-container *ngIf="categories$ | async"></ng-container>
-                            <mat-chip-list #chipCategoriesList formControlName="Categories">
-                                <mat-chip
-                                    *ngFor="let category of categories"
-                                    [selectable]="selectableCategory"
-                                    [removable]="removableCategory"
-                                    (removed)="removeCategory(category)">
-                                    {{ category.Name }}
-                                    <mat-icon matChipRemove *ngIf="removableCategory">cancel</mat-icon>
-                                </mat-chip>
-                                <input
-                                    placeholder="New category..."
-                                    #categoryInput
-                                    [matAutocomplete]="autoCategory"
-                                    [matChipInputFor]="chipCategoriesList"
-                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
-                            </mat-chip-list>
-                            <mat-autocomplete #autoCategory="matAutocomplete" (optionSelected)="selectedCategory($event)">
-                                <mat-option *ngFor="let category of filteredCategories$ | async" [value]="category.CategoryId">
-                                    {{ category.Name }}
-                                </mat-option>
-                            </mat-autocomplete>
-                        </mat-form-field>
-                        <div class="row">
-                            <mat-form-field class="col-md-12" hintLabel="Tags">
-                                <mat-chip-list #chipTags>
-                                    <ng-container *ngIf="tags.length > 0">
-                                        <mat-chip *ngFor="let tag of tags" [selectable]="selectable"
-                                                [removable]="removable" (removed)="removeTag(tag)">
-                                        {{tag}}
-                                        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                        <mat-tab-group mat-align-tabs="start">
+                            <mat-tab label="Address Info">
+                                <mat-form-field hintLabel="Name">
+                                    <input matInput placeholder="Business Name" maxlength="500" minlength="3"
+                                        formControlName="Name" [errorStateMatcher]="confirmValidParentMatcher" required>
+                                    <mat-error *ngIf="fBusiness.Name.invalid && fBusiness.Name.touched">
+                                        {{getErrorMessage('Name')}}</mat-error>
+                                </mat-form-field>
+                                <mat-form-field hintLabel="Address">
+                                    <input matInput placeholder="Address" formControlName="Address" maxlength="500"
+                                        minlength="3" [errorStateMatcher]="confirmValidParentMatcher" required>
+                                    <mat-error *ngIf="fBusiness.Address.invalid && fBusiness.Address.touched">
+                                        {{getErrorMessage('Address')}}</mat-error>
+                                </mat-form-field>
+                                <div class="row">
+                                    <mat-form-field class="col-md-4" hintLabel="Country">
+                                        <input type="text" placeholder="Country" matInput formControlName="Country"
+                                            [matAutocomplete]="autoCountry"
+                                            [errorStateMatcher]="confirmValidParentMatcher" required>
+                                        <mat-error *ngIf="fBusiness.Country.invalid && fBusiness.Country.touched">
+                                            {{getErrorMessage('Country')}}</mat-error>
+                                        <mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayFn"
+                                            activeOption="activeOption">
+                                            <mat-option *ngFor="let country of filteredCountries$ | async"
+                                                [value]="country">
+                                                {{country.n}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                    </mat-form-field>
+                                    <mat-form-field class="col-md-4" hintLabel="City">
+                                        <input matInput placeholder="City" formControlName="City" maxlength="100"
+                                            minlength="2" [errorStateMatcher]="confirmValidParentMatcher" required>
+                                        <mat-error *ngIf="fBusiness.City.invalid && fBusiness.City.touched">
+                                            {{getErrorMessage('City')}}</mat-error>
+                                    </mat-form-field>
+                                    <mat-form-field class="col-md-2" hintLabel="Zip Code">
+                                        <input matInput placeholder="Zip Code" formControlName="ZipCode" maxlength="10"
+                                            minlength="3" [errorStateMatcher]="confirmValidParentMatcher">
+                                        <mat-error *ngIf="fBusiness.ZipCode.invalid && fBusiness.ZipCode.touched">
+                                            {{getErrorMessage('ZipCode')}}</mat-error>
+                                    </mat-form-field>
+                                    <mat-form-field class="col-md" hintLabel="Phone">
+                                        <span matPrefix>+1 &nbsp;</span>
+                                        <input matInput appPhoneMask placeholder="Phone" formControlName="Phone"
+                                            maxlength="15" minlength="3"
+                                            [errorStateMatcher]="confirmValidParentMatcher">
+                                        <mat-error *ngIf="fBusiness.Phone.invalid && fBusiness.Phone.touched">
+                                            {{getErrorMessage('Phone')}}</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="row">
+                                    <div class="form-field-check ml-3 mt-3">
+                                        <mat-checkbox formControlName="ParentBusiness">Parent Business</mat-checkbox>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md mt-3 mb-3">
+                                        <agm-map [latitude]="lat" [zoom]="zoom" [longitude]="lng">
+                                            <agm-marker [latitude]="lat" [longitude]="lng" [markerDraggable]="true"
+                                                (dragEnd)="markerDragEnd($event)"></agm-marker>
+                                        </agm-map>
+                                    </div>
+                                </div>
+                            </mat-tab>
+                            <mat-tab label="Social Info">
+                                <div class="row">
+                                    <mat-form-field class="col-md-6" hintLabel="Email format">
+                                        <input matInput placeholder="Email" maxlength="200"
+                                            pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" formControlName="Email"
+                                            [errorStateMatcher]="confirmValidParentMatcher" required>
+                                        <mat-error *ngIf="fBusiness.Email.invalid && fBusiness.Email.touched">
+                                            {{getErrorMessage('Email')}}</mat-error>
+                                    </mat-form-field>
+                                    <mat-form-field class="col-md-6" hintLabel="WebSite">
+                                        <input matInput placeholder="WebSite" formControlName="WebSite" maxlength="150"
+                                            minlength="4" [errorStateMatcher]="confirmValidParentMatcher">
+                                        <mat-error *ngIf="fBusiness.WebSite.invalid && fBusiness.WebSite.touched">
+                                            {{getErrorMessage('WebSite')}}</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="row">
+                                    <mat-form-field class="col-md-4" hintLabel="Facebook">
+                                        <input matInput placeholder="Facebook" maxlength="150" minlength="4"
+                                            formControlName="Facebook" [errorStateMatcher]="confirmValidParentMatcher">
+                                        <mat-error *ngIf="fBusiness.Facebook.invalid && fBusiness.Facebook.touched">
+                                            {{getErrorMessage('Facebook')}}</mat-error>
+                                    </mat-form-field>
+                                    <mat-form-field class="col-md-4" hintLabel="Twitter">
+                                        <input matInput placeholder="Twitter" maxlength="150" minlength="4"
+                                            formControlName="Twitter" [errorStateMatcher]="confirmValidParentMatcher">
+                                        <mat-error *ngIf="fBusiness.Twitter.invalid && fBusiness.Twitter.touched">
+                                            {{getErrorMessage('Twitter')}}</mat-error>
+                                    </mat-form-field>
+                                    <mat-form-field class="col-md-4" hintLabel="Instagram">
+                                        <input matInput placeholder="Instagram" maxlength="150" minlength="4"
+                                            formControlName="Instagram" [errorStateMatcher]="confirmValidParentMatcher">
+                                        <mat-error *ngIf="fBusiness.Instagram.invalid && fBusiness.Instagram.touched">
+                                            {{getErrorMessage('Instagram')}}</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </mat-tab>
+                            <mat-tab label="Categories / Purpose">
+                                <mat-form-field hintLabel="Categories">
+                                    <ng-container *ngIf="categories$ | async"></ng-container>
+                                    <mat-chip-list #chipCategoriesList formControlName="Categories">
+                                        <mat-chip *ngFor="let category of categories" [selectable]="selectableCategory"
+                                            [removable]="removableCategory" (removed)="removeCategory(category)">
+                                            {{ category.Name }}
+                                            <mat-icon matChipRemove *ngIf="removableCategory">cancel</mat-icon>
                                         </mat-chip>
-                                    </ng-container>
-                                    <input placeholder="New Tag..."
-                                           [matChipInputFor]="chipTags"
-                                           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                           [matChipInputAddOnBlur]="addOnBlur"
-                                           (matChipInputTokenEnd)="addTag($event)">
-                                  </mat-chip-list>
-                            </mat-form-field>
-                        </div>
-                        <!-- <mat-form-field>
-                            <input matInput placeholder="Tags" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" [errorStateMatcher]="confirmValidParentMatcher">
-                            <mat-error *ngIf="fBusiness.Tags.invalid && fBusiness.Tags.touched">{{getErrorMessage('Tags')}}</mat-error>
-                        </mat-form-field> -->
-                        <!-- <mat-form-field>
-                            <mat-chip-list #chipList>
-                                <mat-chip *ngFor="let item of tags" [selectable]="selectable"
-                                            [removable]="removable" (removed)="remove(item)">{{item}}
-                                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-                                </mat-chip>
-                                <input placeholder="New Tag..."
-                                        [matChipInputFor]="chipList"
-                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                        [matChipInputAddOnBlur]="addOnBlur"
-                                        (matChipInputTokenEnd)="add($event)">
-                            </mat-chip-list>
-                        </mat-form-field> -->
-                        <div class="col-md-10 mt-3 mb-3">
-                            <mat-label class="">Operation Hours</mat-label>
-                            <div class="row pb-2">
-                                <mat-checkbox formControlName="MonEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabled(0, $event)">Mon</mat-checkbox>
-                                <div class="slider col-md-4">
-                                    <ng5-slider formControlName="Mon" [options]="options[0]" class="ml-1"></ng5-slider>
+                                        <input placeholder="New category..." #categoryInput
+                                            [matAutocomplete]="autoCategory" [matChipInputFor]="chipCategoriesList"
+                                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+                                    </mat-chip-list>
+                                    <mat-autocomplete #autoCategory="matAutocomplete"
+                                        (optionSelected)="selectedCategory($event)">
+                                        <mat-option *ngFor="let category of filteredCategories$ | async"
+                                            [value]="category.CategoryId">
+                                            {{ category.Name }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                                <div class="row">
+                                    <mat-form-field class="col-md-12" hintLabel="Tags">
+                                        <mat-chip-list #chipTags>
+                                            <ng-container *ngIf="tags.length > 0">
+                                                <mat-chip *ngFor="let tag of tags" [selectable]="selectable"
+                                                    [removable]="removable" (removed)="removeTag(tag)">
+                                                    {{tag}}
+                                                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                                </mat-chip>
+                                            </ng-container>
+                                            <input placeholder="New Tag..." [matChipInputFor]="chipTags"
+                                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                [matChipInputAddOnBlur]="addOnBlur"
+                                                (matChipInputTokenEnd)="addTag($event)">
+                                        </mat-chip-list>
+                                    </mat-form-field>
                                 </div>
-                                <button [disabled]="fBusiness.MonEnabled.value == 0" *ngIf="newInterval[0] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(0)">+ Add Interval</button>
-                                <div class="slider col-md-4" *ngIf="newInterval[0] == '1'">
-                                    <ng5-slider formControlName="Mon02" [options]="options02[0]" class="ml-1"></ng5-slider>
+                                <div class="row">
+                                    <mat-form-field class="col-md-12" hintLabel="Appointment Purpose">
+                                        <mat-chip-list #chipApposPurpose>
+                                            <ng-container *ngIf="apposPurpose.length > 0">
+                                                <mat-chip *ngFor="let purpose of apposPurpose" [selectable]="selectable"
+                                                    [removable]="removable" (removed)="removePurpose(purpose)">
+                                                    {{purpose}}
+                                                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                                </mat-chip>
+                                            </ng-container>
+                                            <input placeholder="New Appointment Purpose..."
+                                                [matChipInputFor]="chipApposPurpose"
+                                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                [matChipInputAddOnBlur]="addOnBlur"
+                                                (matChipInputTokenEnd)="addPurpose($event)">
+                                        </mat-chip-list>
+                                    </mat-form-field>
                                 </div>
-                                <button *ngIf="newInterval[0] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(0)">- Delete</button>
-                            </div>
-                            <div class="row pb-2">
-                                <mat-checkbox formControlName="TueEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabled(1, $event)">Tue</mat-checkbox>
-                                <div class="slider col-md-4">
-                                    <ng5-slider formControlName="Tue" [options]="options[1]" class="ml-1"></ng5-slider>
+                            </mat-tab>
+                            <mat-tab label="Operation Hours">
+                                <div class="col-md-10 mt-3 mb-3">
+                                    <mat-label class="">Operation Hours</mat-label>
+                                    <div class="row pb-2">
+                                        <mat-checkbox formControlName="MonEnabled" class="col-md-1 pl-4 mt-4"
+                                            (change)="onChangeDisabled(0, $event)">Mon</mat-checkbox>
+                                        <div class="slider col-md-4">
+                                            <ng5-slider formControlName="Mon" [options]="options[0]" class="ml-1">
+                                            </ng5-slider>
+                                        </div>
+                                        <button [disabled]="fBusiness.MonEnabled.value == 0"
+                                            *ngIf="newInterval[0] == '0'" mat-stroked-button color="primary"
+                                            class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(0)">+ Add
+                                            Interval</button>
+                                        <div class="slider col-md-4" *ngIf="newInterval[0] == '1'">
+                                            <ng5-slider formControlName="Mon02" [options]="options02[0]" class="ml-1">
+                                            </ng5-slider>
+                                        </div>
+                                        <button *ngIf="newInterval[0] == '1'" mat-stroked-button color="primary"
+                                            class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(0)">-
+                                            Delete</button>
+                                    </div>
+                                    <div class="row pb-2">
+                                        <mat-checkbox formControlName="TueEnabled" class="col-md-1 pl-4 mt-4"
+                                            (change)="onChangeDisabled(1, $event)">Tue</mat-checkbox>
+                                        <div class="slider col-md-4">
+                                            <ng5-slider formControlName="Tue" [options]="options[1]" class="ml-1">
+                                            </ng5-slider>
+                                        </div>
+                                        <button [disabled]="fBusiness.TueEnabled.value == 0"
+                                            *ngIf="newInterval[1] == '0'" mat-stroked-button color="primary"
+                                            class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(1)">+ Add
+                                            Interval</button>
+                                        <div class="slider col-md-4" *ngIf="newInterval[1] == '1'">
+                                            <ng5-slider formControlName="Tue02" [options]="options02[1]" class="ml-1">
+                                            </ng5-slider>
+                                        </div>
+                                        <button *ngIf="newInterval[1] == '1'" mat-stroked-button color="primary"
+                                            class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(1)">-
+                                            Delete</button>
+                                    </div>
+                                    <div class="row pb-2">
+                                        <mat-checkbox formControlName="WedEnabled" class="col-md-1 pl-4 mt-4"
+                                            (change)="onChangeDisabled(2, $event)">Wed</mat-checkbox>
+                                        <div class="slider col-md-4">
+                                            <ng5-slider formControlName="Wed" [options]="options[2]" class="ml-1">
+                                            </ng5-slider>
+                                        </div>
+                                        <button [disabled]="fBusiness.WedEnabled.value == 0"
+                                            *ngIf="newInterval[2] == '0'" mat-stroked-button color="primary"
+                                            class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(2)">+ Add
+                                            Interval</button>
+                                        <div class="slider col-md-4" *ngIf="newInterval[2] == '1'">
+                                            <ng5-slider formControlName="Wed02" [options]="options02[2]" class="ml-1">
+                                            </ng5-slider>
+                                        </div>
+                                        <button *ngIf="newInterval[2] == '1'" mat-stroked-button color="primary"
+                                            class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(2)">-
+                                            Delete</button>
+                                    </div>
+                                    <div class="row pb-2">
+                                        <mat-checkbox formControlName="ThuEnabled" class="col-md-1 pl-4 mt-4"
+                                            (change)="onChangeDisabled(3, $event)">Thu</mat-checkbox>
+                                        <div class="slider col-md-4">
+                                            <ng5-slider formControlName="Thu" [options]="options[3]" class="ml-1">
+                                            </ng5-slider>
+                                        </div>
+                                        <button [disabled]="fBusiness.ThuEnabled.value == 0"
+                                            *ngIf="newInterval[3] == '0'" mat-stroked-button color="primary"
+                                            class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(3)">+ Add
+                                            Interval</button>
+                                        <div class="slider col-md-4" *ngIf="newInterval[3] == '1'">
+                                            <ng5-slider formControlName="Thu02" [options]="options02[3]" class="ml-1">
+                                            </ng5-slider>
+                                        </div>
+                                        <button *ngIf="newInterval[3] == '1'" mat-stroked-button color="primary"
+                                            class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(3)">-
+                                            Delete</button>
+                                    </div>
+                                    <div class="row pb-2">
+                                        <mat-checkbox formControlName="FriEnabled" class="col-md-1 pl-4 mt-4"
+                                            (change)="onChangeDisabled(4, $event)">Fri</mat-checkbox>
+                                        <div class="slider col-md-4">
+                                            <ng5-slider formControlName="Fri" [options]="options[4]" class="ml-1">
+                                            </ng5-slider>
+                                        </div>
+                                        <button [disabled]="fBusiness.FriEnabled.value == 0"
+                                            *ngIf="newInterval[4] == '0'" mat-stroked-button color="primary"
+                                            class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(4)">+ Add
+                                            Interval</button>
+                                        <div class="slider col-md-4" *ngIf="newInterval[4] == '1'">
+                                            <ng5-slider formControlName="Fri02" [options]="options02[4]" class="ml-1">
+                                            </ng5-slider>
+                                        </div>
+                                        <button *ngIf="newInterval[4] == '1'" mat-stroked-button color="primary"
+                                            class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(4)">-
+                                            Delete</button>
+                                    </div>
+                                    <div class="row pb-2">
+                                        <mat-checkbox formControlName="SatEnabled" class="col-md-1 pl-4 mt-4"
+                                            (change)="onChangeDisabled(5, $event)">Sat</mat-checkbox>
+                                        <div class="slider col-md-4">
+                                            <ng5-slider formControlName="Sat" [options]="options[5]" class="ml-1">
+                                            </ng5-slider>
+                                        </div>
+                                        <button [disabled]="fBusiness.SatEnabled.value == 0"
+                                            *ngIf="newInterval[5] == '0'" mat-stroked-button color="primary"
+                                            class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(5)">+ Add
+                                            Interval</button>
+                                        <div class="slider col-md-4" *ngIf="newInterval[5] == '1'">
+                                            <ng5-slider formControlName="Sat02" [options]="options02[5]" class="ml-1">
+                                            </ng5-slider>
+                                        </div>
+                                        <button *ngIf="newInterval[5] == '1'" mat-stroked-button color="primary"
+                                            class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(5)">-
+                                            Delete</button>
+                                    </div>
+                                    <div class="row pb-2">
+                                        <mat-checkbox formControlName="SunEnabled" class="col-md-1 pl-4 mt-4"
+                                            (change)="onChangeDisabled(6, $event)">Sun</mat-checkbox>
+                                        <div class="slider col-md-4">
+                                            <ng5-slider formControlName="Sun" [options]="options[6]" class="ml-1">
+                                            </ng5-slider>
+                                        </div>
+                                        <button [disabled]="fBusiness.SunEnabled.value == 0"
+                                            *ngIf="newInterval[6] == '0'" mat-stroked-button color="primary"
+                                            class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(6)">+ Add
+                                            Interval</button>
+                                        <div class="slider col-md-4" *ngIf="newInterval[6] == '1'">
+                                            <ng5-slider formControlName="Sun02" [options]="options02[6]" class="ml-1">
+                                            </ng5-slider>
+                                        </div>
+                                        <button *ngIf="newInterval[6] == '1'" mat-stroked-button color="primary"
+                                            class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(6)">-
+                                            Delete</button>
+                                    </div>
                                 </div>
-                                <button [disabled]="fBusiness.TueEnabled.value == 0" *ngIf="newInterval[1] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(1)">+ Add Interval</button>
-                                <div class="slider col-md-4" *ngIf="newInterval[1] == '1'">
-                                    <ng5-slider formControlName="Tue02" [options]="options02[1]" class="ml-1"></ng5-slider>
+                            </mat-tab>
+                            <mat-tab label="Additional Data">
+                                <mat-form-field hintLabel="Long description for mobile app">
+                                    <input matInput placeholder="Long Description" maxlength="255" minlength="10"
+                                        formControlName="LongDescription"
+                                        [errorStateMatcher]="confirmValidParentMatcher" required>
+                                    <mat-error
+                                        *ngIf="fBusiness.LongDescription.invalid && fBusiness.LongDescription.touched">
+                                        {{getErrorMessage('LongDescription')}}</mat-error>
+                                </mat-form-field>
+                                <mat-form-field hintLabel="Short description for mobile app">
+                                    <input matInput placeholder="Short Description" maxlength="75" minlength="10"
+                                        formControlName="ShortDescription"
+                                        [errorStateMatcher]="confirmValidParentMatcher" required>
+                                    <mat-error
+                                        *ngIf="fBusiness.ShortDescription.invalid && fBusiness.ShortDescription.touched">
+                                        {{getErrorMessage('ShortDescription')}}</mat-error>
+                                </mat-form-field>
+                                <mat-form-field hintLabel="Tu Cita 24/7 Link">
+                                    <input matInput placeholder="Tu Cita 24/7 Link" maxlength="50" minlength="2"
+                                        formControlName="TuCitaLink"
+                                        [errorStateMatcher]="confirmValidParentMatcher" (focusout)="checkLinkAvailability($event)" required>
+                                        <mat-spinner matSuffix *ngIf="loadingBusiness" diameter="18" color="primary"></mat-spinner>
+                                        <ng-container matSuffix *ngIf="availability$ | async as result">
+                                            <mat-icon *ngIf="linkValidated"
+                                                [ngClass]="{'icon-green':result.Available, 'icon-red':!result.Available}">
+                                                {{result.Available ? 'check' : 'close' }}</mat-icon>
+                                        </ng-container>
+                                    <mat-error
+                                        *ngIf="fBusiness.TuCitaLink.invalid && fBusiness.TuCitaLink.touched">
+                                        {{getErrorMessage('TuCitaLink')}}</mat-error>
+                                </mat-form-field>
+                                <div class="image-business mt-2 mb-2">
+                                    Image for mobile App
+                                    <form [formGroup]="imageForm" autocomplete="off" (ngSubmit)="onSubmitImage()">
+                                        <div class="sector">
+                                            <!-- User Profile Image -->
+                                            <img *ngIf="fBusiness.Imagen.value; else isIcon" class="imgbusiness-pic"
+                                                [src]="imgPath+fBusiness.Imagen.value">
+                                            <ng-template #isIcon>
+                                                <!-- Default Image -->
+                                                <div class="fill-overlay">IMAGE MOBILE APP</div>
+                                            </ng-template>
+                                            <div class="default-overlay">
+                                                <button type="button" class="camera-avatar" mat-icon-button
+                                                    (click)="onSearchImage()">
+                                                    <mat-icon>add_a_photo</mat-icon>
+                                                </button>
+                                                <input id="fileUpload" name="fileUpload" type="file" accept="image/*"
+                                                    style="display:none;" />
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
-                                <button *ngIf="newInterval[1] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(1)">- Delete</button>
-                            </div>
-                            <div class="row pb-2">
-                                <mat-checkbox formControlName="WedEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabled(2, $event)">Wed</mat-checkbox>
-                                <div class="slider col-md-4">
-                                    <ng5-slider formControlName="Wed" [options]="options[2]" class="ml-1"></ng5-slider>
+                                <div class="image-business mt-2 mb-2">
+                                    Image for Tu Cita 24/7 web link
+                                    <form [formGroup]="imageFormLink" autocomplete="off" (ngSubmit)="onSubmitImageLink()">
+                                        <div class="sector">
+                                            <!-- User Profile Image -->
+                                            <img *ngIf="fBusiness.ImagenLink.value; else isIconLink" class="imgbusiness-pic"
+                                                [src]="imgPath+fBusiness.ImagenLink.value">
+                                            <ng-template #isIconLink>
+                                                <!-- Default Image -->
+                                                <div class="fill-overlay">IMAGE WEB LINK</div>
+                                            </ng-template>
+                                            <div class="default-overlay">
+                                                <button type="button" class="camera-avatar" mat-icon-button
+                                                    (click)="onSearchImageLink()">
+                                                    <mat-icon>add_a_photo</mat-icon>
+                                                </button>
+                                                <input id="fileUploadLink" name="fileUploadLink" type="file" accept="image/*"
+                                                    style="display:none;" />
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
-                                <button [disabled]="fBusiness.WedEnabled.value == 0" *ngIf="newInterval[2] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(2)">+ Add Interval</button>
-                                <div class="slider col-md-4" *ngIf="newInterval[2] == '1'">
-                                    <ng5-slider formControlName="Wed02" [options]="options02[2]" class="ml-1"></ng5-slider>
-                                </div>
-                                <button *ngIf="newInterval[2] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(2)">- Delete</button>
-                            </div>
-                            <div class="row pb-2">
-                                <mat-checkbox formControlName="ThuEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabled(3, $event)">Thu</mat-checkbox>
-                                <div class="slider col-md-4">
-                                    <ng5-slider formControlName="Thu" [options]="options[3]" class="ml-1"></ng5-slider>
-                                </div>
-                                <button [disabled]="fBusiness.ThuEnabled.value == 0" *ngIf="newInterval[3] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(3)">+ Add Interval</button>
-                                <div class="slider col-md-4" *ngIf="newInterval[3] == '1'">
-                                    <ng5-slider formControlName="Thu02" [options]="options02[3]" class="ml-1"></ng5-slider>
-                                </div>
-                                <button *ngIf="newInterval[3] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(3)">- Delete</button>
-                            </div>
-                            <div class="row pb-2">
-                                <mat-checkbox formControlName="FriEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabled(4, $event)">Fri</mat-checkbox>
-                                <div class="slider col-md-4">
-                                    <ng5-slider formControlName="Fri" [options]="options[4]" class="ml-1"></ng5-slider>
-                                </div>
-                                <button [disabled]="fBusiness.FriEnabled.value == 0" *ngIf="newInterval[4] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(4)">+ Add Interval</button>
-                                <div class="slider col-md-4" *ngIf="newInterval[4] == '1'">
-                                    <ng5-slider formControlName="Fri02" [options]="options02[4]" class="ml-1"></ng5-slider>
-                                </div>
-                                <button *ngIf="newInterval[4] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(4)">- Delete</button>
-                            </div>
-                            <div class="row pb-2">
-                                <mat-checkbox formControlName="SatEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabled(5, $event)">Sat</mat-checkbox>
-                                <div class="slider col-md-4">
-                                    <ng5-slider formControlName="Sat" [options]="options[5]" class="ml-1"></ng5-slider>
-                                </div>
-                                <button [disabled]="fBusiness.SatEnabled.value == 0" *ngIf="newInterval[5] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(5)">+ Add Interval</button>
-                                <div class="slider col-md-4" *ngIf="newInterval[5] == '1'">
-                                    <ng5-slider formControlName="Sat02" [options]="options02[5]" class="ml-1"></ng5-slider>
-                                </div>
-                                <button *ngIf="newInterval[5] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(5)">- Delete</button>
-                            </div>
-                            <div class="row pb-2">
-                                <mat-checkbox formControlName="SunEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabled(6, $event)">Sun</mat-checkbox>
-                                <div class="slider col-md-4">
-                                    <ng5-slider formControlName="Sun" [options]="options[6]" class="ml-1"></ng5-slider>
-                                </div>
-                                <button [disabled]="fBusiness.SunEnabled.value == 0" *ngIf="newInterval[6] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(6)">+ Add Interval</button>
-                                <div class="slider col-md-4" *ngIf="newInterval[6] == '1'">
-                                    <ng5-slider formControlName="Sun02" [options]="options02[6]" class="ml-1"></ng5-slider>
-                                </div>
-                                <button *ngIf="newInterval[6] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemInterval(6)">- Delete</button>
-                            </div>
-                        </div>
-                        <div class="col-md-10 mt-3 mb-3">
-                            <agm-map [latitude]="lat" [zoom]="zoom" [longitude]="lng">
-                                <agm-marker  [latitude]="lat" [longitude]="lng" [markerDraggable]="true" (dragEnd)="markerDragEnd($event)"></agm-marker>
-                            </agm-map>
-                        </div>
-                        <mat-form-field hintLabel="Long description for mobile app">
-                            <input matInput placeholder="Long Description" maxlength="255" minlength="10" formControlName="LongDescription" [errorStateMatcher]="confirmValidParentMatcher" required>
-                            <mat-error *ngIf="fBusiness.LongDescription.invalid && fBusiness.LongDescription.touched">{{getErrorMessage('LongDescription')}}</mat-error>
-                        </mat-form-field>
-                        <mat-form-field hintLabel="Short description for mobile app">
-                            <input matInput placeholder="Short Description" maxlength="75" minlength="10" formControlName="ShortDescription" [errorStateMatcher]="confirmValidParentMatcher" required>
-                            <mat-error *ngIf="fBusiness.ShortDescription.invalid && fBusiness.ShortDescription.touched">{{getErrorMessage('ShortDescription')}}</mat-error>
-                        </mat-form-field>
-                        <div class="form-field-check">
-                            <mat-checkbox formControlName="ParentBusiness">Parent Business</mat-checkbox>
-                        </div>
-                        {{ businessForm.value | json }}
-                        {{ tags | json}}
+                            </mat-tab>
+                            <!-- {{ businessForm.value | json }}
+                        {{ tags | json}} -->
+                        </mat-tab-group>
+
                     </form>
                     <ng-container *ngIf="imgBusiness$ | async"></ng-container>
-                    <div class="image-business">
-                        <form [formGroup]="imageForm" autocomplete="off" (ngSubmit)="onSubmitImage()">
-                            <div class="sector">
-                                <!-- User Profile Image -->
-                                <img *ngIf="fBusiness.Imagen.value; else isIcon" class="imgbusiness-pic" [src]="imgPath+fBusiness.Imagen.value">
-                                <ng-template #isIcon>
-                                    <!-- Default Image -->
-                                    <div class="fill-overlay">IMAGE MOBILE APP</div>
-                                </ng-template>
-                                <div class="default-overlay">
-                                    <button type="button" class="camera-avatar" mat-icon-button (click)="onSearchImage()">
-                                        <mat-icon>add_a_photo</mat-icon>
-                                    </button>
-                                    <input id="fileUpload" name="fileUpload" type="file" accept="image/*" style="display:none;"/>
-                                </div>                  
-                            </div>
-                        </form>
-                    </div>
                     <div>
-                        <button class="mr-3 mt-2" mat-flat-button color="primary" [disabled]="businessForm.invalid" matStepperNext (click)="onSubmitBusiness()">Save / Next</button>
+                        <button class="mr-3 mt-2" mat-flat-button color="primary" [disabled]="businessForm.invalid"
+                            matStepperNext (click)="onSubmitBusiness()">Save / Next</button>
                     </div>
                 </mat-step>
                 <ng-container *ngIf="(locationSave$ | async) && savingLocation"></ng-container>
                 <ng-container *ngIf="location$ | async"></ng-container>
                 <mat-step [stepControl]="locationForm" step="location" *ngIf="displayLocation">
                     <div>
-                        <button class="mr-3 mt-2 mb-2" type="button" mat-flat-button color="primary" matStepperNext (click)="addLocation()">+ Location</button>
+                        <button class="mr-3 mt-2 mb-2" type="button" mat-flat-button color="primary" matStepperNext
+                            (click)="addLocation()">+ Location</button>
                     </div>
                     <ng-container *ngIf="parentBus$ | async"></ng-container>
                     <form [formGroup]="locationForm" (ngSubmit)="onSubmitLocations()">
                         <ng-template matStepLabel>Locations</ng-template>
                         <mat-accordion>
-                            <ng-container class="" formArrayName="locations" *ngFor="let item of fLocations.controls; let i = index;">
+                            <ng-container class="" formArrayName="locations"
+                                *ngFor="let item of fLocations.controls; let i = index;">
                                 <ng-container [formGroupName]="i">
                                     <mat-expansion-panel>
                                         <mat-expansion-panel-header>
@@ -269,162 +415,252 @@
                                             </mat-panel-title>
                                         </mat-expansion-panel-header>
                                         <div>
-                                            <button *ngIf="item.get('LocationId').value == ''" class="mr-3 mt-2 mb-2" type="button" mat-flat-button color="primary" matStepperNext (click)="delLocation(i)">- Delete Location</button>
+                                            <button *ngIf="item.get('LocationId').value == ''" class="mr-3 mt-2 mb-2"
+                                                type="button" mat-flat-button color="primary" matStepperNext
+                                                (click)="delLocation(i)">- Delete Location</button>
                                         </div>
                                         <mat-form-field hintLabel="Name">
-                                            <input matInput placeholder="Location Name" formControlName="Name" maxlength="500" minlength="3" [errorStateMatcher]="confirmValidParentMatcher" required>
-                                            <mat-error *ngIf="item.get('Name').invalid">{{getErrorMessage('SName', i)}}</mat-error>
+                                            <input matInput placeholder="Location Name" formControlName="Name"
+                                                maxlength="500" minlength="3"
+                                                [errorStateMatcher]="confirmValidParentMatcher" required>
+                                            <mat-error *ngIf="item.get('Name').invalid">{{getErrorMessage('SName', i)}}
+                                            </mat-error>
                                         </mat-form-field>
                                         <mat-form-field hintLabel="Address">
-                                            <input matInput placeholder="Address" formControlName="Address" maxlength="500" minlength="3" [errorStateMatcher]="confirmValidParentMatcher" required>
-                                            <mat-error *ngIf="item.get('Address').invalid">{{getErrorMessage('SAddress', i)}}</mat-error>
+                                            <input matInput placeholder="Address" formControlName="Address"
+                                                maxlength="500" minlength="3"
+                                                [errorStateMatcher]="confirmValidParentMatcher" required>
+                                            <mat-error *ngIf="item.get('Address').invalid">
+                                                {{getErrorMessage('SAddress', i)}}</mat-error>
                                         </mat-form-field>
                                         <div class="row">
                                             <ng-container *ngIf="sectors$ | async"></ng-container>
                                             <mat-form-field class="col-md-5" hintLabel="City">
-                                                <mat-select formControlName="City" (selectionChange)="loadSectors($event.value, i)" required>
+                                                <mat-select formControlName="City"
+                                                    (selectionChange)="loadSectors($event.value, i)" required>
                                                     <mat-option *ngFor="let city of cities" [value]="city.CityId">
-                                                    {{ city.Name }}
+                                                        {{ city.Name }}
                                                     </mat-option>
                                                 </mat-select>
-                                                <mat-error *ngIf="item.get('City').invalid">{{getErrorMessage('SCity', i)}}</mat-error>
+                                                <mat-error *ngIf="item.get('City').invalid">
+                                                    {{getErrorMessage('SCity', i)}}</mat-error>
                                             </mat-form-field>
                                             <mat-form-field class="col-md" hintLabel="Sector">
                                                 <mat-select formControlName="Sector" required>
-                                                    <mat-option *ngFor="let sector of sectors[i]" [value]="sector.SectorId">
-                                                    {{ sector.Name }}
+                                                    <mat-option *ngFor="let sector of sectors[i]"
+                                                        [value]="sector.SectorId">
+                                                        {{ sector.Name }}
                                                     </mat-option>
                                                 </mat-select>
-                                                <mat-error *ngIf="item.get('Sector').invalid">{{getErrorMessage('Sector', i)}}</mat-error>
+                                                <mat-error *ngIf="item.get('Sector').invalid">
+                                                    {{getErrorMessage('Sector', i)}}</mat-error>
                                             </mat-form-field>
                                         </div>
                                         <div class="row">
                                             <mat-form-field class="col-md-3" hintLabel="Max concurrent customer">
-                                                <input matInput placeholder="Max Concurrent Customers" formControlName="MaxConcurrentCustomer" [errorStateMatcher]="confirmValidParentMatcher" required>
-                                                <mat-error *ngIf="item.get('MaxConcurrentCustomer').invalid">{{getErrorMessage('MaxConcurrentCustomer', i)}}</mat-error>
+                                                <input matInput placeholder="Max Concurrent Customers"
+                                                    formControlName="MaxConcurrentCustomer"
+                                                    [errorStateMatcher]="confirmValidParentMatcher" required>
+                                                <mat-error *ngIf="item.get('MaxConcurrentCustomer').invalid">
+                                                    {{getErrorMessage('MaxConcurrentCustomer', i)}}</mat-error>
                                             </mat-form-field>
                                             <mat-form-field class="col-md" hintLabel="Service Time interval">
-                                                <input matInput placeholder="Service Time Interval" formControlName="BucketInterval" [errorStateMatcher]="confirmValidParentMatcher" required>
-                                                <mat-error *ngIf="item.get('BucketInterval').invalid">{{getErrorMessage('BucketInterval', i)}}</mat-error>
+                                                <input matInput placeholder="Service Time Interval"
+                                                    formControlName="BucketInterval"
+                                                    [errorStateMatcher]="confirmValidParentMatcher" required>
+                                                <mat-error *ngIf="item.get('BucketInterval').invalid">
+                                                    {{getErrorMessage('BucketInterval', i)}}</mat-error>
                                             </mat-form-field>
-                                            <mat-form-field class="col-md-3" hintLabel="Number of appointments by service interval">
-                                                <input matInput placeholder="Number of appointments by service interval" formControlName="TotalCustPerBucketInter" [errorStateMatcher]="confirmValidParentMatcher" required>
-                                                <mat-error *ngIf="item.get('TotalCustPerBucketInter').invalid">{{getErrorMessage('TotalCustPerBucketInter', i)}}</mat-error>
+                                            <mat-form-field class="col-md-3"
+                                                hintLabel="Number of appointments by service interval">
+                                                <input matInput placeholder="Number of appointments by service interval"
+                                                    formControlName="TotalCustPerBucketInter"
+                                                    [errorStateMatcher]="confirmValidParentMatcher" required>
+                                                <mat-error *ngIf="item.get('TotalCustPerBucketInter').invalid">
+                                                    {{getErrorMessage('TotalCustPerBucketInter', i)}}</mat-error>
                                             </mat-form-field>
                                         </div>
                                         <div class="row">
                                             <mat-form-field class="col-md" hintLabel="Doors">
                                                 <mat-chip-list #chipDoors>
                                                     <ng-container *ngIf="doors[i].length > 0">
-                                                        <mat-chip *ngFor="let door of doors[i].split(',')" [selectable]="selectable"
-                                                                [removable]="removable" (removed)="removeDoor(door,i)">
-                                                        {{door}}
-                                                        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                                        <mat-chip *ngFor="let door of doors[i].split(',')"
+                                                            [selectable]="selectable" [removable]="removable"
+                                                            (removed)="removeDoor(door,i)">
+                                                            {{door}}
+                                                            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                                                         </mat-chip>
                                                     </ng-container>
-                                                    <input placeholder="New Door..."
-                                                           [matChipInputFor]="chipDoors"
-                                                           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                                           [matChipInputAddOnBlur]="addOnBlur"
-                                                           (matChipInputTokenEnd)="addDoor($event,i)">
-                                                  </mat-chip-list>
+                                                    <input placeholder="New Door..." [matChipInputFor]="chipDoors"
+                                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                        [matChipInputAddOnBlur]="addOnBlur"
+                                                        (matChipInputTokenEnd)="addDoor($event,i)">
+                                                </mat-chip-list>
                                             </mat-form-field>
                                             <mat-form-field class="col-md-6" hintLabel="Parent location">
                                                 <mat-select formControlName="ParentLocation" required>
-                                                    <mat-option *ngFor="let parentBus of businessParent" [value]="parentBus.BusinessId">
-                                                    {{parentBus.Name}}
+                                                    <mat-option *ngFor="let parentBus of businessParent"
+                                                        [value]="parentBus.BusinessId">
+                                                        {{parentBus.Name}}
                                                     </mat-option>
                                                 </mat-select>
-                                                <mat-error *ngIf="item.get('ParentLocation').invalid">{{getErrorMessage('ParentLocation', i)}}</mat-error>
+                                                <mat-error *ngIf="item.get('ParentLocation').invalid">
+                                                    {{getErrorMessage('ParentLocation', i)}}</mat-error>
                                             </mat-form-field>
                                         </div>
                                         <div class="col-md-10 mt-3 mb-3">
                                             <mat-label class="">Operation Hours</mat-label>
                                             <div class="row pb-2">
-                                                <mat-checkbox formControlName="MonEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabledLoc(0, i, $event)">Mon</mat-checkbox>
+                                                <mat-checkbox formControlName="MonEnabled" class="col-md-1 pl-4 mt-4"
+                                                    (change)="onChangeDisabledLoc(0, i, $event)">Mon</mat-checkbox>
                                                 <div class="slider col-md-4 pl-0 pr-0">
-                                                    <ng5-slider formControlName="Mon" [options]="optionsMonLoc[i]" class="ml-1"></ng5-slider>
+                                                    <ng5-slider formControlName="Mon" [options]="optionsMonLoc[i]"
+                                                        class="ml-1"></ng5-slider>
                                                 </div>
-                                                <button [disabled]="item.get('MonEnabled').value == false" *ngIf="newIntervalLoc[i][0] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(0, i)">+ Add Interval</button>
-                                                <div class="slider col-md-4 pl-0 pr-0" *ngIf="newIntervalLoc[i][0] == '1'">
-                                                    <ng5-slider formControlName="Mon02" [options]="optionsMonLoc02[i]" class="ml-1"></ng5-slider>
+                                                <button [disabled]="item.get('MonEnabled').value == false"
+                                                    *ngIf="newIntervalLoc[i][0] == '0'" mat-stroked-button
+                                                    color="primary" class="ml-2 mr-2 addSlider" type="button"
+                                                    (click)="onAddIntervalLoc(0, i)">+ Add Interval</button>
+                                                <div class="slider col-md-4 pl-0 pr-0"
+                                                    *ngIf="newIntervalLoc[i][0] == '1'">
+                                                    <ng5-slider formControlName="Mon02" [options]="optionsMonLoc02[i]"
+                                                        class="ml-1"></ng5-slider>
                                                 </div>
-                                                <button *ngIf="newIntervalLoc[i][0] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(0, i)">- Delete</button>
+                                                <button *ngIf="newIntervalLoc[i][0] == '1'" mat-stroked-button
+                                                    color="primary" class="ml-2 mr-2 addSlider" type="button"
+                                                    (click)="onRemIntervalLoc(0, i)">- Delete</button>
                                             </div>
                                             <div class="row pb-2">
-                                                <mat-checkbox formControlName="TueEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabledLoc(1, i, $event)">Tue</mat-checkbox>
+                                                <mat-checkbox formControlName="TueEnabled" class="col-md-1 pl-4 mt-4"
+                                                    (change)="onChangeDisabledLoc(1, i, $event)">Tue</mat-checkbox>
                                                 <div class="slider col-md-4 pl-0 pr-0">
-                                                    <ng5-slider formControlName="Tue" [options]="optionsTueLoc[i]" class="ml-1"></ng5-slider>
+                                                    <ng5-slider formControlName="Tue" [options]="optionsTueLoc[i]"
+                                                        class="ml-1"></ng5-slider>
                                                 </div>
-                                                <button [disabled]="item.get('TueEnabled').value == false" *ngIf="newIntervalLoc[i][1] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(1, i)">+ Add Interval</button>                                                
-                                                <div class="slider col-md-4 pl-0 pr-0" *ngIf="newIntervalLoc[i][1] == '1'">
-                                                    <ng5-slider formControlName="Tue02" [options]="optionsTueLoc02[i]" class="ml-1"></ng5-slider>
+                                                <button [disabled]="item.get('TueEnabled').value == false"
+                                                    *ngIf="newIntervalLoc[i][1] == '0'" mat-stroked-button
+                                                    color="primary" class="ml-2 mr-2 addSlider" type="button"
+                                                    (click)="onAddIntervalLoc(1, i)">+ Add Interval</button>
+                                                <div class="slider col-md-4 pl-0 pr-0"
+                                                    *ngIf="newIntervalLoc[i][1] == '1'">
+                                                    <ng5-slider formControlName="Tue02" [options]="optionsTueLoc02[i]"
+                                                        class="ml-1"></ng5-slider>
                                                 </div>
-                                                <button *ngIf="newIntervalLoc[i][1] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(1, i)">- Delete</button>
+                                                <button *ngIf="newIntervalLoc[i][1] == '1'" mat-stroked-button
+                                                    color="primary" class="ml-2 mr-2 addSlider" type="button"
+                                                    (click)="onRemIntervalLoc(1, i)">- Delete</button>
                                             </div>
                                             <div class="row pb-2">
-                                                <mat-checkbox formControlName="WedEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabledLoc(2, i, $event)">Wed</mat-checkbox>
+                                                <mat-checkbox formControlName="WedEnabled" class="col-md-1 pl-4 mt-4"
+                                                    (change)="onChangeDisabledLoc(2, i, $event)">Wed</mat-checkbox>
                                                 <div class="slider col-md-4 pl-0 pr-0">
-                                                    <ng5-slider formControlName="Wed" [options]="optionsWedLoc[i]" class="ml-1"></ng5-slider>
+                                                    <ng5-slider formControlName="Wed" [options]="optionsWedLoc[i]"
+                                                        class="ml-1"></ng5-slider>
                                                 </div>
-                                                <button [disabled]="item.get('WedEnabled').value == false" *ngIf="newIntervalLoc[i][2] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(2, i)">+ Add Interval</button>
-                                                <div class="slider col-md-4 pl-0 pr-0" *ngIf="newIntervalLoc[i][2] == '1'">
-                                                    <ng5-slider formControlName="Wed02" [options]="optionsWedLoc02[i]" class="ml-1"></ng5-slider>
+                                                <button [disabled]="item.get('WedEnabled').value == false"
+                                                    *ngIf="newIntervalLoc[i][2] == '0'" mat-stroked-button
+                                                    color="primary" class="ml-2 mr-2 addSlider" type="button"
+                                                    (click)="onAddIntervalLoc(2, i)">+ Add Interval</button>
+                                                <div class="slider col-md-4 pl-0 pr-0"
+                                                    *ngIf="newIntervalLoc[i][2] == '1'">
+                                                    <ng5-slider formControlName="Wed02" [options]="optionsWedLoc02[i]"
+                                                        class="ml-1"></ng5-slider>
                                                 </div>
-                                                <button *ngIf="newIntervalLoc[i][2] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(2, i)">- Delete</button>
+                                                <button *ngIf="newIntervalLoc[i][2] == '1'" mat-stroked-button
+                                                    color="primary" class="ml-2 mr-2 addSlider" type="button"
+                                                    (click)="onRemIntervalLoc(2, i)">- Delete</button>
                                             </div>
                                             <div class="row pb-2">
-                                                <mat-checkbox formControlName="ThuEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabledLoc(3, i, $event)">Thu</mat-checkbox>
+                                                <mat-checkbox formControlName="ThuEnabled" class="col-md-1 pl-4 mt-4"
+                                                    (change)="onChangeDisabledLoc(3, i, $event)">Thu</mat-checkbox>
                                                 <div class="slider col-md-4 pl-0 pr-0">
-                                                    <ng5-slider formControlName="Thu" [options]="optionsThuLoc[i]" class="ml-1"></ng5-slider>
+                                                    <ng5-slider formControlName="Thu" [options]="optionsThuLoc[i]"
+                                                        class="ml-1"></ng5-slider>
                                                 </div>
-                                                <button [disabled]="item.get('ThuEnabled').value == false" *ngIf="newIntervalLoc[i][3] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(3, i)">+ Add Interval</button>
-                                                <div class="slider col-md-4 pl-0 pr-0" *ngIf="newIntervalLoc[i][3] == '1'">
-                                                    <ng5-slider formControlName="Thu02" [options]="optionsThuLoc02[i]" class="ml-1"></ng5-slider>
+                                                <button [disabled]="item.get('ThuEnabled').value == false"
+                                                    *ngIf="newIntervalLoc[i][3] == '0'" mat-stroked-button
+                                                    color="primary" class="ml-2 mr-2 addSlider" type="button"
+                                                    (click)="onAddIntervalLoc(3, i)">+ Add Interval</button>
+                                                <div class="slider col-md-4 pl-0 pr-0"
+                                                    *ngIf="newIntervalLoc[i][3] == '1'">
+                                                    <ng5-slider formControlName="Thu02" [options]="optionsThuLoc02[i]"
+                                                        class="ml-1"></ng5-slider>
                                                 </div>
-                                                <button *ngIf="newIntervalLoc[i][3] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(3, i)">- Delete</button>
+                                                <button *ngIf="newIntervalLoc[i][3] == '1'" mat-stroked-button
+                                                    color="primary" class="ml-2 mr-2 addSlider" type="button"
+                                                    (click)="onRemIntervalLoc(3, i)">- Delete</button>
                                             </div>
                                             <div class="row pb-2">
-                                                <mat-checkbox formControlName="FriEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabledLoc(4, i, $event)">Fri</mat-checkbox>
+                                                <mat-checkbox formControlName="FriEnabled" class="col-md-1 pl-4 mt-4"
+                                                    (change)="onChangeDisabledLoc(4, i, $event)">Fri</mat-checkbox>
                                                 <div class="slider col-md-4 pl-0 pr-0">
-                                                    <ng5-slider formControlName="Fri" [options]="optionsFriLoc[i]" class="ml-1"></ng5-slider>
+                                                    <ng5-slider formControlName="Fri" [options]="optionsFriLoc[i]"
+                                                        class="ml-1"></ng5-slider>
                                                 </div>
-                                                <button [disabled]="item.get('FriEnabled').value == false" *ngIf="newIntervalLoc[i][4] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(4, i)">+ Add Interval</button>
-                                                <div class="slider col-md-4 pl-0 pr-0" *ngIf="newIntervalLoc[i][4] == '1'">
-                                                    <ng5-slider formControlName="Fri02" [options]="optionsFriLoc02[i]" class="ml-1"></ng5-slider>
+                                                <button [disabled]="item.get('FriEnabled').value == false"
+                                                    *ngIf="newIntervalLoc[i][4] == '0'" mat-stroked-button
+                                                    color="primary" class="ml-2 mr-2 addSlider" type="button"
+                                                    (click)="onAddIntervalLoc(4, i)">+ Add Interval</button>
+                                                <div class="slider col-md-4 pl-0 pr-0"
+                                                    *ngIf="newIntervalLoc[i][4] == '1'">
+                                                    <ng5-slider formControlName="Fri02" [options]="optionsFriLoc02[i]"
+                                                        class="ml-1"></ng5-slider>
                                                 </div>
-                                                <button *ngIf="newIntervalLoc[i][4] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(4, i)">- Delete</button>
+                                                <button *ngIf="newIntervalLoc[i][4] == '1'" mat-stroked-button
+                                                    color="primary" class="ml-2 mr-2 addSlider" type="button"
+                                                    (click)="onRemIntervalLoc(4, i)">- Delete</button>
                                             </div>
                                             <div class="row pb-2">
-                                                <mat-checkbox formControlName="SatEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabledLoc(5, i, $event)">Sat</mat-checkbox>
+                                                <mat-checkbox formControlName="SatEnabled" class="col-md-1 pl-4 mt-4"
+                                                    (change)="onChangeDisabledLoc(5, i, $event)">Sat</mat-checkbox>
                                                 <div class="slider col-md-4 pl-0 pr-0">
-                                                    <ng5-slider formControlName="Sat" [options]="optionsSatLoc[i]" class="ml-1"></ng5-slider>
+                                                    <ng5-slider formControlName="Sat" [options]="optionsSatLoc[i]"
+                                                        class="ml-1"></ng5-slider>
                                                 </div>
-                                                <button [disabled]="item.get('SatEnabled').value == false" *ngIf="newIntervalLoc[i][5] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(5, i)">+ Add Interval</button>
-                                                <div class="slider col-md-4 pl-0 pr-0" *ngIf="newIntervalLoc[i][5] == '1'">
-                                                    <ng5-slider formControlName="Sat02" [options]="optionsSatLoc02[i]" class="ml-1"></ng5-slider>
+                                                <button [disabled]="item.get('SatEnabled').value == false"
+                                                    *ngIf="newIntervalLoc[i][5] == '0'" mat-stroked-button
+                                                    color="primary" class="ml-2 mr-2 addSlider" type="button"
+                                                    (click)="onAddIntervalLoc(5, i)">+ Add Interval</button>
+                                                <div class="slider col-md-4 pl-0 pr-0"
+                                                    *ngIf="newIntervalLoc[i][5] == '1'">
+                                                    <ng5-slider formControlName="Sat02" [options]="optionsSatLoc02[i]"
+                                                        class="ml-1"></ng5-slider>
                                                 </div>
-                                                <button *ngIf="newIntervalLoc[i][5] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(5, i)">- Delete</button>
+                                                <button *ngIf="newIntervalLoc[i][5] == '1'" mat-stroked-button
+                                                    color="primary" class="ml-2 mr-2 addSlider" type="button"
+                                                    (click)="onRemIntervalLoc(5, i)">- Delete</button>
                                             </div>
                                             <div class="row pb-2">
-                                                <mat-checkbox formControlName="SunEnabled" class="col-md-1 pl-4 mt-4" (change)="onChangeDisabledLoc(6, i, $event)">Sun</mat-checkbox>
+                                                <mat-checkbox formControlName="SunEnabled" class="col-md-1 pl-4 mt-4"
+                                                    (change)="onChangeDisabledLoc(6, i, $event)">Sun</mat-checkbox>
                                                 <div class="slider col-md-4 pl-0 pr-0">
-                                                    <ng5-slider formControlName="Sun" [options]="optionsSunLoc[i]" class="ml-1"></ng5-slider>
+                                                    <ng5-slider formControlName="Sun" [options]="optionsSunLoc[i]"
+                                                        class="ml-1"></ng5-slider>
                                                 </div>
-                                                <button [disabled]="item.get('SunEnabled').value == false" *ngIf="newIntervalLoc[i][6] == '0'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onAddIntervalLoc(6, i)">+ Add Interval</button>
-                                                <div class="slider col-md-4 pl-0 pr-0" *ngIf="newIntervalLoc[i][6] == '1'">
-                                                    <ng5-slider formControlName="Sun02" [options]="optionsSunLoc02[i]" class="ml-1"></ng5-slider>
+                                                <button [disabled]="item.get('SunEnabled').value == false"
+                                                    *ngIf="newIntervalLoc[i][6] == '0'" mat-stroked-button
+                                                    color="primary" class="ml-2 mr-2 addSlider" type="button"
+                                                    (click)="onAddIntervalLoc(6, i)">+ Add Interval</button>
+                                                <div class="slider col-md-4 pl-0 pr-0"
+                                                    *ngIf="newIntervalLoc[i][6] == '1'">
+                                                    <ng5-slider formControlName="Sun02" [options]="optionsSunLoc02[i]"
+                                                        class="ml-1"></ng5-slider>
                                                 </div>
-                                                <button *ngIf="newIntervalLoc[i][6] == '1'" mat-stroked-button color="primary" class="ml-2 mr-2 addSlider" type="button" (click)="onRemIntervalLoc(6, i)">- Delete</button>
+                                                <button *ngIf="newIntervalLoc[i][6] == '1'" mat-stroked-button
+                                                    color="primary" class="ml-2 mr-2 addSlider" type="button"
+                                                    (click)="onRemIntervalLoc(6, i)">- Delete</button>
                                             </div>
                                         </div>
                                         <div class="col-md-10 mt-3 mb-3">
                                             <agm-map [latitude]="latLoc[i]" [zoom]="zoom" [longitude]="lngLoc[i]">
-                                                <agm-marker  [latitude]="latLoc[i]" [longitude]="lngLoc[i]" [markerDraggable]="true" (dragEnd)="markerDragEndLoc($event, i)"></agm-marker>
+                                                <agm-marker [latitude]="latLoc[i]" [longitude]="lngLoc[i]"
+                                                    [markerDraggable]="true" (dragEnd)="markerDragEndLoc($event, i)">
+                                                </agm-marker>
                                             </agm-map>
                                         </div>
                                         <div class="form-field-check">
-                                            <mat-checkbox formControlName="ManualCheckOut">Manual Check Out</mat-checkbox>
+                                            <mat-checkbox formControlName="ManualCheckOut">Manual Check Out
+                                            </mat-checkbox>
                                         </div>
                                         <div class="form-field-check">
                                             <mat-checkbox formControlName="Status">Status</mat-checkbox>
@@ -435,12 +671,13 @@
                         </mat-accordion>
                         <div>
                             <button class="mr-3 mt-2" mat-flat-button color="accent" matStepperPrevious>Back</button>
-                            <button class="mr-3 mt-2" mat-flat-button color="primary" [disabled]="!locationForm.valid" matStepperNext>Save</button>
+                            <button class="mr-3 mt-2" mat-flat-button color="primary" [disabled]="!locationForm.valid"
+                                matStepperNext>Save</button>
                         </div>
-                         <!-- {{ locationForm.value | json }}  -->
+                        <!-- {{ locationForm.value | json }}  -->
                     </form>
                 </mat-step>
-            </mat-horizontal-stepper>              
+            </mat-horizontal-stepper>
         </div>
     </div>
 </div>

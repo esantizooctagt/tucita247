@@ -55,8 +55,27 @@
   width: 100%; 
   height: 120px;
 }
+.image-business{
+  font-family: Montserrat;
+  font-weight: 600;
+  font-size: 17px;
+}
 .mat-icon-button:hover .mat-button-focus-overlay {
   opacity: 1 !important;
+}
+.addSlider{
+  height: 36px;
+  top: 20px;
+  width: 130px;
+}
+.icon-green{
+  color: green;
+}
+.icon-red{
+  color: red;
+}
+agm-map{
+  height: 300px;
 }
 ::ng-deep .ng5-slider .ng5-slider-bar {
   height: 50px;
@@ -96,11 +115,7 @@
 :host::ng-deep .mat-form-field-underline {
   background-color: #B6B6B6 !important;
 }
-.addSlider{
-  height: 36px;
-  top: 20px;
-  width: 130px;
-}
-agm-map{
-  height: 300px;
+:host::ng-deep .mat-tab-body-content {
+  height: 100%;
+  overflow: hidden;
 }

@@ -38,6 +38,16 @@ export class BusinessService {
                     .pipe(catchError(this.errorHandler));
   }
 
+  uploadBusinessImgLink(businessId, dataForm){
+    return this.http.put(this.apiURL + '/business/imagen/link/' + businessId, dataForm)
+                    .pipe(catchError(this.errorHandler));
+  }
+
+  validateLink(link){
+    return this.http.get<any>(this.apiURL + '/business/link/' + link)
+                    .pipe(catchError(this.errorHandler))
+  }
+
   errorHandler(error){
     return throwError(error || 'Server Error');
   }
