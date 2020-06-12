@@ -60,6 +60,12 @@
   font-weight: 600;
   font-size: 17px;
 }
+.content-label{
+  position:relative;
+  text-align:left;
+  top:20px;
+  font-family: Montserrat;
+}
 .mat-icon-button:hover .mat-button-focus-overlay {
   opacity: 1 !important;
 }

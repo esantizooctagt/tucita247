@@ -524,6 +524,18 @@ export class HostComponent implements OnInit {
           }
         }
       }),
+      mergeMap(v => 
+        //ACTUALIZA NUMERO DE PERSONAS
+        this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
+          map((res: any) => {
+            if (res != null){
+              this.qtyPeople = res.Quantity;
+              this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+              return res.Quantity.toString();
+            }
+          })
+        )
+      ),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
         this.locationStatus = 0;
@@ -548,6 +560,18 @@ export class HostComponent implements OnInit {
           }
         }
       }),
+      mergeMap(v => 
+        //ACTUALIZA NUMERO DE PERSONAS
+        this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
+          map((res: any) => {
+            if (res != null){
+              this.qtyPeople = res.Quantity;
+              this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+              return res.Quantity.toString();
+            }
+          })
+        )
+      ),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
         this.locationStatus = 1;

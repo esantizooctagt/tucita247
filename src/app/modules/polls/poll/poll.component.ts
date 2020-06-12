@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
+import { FormBuilder, Validators, FormArray } from '@angular/forms';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { LocationService, PollsService } from '@app/services';
 import { AuthService } from '@app/core/services';
 import { catchError, map, tap } from 'rxjs/operators';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { throwError, Observable } from 'rxjs';
-import { ArrayValidators } from '@app/validators';
 import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
-import { Poll, Question } from '@app/_models';
+import { Poll } from '@app/_models';
 import { MonitorService } from '@app/shared/monitor.service';
 
 @Component({
@@ -24,12 +23,6 @@ export class PollComponent implements OnInit {
   poll$: Observable<Poll>;
   savePoll$: Observable<any>; 
   pollDataList: Poll;
-  displayRes: boolean = false;
-
-  fDescription: string = '';
-  fHappy: string = '';
-  fNeutral: string = '';
-  fAngry: string = '';
 
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
@@ -43,10 +36,6 @@ export class PollComponent implements OnInit {
     private locationService: LocationService
   ) { }
 
-  get fQuestions(){
-    return this.pollForm.get('Questions') as FormArray;
-  }
-
   get f(){
     return this.pollForm.controls;
   }
@@ -56,20 +45,12 @@ export class PollComponent implements OnInit {
     Name: ['', [Validators.required, Validators.maxLength(100), Validators.minLength(3)]],
     LocationId: ['', [Validators.required]],
     DatePoll: [this.minDate, Validators.required],
-    Status: [true],
-    Questions : this.fb.array([this.addQuestion()], ArrayValidators.minLength(1))
+    DateFinPoll: [''],
+    Happy: [0],
+    Neutral: [0],
+    Angry: [0],
+    Status: [true]
   });
-
-  addQuestion(): FormGroup {
-    return this.fb.group({
-      QuestionId: [''],
-      Description: ['', [Validators.required, Validators.maxLength(100), Validators.minLength(3)]],
-      Happy: [0],
-      Neutral: [0],
-      Angry: [0],
-      Status: [1]
-    });
-  }
 
   openDialog(header: string, message: string, success: boolean, error: boolean, warn: boolean): void {
     const dialogConfig = new MatDialogConfig();
@@ -112,20 +93,22 @@ export class PollComponent implements OnInit {
   onDisplay(){
     if (this.pollDataList != undefined){
       var spinnerRef = this.spinnerService.start("Loading Poll...");
-      this.pollForm.reset({ PollId: '', Name: '', LocationId: '', DatePoll: '', Status: true});
-      this.fQuestions.clear();
+      this.pollForm.reset({ PollId: '', Name: '', LocationId: '', DatePoll: '', DateFinPoll: '', Happy: 0, Neutral: 0, Angry: 0, Status: true});
       this.poll$ = this.pollService.getPoll(this.pollDataList).pipe(
         map(poll => {
           let dateP = new Date(poll.DatePoll+'T06:00:00');
+          let dateFinP = new Date(poll.DateFinPoll+'T06:00:00');
           this.pollForm.setValue({
             PollId: poll.PollId,
             Name: poll.Name,
             LocationId: poll.LocationId,
             DatePoll: dateP,
-            Status: (poll.Status == 1 ? true : false),
-            Questions: []
+            DateFinPoll: dateFinP,
+            Happy: poll.Happy,
+            Neutral: poll.Neutral,
+            Angry: poll.Angry,
+            Status: (poll.Status == 1 ? true : false)
           });
-          this.pollForm.setControl('Questions', this.setExistingPolls(poll.Questions));
           this.spinnerService.stop(spinnerRef);
           return poll;
         }),
@@ -136,22 +119,6 @@ export class PollComponent implements OnInit {
         })
       );
     }
-  }
-
-  setExistingPolls(quest: Question[]): FormArray{
-    const formArray = new FormArray([]);
-    quest.forEach(res => {
-      formArray.push(this.fb.group({
-          QuestionId: res.QuestionId,
-          Description: res.Description,
-          Status: res.Status,
-          Happy: res.Happy,
-          Neutral: res.Neutral,
-          Angry: res.Angry
-        })
-      );
-    });
-    return formArray;
   }
 
   getErrorMessage(component: string, index: number =0){
@@ -178,37 +145,43 @@ export class PollComponent implements OnInit {
     }
   }
 
-  onAddQuestion(): void{
-    (<FormArray>this.pollForm.get('Questions')).push(this.addQuestion());
-  }
-
   onCancel(){
-    this.pollForm.reset({ PollId: '', Name: '', LocationId: '', DatePoll: this.minDate, Status: true});
-    this.fQuestions.clear();
-    (<FormArray>this.pollForm.get('Questions')).push(this.addQuestion());
+    this.pollForm.reset({ PollId: '', Name: '', LocationId: '', DatePoll: this.minDate, DateFinPoll: this.minDate, Happy: 0, Neutral: 0, Angry: 0, Status: true});
   }
 
   onSubmit(){
     if (this.pollForm.invalid) { return; }
     let dateVal = new Date(this.pollForm.value.DatePoll);
+    let dateFinVal;
+    if (this.pollForm.value.DateFinPoll == '') {
+      dateFinVal = '';
+    } 
+    else { 
+      dateFinVal = new Date(this.pollForm.value.DateFinPoll);
+      dateFinVal=dateFinVal.getFullYear().toString() + '-' + (dateFinVal.getMonth()+1).toString().padStart(2,'0') + '-' + dateFinVal.getDate().toString().padStart(2, '0');
+    } 
+
     let dataForm = {
       PollId: this.pollForm.value.PollId,
       BusinessId: this.businessId,
       LocationId: this.pollForm.value.LocationId,
       DatePoll: dateVal.getFullYear().toString() + '-' + (dateVal.getMonth()+1).toString().padStart(2,'0') + '-' + dateVal.getDate().toString().padStart(2, '0'),
+      DateFinPoll: dateFinVal,
       Name: this.pollForm.value.Name,
-      Status: 1,
-      Questions: this.pollForm.value.Questions
+      Status: 1
     }
+    if (dateFinVal != ''){
+      if (dataForm.DatePoll > dataForm.DateFinPoll) {return;}
+    }
+
     var spinnerRef = this.spinnerService.start("Saving Poll...");
     this.savePoll$ =  this.pollService.postPolls(dataForm).pipe(
       map((res:any) => {
         if (res != null){
           if (res.Code == 200){
             this.spinnerService.stop(spinnerRef);
-            this.pollForm.reset({ PollId: '', Name: '', LocationId: '', DatePoll: '', Status: true});
-            this.fQuestions.clear();
-            (<FormArray>this.pollForm.get('Questions')).push(this.addQuestion());
+            this.pollForm.patchValue({PollId: res.PollId});
+            // this.pollForm.reset({ PollId: '', Name: '', LocationId: '', DatePoll: '', DateFinPoll: '', Happy: 0, Neutral: 0, Angry: 0, Status: true});
             this.openDialog('Polls', 'Saving successfully', true, false, false);
           } else {
             this.spinnerService.stop(spinnerRef);
@@ -225,23 +198,6 @@ export class PollComponent implements OnInit {
         return throwError (err || err.message);
       })
     );
-
   }
 
-  onRemoveQuestion(index: number){
-    let quest =  this.pollForm.get('Questions') as FormArray;
-    let item = quest.at(index);
-    if (item.value.QuestionId == ''){
-      quest.removeAt(index);
-    } else {
-      item.patchValue({Status: 0});
-    }
-  }
-
-  showScore(item){
-    this.fDescription = item.value.Description;
-    this.fHappy =  item.value.Happy;
-    this.fNeutral = item.value.Neutral;
-    this.fAngry = item.value.Angry;
-  }
 }

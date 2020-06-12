@@ -3,33 +3,26 @@
 </div>
 <ng-container *ngIf="savePoll$ | async"></ng-container>
 <ng-container *ngIf="pollData$ | async"></ng-container>
-<mat-card class="col-sm col-md col-lg-7" *ngIf="!savePoll">
-    <form [formGroup]="pollForm" (ngSubmit)="onSubmit()" class="mt-4">
+<ng-container *ngIf="error == ''; else Error">
+    <mat-card class="col-sm col-md col-lg-7" *ngIf="!savePoll">
         <div class="form-field pl-3 pr-3">
-            {{f.Name.value}}
+            {{Name}}
         </div>
         <div class="panel-array col-md p-0 pt-3">
-            <mat-horizontal-stepper formArrayName="Questions" linear>
-                <mat-step [formGroupName]="i" *ngFor="let item of fQuestions.controls; let i=index" [stepControl]="item">
-                    <div>
-                        <div class="col-md-10">
-                            {{item.get('Description').value}}
-                        </div>
-                        <mat-radio-group aria-label="Select an option" formControlName="Result">
-                            <mat-radio-button value="1">Happy</mat-radio-button>
-                            <mat-radio-button value="2">Neutral</mat-radio-button>
-                            <mat-radio-button value="3">Angry</mat-radio-button>
-                        </mat-radio-group>
-                        <button *ngIf="i<noItems-1" [disabled]="item.get('Result').value == 0" mat-flat-button matStepperNext color="primary" type="button">Next</button>
-                        <button *ngIf="i==noItems-1" [disabled]="item.get('Result').value == 0" mat-flat-button matStepperNext color="primary" type="submit">Save</button>
-                    </div>
-                </mat-step>
-            </mat-horizontal-stepper>
+            <mat-radio-group>
+                <mat-radio-button value="1" (click)="onSubmit(1)">Happy</mat-radio-button>
+                <mat-radio-button value="2" (click)="onSubmit(2)">Neutral</mat-radio-button>
+                <mat-radio-button value="3" (click)="onSubmit(3)">Angry</mat-radio-button>
+            </mat-radio-group>  
         </div>
-        {{ pollForm.value | json }}
-    </form>
-</mat-card>
-<div class="" *ngIf="savePoll">
-    Poll saved successfull
-    Thanks!!!
-</div>
+    </mat-card>
+    <div class="" *ngIf="savePoll">
+        Poll saved successfull
+        Thanks!!!
+    </div>
+</ng-container>
+<ng-template #Error>
+    <div class="" *ngIf="savePoll">
+        Poll is already inactive
+    </div>
+</ng-template>

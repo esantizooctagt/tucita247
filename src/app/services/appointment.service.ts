@@ -32,6 +32,11 @@ export class AppointmentService {
                     .pipe(catchError(this.errorHandler));
   }
 
+  updateAppointmentCheckInQR(appointmentId, formData) {
+    return this.http.put(this.apiURL + '/appointment/checkinqr/' + appointmentId, formData)
+                    .pipe(catchError(this.errorHandler));
+  }
+
   updateAppointmentCheckOut(formData){
     return this.http.put(this.apiURL + '/appointment/checkout', formData)
                     .pipe(catchError(this.errorHandler));

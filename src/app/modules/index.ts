@@ -20,3 +20,6 @@ export * from './userloc/userloc.component';
 export * from './polls/polls.component';
 export * from './poll-resp/poll-resp.component';
 export * from './quick-checkin/quick-checkin.component';
+export * from './surveys/surveys.component';
+export * from './survey-resp/survey-resp.component';
+export * from './landing/landing.component';

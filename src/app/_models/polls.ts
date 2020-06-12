@@ -1,12 +1,13 @@
-import { Question } from './questions';
-
 export class Poll {
     constructor (
         public PollId: string,
         public Name: string,
         public DatePoll: string,
+        public DateFinPoll: string,
         public LocationId?: string,
         public Status?: number,
-        public Questions?: Question[],
+        public Happy?: number,
+        public Neutral?: number,
+        public Angry?: number,
     ){}
 }

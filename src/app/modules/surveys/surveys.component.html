@@ -1,0 +1,9 @@
+<div class="container-fluid h-100 main-background">
+    <div class="row p-0">
+        <div class="list-form col-md-12 pl-4 m-0">
+            <app-search placeholder="Search by description" (setValue)="filterList($event)"></app-search>
+        </div> 
+        <app-survey-list class="col-md-12 pl-4 m-0" *ngIf="changeData == 'Search'" [filterValue]="filterData"></app-survey-list>
+        <app-survey class="col-md-12 pl-4 m-0" *ngIf="changeData == 'Add'"></app-survey>
+    </div>
+</div>

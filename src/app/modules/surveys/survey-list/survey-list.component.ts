@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges, ViewChild } from '@angular/core';
-import { Poll } from '@app/_models';
+import { Survey } from '@app/_models';
 import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthService } from '@app/core/services';
@@ -10,20 +10,20 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { catchError, tap, map } from 'rxjs/operators';
 import { throwError, Observable } from 'rxjs';
-import { PollsService } from '@app/services';
+import { SurveysService } from '@app/services';
 import { MatTable } from '@angular/material/table';
 
 @Component({
-  selector: 'app-poll-list',
-  templateUrl: './poll-list.component.html',
-  styleUrls: ['./poll-list.component.scss']
+  selector: 'app-survey-list',
+  templateUrl: './survey-list.component.html',
+  styleUrls: ['./survey-list.component.scss']
 })
-export class PollListComponent implements OnInit {
+export class SurveyListComponent implements OnInit {
   @Input() filterValue: string;
-  @ViewChild(MatTable) pollTable :MatTable<any>;
+  @ViewChild(MatTable) surveyTable :MatTable<any>;
   
-  deletePoll$: Observable<any>;
-  polls$: Observable<Poll[]>;
+  deleteSurvey$: Observable<any>;
+  surveys$: Observable<Survey[]>;
   public onError: string='';
 
   public length: number = 0;
@@ -34,24 +34,24 @@ export class PollListComponent implements OnInit {
 
   displayYesNo: boolean = false;
 
-  displayedColumns = ['Name', 'DatePoll', 'DateFinPoll', 'Actions'];
+  displayedColumns = ['Name', 'DateSurvey', 'Actions'];
   businessId: string = '';
   changeData: string;
-  pollData: Poll;
+  surveyData: Survey;
 
-  get fPolls(){
-    return this.pollForm.get('Polls') as FormArray;
+  get fSurveys(){
+    return this.surveyForm.get('Surveys') as FormArray;
   }
 
-  pollForm = this.fb.group({
-    Polls: this.fb.array([this.addPolls()])
+  surveyForm = this.fb.group({
+    Surveys: this.fb.array([this.addSurveys()])
   });
 
-  addPolls(): FormGroup{
+  addSurveys(): FormGroup{
     return this.fb.group({
-      PollId: [''],
+      SurveyId: [''],
       Name: ['', [Validators.required, Validators.maxLength(100), Validators.minLength(3)]],
-      DatePoll: ['', Validators.required]
+      DateSurvey: ['', Validators.required]
     });
   }
 
@@ -62,7 +62,7 @@ export class PollListComponent implements OnInit {
     private data: MonitorService,
     private spinnerService: SpinnerService,
     private dialog: MatDialog,
-    private pollService: PollsService,
+    private surveyService: SurveysService,
     private matIconRegistry: MatIconRegistry
   ) { 
     this.matIconRegistry.addSvgIcon('edit',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/edit.svg'));
@@ -89,13 +89,13 @@ export class PollListComponent implements OnInit {
   ngOnInit(): void {
     this.businessId = this.authService.businessId();
     this._page = 1;
-    this._currentPage.push({page: this._page, pollId: ''});
-    this.loadPolls(
-      this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].pollId
+    this._currentPage.push({page: this._page, surveyId: ''});
+    this.loadSurveys(
+      this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].surveyId
     );
 
     this.data.handleMessage.subscribe(res => this.changeData = res);
-    this.data.objectMessage.subscribe(res => this.pollData = res);
+    this.data.objectMessage.subscribe(res => this.surveyData = res);
     this.data.setData(undefined);
   }
 
@@ -110,29 +110,29 @@ export class PollListComponent implements OnInit {
       this._currentSearchValue = changes.filterValue.currentValue;
       this._currentPage = [];
       this._page = 1;
-      this._currentPage.push({page: this._page, pollId: ''});
-      this.loadPolls(
-        this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].pollId
+      this._currentPage.push({page: this._page, surveyId: ''});
+      this.loadSurveys(
+        this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].surveyId
       );
     }
   }
 
-  loadPolls(crPage, crItems, crSearch, crlastItem) {
+  loadSurveys(crPage, crItems, crSearch, crlastItem) {
     this.onError = '';
-    var spinnerRef = this.spinnerService.start("Loading Polls...");
+    var spinnerRef = this.spinnerService.start("Loading Surveys...");
     let data = this.businessId + "/" + crItems + (crSearch === '' ? '/_' : '/' + crSearch) + (crlastItem === '' ? '/_' : '/' +  crlastItem);
 
-    this.polls$ = this.pollService.getPolls(data).pipe(
+    this.surveys$ = this.surveyService.getSurveys(data).pipe(
       map((res: any) => {
         if (res != null) {
           if (res.lastItem != ''){
             this.length = (this.pageSize*this._page)+1;
-            this._currentPage.push({page: this._page+1, pollId: res.lastItem});
+            this._currentPage.push({page: this._page+1, surveyId: res.lastItem});
           }
         }
-        this.pollForm.setControl('Polls', this.setExistingPolls(res.polls));
+        this.surveyForm.setControl('Surveys', this.setExistingSurveys(res.surveys));
         this.spinnerService.stop(spinnerRef);
-        return res.polls;
+        return res.surveys;
       }),
       catchError(err => {
         this.onError = err.Message;
@@ -142,17 +142,16 @@ export class PollListComponent implements OnInit {
     );
   }
 
-  setExistingPolls(polls: Poll[]): FormArray{
+  setExistingSurveys(surveys: Survey[]): FormArray{
     const formArray = new FormArray([]);
-    polls.forEach(res => {
+    surveys.forEach(res => {
       formArray.push(this.fb.group({
-          PollId: res.PollId,
+          SurveyId: res.SurveyId,
           Name: res.Name,
-          DatePoll: res.DatePoll,
-          DateFinPoll: res.DateFinPoll
+          DateSurvey: res.DateSurvey
         })
       );
-      this.pollTable.renderRows();
+      this.surveyTable.renderRows();
     });
     return formArray;
   }
@@ -164,26 +163,26 @@ export class PollListComponent implements OnInit {
     } else {
       this._page = page+1;
     }
-    this.loadPolls(
+    this.loadSurveys(
       this._currentPage[this._page-1].page,
       this.pageSize,
       this._currentSearchValue,
-      this._currentPage[this._page-1].pollId
+      this._currentPage[this._page-1].surveyId
     );
   }
 
-  onSelect(poll: any){
-    this.data.setData(poll);
+  onSelect(survey: any){
+    this.data.setData(survey);
     this.data.handleData('Add');
   }
 
-  onDelete(poll: any){
+  onDelete(survey: any){
     this.displayYesNo = true;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = false;
     dialogConfig.data = {
-      header: 'Poll', 
-      message: 'Are you sure to delete this Poll?', 
+      header: 'Survey', 
+      message: 'Are you sure to delete this Survey?', 
       success: false, 
       error: false, 
       warn: false,
@@ -196,16 +195,16 @@ export class PollListComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
       if(result != undefined){
-        var spinnerRef = this.spinnerService.start("Deleting Poll...");
+        var spinnerRef = this.spinnerService.start("Deleting Survey...");
         if (result){ 
-          this.deletePoll$ = this.pollService.deletePoll(poll.value.PollId, this.businessId, poll.value.DatePoll).pipe(
+          this.deleteSurvey$ = this.surveyService.deleteSurvey(survey.value.SurveyId, this.businessId, survey.value.DateSurvey).pipe(
             tap(res => {
               this.spinnerService.stop(spinnerRef);
               this.displayYesNo = false;
-              this.loadPolls(
-                this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].pollId
+              this.loadSurveys(
+                this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].surveyId
               );
-              this.openDialog('Polls', 'Poll deleted successful', true, false, false);
+              this.openDialog('Surveys', 'Survey deleted successful', true, false, false);
             }),
             catchError(err => {
               this.spinnerService.stop(spinnerRef);
@@ -219,8 +218,8 @@ export class PollListComponent implements OnInit {
     });
   }
 
-  trackRow(index: number, item: Poll) {
-    return item.PollId;
+  trackRow(index: number, item: Survey) {
+    return item.SurveyId;
   }
 
 }

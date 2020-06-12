@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '@modules/authentication/guards/auth.guard';
 
 /**Main Components**/
-import { MainNavComponent, NotFoundComponent, LoginComponent, UsersComponent, ClientsComponent, DashboardComponent, ServicesComponent, ProfileComponent, BusinessComponent, CategoriesComponent, ReportsComponent, RolesComponent, HelpComponent, ResetComponent, VerificationComponent, ForgotpassComponent, HomeComponent, HostComponent, UserlocComponent, PollsComponent, PollRespComponent, QuickCheckinComponent } from '@modules/index';
+import { MainNavComponent, NotFoundComponent, LoginComponent, UsersComponent, ClientsComponent, DashboardComponent, ServicesComponent, ProfileComponent, BusinessComponent, CategoriesComponent, ReportsComponent, RolesComponent, HelpComponent, ResetComponent, VerificationComponent, ForgotpassComponent, HomeComponent, HostComponent, UserlocComponent, PollsComponent, PollRespComponent, QuickCheckinComponent, SurveysComponent, SurveyRespComponent, LandingComponent } from '@modules/index';
 
 const routes: Routes = [
   {
@@ -13,6 +13,7 @@ const routes: Routes = [
       { path: 'clients', component: ClientsComponent, canActivate: [AuthGuard] },
       { path: 'userloc', component: UserlocComponent, canActivate: [AuthGuard] },
       { path: 'polls', component: PollsComponent, canActivate: [AuthGuard] },
+      { path: 'surveys', component: SurveysComponent, canActivate: [AuthGuard] },
       { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
       { path: 'host', component: HostComponent, canActivate: [AuthGuard] },
       { path: 'quick-checkin', component: QuickCheckinComponent, canActivate: [AuthGuard] },
@@ -46,6 +47,14 @@ const routes: Routes = [
     component: PollRespComponent
   },
   {
+    path: 'survey-response/:surveyId/:custId',
+    component: SurveyRespComponent
+  },
+  {
+    path: ':landing',
+    component: LandingComponent
+  },
+  {
     path: '**',
     component: NotFoundComponent //redirectTo: '' 
   }
@@ -74,6 +83,9 @@ export const routingComponents = [
   BusinessComponent,
   CategoriesComponent,
   PollRespComponent,
+  SurveyRespComponent,
+  SurveysComponent,
+  LandingComponent,
   RolesComponent,
   HelpComponent,
   HomeComponent,

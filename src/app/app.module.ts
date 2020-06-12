@@ -63,6 +63,8 @@ import { SearchComponent } from '@shared/search/search.component';
 import { PollComponent } from '@modules/polls/poll/poll.component';
 import { PollListComponent } from '@modules/polls/poll-list/poll-list.component';
 import { UserlocComponent } from '@modules/userloc/userloc.component';
+import { SurveyComponent } from '@modules/surveys/survey/survey.component';
+import { SurveyListComponent } from './modules/surveys/survey-list/survey-list.component';
 
 //Directives
 import { PhoneMaskDirective } from '@shared/phone-mask.directive';
@@ -89,7 +91,9 @@ import { QuickCheckinComponent } from './modules/quick-checkin/quick-checkin.com
     UserlocComponent,
     PollComponent,
     PollListComponent,
-    QuickCheckinComponent
+    QuickCheckinComponent,
+    SurveyComponent,
+    SurveyListComponent
   ],
   imports: [
     BrowserModule,

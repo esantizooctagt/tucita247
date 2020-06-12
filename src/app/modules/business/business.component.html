@@ -75,43 +75,6 @@
                                     </div>
                                 </div>
                             </mat-tab>
-                            <mat-tab label="Social Info">
-                                <div class="row">
-                                    <mat-form-field class="col-md-6" hintLabel="Email format">
-                                        <input matInput placeholder="Email" maxlength="200"
-                                            pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" formControlName="Email"
-                                            [errorStateMatcher]="confirmValidParentMatcher" required>
-                                        <mat-error *ngIf="fBusiness.Email.invalid && fBusiness.Email.touched">
-                                            {{getErrorMessage('Email')}}</mat-error>
-                                    </mat-form-field>
-                                    <mat-form-field class="col-md-6" hintLabel="WebSite">
-                                        <input matInput placeholder="WebSite" formControlName="WebSite" maxlength="150"
-                                            minlength="4" [errorStateMatcher]="confirmValidParentMatcher">
-                                        <mat-error *ngIf="fBusiness.WebSite.invalid && fBusiness.WebSite.touched">
-                                            {{getErrorMessage('WebSite')}}</mat-error>
-                                    </mat-form-field>
-                                </div>
-                                <div class="row">
-                                    <mat-form-field class="col-md-4" hintLabel="Facebook">
-                                        <input matInput placeholder="Facebook" maxlength="150" minlength="4"
-                                            formControlName="Facebook" [errorStateMatcher]="confirmValidParentMatcher">
-                                        <mat-error *ngIf="fBusiness.Facebook.invalid && fBusiness.Facebook.touched">
-                                            {{getErrorMessage('Facebook')}}</mat-error>
-                                    </mat-form-field>
-                                    <mat-form-field class="col-md-4" hintLabel="Twitter">
-                                        <input matInput placeholder="Twitter" maxlength="150" minlength="4"
-                                            formControlName="Twitter" [errorStateMatcher]="confirmValidParentMatcher">
-                                        <mat-error *ngIf="fBusiness.Twitter.invalid && fBusiness.Twitter.touched">
-                                            {{getErrorMessage('Twitter')}}</mat-error>
-                                    </mat-form-field>
-                                    <mat-form-field class="col-md-4" hintLabel="Instagram">
-                                        <input matInput placeholder="Instagram" maxlength="150" minlength="4"
-                                            formControlName="Instagram" [errorStateMatcher]="confirmValidParentMatcher">
-                                        <mat-error *ngIf="fBusiness.Instagram.invalid && fBusiness.Instagram.touched">
-                                            {{getErrorMessage('Instagram')}}</mat-error>
-                                    </mat-form-field>
-                                </div>
-                            </mat-tab>
                             <mat-tab label="Categories / Purpose">
                                 <mat-form-field hintLabel="Categories">
                                     <ng-container *ngIf="categories$ | async"></ng-container>
@@ -308,6 +271,52 @@
                                 </div>
                             </mat-tab>
                             <mat-tab label="Additional Data">
+                                <div class="row">
+                                    <ng-container *ngIf="!fBusiness.Email.value; else labelEmail">
+                                        <mat-form-field class="col-md-6" hintLabel="Email format">
+                                            <input matInput placeholder="Email" maxlength="200"
+                                                pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                                                formControlName="Email" [errorStateMatcher]="confirmValidParentMatcher"
+                                                required>
+                                            <mat-error *ngIf="fBusiness.Email.invalid && fBusiness.Email.touched">
+                                                {{getErrorMessage('Email')}}</mat-error>
+                                        </mat-form-field>
+                                    </ng-container>
+                                    <ng-template #labelEmail >
+                                        <div class="content-label col-md-6 form-field pl-3 pr-3">
+                                            <mat-label class="">
+                                                Email :
+                                            </mat-label>
+                                            {{fBusiness.Email.value}}
+                                        </div>
+                                    </ng-template>
+                                    <mat-form-field class="col-md-6" hintLabel="WebSite">
+                                        <input matInput placeholder="WebSite" formControlName="WebSite" maxlength="150"
+                                            minlength="4" [errorStateMatcher]="confirmValidParentMatcher">
+                                        <mat-error *ngIf="fBusiness.WebSite.invalid && fBusiness.WebSite.touched">
+                                            {{getErrorMessage('WebSite')}}</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="row">
+                                    <mat-form-field class="col-md-4" hintLabel="Facebook">
+                                        <input matInput placeholder="Facebook" maxlength="150" minlength="4"
+                                            formControlName="Facebook" [errorStateMatcher]="confirmValidParentMatcher">
+                                        <mat-error *ngIf="fBusiness.Facebook.invalid && fBusiness.Facebook.touched">
+                                            {{getErrorMessage('Facebook')}}</mat-error>
+                                    </mat-form-field>
+                                    <mat-form-field class="col-md-4" hintLabel="Twitter">
+                                        <input matInput placeholder="Twitter" maxlength="150" minlength="4"
+                                            formControlName="Twitter" [errorStateMatcher]="confirmValidParentMatcher">
+                                        <mat-error *ngIf="fBusiness.Twitter.invalid && fBusiness.Twitter.touched">
+                                            {{getErrorMessage('Twitter')}}</mat-error>
+                                    </mat-form-field>
+                                    <mat-form-field class="col-md-4" hintLabel="Instagram">
+                                        <input matInput placeholder="Instagram" maxlength="150" minlength="4"
+                                            formControlName="Instagram" [errorStateMatcher]="confirmValidParentMatcher">
+                                        <mat-error *ngIf="fBusiness.Instagram.invalid && fBusiness.Instagram.touched">
+                                            {{getErrorMessage('Instagram')}}</mat-error>
+                                    </mat-form-field>
+                                </div>
                                 <mat-form-field hintLabel="Long description for mobile app">
                                     <input matInput placeholder="Long Description" maxlength="255" minlength="10"
                                         formControlName="LongDescription"
@@ -324,20 +333,30 @@
                                         *ngIf="fBusiness.ShortDescription.invalid && fBusiness.ShortDescription.touched">
                                         {{getErrorMessage('ShortDescription')}}</mat-error>
                                 </mat-form-field>
-                                <mat-form-field hintLabel="Tu Cita 24/7 Link">
-                                    <input matInput placeholder="Tu Cita 24/7 Link" maxlength="50" minlength="2"
-                                        formControlName="TuCitaLink"
-                                        [errorStateMatcher]="confirmValidParentMatcher" (focusout)="checkLinkAvailability($event)" required>
-                                        <mat-spinner matSuffix *ngIf="loadingBusiness" diameter="18" color="primary"></mat-spinner>
+                                <ng-container *ngIf="!fBusiness.TuCitaLink.value; else labelTuCita">
+                                    <mat-form-field hintLabel="Tu Cita 24/7 Link">
+                                        <input matInput placeholder="Tu Cita 24/7 Link" maxlength="50" minlength="2"
+                                            formControlName="TuCitaLink" [errorStateMatcher]="confirmValidParentMatcher"
+                                            (focusout)="checkLinkAvailability($event)" required>
+                                        <mat-spinner matSuffix *ngIf="loadingBusiness" diameter="18" color="primary">
+                                        </mat-spinner>
                                         <ng-container matSuffix *ngIf="availability$ | async as result">
                                             <mat-icon *ngIf="linkValidated"
                                                 [ngClass]="{'icon-green':result.Available, 'icon-red':!result.Available}">
                                                 {{result.Available ? 'check' : 'close' }}</mat-icon>
                                         </ng-container>
-                                    <mat-error
-                                        *ngIf="fBusiness.TuCitaLink.invalid && fBusiness.TuCitaLink.touched">
-                                        {{getErrorMessage('TuCitaLink')}}</mat-error>
-                                </mat-form-field>
+                                        <mat-error *ngIf="fBusiness.TuCitaLink.invalid && fBusiness.TuCitaLink.touched">
+                                            {{getErrorMessage('TuCitaLink')}}</mat-error>
+                                    </mat-form-field>
+                                </ng-container>
+                                <ng-template #labelTuCita>
+                                    <div class="content-label col-md-6 form-field pl-0 pr-3 pb-3">
+                                        <mat-label class="">
+                                            Tu Cita 24/7 Link :
+                                        </mat-label>
+                                        {{fBusiness.TuCitaLink.value}}
+                                    </div>
+                                </ng-template>
                                 <div class="image-business mt-2 mb-2">
                                     Image for mobile App
                                     <form [formGroup]="imageForm" autocomplete="off" (ngSubmit)="onSubmitImage()">
@@ -362,11 +381,12 @@
                                 </div>
                                 <div class="image-business mt-2 mb-2">
                                     Image for Tu Cita 24/7 web link
-                                    <form [formGroup]="imageFormLink" autocomplete="off" (ngSubmit)="onSubmitImageLink()">
+                                    <form [formGroup]="imageFormLink" autocomplete="off"
+                                        (ngSubmit)="onSubmitImageLink()">
                                         <div class="sector">
                                             <!-- User Profile Image -->
-                                            <img *ngIf="fBusiness.ImagenLink.value; else isIconLink" class="imgbusiness-pic"
-                                                [src]="imgPath+fBusiness.ImagenLink.value">
+                                            <img *ngIf="fBusiness.ImagenLink.value; else isIconLink"
+                                                class="imgbusiness-pic" [src]="imgPath+fBusiness.ImagenLink.value">
                                             <ng-template #isIconLink>
                                                 <!-- Default Image -->
                                                 <div class="fill-overlay">IMAGE WEB LINK</div>
@@ -376,8 +396,8 @@
                                                     (click)="onSearchImageLink()">
                                                     <mat-icon>add_a_photo</mat-icon>
                                                 </button>
-                                                <input id="fileUploadLink" name="fileUploadLink" type="file" accept="image/*"
-                                                    style="display:none;" />
+                                                <input id="fileUploadLink" name="fileUploadLink" type="file"
+                                                    accept="image/*" style="display:none;" />
                                             </div>
                                         </div>
                                     </form>

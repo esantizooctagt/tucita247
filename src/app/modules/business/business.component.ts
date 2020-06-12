@@ -1221,7 +1221,6 @@ export class BusinessComponent implements OnInit {
       tap(response =>  {
           this.spinnerService.stop(spinnerRef);
           this.businessForm.patchValue({'ImagenLink': this.businessId+'/img/link/'+this.businessId+type});
-          // this.authService.setUserAvatar(this.businessId+'/img/link/'+this.businessId+type);
           this.imageFormLink.reset({'Imagen_Link':null});
           this.fileStringLink = null;
           this.openDialog('Business', 'Image uploaded successful', true, false, false);

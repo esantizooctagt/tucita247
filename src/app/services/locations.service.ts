@@ -47,8 +47,8 @@ export class LocationService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  getLocationQuantityAll(businessId): Observable<any[]>{
-    return this.http.get<any>(this.apiURL + '/location/checkinall/' + businessId)
+  getLocationQuantityAll(businessId, isAdmin): Observable<any[]>{
+    return this.http.get<any>(this.apiURL + '/location/checkinall/' + businessId + '/' + isAdmin)
                     .pipe(catchError(this.errorHandler));
   }
 

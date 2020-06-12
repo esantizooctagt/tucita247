@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PollsService } from '@app/services';
 import { Observable } from 'rxjs';
-import { Poll, Question } from '@app/_models';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { map, catchError } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -14,9 +13,11 @@ import { FormBuilder, FormArray } from '@angular/forms';
   styleUrls: ['./poll-resp.component.scss']
 })
 export class PollRespComponent implements OnInit {
-  pollId: string = '';
-  custId: string = '';
-  noItems: number = 0;
+  PollId: string = '';
+  CustId: string = '';
+  Name: string = '';
+  LocationId: string = '';
+  error: string = '';
   savePoll: boolean = false;
 
   savePoll$: Observable<any>;
@@ -30,22 +31,6 @@ export class PollRespComponent implements OnInit {
     private spinnerService: SpinnerService
   ) { }
 
-  get fQuestions(){
-    return this.pollForm.get('Questions') as FormArray;
-  }
-
-  get f(){
-    return this.pollForm.controls;
-  }
-
-  pollForm = this.fb.group({
-    PollId: [''],
-    Name: [''],
-    LocationId: [''],
-    DatePoll: [''],
-    Status: [true],
-    Questions : this.fb.array([])
-  });
 
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
@@ -54,21 +39,22 @@ export class PollRespComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.pollId = this.route.snapshot.paramMap.get('pollId');
-    this.custId = this.route.snapshot.paramMap.get('custId');
+    this.PollId = this.route.snapshot.paramMap.get('pollId');
+    this.CustId = this.route.snapshot.paramMap.get('custId');
 
     var spinnerRef = this.spinnerService.start("Loading Poll...");
-    this.pollData$ = this.pollService.getPoll(this.pollId).pipe(
+    this.pollData$ = this.pollService.getPoll(this.PollId).pipe(
       map((poll: any) => {
-        this.pollForm.setValue({
-          PollId: poll.PollId,
-          Name: poll.Name,
-          LocationId: poll.LocationId,
-          DatePoll: '',
-          Status: (poll.Status == 1 ? true : false),
-          Questions: []
-        });
-        this.pollForm.setControl('Questions', this.setExistingPolls(poll.Questions));
+        let actualDate = new Date();
+        if (poll.DateFinPoll < actualDate && poll.Status == 1) {
+          this.PollId = poll.PollId;
+          this.CustId = poll.CustId;
+          this.LocationId = poll.LocationId;
+          this.Name = poll.Name;
+        }
+        else {
+          this.error = "Poll is not active";          
+        }
         this.spinnerService.stop(spinnerRef);
         return '';
       }),
@@ -79,36 +65,15 @@ export class PollRespComponent implements OnInit {
       })
     );
   }
-
-  setExistingPolls(quest: Question[]): FormArray{
-    const formArray = new FormArray([]);
-    quest.forEach(res => {
-      formArray.push(this.fb.group({
-          QuestionId: res.QuestionId,
-          Description: res.Description,
-          Status: res.Status,
-          Happy: res.Happy,
-          Neutral: res.Neutral,
-          Angry: res.Angry,
-          Result: 0
-        })
-      );
-      this.noItems = this.noItems +1;
-    });
-    return formArray;
-  }
   
-  onSubmit(){
-    let items = this.pollForm.value.Questions;
-    let detail = [];
-    items.forEach(ele => {
-      detail.push({QuestionId: ele.QuestionId, Happy: (ele.Result == 1 ? 1 : 0), Neutral: (ele.Result == 2 ? 1 : 0), Angry: (ele.Result == 3 ? 1 : 0)});
-    })
+  onSubmit(i: number){
     let formData = {
-      PollId: this.pollForm.value.PollId,
-      CustomerId: this.custId,
-      LocationId: this.pollForm.value.LocationId,
-      Questions: detail
+      PollId: this.PollId,
+      CustomerId: this.CustId,
+      LocationId: this.LocationId,
+      Happy: (i == 1 ? 1 : 0),
+      Neutral: (i == 2 ? 1 : 0),
+      Angry: (i == 3 ? 1 : 0)
     }
     this.savePoll = false;
     var spinnerRef = this.spinnerService.start("Saving Poll...");
