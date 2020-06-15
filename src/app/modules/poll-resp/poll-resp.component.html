@@ -1,19 +1,14 @@
-<div class="pl-0 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
-    <h3>POLLS</h3>
-</div>
 <ng-container *ngIf="savePoll$ | async"></ng-container>
 <ng-container *ngIf="pollData$ | async"></ng-container>
 <ng-container *ngIf="error == ''; else Error">
-    <mat-card class="col-sm col-md col-lg-7" *ngIf="!savePoll">
-        <div class="form-field pl-3 pr-3">
+    <mat-card class="col-sm col-md col-lg-4 ml-3 mt-3" *ngIf="!savePoll">
+        <div class="form-field pr-3">
             {{Name}}
         </div>
         <div class="panel-array col-md p-0 pt-3">
-            <mat-radio-group>
-                <mat-radio-button value="1" (click)="onSubmit(1)">Happy</mat-radio-button>
-                <mat-radio-button value="2" (click)="onSubmit(2)">Neutral</mat-radio-button>
-                <mat-radio-button value="3" (click)="onSubmit(3)">Angry</mat-radio-button>
-            </mat-radio-group>  
+            <div class="happy-img mr-2" (click)="onSubmit(1)"></div>
+            <div class="neutral-img mr-2" (click)="onSubmit(2)"></div>
+            <div class="angry-img mr-2" (click)="onSubmit(3)"></div>
         </div>
     </mat-card>
     <div class="" *ngIf="savePoll">

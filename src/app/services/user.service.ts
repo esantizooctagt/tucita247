@@ -32,6 +32,11 @@ export class UserService {
                     .pipe(catchError(this.errorHandler));
   }
 
+  updateToken(formData){
+    return this.http.put(this.apiURL + '/user/token', formData)
+                    .pipe(catchError(this.errorHandler));
+  }
+
   getUsers(formData): Observable<User[]> {
     return this.http.get<User[]>(this.apiURL + '/users/' + formData)
                     .pipe(catchError(this.errorHandler));

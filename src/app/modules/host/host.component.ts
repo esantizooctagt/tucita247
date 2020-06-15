@@ -149,183 +149,8 @@ export class HostComponent implements OnInit {
   })
 
   schedule = [];
-  //   {
-  //     AppId: "12345",
-  //     ClientId: "55555",
-  //     Name: "ERICK SANTIZO",
-  //     Phone: "9009009282",
-  //     OnBehalf: 0,
-  //     Companions: 1,
-  //     DateAppo: "09:00",
-  //     Door: "LEVEL 1",
-  //     Disability: "",
-  //     DateFull: "2020-05-25-09-00",
-  //     Unread: "0"
-  //   },
-  //   {
-  //     AppId: "67890",
-  //     ClientId: "55555",
-  //     Name: "LUIS PEREZ",
-  //     Phone: "1239009282",
-  //     OnBehalf: 0,
-  //     Companions: 1,
-  //     DateAppo: "09:00",
-  //     Door: "LEVEL 1",
-  //     Disability: "",
-  //     DateFull: "2020-05-25-09-00",
-  //     Unread: "0"
-  //   },
-  //   {
-  //     AppId: "67895",
-  //     ClientId: "55555",
-  //     Name: "J. SMITH",
-  //     Phone: "9899109282",
-  //     OnBehalf: 0,
-  //     Companions: 1,
-  //     DateAppo: "09:00",
-  //     Door: "LEVEL 1",
-  //     Disability: "",
-  //     DateFull: "2020-05-25-09-00",
-  //     Unread: "0"
-  //   },
-  //   {
-  //     AppId: "69998",
-  //     ClientId: "55555",
-  //     Name: "LUISA MARTINEZ",
-  //     Phone: "2333339132",
-  //     OnBehalf: 0,
-  //     Companions: 1,
-  //     DateAppo: "09:00",
-  //     Door: "LEVEL 1",
-  //     Disability: "",
-  //     DateFull: "2020-05-25-09-00",
-  //     Unread: "0"
-  //   },
-  //   {
-  //     AppId: "69890",
-  //     ClientId: "55555",
-  //     Name: "L. FERGUSON",
-  //     Phone: "1233449282",
-  //     OnBehalf: 0,
-  //     Companions: 1,
-  //     DateAppo: "10:00",
-  //     Door: "LEVEL 1",
-  //     Disability: "",
-  //     DateFull: "2020-05-25-10-00",
-  //     Unread: "0"
-  //   },
-  //   {
-  //     AppId: "69095",
-  //     ClientId: "55555",
-  //     Name: "AUSTIN SMITH",
-  //     Phone: "4549109282",
-  //     OnBehalf: 0,
-  //     Companions: 1,
-  //     DateAppo: "10:00",
-  //     Door: "LEVEL 1",
-  //     Disability: "",
-  //     DateFull: "2020-05-25-10-00",
-  //     Unread: "0"
-  //   },
-  //   {
-  //     AppId: "69090",
-  //     ClientId: "55555",
-  //     Name: "L SMITH",
-  //     Phone: "4549109452",
-  //     OnBehalf: 0,
-  //     Companions: 1,
-  //     DateAppo: "10:00",
-  //     Door: "LEVEL 1",
-  //     Disability: "",
-  //     DateFull: "2020-05-25-10-00",
-  //     Unread: "0"
-  //   },
-  //   {
-  //     AppId: "62395",
-  //     ClientId: "55555",
-  //     Name: "J SMITH",
-  //     Phone: "4549359282",
-  //     OnBehalf: 0,
-  //     Companions: 1,
-  //     DateAppo: "10:00",
-  //     Door: "LEVEL 1",
-  //     Disability: "",
-  //     DateFull: "2020-05-25-10-00",
-  //     Unread: "0"
-  //   },
-  //   {
-  //     AppId: "34095",
-  //     ClientId: "55555",
-  //     Name: "M SMITH",
-  //     Phone: "4549103482",
-  //     OnBehalf: 0,
-  //     Companions: 1,
-  //     DateAppo: "10:00",
-  //     Door: "LEVEL 1",
-  //     Disability: "",
-  //     DateFull: "2020-05-25-10-00",
-  //     Unread: "0"
-  //   },
-  //   {
-  //     AppId: "67895",
-  //     ClientId: "55555",
-  //     Name: "SS SMITH",
-  //     Phone: "4549359282",
-  //     OnBehalf: 0,
-  //     Companions: 1,
-  //     DateAppo: "10:00",
-  //     Door: "LEVEL 1",
-  //     Disability: "",
-  //     DateFull: "2020-05-25-10-00",
-  //     Unread: "0"
-  //   },
-  //   {
-  //     AppId: "36795",
-  //     ClientId: "55555",
-  //     Name: "M Bsm",
-  //     Phone: "4549103482",
-  //     OnBehalf: 0,
-  //     Companions: 1,
-  //     DateAppo: "10:00",
-  //     Door: "LEVEL 1",
-  //     Disability: "",
-  //     DateFull: "2020-05-25-10-00",
-  //     Unread: "0"
-  //   }
-  // ];
   walkIns = [];
-  //   {
-  //     AppId: "45456",
-  //     ClientId: "55555",
-  //     Name: "VALERIE SANTIZO",
-  //     Phone: "1239009282",
-  //     OnBehalf: 0,
-  //     Companions: 1,
-  //     DateAppo: "10:00",
-  //     Door: "LEVEL 1",
-  //     Disability: "",
-  //     DateFull: "2020-05-25-10-00",
-  //     Unread: "0"
-  //   }
-  // ]
-  preCheckIn =[
-    {
-      AppId: "34256",
-      ClientId: "55555",
-      Name: "Natalie Merk",
-      Phone: "4569009282",
-      OnBehalf: 0,
-      Guests: 1,
-      DateAppo: "10:00",
-      Door: "LEVEL 1",
-      Disability: "",
-      DateFull: "2020-06-10-09-00",
-      Unread: "0",
-      CheckInTime: "2020-06-10-10-10",
-      ElapsedTime: ""
-    }
-  ]
-
+  preCheckIn =[]
   previous=[];
 
   openSnackBar(message: string, action: string) {
@@ -443,24 +268,6 @@ export class HostComponent implements OnInit {
       })
     );
 
-    // setInterval(() => { 
-    //   if (this.locationId != '' && this.locationStatus == 1 && this.closedLoc == 0){
-    //     this.quantityPeople$ = this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
-    //       map((res: any) => {
-    //         if (res != null){
-    //           this.qtyPeople = res.Quantity;
-    //           this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
-    //           return res.Quantity.toString();
-    //         }
-    //       }),
-    //       catchError(err => {
-    //         this.onError = err.Message;
-    //         return '0';
-    //       })
-    //     );
-    //   }
-    // }, 30000);
-
     setInterval(() => {
       this.preCheckIn.forEach(res => {
         let options = {
@@ -517,6 +324,9 @@ export class HostComponent implements OnInit {
           if (res['Business'].OPEN == 1){
             this.locationStatus = 1;
             this.closedLoc = 0;
+            this.lastItem = "_";
+            this.lastItemPre = "_";
+            this.lastItemWalk = "_";
             this.spinnerService.stop(spinnerRef);
             this.getAppointmentsSche();
             this.getAppointmentsWalk();
@@ -590,7 +400,7 @@ export class HostComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result != undefined) {
-        this.qrCode = result;
+        this.qrCode = result.qrCode;
         this.checkOutAppointment(this.qrCode);
       }
     });
@@ -623,7 +433,7 @@ export class HostComponent implements OnInit {
       ),
       catchError(err => {
         if (err.Status == 404){
-          this.openSnackBar("Invalid qr code","Check-out");
+          this.openSnackBar(err.Message,"Check-out");
           return err.Message;
         }
         this.onError = err.Message;
@@ -846,7 +656,7 @@ export class HostComponent implements OnInit {
 
   onCheckInApp(appo: any){
     //READ QR CODE AND CHECK-IN PROCESS
-    if (appo.Phone != '0000000000') {
+    if (appo.Type == 1) {
       const dialogRef = this.dialog.open(VideoDialogComponent, {
         width: '450px',
         height: '675px',
@@ -982,7 +792,8 @@ export class HostComponent implements OnInit {
     //MOVE TO READY TO CHECK-IN INSTEAD OF DRAG AND DROP
     let formData = {
       Status: 2,
-      DateAppo: appo.DateFull
+      DateAppo: appo.DateFull,
+      CustomerId: appo.ClientId
     }
     this.updAppointment$ = this.appointmentService.updateAppointment(appo.AppId, formData).pipe(
       map((res: any) => {
@@ -1114,6 +925,8 @@ export class HostComponent implements OnInit {
               Phone: item['Phone'],
               DateFull: item['DateAppo'],
               DateAppo: hora,
+              Type: item['Type'],
+              Purpose: item['Purpose'],
               Unread: item['Unread']
             }
             this.previous.push(data);
@@ -1165,6 +978,8 @@ export class HostComponent implements OnInit {
               Disability: item['Disability'],
               Phone: item['Phone'],
               DateFull: item['DateAppo'],
+              Type: item['Type'],
+              Purpose: item['Purpose'],
               DateAppo: hora,
               Unread: item['Unread']
             }
@@ -1224,6 +1039,8 @@ export class HostComponent implements OnInit {
               Phone: item['Phone'],
               DateFull: item['DateAppo'],
               DateAppo: hora,
+              Type: item['Type'],
+              Purpose: item['Purpose'],
               Unread: item['Unread']
             }
             this.walkIns.push(data);
@@ -1275,6 +1092,8 @@ export class HostComponent implements OnInit {
               Phone: item['Phone'],
               DateFull: item['DateAppo'],
               DateAppo: hora,
+              Type: item['Type'],
+              Purpose: item['Purpose'],
               Unread: item['Unread'],
               CheckInTime: item['CheckInTime'],
               ElapsedTime: this.calculateTime(item['CheckInTime'])
@@ -1291,6 +1110,14 @@ export class HostComponent implements OnInit {
         return this.onError;
       })
     );
+  }
+
+  locationStatusChange(){
+    if (this.locationStatus == 1){
+      this.closedLocation();
+    } else {
+      this.openLocation();
+    }
   }
 
   calculateTime(cardTime: string): string{
@@ -1358,9 +1185,6 @@ export class HostComponent implements OnInit {
         })
       );
     }
-  }
-
-  ngOnDestroy() {
   }
 
   onScrollSche(){

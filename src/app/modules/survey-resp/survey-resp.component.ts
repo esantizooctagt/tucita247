@@ -7,6 +7,8 @@ import { SpinnerService } from '@app/shared/spinner.service';
 import { map, catchError } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormArray } from '@angular/forms';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-survey-resp',
@@ -23,12 +25,18 @@ export class SurveyRespComponent implements OnInit {
   surveyData$: Observable<any>;
 
   constructor(
+    private domSanitizer: DomSanitizer,
+    private matIconRegistry: MatIconRegistry,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private surveyService: SurveysService,
     private _snackBar: MatSnackBar,
     private spinnerService: SpinnerService
-  ) { }
+  ) {
+    this.matIconRegistry.addSvgIcon('happy',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/happy.svg'));
+    this.matIconRegistry.addSvgIcon('neutral',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/neutral.svg'));
+    this.matIconRegistry.addSvgIcon('angry',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/angry.svg'));
+   }
 
   get fQuestions(){
     return this.surveyForm.get('Questions') as FormArray;

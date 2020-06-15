@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { map, catchError } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormBuilder, FormArray } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-poll-resp',
@@ -41,14 +41,13 @@ export class PollRespComponent implements OnInit {
   ngOnInit(): void {
     this.PollId = this.route.snapshot.paramMap.get('pollId');
     this.CustId = this.route.snapshot.paramMap.get('custId');
-
     var spinnerRef = this.spinnerService.start("Loading Poll...");
     this.pollData$ = this.pollService.getPoll(this.PollId).pipe(
       map((poll: any) => {
         let actualDate = new Date();
-        if (poll.DateFinPoll < actualDate && poll.Status == 1) {
+        let dateStr = actualDate.getFullYear().toString() + '-' + (actualDate.getMonth() + 1).toString().padStart(2,'0') + '-' + (actualDate.getDate()).toString().padStart(2,'0');
+        if (poll.DateFinPoll > dateStr && poll.Status == 1) {
           this.PollId = poll.PollId;
-          this.CustId = poll.CustId;
           this.LocationId = poll.LocationId;
           this.Name = poll.Name;
         }

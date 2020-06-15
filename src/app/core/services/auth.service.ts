@@ -13,10 +13,12 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<User>;
   private currentUserTknSubject: BehaviorSubject<any>;
   private currentAccessTknSubject: BehaviorSubject<any>;
+  private currentRefreshTknSubject: BehaviorSubject<any>;
 
   public currentUser: Observable<User>;
   public currentTkn: Observable<any>;
   public currentAccessTkn: Observable<any>;
+  public currentRefresh: Observable<any>;
 
   readonly apiURL = environment.apiUrl;
   constructor(private http: HttpClient) {
@@ -28,6 +30,9 @@ export class AuthService {
 
     this.currentAccessTknSubject = new BehaviorSubject<User>(JSON.parse(sessionStorage.getItem('TC247_ACT')));
     this.currentAccessTkn = this.currentAccessTknSubject.asObservable();
+
+    this.currentRefreshTknSubject = new BehaviorSubject<User>(JSON.parse(sessionStorage.getItem('TC247_REF')));
+    this.currentRefresh = this.currentRefreshTknSubject.asObservable();
    }
 
   public get currentUserValue(): User {
@@ -42,6 +47,10 @@ export class AuthService {
     return this.currentAccessTknSubject.value;
   }
 
+  public get currentRefreshValue(): any{
+    return this.currentRefreshTknSubject.value;
+  }
+
   login(email: string, password: string, authCode: string) {
     return this.http.post<any>(this.apiURL + '/user/login', { "Email": email, "Password": password })
       .pipe(
@@ -54,6 +63,8 @@ export class AuthService {
                   this.currentUserTknSubject.next(user.token);
                   sessionStorage.setItem('TC247_ACT', JSON.stringify(user.access));
                   this.currentAccessTknSubject.next(user.access);
+                  sessionStorage.setItem('TC247_REF', JSON.stringify(user.refresh));
+                  this.currentRefreshTknSubject.next(user.refresh);
               }
               return user;
           }),
@@ -79,12 +90,21 @@ export class AuthService {
     return user.User_Id;
   }
 
+  email(){
+    let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
+    return user.Email;
+  }
+  
   currentToken() {
     return this.currentUserTknSubject.value;
   }
 
   currentAccessToken(){
     return this.currentAccessTknSubject.value;
+  }
+
+  currentRefreshToken(){
+    return this.currentRefreshTknSubject.value;
   }
   
   avatar(){
@@ -139,5 +159,7 @@ export class AuthService {
     this.currentUserTknSubject.next(null);
     sessionStorage.removeItem('TC247_ACT');
     this.currentAccessTknSubject.next(null);
+    sessionStorage.removeItem('TC247_REF');
+    this.currentRefreshTknSubject.next(null);
   }
 }

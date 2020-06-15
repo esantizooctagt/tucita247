@@ -1,27 +1,28 @@
 <div class="container-fluid host-container">
-    <div class="row pl-2 pr-2">
+    <div class="row">
         <ng-container *ngIf="updAppointment$ | async"></ng-container>
         <ng-container *ngIf="openLoc$ | async"></ng-container>
         <ng-container *ngIf="closedLoc$ | async"></ng-container>
         <div class="col-md-12">
-            <div class="row mt-2 mb-2">
-                <div class="col-sm-9 p-0">
-                    <button mat-stroked-button class="action-buttons-init" *ngIf="locationStatus == 0" color="primary" type="button" (click)="openLocation()">Open</button>
-                    <button mat-stroked-button class="action-buttons-init" *ngIf="locationStatus == 1" color="primary" type="button" (click)="closedLocation()">Closed</button>
-                    <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 0" color="primary" type="button" (click)="getWalkInsCheckOut()">Walk-Ins Check Out</button>
+            <div class="row space-row mt-2 mb-2">
+                <div class="col-sm-8 p-0">
+                    <mat-slide-toggle [checked]="locationStatus == 0" (change)="locationStatusChange()">{{(locationStatus == 0 ? 'Your location is closed' : 'Your location is open')}}</mat-slide-toggle>
+                </div>
+                <div class="operation-buttons col-sm-4 p-0">
+                    <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 0" color="secondary" type="button" (click)="getWalkInsCheckOut()">Walk-Ins Check Out</button>
                     <ng-container *ngIf="getWalkIns$ | async"></ng-container>
                     <ng-container *ngIf="manualCheckOut$ | async"></ng-container>
-                    <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 1" color="primary" type="button" (click)="setManualCheckOut()">Manual Check Out</button>
-                    <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 0" color="primary" type="button" (click)="checkOutQR()">QR Check Out</button>
+                    <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 1" color="secondary" type="button" (click)="setManualCheckOut()">Manual Check Out</button>
+                    <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 0" color="secondary" type="button" (click)="checkOutQR()">Check Out</button>
                 </div>
             </div>
-            <div class="row">
+            <div class="row space-row">
                 <ng-container *ngIf="quantityPeople$ | async"></ng-container>
                 <div class="col-md-2" [ngClass]="{
                     'qty-people-white': perLocation < 80,
                     'qty-people-black': perLocation < 95,
                     'qty-people-white-02': perLocation >= 95}">{{qtyPeople}}</div>
-                <mat-progress-bar class="ml-2" [ngClass]="{
+                <mat-progress-bar [ngClass]="{
                     'green-bar': perLocation < 80,
                     'yellow-bar': perLocation < 95,
                     'red-bar': perLocation >= 95
@@ -33,25 +34,25 @@
         <ng-container *ngIf="getLocInfo$ | async"></ng-container>
         <ng-container *ngIf="reasons$ | async"></ng-container>
         <div class="col-sm col-md col-lg-12">
-            <div class="row mb-2">
-                <div class="col-md ml-2 mr-2 mt-2 title-qeue">
+            <div class="row space-row mb-2">
+                <div class="col-md mt-2 title-qeue">
                     Citas
                 </div>
-                <div class="col-md ml-2 mr-2 mt-2 title-qeue">
+                <div class="col-md mt-2 title-qeue">
                     Walk-Ins
-                    <button mat-mini-fab class="add_client" (click)="showAppointment()">
+                    <button mat-mini-fab class="add_client" *ngIf="locationStatus == 1" (click)="showAppointment()">
                         <mat-icon>add</mat-icon>
                     </button>
                 </div>
-                <div class="col-md ml-2 mr-2 mt-2 title-qeue">
+                <div class="col-md mt-2 title-qeue">
                     Ready To Check-In
                 </div>
             </div>
             <ng-container *ngIf="messages$ | async"></ng-container>
-            <div class="row">
+            <div class="row space-row">
                 <div cdkDropList
                     [cdkDropListConnectedTo]="[preCheckInList]"
-                    [cdkDropListData]="schedule" class="col-md drop-qeue m-0">
+                    [cdkDropListData]="schedule" class="col-md drop-qeue">
                     <ng-container *ngIf="appointmentsSche$ | async"></ng-container>
                     <div
                         infiniteScroll
@@ -59,8 +60,8 @@
                         [infiniteScrollThrottle]="50"
                         (scrolled)="onScrollSche()"
                         [scrollWindow]="false" 
-                        class="col-md ml-2 mr-2 plan">
-                        <mat-card class="mt-2 card-pending" *ngIf="prevHour > 0">
+                        class="col-md plan">
+                        <mat-card class="mt-2 card-pending" *ngIf="prevHour > 0 && locationStatus == 1">
                             <mat-card-content>
                                 <div class="card-previous" (click)="showPrevious = !showPrevious; getPreviousAppos(prevHour)">
                                     <mat-icon *ngIf="showPrevious" svgIcon="menos"></mat-icon>
@@ -86,6 +87,9 @@
                                 <ng-container *ngIf="showDetailsPrev[i]">
                                     <div class="row pr-3 pl-3 mt-2 mb-2">
                                         <div class="card-contentprio col-md-6 pl-0">No. of guests: </div><div class="card-resultprio col-md">{{item.Guests}}</div>
+                                    </div>
+                                    <div class="row pr-3 pl-3 mt-2 mb-2">
+                                        <div class="card-contentprio col-md-6 pl-0">Purpose: </div><div class="card-resultprio-door col-md">{{item.Purpose}}</div>
                                     </div>
                                     <div class="row pr-3 pl-3 mt-2 mb-2">
                                         <div class="card-contentprio col-md-6 pl-0">Door: </div><div class="card-resultprio-door col-md">{{item.Door}}</div>
@@ -180,6 +184,9 @@
                                     <div class="card-contentprio col-md-6 pl-0">Number of guests: </div><div class="card-resultprio col-md">{{item.Guests}}</div>
                                 </div>
                                 <div class="row pr-3 pl-3 mt-2 mb-2">
+                                    <div class="card-contentprio col-md-6 pl-0">Purpose: </div><div class="card-resultprio-door col-md">{{item.Purpose}}</div>
+                                </div>
+                                <div class="row pr-3 pl-3 mt-2 mb-2">
                                     <div class="card-contentprio col-md-6 pl-0">Door: </div><div class="card-resultprio-door col-md">{{item.Door}}</div>
                                 </div>
                                 <div class="row pr-3 pl-3 mt-2 mb-2">
@@ -256,7 +263,7 @@
                 </div>
                 <div cdkDropList 
                      [cdkDropListConnectedTo]="[preCheckInList]"
-                     [cdkDropListData]="walkIns" class="col-md drop-qeue m-0">
+                     [cdkDropListData]="walkIns" class="col-md drop-qeue">
                      <ng-container *ngIf="appointmentsWalk$ | async"></ng-container>
                      <div
                         infiniteScroll
@@ -264,7 +271,7 @@
                         [infiniteScrollThrottle]="50"
                         (scrolled)="onScrollWalk()"
                         [scrollWindow]="false" 
-                        class="col-md ml-2 mr-2 walkin">
+                        class="col-md walkin">
                         <mat-card *ngIf="showApp" class="card-Appointment mt-2">
                             <ng-container *ngIf="newAppointment$ | async"></ng-container>
                             <form [formGroup]="clientForm" (ngSubmit)="addAppointment()">
@@ -354,6 +361,9 @@
                                     <div class="card-contentprio col-md-6 pl-0">Number of guests: </div><div class="card-resultprio col-md">{{item.Guests}}</div>
                                 </div>
                                 <div class="row pr-3 pl-3 mt-2 mb-2">
+                                    <div class="card-contentprio col-md-6 pl-0">Purpose: </div><div class="card-resultprio-door col-md">{{item.Purpose}}</div>
+                                </div>
+                                <div class="row pr-3 pl-3 mt-2 mb-2">
                                     <div class="card-contentprio col-md-6 pl-0">Door: </div><div class="card-resultprio-door col-md">{{item.Door}}</div>
                                 </div>
                                 <div class="row pr-3 pl-3 mt-2 mb-2">
@@ -431,7 +441,7 @@
                 <div cdkDropList
                      #preCheckInList="cdkDropList"
                      (cdkDropListDropped)="drop($event)"
-                     [cdkDropListData]="preCheckIn" class="col-md drop-qeue m-0">
+                     [cdkDropListData]="preCheckIn" class="col-md drop-qeue">
                      <ng-container *ngIf="appointmentsPre$ | async"></ng-container>
                      <div
                         infiniteScroll
@@ -439,7 +449,7 @@
                         [infiniteScrollThrottle]="50"
                         (scrolled)="onScrollWalk()"
                         [scrollWindow]="false" 
-                        class="col-md ml-2 mr-2 precheck">
+                        class="col-md precheck">
                         <ng-container *ngIf="checkIn$ | async"></ng-container>
                         <mat-card class="mt-2 appCard" *ngFor="let item of preCheckIn;let i=index">
                             <div class="row pr-3 pl-3">
@@ -464,6 +474,9 @@
                             <ng-container *ngIf="showDetailsCheck[i]">
                                 <div class="row pr-3 pl-3 mt-2 mb-2">
                                     <div class="card-contentprio col-md-6 pl-0">Number of guests: </div><div class="card-resultprio col-md">{{item.Guests}}</div>
+                                </div>
+                                <div class="row pr-3 pl-3 mt-2 mb-2">
+                                    <div class="card-contentprio col-md-6 pl-0">Purpose: </div><div class="card-resultprio-door col-md">{{item.Purpose}}</div>
                                 </div>
                                 <div class="row pr-3 pl-3 mt-2 mb-2">
                                     <div class="card-contentprio col-md-6 pl-0">Door: </div><div class="card-resultprio-door col-md">{{item.Door}}</div>

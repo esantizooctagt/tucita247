@@ -1,3 +1,23 @@
 ::ng-deep .mat-horizontal-stepper-header-container {
     display: none !important;
 }
+.mat-button-toggle-group-appearance-standard {
+    border: none;
+}
+mat-icon{
+    height: 60px;
+    width: 60px;
+}
+::ng-deep .mat-horizontal-content-container{
+    padding: 0;
+}
+.form-field{
+    font-family: Montserrat;
+    font-weight: 600;
+    font-size: 20px;
+}
+.form-question{
+    font-family: Montserrat;
+    font-weight: 400;
+    font-size: 16px;
+}
