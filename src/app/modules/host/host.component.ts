@@ -863,6 +863,36 @@ export class HostComponent implements OnInit {
     return actualTime;
   }
 
+  getActTime(): string{
+    let options = {
+      timeZone: 'America/Puerto_Rico',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: false,
+    },
+    formatter = new Intl.DateTimeFormat([], options);
+    var actual = formatter.format(new Date());
+    var actualTime = '';
+    var a = new Date();
+    var hour: number = +actual.substring(0,2);
+    var min: number = (+actual.substring(3,5) > 30 ? 0.5 : 0);
+
+    var actTime: number = 0;
+    if (this.bucketInterval == 0.5){
+      actTime = hour+min;
+    } else {
+      actTime = hour;
+    }
+    for (var i=0; i<= this.buckets.length-1; i++){
+      if (this.buckets[i].Time == actTime){
+        actualTime = this.buckets[i].TimeFormat;
+        break;
+      }
+    }
+    return actualTime;
+  }
+
   getYear(): string{
     let options = {
       timeZone: 'America/Puerto_Rico',
@@ -947,10 +977,11 @@ export class HostComponent implements OnInit {
     // let dateAppoStr = '2020-05-25-09-00';
     // let dateAppoFinStr = '2020-05-25-23-00';
     let getHours = this.getTime();
+    let getInitHour = this.getActTime();
     let hourIni = '00-00';
     let hourFin = '00-00';
     if (getHours.length > 0) {
-      hourIni = getHours.replace(':','-');
+      hourIni = getInitHour.replace(':','-');
       hourFin = getHours.replace(':','-');
     }
     let yearCurr = this.getYear();

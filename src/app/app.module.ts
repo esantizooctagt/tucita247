@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { NgxEchartsModule } from 'ngx-echarts';
 
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -135,6 +136,7 @@ import { QuickCheckinComponent } from './modules/quick-checkin/quick-checkin.com
     MatButtonToggleModule,
     MatTabsModule,
     InfiniteScrollModule,
+    NgxEchartsModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyCyKdLcjPnI3n5Eb2VmMJk-sgan83LEsCM'
     })

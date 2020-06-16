@@ -28,6 +28,16 @@ export class BusinessService {
                     .pipe(catchError(this.errorHandler));
   }
 
+  getBusinessAppos(businessId): Observable<any>{
+    return this.http.get<any>(this.apiURL + '/business/appos/' + businessId)
+                    .pipe(catchError(this.errorHandler));
+  }
+
+  getBusinessLanding(link): Observable<any>{
+    return this.http.get<any>(this.apiURL + '/business/landing/'+ link)
+                    .pipe(catchError(this.errorHandler));
+  }
+
   updateBusiness(businessId, dataForm) {
     return this.http.put(this.apiURL + '/business/' + businessId, dataForm)
                     .pipe(catchError(this.errorHandler));
