@@ -5,7 +5,7 @@ import { LocationService, BusinessService } from '@app/services';
 import { map, catchError, mergeMap } from 'rxjs/operators';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { AppointmentService } from '@app/services/appointment.service';
-import { runInThisContext } from 'vm';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,7 +15,7 @@ import { runInThisContext } from 'vm';
 export class DashboardComponent implements OnInit {
   quantityPeople$: Observable<any>;
   appos$: Observable<any>;
-  avgData$: Observable<any>;
+  avgData$: Observable<any[]>;
   businessId: string = '';
   onError: string = '';
   locationId: string = '';
@@ -26,7 +26,23 @@ export class DashboardComponent implements OnInit {
   perLocation = [];
   LocationName = [];
 
-  avgAppos: any;
+
+  multi: any[];
+  view: any[] = [700, 400];
+  // options
+  showXAxis: boolean = true;
+  showYAxis: boolean = true;
+  gradient: boolean = true;
+  showLegend: boolean = true;
+  showXAxisLabel: boolean = true;
+  xAxisLabel: string = 'Country';
+  showYAxisLabel: boolean = true;
+  yAxisLabel: string = 'Population';
+  legendTitle: string = 'Years';
+
+  colorScheme = {
+    domain: ['#5AA454', '#C7B42C', '#AAAAAA']
+  };
 
   constructor(
     private authService: AuthService,
@@ -110,113 +126,164 @@ export class DashboardComponent implements OnInit {
       );
     }
     
-    let averageData = [];
-    let dataShadow = [];
-    let initDate = '2020-06-16'
-    this.avgData$ = this.appointmentService.getApposAverage(this.businessId, initDate).pipe(
-      map((res: any) => {
-        if (res != null){
-          let maxVal = 0;
-          let maxInvoice = 0;
-          let series = [];
-          let content = [];
-          let dataAxis = [];
-          console.log(res);
-          res.forEach(loc =>{
-            let i: number = 0;
-            res.Data.forEach(item => {
-              let line = {
-                Qty: item.Qty
-              }
-              content[i].push(line);
-              dataAxis[i].push(item.DateAppo);
-            });
-            let data = {
-              name: loc.Name,
-              type: 'bar',
-              itemStyle: {
-                normal: {
-                  color: '#092e66',
-                },
-                emphasis: {
-                  color: '#abc6ff',
-                }
-              },
-              data: content[i]
-            }
-            series.push(loc.Name);
-          });
-          console.log(series);
-          // res.forEach(element => {
-          //   if (element.StoreId == ''){
-          //     dataAxis.push(element.dateAppo);
-          //     averageData.push(element.Sale);
-          //     if (maxVal < element.avg){
-          //       maxVal = element.avg;
-          //     }
-          //   }
-          // });
 
-          // // yMax = maxVal;
-          // // yMaxDoctos = maxInvoice;
+    this.multi = [
+      {
+        "name": "Germany",
+        "series": [
+          {
+            "name": "2010",
+            "value": 7300000
+          },
+          {
+            "name": "2011",
+            "value": 8940000
+          }
+        ]
+      },
+    
+      {
+        "name": "USA",
+        "series": [
+          {
+            "name": "2010",
+            "value": 7870000
+          },
+          {
+            "name": "2011",
+            "value": 8270000
+          }
+        ]
+      },
+    
+      {
+        "name": "France",
+        "series": [
+          {
+            "name": "2010",
+            "value": 5000002
+          },
+          {
+            "name": "2011",
+            "value": 5800000
+          }
+        ]
+      }
+    ];
 
-          this.avgAppos = {
-            title: {
-              text: 'Average time'
-            },
-            tooltip: {
-              trigger: 'axis',
-              axisPointer: {
-                type: 'shadow'
-              }
-            },
-            grid: {
-              left: '3%',
-              right: '4%',
-              bottom: '3%',
-              containLabel: true
-            },
-            xAxis: {
-              data: dataAxis,
-              axisLabel: {
-                inside: false,
-                textStyle: {
-                  color: '#000'
-                }
-              },
-              axisTick: {
-                show: false
-              },
-              axisLine: {
-                show: false
-              },
-              z: 10
-            },
-            yAxis: {
-              axisLine: {
-                show: false
-              },
-              axisTick: {
-                show: false
-              },
-              axisLabel: {
-                textStyle: {
-                  color: '#999'
-                }
-              }
-            },
-            dataZoom: [
-              {
-                type: 'inside'
-              }
-            ],
-            series: series
-          };
+    Object.assign(this, this.multi)
 
-          console.log(this.avgAppos);
-        }
-      })
-    );
+    // let averageData = [];
+    // let dataShadow = [];
+    // let initDate = '2020-06-16';
+    // this.avgData$ = this.appointmentService.getApposAverage(this.businessId, initDate).pipe(
+    //   map((res: any) => {
+    //     if (res != null){
+    //       let maxVal = 0;
+    //       let maxInvoice = 0;
+    //       let series = [];
+    //       let content = [];
+    //       let dataAxis = ['2020-06-14','2020-06-16'];
+    //       console.log(res);
+    //       let i: number = 0;
+    //       let locations = [];
+    //       res.forEach(loc =>{
+    //         content[i] = [];
+    //         locations.push(loc.Name);
+    //         loc.Data.forEach(item => {
+    //           let line = {
+    //             Qty: item.Qty
+    //           }
+    //           content[i].push(line);
+    //         });
+    //         let data = {
+    //           name: loc.Name,
+    //           type: 'bar',
+    //           barGap: 0,
+    //           data: content[i]
+    //         }
+    //         series.push(data);
+    //         i = i + 1;
+    //       });
+    //       // console.log(series);
+    //       // return res;
+    //       // res.forEach(element => {
+    //       //   if (element.StoreId == ''){
+    //       //     dataAxis.push(element.dateAppo);
+    //       //     averageData.push(element.Sale);
+    //       //     if (maxVal < element.avg){
+    //       //       maxVal = element.avg;
+    //       //     }
+    //       //   }
+    //       // });
+
+    //       // // yMax = maxVal;
+    //       // // yMaxDoctos = maxInvoice;
+
+    //       this.avgAppos = {
+    //         title: {
+    //           text: 'Average time'
+    //         },
+    //         tooltip: {
+    //           trigger: 'axis',
+    //           axisPointer: {
+    //             type: 'shadow'
+    //           }
+    //         },
+    //         legend: {
+    //           data: locations
+    //         },
+    //         // grid: {
+    //         //   left: '3%',
+    //         //   right: '4%',
+    //         //   bottom: '3%',
+    //         //   containLabel: true
+    //         // },
+    //         xAxis: {
+    //           type: 'category',
+    //           axisTick: {show: false},
+    //           data: dataAxis,
+    //           // axisLabel: {
+    //           //   inside: false,
+    //           //   textStyle: {
+    //           //     color: '#000'
+    //           //   }
+    //           // },
+    //           // axisTick: {
+    //           //   show: false
+    //           // },
+    //           // axisLine: {
+    //           //   show: false
+    //           // },
+    //           // z: 10
+    //         },
+    //         yAxis: {
+    //           type: 'value'
+    //           // axisLine: {
+    //           //   show: false
+    //           // },
+    //           // axisTick: {
+    //           //   show: false
+    //           // },
+    //           // axisLabel: {
+    //           //   textStyle: {
+    //           //     color: '#999'
+    //           //   }
+    //           // }
+    //         },
+    //         // dataZoom: [
+    //         //   {
+    //         //     type: 'inside'
+    //         //   }
+    //         // ],
+    //         series: series
+    //       };
+
+    //       console.log(this.avgAppos);
+    //       return res;
+    //     }
+    //   })
+    // );
 
     setInterval(() => { 
       if (this.locationId != ''){
@@ -242,3 +309,21 @@ export class DashboardComponent implements OnInit {
   }
 
 }
+
+
+// <!-- (select)="onSelect($event)" (activate)="onActivate($event)"
+// (deactivate)="onDeactivate($event)"
+    
+// // onSelect(data): void {
+// //   console.log('Item clicked', JSON.parse(JSON.stringify(data)));
+// // }
+
+// // onActivate(data): void {
+// //   console.log('Activate', JSON.parse(JSON.stringify(data)));
+// // }
+
+// // onDeactivate(data): void {
+// //   console.log('Deactivate', JSON.parse(JSON.stringify(data)));
+// // }
+
+// -->

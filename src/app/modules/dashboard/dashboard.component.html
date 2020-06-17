@@ -38,10 +38,15 @@
                 </mat-card>
             </div>
             <div class="row p-0 m-0 mt-3 mb-3">
+                <ng-container *ngIf="avgData$ | async"></ng-container>
                 <mat-card class="col-sm col-md col-lg">
                     <div class="row ml-2 mb-2">
                         <h2>Average time</h2>
-                        <div echarts [options]="avgAppos"></div>
+                        <ngx-charts-bar-vertical-2d [view]="view" [scheme]="colorScheme" [results]="multi"
+                            [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
+                            [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
+                            [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [legendTitle]="legendTitle">
+                        </ngx-charts-bar-vertical-2d>
                     </div>
                 </mat-card>
             </div>
