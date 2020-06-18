@@ -26,8 +26,7 @@ export class DashboardComponent implements OnInit {
   perLocation = [];
   LocationName = [];
 
-
-  multi: any[];
+  series: any[] = [];
   view: any[] = [700, 400];
   // options
   showXAxis: boolean = true;
@@ -35,13 +34,13 @@ export class DashboardComponent implements OnInit {
   gradient: boolean = true;
   showLegend: boolean = true;
   showXAxisLabel: boolean = true;
-  xAxisLabel: string = 'Country';
+  xAxisLabel: string = 'Current Month';
   showYAxisLabel: boolean = true;
-  yAxisLabel: string = 'Population';
-  legendTitle: string = 'Years';
+  yAxisLabel: string = 'Average cita';
+  legendTitle: string = 'Locations';
 
   colorScheme = {
-    domain: ['#5AA454', '#C7B42C', '#AAAAAA']
+    domain: ['#FF4F00', '#C9C9C9', '#AAAAAA']
   };
 
   constructor(
@@ -53,7 +52,6 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    let dataAxis = [];
     var spinnerRef = this.spinnerService.start("Loading Dashboard...");
     this.businessId = this.authService.businessId();
     this.isAdmin = this.authService.isAdmin();
@@ -91,7 +89,6 @@ export class DashboardComponent implements OnInit {
                 this.LocationName[i] = item.Name;
                 i = i +1;
               });
-              this.spinnerService.stop(spinnerRef);
               return res;
             }
           })
@@ -125,165 +122,55 @@ export class DashboardComponent implements OnInit {
         })
       );
     }
-    
 
-    this.multi = [
-      {
-        "name": "Germany",
-        "series": [
-          {
-            "name": "2010",
-            "value": 7300000
-          },
-          {
-            "name": "2011",
-            "value": 8940000
-          }
-        ]
-      },
-    
-      {
-        "name": "USA",
-        "series": [
-          {
-            "name": "2010",
-            "value": 7870000
-          },
-          {
-            "name": "2011",
-            "value": 8270000
-          }
-        ]
-      },
-    
-      {
-        "name": "France",
-        "series": [
-          {
-            "name": "2010",
-            "value": 5000002
-          },
-          {
-            "name": "2011",
-            "value": 5800000
-          }
-        ]
+    let initDate = '';
+    let yearCurr = this.getYear();
+    let monthCurr = this.getMonth();
+    let dayCurr = this.getDay();
+    initDate = yearCurr+'-'+monthCurr+'-'+dayCurr;
+    let result = [];
+    for (let i=1; i<=+dayCurr; i++){
+      let data = {
+        name: i,
+        series: []
       }
-    ];
-
-    Object.assign(this, this.multi)
-
-    // let averageData = [];
-    // let dataShadow = [];
-    // let initDate = '2020-06-16';
-    // this.avgData$ = this.appointmentService.getApposAverage(this.businessId, initDate).pipe(
-    //   map((res: any) => {
-    //     if (res != null){
-    //       let maxVal = 0;
-    //       let maxInvoice = 0;
-    //       let series = [];
-    //       let content = [];
-    //       let dataAxis = ['2020-06-14','2020-06-16'];
-    //       console.log(res);
-    //       let i: number = 0;
-    //       let locations = [];
-    //       res.forEach(loc =>{
-    //         content[i] = [];
-    //         locations.push(loc.Name);
-    //         loc.Data.forEach(item => {
-    //           let line = {
-    //             Qty: item.Qty
-    //           }
-    //           content[i].push(line);
-    //         });
-    //         let data = {
-    //           name: loc.Name,
-    //           type: 'bar',
-    //           barGap: 0,
-    //           data: content[i]
-    //         }
-    //         series.push(data);
-    //         i = i + 1;
-    //       });
-    //       // console.log(series);
-    //       // return res;
-    //       // res.forEach(element => {
-    //       //   if (element.StoreId == ''){
-    //       //     dataAxis.push(element.dateAppo);
-    //       //     averageData.push(element.Sale);
-    //       //     if (maxVal < element.avg){
-    //       //       maxVal = element.avg;
-    //       //     }
-    //       //   }
-    //       // });
-
-    //       // // yMax = maxVal;
-    //       // // yMaxDoctos = maxInvoice;
-
-    //       this.avgAppos = {
-    //         title: {
-    //           text: 'Average time'
-    //         },
-    //         tooltip: {
-    //           trigger: 'axis',
-    //           axisPointer: {
-    //             type: 'shadow'
-    //           }
-    //         },
-    //         legend: {
-    //           data: locations
-    //         },
-    //         // grid: {
-    //         //   left: '3%',
-    //         //   right: '4%',
-    //         //   bottom: '3%',
-    //         //   containLabel: true
-    //         // },
-    //         xAxis: {
-    //           type: 'category',
-    //           axisTick: {show: false},
-    //           data: dataAxis,
-    //           // axisLabel: {
-    //           //   inside: false,
-    //           //   textStyle: {
-    //           //     color: '#000'
-    //           //   }
-    //           // },
-    //           // axisTick: {
-    //           //   show: false
-    //           // },
-    //           // axisLine: {
-    //           //   show: false
-    //           // },
-    //           // z: 10
-    //         },
-    //         yAxis: {
-    //           type: 'value'
-    //           // axisLine: {
-    //           //   show: false
-    //           // },
-    //           // axisTick: {
-    //           //   show: false
-    //           // },
-    //           // axisLabel: {
-    //           //   textStyle: {
-    //           //     color: '#999'
-    //           //   }
-    //           // }
-    //         },
-    //         // dataZoom: [
-    //         //   {
-    //         //     type: 'inside'
-    //         //   }
-    //         // ],
-    //         series: series
-    //       };
-
-    //       console.log(this.avgAppos);
-    //       return res;
-    //     }
-    //   })
-    // );
+      result.push(data);
+    }
+    console.log(result);
+    
+    this.avgData$ = this.appointmentService.getApposAverage(this.businessId, initDate).pipe(
+      map((res: any) => {
+        if (res != null){
+          let content = [];
+          let i: number = 0;
+          res.forEach(loc =>{
+            content[i] = [];
+            loc.Data.forEach(item => {
+              let line = {
+                name: item.DateAppo,
+                value: item.Average
+              }
+              content[i].push(line);
+            });
+            let data = {
+              name: loc.Name,
+              series: content[i]
+            }
+            this.series.push(data);
+            i = i + 1;
+          });
+          this.series = [...this.series];
+          Object.assign(this, this.series);
+          this.spinnerService.stop(spinnerRef);
+          return res;
+        }
+      }),
+      catchError(err => {
+        this.spinnerService.stop(spinnerRef);
+        this.onError = err.Message;
+        return '0';
+      })
+    );
 
     setInterval(() => { 
       if (this.locationId != ''){
@@ -306,6 +193,36 @@ export class DashboardComponent implements OnInit {
         );
       }
     }, 30000);
+  }
+
+  getYear(): string{
+    let options = {
+      timeZone: 'America/Puerto_Rico',
+      year: 'numeric'
+    },
+    formatter = new Intl.DateTimeFormat([], options);
+    var actual = formatter.format(new Date());
+    return actual;
+  }
+
+  getMonth(): string{
+    let options = {
+      timeZone: 'America/Puerto_Rico',
+      month: 'numeric'
+    },
+    formatter = new Intl.DateTimeFormat([], options);
+    var actual = formatter.format(new Date());
+    return actual.padStart(2,'0');
+  }
+
+  getDay(): string{
+    let options = {
+      timeZone: 'America/Puerto_Rico',
+      day: 'numeric'
+    },
+    formatter = new Intl.DateTimeFormat([], options);
+    var actual = formatter.format(new Date());
+    return actual.padStart(2,'0');
   }
 
 }
