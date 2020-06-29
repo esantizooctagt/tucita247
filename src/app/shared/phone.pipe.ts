@@ -7,8 +7,8 @@ export class PhonePipe implements PipeTransform {
 
   transform(rawNum) {
     let newStr = "";
-    newStr = rawNum.charAt(0) != 0 ? "0" + rawNum : "" + rawNum;
-
+    // newStr = rawNum.charAt(0) != 0 ? "0" + rawNum : "" + rawNum;
+    newStr = rawNum;
     if (newStr.length === 0) {
       newStr = '';
     } else if (newStr.length <= 3) {

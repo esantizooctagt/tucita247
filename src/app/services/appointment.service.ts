@@ -52,8 +52,8 @@ export class AppointmentService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  updateManualCheckOut(businessId, locationId){
-    return this.http.put(this.apiURL + '/appointment/checkout/manual/' + businessId + '/' + locationId,'')
+  updateManualCheckOut(businessId, locationId, qtyGuests){
+    return this.http.put(this.apiURL + '/appointment/checkout/manual/' + businessId + '/' + locationId + '/' + qtyGuests,'')
                     .pipe(catchError(this.errorHandler));
   }
 

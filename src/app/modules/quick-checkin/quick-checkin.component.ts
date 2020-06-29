@@ -40,6 +40,7 @@ export class QuickCheckinComponent implements OnInit {
   getWalkIns$: Observable<any[]>;
   check$: Observable<any>;
   newAppointment$: Observable<any>;
+  manualCheckOut$: Observable<any>;
 
   get f(){
     return this.clientForm.controls;
@@ -163,10 +164,31 @@ export class QuickCheckinComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result != undefined) {
+        let qtyGuests = result.Guests;
         this.qrCode = result.qrCode;
-        this.checkOutAppointment(this.qrCode);
+        if  (this.qrCode != ''){
+          this.checkOutAppointment(this.qrCode);
+        } 
+        if (qtyGuests > 0) {
+          this.setManualCheckOut(qtyGuests);
+        }
       }
     });
+  }
+
+  setManualCheckOut(qtyOut){
+    this.manualCheckOut$ = this.appointmentService.updateManualCheckOut(this.businessId, this.locationId, qtyOut).pipe(
+      map((res: any) => {
+        if (res.Code == 200){
+          this.openSnackBar("La Cita check-out successfull","Check-Out");
+        }
+      }),
+      catchError(err => {
+        this.onError = err.Message;
+        this.openSnackBar("Something goes wrong try again","Check-out");
+        return this.onError;
+      })
+    );
   }
 
   checkOutAppointment(qrCode: string){

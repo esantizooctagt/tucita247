@@ -105,6 +105,8 @@ export class HostComponent implements OnInit {
   appoIdPre: string = '_';
   appoIdSche: string = '_';
 
+  manualGuests: number =  1;
+
   get f(){
     return this.clientForm.controls;
   }
@@ -400,8 +402,14 @@ export class HostComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result != undefined) {
+        let qtyGuests = result.Guests;
         this.qrCode = result.qrCode;
-        this.checkOutAppointment(this.qrCode);
+        if (this.qrCode != ''){
+          this.checkOutAppointment(this.qrCode);
+        }
+        if (qtyGuests > 0){
+          this.setManualCheckOut(qtyGuests);
+        }
       }
     });
   }
@@ -443,8 +451,8 @@ export class HostComponent implements OnInit {
     );
   }
 
-  setManualCheckOut(){
-    this.manualCheckOut$ = this.appointmentService.updateManualCheckOut(this.businessId, this.locationId).pipe(
+  setManualCheckOut(qtyOut: number){
+    this.manualCheckOut$ = this.appointmentService.updateManualCheckOut(this.businessId, this.locationId, qtyOut).pipe(
       map((res: any) => {
         if (res.Code == 200){
           this.openSnackBar("La Cita check-out successfull","Check-Out");
@@ -1127,6 +1135,7 @@ export class HostComponent implements OnInit {
               Purpose: item['Purpose'],
               Unread: item['Unread'],
               CheckInTime: item['CheckInTime'],
+              Ready: item['Ready'],
               ElapsedTime: this.calculateTime(item['CheckInTime'])
             }
             this.preCheckIn.push(data);

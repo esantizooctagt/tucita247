@@ -2,16 +2,6 @@
 <ng-container *ngIf="Locs$ | async"></ng-container>
 <div class="col-md-12" *ngIf="locationStatus == 1">
     <div class="qr-space">
-        <div class="qr-logo"></div>
-        <button mat-stroked-button class="action-buttons col-md-12" color="secondary" type="button"
-            (click)="onCheckInApp()" [disabled]="!locationId">Check In</button>
-    </div>
-    <div class="qr-space">
-        <div class="qr-logo"></div>
-        <button mat-stroked-button class="action-buttons col-md-12" color="secondary" type="button"
-            (click)="checkOutQR()" [disabled]="!locationId">Check Out</button>
-    </div>
-    <div class="qr-space">
         <button mat-stroked-button class="action-buttons col-md-12 mt-2 mb-2" color="secondary" type="button"
             (click)="showCard = !showCard">Walk-Ins Check In</button>
         <mat-card *ngIf="showCard" class="card-Appointment mt-2 mb-2">
@@ -86,10 +76,21 @@
         </mat-card>
     </div>
     <div class="qr-space">
+        <div class="qr-logo"></div>
+        <button mat-stroked-button class="action-buttons col-md-12" color="secondary" type="button"
+            (click)="onCheckInApp()" [disabled]="!locationId">Check In</button>
+    </div>
+    <div class="qr-space">
+        <div class="qr-logo"></div>
+        <button mat-stroked-button class="action-buttons col-md-12" color="secondary" type="button"
+            (click)="checkOutQR()" [disabled]="!locationId">Check Out</button>
+        <ng-container *ngIf="manualCheckOut$ | async"></ng-container>
+    </div>
+    <!-- <div class="qr-space">
         <button mat-stroked-button class="action-buttons col-md-12 mt-0 mb-2" color="secondary" type="button"
             (click)="getWalkInsCheckOut()">Walk-Ins Check Out</button>
         <ng-container *ngIf="getWalkIns$ | async"></ng-container>
-    </div>
+    </div> -->
 </div>
 <div *ngIf="locationStatus == 0">
     Location is closed
