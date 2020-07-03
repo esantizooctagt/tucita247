@@ -93,6 +93,8 @@ export class DashboardComponent implements OnInit {
               this.resultLoc = res.Data;
               if (this.resultLoc.length > 0){
                 this.selectedLoc = this.resultLoc[0].LocationId;
+                this.perLocation = this.resultLoc[0].PerLocation;
+                this.quantity = this.resultLoc[0].Quantity;
               }
               this.spinnerService.stop(spinnerRef);
               return res;
@@ -113,6 +115,8 @@ export class DashboardComponent implements OnInit {
             this.resultLoc = res.Data;
             if (this.resultLoc.length > 0){
               this.selectedLoc = this.resultLoc[0].LocationId;
+              this.perLocation = this.resultLoc[0].PerLocation;
+              this.quantity = this.resultLoc[0].Quantity;
             }
             this.spinnerService.stop(spinnerRef);
             return res;
@@ -181,6 +185,11 @@ export class DashboardComponent implements OnInit {
           map((res: any) => {
             if (res != null){
               this.resultLoc = res.Data;
+              if (this.resultLoc.length > 0){
+                this.selectedLoc = this.resultLoc[0].LocationId;
+                this.perLocation = this.resultLoc[0].PerLocation;
+                this.quantity = this.resultLoc[0].Quantity;
+              }
               console.log(this.resultLoc);
               return res;
             }
@@ -194,11 +203,17 @@ export class DashboardComponent implements OnInit {
     }, 30000);
   }
 
-  onSelectLocation(locationId: string){
+  onSelectLocation(event){
+    let locationId = event.source.value;
     let locSelected;
     locSelected =  this.resultLoc.filter(x => x.LocationId == locationId);
-    this.perLocation = locSelected.PerLocation;
-    this.quantity = locSelected.Quantity;
+    if (locSelected.length > 0){
+      this.perLocation = locSelected[0].PerLocation;
+      this.quantity = locSelected[0].Quantity;
+    } else {
+      this.perLocation = 0;
+      this.quantity = 0;
+    }
   }
 
   getYear(): string{
