@@ -71,16 +71,13 @@ export class AuthService {
           catchError(this.errorHandler)
       );
   }
-
   errorHandler(error) {
     return throwError(error || 'Server Error');
   }
-
   businessId() {
     let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
     return user.Business_Id;
   }
-
   businessName(){
     let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
     return user.Business_Name;
@@ -89,29 +86,27 @@ export class AuthService {
     let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
     return user.User_Id;
   }
-
   email(){
     let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
     return user.Email;
   }
-  
+  cognitoUser(){
+    let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
+    return user.UsrCog;
+  }
   currentToken() {
     return this.currentUserTknSubject.value;
   }
-
   currentAccessToken(){
     return this.currentAccessTknSubject.value;
   }
-
   currentRefreshToken(){
     return this.currentRefreshTknSubject.value;
   }
-  
   avatar(){
     let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
     return user.Avatar;
   }
-
   get userAvatar() {
     if (sessionStorage.getItem('TC247_USS') != null) {
       var user = JSON.parse(sessionStorage.getItem('TC247_USS'));
@@ -121,7 +116,6 @@ export class AuthService {
     }
     return null;
   }
-
   getUserProfile() {
     if (sessionStorage.getItem('TC247_USS') != null) {
       var user = JSON.parse(sessionStorage.getItem('TC247_USS'));
@@ -129,7 +123,6 @@ export class AuthService {
     }
     return null;
   }
-
   setUserAvatar(imgUrl) {
     if (this.getUserProfile() != null) {
       var user = this.getUserProfile();
@@ -137,21 +130,17 @@ export class AuthService {
       this.setUserProfile(user);
     }
   }
-
   setUserProfile(userProfile) {
     sessionStorage.setItem('TC247_USS', JSON.stringify(userProfile));
   }
-
   roleId(){
     let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
     return user.Role_Id;
   }
-
   isAdmin(){
     let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
     return user.Is_Admin;
   }
-
   logout() {
     sessionStorage.removeItem('TC247_USS');
     this.currentUserSubject.next(null);

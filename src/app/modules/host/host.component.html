@@ -19,7 +19,7 @@
                             <mat-icon class="site-color">add</mat-icon>
                         </button>
                         <mat-form-field class="pt-3 num-guests">
-                            <input matInput placeholder="Number of Guests" [(ngModel)]="manualGuests">
+                            <input class="input-guests" matInput placeholder="Number of Guests" [(ngModel)]="manualGuests">
                         </mat-form-field>
                         <button mat-icon-button (click)="(manualGuests > 1 ? manualGuests=manualGuests-1 : manualGuests)">
                             <mat-icon class="site-color">remove</mat-icon>
@@ -90,7 +90,7 @@
                                     <div class="card-time col-md pr-0 pl-0">{{item.DateAppo.substring(0,2) + item.DateAppo.substring(5,8)}}</div>
                                 </div>
                                 <div class="row pr-3 pl-3">
-                                    <div class="card-phone col-md-9 pl-0 pr-0">+1 {{item.Phone | phone}}</div>
+                                    <div class="card-phone col-md-9 pl-0 pr-0">{{item.Phone | phone}}</div>
                                     <div class="card-disability col-md pr-0 pl-0">
                                         <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
                                         <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
@@ -185,7 +185,7 @@
                                 <div class="card-time col-md pr-0 pl-0">{{item.DateAppo.substring(0,2) + item.DateAppo.substring(5,8)}}</div>
                             </div>
                             <div class="row pr-3 pl-3">
-                                <div class="card-phone col-md-9 pl-0 pr-0">+1 {{item.Phone | phone}}</div>
+                                <div class="card-phone col-md-9 pl-0 pr-0">{{item.Phone | phone}}</div>
                                 <div class="card-disability col-md pr-0 pl-0">
                                     <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
                                     <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
@@ -290,8 +290,7 @@
                             <form [formGroup]="clientForm" (ngSubmit)="addAppointment()">
                                 <div class="form-field pl-3 pr-3">
                                     <mat-form-field hintLabel="Phone number">
-                                        <span matPrefix>+1 &nbsp;</span>
-                                        <input matInput #Phone placeholder="(555) 555-1234" appPhoneMask maxlength="14" formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher">
+                                        <input matInput #Phone placeholder="+1 (555) 555-1234" appPhoneMask maxlength="17" formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher">
                                         <mat-error *ngIf="f.Phone.invalid && f.Phone.touched">{{getErrorMessage('Phone')}}</mat-error>
                                     </mat-form-field>
                                 </div>
@@ -362,7 +361,7 @@
                                 <div class="card-time col-md pr-0 pl-0">{{item.DateAppo.substring(0,2) + item.DateAppo.substring(5,8)}}</div>
                             </div>
                             <div class="row pr-3 pl-3">
-                                <div class="card-phone col-md-9 pl-0 pr-0">+1 {{item.Phone | phone}}</div>
+                                <div class="card-phone col-md-9 pl-0 pr-0">{{item.Phone | phone}}</div>
                                 <div class="card-disability col-md pr-0 pl-0">
                                     <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
                                     <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
@@ -466,7 +465,6 @@
                         <ng-container *ngIf="checkIn$ | async"></ng-container>
                         <mat-card class="mt-2 appCard" *ngFor="let item of preCheckIn;let i=index">
                             <div class="row pr-3 pl-3">
-                                <div *ngIf="item.Ready == '1'" class="green-circle"></div>
                                 <div *ngIf="!showDetailsCheck[i]" class="card-user col-md-9 pl-0 pr-0">{{item.Name}}</div>
                                 <div *ngIf="showDetailsCheck[i]" class="card-user-disp col-md-9 pl-0 pr-0">{{item.Name}}</div>
                                 <div class="col-md pr-0 pl-0">
@@ -478,7 +476,7 @@
                                 </div>
                             </div>
                             <div class="row pr-3 pl-3">
-                                <div class="card-phone col-md-9 pl-0 pr-0">+1 {{item.Phone | phone}}</div>
+                                <div class="card-phone col-md-9 pl-0 pr-0">{{item.Phone | phone}}</div>
                                 <div class="card-disability-pre col-md pr-0 pl-0">
                                     <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
                                     <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>

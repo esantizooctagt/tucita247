@@ -16,10 +16,9 @@ export class PhonePipe implements PipeTransform {
     } else if (newStr.length <= 6) {
       newStr = newStr.replace(/^(\d{0,3})(\d{0,3})/, '($1) $2');
     } else if (newStr.length <= 10) {
-      newStr = newStr.replace(/^(\d{0,3})(\d{0,3})(\d{0,4})/, '($1) $2-$3');
+      newStr = newStr.replace(/^(\d{0,3})(\d{0,3})(\d{0,4})/, '+1 ($1) $2-$3');
     } else {
-      newStr = newStr.substring(0, 10);
-      newStr = newStr.replace(/^(\d{0,3})(\d{0,3})(\d{0,4})/, '($1) $2-$3');
+      newStr = newStr.replace(/^(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,4})/, '+$1 ($2) $3-$4');
     }
 
     return newStr;

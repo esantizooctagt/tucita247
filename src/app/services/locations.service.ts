@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
-import { Location } from '@app/_models';  //StoreDocto
+import { Location } from '@app/_models';
 import { catchError } from 'rxjs/operators';
 import { throwError, Observable } from 'rxjs';
 

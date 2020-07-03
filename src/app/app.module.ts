@@ -73,6 +73,7 @@ import { PhoneMaskDirective } from '@shared/phone-mask.directive';
 import { AgmCoreModule } from '@agm/core';
 import { PhonePipe } from '@shared/phone.pipe';
 import { QuickCheckinComponent } from './modules/quick-checkin/quick-checkin.component';
+import { ScheduleComponent } from './modules/schedule/schedule.component';
 
 @NgModule({
   declarations: [
@@ -94,7 +95,8 @@ import { QuickCheckinComponent } from './modules/quick-checkin/quick-checkin.com
     PollListComponent,
     QuickCheckinComponent,
     SurveyComponent,
-    SurveyListComponent
+    SurveyListComponent,
+    ScheduleComponent
   ],
   imports: [
     BrowserModule,

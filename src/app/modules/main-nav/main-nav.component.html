@@ -9,14 +9,14 @@
         <a class="list-item-business" mat-list-item pt-2 mb-2>{{businessName}}</a>
         <mat-divider></mat-divider>
         <ng-container class="" *ngFor="let item of apps$ | async">
-          <a class="list-item" *ngIf="item.Active == '1'" mat-list-item [routerLink]="['/'+item.Route]" routerLinkActive="menu-active" (click)="displayHome(item.Name)">{{ item.Name }}</a>
+          <a class="list-item" *ngIf="item.Active == '1'" mat-list-item [routerLink]="['/'+item.Route]" routerLinkActive="menu-active">{{ item.Name }}</a>
         </ng-container>
         <div *ngIf="isAdmin">
           <mat-divider></mat-divider>
           <a mat-list-item class="item-list">{{ 'SETTINGS'}}</a>
-          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/company']" routerLinkActive="menu-active" (click)="displayHome('Company')">{{ 'Company'}}</a>
-          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/users']" routerLinkActive="menu-active" (click)="displayHome('Users')">{{ 'Users' }}</a>
-          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/roles']" routerLinkActive="menu-active" (click)="displayHome('Roles')">{{ 'Roles' }}</a>
+          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/company']" routerLinkActive="menu-active">{{ 'Company'}}</a>
+          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/users']" routerLinkActive="menu-active">{{ 'Users' }}</a>
+          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/roles']" routerLinkActive="menu-active">{{ 'Roles' }}</a>
         </div>
       </mat-nav-list>
     </mat-sidenav>
@@ -58,12 +58,9 @@
         </button>
         <mat-menu #userMenu="matMenu" xPosition="before">
           <button mat-menu-item [routerLink]="['/profile']"><mat-icon>perm_identity</mat-icon>Profle</button>
-          <!-- <button *ngIf="isAdmin" [routerLink]="['/settings']" mat-menu-item><mat-icon>settings</mat-icon>Settings</button> -->
           <button mat-menu-item (click)="logout()"><mat-icon>exit_to_app</mat-icon>Logout</button>
         </mat-menu>
       </mat-toolbar>
-      <!-- Add Content Here -->
-      <app-home *ngIf="dispHome"></app-home>
       <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>

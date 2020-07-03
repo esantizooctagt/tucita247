@@ -9,6 +9,7 @@ const routes: Routes = [
   {
     path: '', component: MainNavComponent, canActivate: [AuthGuard],
     children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
       { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
       { path: 'clients', component: ClientsComponent, canActivate: [AuthGuard] },
       { path: 'userloc', component: UserlocComponent, canActivate: [AuthGuard] },

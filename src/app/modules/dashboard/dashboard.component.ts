@@ -22,9 +22,17 @@ export class DashboardComponent implements OnInit {
   doorId: string = '';
   userId: string = '';
   isAdmin: number = 0;
-  qtyPeople = [];
-  perLocation = [];
-  LocationName = [];
+
+  // locationValue: string = '';
+  // qtyPeople: number = 0;
+  // perLocation: number = 0;
+  // LocationName = [];
+
+  selectedLoc: string = '';
+  resultLoc: any[] =[];
+  perLocation: number = 0;
+  quantity: number = 0;
+  // locationSelected: any[] =[];
 
   series: any[] = [];
   view: any[] = [700, 400];
@@ -82,13 +90,11 @@ export class DashboardComponent implements OnInit {
         mergeMap(x => this.locationService.getLocationQuantityAll(this.businessId, this.locationId).pipe(
           map((res: any) => {
             if (res != null){
-              let i =0;
-              res.Data.forEach(item => {
-                this.qtyPeople[i] = item.Quantity;
-                this.perLocation[i] = (+this.qtyPeople[i] / +item.TotLocation)*100;  
-                this.LocationName[i] = item.Name;
-                i = i +1;
-              });
+              this.resultLoc = res.Data;
+              if (this.resultLoc.length > 0){
+                this.selectedLoc = this.resultLoc[0].LocationId;
+              }
+              this.spinnerService.stop(spinnerRef);
               return res;
             }
           })
@@ -104,13 +110,10 @@ export class DashboardComponent implements OnInit {
       this.quantityPeople$ = this.locationService.getLocationQuantityAll(this.businessId, this.locationId).pipe(
         map((res: any) => {
           if (res != null){
-            let i =0;
-            res.Data.forEach(item => {
-              this.qtyPeople[i] = item.Quantity;
-              this.perLocation[i] = (+this.qtyPeople[i] / +item.TotLocation)*100;  
-              this.LocationName[i] = item.Name;
-              i = i +1;
-            });
+            this.resultLoc = res.Data;
+            if (this.resultLoc.length > 0){
+              this.selectedLoc = this.resultLoc[0].LocationId;
+            }
             this.spinnerService.stop(spinnerRef);
             return res;
           }
@@ -177,12 +180,8 @@ export class DashboardComponent implements OnInit {
         this.quantityPeople$ = this.locationService.getLocationQuantityAll(this.businessId, this.locationId).pipe(
           map((res: any) => {
             if (res != null){
-              let i =0;
-              res.Data.forEach(item => {
-                this.qtyPeople[i] = item.Quantity;
-                this.perLocation[i] = (+this.qtyPeople[i] / +item.TotLocation)*100;  
-                i = i +1;
-              });
+              this.resultLoc = res.Data;
+              console.log(this.resultLoc);
               return res;
             }
           }),
@@ -193,6 +192,13 @@ export class DashboardComponent implements OnInit {
         );
       }
     }, 30000);
+  }
+
+  onSelectLocation(locationId: string){
+    let locSelected;
+    locSelected =  this.resultLoc.filter(x => x.LocationId == locationId);
+    this.perLocation = locSelected.PerLocation;
+    this.quantity = locSelected.Quantity;
   }
 
   getYear(): string{
@@ -226,21 +232,3 @@ export class DashboardComponent implements OnInit {
   }
 
 }
-
-
-// <!-- (select)="onSelect($event)" (activate)="onActivate($event)"
-// (deactivate)="onDeactivate($event)"
-    
-// // onSelect(data): void {
-// //   console.log('Item clicked', JSON.parse(JSON.stringify(data)));
-// // }
-
-// // onActivate(data): void {
-// //   console.log('Activate', JSON.parse(JSON.stringify(data)));
-// // }
-
-// // onDeactivate(data): void {
-// //   console.log('Deactivate', JSON.parse(JSON.stringify(data)));
-// // }
-
-// -->

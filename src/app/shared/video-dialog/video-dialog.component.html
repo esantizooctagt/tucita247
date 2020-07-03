@@ -30,18 +30,16 @@
         <mat-label>Cita Code</mat-label>
         <input matInput placeholder="QR Code" [(ngModel)]="qrCode">
     </mat-form-field>
-    <ng-container *ngIf="data.tipo == 1 || data.tipo == 3">
-        <mat-label class="label-guests">Guests</mat-label>
-        <button mat-icon-button (click)="data.guests=data.guests+1">
-            <mat-icon class="site-color">add</mat-icon>
-        </button>
-        <mat-form-field class="pt-3 num-guests">
-            <input matInput placeholder="Number of Guests" [(ngModel)]="data.guests">
-        </mat-form-field>
-        <button mat-icon-button (click)="(data.guests > 1 ? data.guests=data.guests-1 : data.guests)">
-            <mat-icon class="site-color">remove</mat-icon>
-        </button>
-    </ng-container>
+    <mat-label class="label-guests">Guests</mat-label>
+    <button mat-icon-button (click)="data.guests=data.guests+1">
+        <mat-icon class="site-color">add</mat-icon>
+    </button>
+    <mat-form-field class="pt-3 num-guests">
+        <input matInput placeholder="Number of Guests" [(ngModel)]="data.guests">
+    </mat-form-field>
+    <button mat-icon-button (click)="(data.guests > 1 ? data.guests=data.guests-1 : data.guests)">
+        <mat-icon class="site-color">remove</mat-icon>
+    </button>
     <div>
         <button mat-flat-button class="mr-3 btn-cancel" (click)="onNoClick()">Cancel</button>
         <button mat-flat-button color="primary" class="btn-ok" (click)="onOK()" cdkFocusInitial>Ok</button>

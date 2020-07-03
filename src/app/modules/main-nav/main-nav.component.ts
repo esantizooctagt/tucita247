@@ -25,7 +25,6 @@ export class MainNavComponent implements OnInit {
   roleId: string='';
   language: string='';
   isAdmin: boolean=false;
-  dispHome: boolean=true;
 
   apps$: Observable<Access[]>;
 
@@ -66,9 +65,6 @@ export class MainNavComponent implements OnInit {
   }
 
   ngOnInit(){
-    if (this.router.url != '/'){
-      this.dispHome = false;
-    }
     this.businessId = this.authService.businessId();
     this.businessName = this.authService.businessName();
     this.roleId = this.authService.roleId();
@@ -87,12 +83,6 @@ export class MainNavComponent implements OnInit {
   logout() {
     this.authService.logout();
     this.router.navigate(['/login']);
-  }
-
-  displayHome(event){
-    if (event != '') {
-      this.dispHome = false;
-    }
   }
 
 }

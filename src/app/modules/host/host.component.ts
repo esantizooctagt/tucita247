@@ -140,7 +140,7 @@ export class HostComponent implements OnInit {
   }
 
   clientForm = this.fb.group({
-    Phone: ['',[Validators.maxLength(14)]],
+    Phone: ['',[Validators.maxLength(17)]],
     Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     Email: ['', [Validators.maxLength(200), Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
     DOB: [''],
@@ -541,12 +541,12 @@ export class HostComponent implements OnInit {
       let day = (dobClient.getDate().toString().length > 1 ? dobClient.getDate().toString() : '0'+dobClient.getDate().toString());
       dob = dobClient.getUTCFullYear().toString() + '-' + month + '-' + day;
     }
-    let phoneNumber = this.clientForm.value.Phone.toString().replace('(','').replace(')','').replace(' ','').replace('-','');
+    let phoneNumber = this.clientForm.value.Phone.toString().replace(/[^0-9]/g,'');
     let formData = {
       BusinessId: this.businessId,
       LocationId: this.locationId,
       Door: this.doorId,
-      Phone: (phoneNumber == '' ?  '0000000000' : phoneNumber),
+      Phone: (phoneNumber == '' ?  '0000000000' : (phoneNumber.length <= 10 ? '1' + phoneNumber : phoneNumber)),
       Name: this.clientForm.value.Name,
       Email: (this.clientForm.value.Email == '' ? '' : this.clientForm.value.Email),
       DOB: dob,
@@ -1135,7 +1135,6 @@ export class HostComponent implements OnInit {
               Purpose: item['Purpose'],
               Unread: item['Unread'],
               CheckInTime: item['CheckInTime'],
-              Ready: item['Ready'],
               ElapsedTime: this.calculateTime(item['CheckInTime'])
             }
             this.preCheckIn.push(data);
