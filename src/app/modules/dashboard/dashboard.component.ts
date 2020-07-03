@@ -200,7 +200,7 @@ export class DashboardComponent implements OnInit {
           })
         );
       }
-    }, 30000);
+    }, 60000);
   }
 
   onSelectLocation(event){

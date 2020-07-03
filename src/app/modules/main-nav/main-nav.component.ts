@@ -2,14 +2,14 @@ import { Component, OnInit, LOCALE_ID, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { map, shareReplay, catchError } from 'rxjs/operators';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
 
 import { User, Access } from '@app/_models';
 import { AuthService } from '@core/services';
 import { environment } from '@environments/environment';
-import { RolesService } from '@app/services';
+import { RolesService, UserService } from '@app/services';
 
 @Component({
   selector: 'app-main-nav',
@@ -25,7 +25,7 @@ export class MainNavComponent implements OnInit {
   roleId: string='';
   language: string='';
   isAdmin: boolean=false;
-
+  resetToken$: Observable<any>;
   apps$: Observable<Access[]>;
 
   readonly imgPath = environment.bucket;
@@ -44,6 +44,7 @@ export class MainNavComponent implements OnInit {
     public authService: AuthService,
     private roleService: RolesService,
     private dialog: MatDialog,
+    private userService: UserService,
     private router: Router
     ) {
   }
@@ -74,7 +75,36 @@ export class MainNavComponent implements OnInit {
       this.avatar = this.imgPath + this.authService.avatar();
     }
     this.loadAccess();
+
+    setInterval(() => { 
+      this.refreshToken();
+    }, 2700000);
   }
+
+  refreshToken(){
+    let token = this.authService.currentRefreshToken();
+    let userName = this.authService.cognitoUser();
+    let formData = {
+        RefreshTkn: token,
+        Email: userName
+    };
+    this.resetToken$ =  this.userService.updateToken(formData).pipe(
+      map((res: any) => {
+        if (res.Code == 200){
+            sessionStorage.setItem('TC247_TKN', JSON.stringify(res.Token));
+            sessionStorage.setItem('TC247_ACT', JSON.stringify(res.Access));
+        } else {
+            this.authService.logout();
+            location.reload(true);
+        }
+    }),
+    catchError(res => {
+      this.authService.logout();
+      location.reload(true);
+      return res;
+    })
+  );
+}
 
   loadAccess(){
     this.apps$ = this.roleService.getApplications((this.roleId != '' ? this.roleId : 1), this.businessId);

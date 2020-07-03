@@ -1,14 +1,14 @@
 .circle-red {
     background-color: transparent;
     border: 7px solid red;
-    border-radius: 140px;
+    border-radius: 160px;
     box-shadow: 0 0 2px #888;
-    min-height: 140px;
-    max-height: 140px;
-    max-width: 140px;
+    min-height: 160px;
+    max-height: 160px;
+    max-width: 160px;
     text-align: center;
     display: block;
-    line-height: 126px;
+    line-height: 144px;
     font-size: 30px;
     font-family: Montserrat;
     font-weight: 700;
@@ -18,14 +18,14 @@
 .circle-yellow {
     background-color: transparent;
     border: 7px solid yellow;
-    border-radius: 140px;
+    border-radius: 160px;
     box-shadow: 0 0 2px #888;
-    min-height: 140px;
-    max-height: 140px;
-    max-width: 140px;
+    min-height: 160px;
+    max-height: 160px;
+    max-width: 160px;
     text-align: center;
     display: block;
-    line-height: 126px;
+    line-height: 144px;
     font-size: 30px;
     font-family: Montserrat;
     font-weight: 700;
@@ -35,14 +35,14 @@
 .circle-green {
     background-color: transparent;
     border: 7px solid green;
-    border-radius: 140px;
+    border-radius: 160px;
     box-shadow: 0 0 2px #888;
-    min-height: 140px;
-    max-height: 140px;
-    max-width: 140px;
+    min-height: 160px;
+    max-height: 160px;
+    max-width: 160px;
     text-align: center;
     display: block;
-    line-height: 126px;
+    line-height: 144px;
     font-size: 30px;
     font-family: Montserrat;
     font-weight: 700;
@@ -52,14 +52,14 @@
 .circle-gray{
     background-color: transparent;
     border: 7px solid #c9c9c9;
-    border-radius: 140px;
+    border-radius: 160px;
     box-shadow: 0 0 2px #888;
-    min-height: 140px;
-    max-height: 140px;
-    max-width: 140px;
+    min-height: 160px;
+    max-height: 160px;
+    max-width: 160px;
     text-align: center;
     display: block;
-    line-height: 126px;
+    line-height: 144px;
     font-size: 30px;
     font-family: Montserrat;
     font-weight: 700;
@@ -102,4 +102,7 @@ h2{
 }
 .selection-line{
     top:-17px;
+}
+.line-cards{
+    height: 270px;
 }

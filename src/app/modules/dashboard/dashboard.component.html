@@ -1,4 +1,4 @@
-<div class="container-fluid h-100 main-background">
+<div class="container-fluid main-background">
     <div class="row p-0">
         <div class="col-md-12 pl-4 m-0">
             <div class="pl-0 pt-1 pb-2 col-md-12 mt-1 mb-1 pr-0 header-route">
@@ -13,19 +13,12 @@
                     </mat-form-field>
                 </div>
             </div>
-            <div class="row p-0 m-0">
+            <div class="row p-0 m-0 line-cards">
                 <mat-card class="col-sm col-md-4 col-lg-4 mr-3">
                     <div class="row ml-2 mb-2">
-                        <h2>Current visitors</h2>
+                        <h3>Current visitors</h3>
                     </div>
                     <ng-container *ngIf="quantityPeople$ | async"></ng-container>
-                    <!-- <mat-form-field class="ml-2 pr-3">
-                        <mat-select name="locations" [(value)]="selectedLoc" (selectionChange)="onSelectLocation($event)"> 
-                            <mat-option *ngFor="let item of resultLoc" [value]="item.LocationId">
-                                {{item.Name}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field> -->
                     <div class="row pl-3 pb-3">
                         <div class="col-md-6" [ngClass]="{'circle-gray': perLocation == 0,
                                     'circle-green': perLocation < 80,
@@ -35,7 +28,7 @@
                 </mat-card>
                 <mat-card class="col-sm col-md col-lg">
                     <div class="row ml-2 mb-2">
-                        <h2>Appointments available</h2>
+                        <h3>Citas available</h3>
                     </div>
                     <ng-container *ngIf="appos$ | async as appo">
                         <div class="row pl-3 pb-3 available-label">
