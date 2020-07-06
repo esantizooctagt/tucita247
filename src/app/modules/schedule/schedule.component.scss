@@ -1,0 +1,51 @@
+.title-qeue{
+    text-align: center;
+    font-size: 15px;
+    font-family: Montserrat;
+    font-weight: 600;
+    height: 23px;
+}
+.month-qeue{
+    text-align: center;
+    font-size: 20px;
+    font-family: Montserrat;
+    font-weight: 600;
+}
+.hour-available{
+    background: white;
+    border: 1px solid green;
+    background-color: green;
+    color: white;
+    font-weight: 500;
+}
+.hour-disabled{
+    background: white;
+    border: 1px solid lightgray;
+    background-color: lightgray;
+}
+.nav-buttons{
+    color: #F44F00;
+}
+.time-bucket{
+    height: 70px;
+}
+.time-actions{
+    height: 47px;
+    background-color: #fff;
+    border: 1px solid lightgray;
+}
+.time-week{
+    height: 50px;
+}
+.action-enabled{
+    stroke: #F44F00;
+}
+.action-disabled{
+    stroke: lightgray;
+}
+.back-enabled{
+    color: #FF4F00;
+}
+.back-disabled{
+    color:lightgray;
+}

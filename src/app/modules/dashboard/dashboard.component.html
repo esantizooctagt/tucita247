@@ -27,29 +27,87 @@
                     </div>
                 </mat-card>
                 <mat-card class="col-sm col-md col-lg">
-                    <div class="row ml-2 mb-2">
-                        <h3>Citas available</h3>
-                    </div>
                     <ng-container *ngIf="appos$ | async as appo">
-                        <div class="row pl-3 pb-3 available-label">
-                            <span>Total:</span> {{appo.Total}}
+                        <div class="row ml-2 mb-2">
+                            <h3 class="col-md-3">Citas available</h3>
+                            <div class="col-md labels-content">
+                                {{appo.DueDate | date: 'MMM d'}}
+                            </div>
                         </div>
-                        <div class="row pl-3 pb-3 available-label">
-                            <span>Available:</span>{{appo.Available}}
+                        <div class="row">
+                            <div class="col-md-6 ml-3 available-label">
+                                <span class="">{{appo.Name}}</span>
+                            </div>
+                            <div class="col-md available-label">
+                                <span>{{appo.Total}}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 ml-3 labels-appo">
+                                <span class="">Additional Citas Packages</span>
+                            </div>
+                            <div class="col-md labels-content">
+                                {{sumAdditional(appo.Packs)}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 ml-3 labels-appo">
+                                Citas used
+                            </div>
+                            <div class="col-md used-label">
+                                ({{sumUsed(appo.Packs, appo.Used)}})
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 ml-3 labels-appo">
+                                Available
+                            </div>
+                            <div class="col-md labels-content">
+                                {{sumAvailable(appo.Packs, appo.Available)}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 ml-3 labels-appo">Citas about to expire on </div>
+                            <div class="col-md-2 labels-content">{{getExpire(appo.Packs) | date: 'MMM d'}}</div>
+                            <div class="col-md-3 labels-content">{{getExpireCitas(appo.Packs)}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 ml-3"></div>
+                            <button mat-stroked-button class="col-md-3 ml-3" color="secondary" type="button" (click)="addCitas()">+ Add Citas</button>
                         </div>
                     </ng-container>
                 </mat-card>
             </div>
             <div class="row p-0 m-0 mt-3 mb-3">
                 <ng-container *ngIf="avgData$ | async"></ng-container>
-                <mat-card class="col-sm col-md col-lg">
+                <mat-card class="col-sm col-md col-lg graph-style">
                     <div class="row ml-2 mb-2">
-                        <h2>Average time</h2>
-                        <ngx-charts-bar-vertical-2d [view]="view" [scheme]="colorScheme" [results]="series"
-                            [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend"
-                            [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel"
-                            [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [legendTitle]="legendTitle">
-                        </ngx-charts-bar-vertical-2d>
+                        <mat-tab-group (selectedTabChange)="changeGraph($event)">
+                            <mat-tab label="Average Time"></mat-tab>
+                            <mat-tab label="Quantity Appointments"></mat-tab>
+                        </mat-tab-group>
+                    </div>
+                    <div class="row ml-2 mb-2 mr-2 chart-dim">
+                        <ng-container *ngIf="series != undefined">
+                            <ng-container *ngIf="series.length > 0; else nodata">
+                                <ngx-charts-bar-vertical class="col-md"
+                                    [scheme]="colorScheme" 
+                                    [results]="series"
+                                    [gradient]="gradient" 
+                                    [xAxis]="showXAxis" 
+                                    [yAxis]="showYAxis" 
+                                    [legend]="showLegend"
+                                    [showXAxisLabel]="showXAxisLabel" 
+                                    [showYAxisLabel]="showYAxisLabel"
+                                    [xAxisLabel]="xAxisLabel" 
+                                    [yAxisLabel]="yAxisLabel" 
+                                    [legendTitle]="legendTitle">
+                                </ngx-charts-bar-vertical>
+                            </ng-container>
+                            <ng-template #nodata>
+                                <div class="not-found">No data found</div>
+                            </ng-template>
+                        </ng-container>
                     </div>
                 </mat-card>
             </div>

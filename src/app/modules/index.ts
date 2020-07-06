@@ -23,3 +23,4 @@ export * from './quick-checkin/quick-checkin.component';
 export * from './surveys/surveys.component';
 export * from './survey-resp/survey-resp.component';
 export * from './landing/landing.component';
+export * from './schedule/schedule.component';

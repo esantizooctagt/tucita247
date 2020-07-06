@@ -93,14 +93,9 @@ export class MainNavComponent implements OnInit {
         if (res.Code == 200){
             sessionStorage.setItem('TC247_TKN', JSON.stringify(res.Token));
             sessionStorage.setItem('TC247_ACT', JSON.stringify(res.Access));
-        } else {
-            this.authService.logout();
-            location.reload(true);
         }
     }),
     catchError(res => {
-      this.authService.logout();
-      location.reload(true);
       return res;
     })
   );

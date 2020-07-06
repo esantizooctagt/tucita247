@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '@modules/authentication/guards/auth.guard';
 
 /**Main Components**/
-import { MainNavComponent, NotFoundComponent, LoginComponent, UsersComponent, ClientsComponent, DashboardComponent, ServicesComponent, ProfileComponent, BusinessComponent, CategoriesComponent, ReportsComponent, RolesComponent, HelpComponent, ResetComponent, VerificationComponent, ForgotpassComponent, HomeComponent, HostComponent, UserlocComponent, PollsComponent, PollRespComponent, QuickCheckinComponent, SurveysComponent, SurveyRespComponent, LandingComponent } from '@modules/index';
+import { MainNavComponent, NotFoundComponent, LoginComponent, UsersComponent, ClientsComponent, DashboardComponent, ServicesComponent, ProfileComponent, BusinessComponent, CategoriesComponent, ReportsComponent, RolesComponent, HelpComponent, ResetComponent, VerificationComponent, ForgotpassComponent, HomeComponent, HostComponent, UserlocComponent, PollsComponent, PollRespComponent, QuickCheckinComponent, SurveysComponent, SurveyRespComponent, LandingComponent, ScheduleComponent } from '@modules/index';
 
 const routes: Routes = [
   {
@@ -24,6 +24,7 @@ const routes: Routes = [
       { path: 'categories', component: CategoriesComponent, canActivate: [AuthGuard] },
       { path: 'reports', component: ReportsComponent, canActivate: [AuthGuard] },
       { path: 'roles', component: RolesComponent, canActivate: [AuthGuard] },
+      { path: 'schedule', component: ScheduleComponent, canActivate: [AuthGuard] },
       { path: 'help', component: HelpComponent, canActivate: [AuthGuard] }
     ]
   },
@@ -92,5 +93,6 @@ export const routingComponents = [
   HelpComponent,
   HomeComponent,
   HostComponent,
+  ScheduleComponent,
   QuickCheckinComponent
 ]

@@ -1,27 +1,259 @@
 <div class="container-fluid host-container">
+    <div class="row mt-3 mb-3">
+        <button mat-icon-button class="ml-3 nav-buttons" type="button" (click)="prevWeek()">
+            <mat-icon [ngClass]="{'back-disabled': currWeek == 1,
+                'back-enabled': currWeek == 0}">arrow_back</mat-icon>
+        </button>
+        <div class="col-sm col-md col-lg pt-2 pb-2 month-qeue">{{(weekStart | date: 'MMM d') + ', ' + (weekEnd | date: 'MMM d')}}</div>
+        <button mat-icon-button class="mr-3 nav-buttons" type="button" (click)="nextWeek()">
+            <mat-icon>arrow_forward</mat-icon>
+        </button>
+    </div>
     <div class="row">
+        <div class="col-sm col-md col-lg-12 time-week">
+            <div class="row space-row mb-2 ml-1 mr-1 time-week">
+                <div class="col-md mt-2 title-qeue">
+                    Time
+                </div>
+                <div class="col-md mt-2 title-qeue">
+                    Mon<br/>{{((monday | date: 'd') == '1' ? (monday | date: 'MMM d') : (monday | date: 'd') )}}
+                </div>
+                <div class="col-md mt-2 title-qeue">
+                    Tue<br/>{{( (tuesday | date: 'd') == '1' ? (tuesday | date: 'MMM d') : (tuesday | date: 'd') )}}
+                </div>
+                <div class="col-md mt-2 title-qeue">
+                    Wed<br/>{{( (wednesday | date: 'd') == '1' ? (wednesday | date: 'MMM d') : (wednesday | date: 'd') )}}
+                </div>
+                <div class="col-md mt-2 title-qeue">
+                    Thu<br/>{{( (thursday | date: 'd') == '1' ? (thursday | date: 'MMM d') : (thursday | date: 'd') )}}
+                </div>
+                <div class="col-md mt-2 title-qeue">
+                    Fri<br/>{{( (friday | date: 'd') == '1' ? (friday | date: 'MMM d') : (friday | date: 'd') )}}
+                </div>
+                <div class="col-md mt-2 title-qeue">
+                    Sat<br/>{{( (saturday | date: 'd') == '1' ? (saturday | date: 'MMM d') : (saturday | date: 'd') )}}
+                </div>
+                <div class="col-md mt-2 title-qeue">
+                    Sun<br/>{{( (sunday | date: 'd') == '1' ? (sunday | date: 'MMM d') : (sunday | date: 'd') )}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngFor="let item of hours">
         <div class="col-sm col-md col-lg-12">
-            <div class="row space-row mb-2">
+            <div class="row space-row mb-2 ml-1 mr-1">
                 <div class="col-md mt-2 title-qeue">
-                    Mon
+                    {{item.Time}}
                 </div>
-                <div class="col-md mt-2 title-qeue">
-                    Tue
+                <div class="time-bucket col-md mt-2">
+                    <div class="title-qeue" [ngClass]="{'hour-available': getBucket(item.Time, 1) > 0,
+                        'hour-disabled': getBucket(item.Time, 1) == 0}">
+                        {{ (getAvailability(item.Time,1) == '0' ? '' : getAvailability(item.Time,1) + '/') + (getBucket(item.Time, 1) == 0 ? '' : getBucket(item.Time, 1)) }}
+                    </div>
+                    <div class="time-actions">
+                        <ng-container *ngIf="getBucket(item.Time, 1) > 0 && ((monday > today) || (monday.toString() == today.toString() && currTime < item.Time24H))"> 
+                            <button mat-icon-button (click)="newAppo(item.Time, 1)">
+                                <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="cancelTime(item.Time, 1)">
+                                <mat-icon class="action-enabled" svgIcon="cancel"></mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="expandTime(item.Time, 1)">
+                                <mat-icon class="action-enabled" svgIcon="view"></mat-icon>
+                            </button>
+                        </ng-container>
+                        <ng-container *ngIf="getBucket(item.Time, 1) > 0 && (monday < today || (monday == today && currTime > item.Time24H))">
+                            <button mat-icon-button>
+                                <mat-icon class="action-disabled" svgIcon="new"></mat-icon>
+                            </button>
+                            <button mat-icon-button>
+                                <mat-icon class="action-disabled" svgIcon="cancel"></mat-icon>
+                            </button>
+                            <button mat-icon-button>
+                                <mat-icon class="action-disabled" svgIcon="view"></mat-icon>
+                            </button>
+                        </ng-container>
+                    </div>
                 </div>
-                <div class="col-md mt-2 title-qeue">
-                    Wed
+                <div class="time-bucket col-md mt-2">
+                    <div class="title-qeue" [ngClass]="{'hour-available': getBucket(item.Time, 2) > 0,
+                        'hour-disabled': getBucket(item.Time, 2) == 0}">
+                        {{ (getAvailability(item.Time,2) == '0' ? '' : getAvailability(item.Time,2) + '/') + (getBucket(item.Time, 2) == 0 ? '' : getBucket(item.Time, 2)) }}
+                    </div>
+                    <div class="time-actions">
+                        <ng-container *ngIf="getBucket(item.Time, 2) > 0 && ((tuesday > today) || (tuesday.toString() == today.toString() && currTime < item.Time24H))">
+                            <button mat-icon-button (click)="newAppo(item.Time, 2)">
+                                <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="cancelTime(item.Time, 2)">
+                                <mat-icon class="action-enabled" svgIcon="cancel"></mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="expandTime(item.Time, 2)">
+                                <mat-icon class="action-enabled" svgIcon="view"></mat-icon>
+                            </button>
+                        </ng-container>
+                        <ng-container *ngIf="getBucket(item.Time, 2) > 0 && (tuesday < today || (tuesday == today && currTime > item.Time24H))">
+                            <button mat-icon-button>
+                                <mat-icon class="action-disabled" svgIcon="new"></mat-icon>
+                            </button>
+                            <button mat-icon-button>
+                                <mat-icon class="action-disabled" svgIcon="cancel"></mat-icon>
+                            </button>
+                            <button mat-icon-button>
+                                <mat-icon class="action-disabled" svgIcon="view"></mat-icon>
+                            </button>
+                        </ng-container>
+                    </div>
                 </div>
-                <div class="col-md mt-2 title-qeue">
-                    Thu
+                <div class="time-bucket col-md mt-2">
+                    <div class="title-qeue" [ngClass]="{'hour-available': getBucket(item.Time, 3) > 0,
+                        'hour-disabled': getBucket(item.Time, 3) == 0}">
+                        {{ (getAvailability(item.Time,3) == '0' ? '' : getAvailability(item.Time,3) + '/') + (getBucket(item.Time, 3) == 0 ? '' : getBucket(item.Time, 3)) }}
+                    </div>
+                    <div class="time-actions">
+                        <ng-container *ngIf="getBucket(item.Time, 3) > 0 && ((wednesday > today) || (wednesday.toString() == today.toString() && currTime < item.Time24H))">
+                            <button mat-icon-button (click)="newAppo(item.Time, 3)">
+                                <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="cancelTime(item.Time, 3)">
+                                <mat-icon class="action-enabled" svgIcon="cancel"></mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="expandTime(item.Time, 3)">
+                                <mat-icon class="action-enabled" svgIcon="view"></mat-icon>
+                            </button>
+                        </ng-container>
+                        <ng-container *ngIf="getBucket(item.Time, 3) > 0 && (wednesday < today || (wednesday == today && currTime > item.Time24H))">
+                            <button mat-icon-button>
+                                <mat-icon class="action-disabled" svgIcon="new"></mat-icon>
+                            </button>
+                            <button mat-icon-button>
+                                <mat-icon class="action-disabled" svgIcon="cancel"></mat-icon>
+                            </button>
+                            <button mat-icon-button>
+                                <mat-icon class="action-disabled" svgIcon="view"></mat-icon>
+                            </button>
+                        </ng-container>
+                    </div>
                 </div>
-                <div class="col-md mt-2 title-qeue">
-                    Fri
+                <div class="time-bucket col-md mt-2">
+                    <div class="title-qeue" [ngClass]="{'hour-available': getBucket(item.Time, 4) > 0,
+                        'hour-disabled': getBucket(item.Time, 4) == 0}">
+                        {{ (getAvailability(item.Time,4) == '0' ? '' : getAvailability(item.Time,4) + '/') + (getBucket(item.Time, 4) == 0 ? '' : getBucket(item.Time, 4)) }}
+                    </div>
+                    <div class="time-actions">
+                        <ng-container *ngIf="getBucket(item.Time, 4) > 0 && ((thursday > today) || (thursday.toString() == today.toString() && currTime < item.Time24H))">
+                            <button mat-icon-button (click)="newAppo(item.Time, 4)">
+                                <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="cancelTime(item.Time, 4)">
+                                <mat-icon class="action-enabled" svgIcon="cancel"></mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="expandTime(item.Time, 4)">
+                                <mat-icon class="action-enabled" svgIcon="view"></mat-icon>
+                            </button>
+                        </ng-container>
+                        <ng-container *ngIf="getBucket(item.Time, 4) > 0 && (thursday < today || (thursday == today && currTime > item.Time24H))">
+                            <button mat-icon-button>
+                                <mat-icon class="action-disabled" svgIcon="new"></mat-icon>
+                            </button>
+                            <button mat-icon-button>
+                                <mat-icon class="action-disabled" svgIcon="cancel"></mat-icon>
+                            </button>
+                            <button mat-icon-button>
+                                <mat-icon class="action-disabled" svgIcon="view"></mat-icon>
+                            </button>
+                        </ng-container>
+                    </div>
                 </div>
-                <div class="col-md mt-2 title-qeue">
-                    Sat
+                <div class="time-bucket col-md mt-2">
+                    <div class="title-qeue" [ngClass]="{'hour-available': getBucket(item.Time, 5) > 0,
+                        'hour-disabled': getBucket(item.Time, 5) == 0}">
+                        {{ (getAvailability(item.Time,5) == '0' ? '' : getAvailability(item.Time,5) + '/') + (getBucket(item.Time, 5) == 0 ? '' : getBucket(item.Time, 5)) }}
+                    </div>
+                    <div class="time-actions">
+                        <ng-container *ngIf="getBucket(item.Time, 5) > 0 && ((friday > today) || (friday.toString() == today.toString() && currTime < item.Time24H))">
+                            <button mat-icon-button (click)="newAppo(item.Time, 5)">
+                                <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="cancelTime(item.Time, 5)">
+                                <mat-icon class="action-enabled" svgIcon="cancel"></mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="expandTime(item.Time, 5)">
+                                <mat-icon class="action-enabled" svgIcon="view"></mat-icon>
+                            </button>
+                        </ng-container>
+                        <ng-container *ngIf="getBucket(item.Time, 5) > 0 && (friday < today || (friday == today && currTime > item.Time24H))">
+                            <button mat-icon-button>
+                                <mat-icon class="action-disabled" svgIcon="new"></mat-icon>
+                            </button>
+                            <button mat-icon-button>
+                                <mat-icon class="action-disabled" svgIcon="cancel"></mat-icon>
+                            </button>
+                            <button mat-icon-button>
+                                <mat-icon class="action-disabled" svgIcon="view"></mat-icon>
+                            </button>
+                        </ng-container>
+                    </div>
                 </div>
-                <div class="col-md mt-2 title-qeue">
-                    Sun
+                <div class="time-bucket col-md mt-2">
+                    <div class="title-qeue" [ngClass]="{'hour-available': getBucket(item.Time, 6) > 0,
+                        'hour-disabled': getBucket(item.Time, 6) == 0}">
+                        {{ (getAvailability(item.Time,6) == '0' ? '' : getAvailability(item.Time,6) + '/') + (getBucket(item.Time, 6) == 0 ? '' : getBucket(item.Time, 6)) }}
+                    </div>
+                    <div class="time-actions">
+                        <ng-container *ngIf="getBucket(item.Time, 6) > 0 && ((saturday > today) || (saturday.toString() == today.toString() && currTime < item.Time24H))">
+                            <button mat-icon-button (click)="newAppo(item.Time, 6)">
+                                <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="cancelTime(item.Time, 6)">
+                                <mat-icon class="action-enabled" svgIcon="cancel"></mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="expandTime(item.Time, 6)">
+                                <mat-icon class="action-enabled" svgIcon="view"></mat-icon>
+                            </button>
+                        </ng-container>
+                        <ng-container *ngIf="getBucket(item.Time, 6) > 0 && (saturday < today || (saturday == today && currTime > item.Time24H))">
+                            <button mat-icon-button>
+                                <mat-icon class="action-disabled" svgIcon="new"></mat-icon>
+                            </button>
+                            <button mat-icon-button>
+                                <mat-icon class="action-disabled" svgIcon="cancel"></mat-icon>
+                            </button>
+                            <button mat-icon-button>
+                                <mat-icon class="action-disabled" svgIcon="view"></mat-icon>
+                            </button>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="time-bucket col-md mt-2">
+                    <div class="title-qeue" [ngClass]="{'hour-available': getBucket(item.Time, 7) > 0,
+                        'hour-disabled': getBucket(item.Time, 7) == 0}">
+                        {{ (getAvailability(item.Time,7) == '0' ? '' : getAvailability(item.Time,7) + '/') + (getBucket(item.Time, 7) == 0 ? '' : getBucket(item.Time, 7)) }}
+                    </div>
+                    <div class="time-actions">
+                        <ng-container *ngIf="getBucket(item.Time, 7) > 0 && ((sunday > today) || (sunday.toString() == today.toString() && currTime < item.Time24H))">
+                            <button mat-icon-button (click)="newAppo(item.Time, 7)">
+                                <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="cancelTime(item.Time, 7)">
+                                <mat-icon class="action-enabled" svgIcon="cancel"></mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="expandTime(item.Time, 7)">
+                                <mat-icon class="action-enabled" svgIcon="view"></mat-icon>
+                            </button>
+                        </ng-container>
+                        <ng-container *ngIf="getBucket(item.Time, 7) > 0 && (sunday < today || (sunday == today && currTime > item.Time24H))">
+                            <button mat-icon-button>
+                                <mat-icon class="action-disabled" svgIcon="new"></mat-icon>
+                            </button>
+                            <button mat-icon-button>
+                                <mat-icon class="action-disabled" svgIcon="cancel"></mat-icon>
+                            </button>
+                            <button mat-icon-button>
+                                <mat-icon class="action-disabled" svgIcon="view"></mat-icon>
+                            </button>
+                        </ng-container>
+                    </div>
                 </div>
             </div>
         </div>
