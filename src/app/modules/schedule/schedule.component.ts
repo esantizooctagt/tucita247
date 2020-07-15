@@ -1,7 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { throwMatDuplicatedDrawerError } from '@angular/material/sidenav';
+import { Observable } from 'rxjs';
+import { LocationService } from '@app/services';
+import { map, catchError } from 'rxjs/operators';
+import { SpinnerService } from '@app/shared/spinner.service';
+import { AuthService } from '@app/core/services';
+import { AppoDialogComponent } from '@app/shared/appo-dialog/appo-dialog.component';
+import { ShowappoDialogComponent } from '@app/shared/showappo-dialog/showappo-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { DatePipe } from '@angular/common';
+import { AppointmentService } from '@app/services/appointment.service';
 
 @Component({
   selector: 'app-schedule',
@@ -29,13 +38,28 @@ export class ScheduleComponent implements OnInit {
   FriHours = [];
   SatHours = [];
   SunHours = [];
+
+  businessId: string = '';
+  doors: string = '';
+
+  locationData$: Observable<any[]>;
+  operationHours$: Observable<any>;
+  locationData = '';
+  locationId = '';
+  
   constructor(
+    private authService: AuthService,
     private domSanitizer: DomSanitizer,
-    private matIconRegistry: MatIconRegistry
+    private matIconRegistry: MatIconRegistry,
+    private locationService: LocationService,
+    private spinnerService: SpinnerService,
+    private appointmentService: AppointmentService,
+    public dialog: MatDialog,
+    public datepipe: DatePipe
   ) {
     this.matIconRegistry.addSvgIcon('new',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/newAppo.svg'));
-    this.matIconRegistry.addSvgIcon('cancel',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/cancelAppos.svg'));
-    this.matIconRegistry.addSvgIcon('view',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/view.svg'));
+    this.matIconRegistry.addSvgIcon('cancel02',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/cancelAppos.svg'));
+    this.matIconRegistry.addSvgIcon('view',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/expand02.svg'));
    }
 
   ngOnInit(): void {
@@ -50,7 +74,6 @@ export class ScheduleComponent implements OnInit {
     this.weekEnd = new Date(this.weekStart.valueOf() + 6*86400000);
     this.currTime = this.getActTime();
 
-    console.log(this.currTime);
     this.monday = this.weekStart;
     this.tuesday = this.addDays(this.weekStart, 1);
     this.wednesday = this.addDays(this.weekStart, 2);
@@ -59,10 +82,51 @@ export class ScheduleComponent implements OnInit {
     this.saturday = this.addDays(this.weekStart, 5);
     this.sunday = this.addDays(this.weekStart, 6);
 
-    this.hours.push({'Time': '08:00 AM', 'Time24H': '08:00'},{'Time': '09:00 AM', 'Time24H': '09:00'},{'Time':'10:00 AM', 'Time24H': '10:00'}, {'Time': '02:00 PM', 'Time24H': '14:00'}, {'Time': '03:00 PM', 'Time24H': '15:00'}, {'Time': '04:00 PM', 'Time24H': '16:00'});
-    this.MonHours.push({'Time': '09:00 AM', 'Bucket': 20, 'Available': 10, 'Used': 10}, {'Time': '10:00 AM', 'Bucket': 20, 'Available': 15, 'Used': 5});
-    this.ThuHours.push({'Time': '10:00 AM', 'Bucket': 20, 'Available': 10, 'Used': 10}, {'Time': '03:00 PM', 'Bucket': 20, 'Available': 15, 'Used': 5});
-    this.WedHours.push({'Time': '08:00 AM', 'Bucket': 20, 'Available': 20, 'Used': 0}, {'Time': '09:00 AM', 'Bucket': 20, 'Available': 20, 'Used': 0}, {'Time': '10:00 AM', 'Bucket': 20, 'Available': 20, 'Used': 0 }, {'Time': '03:00 PM', 'Bucket': 20, 'Available': 15, 'Used': 0});
+    this.businessId = this.authService.businessId();
+    var spinnerRef = this.spinnerService.start("Loading Schedule...");
+    this.locationData$ = this.locationService.getLocationsHost(this.businessId).pipe(
+      map((res: any) => {
+        if (res.Code == 200){
+          if (res.Locs.length > 0){
+            this.locationData = res.Locs[0];
+            this.locationId = res.Locs[0].LocationId;
+            this.doors = res.Locs[0].Doors;
+            this.loadHours();
+          }
+          this.spinnerService.stop(spinnerRef);
+          return res.Locs;
+        }
+      }),
+      catchError(err => {
+        this.spinnerService.stop(spinnerRef);
+        return err;
+      })
+    )
+  }
+
+  loadHours(){
+    this.operationHours$ = this.appointmentService.getOperationHours(this.businessId, this.locationId, this.datepipe.transform(this.monday, 'yyyy-MM-dd')).pipe(
+      map((res: any) => {
+        if (res.Code == 200){
+          this.hours = res.Hours;
+          this.MonHours = res.Monday;
+          this.TueHours = res.Tuesday;
+          this.WedHours = res.Wednesday;
+          this.ThuHours = res.Thursday;
+          this.FriHours = res.Friday;
+          this.SatHours = res.Saturday;
+          this.SunHours = res.Sunday;
+          return res;
+        }
+      }), 
+      catchError(err => {
+        return err;
+      })
+    )
+    // this.hours.push({'Time': '08:00 AM', 'Time24H': '08:00'},{'Time': '09:00 AM', 'Time24H': '09:00'},{'Time':'10:00 AM', 'Time24H': '10:00'},{'Time':'11:00 AM', 'Time24H': '11:00'}, {'Time': '02:00 PM', 'Time24H': '14:00'}, {'Time': '03:00 PM', 'Time24H': '15:00'}, {'Time': '04:00 PM', 'Time24H': '16:00'});
+    // this.MonHours.push({'Time': '09:00 AM', 'Bucket': 20, 'Available': 10, 'Used': 10}, {'Time': '10:00 AM', 'Bucket': 20, 'Available': 15, 'Used': 5}, {'Time': '11:00 AM', 'Bucket': 20, 'Available': 10, 'Used': 10});
+    // this.ThuHours.push({'Time': '10:00 AM', 'Bucket': 20, 'Available': 10, 'Used': 10}, {'Time': '03:00 PM', 'Bucket': 20, 'Available': 15, 'Used': 5});
+    // this.WedHours.push({'Time': '08:00 AM', 'Bucket': 20, 'Available': 20, 'Used': 0}, {'Time': '09:00 AM', 'Bucket': 20, 'Available': 20, 'Used': 0}, {'Time': '10:00 AM', 'Bucket': 20, 'Available': 20, 'Used': 0 }, {'Time': '03:00 PM', 'Bucket': 20, 'Available': 15, 'Used': 0});
   }
 
   addDays(date, days) {
@@ -157,6 +221,7 @@ export class ScheduleComponent implements OnInit {
     this.sunday = this.addDays(this.weekStart, 6);
 
     this.currWeek = 0;
+    this.loadHours();
   }
 
   prevWeek(){
@@ -182,51 +247,37 @@ export class ScheduleComponent implements OnInit {
     } else {
       this.currWeek = 0;
     }
+    this.loadHours();
   }
 
-  newAppo(timeGrl: string, dayNum: number){
-    console.log("new appo");
+  newAppo(timeGrl: string, day: Date, dayNum: number){
     let result = this.getAvailability(timeGrl, dayNum);
-    console.log(result);
+    let timeSel = (timeGrl.substring(6) == 'PM' ? (+timeGrl.substring(0,2)+12).toString() + '-' + timeGrl.substring(3,5) : timeGrl.replace(':','-').substring(0,5));
+    if (result == '0') { return; }
+    const dialogRef = this.dialog.open(AppoDialogComponent, {
+      width: '450px',
+      height: '700px',
+      data: {businessId: this.businessId, locationId: this.locationId, appoTime: timeSel, appoDate: this.datepipe.transform(day, 'yyyy-MM-dd'), doors: this.doors.split(',')}
+    });    
+  }
+
+  onSelectLocation(event){
+    this.locationData = event.value;
+    this.locationId = event.value.LocationId;
+    this.doors = event.value.Doors;
+    this.loadHours();
   }
 
   cancelTime(timeGrl: string, dayNum: number){
 
   }
 
-  expandTime(timeGrl: string, dayNum: number){
-
-  }
-
-  validateDate(dt: Date, time: string): number{
-    if (dt > this.today) {return 1;}
-    console.log(dt);
-    if (dt == this.today){
-      let timeSch = '';
-      timeSch = (time.substring(6,8) == 'PM' ? (+time.substring(0,2)+12).toString() + ':' + time.substring(3,5) : time.substring(0,5));
-      console.log(timeSch);
-      if (timeSch < this.currTime){ 
-        return 0;
-      } else {
-        return 1;
-      } 
-    }
-    if (dt < this.today) {return 0;}
-  }
-
-  validateDisDate(dt: Date, time: string): boolean{
-    if (dt > this.today) {return false;}
-    if (dt < this.today) {return true;}
-
-    let timeSch = '';
-    timeSch = (time.substring(6,8) == 'PM' ? (+time.substring(0,2)+12).toString() + ':' + time.substring(3,5) : time.substring(0,5));
-    if (dt == this.today){
-      if (timeSch < this.currTime){ 
-        return true;
-      } else {
-        return false;
-      } 
-    }
+  expandTime(timeGrl: Date, day: any){
+    const dialogRef = this.dialog.open(ShowappoDialogComponent, {
+      width: '450px',
+      height: '700px',
+      data: {businessId: this.businessId, locationId: this.locationId, appoTime: timeGrl, appoDate: this.datepipe.transform(day, 'yyyy-MM-dd')}
+    });
   }
 
   getActTime(): string{
@@ -239,10 +290,10 @@ export class ScheduleComponent implements OnInit {
     },
     formatter = new Intl.DateTimeFormat([], options);
     var actual = formatter.format(new Date());
-    var hour: number = +actual.substring(0,2);
-    var min: number = +actual.substring(3,5);
+    var hour: string = (+actual.substring(0,2) == 24 ? '00' : actual.substring(0,2).padStart(2, '0'));
+    var min: string = actual.substring(3,5).padStart(2,'0');
 
-    return (hour.toString().padStart(2,'0')+':'+min.toString().padStart(2,'0')).trim();
+    return hour+':'+min;
   }
 
   getYear(): string{

@@ -17,6 +17,11 @@ export class AppointmentService {
                       .pipe(catchError(this.errorHandler));
   }
 
+  getAppointmentsSche(businessId, locationId, dateAppoIni): Observable<Appointment[]>{
+    return this.http.get<Appointment[]>(this.apiURL + '/appointments/' + businessId + '/' + locationId + '/' + dateAppoIni)
+                    .pipe(catchError(this.errorHandler));
+  }
+
   getPreviousAppointments(businessId, locationId, dateAppo, status): Observable<Appointment[]> {
     return this.http.get<Appointment[]>(this.apiURL + '/appointments/previous/' + businessId + '/' + locationId + '/' + dateAppo + '/' + status)
                     .pipe(catchError(this.errorHandler));
@@ -74,6 +79,16 @@ export class AppointmentService {
 
   getMessages(appointmentId, type): Observable<any[]> {
     return this.http.get<any[]>(this.apiURL + '/appointment/messages/' + appointmentId + '/' + type)
+                    .pipe(catchError(this.errorHandler));
+  }
+
+  getPurpose(businessId): Observable<any[]> {
+    return this.http.get<any[]>(this.apiURL + '/appointment/purpose/' + businessId)
+                    .pipe(catchError(this.errorHandler))
+  }
+
+  getOperationHours(businessId, locationId, initDay){
+    return this.http.get<any>(this.apiURL + '/appointment/opeHours/' + businessId + '/' + locationId + '/' + initDay)
                     .pipe(catchError(this.errorHandler));
   }
 

@@ -300,16 +300,16 @@ export class QuickCheckinComponent implements OnInit {
     if (dobClient.toString() == '') {
       dob = '';
     } else {
-      let month = ((dobClient.getMonth()+1).toString().length > 1 ? (dobClient.getMonth()+1).toString() : '0'+(dobClient.getMonth()+1).toString()); 
-      let day = (dobClient.getDate().toString().length > 1 ? dobClient.getDate().toString() : '0'+dobClient.getDate().toString());
+      let month = (dobClient.getMonth()+1).toString().padStart(2, '0'); 
+      let day = dobClient.getDate().toString().padStart(2, '0');
       dob = dobClient.getUTCFullYear().toString() + '-' + month + '-' + day;
     }
-    let phoneNumber = this.clientForm.value.Phone.toString().replace('(','').replace(')','').replace(' ','').replace('-','');
+    let phoneNumber = this.clientForm.value.Phone.toString().replace( /\D+/g, '');
     let formData = {
       BusinessId: this.businessId,
       LocationId: this.locationId,
       Door: this.doorId,
-      Phone: (phoneNumber == '' ?  '0000000000' : phoneNumber),
+      Phone: (phoneNumber == '' ?  '00000000000' : (phoneNumber.length <= 10 ? '1' + phoneNumber : phoneNumber)),
       Name: this.clientForm.value.Name,
       Email: (this.clientForm.value.Email == '' ? '' : this.clientForm.value.Email),
       DOB: dob,

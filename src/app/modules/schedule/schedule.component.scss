@@ -13,10 +13,10 @@
 }
 .hour-available{
     background: white;
-    border: 1px solid green;
-    background-color: green;
-    color: white;
-    font-weight: 500;
+    border: 1px solid lightgray;
+    background-color: #fff;
+    color: green;
+    font-weight: 600;
 }
 .hour-disabled{
     background: white;
@@ -48,4 +48,24 @@
 }
 .back-disabled{
     color:lightgray;
+}
+button.mat-icon-button
+{
+    &.cdk-program-focused 
+    {
+        ::ng-deep .mat-button-focus-overlay
+        {
+            opacity: 0;  // hide overlay
+        }
+    }
+}
+button.mat-stroked-button
+{
+    &.cdk-program-focused 
+    {
+        ::ng-deep .mat-button-focus-overlay
+        {
+            opacity: 0;  // hide overlay
+        }
+    }
 }

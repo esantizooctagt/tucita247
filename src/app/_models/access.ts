@@ -3,6 +3,7 @@ export class Access {
         public ApplicationId: string,
         public Name: string,
         public Level_Access: Number,
-        public Active: Number
+        public Active: Number,
+        public OrderApp?: Number
     ){}
 }

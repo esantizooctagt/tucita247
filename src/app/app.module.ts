@@ -74,6 +74,9 @@ import { AgmCoreModule } from '@agm/core';
 import { PhonePipe } from '@shared/phone.pipe';
 import { QuickCheckinComponent } from './modules/quick-checkin/quick-checkin.component';
 import { ScheduleComponent } from './modules/schedule/schedule.component';
+import { AppoDialogComponent } from './shared/appo-dialog/appo-dialog.component';
+import { ShowappoDialogComponent } from './shared/showappo-dialog/showappo-dialog.component';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -96,7 +99,9 @@ import { ScheduleComponent } from './modules/schedule/schedule.component';
     QuickCheckinComponent,
     SurveyComponent,
     SurveyListComponent,
-    ScheduleComponent
+    ScheduleComponent,
+    AppoDialogComponent,
+    ShowappoDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -148,6 +153,7 @@ import { ScheduleComponent } from './modules/schedule/schedule.component';
   ],
   providers: [
     SpinnerService,
+    DatePipe,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],

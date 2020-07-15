@@ -1,14 +1,14 @@
 .circle-red {
     background-color: transparent;
     border: 7px solid red;
-    border-radius: 160px;
+    border-radius: 145px;
     box-shadow: 0 0 2px #888;
-    min-height: 160px;
-    max-height: 160px;
-    max-width: 160px;
+    min-height: 145px;
+    max-height: 145px;
+    max-width: 145px;
     text-align: center;
     display: block;
-    line-height: 144px;
+    line-height: 129px;
     font-size: 30px;
     font-family: Montserrat;
     font-weight: 700;
@@ -18,14 +18,14 @@
 .circle-yellow {
     background-color: transparent;
     border: 7px solid yellow;
-    border-radius: 160px;
+    border-radius: 145px;
     box-shadow: 0 0 2px #888;
-    min-height: 160px;
-    max-height: 160px;
-    max-width: 160px;
+    min-height: 145px;
+    max-height: 145px;
+    max-width: 145px;
     text-align: center;
     display: block;
-    line-height: 144px;
+    line-height: 129px;
     font-size: 30px;
     font-family: Montserrat;
     font-weight: 700;
@@ -35,14 +35,14 @@
 .circle-green {
     background-color: transparent;
     border: 7px solid green;
-    border-radius: 160px;
+    border-radius: 145px;
     box-shadow: 0 0 2px #888;
-    min-height: 160px;
-    max-height: 160px;
-    max-width: 160px;
+    min-height: 145px;
+    max-height: 145px;
+    max-width: 145px;
     text-align: center;
     display: block;
-    line-height: 144px;
+    line-height: 129px;
     font-size: 30px;
     font-family: Montserrat;
     font-weight: 700;
@@ -52,14 +52,14 @@
 .circle-gray{
     background-color: transparent;
     border: 7px solid #c9c9c9;
-    border-radius: 160px;
+    border-radius: 145px;
     box-shadow: 0 0 2px #888;
-    min-height: 160px;
-    max-height: 160px;
-    max-width: 160px;
+    min-height: 145px;
+    max-height: 145px;
+    max-width: 145px;
     text-align: center;
     display: block;
-    line-height: 144px;
+    line-height: 129px;
     font-size: 30px;
     font-family: Montserrat;
     font-weight: 700;
@@ -120,13 +120,13 @@ h2{
     top:-17px;
 }
 .line-cards{
-    height: 270px;
+    height: 310px;
 }
 .graph-style{
-    height: calc(100vh - 418px);
+    height: calc(100vh - 470px);
 }
 .chart-dim{
-    height: 85%;
+    height: calc(100vh - 587px);
 }
 .not-found{
     width: 100%;
@@ -136,4 +136,10 @@ h2{
     font-family: Montserrat;
     font-weight: 600;
     line-height: 130px;
+}
+.dashboard-plan{
+    background-color: linen;
+}
+.title-graph{
+    text-align: center;
 }

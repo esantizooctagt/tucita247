@@ -6,6 +6,7 @@ import { map, catchError, mergeMap, switchMap } from 'rxjs/operators';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { AppointmentService } from '@app/services/appointment.service';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
@@ -51,6 +52,7 @@ export class DashboardComponent implements OnInit {
     private locationService: LocationService,
     private businessService: BusinessService,
     private appointmentService: AppointmentService,
+    private datePipe: DatePipe,
     private spinnerService: SpinnerService
   ) { }
 
@@ -223,8 +225,8 @@ export class DashboardComponent implements OnInit {
             let content = [];
             res.Data.forEach(item => {
               let line = {
-                name: item.DateAppo.substring(8,10),
-                value: (this.tabSelected == 0 ? item.Average : item.Qty)
+                name: this.datePipe.transform(item.DateAppo, 'MMM dd'),
+                value: (this.tabSelected == 1 ? item.Average : item.Qty)
               }
               content.push(line);
             });
@@ -259,8 +261,8 @@ export class DashboardComponent implements OnInit {
           let content = [];
           res.Data.forEach(item => {
             let line = {
-              name: item.DateAppo.substring(8,10),
-              value: (type == 0 ? item.Average : item.Qty)
+              name: this.datePipe.transform(item.DateAppo, 'MMM dd'),
+              value: (type == 1 ? item.Average : item.Qty)
             }
             content.push(line);
           });

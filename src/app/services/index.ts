@@ -6,3 +6,4 @@ export * from './business.service';
 export * from './reasons.service';
 export * from './polls.service';
 export * from './surveys.service';
+export * from './appointment.service';

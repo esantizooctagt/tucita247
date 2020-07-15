@@ -1,0 +1,115 @@
+<h3 mat-dialog-title class="pr-3 mb-1">Citas</h3>
+<h5 mat-dialog-title class="pr-3 mb-1">{{ (data.appoDate | date: 'MMM, d') + ' ' + data.appoTime.replace('-',':')}}</h5>
+<div class="container-fluid host-container">
+    <div mat-dialog-content class="citas-content row pb-2">
+        <ng-container *ngIf="comments$ | async"></ng-container>
+        <ng-container *ngIf="opeHours$ | async"></ng-container>
+        <ng-container *ngIf="getLocInfo$ | async"></ng-container>
+        <ng-container *ngIf="reasons$ | async"></ng-container>
+        <div class="col-sm col-md col-lg-12">
+            <ng-container *ngIf="messages$ | async"></ng-container>
+            <ng-container *ngIf="appointmentsSche$ | async"></ng-container>
+            <mat-card class="mt-2 appCard" *ngFor="let item of schedule;let i=index">
+                <div class="row pr-3 pl-3">
+                    <div *ngIf="!showDetailsSche[i]" class="card-user col-md-9 pl-0 pr-0">{{item.Name}}</div>
+                    <div *ngIf="showDetailsSche[i]" class="card-user-disp col-md-9 pl-0 pr-0">{{item.Name}}</div>
+                    <div class="card-time col-md pr-0 pl-0">
+                        {{item.DateAppo.substring(0,2) + item.DateAppo.substring(5,8)}}</div>
+                </div>
+                <div class="row pr-3 pl-3">
+                    <div class="card-phone col-md-9 pl-0 pr-0">{{item.Phone | phone}}</div>
+                    <div class="card-disability col-md pr-0 pl-0">
+                        <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
+                        <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
+                        <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
+                    </div>
+                </div>
+                <ng-container *ngIf="showDetailsSche[i]">
+                    <div class="row pr-3 pl-3 mt-2 mb-2">
+                        <div class="card-contentprio col-md-6 pl-0">Number of guests: </div>
+                        <div class="card-resultprio col-md">{{item.Guests}}</div>
+                    </div>
+                    <div class="row pr-3 pl-3 mt-2 mb-2">
+                        <div class="card-contentprio col-md-6 pl-0">Purpose: </div>
+                        <div class="card-resultprio-door col-md">{{item.Purpose}}</div>
+                    </div>
+                    <div class="row pr-3 pl-3 mt-2 mb-2">
+                        <div class="card-contentprio col-md-6 pl-0">Door: </div>
+                        <div class="card-resultprio-door col-md">{{item.Door}}</div>
+                    </div>
+                    <div class="row pr-3 pl-3 mt-2 mb-2">
+                        <div class="card-contentprio col-md-6 pl-0">On Behalf: </div>
+                        <div class="card-resultprio col-md">{{item.OnBehalf == '0' ? 'No' : 'Yes'}}</div>
+                    </div>
+                </ng-container>
+                <div class="row mb-0 mt-2">
+                    <div class="card-actions-center col-sm-4 p-0">
+                        <button mat-icon-button color="secondary"
+                            (click)="showCancelOptionsSche[i] = !showCancelOptionsSche[i]">
+                            <mat-icon svgIcon="cancel"></mat-icon>
+                        </button>
+                    </div>
+                    <div class="card-actions-center col-sm-4 p-0">
+                        <button mat-icon-button color="secondary"
+                            (click)="showMessageSche[i] = !showMessageSche[i]; onShowMessage(item, i, 'schedule');">
+                            <mat-icon [matBadgeHidden]="item.Unread != 'H'" matBadgeSize="small" matBadge="*"
+                                matBadgePosition="after" matBadgeColor="warn" matBadgeOverlap="true" svgIcon="sms">
+                            </mat-icon>
+                        </button>
+                    </div>
+                    <div class="card-actions-center col-sm-4 p-0">
+                        <button mat-icon-button color="secondary" (click)="showDetailsSche[i] = !showDetailsSche[i]">
+                            <mat-icon svgIcon="expand"></mat-icon>
+                        </button>
+                    </div>
+                </div>
+                <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showCancelOptionsSche[i]">
+                    <div class="col-md-12 pl-0 pr-0">
+                        <mat-form-field>
+                            <mat-label>Cancel reasons</mat-label>
+                            <mat-select [(value)]="selectedSche[i]">
+                                <mat-option *ngFor="let reason of reasons" [value]="reason.ReasonId">
+                                    {{reason.Description}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-12 pl-0 pr-0 mt-2 mb-2">
+                        <button mat-flat-button type="button" color="primary"
+                            (click)="onCancelApp(item, selectedSche[i], i, 'schedule')"
+                            [disabled]="selectedSche[i] == undefined">
+                            Cancel Appointment
+                        </button>
+                    </div>
+                </div>
+                <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showMessageSche[i]">
+                    <div class="col-sm-10 pl-0 pr-0">
+                        <textarea class="card-text" #messageText matInput placeholder="Write a comment..."></textarea>
+                    </div>
+                    <div class="button-send col-md pr-0 pl-0">
+                        <button mat-icon-button type="button"
+                            (click)="onMessageApp(item.AppId, messageText.value ,i, 'schedule')">
+                            <mat-icon class="send_icon">send</mat-icon>
+                        </button>
+                    </div>
+                    <div class="card-chat pl-3 pr-3 mb-0 mt-3 col-md-12">
+                        <ng-container *ngFor="let item of getCommentsSche[i]">
+                            <div class="row row justify-content-start" *ngIf="item.U != undefined">
+                                <div class="card-chat-user col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
+                                    <div class="card-chat-time">{{item.T}}</div>
+                                    {{item.U}}
+                                </div>
+                            </div>
+                            <div class="row justify-content-end" *ngIf="item.H != undefined">
+                                <div class="card-chat-host col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
+                                    <div class="card-chat-time">{{item.T}}</div>
+                                    {{item.H}}
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+    </div>
+</div>

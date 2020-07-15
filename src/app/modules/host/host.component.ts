@@ -2,11 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { LocationService, ReasonsService, BusinessService } from '@app/services';
+import { LocationService, ReasonsService, BusinessService, AppointmentService } from '@app/services';
 import { AuthService } from '@app/core/services';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { map, catchError, switchMap, mergeMap } from 'rxjs/operators';
-import { AppointmentService } from '@app/services/appointment.service';
 import { Appointment, Reason } from '@app/_models';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ConfirmValidParentMatcher } from '@app/validators';
@@ -537,8 +536,8 @@ export class HostComponent implements OnInit {
     if (dobClient.toString() == '') {
       dob = '';
     } else {
-      let month = ((dobClient.getMonth()+1).toString().length > 1 ? (dobClient.getMonth()+1).toString() : '0'+(dobClient.getMonth()+1).toString()); 
-      let day = (dobClient.getDate().toString().length > 1 ? dobClient.getDate().toString() : '0'+dobClient.getDate().toString());
+      let month = (dobClient.getMonth()+1).toString().padStart(2, '0'); 
+      let day = dobClient.getDate().toString().padStart(2, '0');
       dob = dobClient.getUTCFullYear().toString() + '-' + month + '-' + day;
     }
     let phoneNumber = this.clientForm.value.Phone.toString().replace(/[^0-9]/g,'');
@@ -546,7 +545,7 @@ export class HostComponent implements OnInit {
       BusinessId: this.businessId,
       LocationId: this.locationId,
       Door: this.doorId,
-      Phone: (phoneNumber == '' ?  '0000000000' : (phoneNumber.length <= 10 ? '1' + phoneNumber : phoneNumber)),
+      Phone: (phoneNumber == '' ?  '00000000000' : (phoneNumber.length <= 10 ? '1' + phoneNumber : phoneNumber)),
       Name: this.clientForm.value.Name,
       Email: (this.clientForm.value.Email == '' ? '' : this.clientForm.value.Email),
       DOB: dob,

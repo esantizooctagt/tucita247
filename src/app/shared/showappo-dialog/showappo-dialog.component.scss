@@ -1,0 +1,386 @@
+mat-card{
+    margin-left:0px;
+    padding: 5px 8px;
+    background: #FFFFFF;
+    box-shadow: -3px 1px 4px rgba(0, 0, 0, 0.25) !important;
+    border-radius: 0px; //10px;
+}
+:host ::ng-deep .mat-form-field {
+    .mat-form-field-wrapper {
+        padding-bottom: 0;
+        .mat-form-field-underline {
+            position: initial !important;
+            display: block;
+            margin-top: -1px;
+        }
+        .mat-form-field-subscript-wrapper,
+        .mat-form-field-ripple {
+            position: initial !important;
+            display: table;
+        }
+        .mat-form-field-subscript-wrapper {
+            min-height: calc(1em + 1px);
+        }
+    }
+}
+.qty-people-black{
+    position: relative;
+    top: 21px;
+    z-index: 100;
+    color: black;
+    font-weight: 600;
+}
+.qty-people-white{
+    position: relative;
+    top: 21px;
+    z-index: 100;
+    color: white;
+    font-weight: 600;
+}
+.qty-people-white-02{
+    position: relative;
+    top: 21px;
+    z-index: 100;
+    color: white;
+    font-weight: 600;
+}
+::ng-deep .yellow-bar .mat-progress-bar-fill::after {
+    background-color: yellow!important;
+    border-radius: 15px;
+}
+::ng-deep .green-bar .mat-progress-bar-fill::after {
+    background-color: green!important;
+    border-radius: 15px;
+}
+::ng-deep .red-bar .mat-progress-bar-fill::after {
+    background-color: red!important;
+    border-radius: 15px;
+}
+:host::ng-deep .mat-form-field-underline {
+    background-color: #B6B6B6 !important;
+}
+::ng-deep .mat-progress-bar-buffer {
+    background: #E4E8EB;
+}
+::ng-deep .mat-progress-bar {
+    border-radius: 15px;
+    height: 20px !important;
+}
+/* Use the button type you're using here */
+button.mat-icon-button
+{
+    &.cdk-program-focused 
+    {
+        ::ng-deep .mat-button-focus-overlay
+        {
+            opacity: 0;  // hide overlay
+        }
+    }
+}
+button.mat-stroked-button
+{
+    &.cdk-program-focused 
+    {
+        ::ng-deep .mat-button-focus-overlay
+        {
+            opacity: 0;  // hide overlay
+        }
+    }
+}
+.drop-qeue{
+    height: calc(100vh - 228px); //209.33
+    padding-right: 2px;
+    padding-left: 1px;
+}
+.plan{
+    min-height: 500px;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    border: dashed 1px #ff4f00;
+}
+.walkin{
+    min-height: 500px;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    border: dashed 1px #ff4f00;
+}
+.precheck{
+    min-height: 500px;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    border: dashed 1px #ff4f00;
+}
+.addApp{
+    text-align: right;
+}
+.mat-option {
+    font-family: 'Montserrat';
+    font-size: 14px;
+}
+.host-container{
+    background-color: #F5F5F5;
+}
+.title-qeue{
+    font-size: 25px;
+    font-weight: 600;
+    color: #797979;
+    text-align: center;
+}
+.add_client{
+    color: #ff4f00;
+    background: white;
+    height: 35px;
+    width: 35px;
+    box-shadow: none !important;
+    border: 1px solid #ff4f00;
+}
+.card-previous{
+    font-family: Montserrat;
+    font-size: 16px;
+    color: #FF4F00;    
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.card-pending{
+    width: 100%;
+    height: 65px;
+    line-height: 50px;
+}
+.num-guests{
+    width: 35px;
+    text-align: center;
+}
+.input-guests{
+    padding: 0 !important;
+    height: 35px;
+}
+mat-icon.mat-icon.notranslate.material-icons.mat-icon-no-color {
+    top: -4px;
+    position: relative;
+}
+.card-Appointment{
+    margin-top:2px;
+}
+.client_gender{
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+}
+.send_icon{
+    color: #ff4f00;
+}
+.button-send{
+    position: relative;
+    top: -10px;
+}
+.card {
+    padding-top: 14px;
+}
+.video {
+    width: 100%;
+    object-fit: cover;
+}
+.video-row {
+    padding-bottom: 10px;
+    border: 1px solid #ff4f00;
+}
+#canvas {
+    width: 100%;
+}
+.card-user{
+    font-weight: 700;
+    color: #797979;
+    line-height: 24px;
+    font-size: 20px;
+    text-transform: capitalize;
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.card-user-disp{
+    font-weight: 700;
+    color: #797979;
+    line-height: 24px;
+    font-size: 20px;
+    text-transform: capitalize;
+}
+.card-phone{
+    font-weight: 200;
+    color: #797979;
+    line-height: 24px;
+    font-size: 20px;
+}
+.card-time{
+    font-weight: 200;
+    color: #797979;
+    line-height: 20px;
+    font-size: 16px;
+    text-align: right;
+}
+.card-contentprio{
+    font-weight: 600;
+    color: #797979;
+    line-height: 18px;
+    font-size: 16px;
+}
+.card-resultprio{
+    font-weight: 200;
+    color: #797979;
+    line-height: 18px;
+    font-size: 16px;
+}
+.card-resultprio-door{
+    font-weight: 200;
+    color: #797979;
+    line-height: 18px;
+    font-size: 16px;
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.card-actions-center{
+    text-align: center;
+}
+.card-actions-left{
+    text-align: left;
+}
+.card-actions-right{
+    text-align: right;
+}
+.card-disability{
+    text-align: right;
+}
+.card-disability-pre{
+    text-align: right;
+    position: relative;
+    top: 15px;
+    line-height: 30px;
+    right: -6px;
+}
+.card-text{
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    outline: 2px solid #18A0FB !important;
+}
+.card-chat{
+    background-color: #F9F7F7;
+}
+.card-chat-user{
+    background: #D7D7D7;
+    border-radius: 8px;
+}
+.card-chat-host{
+    background: linear-gradient(0deg, #E8E8E8, #E8E8E8), #E1DDDD;
+    border-radius: 8px;
+    text-align: right;
+}
+.card-chat-time{
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 8px;
+    line-height: 10px;
+}
+.elapsed-time{
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 26px;
+    line-height: 9px;
+    color: #FF4F00;
+    text-align: right;
+    position: relative;
+    top: -15px;
+}
+.elapsed-tag{
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1px;
+    text-align: right;
+    color: #FF4F00;
+    top: 0px;
+    left: 19px;
+}
+.elapsed-clock{
+    position: relative;
+    height: 18px;
+    width: 18px;
+    left: 20px;
+}
+.checkin-list{
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 15px;
+    text-align: left;
+}
+.action-buttons{
+    width: 175px;
+    margin: 2px;
+}
+.action-buttons-init{
+    width: 175px;
+    margin: 2px;
+    margin-left: 8px;
+}
+.operation-buttons{
+    text-align: right;
+}
+.space-row{
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.citas-content{
+    max-height: 77vh !important;
+}
+mat-menu{
+    overflow: auto;
+}
+@media (max-width: 1024px){
+    .title-qeue{
+        font-size: 20px;
+    }
+    .card-user{
+        font-size: 15px;
+    }
+    .card-user-disp{
+        font-size: 15px;
+    }
+    .card-time{
+        font-size: 13px;
+    }
+    .card-phone{
+        font-size: 15px;
+    }
+    .elapsed-time{
+        font-size: 20px;
+        line-height: 1px;
+    }
+    .elapsed-tag{
+        font-size:13px;
+    }
+    .elapsed-clock{
+        height: 16px;
+        width: 16px;
+        left: 0px;
+        top: -3px;
+    }
+    .card-contentprio{
+        line-height: 12px;
+        font-size: 13px;
+    }
+    .card-resultprio{
+        line-height: 12px;
+        font-size: 13px;
+    }
+} 

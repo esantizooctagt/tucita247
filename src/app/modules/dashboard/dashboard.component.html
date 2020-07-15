@@ -3,33 +3,14 @@
         <div class="col-md-12 pl-4 m-0">
             <div class="pl-0 pt-1 pb-2 col-md-12 mt-1 mb-1 pr-0 header-route">
                 <div class="row p-0 m-0 line-height">
-                    <h3 class="col-md-8 line-height">DASHBOARD</h3>
-                    <mat-form-field class="col-md-4 selection-line">
-                        <mat-select name="locations" [(value)]="selectedLoc" (selectionChange)="onSelectLocation($event)"> 
-                            <mat-option *ngFor="let item of resultLoc" [value]="item.LocationId">
-                                {{item.Name}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
+                    <h3 class="col-md-8 line-height pl-0">DASHBOARD</h3>
                 </div>
             </div>
             <div class="row p-0 m-0 line-cards">
-                <mat-card class="col-sm col-md-4 col-lg-4 mr-3">
-                    <div class="row ml-2 mb-2">
-                        <h3>Current visitors</h3>
-                    </div>
-                    <ng-container *ngIf="quantityPeople$ | async"></ng-container>
-                    <div class="row pl-3 pb-3">
-                        <div class="col-md-6" [ngClass]="{'circle-gray': perLocation == 0,
-                                    'circle-green': perLocation < 80,
-                                    'circle-yellow': perLocation < 95,
-                                    'circle-red': perLocation >= 95}">{{quantity}}</div>
-                    </div>
-                </mat-card>
-                <mat-card class="col-sm col-md col-lg">
+                <mat-card class="col-sm col-md col-lg mr-3 dashboard-plan">
                     <ng-container *ngIf="appos$ | async as appo">
                         <div class="row ml-2 mb-2">
-                            <h3 class="col-md-3">Citas available</h3>
+                            <h3 class="col-md-3 pl-2">Citas available</h3>
                             <div class="col-md labels-content">
                                 {{appo.DueDate | date: 'MMM d'}}
                             </div>
@@ -77,14 +58,36 @@
                         </div>
                     </ng-container>
                 </mat-card>
+                <mat-card class="col-sm col-md-4 col-lg-4">
+                    <div class="row ml-2 mb-2">
+                        <h3>Current visitors</h3>
+                    </div>
+                    <div class="row ml-2 mb-2">
+                        <mat-form-field class="col-md selection-line pl-0">
+                            <mat-select name="locations" [(value)]="selectedLoc" (selectionChange)="onSelectLocation($event)"> 
+                                <mat-option *ngFor="let item of resultLoc" [value]="item.LocationId">
+                                    {{item.Name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <ng-container *ngIf="quantityPeople$ | async"></ng-container>
+                    <div class="row pl-3 pb-3">
+                        <div class="col-md-6" [ngClass]="{'circle-gray': perLocation == 0,
+                                    'circle-green': perLocation < 80,
+                                    'circle-yellow': perLocation < 95,
+                                    'circle-red': perLocation >= 95}">{{quantity}}</div>
+                    </div>
+                </mat-card>
             </div>
             <div class="row p-0 m-0 mt-3 mb-3">
                 <ng-container *ngIf="avgData$ | async"></ng-container>
                 <mat-card class="col-sm col-md col-lg graph-style">
+                    <h3 class="title-graph">Month to Date</h3>
                     <div class="row ml-2 mb-2">
                         <mat-tab-group (selectedTabChange)="changeGraph($event)">
+                            <mat-tab label="Citas"></mat-tab>
                             <mat-tab label="Average Time"></mat-tab>
-                            <mat-tab label="Quantity Appointments"></mat-tab>
                         </mat-tab-group>
                     </div>
                     <div class="row ml-2 mb-2 mr-2 chart-dim">

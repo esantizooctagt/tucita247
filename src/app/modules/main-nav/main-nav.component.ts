@@ -18,7 +18,7 @@ import { RolesService, UserService } from '@app/services';
 })
 export class MainNavComponent implements OnInit {
   public online: boolean = true;
-  businessId: string='';
+  businessId: string='';  
   businessName: string = '';
   userId: string='';
   avatar: string='';
@@ -91,8 +91,8 @@ export class MainNavComponent implements OnInit {
     this.resetToken$ =  this.userService.updateToken(formData).pipe(
       map((res: any) => {
         if (res.Code == 200){
-            sessionStorage.setItem('TC247_TKN', JSON.stringify(res.Token));
-            sessionStorage.setItem('TC247_ACT', JSON.stringify(res.Access));
+            sessionStorage.setItem('TC247_TKN', JSON.stringify(res.token));
+            sessionStorage.setItem('TC247_ACT', JSON.stringify(res.access));
         }
     }),
     catchError(res => {
@@ -102,12 +102,31 @@ export class MainNavComponent implements OnInit {
 }
 
   loadAccess(){
-    this.apps$ = this.roleService.getApplications((this.roleId != '' ? this.roleId : 1), this.businessId);
+    this.apps$ = this.roleService.getApplications((this.roleId != '' ? this.roleId : 1), this.businessId).pipe(
+      map(res => res.sort(function (a, b) {
+        if (a.OrderApp > b.OrderApp) {
+          return 1;
+        }
+        if (a.OrderApp < b.OrderApp) {
+          return -1;
+        }
+        return 0;
+        })
+      )
+    );
   }
 
   logout() {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
+
+  compareFn = (a, b) => {
+    if (a.OrderApp < b.OrderApp)
+      return -1;
+    if (a.OrderApp > b.OrderApp)
+      return 1;
+    return 0;
+  };
 
 }
