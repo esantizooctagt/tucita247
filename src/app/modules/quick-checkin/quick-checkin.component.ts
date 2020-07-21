@@ -23,6 +23,7 @@ export class QuickCheckinComponent implements OnInit {
   qrCode: string = '';
   businessId: string  = '';
   locationId: string = '';
+  serviceId: string = '';
   doorId: string = '';
   onError: string = '';
   userId: string = '';
@@ -32,6 +33,7 @@ export class QuickCheckinComponent implements OnInit {
   currHour: number = 0;
   prevHour: number = 0;
   firstHour: number = 0;
+  closedLoc: number = 0;
   buckets=[];
 
   showCard: boolean =false;
@@ -41,6 +43,8 @@ export class QuickCheckinComponent implements OnInit {
   check$: Observable<any>;
   newAppointment$: Observable<any>;
   manualCheckOut$: Observable<any>;
+
+  Services: [] = [];
 
   get f(){
     return this.clientForm.controls;
@@ -103,7 +107,12 @@ export class QuickCheckinComponent implements OnInit {
         if (res.Locs != null){
           this.locationId = res.Locs.LocationId;
           this.doorId = res.Locs.Door;
-          this.locationStatus = res.Locs.Open;
+          this.Services = res.Locs.Services;
+          if (this.Services.length > 0){
+            this.locationStatus = res.Locs.Services[0].Open;
+            this.closedLoc = res.Locs.Services[0].Closed;
+            this.serviceId = res.Locs.Services[0].ServiceId;
+          }
           this.spinnerService.stop(spinnerRef);
           return res;
         } else {
@@ -113,7 +122,7 @@ export class QuickCheckinComponent implements OnInit {
           return;
         }
       }),
-      switchMap(val => val = this.businessService.getBusinessOpeHours(this.businessId, this.locationId)),
+      switchMap(val => val = this.businessService.getBusinessOpeHours(this.businessId, this.locationId, this.serviceId)),
       map((res: any) => {
         if (res.Code == 200) {
           this.bucketInterval = parseFloat(res.BucketInterval);
@@ -177,7 +186,7 @@ export class QuickCheckinComponent implements OnInit {
   }
 
   setManualCheckOut(qtyOut){
-    this.manualCheckOut$ = this.appointmentService.updateManualCheckOut(this.businessId, this.locationId, qtyOut).pipe(
+    this.manualCheckOut$ = this.appointmentService.updateManualCheckOut(this.businessId, this.locationId, this.serviceId, qtyOut).pipe(
       map((res: any) => {
         if (res.Code == 200){
           this.openSnackBar("La Cita check-out successfull","Check-Out");
@@ -196,7 +205,8 @@ export class QuickCheckinComponent implements OnInit {
       Status: 4,
       qrCode: qrCode,
       BusinessId: this.businessId,
-      LocationId: this.locationId
+      LocationId: this.locationId,
+      ServiceId: this.serviceId
     }
     this.check$ = this.appointmentService.updateAppointmentCheckOut(formData).pipe(
       map((res: any) => {
@@ -241,7 +251,8 @@ export class QuickCheckinComponent implements OnInit {
       qrCode: qrCode,
       Guests: guests,
       BusinessId: this.businessId,
-      LocationId: this.locationId
+      LocationId: this.locationId,
+      ServiceId: this.serviceId
     }
     this.check$ = this.appointmentService.updateAppointmentCheckInQR(qrCode, formData).pipe(
       map((res: any) => {

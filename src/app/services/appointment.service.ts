@@ -12,8 +12,8 @@ export class AppointmentService {
   readonly apiURL = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
-  getAppointments(businessId, locationId, dateAppoIni, dateAppoFin, status, type, lastItem, appId): Observable<Appointment[]> {
-      return this.http.get<Appointment[]>(this.apiURL + '/appointments/' + businessId + '/' + locationId + '/' + dateAppoIni + '/' + dateAppoFin + '/' + status + '/' + type + '/' + lastItem + '/' + appId)
+  getAppointments(businessId, locationId, serviceId, dateAppoIni, dateAppoFin, status, type, lastItem, appId): Observable<Appointment[]> {
+      return this.http.get<Appointment[]>(this.apiURL + '/appointments/' + businessId + '/' + locationId + '/' + serviceId + '/' + dateAppoIni + '/' + dateAppoFin + '/' + status + '/' + type + '/' + lastItem + '/' + appId)
                       .pipe(catchError(this.errorHandler));
   }
 
@@ -22,13 +22,13 @@ export class AppointmentService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  getPreviousAppointments(businessId, locationId, dateAppo, status): Observable<Appointment[]> {
-    return this.http.get<Appointment[]>(this.apiURL + '/appointments/previous/' + businessId + '/' + locationId + '/' + dateAppo + '/' + status)
+  getPreviousAppointments(businessId, locationId, serviceId, dateAppo, status): Observable<Appointment[]> {
+    return this.http.get<Appointment[]>(this.apiURL + '/appointments/previous/' + businessId + '/' + locationId + '/' + serviceId + '/' + dateAppo + '/' + status)
                     .pipe(catchError(this.errorHandler));
   }
 
-  getApposAverage(locationId, initDate): Observable<any[]>{
-    return this.http.get<any[]>(this.apiURL + '/appointments/average/' + locationId + '/' + initDate)
+  getApposAverage(locationId, serviceId, initDate): Observable<any[]>{
+    return this.http.get<any[]>(this.apiURL + '/appointments/average/' + locationId + '/' + serviceId + '/' + initDate)
                     .pipe(catchError(this.errorHandler));
   }
 
@@ -57,8 +57,8 @@ export class AppointmentService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  updateManualCheckOut(businessId, locationId, qtyGuests){
-    return this.http.put(this.apiURL + '/appointment/checkout/manual/' + businessId + '/' + locationId + '/' + qtyGuests,'')
+  updateManualCheckOut(businessId, locationId, serviceId, qtyGuests){
+    return this.http.put(this.apiURL + '/appointment/checkout/manual/' + businessId + '/' + locationId + '/' + serviceId + '/' + qtyGuests,'')
                     .pipe(catchError(this.errorHandler));
   }
 

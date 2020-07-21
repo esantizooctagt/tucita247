@@ -65,9 +65,12 @@
                     <div class="row ml-2 mb-2">
                         <mat-form-field class="col-md selection-line pl-0">
                             <mat-select name="locations" [(value)]="selectedLoc" (selectionChange)="onSelectLocation($event)"> 
-                                <mat-option *ngFor="let item of resultLoc" [value]="item.LocationId">
+                                <mat-optgroup *ngFor="let item of resultLoc">
                                     {{item.Name}}
-                                </mat-option>
+                                    <mat-option *ngFor="let serv of item.Services" [value]="item.LocationId + '#' + serv.ServiceId">
+                                        {{serv.Name}}
+                                    </mat-option>
+                                </mat-optgroup>
                             </mat-select>
                         </mat-form-field>
                     </div>

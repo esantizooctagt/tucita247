@@ -106,6 +106,9 @@ export class HostComponent implements OnInit {
 
   manualGuests: number =  1;
 
+  Services: [] = [];
+  serviceId: string = '';
+
   get f(){
     return this.clientForm.controls;
   }
@@ -146,7 +149,8 @@ export class HostComponent implements OnInit {
     Gender: [''],
     Preference: [''],
     Disability: [''],
-    Guests: ['1', [Validators.required, Validators.max(99), Validators.min(1)]]
+    Guests: ['1', [Validators.required, Validators.max(99), Validators.min(1)]],
+    ServiceId: ['']
   })
 
   schedule = [];
@@ -186,10 +190,14 @@ export class HostComponent implements OnInit {
         if (res.Locs != null){
           this.locationId = res.Locs.LocationId;
           this.doorId = res.Locs.Door;
-          this.locationStatus = res.Locs.Open;
           this.manualCheckOut = res.Locs.ManualCheckOut;
-          this.closedLoc = res.Locs.Closed;
           this.totLocation = res.Locs.MaxCustomers;
+          this.Services = res.Locs.Services;
+          if (this.Services.length > 0){
+            this.locationStatus = res.Locs.Services[0].Open;
+            this.closedLoc = res.Locs.Services[0].Closed;
+            this.serviceId = res.Locs.Services[0].ServiceId;
+          }
           return res;
         } else {
           this.spinnerService.stop(spinnerRef);
@@ -198,7 +206,7 @@ export class HostComponent implements OnInit {
           return;
         }
       }),
-      switchMap(val => val = this.businessService.getBusinessOpeHours(this.businessId, this.locationId)),
+      switchMap(val => val = this.businessService.getBusinessOpeHours(this.businessId, this.locationId, this.serviceId)),
       map((res: any) => {
         if (res.Code == 200) {
           this.bucketInterval = parseFloat(res.BucketInterval);
@@ -319,7 +327,7 @@ export class HostComponent implements OnInit {
 
   openLocation(){
     var spinnerRef = this.spinnerService.start("Loading Open Location...");
-    this.openLoc$ = this.locationService.updateOpenLocation(this.locationId, this.businessId).pipe(
+    this.openLoc$ = this.locationService.updateOpenLocation(this.locationId, this.businessId, this.serviceId).pipe(
       map((res: any) => {
         if (res != null){
           if (res['Business'].OPEN == 1){
@@ -358,7 +366,7 @@ export class HostComponent implements OnInit {
 
   closedLocation(){
     var spinnerRef = this.spinnerService.start("Closing Location...");
-    this.closedLoc$ = this.locationService.updateClosedLocation(this.locationId, this.businessId).pipe(
+    this.closedLoc$ = this.locationService.updateClosedLocation(this.locationId, this.businessId, this.serviceId).pipe(
       map((res: any) => {
         if (res != null){
           if (res['Business'].OPEN == 0){
@@ -418,7 +426,8 @@ export class HostComponent implements OnInit {
       Status: 4,
       qrCode: qrCode,
       BusinessId: this.businessId,
-      LocationId: this.locationId
+      LocationId: this.locationId,
+      ServiceId: this.serviceId
     }
     this.checkIn$ = this.appointmentService.updateAppointmentCheckOut(formData).pipe(
       map((res: any) => {
@@ -451,7 +460,7 @@ export class HostComponent implements OnInit {
   }
 
   setManualCheckOut(qtyOut: number){
-    this.manualCheckOut$ = this.appointmentService.updateManualCheckOut(this.businessId, this.locationId, qtyOut).pipe(
+    this.manualCheckOut$ = this.appointmentService.updateManualCheckOut(this.businessId, this.locationId, this.serviceId, qtyOut).pipe(
       map((res: any) => {
         if (res.Code == 200){
           this.openSnackBar("La Cita check-out successfull","Check-Out");
@@ -552,6 +561,7 @@ export class HostComponent implements OnInit {
       Gender: (this.clientForm.value.Gender == '' ? '': this.clientForm.value.Gender),
       Preference: (this.clientForm.value.Preference == '' ? '': this.clientForm.value.Preference),
       Disability: (this.clientForm.value.Disability == null ? '': this.clientForm.value.Disability),
+      ServiceId: this.serviceId,
       Guests: this.clientForm.value.Guests
     }
     var spinnerRef = this.spinnerService.start("Adding Appointment...");
@@ -561,7 +571,7 @@ export class HostComponent implements OnInit {
           this.walkIns.push(res.Appointment);
         }
         this.spinnerService.stop(spinnerRef);
-        this.clientForm.reset({Phone:'',Name:'',Email:'',DOB:'',Gender:'',Preference:'', Disability:'', Guests: 1});
+        this.clientForm.reset({Phone:'',Name:'',Email:'',DOB:'',Gender:'',Preference:'', Disability:'', ServiceId: '', Guests: 1});
         this.showApp = false;
         return res.Code;
       }),
@@ -577,12 +587,12 @@ export class HostComponent implements OnInit {
   showAppointment(){
     this.showApp = !this.showApp;
     if (this.showApp){
-      this.clientForm.reset({Phone:'',Name:'',Email:'',DOB:'',Gender:'',Preference:''});
+      this.clientForm.reset({Phone:'',Name:'',Email:'',DOB:'',Gender:'',ServiceId:'',Preference:''});
     }
   }
 
   onCancelAddAppointment(){
-    this.clientForm.reset({Phone:'',Name:'',Email:'',DOB:'',Gender:'',Preference:''});
+    this.clientForm.reset({Phone:'',Name:'',Email:'',DOB:'',Gender:'',ServiceId:'',Preference:''});
     this.showApp = false;
   }
 
@@ -691,7 +701,8 @@ export class HostComponent implements OnInit {
       qrCode: qrCode,
       Guests: guests,
       BusinessId: this.businessId,
-      LocationId: this.locationId
+      LocationId: this.locationId,
+      ServiceId: this.serviceId
     }
     this.checkIn$ = this.appointmentService.updateAppointmentCheckIn(appo.AppId, formData).pipe(
       map((res: any) => {
@@ -944,7 +955,7 @@ export class HostComponent implements OnInit {
     let dayCurr = this.getDay();
     let dateAppo = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + time.replace(':','-');
     var spinnerRef = this.spinnerService.start("Loading Appointments...");
-    this.appointmentsPrevious$ = this.appointmentService.getPreviousAppointments(this.businessId, this.locationId, dateAppo, 1).pipe(
+    this.appointmentsPrevious$ = this.appointmentService.getPreviousAppointments(this.businessId, this.locationId, this.serviceId, dateAppo, 1).pipe(
       map((res: any) => {
         if (res != null) {
           this.previous = [];
@@ -998,7 +1009,7 @@ export class HostComponent implements OnInit {
     let dateAppoFinStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourFin;
 
     var spinnerRef = this.spinnerService.start("Loading Appointments...");
-    this.appointmentsSche$ = this.appointmentService.getAppointments(this.businessId, this.locationId, dateAppoStr, dateAppoFinStr, 1, 1, this.lastItem, this.appoIdSche).pipe(
+    this.appointmentsSche$ = this.appointmentService.getAppointments(this.businessId, this.locationId, this.serviceId, dateAppoStr, dateAppoFinStr, 1, 1, this.lastItem, this.appoIdSche).pipe(
       map((res: any) => {
         if (res != null) {
           this.lastItem = res['lastItem'].toString().replace('1#DT#','');
@@ -1058,7 +1069,7 @@ export class HostComponent implements OnInit {
     let dateAppoFinStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourFin;
 
     var spinnerRef = this.spinnerService.start("Loading Appointments...");
-    this.appointmentsWalk$ = this.appointmentService.getAppointments(this.businessId, this.locationId, dateAppoStr, dateAppoFinStr, 1, 2, this.lastItemWalk, this.appoIdWalk).pipe(
+    this.appointmentsWalk$ = this.appointmentService.getAppointments(this.businessId, this.locationId, this.serviceId, dateAppoStr, dateAppoFinStr, 1, 2, this.lastItemWalk, this.appoIdWalk).pipe(
       map((res: any) => {
         if (res != null) {
           this.lastItemWalk = res['lastItem'].toString().replace('1#DT#','');
@@ -1111,7 +1122,7 @@ export class HostComponent implements OnInit {
     let dateAppoStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourIni;
     let dateAppoFinStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourFin;
     var spinnerRef = this.spinnerService.start("Loading Appointments...");
-    this.appointmentsPre$ = this.appointmentService.getAppointments(this.businessId, this.locationId, dateAppoStr, dateAppoFinStr, 2, '_', this.lastItemPre, this.appoIdPre).pipe(
+    this.appointmentsPre$ = this.appointmentService.getAppointments(this.businessId, this.locationId, this.serviceId, dateAppoStr, dateAppoFinStr, 2, '_', this.lastItemPre, this.appoIdPre).pipe(
       map((res: any) => {
         if (res != null) {
           this.lastItemPre = res['lastItem'].toString().replace('2#DT#','');
@@ -1156,6 +1167,10 @@ export class HostComponent implements OnInit {
     } else {
       this.openLocation();
     }
+  }
+
+  onServiceChange(event){
+    console.log(event.target.value);
   }
 
   calculateTime(cardTime: string): string{

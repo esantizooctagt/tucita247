@@ -5,22 +5,28 @@
         <ng-container *ngIf="closedLoc$ | async"></ng-container>
         <div class="col-md-12">
             <div class="row space-row mt-2 mb-2">
-                <div class="col-sm-8 p-0">
-                    <mat-slide-toggle [checked]="locationStatus == 0" (change)="locationStatusChange()">{{(locationStatus == 0 ? 'Your location is closed' : 'Your location is open')}}</mat-slide-toggle>
+                <div class="col-sm-5 p-0 m-auto">
+                    <mat-slide-toggle [checked]="locationStatus == 0" (change)="locationStatusChange()">{{(locationStatus == 0 ? 'Your location is closed' : (closedLoc == 0 ? 'You need to reopen your location' : 'Your location is open'))}}</mat-slide-toggle>
                 </div>
-                <div class="operation-buttons col-sm-4 p-0">
+                <div class="operation-buttons col-sm-7 p-0">
                     <!-- <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 0" color="secondary" type="button" (click)="getWalkInsCheckOut()">Walk-Ins Check Out</button> -->
                     <ng-container *ngIf="getWalkIns$ | async"></ng-container>
                     <ng-container *ngIf="manualCheckOut$ | async"></ng-container>
                     <!-- El primero que es el manual se debe pedir la cantidad de gente aca afuera + __ - por default 1 -->
+                    <mat-select name="services" class="col-sm-6 pr-3" [(value)]="serviceId" (selectionChange)="onServiceChange($event)">
+                        <mat-option *ngFor="let item of Services" [value]="item.ServiceId">
+                            {{item.Name}}
+                        </mat-option>
+                    </mat-select>
                     <ng-container *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 1">
                         <mat-label class="label-guests">Guests</mat-label>
                         <button mat-icon-button (click)="manualGuests=manualGuests+1">
                             <mat-icon class="site-color">add</mat-icon>
                         </button>
-                        <mat-form-field class="pt-3 num-guests">
+                        <input class="input-guests" matInput placeholder="Number of Guests" [(ngModel)]="manualGuests">
+                        <!-- <mat-form-field class="pt-3 num-guests" appearance="outline">
                             <input class="input-guests" matInput placeholder="Number of Guests" [(ngModel)]="manualGuests">
-                        </mat-form-field>
+                        </mat-form-field> -->
                         <button mat-icon-button (click)="(manualGuests > 1 ? manualGuests=manualGuests-1 : manualGuests)">
                             <mat-icon class="site-color">remove</mat-icon>
                         </button>
@@ -31,11 +37,11 @@
             </div>
             <div class="row space-row">
                 <ng-container *ngIf="quantityPeople$ | async"></ng-container>
-                <div class="col-md-2" [ngClass]="{
+                <div *ngIf="locationStatus == 1 && closedLoc == 0" class="col-md-2" [ngClass]="{
                     'qty-people-white': perLocation < 80,
                     'qty-people-black': perLocation < 95,
                     'qty-people-white-02': perLocation >= 95}">{{qtyPeople}}</div>
-                <mat-progress-bar [ngClass]="{
+                <mat-progress-bar *ngIf="locationStatus == 1 && closedLoc == 0" [ngClass]="{
                     'green-bar': perLocation < 80,
                     'yellow-bar': perLocation < 95,
                     'red-bar': perLocation >= 95
@@ -53,7 +59,7 @@
                 </div>
                 <div class="col-md mt-2 title-qeue">
                     Walk-Ins
-                    <button mat-mini-fab class="add_client" *ngIf="locationStatus == 1" (click)="showAppointment()">
+                    <button mat-mini-fab class="add_client" *ngIf="locationStatus == 1 && closedLoc == 0" (click)="showAppointment()">
                         <mat-icon>add</mat-icon>
                     </button>
                 </div>

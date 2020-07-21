@@ -20,6 +20,8 @@ export class DashboardComponent implements OnInit {
   businessId: string = '';
   onError: string = '';
   locationId: string = '';
+  selectedSer: string = '';
+  services: []=[];
   doorId: string = '';
   userId: string = '';
   isAdmin: number = 0;
@@ -95,6 +97,7 @@ export class DashboardComponent implements OnInit {
           if (res.Locs != null){
             this.locationId = res.Locs.LocationId;
             this.doorId = res.Locs.Door;
+            this.services = res.Locs.Services;
             return 0;
           }
         }),
@@ -103,9 +106,10 @@ export class DashboardComponent implements OnInit {
             if (res != null){
               this.resultLoc = res.Data;
               if (this.resultLoc.length > 0){
-                this.selectedLoc = this.resultLoc[0].LocationId;
-                this.perLocation = this.resultLoc[0].PerLocation;
-                this.quantity = this.resultLoc[0].Quantity;
+                this.selectedLoc = this.resultLoc[0].LocationId + '#' + this.resultLoc[0].Services[0].ServiceId;
+                this.perLocation = this.resultLoc[0].Services[0].PerLocation;
+                this.selectedSer = this.resultLoc[0].Services[0].ServiceId;
+                this.quantity = this.resultLoc[0].Services[0].Quantity;
               }
               this.spinnerService.stop(spinnerRef);
               return res;
@@ -113,7 +117,7 @@ export class DashboardComponent implements OnInit {
           })
         )),
         switchMap(_ => 
-          this.appointmentService.getApposAverage(this.selectedLoc.replace('LOC#',''), initDate).pipe(
+          this.appointmentService.getApposAverage(this.selectedLoc.replace('LOC#','').split('#')[0], this.selectedSer, initDate).pipe(
             map((res: any) => {
               if (res != null){
                 let content = [];
@@ -145,16 +149,17 @@ export class DashboardComponent implements OnInit {
           if (res != null){
             this.resultLoc = res.Data;
             if (this.resultLoc.length > 0){
-              this.selectedLoc = this.resultLoc[0].LocationId;
-              this.perLocation = this.resultLoc[0].PerLocation;
-              this.quantity = this.resultLoc[0].Quantity;
+              this.selectedLoc = this.resultLoc[0].LocationId + '#' + this.resultLoc[0].Services[0].ServiceId;
+              this.perLocation = this.resultLoc[0].Services[0].PerLocation;
+              this.selectedSer = this.resultLoc[0].Services[0].ServiceId;
+              this.quantity = this.resultLoc[0].Services[0].Quantity;
             }
             this.spinnerService.stop(spinnerRef);
             return res;
           }
         }),
         switchMap(_ => 
-          this.appointmentService.getApposAverage(this.selectedLoc.replace('LOC#',''), initDate).pipe(
+          this.appointmentService.getApposAverage(this.selectedLoc.replace('LOC#','').split('#')[0], this.selectedSer, initDate).pipe(
             map((res: any) => {
               if (res != null){
                 let content = [];
@@ -188,9 +193,10 @@ export class DashboardComponent implements OnInit {
             if (res != null){
               this.resultLoc = res.Data;
               if (this.resultLoc.length > 0){
-                this.selectedLoc = this.resultLoc[0].LocationId;
-                this.perLocation = this.resultLoc[0].PerLocation;
-                this.quantity = this.resultLoc[0].Quantity;
+                this.selectedLoc = this.resultLoc[0].LocationId + '#' + this.resultLoc[0].Services[0].ServiceId;
+                this.perLocation = this.resultLoc[0].Services[0].PerLocation;
+                this.selectedSer = this.resultLoc[0].Services[0].ServiceId;
+                this.quantity = this.resultLoc[0].Services[0].Quantity;
               }
               return res;
             }
@@ -205,21 +211,26 @@ export class DashboardComponent implements OnInit {
   }
 
   onSelectLocation(event){
-    let locationId = event.source.value;
-    let locSelected;
-
+    let value = event.source.value;
+    let serSelected;
+    let serLocation;
     let initDate = '';
     let yearCurr = this.getYear();
     let monthCurr = this.getMonth();
     let dayCurr = this.getDay();
-    initDate = yearCurr+'-'+monthCurr+'-'+dayCurr;
+    let locId = '';
 
-    locSelected =  this.resultLoc.filter(x => x.LocationId == locationId);
-    if (locSelected.length > 0){
-      this.perLocation = locSelected[0].PerLocation;
-      this.quantity = locSelected[0].Quantity;
+    this.selectedLoc = value;
+    locId = this.selectedLoc.replace('LOC#','').split('#')[0];
+    serLocation = this.resultLoc.filter(x => x.LocationId.replace('LOC#','') == locId);
+    serSelected = serLocation[0].Services.filter(x => x.ServiceId == this.selectedLoc.replace('LOC#','').split('#')[1]);
+    initDate = yearCurr+'-'+monthCurr+'-'+dayCurr;    
 
-      this.avgData$ = this.appointmentService.getApposAverage(this.selectedLoc.replace('LOC#',''), initDate).pipe(
+    if (serSelected.length > 0){
+      this.perLocation = serSelected[0].PerLocation;
+      this.quantity = serSelected[0].Quantity;
+      this.selectedSer = serSelected[0].ServiceId;
+      this.avgData$ = this.appointmentService.getApposAverage(locId, this.selectedSer, initDate).pipe(
         map((res: any) => {
           if (res != null){
             let content = [];
@@ -255,7 +266,7 @@ export class DashboardComponent implements OnInit {
 
     let type = event.index;
     this.tabSelected = type;
-    this.avgData$ = this.appointmentService.getApposAverage(this.selectedLoc.replace('LOC#',''), initDate).pipe(
+    this.avgData$ = this.appointmentService.getApposAverage(this.selectedLoc.replace('LOC#','').split('#')[0], this.selectedSer, initDate).pipe(
       map((res: any) => {
         if (res != null){
           let content = [];
