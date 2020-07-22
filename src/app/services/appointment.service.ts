@@ -17,8 +17,8 @@ export class AppointmentService {
                       .pipe(catchError(this.errorHandler));
   }
 
-  getAppointmentsSche(businessId, locationId, dateAppoIni): Observable<Appointment[]>{
-    return this.http.get<Appointment[]>(this.apiURL + '/appointments/' + businessId + '/' + locationId + '/' + dateAppoIni)
+  getAppointmentsSche(businessId, locationId, serviceId, dateAppoIni): Observable<Appointment[]>{
+    return this.http.get<Appointment[]>(this.apiURL + '/appointments/' + businessId + '/' + locationId + '/' + serviceId + '/' + dateAppoIni)
                     .pipe(catchError(this.errorHandler));
   }
 

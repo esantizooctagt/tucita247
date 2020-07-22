@@ -6,7 +6,7 @@
         <div class="col-md-12">
             <div class="row space-row mt-2 mb-2">
                 <div class="col-sm-5 p-0 m-auto">
-                    <mat-slide-toggle [checked]="locationStatus == 0" (change)="locationStatusChange()">{{(locationStatus == 0 ? 'Your location is closed' : (closedLoc == 0 ? 'You need to reopen your location' : 'Your location is open'))}}</mat-slide-toggle>
+                    <mat-slide-toggle [checked]="locationStatus == 0" (change)="locationStatusChange()">{{(locationStatus == 0 ? 'Your location is closed' : (closedLoc == 1 ? 'You need to reopen your location' : 'Your location is open'))}}</mat-slide-toggle>
                 </div>
                 <div class="operation-buttons col-sm-7 p-0">
                     <!-- <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 0" color="secondary" type="button" (click)="getWalkInsCheckOut()">Walk-Ins Check Out</button> -->
@@ -80,7 +80,7 @@
                         (scrolled)="onScrollSche()"
                         [scrollWindow]="false" 
                         class="col-md plan">
-                        <mat-card class="mt-2 card-pending" *ngIf="prevHour > 0 && locationStatus == 1">
+                        <mat-card class="mt-2 card-pending" *ngIf="prevHour > 0 && locationStatus == 1 && closedLoc == 0">
                             <mat-card-content>
                                 <div class="card-previous" (click)="showPrevious = !showPrevious; getPreviousAppos(prevHour)">
                                     <mat-icon *ngIf="showPrevious" svgIcon="menos"></mat-icon>

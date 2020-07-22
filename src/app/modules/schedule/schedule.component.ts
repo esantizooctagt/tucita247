@@ -44,8 +44,9 @@ export class ScheduleComponent implements OnInit {
 
   locationData$: Observable<any[]>;
   operationHours$: Observable<any>;
-  locationData = '';
-  locationId = '';
+  locationData: string = '';
+  locationId: string = '';
+  serviceId: string = '';
   
   constructor(
     private authService: AuthService,
@@ -276,7 +277,7 @@ export class ScheduleComponent implements OnInit {
     const dialogRef = this.dialog.open(ShowappoDialogComponent, {
       width: '450px',
       height: '700px',
-      data: {businessId: this.businessId, locationId: this.locationId, appoTime: timeGrl, appoDate: this.datepipe.transform(day, 'yyyy-MM-dd')}
+      data: {businessId: this.businessId, locationId: this.locationId, serviceId: this.serviceId, appoTime: timeGrl, appoDate: this.datepipe.transform(day, 'yyyy-MM-dd')}
     });
   }
 

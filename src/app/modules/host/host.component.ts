@@ -106,7 +106,7 @@ export class HostComponent implements OnInit {
 
   manualGuests: number =  1;
 
-  Services: [] = [];
+  Services: any[]=[];
   serviceId: string = '';
 
   get f(){
@@ -355,6 +355,16 @@ export class HostComponent implements OnInit {
           })
         )
       ),
+      switchMap(x => this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
+        map((res: any) => {
+          if (res.Locs != null){
+            this.Services = res.Locs.Services;
+            return res;
+          } else {
+            return;
+          }
+        })
+      )),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
         this.locationStatus = 0;
@@ -379,6 +389,16 @@ export class HostComponent implements OnInit {
           }
         }
       }),
+      switchMap(x => this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
+        map((res: any) => {
+          if (res.Locs != null){
+            this.Services = res.Locs.Services;
+            return res;
+          } else {
+            return;
+          }
+        })
+      )),
       mergeMap(v => 
         //ACTUALIZA NUMERO DE PERSONAS
         this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
@@ -414,7 +434,7 @@ export class HostComponent implements OnInit {
         if (this.qrCode != ''){
           this.checkOutAppointment(this.qrCode);
         }
-        if (qtyGuests > 0){
+        if (qtyGuests > 0 && this.qrCode == ''){
           this.setManualCheckOut(qtyGuests);
         }
       }
@@ -550,6 +570,11 @@ export class HostComponent implements OnInit {
       dob = dobClient.getUTCFullYear().toString() + '-' + month + '-' + day;
     }
     let phoneNumber = this.clientForm.value.Phone.toString().replace(/[^0-9]/g,'');
+    let yearCurr = this.getYear();
+    let monthCurr = this.getMonth();
+    let dayCurr = this.getDay();
+    let dateAppo = yearCurr + '-' + monthCurr + '-' + dayCurr;
+    let timeAppo = this.getTime();
     let formData = {
       BusinessId: this.businessId,
       LocationId: this.locationId,
@@ -562,8 +587,12 @@ export class HostComponent implements OnInit {
       Preference: (this.clientForm.value.Preference == '' ? '': this.clientForm.value.Preference),
       Disability: (this.clientForm.value.Disability == null ? '': this.clientForm.value.Disability),
       ServiceId: this.serviceId,
-      Guests: this.clientForm.value.Guests
+      Guests: this.clientForm.value.Guests,
+      AppoDate: dateAppo,
+      AppoHour: timeAppo
     }
+    console.log(formData);
+    return;
     var spinnerRef = this.spinnerService.start("Adding Appointment...");
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
       map((res: any) => {
@@ -1170,7 +1199,76 @@ export class HostComponent implements OnInit {
   }
 
   onServiceChange(event){
-    console.log(event.target.value);
+    let res = this.Services.filter(val => val.ServiceId == event.value);
+    if (res.length > 0){
+      this.locationStatus = res[0].Open;
+      this.closedLoc = res[0].Closed;
+      this.serviceId = res[0].ServiceId;
+    }
+    this.previous = [];
+    this.schedule = [];
+    this.walkIns = [];
+    this.preCheckIn = [];
+    this.showPrevious = false;
+    this.lastItem = '_';
+    this.lastItemPre = '_';
+    this.lastItemWalk = '_';
+    var spinnerRef = this.spinnerService.start("Loading Locations Data...");
+    this.getLocInfo$ = this.businessService.getBusinessOpeHours(this.businessId, this.locationId, this.serviceId).pipe(
+      map((res: any) => {
+        if (res.Code == 200) {
+          this.bucketInterval = parseFloat(res.BucketInterval);
+          this.currHour = parseFloat(res.CurrHour);
+          let hours = res.Hours;
+          this.buckets = [];
+          for (var i=0; i<=hours.length-1; i++){
+            let horaIni = parseFloat(hours[i].HoraIni);
+            let horaFin = parseFloat(hours[i].HoraFin);
+            if (i ==0){
+              this.firstHour = horaIni;
+            }
+            for (var x=horaIni; x<=horaFin; x+=this.bucketInterval){
+              let hora = '';
+              if (x % 1 != 0){
+                hora = (x - (x%1)).toString().padStart(2,'0') + ':30';
+              } else {
+                hora = x.toString().padStart(2, '0') + ':00';
+              }
+              this.buckets.push({ TimeFormat: hora, Time: x });
+              if (x == this.currHour) {
+                if (x-this.bucketInterval>= horaIni){
+                  this.prevHour = this.currHour-this.bucketInterval;
+                }
+              }
+            }
+          }
+          this.spinnerService.stop(spinnerRef);
+        } else {
+          this.spinnerService.stop(spinnerRef);
+          return;
+        }
+      }),
+      switchMap((value: any) => {
+        value = this.locationService.getLocationQuantity(this.businessId, this.locationId);
+        return value;
+      }),
+      map((res: any) => {
+        this.qtyPeople = res.Quantity;
+        this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+      }),
+      map(_ => {
+        if (this.locationId != '' && this.locationStatus == 1 && this.closedLoc == 0){
+          this.getAppointmentsSche();
+          this.getAppointmentsWalk();
+          this.getAppointmentsPre();
+        }
+      }),
+      catchError(err => {
+        this.spinnerService.stop(spinnerRef);
+        this.onError = err.Message;
+        return '0';
+      })
+    );
   }
 
   calculateTime(cardTime: string): string{

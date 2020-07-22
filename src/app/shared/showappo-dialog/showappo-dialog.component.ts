@@ -13,6 +13,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 export interface DialogData {
   businessId: string;
   locationId: string;
+  serviceId: string;
   appoTime: string;
   appoDate: string;
 }
@@ -42,6 +43,7 @@ export class ShowappoDialogComponent implements OnInit {
 
   locationId: string = '';
   businessId: string = '';
+  serviceId: string = '';
   userId: string = '';
   onError: string = '';
 
@@ -79,6 +81,7 @@ export class ShowappoDialogComponent implements OnInit {
     this.userId = this.authService.userId();
     this.businessId = this.data.businessId;
     this.locationId = this.data.locationId;
+    this.serviceId = this.data.serviceId;
 
     this.reasons$ = this.reasonService.getReasons(this.businessId).pipe(
       map((res: any) => {
@@ -102,7 +105,7 @@ export class ShowappoDialogComponent implements OnInit {
     let dateAppoStr = this.data.appoDate + '-' + hourIni;
 
     var spinnerRef = this.spinnerService.start("Loading Appointments...");
-    this.appointmentsSche$ = this.appointmentService.getAppointmentsSche(this.businessId, this.locationId, dateAppoStr).pipe(
+    this.appointmentsSche$ = this.appointmentService.getAppointmentsSche(this.businessId, this.locationId, this.serviceId, dateAppoStr).pipe(
       map((res: any) => {
         if (res != null) {
           res['Appos'].forEach(item => {
