@@ -1,11 +1,37 @@
 <ng-container *ngIf="check$ | async"></ng-container>
 <ng-container *ngIf="Locs$ | async"></ng-container>
-<div class="col-md-12" *ngIf="locationStatus == 1">
+<ng-container *ngIf="openLoc$ | async"></ng-container>
+<ng-container *ngIf="closedLoc$ | async"></ng-container>
+<ng-container *ngIf="getLocInfo$ | async"></ng-container>
+<div class="col-md-12">
+    <div class="qr-space">
+        <div class="p-0 pt-2 m-auto">
+            <mat-slide-toggle [checked]="locationStatus == 0" (change)="locationStatusChange()">{{(locationStatus == 0 ? 'Your location is closed' : (closedLoc == 1 ? 'You need to reopen your location' : 'Your location is open'))}}</mat-slide-toggle>
+        </div>
+        <mat-select name="services" class="pt-2 pr-3" [(value)]="serviceId" (selectionChange)="onServiceChange($event)">
+            <mat-option *ngFor="let item of Services" [value]="item.ServiceId">
+                {{item.Name}}
+            </mat-option>
+        </mat-select>
+        <div class="row space-row">
+            <div *ngIf="locationStatus == 1 && closedLoc == 0" class="col-md-2" [ngClass]="{
+                'qty-people-white': perLocation < 80,
+                'qty-people-black': perLocation < 95,
+                'qty-people-white-02': perLocation >= 95}">{{qtyPeople}}</div>
+            <mat-progress-bar *ngIf="locationStatus == 1 && closedLoc == 0" [ngClass]="{
+                'green-bar': perLocation < 80,
+                'yellow-bar': perLocation < 95,
+                'red-bar': perLocation >= 95
+            }" mode="determinate" [value]="perLocation"></mat-progress-bar>
+        </div>
+    </div>
+</div>
+<div class="col-md-12" *ngIf="locationStatus == 1 && closedLoc == 0">
     <div class="qr-space">
         <button mat-stroked-button class="action-buttons col-md-12 mt-2 mb-2" color="secondary" type="button"
             (click)="showCard = !showCard">Walk-Ins Check In</button>
+        <ng-container *ngIf="newAppointment$ | async"></ng-container>
         <mat-card *ngIf="showCard" class="card-Appointment mt-2 mb-2">
-            <ng-container *ngIf="newAppointment$ | async"></ng-container>
             <form [formGroup]="clientForm" (ngSubmit)="addAppointment()">
                 <div class="form-field pl-3 pr-3">
                     <mat-form-field hintLabel="Phone number">

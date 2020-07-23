@@ -589,10 +589,9 @@ export class HostComponent implements OnInit {
       ServiceId: this.serviceId,
       Guests: this.clientForm.value.Guests,
       AppoDate: dateAppo,
-      AppoHour: timeAppo
+      AppoHour: timeAppo,
+      Type: 2
     }
-    console.log(formData);
-    return;
     var spinnerRef = this.spinnerService.start("Adding Appointment...");
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
       map((res: any) => {

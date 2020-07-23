@@ -15,3 +15,50 @@
     flex-direction: column;
     margin: 15px 0;
 }
+.qty-people-black{
+    position: relative;
+    top: 22px;
+    z-index: 100;
+    color: black;
+    font-weight: 600;
+}
+.qty-people-white{
+    position: relative;
+    top: 22px;
+    z-index: 100;
+    color: white;
+    font-weight: 600;
+}
+.qty-people-white-02{
+    position: relative;
+    top: 22px;
+    z-index: 100;
+    color: white;
+    font-weight: 600;
+}
+.space-row{
+    padding-left: 15px;
+    padding-right: 15px;
+}
+::ng-deep .yellow-bar .mat-progress-bar-fill::after {
+    background-color: yellow!important;
+    border-radius: 15px;
+}
+::ng-deep .green-bar .mat-progress-bar-fill::after {
+    background-color: green!important;
+    border-radius: 15px;
+}
+::ng-deep .red-bar .mat-progress-bar-fill::after {
+    background-color: red!important;
+    border-radius: 15px;
+}
+:host::ng-deep .mat-form-field-underline {
+    background-color: #B6B6B6 !important;
+}
+::ng-deep .mat-progress-bar-buffer {
+    background: #E4E8EB;
+}
+::ng-deep .mat-progress-bar {
+    border-radius: 15px;
+    height: 20px !important;
+}

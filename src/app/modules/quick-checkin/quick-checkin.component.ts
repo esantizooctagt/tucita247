@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocationService, BusinessService } from '@app/services';
 import { AuthService } from '@app/core/services';
 import { SpinnerService } from '@app/shared/spinner.service';
-import { map, catchError, switchMap } from 'rxjs/operators';
+import { map, catchError, switchMap, mergeMap } from 'rxjs/operators';
 import { AppointmentService } from '@app/services/appointment.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
@@ -34,6 +34,9 @@ export class QuickCheckinComponent implements OnInit {
   prevHour: number = 0;
   firstHour: number = 0;
   closedLoc: number = 0;
+  qtyPeople: number = 0;
+  perLocation: number = 0;
+  totLocation: number = 0;
   buckets=[];
 
   showCard: boolean =false;
@@ -43,8 +46,11 @@ export class QuickCheckinComponent implements OnInit {
   check$: Observable<any>;
   newAppointment$: Observable<any>;
   manualCheckOut$: Observable<any>;
+  getLocInfo$: Observable<any>;
+  openLoc$: Observable<any>;
+  closedLoc$: Observable<any>;
 
-  Services: [] = [];
+  Services: any[] = [];
 
   get f(){
     return this.clientForm.controls;
@@ -108,6 +114,7 @@ export class QuickCheckinComponent implements OnInit {
           this.locationId = res.Locs.LocationId;
           this.doorId = res.Locs.Door;
           this.Services = res.Locs.Services;
+          this.totLocation = res.Locs.MaxCustomers;
           if (this.Services.length > 0){
             this.locationStatus = res.Locs.Services[0].Open;
             this.closedLoc = res.Locs.Services[0].Closed;
@@ -122,6 +129,15 @@ export class QuickCheckinComponent implements OnInit {
           return;
         }
       }),
+      switchMap(v => this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
+        map((res: any) => {
+          if (res != null){
+            this.qtyPeople = res.Quantity;
+            this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+            return res.Quantity.toString();
+          }
+        })
+      )),
       switchMap(val => val = this.businessService.getBusinessOpeHours(this.businessId, this.locationId, this.serviceId)),
       map((res: any) => {
         if (res.Code == 200) {
@@ -178,7 +194,7 @@ export class QuickCheckinComponent implements OnInit {
         if  (this.qrCode != ''){
           this.checkOutAppointment(this.qrCode);
         } 
-        if (qtyGuests > 0) {
+        if (qtyGuests > 0 && this.qrCode == '') {
           this.setManualCheckOut(qtyGuests);
         }
       }
@@ -192,6 +208,15 @@ export class QuickCheckinComponent implements OnInit {
           this.openSnackBar("La Cita check-out successfull","Check-Out");
         }
       }),
+      switchMap(v => this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
+        map((res: any) => {
+          if (res != null){
+            this.qtyPeople = res.Quantity;
+            this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+            return res.Quantity.toString();
+          }
+        })
+      )),
       catchError(err => {
         this.onError = err.Message;
         this.openSnackBar("Something goes wrong try again","Check-out");
@@ -214,6 +239,15 @@ export class QuickCheckinComponent implements OnInit {
           this.openSnackBar("La Cita check-out successfull","Check-Out");
         }
       }),
+      switchMap(v => this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
+        map((res: any) => {
+          if (res != null){
+            this.qtyPeople = res.Quantity;
+            this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+            return res.Quantity.toString();
+          }
+        })
+      )),
       catchError(err => {
         if (err.Status == 404){
           this.openSnackBar("Invalid qr code","Check-out");
@@ -260,6 +294,15 @@ export class QuickCheckinComponent implements OnInit {
           this.openSnackBar("La Cita check-in successfull","Check-In");
         }
       }),
+      switchMap(v => this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
+        map((res: any) => {
+          if (res != null){
+            this.qtyPeople = res.Quantity;
+            this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+            return res.Quantity.toString();
+          }
+        })
+      )),
       catchError(err => {
         if (err.Status == 404){
           this.openSnackBar("Invalid qr code","Check-in");
@@ -316,9 +359,15 @@ export class QuickCheckinComponent implements OnInit {
       dob = dobClient.getUTCFullYear().toString() + '-' + month + '-' + day;
     }
     let phoneNumber = this.clientForm.value.Phone.toString().replace( /\D+/g, '');
+    let yearCurr = this.getYear();
+    let monthCurr = this.getMonth();
+    let dayCurr = this.getDay();
+    let dateAppo = yearCurr + '-' + monthCurr + '-' + dayCurr;
+    let timeAppo = this.getTime();
     let formData = {
       BusinessId: this.businessId,
       LocationId: this.locationId,
+      ServiceId: this.serviceId,
       Door: this.doorId,
       Phone: (phoneNumber == '' ?  '00000000000' : (phoneNumber.length <= 10 ? '1' + phoneNumber : phoneNumber)),
       Name: this.clientForm.value.Name,
@@ -328,7 +377,10 @@ export class QuickCheckinComponent implements OnInit {
       Preference: (this.clientForm.value.Preference == '' ? '': this.clientForm.value.Preference),
       Disability: (this.clientForm.value.Disability == null ? '': this.clientForm.value.Disability),
       Guests: this.clientForm.value.Guests,
-      Status: 3
+      Status: 3,
+      AppoDate: dateAppo,
+      AppoHour: timeAppo,
+      Type: 2
     }
     var spinnerRef = this.spinnerService.start("Adding Appointment...");
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
@@ -338,6 +390,14 @@ export class QuickCheckinComponent implements OnInit {
         this.showCard = false;
         this.openSnackBar("Walk-in added successfully","Check-In");
         return res.Code;
+      }),
+      switchMap((res: any) => {
+        res = this.locationService.getLocationQuantity(this.businessId, this.locationId);
+        return res;
+      }),
+      map((res: any) => {
+        this.qtyPeople = res.Quantity;
+        this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
@@ -376,6 +436,157 @@ export class QuickCheckinComponent implements OnInit {
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
+        this.onError = err.Message;
+        return this.onError;
+      })
+    );
+  }
+
+  locationStatusChange(){
+    if (this.locationStatus == 1){
+      this.closedLocation();
+    } else {
+      this.openLocation();
+    }
+  }
+
+  onServiceChange(event){
+    let res = this.Services.filter(val => val.ServiceId == event.value);
+    if (res.length > 0){
+      this.locationStatus = res[0].Open;
+      this.closedLoc = res[0].Closed;
+      this.serviceId = res[0].ServiceId;
+    }
+    var spinnerRef = this.spinnerService.start("Loading Locations Data...");
+    this.getLocInfo$ = this.businessService.getBusinessOpeHours(this.businessId, this.locationId, this.serviceId).pipe(
+      map((res: any) => {
+        if (res.Code == 200) {
+          this.bucketInterval = parseFloat(res.BucketInterval);
+          this.currHour = parseFloat(res.CurrHour);
+          let hours = res.Hours;
+          this.buckets = [];
+          for (var i=0; i<=hours.length-1; i++){
+            let horaIni = parseFloat(hours[i].HoraIni);
+            let horaFin = parseFloat(hours[i].HoraFin);
+            if (i ==0){
+              this.firstHour = horaIni;
+            }
+            for (var x=horaIni; x<=horaFin; x+=this.bucketInterval){
+              let hora = '';
+              if (x % 1 != 0){
+                hora = (x - (x%1)).toString().padStart(2,'0') + ':30';
+              } else {
+                hora = x.toString().padStart(2, '0') + ':00';
+              }
+              this.buckets.push({ TimeFormat: hora, Time: x });
+              if (x == this.currHour) {
+                if (x-this.bucketInterval>= horaIni){
+                  this.prevHour = this.currHour-this.bucketInterval;
+                }
+              }
+            }
+          }
+          this.spinnerService.stop(spinnerRef);
+        } else {
+          this.spinnerService.stop(spinnerRef);
+          return;
+        }
+      }),
+      switchMap((value: any) => {
+        value = this.locationService.getLocationQuantity(this.businessId, this.locationId);
+        return value;
+      }),
+      map((res: any) => {
+        this.qtyPeople = res.Quantity;
+        this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+      }),
+      catchError(err => {
+        this.spinnerService.stop(spinnerRef);
+        this.onError = err.Message;
+        return '0';
+      })
+    );
+  }
+
+  openLocation(){
+    var spinnerRef = this.spinnerService.start("Loading Open Location...");
+    this.openLoc$ = this.locationService.updateOpenLocation(this.locationId, this.businessId, this.serviceId).pipe(
+      map((res: any) => {
+        if (res != null){
+          if (res['Business'].OPEN == 1){
+            this.locationStatus = 1;
+            this.closedLoc = 0;
+            this.spinnerService.stop(spinnerRef);
+          }
+        }
+      }),
+      mergeMap(v => 
+        //ACTUALIZA NUMERO DE PERSONAS
+        this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
+          map((res: any) => {
+            if (res != null){
+              this.qtyPeople = res.Quantity;
+              this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+              return res.Quantity.toString();
+            }
+          })
+        )
+      ),
+      switchMap(x => this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
+        map((res: any) => {
+          if (res.Locs != null){
+            this.Services = res.Locs.Services;
+            return res;
+          } else {
+            return;
+          }
+        })
+      )),
+      catchError(err => {
+        this.spinnerService.stop(spinnerRef);
+        this.locationStatus = 0;
+        this.onError = err.Message;
+        return this.onError;
+      })
+    );
+  }
+
+  closedLocation(){
+    var spinnerRef = this.spinnerService.start("Closing Location...");
+    this.closedLoc$ = this.locationService.updateClosedLocation(this.locationId, this.businessId, this.serviceId).pipe(
+      map((res: any) => {
+        if (res != null){
+          if (res['Business'].OPEN == 0){
+            this.locationStatus = 0;
+            this.spinnerService.stop(spinnerRef);
+          }
+        }
+      }),
+      switchMap(x => this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
+        map((res: any) => {
+          if (res.Locs != null){
+            this.Services = res.Locs.Services;
+            return res;
+          } else {
+            return;
+          }
+        })
+      )),
+      mergeMap(v => 
+        //ACTUALIZA NUMERO DE PERSONAS
+        this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
+          map((res: any) => {
+            if (res != null){
+              this.qtyPeople = res.Quantity;
+              this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+              return res.Quantity.toString();
+            }
+          })
+        )
+      ),
+      catchError(err => {
+        this.spinnerService.stop(spinnerRef);
+        this.locationStatus = 1;
         this.onError = err.Message;
         return this.onError;
       })
