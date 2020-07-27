@@ -7,7 +7,7 @@ import {ThemePalette} from '@angular/material/core';
   styleUrls: ['./company-spec-days.component.scss']
 })
 export class CompanySpecDaysComponent implements OnInit {
-  links = ['Opening hours', 'Special days'];
+  links = [{label:'Opening hours',link:'company-ope-hours'}, {label:'Special days',link:'company-spec-days'}];
   activeLink = this.links[1];
   background: ThemePalette = 'primary';
 

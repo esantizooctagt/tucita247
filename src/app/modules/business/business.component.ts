@@ -97,6 +97,7 @@ export class BusinessComponent implements OnInit {
   genOption = {
     floor: 0,
     ceil: 24,
+    disabled: false,
     translate: (value: number, label: LabelType): string => {
       switch (label) {
         case LabelType.Low:
@@ -441,6 +442,7 @@ export class BusinessComponent implements OnInit {
             let iniGenOption = {
               floor: 0,
               ceil: this.businessForm.value.Mon02[0]-1,
+              disabled: false,
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
@@ -455,6 +457,7 @@ export class BusinessComponent implements OnInit {
             let locGenOption = {
               floor: this.businessForm.value.Mon02[0],
               ceil: 24,
+              disabled: false,
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
@@ -476,6 +479,7 @@ export class BusinessComponent implements OnInit {
             let iniGenOption = {
               floor: 0,
               ceil: this.businessForm.value.Tue02[0]-1,
+              disabled: false,
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
@@ -490,6 +494,7 @@ export class BusinessComponent implements OnInit {
             let locGenOption = {
               floor: this.businessForm.value.Tue02[0],
               ceil: 24,
+              disabled: false,
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
@@ -511,6 +516,7 @@ export class BusinessComponent implements OnInit {
             let iniGenOption = {
               floor: 0,
               ceil: this.businessForm.value.Wed02[0]-1,
+              disabled: false,
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
@@ -525,6 +531,7 @@ export class BusinessComponent implements OnInit {
             let locGenOption = {
               floor: this.businessForm.value.Wed02[0],
               ceil: 24,
+              disabled: false,
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
@@ -546,6 +553,7 @@ export class BusinessComponent implements OnInit {
             let iniGenOption = {
               floor: 0,
               ceil: this.businessForm.value.Thu02[0]-1,
+              disabled: false,
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
@@ -560,6 +568,7 @@ export class BusinessComponent implements OnInit {
             let locGenOption = {
               floor: this.businessForm.value.Thu02[0],
               ceil: 24,
+              disabled: false,
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
@@ -581,6 +590,7 @@ export class BusinessComponent implements OnInit {
             let iniGenOption = {
               floor: 0,
               ceil: this.businessForm.value.Fri02[0]-1,
+              disabled: false,
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
@@ -595,6 +605,7 @@ export class BusinessComponent implements OnInit {
             let locGenOption = {
               floor: this.businessForm.value.Fri02[0],
               ceil: 24,
+              disabled: false,
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
@@ -616,6 +627,7 @@ export class BusinessComponent implements OnInit {
             let iniGenOption = {
               floor: 0,
               ceil: this.businessForm.value.Sat02[0]-1,
+              disabled: false,
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
@@ -630,6 +642,7 @@ export class BusinessComponent implements OnInit {
             let locGenOption = {
               floor: this.businessForm.value.Sat02[0],
               ceil: 24,
+              disabled: false,
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
@@ -651,6 +664,7 @@ export class BusinessComponent implements OnInit {
             let iniGenOption = {
               floor: 0,
               ceil: this.businessForm.value.Sun02[0]-1,
+              disabled: false,
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
@@ -665,6 +679,7 @@ export class BusinessComponent implements OnInit {
             let locGenOption = {
               floor: this.businessForm.value.Sun02[0],
               ceil: 24,
+              disabled: false,
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
@@ -852,6 +867,7 @@ export class BusinessComponent implements OnInit {
         let iniGenOption = {
           floor: 0,
           ceil: s.Mon02[0]-1,
+          disabled: false,
           translate: (value: number, label: LabelType): string => {
             switch (label) {
               case LabelType.Low:
@@ -866,6 +882,7 @@ export class BusinessComponent implements OnInit {
         let locGenOption = {
           floor: s.Mon02[0],
           ceil: 24,
+          disabled: false,
           translate: (value: number, label: LabelType): string => {
             switch (label) {
               case LabelType.Low:
@@ -887,6 +904,7 @@ export class BusinessComponent implements OnInit {
         let iniGenOption = {
           floor: 0,
           ceil: s.Tue02[0]-1,
+          disabled: false,
           translate: (value: number, label: LabelType): string => {
             switch (label) {
               case LabelType.Low:
@@ -901,6 +919,7 @@ export class BusinessComponent implements OnInit {
         let locGenOption = {
           floor: s.Tue02[0],
           ceil: 24,
+          disabled: false,
           translate: (value: number, label: LabelType): string => {
             switch (label) {
               case LabelType.Low:
@@ -922,6 +941,7 @@ export class BusinessComponent implements OnInit {
         let iniGenOption = {
           floor: 0,
           ceil: s.Wed02[0]-1,
+          disabled: false,
           translate: (value: number, label: LabelType): string => {
             switch (label) {
               case LabelType.Low:
@@ -936,6 +956,7 @@ export class BusinessComponent implements OnInit {
         let locGenOption = {
           floor: s.Wed02[0],
           ceil: 24,
+          disabled: false,
           translate: (value: number, label: LabelType): string => {
             switch (label) {
               case LabelType.Low:
@@ -957,6 +978,7 @@ export class BusinessComponent implements OnInit {
         let iniGenOption = {
           floor: 0,
           ceil: s.Thu02[0]-1,
+          disabled: false,
           translate: (value: number, label: LabelType): string => {
             switch (label) {
               case LabelType.Low:
@@ -971,6 +993,7 @@ export class BusinessComponent implements OnInit {
         let locGenOption = {
           floor: s.Thu02[0],
           ceil: 24,
+          disabled: false,
           translate: (value: number, label: LabelType): string => {
             switch (label) {
               case LabelType.Low:
@@ -992,6 +1015,7 @@ export class BusinessComponent implements OnInit {
         let iniGenOption = {
           floor: 0,
           ceil: s.Fri02[0]-1,
+          disabled: false,
           translate: (value: number, label: LabelType): string => {
             switch (label) {
               case LabelType.Low:
@@ -1006,6 +1030,7 @@ export class BusinessComponent implements OnInit {
         let locGenOption = {
           floor: s.Fri02[0],
           ceil: 24,
+          disabled: false,
           translate: (value: number, label: LabelType): string => {
             switch (label) {
               case LabelType.Low:
@@ -1027,6 +1052,7 @@ export class BusinessComponent implements OnInit {
         let iniGenOption = {
           floor: 0,
           ceil: s.Sat02[0]-1,
+          disabled: false,
           translate: (value: number, label: LabelType): string => {
             switch (label) {
               case LabelType.Low:
@@ -1041,6 +1067,7 @@ export class BusinessComponent implements OnInit {
         let locGenOption = {
           floor: s.Sat02[0],
           ceil: 24,
+          disabled: false,
           translate: (value: number, label: LabelType): string => {
             switch (label) {
               case LabelType.Low:
@@ -1062,6 +1089,7 @@ export class BusinessComponent implements OnInit {
         let iniGenOption = {
           floor: 0,
           ceil: s.Sun02[0]-1,
+          disabled: false,
           translate: (value: number, label: LabelType): string => {
             switch (label) {
               case LabelType.Low:
@@ -1076,6 +1104,7 @@ export class BusinessComponent implements OnInit {
         let locGenOption = {
           floor: s.Sun02[0],
           ceil: 24,
+          disabled: false,
           translate: (value: number, label: LabelType): string => {
             switch (label) {
               case LabelType.Low:
@@ -1487,6 +1516,7 @@ export class BusinessComponent implements OnInit {
       let iniGenOption = {
         floor: 0,
         ceil: maxValue,
+        disabled: false,
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
@@ -1501,6 +1531,7 @@ export class BusinessComponent implements OnInit {
       let locGenOption = {
         floor: maxValue+1,
         ceil: 24,
+        disabled: false,
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
@@ -1522,6 +1553,7 @@ export class BusinessComponent implements OnInit {
     let locGenOption = {
       floor: 0,
       ceil: 24,
+      disabled: false,
       translate: (value: number, label: LabelType): string => {
         switch (label) {
           case LabelType.Low:
@@ -1803,6 +1835,7 @@ export class BusinessComponent implements OnInit {
       let iniGenOption = {
         floor: 0,
         ceil: maxValue,
+        disabled: false,
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
@@ -1817,6 +1850,7 @@ export class BusinessComponent implements OnInit {
       let locGenOption = {
         floor: maxValue+1,
         ceil: 24,
+        disabled: false,
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
@@ -1866,6 +1900,7 @@ export class BusinessComponent implements OnInit {
     let locGenOption = {
       floor: 0,
       ceil: 24,
+      disabled: false,
       translate: (value: number, label: LabelType): string => {
         switch (label) {
           case LabelType.Low:

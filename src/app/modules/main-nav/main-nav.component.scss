@@ -141,3 +141,11 @@
 :host ::ng-deep .mat-expansion-panel .mat-expansion-panel-header-title:hover{
   color: #FF4F00 !important;
 }
+.submenu-active{
+  border-color: #FF4F00 !important;
+  border-left: 3px solid;
+  margin-left: 0px !important;
+  color: #FF4F00 !important;
+  font-weight: 500;
+  padding-left: 5px;
+}
