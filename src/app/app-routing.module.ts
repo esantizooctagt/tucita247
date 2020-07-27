@@ -26,12 +26,12 @@ const routes: Routes = [
       { path: 'roles', component: RolesComponent, canActivate: [AuthGuard] },
       { path: 'schedule', component: ScheduleComponent, canActivate: [AuthGuard] },
       { path: 'time', component: TimeComponent, canActivate: [AuthGuard] },
-      { path: 'businessOpe', component: BusinessOpeComponent, canActivate: [AuthGuard] },
-      { path: 'businessDays', component: BusinessDaysComponent, canActivate: [AuthGuard] },
-      { path: 'locationOpe', component: LocationOpeComponent, canActivate: [AuthGuard] },
-      { path: 'locationDays', component: LocationDaysComponent, canActivate: [AuthGuard] },
-      { path: 'providerOpe', component: ProviderOpeComponent, canActivate: [AuthGuard] },
-      { path: 'providerDays', component: ProviderDaysComponent, canActivate: [AuthGuard] },
+      { path: 'businessope', component: BusinessOpeComponent, canActivate: [AuthGuard] },
+      { path: 'businessdays', component: BusinessDaysComponent, canActivate: [AuthGuard] },
+      { path: 'locationope', component: LocationOpeComponent, canActivate: [AuthGuard] },
+      { path: 'locationdays', component: LocationDaysComponent, canActivate: [AuthGuard] },
+      { path: 'providerope', component: ProviderOpeComponent, canActivate: [AuthGuard] },
+      { path: 'providerdays', component: ProviderDaysComponent, canActivate: [AuthGuard] },
       { path: 'help', component: HelpComponent, canActivate: [AuthGuard] }
     ]
   },

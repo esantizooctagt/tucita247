@@ -1,3 +1,64 @@
 .ng5-slider {
     width: 300px;
-  }
+}
+.addSlider{
+  height: 36px;
+  top: 20px;
+  width: 130px;
+}
+:host ::ng-deep mat-calendar mat-calendar-header .mat-calendar-header{
+    display: none;
+}
+:host ::ng-deep .mat-calendar-body-cell.selected
+{
+  background-color:#FF4F00!important;
+  border-radius: 50%;
+}
+.mat-tab-label-active{
+  color: #000 !important;
+}
+.mat-tab-link{
+  color: rgba(0, 0, 0, 0.87) !important;
+}
+::ng-deep .ng5-slider .ng5-slider-bar {
+  height: 50px;
+}
+::ng-deep .ng5-slider .ng5-slider-selection {
+  background: #ff4f00 !important;
+}
+::ng-deep .ng5-slider .ng5-slider-bar {
+  left: 0;
+  width: 100%;
+  height: 9px !important;
+  z-index: 1;
+  background: #e4e4e4;
+  border-radius: 10px !important;
+  border: 1px solid #898989;
+}
+::ng-deep .ng5-slider[disabled] .ng5-slider-selection {
+  background: #d8e0f3 !important;
+}
+::ng-deep .ng5-slider .ng5-slider-pointer {
+  background: #ff4f00 !important;
+  width: 26px !important;
+  height: 26px !important;
+  top: -9px !important;
+  border: solid 1px #898989;
+}
+::ng-deep .ng5-slider[disabled] .ng5-slider-pointer {
+  cursor: not-allowed;
+  background-color: #d8e0f3 !important;
+}
+::ng-deep .ng5-slider .ng5-slider-pointer:after {
+  display: none;
+}
+::ng-deep .ng5-slider .ng5-slider-bubble {
+  font-size: 14px;
+}
+:host::ng-deep .mat-form-field-underline {
+  background-color: #B6B6B6 !important;
+}
+:host::ng-deep .mat-tab-body-content {
+  height: 100%;
+  overflow: hidden;
+}

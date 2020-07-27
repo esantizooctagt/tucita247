@@ -4,31 +4,47 @@
             <a mat-tab-link *ngFor="let link of links"
                [routerLink]="link.link"
                (click)="activeLink = link"
-               [active]="'First' == link.label"> {{link.label}} </a>
+               [active]="link.active"> {{link.label}} </a>
           </nav>
     </div>
+    <div class="row justify-content-md-center mt-3 mb-3">
+        <div class="col-md-3 col-lg-3">
+            <button mat-icon-button class="ml-3 nav-buttons" type="button" (click)="prevYear()">
+                <mat-icon [ngClass]="{'back-disabled': currYearAct == 1,
+                    'back-enabled': currYearAct == 0}">arrow_back</mat-icon>
+            </button>
+            <span class="text-nav" [ngClass]="{'back-disabled': currYearAct == 1, 'back-enabled': currYearAct == 0}">Previous year</span>
+        </div>
+        <div class="col-sm col-md-5 col-lg-5 pt-2 pb-2 year-qeue">{{(navYear == 0 ? currYear : navYear)}}</div>
+        <div class="col-md-3 col-lg-3 pr-4 next-button">
+            <span class="text-next">Next year</span>
+            <button mat-icon-button class="mr-3 nav-buttons" type="button" (click)="nextYear()">
+                <mat-icon>arrow_forward</mat-icon>
+            </button>
+        </div>
+    </div>
     <div class="row mt-2 mb-2 mr-5 ml-5">
         <div class="col-sm col-md-3 col-lg-3 pr-3 pl-3">
             <div class="calendar-wrapper">
-                <mat-calendar #calendarjan [dateClass]="isSelectedJan" (selectedChange)="onSelect($event, calendarjan, janSelected)" [minDate]="minJan" [maxDate]="maxJan">
+                <mat-calendar #calendarjan [dateClass]="isSelected" (selectedChange)="onSelect($event, calendarjan)">
                 </mat-calendar>
             </div>
         </div>
         <div class="col-sm col-md-3 col-lg-3">
             <div class="calendar-wrapper">
-                <mat-calendar #calendarfeb [dateClass]="isSelectedFeb" (selectedChange)="onSelect($event, calendarfeb, febSelected)" [minDate]="minFeb" [maxDate]="maxFeb">
+                <mat-calendar #calendarfeb [dateClass]="isSelected" (selectedChange)="onSelect($event, calendarfeb)">
                 </mat-calendar>
             </div>
         </div>
         <div class="col-sm col-md-3 col-lg-3">
             <div class="calendar-wrapper">
-                <mat-calendar #calendarmar [dateClass]="isSelectedMar" (selectedChange)="onSelect($event, calendarmar, marSelected)" [minDate]="minMar" [maxDate]="maxMar">
+                <mat-calendar #calendarmar [dateClass]="isSelected" (selectedChange)="onSelect($event, calendarmar)">
                 </mat-calendar>
             </div>
         </div>
         <div class="col-sm col-md-3 col-lg-3">
             <div class="calendar-wrapper">
-                <mat-calendar #calendarapr [dateClass]="isSelectedApr" (selectedChange)="onSelect($event, calendarapr, aprSelected)" [minDate]="minApr" [maxDate]="maxApr">
+                <mat-calendar #calendarapr [dateClass]="isSelected" (selectedChange)="onSelect($event, calendarapr)">
                 </mat-calendar>
             </div>
         </div>
@@ -36,25 +52,25 @@
     <div class="row mt-2 mb-2 mr-5 ml-5">
         <div class="col-sm col-md-3 col-lg-3 pr-3 pl-3">
             <div class="calendar-wrapper">
-                <mat-calendar #calendarmay [dateClass]="isSelectedMay" (selectedChange)="onSelect($event, calendarmay, maySelected)" [minDate]="minMay" [maxDate]="maxMay">
+                <mat-calendar #calendarmay [dateClass]="isSelected" (selectedChange)="onSelect($event, calendarmay)">
                 </mat-calendar>
             </div>
         </div>
         <div class="col-sm col-md-3 col-lg-3">
             <div class="calendar-wrapper">
-                <mat-calendar #calendarjun [dateClass]="isSelectedJun" (selectedChange)="onSelect($event, calendarjun, junSelected)" [minDate]="minJun" [maxDate]="maxJun">
+                <mat-calendar #calendarjun [dateClass]="isSelected" (selectedChange)="onSelect($event, calendarjun)">
                 </mat-calendar>
             </div>
         </div>
         <div class="col-sm col-md-3 col-lg-3">
             <div class="calendar-wrapper">
-                <mat-calendar #calendarjul [dateClass]="isSelectedJul" (selectedChange)="onSelect($event, calendarjul, julSelected)" [minDate]="minJul" [maxDate]="maxJul">
+                <mat-calendar #calendarjul [dateClass]="isSelected" (selectedChange)="onSelect($event, calendarjul)">
                 </mat-calendar>
             </div>
         </div>
         <div class="col-sm col-md-3 col-lg-3">
             <div class="calendar-wrapper">
-                <mat-calendar #calendaraug [dateClass]="isSelectedAug" (selectedChange)="onSelect($event, calendaraug, augSelected)" [minDate]="minAug" [maxDate]="maxAug">
+                <mat-calendar #calendaraug [dateClass]="isSelected" (selectedChange)="onSelect($event, calendaraug)">
                 </mat-calendar>
             </div>
         </div>
@@ -62,25 +78,25 @@
     <div class="row mt-2 mb-2 mr-5 ml-5">
         <div class="col-sm col-md-3 col-lg-3 pr-3 pl-3">
             <div class="calendar-wrapper">
-                <mat-calendar #calendarsep [dateClass]="isSelectedSep" (selectedChange)="onSelect($event, calendarsep, sepSelected)" [minDate]="minSep" [maxDate]="maxSep">
+                <mat-calendar #calendarsep [dateClass]="isSelected" (selectedChange)="onSelect($event, calendarsep)">
                 </mat-calendar>
             </div>
         </div>
         <div class="col-sm col-md-3 col-lg-3">
             <div class="calendar-wrapper">
-                <mat-calendar #calendaroct [dateClass]="isSelectedOct" (selectedChange)="onSelect($event, calendaroct, octSelected)" [minDate]="minOct" [maxDate]="maxOct">
+                <mat-calendar #calendaroct [dateClass]="isSelected" (selectedChange)="onSelect($event, calendaroct)">
                 </mat-calendar>
             </div>
         </div>
         <div class="col-sm col-md-3 col-lg-3">
             <div class="calendar-wrapper">
-                <mat-calendar #calendarnov [dateClass]="isSelectedNov" (selectedChange)="onSelect($event, calendarnov, novSelected)" [minDate]="minNov" [maxDate]="maxNov">
+                <mat-calendar #calendarnov [dateClass]="isSelected" (selectedChange)="onSelect($event, calendarnov)">
                 </mat-calendar>
             </div>
         </div>
         <div class="col-sm col-md-3 col-lg-3">
             <div class="calendar-wrapper">
-                <mat-calendar #calendardec [dateClass]="isSelectedDec" (selectedChange)="onSelect($event, calendardec, decSelected)" [minDate]="minDec" [maxDate]="maxDec">
+                <mat-calendar #calendardec [dateClass]="isSelected" (selectedChange)="onSelect($event, calendardec)">
                 </mat-calendar>
             </div>
         </div>

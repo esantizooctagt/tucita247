@@ -35,8 +35,8 @@ export class BusinessOpeComponent implements OnInit {
     return this.businessForm.controls;
   }
 
-  links = [{label:'Opening hours',link:'/businessOpe'}, {label:'Special days',link:'/businessDays'}];
-  activeLink = this.links[1];
+  links = [{label:'Opening hours',link:'/businessope',active:1}, {label:'Special days',link:'/businessdays',active:0}];
+  activeLink = this.links[0];
   background: ThemePalette = undefined;
 
   constructor(
