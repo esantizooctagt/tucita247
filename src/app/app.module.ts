@@ -71,8 +71,6 @@ import { PhoneMaskDirective } from '@shared/phone-mask.directive';
 
 import { AgmCoreModule } from '@agm/core';
 import { PhonePipe } from '@shared/phone.pipe';
-import { QuickCheckinComponent } from './modules/quick-checkin/quick-checkin.component';
-import { ScheduleComponent } from './modules/schedule/schedule.component';
 import { AppoDialogComponent } from './shared/appo-dialog/appo-dialog.component';
 import { ShowappoDialogComponent } from './shared/showappo-dialog/showappo-dialog.component';
 import { DatePipe } from '@angular/common';
@@ -95,10 +93,8 @@ import { DatePipe } from '@angular/common';
     UserlocComponent,
     PollComponent,
     PollListComponent,
-    QuickCheckinComponent,
     SurveyComponent,
     SurveyListComponent,
-    ScheduleComponent,
     AppoDialogComponent,
     ShowappoDialogComponent
   ],

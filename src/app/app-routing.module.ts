@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '@modules/authentication/guards/auth.guard';
 
 /**Main Components**/
-import { MainNavComponent, NotFoundComponent, LoginComponent, UsersComponent, ClientsComponent, DashboardComponent, ServicesComponent, ProfileComponent, BusinessComponent, CategoriesComponent, ReportsComponent, RolesComponent, HelpComponent, ResetComponent, VerificationComponent, ForgotpassComponent, HomeComponent, HostComponent, UserlocComponent, PollsComponent, PollRespComponent, QuickCheckinComponent, SurveysComponent, SurveyRespComponent, LandingComponent, ScheduleComponent, TimeComponent } from '@modules/index';
+import { MainNavComponent, NotFoundComponent, LoginComponent, UsersComponent, ClientsComponent, DashboardComponent, ServicesComponent, ProfileComponent, BusinessComponent, CategoriesComponent, ReportsComponent, RolesComponent, HelpComponent, ResetComponent, VerificationComponent, ForgotpassComponent, HomeComponent, HostComponent, UserlocComponent, PollsComponent, PollRespComponent, QuickCheckinComponent, SurveysComponent, SurveyRespComponent, LandingComponent, ScheduleComponent, TimeComponent, BusinessOpeComponent, BusinessDaysComponent, LocationOpeComponent, LocationDaysComponent, ProviderOpeComponent, ProviderDaysComponent } from '@modules/index';
 
 const routes: Routes = [
   {
@@ -26,12 +26,12 @@ const routes: Routes = [
       { path: 'roles', component: RolesComponent, canActivate: [AuthGuard] },
       { path: 'schedule', component: ScheduleComponent, canActivate: [AuthGuard] },
       { path: 'time', component: TimeComponent, canActivate: [AuthGuard] },
-      // { path: 'company-ope-hours', component: CompanyOpeHoursComponent, canActivate: [AuthGuard] },
-      // { path: 'company-spec-days', component: CompanySpecDaysComponent, canActivate: [AuthGuard] },
-      // { path: 'location-ope-hours', component: LocationOpeHoursComponent, canActivate: [AuthGuard] },
-      // { path: 'location-spec-days', component: LocationSpecDaysComponent, canActivate: [AuthGuard] },
-      // { path: 'provider-ope-hours', component: ProviderOpeHoursComponent, canActivate: [AuthGuard] },
-      // { path: 'provider-spec-days', component: ProviderSpecDaysComponent, canActivate: [AuthGuard] },
+      { path: 'businessOpe', component: BusinessOpeComponent, canActivate: [AuthGuard] },
+      { path: 'businessDays', component: BusinessDaysComponent, canActivate: [AuthGuard] },
+      { path: 'locationOpe', component: LocationOpeComponent, canActivate: [AuthGuard] },
+      { path: 'locationDays', component: LocationDaysComponent, canActivate: [AuthGuard] },
+      { path: 'providerOpe', component: ProviderOpeComponent, canActivate: [AuthGuard] },
+      { path: 'providerDays', component: ProviderDaysComponent, canActivate: [AuthGuard] },
       { path: 'help', component: HelpComponent, canActivate: [AuthGuard] }
     ]
   },
@@ -101,6 +101,12 @@ export const routingComponents = [
   HomeComponent,
   HostComponent,
   TimeComponent,
+  BusinessOpeComponent,
+  BusinessDaysComponent,
+  LocationOpeComponent,
+  LocationDaysComponent,
+  ProviderOpeComponent,
+  ProviderDaysComponent,
   ScheduleComponent,
   QuickCheckinComponent
 ]

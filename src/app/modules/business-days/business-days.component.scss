@@ -1,0 +1,14 @@
+:host ::ng-deep mat-calendar mat-calendar-header .mat-calendar-header{
+    display: none;
+}
+:host ::ng-deep .mat-calendar-body-cell.selected
+{
+  background-color:#FF4F00!important;
+  border-radius: 50%;
+}
+.mat-tab-label-active{
+  color: #000 !important;
+}
+.mat-tab-link{
+  color: rgba(0, 0, 0, 0.87) !important;
+}
