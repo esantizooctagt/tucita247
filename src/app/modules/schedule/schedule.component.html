@@ -2,10 +2,13 @@
     <ng-container *ngIf="operationHours$ | async"></ng-container>
     <div class="row mt-2 mb-2">
         <mat-form-field class="col-md-4 selection-line">
-            <mat-select name="locations" [(value)]="locationData" (selectionChange)="onSelectLocation($event)"> 
-                <mat-option *ngFor="let item of locationData$ | async" [value]="item">
+            <mat-select name="locations" [(value)]="locationData" (selectionChange)="onSelectLocation($event)">
+                <mat-optgroup *ngFor="let item of locationData$ | async">
                     {{item.Name}}
-                </mat-option>
+                    <mat-option *ngFor="let serv of item.Services" [value]="serv.ServiceId">
+                        {{serv.Name}}
+                    </mat-option>
+                </mat-optgroup>
             </mat-select>
         </mat-form-field>
     </div>
@@ -65,7 +68,7 @@
                             <button mat-icon-button (click)="newAppo(item.Time, monday, 1)">
                                 <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
                             </button>
-                            <button mat-icon-button (click)="cancelTime(item.Time, 1)">
+                            <button mat-icon-button (click)="cancelTime(item.Time24H, monday)">
                                 <mat-icon class="action-enabled" svgIcon="cancel02"></mat-icon>
                             </button>
                             <button mat-icon-button (click)="expandTime(item.Time24H, monday)">
@@ -95,7 +98,7 @@
                             <button mat-icon-button (click)="newAppo(item.Time, tuesday, 2)">
                                 <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
                             </button>
-                            <button mat-icon-button (click)="cancelTime(item.Time, 2)">
+                            <button mat-icon-button (click)="cancelTime(item.Time24H, tuesday)">
                                 <mat-icon class="action-enabled" svgIcon="cancel02"></mat-icon>
                             </button>
                             <button mat-icon-button (click)="expandTime(item.Time24H, tuesday)">
@@ -125,7 +128,7 @@
                             <button mat-icon-button (click)="newAppo(item.Time, wednesday, 3)">
                                 <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
                             </button>
-                            <button mat-icon-button (click)="cancelTime(item.Time, 3)">
+                            <button mat-icon-button (click)="cancelTime(item.Time24H, wednesday)">
                                 <mat-icon class="action-enabled" svgIcon="cancel02"></mat-icon>
                             </button>
                             <button mat-icon-button (click)="expandTime(item.Time24H, wednesday)">
@@ -155,7 +158,7 @@
                             <button mat-icon-button (click)="newAppo(item.Time, thursday, 4)">
                                 <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
                             </button>
-                            <button mat-icon-button (click)="cancelTime(item.Time, 4)">
+                            <button mat-icon-button (click)="cancelTime(item.Time24H, thursday)">
                                 <mat-icon class="action-enabled" svgIcon="cancel02"></mat-icon>
                             </button>
                             <button mat-icon-button (click)="expandTime(item.Time24H, thursday)">
@@ -185,7 +188,7 @@
                             <button mat-icon-button (click)="newAppo(item.Time, friday, 5)">
                                 <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
                             </button>
-                            <button mat-icon-button (click)="cancelTime(item.Time, 5)">
+                            <button mat-icon-button (click)="cancelTime(item.Time24H, friday)">
                                 <mat-icon class="action-enabled" svgIcon="cancel02"></mat-icon>
                             </button>
                             <button mat-icon-button (click)="expandTime(item.Time24H, friday)">
@@ -215,7 +218,7 @@
                             <button mat-icon-button (click)="newAppo(item.Time, saturday, 6)">
                                 <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
                             </button>
-                            <button mat-icon-button (click)="cancelTime(item.Time, 6)">
+                            <button mat-icon-button (click)="cancelTime(item.Time24H, saturday)">
                                 <mat-icon class="action-enabled" svgIcon="cancel02"></mat-icon>
                             </button>
                             <button mat-icon-button (click)="expandTime(item.Time24H, saturday)">
@@ -245,7 +248,7 @@
                             <button mat-icon-button (click)="newAppo(item.Time, sunday, 7)">
                                 <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
                             </button>
-                            <button mat-icon-button (click)="cancelTime(item.Time, 7)">
+                            <button mat-icon-button (click)="cancelTime(item.Time24H, sunday)">
                                 <mat-icon class="action-enabled" svgIcon="cancel02"></mat-icon>
                             </button>
                             <button mat-icon-button (click)="expandTime(item.Time24H, sunday)">

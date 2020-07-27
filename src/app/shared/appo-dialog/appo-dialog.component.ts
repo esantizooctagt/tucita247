@@ -108,7 +108,8 @@ export class AppoDialogComponent implements OnInit {
       Disability: (this.clientForm.value.Disability == null ? '': this.clientForm.value.Disability),
       Purpose: this.clientForm.value.Purpose.toString(),
       Guests: this.clientForm.value.Guests,
-      Status: 1
+      Status: 1,
+      Type: 1
     }
     var spinnerRef = this.spinnerService.start("Adding Appointment...");
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(

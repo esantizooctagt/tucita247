@@ -77,6 +77,11 @@ export class AppointmentService {
                     .pipe(catchError(this.errorHandler));
   }
 
+  putCancelAppos(businessId, locationId, serviceId, appoDate) {
+    return this.http.put(this.apiURL + '/appointment/' + businessId + '/' + locationId + '/' + serviceId + '/' + appoDate, '')
+                    .pipe(catchError(this.errorHandler));
+  }
+
   getMessages(appointmentId, type): Observable<any[]> {
     return this.http.get<any[]>(this.apiURL + '/appointment/messages/' + appointmentId + '/' + type)
                     .pipe(catchError(this.errorHandler));
@@ -87,8 +92,8 @@ export class AppointmentService {
                     .pipe(catchError(this.errorHandler))
   }
 
-  getOperationHours(businessId, locationId, initDay){
-    return this.http.get<any>(this.apiURL + '/appointment/opeHours/' + businessId + '/' + locationId + '/' + initDay)
+  getOperationHours(businessId, locationId, serviceId, initDay){
+    return this.http.get<any>(this.apiURL + '/appointment/opeHours/' + businessId + '/' + locationId + '/' + serviceId + '/' + initDay)
                     .pipe(catchError(this.errorHandler));
   }
 

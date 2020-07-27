@@ -15,6 +15,35 @@
         <div *ngIf="isAdmin">
           <mat-divider></mat-divider>
           <a mat-list-item class="item-list">{{ 'SETTINGS'}}</a>
+          <mat-accordion multi="true" [displayMode]="displayMode">
+            <mat-expansion-panel class="no-shadow">
+              <mat-expansion-panel-header fxLayout="row" [expandedHeight]="expandHeight" [collapsedHeight]="collapseHeight">
+                <mat-panel-title>
+                  Time Settings
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-nav-list class="ml-0" dense>
+                <mat-list-item class="submenu-item">
+                  <a [routerLink]="['/company-ope-hours']" class="value-submenu-item">Company opening hours</a>
+                </mat-list-item>
+                <mat-list-item class="submenu-item">
+                  <a [routerLink]="['/company-spec-days']" class="value-submenu-item">Company special days</a>
+                </mat-list-item>
+                <mat-list-item class="submenu-item">
+                  <a [routerLink]="['/location-ope-hours']" class="value-submenu-item">Location opening hours</a>
+                </mat-list-item>
+                <mat-list-item class="submenu-item">
+                  <a [routerLink]="['/location-spec-days']" class="value-submenu-item">Location special days</a>
+                </mat-list-item>
+                <mat-list-item class="submenu-item">
+                  <a [routerLink]="['/provider-ope-hours']" class="value-submenu-item">Provider opening hours</a>
+                </mat-list-item>
+                <mat-list-item class="submenu-item">
+                  <a [routerLink]="['/provider-spec-days']" class="value-submenu-item">Provider special days</a>
+                </mat-list-item>
+              </mat-nav-list>
+            </mat-expansion-panel>
+          </mat-accordion>
           <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/company']" routerLinkActive="menu-active">{{ 'Company'}}</a>
           <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/users']" routerLinkActive="menu-active">{{ 'Users' }}</a>
           <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/userloc']" routerLinkActive="menu-active">{{ 'User Locations' }}</a>

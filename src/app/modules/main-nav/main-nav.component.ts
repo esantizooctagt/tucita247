@@ -28,6 +28,12 @@ export class MainNavComponent implements OnInit {
   resetToken$: Observable<any>;
   apps$: Observable<Access[]>;
 
+  opened = true;
+  over = 'side';
+  expandHeight = '42px';
+  collapseHeight = '42px';
+  displayMode = 'flat';
+  
   readonly imgPath = environment.bucket;
 
   users: User[] = [];
