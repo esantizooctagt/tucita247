@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatCalendar } from '@angular/material/datepicker/calendar';
+import { ThemePalette } from '@angular/material/core';
 
 @Component({
   selector: 'app-time',
@@ -7,8 +8,6 @@ import { MatCalendar } from '@angular/material/datepicker/calendar';
   styleUrls: ['./time.component.scss']
 })
 export class TimeComponent implements OnInit {
-  // @ViewChild('calendar') calendar: MatCalendar<Moment>;
-  // selectedDate: Moment;
   minJan = new Date(2020, 0, 1);
   maxJan = new Date(2020, 0, 31);
   minFeb = new Date(2020, 1, 1);
@@ -47,6 +46,10 @@ export class TimeComponent implements OnInit {
   octSelected: any[] = [];
   novSelected: any[] = [];
   decSelected: any[] = [];
+
+  links = [{label:'First',link:'/dashboard'}, {label:'Second',link:'/schedule'}];
+  activeLink = this.links[0];
+  background: ThemePalette = undefined;
   constructor() { }
 
   ngOnInit(): void {
