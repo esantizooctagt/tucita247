@@ -43,6 +43,11 @@ export class BusinessService {
                     .pipe(catchError(this.errorHandler));
   }
 
+  updateDaysOff(businessId, locationId, serviceId, dateOpe, tipo){
+    return this.http.put(this.apiURL + '/business/daysoff/' + businessId + '/' + locationId + '/' + serviceId + '/' + dateOpe + '/' + tipo, '')
+                    .pipe(catchError(this.errorHandler));
+  }
+
   updateBusiness(businessId, dataForm) {
     return this.http.put(this.apiURL + '/business/' + businessId, dataForm)
                     .pipe(catchError(this.errorHandler));

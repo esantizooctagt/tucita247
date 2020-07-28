@@ -3,6 +3,10 @@ import { ThemePalette } from '@angular/material/core';
 import { MatCalendar } from '@angular/material/datepicker/calendar';
 import { BusinessService } from '@app/services';
 import { AuthService } from '@app/core/services';
+import { catchError, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { SpinnerService } from '@app/shared/spinner.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-business-days',
@@ -26,19 +30,11 @@ export class BusinessDaysComponent implements OnInit {
   currYear: number = 0;
   navYear: number = 0;
   currYearAct: number = 0;
+  businessId: string = '';
+  daysOff$: Observable<any>;
+  businessData: any;
 
   dateSelected: any[] = [];
-  // febSelected: any[] = [];
-  // marSelected: any[] = [];
-  // aprSelected: any[] = [];
-  // maySelected: any[] = [];
-  // junSelected: any[] = [];
-  // julSelected: any[] = [];
-  // augSelected: any[] = [];
-  // sepSelected: any[] = [];
-  // octSelected: any[] = [];
-  // novSelected: any[] = [];
-  // decSelected: any[] = [];
 
   links = [{label:'Opening hours',link:'/businessope',active:0}, {label:'Special days',link:'/businessdays',active:1}];
   activeLink = this.links[0];
@@ -46,20 +42,41 @@ export class BusinessDaysComponent implements OnInit {
   
   constructor(
     private authService: AuthService,
-    private businessService: BusinessService
+    private _snackBar: MatSnackBar,
+    private businessService: BusinessService,
+    private spinnerService: SpinnerService
     
   ) { }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 2000,
+    });
+  }
 
   ngOnInit(): void {
     let dateYear = new Date();
     this.currYear = dateYear.getFullYear();
     this.currYearAct = 1;
-  }
+    this.businessId = this.authService.businessId();
 
-  ngAfterViewInit(){
-    setTimeout(() => {
-      this.setMoths(this.currYear);
-    }, 1);
+    var spinnerRef = this.spinnerService.start("Loading Special Days...");
+    this.daysOff$ = this.businessService.getDaysOff(this.businessId, this.currYear).pipe(
+      map((res: any) => {
+        if (res.Code == 200){
+          this.businessData = JSON.parse(res.Business);
+          this.dateSelected = this.businessData.DaysOff;
+          setTimeout(() => {
+            this.setMoths(this.currYear);
+          }, 1);
+        }
+        this.spinnerService.stop(spinnerRef);
+      }),
+      catchError(err => {
+        this.spinnerService.stop(spinnerRef);
+        return err;
+      })
+    );
   }
 
   setMoths(selYear: number){
@@ -103,90 +120,62 @@ export class BusinessDaysComponent implements OnInit {
 
   isSelected = (event: any) => {
     const date = event.getFullYear() + "-" + ("00" + (event.getMonth() + 1)).slice(-2) + "-" + ("00" + event.getDate()).slice(-2);
-    
     return this.dateSelected.find(x => x == date) ? "selected" : null;
   };
-
-  // isSelectedFeb = (event: any) => {
-  //   const date = event.getFullYear() + "-" + ("00" + (event.getMonth() + 1)).slice(-2) + "-" + ("00" + event.getDate()).slice(-2);
-    
-  //   return this.febSelected.find(x => x == date) ? "selected" : null;
-  // };
-
-  // isSelectedMar = (event: any) => {
-  //   const date = event.getFullYear() + "-" + ("00" + (event.getMonth() + 1)).slice(-2) + "-" + ("00" + event.getDate()).slice(-2);
-    
-  //   return this.marSelected.find(x => x == date) ? "selected" : null;
-  // };
-
-  // isSelectedApr = (event: any) => {
-  //   const date = event.getFullYear() + "-" + ("00" + (event.getMonth() + 1)).slice(-2) + "-" + ("00" + event.getDate()).slice(-2);
-    
-  //   return this.aprSelected.find(x => x == date) ? "selected" : null;
-  // };
-
-  // isSelectedMay = (event: any) => {
-  //   const date = event.getFullYear() + "-" + ("00" + (event.getMonth() + 1)).slice(-2) + "-" + ("00" + event.getDate()).slice(-2);
-    
-  //   return this.maySelected.find(x => x == date) ? "selected" : null;
-  // };
-
-  // isSelectedJun = (event: any) => {
-  //   const date = event.getFullYear() + "-" + ("00" + (event.getMonth() + 1)).slice(-2) + "-" + ("00" + event.getDate()).slice(-2);
-    
-  //   return this.junSelected.find(x => x == date) ? "selected" : null;
-  // };
-
-  // isSelectedJul = (event: any) => {
-  //   const date = event.getFullYear() + "-" + ("00" + (event.getMonth() + 1)).slice(-2) + "-" + ("00" + event.getDate()).slice(-2);
-    
-  //   return this.julSelected.find(x => x == date) ? "selected" : null;
-  // };
-
-  // isSelectedAug = (event: any) => {
-  //   const date = event.getFullYear() + "-" + ("00" + (event.getMonth() + 1)).slice(-2) + "-" + ("00" + event.getDate()).slice(-2);
-    
-  //   return this.augSelected.find(x => x == date) ? "selected" : null;
-  // };
-
-  // isSelectedSep = (event: any) => {
-  //   const date = event.getFullYear() + "-" + ("00" + (event.getMonth() + 1)).slice(-2) + "-" + ("00" + event.getDate()).slice(-2);
-    
-  //   return this.sepSelected.find(x => x == date) ? "selected" : null;
-  // };
-
-  // isSelectedOct = (event: any) => {
-  //   const date = event.getFullYear() + "-" + ("00" + (event.getMonth() + 1)).slice(-2) + "-" + ("00" + event.getDate()).slice(-2);
-    
-  //   return this.octSelected.find(x => x == date) ? "selected" : null;
-  // };
-
-  // isSelectedNov = (event: any) => {
-  //   const date = event.getFullYear() + "-" + ("00" + (event.getMonth() + 1)).slice(-2) + "-" + ("00" + event.getDate()).slice(-2);
-    
-  //   return this.novSelected.find(x => x == date) ? "selected" : null;
-  // };
-
-  // isSelectedDec = (event: any) => {
-  //   const date = event.getFullYear() + "-" + ("00" + (event.getMonth() + 1)).slice(-2) + "-" + ("00" + event.getDate()).slice(-2);
-    
-  //   return this.decSelected.find(x => x == date) ? "selected" : null;
-  // };
 
   onSelect(event: any, calendar: any) {
     const date = event.getFullYear() + "-" + ("00" + (event.getMonth() + 1)).slice(-2) + "-" + ("00" + event.getDate()).slice(-2);
     const index = this.dateSelected.findIndex(x => x == date);
     
-    if (index < 0) this.dateSelected.push(date);
-    else this.dateSelected.splice(index, 1);
-    
+    if (index < 0) {
+      this.dateSelected.push(date);
+      // add special days
+      this.daysOff$ = this.businessService.updateDaysOff(this.businessId, '_', '_', date, 'add').pipe(
+        map((res: any) => {
+          if (res.Code == 200){
+            this.businessData = JSON.parse(res.Business);
+            this.dateSelected = this.businessData.DaysOff;
+            setTimeout(() => {
+              this.setMoths(this.currYear);
+            }, 1);
+          }
+          this.openSnackBar("Day added successfully","Special Days");
+        }),
+        catchError(err => {
+          this.openSnackBar("Something goes wrong, try again","Check-in");
+          return err;
+        })
+      );
+    } 
+    else { 
+      this.dateSelected.splice(index, 1);
+      // remove special days
+    }  
     calendar.updateTodaysDate();
   }
 
   nextYear(){
     this.navYear = (this.navYear == 0 ? this.currYear + 1 : this.navYear + 1);
     if (this.navYear == this.currYear) { this.currYearAct = 1; } else { this.currYearAct = 0;}
-    this.setMoths(this.navYear);
+
+    var spinnerRef = this.spinnerService.start("Loading Special Days...");
+    this.daysOff$ = this.businessService.getDaysOff(this.businessId, this.navYear).pipe(
+      map((res: any) => {
+        this.dateSelected = [];
+        if (res.Code == 200){
+          this.businessData = JSON.parse(res.Business);
+          this.dateSelected = this.businessData.DaysOff;
+        }
+        setTimeout(() => {
+          this.setMoths(this.navYear);
+        }, 1);
+        this.spinnerService.stop(spinnerRef);
+      }),
+      catchError(err => {
+        this.spinnerService.stop(spinnerRef);
+        return err;
+      })
+    );
   }
 
   prevYear(){
@@ -194,7 +183,25 @@ export class BusinessDaysComponent implements OnInit {
     if (this.navYear == this.currYear) {return;}
     this.navYear = this.navYear - 1;
     if (this.navYear == this.currYear) { this.currYearAct = 1; } else { this.currYearAct = 0;}
-    this.setMoths(this.navYear);
+
+    var spinnerRef = this.spinnerService.start("Loading Special Days...");
+    this.daysOff$ = this.businessService.getDaysOff(this.businessId, this.navYear).pipe(
+      map((res: any) => {
+        this.dateSelected = [];
+        if (res.Code == 200){
+          this.businessData = JSON.parse(res.Business);
+          this.dateSelected = this.businessData.DaysOff;
+        }
+        setTimeout(() => {
+          this.setMoths(this.navYear);
+        }, 1);
+        this.spinnerService.stop(spinnerRef);
+      }),
+      catchError(err => {
+        this.spinnerService.stop(spinnerRef);
+        return err;
+      })
+    );
   }
 
 }
