@@ -38,8 +38,18 @@ export class BusinessService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  getDaysOff(businessId, year): Observable<any>{
-    return this.http.get<any>(this.apiURL + '/business/daysoff/' + businessId + '/' + year)
+  getDaysOff(businessId, locationId, serviceId, year): Observable<any>{
+    return this.http.get<any>(this.apiURL + '/business/daysoff/' + businessId + '/' + locationId + '/' + serviceId + '/' + year)
+                    .pipe(catchError(this.errorHandler));
+  }
+
+  getOpeningHours(businessId, locationId, serviceId): Observable<any>{
+    return this.http.get<any>(this.apiURL + '/business/openinghours/' + businessId + '/' + locationId + '/' + serviceId)
+                    .pipe(catchError(this.errorHandler));
+  }
+
+  updateOpeningHours(businessId, locationId, serviceId, dataForm){
+    return this.http.put(this.apiURL + '/business/openinghours/' + businessId + '/' + locationId + '/' + serviceId, dataForm)
                     .pipe(catchError(this.errorHandler));
   }
 

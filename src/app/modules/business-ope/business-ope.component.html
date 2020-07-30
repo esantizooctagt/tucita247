@@ -7,8 +7,31 @@
                [active]="link.active"> {{link.label}} </a>
           </nav>
     </div>
+    <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="locationId != '_' && serviceId == '_'">
+        <div class="col-md-6 col-lg-6">
+            <mat-select name="locations" [(value)]="locationId" (selectionChange)="onLocationChange($event)">
+                <mat-option *ngFor="let item of locationData" [value]="item.LocationId">
+                    {{item.Name}}
+                </mat-option>
+            </mat-select>
+        </div>
+    </div>
+    <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="serviceId != '_'">
+        <div class="col-md-6 col-lg-6">
+            <mat-select name="services" [(value)]="serviceId" (selectionChange)="onServiceChange($event)">
+                <mat-optgroup *ngFor="let item of serviceData">
+                    {{item.Name}}
+                    <mat-option *ngFor="let serv of item.Services" [value]="item.LocationId + '#' + serv.ServiceId">
+                        {{serv.Name}}
+                    </mat-option>
+                </mat-optgroup>
+            </mat-select>
+        </div>
+    </div>
     <div class="row mt-2 mb-2 mr-5 ml-5">
         <div class="col-md-10 mt-3 mb-3">
+            <ng-container *ngIf="business$ | async"></ng-container>
+            <ng-container *ngIf="opeHoursSave$ | async"></ng-container>
             <form [formGroup]="businessForm">
                 <mat-label class="">Operation Hours</mat-label>
                 <div class="row pb-2">
@@ -145,6 +168,7 @@
                         Delete</button>
                 </div>
             </form>
+            <button class="btn-save mr-3 mt-2" mat-flat-button color="primary" [disabled]="!businessForm.valid" type="submit" (click)="onSubmit()">Save</button>
         </div>
     </div>
 </div>

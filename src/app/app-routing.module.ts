@@ -28,10 +28,10 @@ const routes: Routes = [
       { path: 'time', component: TimeComponent, canActivate: [AuthGuard] },
       { path: 'businessope', component: BusinessOpeComponent, canActivate: [AuthGuard] },
       { path: 'businessdays', component: BusinessDaysComponent, canActivate: [AuthGuard] },
-      { path: 'locationope', component: LocationOpeComponent, canActivate: [AuthGuard] },
-      { path: 'locationdays', component: LocationDaysComponent, canActivate: [AuthGuard] },
-      { path: 'providerope', component: ProviderOpeComponent, canActivate: [AuthGuard] },
-      { path: 'providerdays', component: ProviderDaysComponent, canActivate: [AuthGuard] },
+      { path: 'locationope/:locations', component: BusinessOpeComponent, canActivate: [AuthGuard] },
+      { path: 'locationdays/:locations', component: BusinessDaysComponent, canActivate: [AuthGuard] },
+      { path: 'providerope/:provider', component: BusinessOpeComponent, canActivate: [AuthGuard] },
+      { path: 'providerdays/:provider', component: BusinessDaysComponent, canActivate: [AuthGuard] },
       { path: 'help', component: HelpComponent, canActivate: [AuthGuard] }
     ]
   },

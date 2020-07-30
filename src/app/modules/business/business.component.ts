@@ -1586,7 +1586,6 @@ export class BusinessComponent implements OnInit {
     if (!this.businessForm.valid){
       return;
     }
-    console.log("entro business");
     // if (this.businessForm.touched){
     let countryId = this.businessForm.value.Country;
     let mon: any[] = [];
