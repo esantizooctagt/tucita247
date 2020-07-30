@@ -38,6 +38,11 @@ export class BusinessService {
                     .pipe(catchError(this.errorHandler));
   }
 
+  getCountry(businessId): Observable<any>{
+    return this.http.get<any>(this.apiURL + '/business/country' + businessId)
+                    .pipe(catchError(this.errorHandler));
+  }
+
   getDaysOff(businessId, locationId, serviceId, year): Observable<any>{
     return this.http.get<any>(this.apiURL + '/business/daysoff/' + businessId + '/' + locationId + '/' + serviceId + '/' + year)
                     .pipe(catchError(this.errorHandler));
