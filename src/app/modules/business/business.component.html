@@ -258,7 +258,7 @@
             </form>
             <ng-container *ngIf="imgBusiness$ | async"></ng-container>
             <div>
-                <button class="mr-3 mt-2" mat-flat-button color="primary" [disabled]="businessForm.invalid"
+                <button class="button-save mr-3 mt-2" mat-flat-button color="primary" [disabled]="businessForm.invalid"
                     (click)="onSubmitBusiness()">Save</button>
             </div>
         </div>

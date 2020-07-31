@@ -1,0 +1,47 @@
+<div class="pl-0 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
+    <h3>SERVICE PROVIDERS</h3>
+</div>
+<ng-container *ngIf="provider$ | async"></ng-container>
+<ng-container *ngIf="saveProvider$ | async"></ng-container>
+<div class="row p-0 m-0">
+    <mat-card class="col-sm col-md col-lg-7">
+        <form [formGroup]="providerForm" (ngSubmit)="onSubmit()" class="mt-4">
+            <div class="form-field pl-3 pr-3">
+                <mat-form-field hintLabel="Name">
+                    <input matInput #Name placeholder="Name" maxlength="100" minlength="3" formControlName="Name"
+                        [errorStateMatcher]="confirmValidParentMatcher" required>
+                    <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{getErrorMessage('Name')}}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="form-field pl-3 pr-3">
+                <mat-form-field hintLabel="Location">
+                    <mat-select formControlName="LocationId">
+                        <mat-option *ngFor="let res of locs$ | async" [value]="res.LocationId">
+                            {{res.Name}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="f.LocationId.invalid && f.LocationId.touched">{{getErrorMessage('LocationId')}}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="form-field pl-3 pr-3">
+                <mat-form-field hintLabel="Customer per bucket">
+                    <input matInput #Name placeholder="Customer per bucket" maxlength="3" minlength="1" formControlName="CustomerPerBucket"
+                        [errorStateMatcher]="confirmValidParentMatcher" required>
+                    <mat-error *ngIf="f.CustomerPerBucket.invalid && f.CustomerPerBucket.touched">{{getErrorMessage('CustomerPerBucket')}}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="form-field-check ml-3 pr-3"
+                *ngIf="providerForm.value.ServiceId !== '' && providerForm.value.ServiceId !== null">
+                <mat-checkbox formControlName="Status">Status</mat-checkbox>
+            </div>
+            <div>
+                <button mat-flat-button color="primary" id="save" [disabled]="!providerForm.valid"
+                    class="ml-3 mr-3 mt-2">Save</button>
+                <button mat-flat-button color="accent" id="cancel" type="button" (click)="onCancel()"
+                    class="mt-2">Cancel</button>
+            </div>
+            <!-- {{ providerForm.value | json }} -->
+        </form>
+    </mat-card>
+</div>

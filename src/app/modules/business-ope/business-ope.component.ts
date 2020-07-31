@@ -135,7 +135,6 @@ export class BusinessOpeComponent implements OnInit {
       tap((res: any) => {
         if (res.Code == 200){
           if (this.locationId == "_"){
-            console.log(res.Data);
             var opeHour = JSON.parse(res.Data[0].OperationHours);
             this.businessForm.setValue({
               BusinessId: res.Data[0].BusinessId,

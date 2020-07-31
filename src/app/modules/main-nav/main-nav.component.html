@@ -9,6 +9,7 @@
       <mat-nav-list color="primary">
         <a class="list-item-business" mat-list-item pt-2 mb-2>{{businessName}}</a>
         <mat-divider></mat-divider>
+        <a class="list-item" mat-list-item [routerLink]="['/welcome']" routerLinkActive="menu-active">Welcome</a>
         <ng-container class="" *ngFor="let item of apps$ | async">
           <a class="list-item" *ngIf="item.Active == '1'" mat-list-item [routerLink]="['/'+item.Route]" routerLinkActive="menu-active">{{ item.Name }}</a>
         </ng-container>

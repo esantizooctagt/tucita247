@@ -1,0 +1,110 @@
+.panel-array{
+    border: 1px solid #c9c9c9;
+}
+mat-select{
+    font-family: Montserrat;
+}
+mat-option{
+    font-family: Montserrat;
+}
+mat-icon{
+    font-size: 45px;
+}
+.qty-icon{
+    font-size: 20px;
+    position: absolute;
+    top: 30px;
+    right: -100px;
+}
+.icon-inactive{
+    color: #898989;
+    height: 40px;
+    width: 40px;
+}
+.icon-active{
+    color: #FF4F00;
+    height: 40px;
+    width: 40px;
+}
+.icon-smile{
+    color: #FF4F00;
+}
+.angry-img{
+    height: 90px;
+    background: url('../../../../assets/images/angry.png');
+    width: 90px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin: 0 auto;
+}
+.happy-img{
+    height: 90px;
+    background: url('../../../../assets/images/happy.png');
+    width: 90px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin: 0 auto;
+}
+.neutral-img{
+    height: 90px;
+    background: url('../../../../assets/images/neutral.png');
+    width: 90px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin: 0 auto;
+}
+mat-card{
+    margin-left:0px;
+    border-radius: 0px;
+    box-shadow: -2px 2px 6px rgba(0, 0, 0, 0.16) !important;
+}
+:host ::ng-deep .mat-form-field {
+    .mat-form-field-wrapper {
+        padding-bottom: 0;
+        .mat-form-field-underline {
+            position: initial !important;
+            display: block;
+            margin-top: -1px;
+        }
+        .mat-form-field-subscript-wrapper,
+        .mat-form-field-ripple {
+            position: initial !important;
+            display: table;
+        }
+        .mat-form-field-subscript-wrapper {
+            min-height: calc(1em + 1px);
+        }
+    }
+}
+:host::ng-deep .mat-form-field-underline {
+    background-color: #B6B6B6 !important;
+}
+@media only screen and (max-width: 600px) {
+    mat-card{
+        margin-left: 0px;
+    }
+    .header-route{
+        padding-left: 0px;
+    }
+    :host ::ng-deep .mat-form-field {
+        .mat-form-field-wrapper {
+            padding-bottom: 0;
+            .mat-form-field-underline {
+                position: initial !important;
+                display: block;
+                margin-top: -1px;
+            }
+            .mat-form-field-subscript-wrapper,
+            .mat-form-field-ripple {
+                position: initial !important;
+                display: table;
+            }
+            .mat-form-field-subscript-wrapper {
+                min-height: calc(1em + 1px);
+            }
+        }
+    }
+}

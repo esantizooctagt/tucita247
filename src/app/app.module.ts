@@ -74,6 +74,8 @@ import { PhonePipe } from '@shared/phone.pipe';
 import { AppoDialogComponent } from './shared/appo-dialog/appo-dialog.component';
 import { ShowappoDialogComponent } from './shared/showappo-dialog/showappo-dialog.component';
 import { DatePipe } from '@angular/common';
+import { ProviderComponent } from './modules/providers/provider/provider.component';
+import { ProviderListComponent } from './modules/providers/provider-list/provider-list.component';
 
 @NgModule({
   declarations: [
@@ -96,7 +98,9 @@ import { DatePipe } from '@angular/common';
     SurveyComponent,
     SurveyListComponent,
     AppoDialogComponent,
-    ShowappoDialogComponent
+    ShowappoDialogComponent,
+    ProviderComponent,
+    ProviderListComponent
   ],
   imports: [
     BrowserModule,

@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '@modules/authentication/guards/auth.guard';
 
 /**Main Components**/
-import { MainNavComponent, NotFoundComponent, LoginComponent, UsersComponent, ClientsComponent, DashboardComponent, ServicesComponent, ProfileComponent, BusinessComponent, CategoriesComponent, ReportsComponent, RolesComponent, HelpComponent, ResetComponent, VerificationComponent, ForgotpassComponent, HomeComponent, HostComponent, UserlocComponent, PollsComponent, PollRespComponent, QuickCheckinComponent, SurveysComponent, SurveyRespComponent, LandingComponent, ScheduleComponent, BusinessOpeComponent, BusinessDaysComponent, LocationsComponent, ProvidersComponent } from '@modules/index';
+import { MainNavComponent, NotFoundComponent, LoginComponent, UsersComponent, ClientsComponent, DashboardComponent, ProfileComponent, BusinessComponent, CategoriesComponent, ReportsComponent, RolesComponent, HelpComponent, ResetComponent, VerificationComponent, ForgotpassComponent, HomeComponent, HostComponent, UserlocComponent, PollsComponent, PollRespComponent, QuickCheckinComponent, SurveysComponent, SurveyRespComponent, LandingComponent, ScheduleComponent, BusinessOpeComponent, BusinessDaysComponent, LocationsComponent, ProvidersComponent, WelcomeComponent } from '@modules/index';
 
 const routes: Routes = [
   {
@@ -16,9 +16,9 @@ const routes: Routes = [
       { path: 'polls', component: PollsComponent, canActivate: [AuthGuard] },
       { path: 'surveys', component: SurveysComponent, canActivate: [AuthGuard] },
       { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+      { path: 'welcome', component: WelcomeComponent, canActivate: [AuthGuard] },
       { path: 'host', component: HostComponent, canActivate: [AuthGuard] },
       { path: 'quick-checkin', component: QuickCheckinComponent, canActivate: [AuthGuard] },
-      { path: 'services', component: ServicesComponent, canActivate: [AuthGuard] },
       { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
       { path: 'company', component: BusinessComponent, canActivate: [AuthGuard] },
       { path: 'locations', component: LocationsComponent, canActivate: [AuthGuard] },
@@ -90,7 +90,6 @@ export const routingComponents = [
   UsersComponent,
   PollsComponent,
   ClientsComponent,
-  ServicesComponent,
   BusinessComponent,
   LocationsComponent,
   ProvidersComponent,
@@ -103,6 +102,7 @@ export const routingComponents = [
   HelpComponent,
   HomeComponent,
   HostComponent,
+  WelcomeComponent,
   BusinessOpeComponent,
   BusinessDaysComponent,
   ScheduleComponent,
