@@ -5,22 +5,21 @@ import { Validators, FormBuilder, FormArray } from '@angular/forms';
 import { AuthService } from '@app/core/services';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { MonitorService } from '@app/shared/monitor.service';
-import { LocationService, ProviderService } from '@app/services';
+import { ServService } from '@app/services';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-provider',
-  templateUrl: './provider.component.html',
-  styleUrls: ['./provider.component.scss']
+  selector: 'app-service',
+  templateUrl: './service.component.html',
+  styleUrls: ['./service.component.scss']
 })
-export class ProviderComponent implements OnInit {
+export class ServiceComponent implements OnInit {
   businessId: string = '';
-  locs$: Observable<any[]>;
-  provider$: Observable<any>;
-  saveProvider$: Observable<any>; 
-  providerDataList: any;
+  service$: Observable<any>;
+  saveService$: Observable<any>; 
+  serviceDataList: any;
 
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
@@ -28,21 +27,20 @@ export class ProviderComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private spinnerService: SpinnerService,
-    private providerService: ProviderService,
+    private serviceService: ServService,
     private dialog: MatDialog,
-    private data: MonitorService,
-    private locationService: LocationService
+    private data: MonitorService
   ) { }
 
   get f(){
-    return this.providerForm.controls;
+    return this.serviceForm.controls;
   }
 
-  providerForm = this.fb.group({
-    ProviderId: [''],
+  serviceForm = this.fb.group({
+    ServiceId: [''],
     Name: ['', [Validators.required, Validators.maxLength(100), Validators.minLength(3)]],
-    LocationId: ['', [Validators.required]],
-    CustomerPerBucket: ['', [Validators.required, Validators.max(999), Validators.min(1)]],
+    TimeService: ['', [Validators.required, Validators.max(999), Validators.min(1)]],
+    CustomerPerTime: ['', [Validators.required, Validators.max(999), Validators.min(1)]],
     Status: [true]
   });
 
@@ -64,41 +62,27 @@ export class ProviderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    var spinnerRef = this.spinnerService.start("Loading Service provider...");
     this.businessId = this.authService.businessId();
 
-    this.locs$ = this.locationService.getLocationsCode(this.businessId).pipe(
-      map((res: any) => {
-        if (res != null){
-          this.spinnerService.stop(spinnerRef);
-          return res.locs;
-        }
-      }),
-      catchError(err => {
-        this.spinnerService.stop(spinnerRef);
-        return throwError(err || err.message);
-      })
-    );
-
-    this.data.objectMessage.subscribe(res => this.providerDataList = res);
+    this.data.objectMessage.subscribe(res => this.serviceDataList = res);
     this.onDisplay();
   }
 
   onDisplay(){
-    if (this.providerDataList != undefined){
-      var spinnerRef = this.spinnerService.start("Loading Service provider...");
-      this.providerForm.reset({ ProviderId: '', Name: '', LocationId: '', CustomerPerBucket: '', Status: true});
-      this.provider$ = this.providerService.getProvider(this.businessId, this.providerDataList).pipe(
-        map(provider => {
-          this.providerForm.setValue({
-            ProviderId: provider.ProviderId,
-            Name: provider.Name,
-            LocationId: provider.LocationId,
-            CustomerPerBucket: provider.CustomerPerBucket,
-            Status: (provider.Status == 1 ? true : false)
+    if (this.serviceDataList != undefined){
+      var spinnerRef = this.spinnerService.start("Loading Service...");
+      this.serviceForm.reset({ ServiceId: '', Name: '', TimeService: '', CustomerPerTime: '', Status: true});
+      this.service$ = this.serviceService.getService(this.businessId, this.serviceDataList).pipe(
+        map(res => {
+          this.serviceForm.setValue({
+            ServiceId: res.ServiceId,
+            Name: res.Name,
+            TimeService: res.TimeService,
+            CustomerPerTime: res.CustomerPerTime,
+            Status: (res.Status == 1 ? true : false)
           });
           this.spinnerService.stop(spinnerRef);
-          return provider;
+          return res;
         }),
         catchError(err => {
           this.spinnerService.stop(spinnerRef);
@@ -116,42 +100,44 @@ export class ProviderComponent implements OnInit {
           this.f.Name.hasError('maxlength') ? 'Maximun length 100' :
             '';
     }
-    if (component === 'LocationId'){
-      return this.f.LocationId.hasError('required') ? 'You must select a value' :
-        '';
+    if (component === 'TimeService'){
+      return this.f.TimeService.hasError('required') ? 'You must enter a value' :
+        this.f.TimeService.hasError('min') ? 'Minimun length 1':
+          this.f.TimeService.hasError('max') ? 'Maximun length 999' :
+          '';
     }
-    if (component === 'CustomerPerBucket'){
-      return this.f.CustomerPerBucket.hasError('required') ? 'You must enter a value' :
-        this.f.CustomerPerBucket.hasError('min') ? 'Minimun length 1':
-          this.f.CustomerPerBucket.hasError('max') ? 'Maximun length 999' :
+    if (component === 'CustomerPerTime'){
+      return this.f.CustomerPerTime.hasError('required') ? 'You must enter a value' :
+        this.f.CustomerPerTime.hasError('min') ? 'Minimun length 1':
+          this.f.CustomerPerTime.hasError('max') ? 'Maximun length 999' :
           '';
     }
   }
 
   onCancel(){
-    this.providerForm.reset({ ProviderId: '', Name: '', LocationId: '', CustomerPerBucket: '', Status: true});
+    this.serviceForm.reset({ ServiceId: '', Name: '', TimeService: '', CustomerPerTime: '', Status: true});
   }
 
   onSubmit(){
-    if (this.providerForm.invalid) { return; }
+    if (this.serviceForm.invalid) { return; }
 
     let dataForm = {
-      ProviderId: this.providerForm.value.ProviderId,
+      ServiceId: this.serviceForm.value.ServiceId,
       BusinessId: this.businessId,
-      LocationId: this.providerForm.value.LocationId,
-      Name: this.providerForm.value.Name,
-      CustomerPerBucket: this.providerForm.value.CustomerPerBucket,
+      TimeService: this.serviceForm.value.TimeService,
+      Name: this.serviceForm.value.Name,
+      CustomerPerTime: this.serviceForm.value.CustomerPerTime,
       Status: 1
     }
 
-    var spinnerRef = this.spinnerService.start("Saving Service provider...");
-    this.saveProvider$ =  this.providerService.postProviders(dataForm).pipe(
+    var spinnerRef = this.spinnerService.start("Saving Service...");
+    this.saveService$ =  this.serviceService.postServices(dataForm).pipe(
       map((res:any) => {
         if (res != null){
           if (res.Code == 200){
             this.spinnerService.stop(spinnerRef);
-            this.providerForm.patchValue({ProviderId: res.ProviderId});
-            this.openDialog('Service provider', 'Saving successfully', true, false, false);
+            this.serviceForm.patchValue({ServiceId: res.ServiceId});
+            this.openDialog('Service', 'Saving successfully', true, false, false);
           } else {
             this.spinnerService.stop(spinnerRef);
             this.openDialog('Error ! ', 'Something goes wrong, try again', false, true, false);

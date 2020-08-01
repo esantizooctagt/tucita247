@@ -70,7 +70,7 @@
                             </div>
                         </div>
                     </mat-tab>
-                    <mat-tab label="Categories / Purpose">
+                    <mat-tab label="Additional Data">
                         <mat-form-field hintLabel="Categories">
                             <ng-container *ngIf="categories$ | async"></ng-container>
                             <mat-chip-list #chipCategoriesList formControlName="Categories">
@@ -107,24 +107,6 @@
                                 </mat-chip-list>
                             </mat-form-field>
                         </div>
-                        <div class="row">
-                            <mat-form-field class="col-md-12" hintLabel="Appointment Purpose">
-                                <mat-chip-list #chipApposPurpose>
-                                    <ng-container *ngIf="apposPurpose.length > 0">
-                                        <mat-chip *ngFor="let purpose of apposPurpose" [selectable]="selectable"
-                                            [removable]="removable" (removed)="removePurpose(purpose)">
-                                            {{purpose}}
-                                            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-                                        </mat-chip>
-                                    </ng-container>
-                                    <input placeholder="New Appointment Purpose..." [matChipInputFor]="chipApposPurpose"
-                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                        [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addPurpose($event)">
-                                </mat-chip-list>
-                            </mat-form-field>
-                        </div>
-                    </mat-tab>
-                    <mat-tab label="Additional Data">
                         <div class="row">
                             <ng-container *ngIf="!fBusiness.Email.value; else labelEmail">
                                 <mat-form-field class="col-md-6" hintLabel="Email format">

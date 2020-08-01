@@ -28,3 +28,4 @@ export * from './business-days/business-days.component';
 export * from './locations/locations.component';
 export * from './providers/providers.component';
 export * from './welcome/welcome.component';
+export * from './services/services.component';

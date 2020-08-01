@@ -11,19 +11,19 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { map, catchError, tap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
-import { ProviderService } from '@app/services';
+import { ServService } from '@app/services';
 
 @Component({
-  selector: 'app-provider-list',
-  templateUrl: './provider-list.component.html',
-  styleUrls: ['./provider-list.component.scss']
+  selector: 'app-service-list',
+  templateUrl: './service-list.component.html',
+  styleUrls: ['./service-list.component.scss']
 })
-export class ProviderListComponent implements OnInit {
+export class ServiceListComponent implements OnInit {
   @Input() filterValue: string;
-  @ViewChild(MatTable) providerTable :MatTable<any>;
+  @ViewChild(MatTable) serviceTable :MatTable<any>;
   
-  deleteProvider$: Observable<any>;
-  providers$: Observable<any[]>;
+  deleteService$: Observable<any>;
+  services$: Observable<any[]>;
   public onError: string='';
 
   public length: number = 0;
@@ -37,21 +37,20 @@ export class ProviderListComponent implements OnInit {
   displayedColumns = ['Name', 'Actions'];
   businessId: string = '';
   changeData: string;
-  providerData: any;
+  serviceData: any;
 
-  get fProviders(){
-    return this.providerForm.get('Providers') as FormArray;
+  get fServices(){
+    return this.serviceForm.get('Services') as FormArray;
   }
 
-  providerForm = this.fb.group({
-    Providers: this.fb.array([this.addProviders()])
+  serviceForm = this.fb.group({
+    Services: this.fb.array([this.addServices()])
   });
 
-  addProviders(): FormGroup{
+  addServices(): FormGroup{
     return this.fb.group({
-      ProviderId: [''],
+      ServiceId: [''],
       Name: ['', [Validators.required, Validators.maxLength(100), Validators.minLength(3)]],
-      LocationId: [''],
       Status: []
     });
   }
@@ -63,7 +62,7 @@ export class ProviderListComponent implements OnInit {
     private data: MonitorService,
     private spinnerService: SpinnerService,
     private dialog: MatDialog,
-    private providerService: ProviderService,
+    private serviceService: ServService,
     private matIconRegistry: MatIconRegistry
   ) { 
     this.matIconRegistry.addSvgIcon('edit',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/edit.svg'));
@@ -90,13 +89,13 @@ export class ProviderListComponent implements OnInit {
   ngOnInit(): void {
     this.businessId = this.authService.businessId();
     this._page = 1;
-    this._currentPage.push({page: this._page, providerId: ''});
-    this.loadProviders(
-      this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].providerId
+    this._currentPage.push({page: this._page, serviceId: ''});
+    this.loadServices(
+      this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].serviceId
     );
 
     this.data.handleMessage.subscribe(res => this.changeData = res);
-    this.data.objectMessage.subscribe(res => this.providerData = res);
+    this.data.objectMessage.subscribe(res => this.serviceData = res);
     this.data.setData(undefined);
   }
 
@@ -111,29 +110,29 @@ export class ProviderListComponent implements OnInit {
       this._currentSearchValue = changes.filterValue.currentValue;
       this._currentPage = [];
       this._page = 1;
-      this._currentPage.push({page: this._page, providerId: ''});
-      this.loadProviders(
-        this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].providerId
+      this._currentPage.push({page: this._page, serviceId: ''});
+      this.loadServices(
+        this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].serviceId
       );
     }
   }
 
-  loadProviders(crPage, crItems, crSearch, crlastItem) {
+  loadServices(crPage, crItems, crSearch, crlastItem) {
     this.onError = '';
-    var spinnerRef = this.spinnerService.start("Loading Service providers...");
+    var spinnerRef = this.spinnerService.start("Loading Services...");
     let data = this.businessId + "/" + crItems + (crSearch === '' ? '/_' : '/' + crSearch) + (crlastItem === '' ? '/_' : '/' +  crlastItem);
 
-    this.providers$ = this.providerService.getProviders(data).pipe(
+    this.services$ = this.serviceService.getServices(data).pipe(
       map((res: any) => {
         if (res != null) {
           if (res.lastItem != ''){
             this.length = (this.pageSize*this._page)+1;
-            this._currentPage.push({page: this._page+1, providerId: res.lastItem});
+            this._currentPage.push({page: this._page+1, serviceId: res.lastItem});
           }
         }
-        this.providerForm.setControl('Providers', this.setExistingServices(res.providers));
+        this.serviceForm.setControl('Services', this.setExistingServices(res.services));
         this.spinnerService.stop(spinnerRef);
-        return res.providers;
+        return res.services;
       }),
       catchError(err => {
         this.onError = err.Message;
@@ -147,13 +146,12 @@ export class ProviderListComponent implements OnInit {
     const formArray = new FormArray([]);
     services.forEach(res => {
       formArray.push(this.fb.group({
-          ProviderId: res.ProviderId,
+          ServiceId: res.ServiceId,
           Name: res.Name,
-          LocationId: res.LocationId,
           Status: res.Status
         })
       );
-      this.providerTable.renderRows();
+      this.serviceTable.renderRows();
     });
     return formArray;
   }
@@ -165,11 +163,11 @@ export class ProviderListComponent implements OnInit {
     } else {
       this._page = page+1;
     }
-    this.loadProviders(
+    this.loadServices(
       this._currentPage[this._page-1].page,
       this.pageSize,
       this._currentSearchValue,
-      this._currentPage[this._page-1].providerId
+      this._currentPage[this._page-1].serviceId
     );
   }
 
@@ -183,8 +181,8 @@ export class ProviderListComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = false;
     dialogConfig.data = {
-      header: 'Service provider', 
-      message: 'Are you sure to delete this Service provider?', 
+      header: 'Service', 
+      message: 'Are you sure to delete this Service?', 
       success: false, 
       error: false, 
       warn: false,
@@ -199,14 +197,14 @@ export class ProviderListComponent implements OnInit {
       if(result != undefined){
         var spinnerRef = this.spinnerService.start("Deleting Service...");
         if (result){ 
-          this.deleteProvider$ = this.providerService.deleteProvider(this.businessId, service.value.LocationId, service.value.ProviderId).pipe(
+          this.deleteService$ = this.serviceService.deleteService(this.businessId, service.value.ServiceId).pipe(
             tap(res => {
               this.spinnerService.stop(spinnerRef);
               this.displayYesNo = false;
-              this.loadProviders(
-                this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].providerId
+              this.loadServices(
+                this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].serviceId
               );
-              this.openDialog('Service provider', 'Service provider deleted successfully', true, false, false);
+              this.openDialog('Service', 'Service deleted successfully', true, false, false);
             }),
             catchError(err => {
               this.spinnerService.stop(spinnerRef);
@@ -221,7 +219,7 @@ export class ProviderListComponent implements OnInit {
   }
 
   trackRow(index: number, item: any) {
-    return item.ProviderId;
+    return item.ServiceId;
   }
 
 }

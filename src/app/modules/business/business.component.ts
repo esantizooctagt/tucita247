@@ -39,7 +39,6 @@ export class BusinessComponent implements OnInit {
 
   //Tags
   public tags =[];
-  public apposPurpose=[];
   
   language: string = 'EN';
 
@@ -138,7 +137,6 @@ export class BusinessComponent implements OnInit {
     Imagen: [''],
     ImagenLink:[''],
     Tags: [''],
-    ApposPurpose: [''],
     Status: ['']
   });
 
@@ -180,7 +178,7 @@ export class BusinessComponent implements OnInit {
       );
     
     let item = 0;
-    this.businessForm.reset({BusinessId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', Tags: '', ApposPurpose: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen: '', ParentBusiness: 0, Status: 1});
+    this.businessForm.reset({BusinessId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', Tags: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen: '', ParentBusiness: 0, Status: 1});
     this.business$ = this.businessService.getBusiness(this.businessId).pipe(
       tap((res: any) => {
         if (res != null){
@@ -225,22 +223,20 @@ export class BusinessComponent implements OnInit {
             ImagenLink: res.ImagenLink,
             ParentBusiness: res.ParentBusiness,
             Tags: res.Tags,
-            ApposPurpose: res.ApposPurpose,
             Status: res.Status
           });
 
           this.categories = res.Categories;
           this.tags = (res.Tags != '' ? res.Tags.split(',') : []);
-          this.apposPurpose = (res.ApposPurpose != '' ? res.ApposPurpose.split(',') : []);
           this.spinnerService.stop(spinnerRef);
         } else {
           this.spinnerService.stop(spinnerRef);
-          this.businessForm.reset({BusinessId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', ApposPurpose: '', ParentBusiness: 0, Status: 1});
+          this.businessForm.reset({BusinessId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', ParentBusiness: 0, Status: 1});
         }
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
-        this.businessForm.reset({BusinessId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', ApposPurpose: '', ParentBusiness: 0, Status: 1});
+        this.businessForm.reset({BusinessId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', ParentBusiness: 0, Status: 1});
         this.openDialog('Error !', err.Message, false, true, false);
         return throwError(err || err.message);
       })
@@ -580,7 +576,6 @@ export class BusinessComponent implements OnInit {
       "Instagram": this.businessForm.value.Instagram,
       "Email": this.businessForm.value.Email,
       "Tags": this.tags.toString(),
-      "ApposPurpose": this.apposPurpose.toString(),
       "Categories": this.businessForm.value.Categories,
       "ParentBusiness": (this.businessForm.value.ParentBusiness ? 1 : 0)
     }
@@ -628,11 +623,6 @@ export class BusinessComponent implements OnInit {
     this.tags.splice(data, 1);
   }
 
-  removePurpose(appoPurpose: string){
-    var data = this.apposPurpose.findIndex(e => e === appoPurpose);
-    this.apposPurpose.splice(data, 1);
-  }
-
   addTag(event: MatChipInputEvent){
     const input = event.input;
     const value = event.value;
@@ -641,18 +631,6 @@ export class BusinessComponent implements OnInit {
       this.tags.push(value);
     }
     if (input) {
-      input.value = '';
-    }
-  }
-
-  addPurpose(event: MatChipInputEvent){
-    const input = event.input;
-    const value = event.value;
-
-    if ((value || '').trim()){
-      this.apposPurpose.push(value);
-    }
-    if (input){
       input.value = '';
     }
   }

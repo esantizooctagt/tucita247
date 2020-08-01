@@ -78,8 +78,8 @@
                                             {{getErrorMessage('BucketInterval', i)}}</mat-error>
                                     </mat-form-field>
                                     <mat-form-field class="col-md-3"
-                                        hintLabel="Number of appointments by service interval">
-                                        <input matInput placeholder="Number of appointments by service interval"
+                                        hintLabel="Number of bookings by service interval">
+                                        <input matInput placeholder="Number of bookings by service interval"
                                             formControlName="TotalCustPerBucketInter"
                                             [errorStateMatcher]="confirmValidParentMatcher" required>
                                         <mat-error *ngIf="item.get('TotalCustPerBucketInter').invalid">

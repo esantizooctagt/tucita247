@@ -382,7 +382,7 @@ export class QuickCheckinComponent implements OnInit {
       AppoHour: timeAppo,
       Type: 2
     }
-    var spinnerRef = this.spinnerService.start("Adding Appointment...");
+    var spinnerRef = this.spinnerService.start("Adding Booking...");
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
       map((res: any) => {
         this.spinnerService.stop(spinnerRef);
@@ -402,7 +402,7 @@ export class QuickCheckinComponent implements OnInit {
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
         this.onError = err.Message;
-        this.openSnackBar("Error on created appointment, try again","Check-In");
+        this.openSnackBar("Error on created booking, try again","Check-In");
         return this.onError;
       })
     );

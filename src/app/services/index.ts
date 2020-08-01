@@ -8,3 +8,4 @@ export * from './polls.service';
 export * from './surveys.service';
 export * from './appointment.service';
 export * from './provider.service';
+export * from './serv.services';

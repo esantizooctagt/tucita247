@@ -74,8 +74,10 @@ import { PhonePipe } from '@shared/phone.pipe';
 import { AppoDialogComponent } from './shared/appo-dialog/appo-dialog.component';
 import { ShowappoDialogComponent } from './shared/showappo-dialog/showappo-dialog.component';
 import { DatePipe } from '@angular/common';
-import { ProviderComponent } from './modules/providers/provider/provider.component';
-import { ProviderListComponent } from './modules/providers/provider-list/provider-list.component';
+import { ProviderComponent } from '@modules/providers/provider/provider.component';
+import { ProviderListComponent } from '@modules/providers/provider-list/provider-list.component';
+import { ServiceListComponent } from '@modules/services/service-list/service-list.component';
+import { ServiceComponent } from '@modules/services/service/service.component';
 
 @NgModule({
   declarations: [
@@ -100,7 +102,9 @@ import { ProviderListComponent } from './modules/providers/provider-list/provide
     AppoDialogComponent,
     ShowappoDialogComponent,
     ProviderComponent,
-    ProviderListComponent
+    ProviderListComponent,
+    ServiceListComponent,
+    ServiceComponent
   ],
   imports: [
     BrowserModule,

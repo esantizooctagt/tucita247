@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '@modules/authentication/guards/auth.guard';
 
 /**Main Components**/
-import { MainNavComponent, NotFoundComponent, LoginComponent, UsersComponent, ClientsComponent, DashboardComponent, ProfileComponent, BusinessComponent, CategoriesComponent, ReportsComponent, RolesComponent, HelpComponent, ResetComponent, VerificationComponent, ForgotpassComponent, HomeComponent, HostComponent, UserlocComponent, PollsComponent, PollRespComponent, QuickCheckinComponent, SurveysComponent, SurveyRespComponent, LandingComponent, ScheduleComponent, BusinessOpeComponent, BusinessDaysComponent, LocationsComponent, ProvidersComponent, WelcomeComponent } from '@modules/index';
+import { MainNavComponent, NotFoundComponent, LoginComponent, UsersComponent, ClientsComponent, DashboardComponent, ProfileComponent, BusinessComponent, CategoriesComponent, ReportsComponent, RolesComponent, HelpComponent, ResetComponent, VerificationComponent, ForgotpassComponent, HomeComponent, HostComponent, UserlocComponent, PollsComponent, PollRespComponent, QuickCheckinComponent, SurveysComponent, SurveyRespComponent, LandingComponent, ScheduleComponent, BusinessOpeComponent, BusinessDaysComponent, LocationsComponent, ProvidersComponent, WelcomeComponent, ServicesComponent } from '@modules/index';
 
 const routes: Routes = [
   {
@@ -23,6 +23,7 @@ const routes: Routes = [
       { path: 'company', component: BusinessComponent, canActivate: [AuthGuard] },
       { path: 'locations', component: LocationsComponent, canActivate: [AuthGuard] },
       { path: 'providers', component: ProvidersComponent, canActivate: [AuthGuard] },
+      { path: 'services', component: ServicesComponent, canActivate: [AuthGuard] },
       { path: 'categories', component: CategoriesComponent, canActivate: [AuthGuard] },
       { path: 'reports', component: ReportsComponent, canActivate: [AuthGuard] },
       { path: 'roles', component: RolesComponent, canActivate: [AuthGuard] },
@@ -103,6 +104,7 @@ export const routingComponents = [
   HomeComponent,
   HostComponent,
   WelcomeComponent,
+  ServicesComponent,
   BusinessOpeComponent,
   BusinessDaysComponent,
   ScheduleComponent,
