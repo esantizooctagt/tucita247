@@ -12,8 +12,8 @@ export class LocationService {
   readonly apiURL = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
-  getLocation(businessId, locationId): Observable<Location>{
-    return this.http.get<Location>(this.apiURL + '/location/' + businessId + '/' + locationId)
+  getLocation(businessId, locationId, country, language): Observable<Location>{
+    return this.http.get<Location>(this.apiURL + '/location/data/' + businessId + '/' + locationId + '/' + country + '/' + language)
                     .pipe(catchError(this.errorHandler));
   }
 
@@ -26,7 +26,7 @@ export class LocationService {
     return this.http.post(this.apiURL + '/location', formData)
                     .pipe(catchError(this.errorHandler))
   }
-  
+
   getLocations(businessId, country, language): Observable<Location[]> {
       return this.http.get<Location[]>(this.apiURL + '/locations/' + businessId + '/' + country + '/' + language)
                       .pipe(catchError(this.errorHandler));

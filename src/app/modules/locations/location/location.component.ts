@@ -22,6 +22,7 @@ export class LocationComponent implements OnInit {
   businessId: string = '';
   saveLocation$: Observable<object>;
   location$: Observable<any>;
+  locationParams$: Observable<any>;
   locationDataList: any;
   sectors$: Observable<any[]>;
   parentBus$: Observable<any[]>;
@@ -100,12 +101,14 @@ export class LocationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    var spinnerRef = this.spinnerService.start("Loading Locations...");
+    var spinnerRef = this.spinnerService.start("Loading Location...");
     this.businessId = this.authService.businessId();
 
     this.sectors = [];
     this.sectors.push({ SectorId: "0", Name: "N/A" });
     this.cities.push({ CityId: "0", Name: "N/A" });
+
+    this.data.objectMessage.subscribe(res => this.locationDataList = res);
 
     this.parentBus$ = this.businessService.getBusinessParent().pipe(
       map(res => {
@@ -117,10 +120,11 @@ export class LocationComponent implements OnInit {
       })
     );
 
-    this.location$ = this.businessService.getCountry(this.businessId).pipe(
+    this.locationParams$ = this.businessService.getCountry(this.businessId).pipe(
       map((res: any) => {
         if (res != null) {
           this.countryCode = res.CountryId;
+          this.onDisplay();
         }
       }),
       switchMap(x => this.locationService.getCities(this.countryCode, this.language).pipe(
@@ -134,32 +138,19 @@ export class LocationComponent implements OnInit {
           }
         })
       )),
-      // switchMap(v => this.locationService.getLocations(this.businessId, this.countryCode, this.language).pipe(
-      //   tap((res: any) => {
-      //     if (res != null){
-      //       this.locationForm.setControl('locations', this.setLocations(res.Locations));
-      //     }
-      //     this.spinnerService.stop(spinnerRef);
-      //     return v;
-      //   })
-      // )),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
         this.openDialog('Error !', err.Message, false, true, false);
         return throwError(err || err.message);
       })
     );
-
-    this.data.objectMessage.subscribe(res => this.locationDataList = res);
-    this.onDisplay();
   }
 
   onDisplay() {
     if (this.locationDataList != undefined) {
-      let provId = '';
-      var spinnerRef = this.spinnerService.start("Loading Service provider...");
+      var spinnerRef = this.spinnerService.start("Loading Location...");
       this.locationForm.reset({ LocationId: '', BusinessId: '', Name: '', City: '', Sector: '', Address: '', Geolocation : '{0.00,0.00}', ParentLocation : '0', MaxConcurrentCustomer: '', BucketInterval: '', TotalCustPerBucketInter: '', ManualCheckOut: '', Doors: '', Status: true});
-      this.location$ = this.locationService.getLocation(this.businessId, this.locationDataList).pipe(
+      this.location$ = this.locationService.getLocation(this.businessId, this.locationDataList, this.countryCode, this.language).pipe(
         map((res: any) => {
           if (res.Code == 200) {
             let loc = res.Data;
@@ -179,6 +170,8 @@ export class LocationComponent implements OnInit {
               Doors: loc.Doors,
               Status: (loc.Status == 1 ? true : false)
             });
+            this.sectors = res.Data.Sectors;
+            this.doors = loc.Doors;
             this.spinnerService.stop(spinnerRef);
             return location;
           }
@@ -191,74 +184,6 @@ export class LocationComponent implements OnInit {
       );
     }
   }
-
-  // setLocations(res: Observable<any[]>){
-  //   const formArray = new FormArray([]);
-  //   let index: number =0;
-  //   res.forEach((s: any) => {
-  //     var locMap = JSON.parse(s.Geolocation);
-  //     if ("LAT" in locMap) {
-  //       this.latLoc[index] = locMap['LAT'];
-  //     } else {
-  //       this.latLoc[index] = 0;
-  //     }
-  //     if ("LNG" in locMap){
-  //       this.lngLoc[index] = locMap['LNG'];
-  //     } else {
-  //       this.lngLoc[index] = 0;
-  //     }
-  //     this.doors[index] = "";
-  //     this.zoom = 15;
-
-  //     this.sectors[index] = [];
-  //     this.noItemsLoc =  index;
-
-  //     this.sectors[index] = s.Sectors;
-  //     this.sectors[index].push({SectorId: "0", Name: "N/A"});
-  //     console.log(s.City);
-  //     formArray.push(
-  //       this.fb.group({
-  //         BusinessId: s.BusinessId,
-  //         LocationId: s.LocationId,
-  //         Name: s.Name,
-  //         Address: s.Address,
-  //         Geolocation: s.Geolocation,
-  //         ParentLocation: s.ParentLocation,
-  //         City: s.City,
-  //         Sector: s.Sector,
-  //         MaxConcurrentCustomer: s.MaxConcurrentCustomer,
-  //         BucketInterval: s.BucketInterval,
-  //         TotalCustPerBucketInter: s.TotalCustPerBucketInter,
-  //         ManualCheckOut: s.ManualCheckOut,
-  //         Doors: '',
-  //         Status: (s.Status == "1" ? true : false)
-  //       })
-  //     );
-  //     this.doors[index] = s.Doors;
-  //     index = index+1;
-  //   });
-  //   return formArray;
-  // }
-
-  // loadSectorsInit(locs: Observable<any>){
-  //   let index  = 0;
-  //   this.sectors[index] = [];
-  //   locs.forEach((s: any) => {
-  //     this.locationService.getSectors(this.countryCode, s.City, this.language).pipe(
-  //       map(res => {
-  //         if (res != null){
-  //           this.sectors[index] = [];
-  //           this.sectors[index].push({SectorId: "0", Name: "N/A"});
-  //           res.forEach(element => {
-  //             this.sectors[index].push(element);
-  //           });
-  //           return res;
-  //         }
-  //       })
-  //     );
-  //     index = index + 1;
-  //   })
-  // }
 
   onKeyPress(event, value): boolean {
     const charCode = (event.which) ? event.which : event.keyCode;
@@ -313,19 +238,6 @@ export class LocationComponent implements OnInit {
     }
   }
 
-  // addLocation(){
-  //   (<FormArray>this.locationForm.get('locations')).push(this.createLocation());
-  // }
-
-  // delLocation(index: number){
-  //   let loca =  this.locationForm.get('locations') as FormArray;
-  //   let item = loca.at(index);
-  //   if (item.value.LocationId == ''){
-  //     loca.removeAt(index);
-  //     this.noItemsLoc = this.noItemsLoc-1;
-  //   }
-  // }
-
   removeDoor(door: string): void {
     const index = this.doors.indexOf(door);
     if (index > 0) {
@@ -346,12 +258,7 @@ export class LocationComponent implements OnInit {
     this.tags.splice(data, 1);
   }
 
-  // removePurpose(appoPurpose: string){
-  //   var data = this.apposPurpose.findIndex(e => e === appoPurpose);
-  //   this.apposPurpose.splice(data, 1);
-  // }
-
-  addDoor(event: MatChipInputEvent, i: number): void {
+  addDoor(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
 
@@ -379,23 +286,11 @@ export class LocationComponent implements OnInit {
     }
   }
 
-  // addPurpose(event: MatChipInputEvent){
-  //   const input = event.input;
-  //   const value = event.value;
-
-  //   if ((value || '').trim()){
-  //     this.apposPurpose.push(value);
-  //   }
-  //   if (input){
-  //     input.value = '';
-  //   }
-  // }
-
   onCancel(){
     this.locationForm.reset({ LocationId: '', BusinessId: '', Name: '', City: '', Sector: '', Address: '', Geolocation : '{0.00,0.00}', ParentLocation : '0', MaxConcurrentCustomer: '', BucketInterval: '', TotalCustPerBucketInter: '', ManualCheckOut: '', Doors: '', Status: true});
   }
 
-  onSubmitLocations() {
+  onSubmit() {
     if (this.locationForm.invalid) { return; }
     if (this.locationForm.touched) {
       let location = {
@@ -413,7 +308,8 @@ export class LocationComponent implements OnInit {
         ManualCheckOut: (this.locationForm.value.ManualCheckOut == true ? 1 : 0),
         Doors: this.doors.toString()
       }
-
+      console.log(location);
+      return;
       var spinnerRef = this.spinnerService.start("Saving Locations...");
       this.saveLocation$ = this.locationService.postLocations(location).pipe(
         map((res:any) => {

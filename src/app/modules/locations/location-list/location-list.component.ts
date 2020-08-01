@@ -9,8 +9,7 @@ import { SpinnerService } from '@app/shared/spinner.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
-import { map, catchError, tap } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 import { LocationService } from '@app/services';
 
 @Component({
