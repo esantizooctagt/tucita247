@@ -7,10 +7,12 @@
                [active]="link.active"> {{link.label}} </a>
           </nav>
     </div>
+    <ng-container *ngIf="updateParentHours$ | async"></ng-container>
     <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="locationId != '_' && serviceId == '_'">
         <div class="col-md-6 col-lg-6">
             Configure your week settings here:
         </div>
+        <mat-slide-toggle [(ngModel)]="providerParentHours" (change)="updateData($event, 2)">Inherit schedule data from company</mat-slide-toggle>
     </div>
     <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="locationId != '_' && serviceId == '_'">
         <div class="col-md-6 col-lg-6">
@@ -25,6 +27,7 @@
         <div class="col-md-6 col-lg-6">
             Select service provider to set up the schedule:
         </div>
+        <mat-slide-toggle [(ngModel)]="providerParentHours" (change)="updateData($event, 2)">Inherit schedule data from location</mat-slide-toggle>
     </div>
     <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="serviceId != '_'">
         <div class="col-md-6 col-lg-6">

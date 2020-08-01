@@ -15,7 +15,7 @@
         </ng-container>
         <div *ngIf="isAdmin">
           <mat-divider></mat-divider>
-          <a mat-list-item class="item-list">{{ 'SETTINGS'}}</a>
+          <!-- <a mat-list-item class="item-list">{{ 'SETTINGS'}}</a> -->
           <mat-accordion multi="true" [displayMode]="displayMode">
             <mat-expansion-panel class="no-shadow">
               <mat-expansion-panel-header fxLayout="row" [expandedHeight]="expandHeight" [collapsedHeight]="collapseHeight">
@@ -23,24 +23,24 @@
                   Time Settings
                 </mat-panel-title>
               </mat-expansion-panel-header>
-              <mat-nav-list class="ml-0" dense>
+              <mat-nav-list class="accordion-menu ml-0" dense>
                 <mat-list-item class="submenu-item">
-                  <a [routerLink]="['/businessope']" routerLinkActive="submenu-active" class="value-submenu-item">Company opening hours</a>
+                  <a [routerLink]="['/businessope']" routerLinkActive="submenu-active" class="value-submenu-item">Company hours</a>
                 </mat-list-item>
                 <mat-list-item class="submenu-item">
-                  <a [routerLink]="['/businessdays']" routerLinkActive="submenu-active" class="value-submenu-item">Company special days</a>
+                  <a [routerLink]="['/businessdays']" routerLinkActive="submenu-active" class="value-submenu-item">Company days off</a>
                 </mat-list-item>
                 <mat-list-item class="submenu-item">
-                  <a [routerLink]="['/locationope/1']" routerLinkActive="submenu-active" class="value-submenu-item">Location opening hours</a>
+                  <a [routerLink]="['/locationope/1']" routerLinkActive="submenu-active" class="value-submenu-item">Location hours</a>
                 </mat-list-item>
                 <mat-list-item class="submenu-item">
-                  <a [routerLink]="['/locationdays/1']" routerLinkActive="submenu-active" class="value-submenu-item">Location special days</a>
+                  <a [routerLink]="['/locationdays/1']" routerLinkActive="submenu-active" class="value-submenu-item">Location days off</a>
                 </mat-list-item>
                 <mat-list-item class="submenu-item">
                   <a [routerLink]="['/providerope/2']" routerLinkActive="submenu-active" class="value-submenu-item">Provider schedule</a>
                 </mat-list-item>
                 <mat-list-item class="submenu-item">
-                  <a [routerLink]="['/providerdays/2']" routerLinkActive="submenu-active" class="value-submenu-item">Provider special days</a>
+                  <a [routerLink]="['/providerdays/2']" routerLinkActive="submenu-active" class="value-submenu-item">Provider days off</a>
                 </mat-list-item>
               </mat-nav-list>
             </mat-expansion-panel>

@@ -7,10 +7,12 @@
                [active]="link.active"> {{link.label}} </a>
           </nav>
     </div>
+    <ng-container *ngIf="updateParentDaysOff$ | async"></ng-container>
     <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="locationId != '_' && serviceId == '_'">
         <div class="col-md-6 col-lg-6">
             Configure your year schedule here. Just click on a date to set the days off.
         </div>
+        <mat-slide-toggle [(ngModel)]="providerParentDO" (change)="updateData($event, 1)">Inherit special days from company</mat-slide-toggle>
     </div>
     <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="locationId != '_' && serviceId == '_'">
         <div class="col-md-6 col-lg-6">
@@ -25,6 +27,7 @@
         <div class="col-md-6 col-lg-6">
             Configure your year schedule here. Just click on a date to set the days off.
         </div>
+        <mat-slide-toggle [(ngModel)]="providerParentDO" (change)="updateData($event, 1)">Inherit special days from location</mat-slide-toggle>
     </div>
     <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="serviceId != '_'">
         <div class="col-md-6 col-lg-6">

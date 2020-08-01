@@ -53,6 +53,11 @@ export class BusinessService {
                     .pipe(catchError(this.errorHandler));
   }
 
+  updateBusinessParms(businessId, locationId, serviceId, value, tipo){
+    return this.http.put(this.apiURL + '/business/params/' + businessId + '/' + locationId + '/' + serviceId + '/' + value + '/' + tipo, '')
+                    .pipe(catchError(this.errorHandler));
+  }
+
   updateOpeningHours(businessId, locationId, serviceId, dataForm){
     return this.http.put(this.apiURL + '/business/openinghours/' + businessId + '/' + locationId + '/' + serviceId, dataForm)
                     .pipe(catchError(this.errorHandler));

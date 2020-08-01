@@ -38,13 +38,20 @@
   height: 40px;
 }
 .list-item{
-  text-transform: uppercase;
+  text-transform: capitalize;
   color: #898989;
+  height: 40px !important;
+  font-size: 14px;
+  font-family: Montserrat;
+  font-weight: 500;
 }
 .list-item:hover{
-  text-transform: uppercase;
+  text-transform: capitalize;
   color: #FF4F00;
   background: none;
+  font-size: 14px;
+  font-family: Montserrat;
+  font-weight: 500;
 }
 .list-item-business{
   font-weight: 600;
@@ -64,15 +71,21 @@
   background: none;
 }
 .list-item-2{
-  text-transform: uppercase;
+  text-transform: capitalize;
   color: #898989;
   font-size: 14px;
+  font-family: Montserrat;
+  font-weight: 500;
   padding-left: 0px !important;
+  height: 40px !important;
 }
 .list-item-2:hover{
-  text-transform: uppercase;
+  text-transform: capitalize;
   color: #FF4F00;
   background: none;
+  height: 40px !important;
+  font-family: Montserrat;
+  font-weight: 500;
 }
 .list-item-2:focus{
   background: none;
@@ -82,7 +95,7 @@
   border-left: 3px solid;
   color: #FF4F00;
   font-weight: 500;
-  text-transform: uppercase;
+  text-transform: capitalize;
   // background-color: #e3e7ef;
 }
 .main-logo{
@@ -103,7 +116,7 @@
   z-index: 1000; /* Ensure that your app's content doesn't overlap the toolbar */
 }
 .mat-expansion-panel-header-title{
-  text-transform: uppercase;
+  text-transform: capitalize;
   color: #898989;
   font-size: 14px;
 }
@@ -148,4 +161,22 @@
   color: #FF4F00 !important;
   font-weight: 500;
   padding-left: 5px;
+}
+:host ::-webkit-scrollbar {
+  width: 5px;
+}
+:host ::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+:host ::-webkit-scrollbar-thumb {
+  background: #ff4f00; 
+}
+:host ::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+:host ::ng-deep .mat-expansion-panel.mat-expanded{
+  background: #f2f2f2;
+}
+:host ::ng-deep mat-sidenav-container .mat-sidenav .mat-drawer-inner-container{
+  overflow: initial !important;
 }

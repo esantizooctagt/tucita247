@@ -36,9 +36,12 @@ export class BusinessDaysComponent implements OnInit {
   serviceId: string = '_';
   daysOff$: Observable<any>;
   savedaysOff$: Observable<any>;
+  updateParentDaysOff$: Observable<any>;
   businessData: any;
   locationData: any;
   serviceData: any;
+
+  providerParentDO: number = 0;
 
   dateSelected: any[] = [];
 
@@ -90,6 +93,7 @@ export class BusinessDaysComponent implements OnInit {
             this.serviceData = res.Data;
             this.serviceId = this.serviceData[0].LocationId + '#' + this.serviceData[0].Services[0].ServiceId;
             this.dateSelected = this.serviceData[0].Services[0].DaysOff;
+            this.providerParentDO = this.serviceData[0].Services[0].ParentDaysOff;
           }
           setTimeout(() => {
             this.setMoths(this.currYear);
@@ -301,9 +305,26 @@ export class BusinessDaysComponent implements OnInit {
     this.dateSelected = [];
     this.serviceId = event.value;
     this.dateSelected = serv[0].DaysOff;
+    this.providerParentDO = serv[0].ParentDaysOff;
     setTimeout(() => {
       this.setMoths((this.navYear == 0 ? this.currYear : this.navYear));
     }, 1);
+  }
+
+  updateData(event, tipo){
+    this.updateParentDaysOff$ = this.businessService.updateBusinessParms(this.businessId, this.locationId, (this.serviceId == '_' ? '_' : this.serviceId.split('#')[1]), (event.checked == true ? 1 : 0), tipo).pipe(
+      map((res: any) => {
+        if (res.Code == 200){
+          this.providerParentDO = (event.checked == true ? 1 : 0);
+          this.openSnackBar("Update data successfully","Special Days");
+        }
+      }),
+      catchError(err => {
+        this.providerParentDO = (!event.checked == true ? 1 : 0);
+        this.openSnackBar("Something goes wrong, try again","Special Days");
+        return err;
+      })
+    );
   }
 
 }

@@ -31,7 +31,7 @@ export class LocationsComponent implements OnInit {
   lng: number = -66.1989426;
   latLoc: any[] = [];
   lngLoc: any[] = [];
-  zoom: number = 15;
+  zoom: number = 9;
 
   cities = [];
   sectors = [];
@@ -91,13 +91,13 @@ export class LocationsComponent implements OnInit {
       Doors: ['',[Validators.required]],
       Status: [1]
     });
+    this.noItemsLoc = this.noItemsLoc+1;
     this.latLoc[this.noItemsLoc] = 18.3796538;
     this.lngLoc[this.noItemsLoc] = -66.1989426;
 
     this.sectors[this.noItemsLoc] = [];
     this.sectors[this.noItemsLoc].push({SectorId: "0", Name: "N/A"});
     
-    this.noItemsLoc = this.noItemsLoc+1;
     return items;
   }
   
@@ -179,14 +179,11 @@ export class LocationsComponent implements OnInit {
       } else {
         this.lngLoc[index] = 0;
       }
-      // if (index > 0){
       this.doors[index] = "";
-      this.latLoc[index] = 18.3796538;
-      this.lngLoc[index] = -66.1989426;
-
+      this.zoom = 15;
+      
       this.sectors[index] = [];
-      this.noItemsLoc =  index; //this.noItemsLoc+1;
-      // }
+      this.noItemsLoc =  index;
       
       this.sectors[index] = s.Sectors;
       this.sectors[index].push({SectorId: "0", Name: "N/A"});

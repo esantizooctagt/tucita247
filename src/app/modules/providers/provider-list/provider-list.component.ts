@@ -51,7 +51,6 @@ export class ProviderListComponent implements OnInit {
     return this.fb.group({
       ServiceId: [''],
       Name: ['', [Validators.required, Validators.maxLength(100), Validators.minLength(3)]],
-      CustomerBucket: ['', Validators.required],
       LocationId: [''],
       Status: []
     });
@@ -150,7 +149,7 @@ export class ProviderListComponent implements OnInit {
       formArray.push(this.fb.group({
           ServiceId: res.ServiceId,
           Name: res.Name,
-          CustomerBucket: res.CustomerBucket,
+          LocationId: res.LocationId,
           Status: res.Status
         })
       );

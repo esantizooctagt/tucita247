@@ -7,7 +7,7 @@ import { BusinessService } from '@app/services';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { AuthService } from '@app/core/services';
 import { Subscription, throwError, Observable } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, map } from 'rxjs/operators';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
@@ -44,11 +44,14 @@ export class BusinessOpeComponent implements OnInit {
   locationId: string = '_';
   serviceId: string = '_';
 
+  providerParentHours: number = 0;
+
   locationData: any;
   serviceData: any;
   subsBusiness: Subscription;
   business$: Observable<any>;
   opeHoursSave$: Observable<any>;
+  updateParentHours$: Observable<any>;
 
   get fBusiness(){
     return this.businessForm.controls;
@@ -707,9 +710,6 @@ export class BusinessOpeComponent implements OnInit {
     let dataForm =  { 
       "OpeHours": JSON.stringify(opeHours)
     }
-    console.log(dataForm);
-    console.log((this.serviceId != '_' ? this.serviceId.split('#')[0] : this.locationId));
-    console.log((this.serviceId == '_' ? '_' : this.serviceId.split('#')[1]));
     var spinnerRef = this.spinnerService.start("Saving Business...");
     this.opeHoursSave$ = this.businessService.updateOpeningHours(this.businessId, (this.serviceId != '_' ? this.serviceId.split('#')[0] : this.locationId), (this.serviceId == '_' ? '_' : this.serviceId.split('#')[1]), dataForm).pipe(
       tap((res: any) => { 
@@ -1370,5 +1370,21 @@ export class BusinessOpeComponent implements OnInit {
     }
 
     this.spinnerService.stop(spinnerRef);
+  }
+
+  updateData(event, tipo){
+    this.updateParentHours$ = this.businessService.updateBusinessParms(this.businessId, this.locationId, (this.serviceId == '_' ? '_' : this.serviceId.split('#')[1]), (event.checked == true ? 1 : 0), tipo).pipe(
+      map((res: any) => {
+        if (res.Code == 200){
+          this.providerParentHours = (event.checked == true ? 1 : 0);
+          this.openSnackBar("Update data successfully","Opening hours");
+        }
+      }),
+      catchError(err => {
+        this.providerParentHours = (!event.checked == true ? 1 : 0);
+        this.openSnackBar("Something goes wrong, try again","Opening hours");
+        return err;
+      })
+    );
   }
 }
