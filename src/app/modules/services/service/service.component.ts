@@ -127,7 +127,7 @@ export class ServiceComponent implements OnInit {
       TimeService: this.serviceForm.value.TimeService,
       Name: this.serviceForm.value.Name,
       CustomerPerTime: this.serviceForm.value.CustomerPerTime,
-      Status: 1
+      Status: this.serviceForm.value.Status == true ? 1 : 0
     }
 
     var spinnerRef = this.spinnerService.start("Saving Service...");

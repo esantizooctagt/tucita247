@@ -1,4 +1,13 @@
-<div class="container-fluid h-100">
+<div class="container-fluid main-background">
+    <div class="row p-0">
+        <div class="list-form col-md-12 pl-4 m-0">
+            <app-search placeholder="Search by description" (setValue)="filterList($event)"></app-search>
+        </div> 
+        <app-location-list class="col-md-12 pl-4 m-0" *ngIf="changeData == 'Search'" [filterValue]="filterData"></app-location-list>
+        <app-location class="col-md-12 pl-4 m-0" *ngIf="changeData == 'Add'"></app-location>
+    </div>
+</div>
+<!-- <div class="container-fluid h-100">
     <div class="row row pl-2 pr-1">
         <div class="pl-15 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
             <h4>Locations</h4>
@@ -138,4 +147,4 @@
             </form>
         </div>
     </div>
-</div>
+</div> -->

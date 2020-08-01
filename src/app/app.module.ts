@@ -78,6 +78,8 @@ import { ProviderComponent } from '@modules/providers/provider/provider.componen
 import { ProviderListComponent } from '@modules/providers/provider-list/provider-list.component';
 import { ServiceListComponent } from '@modules/services/service-list/service-list.component';
 import { ServiceComponent } from '@modules/services/service/service.component';
+import { LocationComponent } from './modules/locations/location/location.component';
+import { LocationListComponent } from './modules/locations/location-list/location-list.component';
 
 @NgModule({
   declarations: [
@@ -104,7 +106,9 @@ import { ServiceComponent } from '@modules/services/service/service.component';
     ProviderComponent,
     ProviderListComponent,
     ServiceListComponent,
-    ServiceComponent
+    ServiceComponent,
+    LocationComponent,
+    LocationListComponent
   ],
   imports: [
     BrowserModule,

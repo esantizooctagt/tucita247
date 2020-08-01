@@ -6,6 +6,13 @@
   top: 20px;
   width: 130px;
 }
+.list-form{
+  background: #fff;
+}
+.main-background{
+  background: #F5F5F5;
+  height: calc(100vh - 64px) !important;
+}
 :host ::ng-deep mat-calendar mat-calendar-header .mat-calendar-header{
     display: none;
 }

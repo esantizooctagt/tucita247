@@ -24,12 +24,14 @@
                     </mat-error>
                 </mat-form-field>
             </div>
-            <div class="form-field pl-3 pr-3">
-                <mat-form-field hintLabel="Customer per bucket">
-                    <input matInput #Name placeholder="Customer per bucket" maxlength="3" minlength="1" formControlName="CustomerPerBucket"
-                        [errorStateMatcher]="confirmValidParentMatcher" required>
-                    <mat-error *ngIf="f.CustomerPerBucket.invalid && f.CustomerPerBucket.touched">{{getErrorMessage('CustomerPerBucket')}}</mat-error>
-                </mat-form-field>
+            <div class="form-field pl-3 pr-3" *ngIf="f.ProviderId.value !=''">
+                <ng-container *ngIf="services$ | async"></ng-container>
+                <ng-container *ngIf="servProvider$ | async"></ng-container>
+                <mat-selection-list #serv (selectionChange)="onSelectService($event)">
+                    <mat-list-option *ngFor="let item of services" [selected]="(item.Selected == 1 ? true : false)" [value]="item.ServiceId">
+                        {{item.Name}}
+                    </mat-list-option>
+                </mat-selection-list>
             </div>
             <div class="form-field-check ml-3 pr-3"
                 *ngIf="providerForm.value.ProviderId !== '' && providerForm.value.ProviderId !== null">
@@ -45,7 +47,6 @@
                 <button mat-flat-button color="accent" id="cancel" type="button" (click)="onCancel()"
                     class="button-action mt-2">Cancel</button>
             </div>
-            <!-- {{ providerForm.value | json }} -->
         </form>
     </mat-card>
 </div>

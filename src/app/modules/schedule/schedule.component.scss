@@ -49,6 +49,13 @@
 .back-disabled{
     color:lightgray;
 }
+.list-form{
+    background: #fff;
+}
+.main-background{
+    background: #F5F5F5;
+    height: calc(100vh - 64px) !important;
+}
 button.mat-icon-button
 {
     &.cdk-program-focused 

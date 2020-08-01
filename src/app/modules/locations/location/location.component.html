@@ -1,0 +1,110 @@
+<p>location works!</p>
+<div class="pl-0 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
+    <h3>LOCATIONS</h3>
+</div>
+<ng-container *ngIf="location$ | async"></ng-container>
+<ng-container *ngIf="saveLocation$ | async"></ng-container>
+<div class="row p-0 m-0">
+    <mat-card class="col-sm col-md col-lg-7">
+        <form [formGroup]="locationForm" (ngSubmit)="onSubmit()" class="mt-4">
+            <div class="form-field pl-3 pr-3">
+                <mat-form-field hintLabel="Name">
+                    <input matInput placeholder="Location Name" formControlName="Name" maxlength="500" minlength="3"
+                        [errorStateMatcher]="confirmValidParentMatcher" required>
+                    <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{getErrorMessage('Name')}}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="form-field pl-3 pr-3">
+                <mat-form-field hintLabel="Address">
+                    <input matInput placeholder="Address" formControlName="Address" maxlength="500" minlength="3"
+                        [errorStateMatcher]="confirmValidParentMatcher" required>
+                    <mat-error *ngIf="f.Address.invalid && f.Address.touched">{{getErrorMessage('Address')}}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="row">
+                <ng-container *ngIf="sectors$ | async"></ng-container>
+                <div class="form-field pl-3 pr-3">
+                    <mat-form-field class="col-md-5" hintLabel="City">
+                        <mat-select formControlName="City" (selectionChange)="loadSectors($event.value)" required>
+                            <mat-option *ngFor="let city of cities" [value]="city.CityId">
+                                {{ city.Name }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="f.City.invalid && f.City.touched">{{getErrorMessage('City')}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="form-field pl-3 pr-3">
+                    <mat-form-field class="col-md" hintLabel="Sector">
+                        <mat-select formControlName="Sector" required>
+                            <mat-option *ngFor="let sector of sectors" [value]="sector.SectorId">
+                                {{ sector.Name }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="f.Sector.invalid && f.Sector.touched">{{getErrorMessage('Sector')}}</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <mat-form-field class="col-md-3" hintLabel="Max concurrent customer">
+                    <input matInput placeholder="Max Concurrent Customers" formControlName="MaxConcurrentCustomer"
+                        [errorStateMatcher]="confirmValidParentMatcher" required>
+                    <mat-error *ngIf="f.MaxConcurrentCustomer.invalid && f.MaxConcurrentCustomer.touched">{{getErrorMessage('MaxConcurrentCustomer')}}</mat-error>
+                </mat-form-field>
+                <mat-form-field class="col-md" hintLabel="Service Time interval">
+                    <input matInput placeholder="Service Time Interval" formControlName="BucketInterval"
+                        [errorStateMatcher]="confirmValidParentMatcher" required>
+                    <mat-error *ngIf="f.BucketInterval.invalid && f.BucketInterval.touched">{{getErrorMessage('BucketInterval')}}</mat-error>
+                </mat-form-field>
+                <mat-form-field class="col-md-4" hintLabel="Number of bookings by service interval">
+                    <input matInput placeholder="Number of bookings by service interval"
+                        formControlName="TotalCustPerBucketInter" [errorStateMatcher]="confirmValidParentMatcher"
+                        required>
+                    <mat-error *ngIf="f.TotalCustPerBucketInter.invalid && f.TotalCustPerBucketInter.touched">{{getErrorMessage('TotalCustPerBucketInter')}}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="row">
+                <mat-form-field class="col-md" hintLabel="Doors">
+                    <mat-chip-list #chipDoors>
+                        <ng-container *ngIf="doors.length > 0">
+                            <mat-chip *ngFor="let door of doors.split(',')" [selectable]="selectable"
+                                [removable]="removable" (removed)="removeDoor(door)">
+                                {{door}}
+                                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                            </mat-chip>
+                        </ng-container>
+                        <input placeholder="New Door..." [matChipInputFor]="chipDoors"
+                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                            (matChipInputTokenEnd)="addDoor($event)">
+                    </mat-chip-list>
+                </mat-form-field>
+                <mat-form-field class="col-md-6" hintLabel="Parent location">
+                    <mat-select formControlName="ParentLocation" required>
+                        <mat-option *ngFor="let parentBus of businessParent" [value]="parentBus.BusinessId">
+                            {{parentBus.Name}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="f.ParentLocation.invalid && f.ParentLocation.touched">{{getErrorMessage('ParentLocation')}}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-10 mt-3 mb-3">
+                <agm-map [latitude]="latLoc" [zoom]="zoom" [longitude]="lngLoc">
+                    <agm-marker [latitude]="latLoc" [longitude]="lngLoc" [markerDraggable]="true"
+                        (dragEnd)="markerDragEndLoc($event)">
+                    </agm-marker>
+                </agm-map>
+            </div>
+            <div class="form-field-check">
+                <mat-checkbox formControlName="ManualCheckOut">Manual Check Out</mat-checkbox>
+            </div>
+            <div class="form-field-check mt-2 mb-3" *ngIf="locationForm.value.LocationId !== '' && locationForm.value.LocationId !== null">
+                <mat-checkbox formControlName="Status">Status</mat-checkbox>
+            </div>
+            <div>
+                <button mat-flat-button color="primary" id="save" [disabled]="!locationForm.valid"
+                    class="button-action ml-3 mr-3 mt-2">Save</button>
+                <button mat-flat-button color="accent" id="cancel" type="button" (click)="onCancel()"
+                    class="button-action mt-2">Cancel</button>
+            </div>
+        </form>
+    </mat-card>
+</div>

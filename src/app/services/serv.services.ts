@@ -31,6 +31,15 @@ export class ServService {
                     .pipe(catchError(this.errorHandler));
   }
 
+  getServicesProvider(businessId, providerId): Observable<any>{
+    return this.http.get<any>(this.apiURL + '/services/' + businessId + '/' + providerId)
+                    .pipe(catchError(this.errorHandler));
+  }
+
+  putServiceProvider(businessId, providerId, serviceId, activo){
+    return this.http.put(this.apiURL + '/service/'+ businessId + '/' + providerId + '/' + serviceId + '/' + activo, '')
+                    .pipe(catchError(this.errorHandler));
+  }
   errorHandler(error) {
     return throwError(error || 'Server Error');
   }

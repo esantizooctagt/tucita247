@@ -12,6 +12,21 @@ export class LocationService {
   readonly apiURL = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
+  getLocation(businessId, locationId): Observable<Location>{
+    return this.http.get<Location>(this.apiURL + '/location/' + businessId + '/' + locationId)
+                    .pipe(catchError(this.errorHandler));
+  }
+
+  getLocationsData(queryStr): Observable<any[]> {
+    return this.http.get<any[]>(this.apiURL + '/locations/' + queryStr)
+                    .pipe(catchError(this.errorHandler));
+  }
+
+  postLocations(formData){
+    return this.http.post(this.apiURL + '/location', formData)
+                    .pipe(catchError(this.errorHandler))
+  }
+  
   getLocations(businessId, country, language): Observable<Location[]> {
       return this.http.get<Location[]>(this.apiURL + '/locations/' + businessId + '/' + country + '/' + language)
                       .pipe(catchError(this.errorHandler));
@@ -66,6 +81,7 @@ export class LocationService {
     return this.http.get<any[]>(this.apiURL + '/location/walkins/' + businessId + '/' + locationId + '/' + dateAppo)
                     .pipe(catchError(this.errorHandler));
   }
+
   errorHandler(error) {
     return throwError(error || 'Server Error');
   }

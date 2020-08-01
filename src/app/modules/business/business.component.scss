@@ -1,3 +1,10 @@
+.list-form{
+  background: #fff;
+}
+.main-background{
+  background: #F5F5F5;
+  height: calc(100vh - 64px) !important;
+}
 .ng5-slider {
   width: 300px;
 }
@@ -127,4 +134,35 @@ agm-map{
 :host::ng-deep .mat-tab-body-content {
   height: 100%;
   overflow: hidden;
+}
+mat-card{
+  margin-left:0px;
+  border-radius: 0px;
+  box-shadow: -2px 2px 6px rgba(0, 0, 0, 0.16) !important;
+}
+@media only screen and (max-width: 600px) {
+  mat-card{
+      margin-left: 0px;
+  }
+  .header-route{
+      padding-left: 0px;
+  }
+  :host ::ng-deep .mat-form-field {
+      .mat-form-field-wrapper {
+          padding-bottom: 0;
+          .mat-form-field-underline {
+              position: initial !important;
+              display: block;
+              margin-top: -1px;
+          }
+          .mat-form-field-subscript-wrapper,
+          .mat-form-field-ripple {
+              position: initial !important;
+              display: table;
+          }
+          .mat-form-field-subscript-wrapper {
+              min-height: calc(1em + 1px);
+          }
+      }
+  }
 }

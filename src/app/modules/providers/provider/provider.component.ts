@@ -5,10 +5,11 @@ import { Validators, FormBuilder, FormArray } from '@angular/forms';
 import { AuthService } from '@app/core/services';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { MonitorService } from '@app/shared/monitor.service';
-import { LocationService, ProviderService } from '@app/services';
+import { LocationService, ProviderService, ServService } from '@app/services';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { Observable, throwError } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, switchMap } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-provider',
@@ -18,7 +19,10 @@ import { map, catchError } from 'rxjs/operators';
 export class ProviderComponent implements OnInit {
   businessId: string = '';
   locs$: Observable<any[]>;
+  services: any[] = [];
   provider$: Observable<any>;
+  services$: Observable<any>;
+  servProvider$: Observable<any>;
   saveProvider$: Observable<any>; 
   providerDataList: any;
 
@@ -26,9 +30,11 @@ export class ProviderComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private _snackBar: MatSnackBar,
     private authService: AuthService,
     private spinnerService: SpinnerService,
     private providerService: ProviderService,
+    private serviceService: ServService,
     private dialog: MatDialog,
     private data: MonitorService,
     private locationService: LocationService
@@ -42,9 +48,14 @@ export class ProviderComponent implements OnInit {
     ProviderId: [''],
     Name: ['', [Validators.required, Validators.maxLength(100), Validators.minLength(3)]],
     LocationId: ['', [Validators.required]],
-    CustomerPerBucket: ['', [Validators.required, Validators.max(999), Validators.min(1)]],
     Status: [true]
   });
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 2000,
+    });
+  }
 
   openDialog(header: string, message: string, success: boolean, error: boolean, warn: boolean): void {
     const dialogConfig = new MatDialogConfig();
@@ -86,24 +97,44 @@ export class ProviderComponent implements OnInit {
 
   onDisplay(){
     if (this.providerDataList != undefined){
+      let provId = '';
       var spinnerRef = this.spinnerService.start("Loading Service provider...");
-      this.providerForm.reset({ ProviderId: '', Name: '', LocationId: '', CustomerPerBucket: '', Status: true});
+      this.providerForm.reset({ ProviderId: '', Name: '', LocationId: '', Status: true});
       this.provider$ = this.providerService.getProvider(this.businessId, this.providerDataList).pipe(
-        map(provider => {
-          this.providerForm.setValue({
-            ProviderId: provider.ProviderId,
-            Name: provider.Name,
-            LocationId: provider.LocationId,
-            CustomerPerBucket: provider.CustomerPerBucket,
-            Status: (provider.Status == 1 ? true : false)
-          });
-          this.spinnerService.stop(spinnerRef);
-          return provider;
+        map((res: any) => {
+          if (res.Code == 200){
+            let provider = res.Data;
+            this.providerForm.setValue({
+              ProviderId: provider.ProviderId,
+              Name: provider.Name,
+              LocationId: provider.LocationId,
+              Status: (provider.Status == 1 ? true : false)
+            });
+            provId = provider.ProviderId;
+            this.spinnerService.stop(spinnerRef);
+            return provider;
+          }
         }),
+        switchMap(_ => this.serviceService.getServicesProvider(this.businessId, provId).pipe(
+          map((res: any) =>{
+            this.services = res.services;
+            return res.services;
+          })
+        )),
         catchError(err => {
           this.spinnerService.stop(spinnerRef);
           this.openDialog('Error !', err.Message, false, true, false);
           return throwError(err || err.Message);
+        })
+      );
+    } else {
+      this.services$ = this.serviceService.getServicesProvider(this.businessId, '_').pipe(
+        map((res: any) =>{
+          this.services = res.services;
+          return res.services;
+        }),
+        catchError(err => {
+          return throwError(err || err.message);
         })
       );
     }
@@ -120,16 +151,10 @@ export class ProviderComponent implements OnInit {
       return this.f.LocationId.hasError('required') ? 'You must select a value' :
         '';
     }
-    if (component === 'CustomerPerBucket'){
-      return this.f.CustomerPerBucket.hasError('required') ? 'You must enter a value' :
-        this.f.CustomerPerBucket.hasError('min') ? 'Minimun length 1':
-          this.f.CustomerPerBucket.hasError('max') ? 'Maximun length 999' :
-          '';
-    }
   }
 
   onCancel(){
-    this.providerForm.reset({ ProviderId: '', Name: '', LocationId: '', CustomerPerBucket: '', Status: true});
+    this.providerForm.reset({ ProviderId: '', Name: '', LocationId: '', Status: true});
   }
 
   onSubmit(){
@@ -140,17 +165,18 @@ export class ProviderComponent implements OnInit {
       BusinessId: this.businessId,
       LocationId: this.providerForm.value.LocationId,
       Name: this.providerForm.value.Name,
-      CustomerPerBucket: this.providerForm.value.CustomerPerBucket,
-      Status: 1
+      Status: this.providerForm.value.Status == true ? 1 : 0
     }
 
     var spinnerRef = this.spinnerService.start("Saving Service provider...");
+    let provId = '';
     this.saveProvider$ =  this.providerService.postProviders(dataForm).pipe(
       map((res:any) => {
         if (res != null){
           if (res.Code == 200){
             this.spinnerService.stop(spinnerRef);
             this.providerForm.patchValue({ProviderId: res.ProviderId});
+            provId = res.ProviderId;
             this.openDialog('Service provider', 'Saving successfully', true, false, false);
           } else {
             this.spinnerService.stop(spinnerRef);
@@ -161,6 +187,12 @@ export class ProviderComponent implements OnInit {
           this.openDialog('Error ! ', 'Something goes wrong, try again', false, true, false);
         }
       }),
+      switchMap(_ => this.serviceService.getServicesProvider(this.businessId, provId).pipe(
+        map((res: any) =>{
+          this.services = res.services;
+          return res.services;
+        })
+      )),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
         this.openDialog('Error ! ', err.Message, false, true, false);
@@ -169,4 +201,26 @@ export class ProviderComponent implements OnInit {
     );
   }
 
+  onSelectService(event){
+    let servId = event.option.value;
+    let activo = (event.option.selected == true ? 1 : 0);
+    
+    if (servId == '') {return;}
+    
+    this.servProvider$ = this.serviceService.putServiceProvider(this.businessId, this.providerForm.value.ProviderId, servId, activo).pipe(
+      map((res: any) => {
+        if (res.Code == 200){
+          if (activo == 1){
+            this.openSnackBar("Service added successfully","Service Provider");
+          } else {
+            this.openSnackBar("Service remove successfully","Service Provider");
+          }
+        }
+      }),
+      catchError(err => {
+        this.openSnackBar("Something goes wrong, try again","Service Provider");
+        return err;
+      })
+    );
+  }
 }

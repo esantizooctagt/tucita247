@@ -39,7 +39,7 @@ export class BusinessService {
   }
 
   getCountry(businessId): Observable<any>{
-    return this.http.get<any>(this.apiURL + '/business/country' + businessId)
+    return this.http.get<any>(this.apiURL + '/business/country/' + businessId)
                     .pipe(catchError(this.errorHandler));
   }
 
