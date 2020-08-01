@@ -48,7 +48,7 @@ export class ScheduleComponent implements OnInit {
   operationHours$: Observable<any>;
   locationData: string = '';
   locationId: string = '';
-  serviceId: string = '';
+  providerId: string = '';
   
   constructor(
     private authService: AuthService,
@@ -92,8 +92,8 @@ export class ScheduleComponent implements OnInit {
         if (res.Code == 200){
           if (res.Locs.length > 0){
             if (res.Locs[0].Services.length > 0){
-              this.locationData = res.Locs[0].Services[0].ServiceId;
-              this.serviceId = res.Locs[0].Services[0].ServiceId.split('#')[1];
+              this.locationData = res.Locs[0].Services[0].ProviderId;
+              this.providerId = res.Locs[0].Services[0].ProviderId.split('#')[1];
             }
             this.locationId = res.Locs[0].LocationId;
             this.doors = res.Locs[0].Doors;
@@ -121,7 +121,7 @@ export class ScheduleComponent implements OnInit {
     this.SatHours = [];
     this.SunHours = [];
     var spinnerRef = this.spinnerService.start("Loading Schedule...");
-    this.operationHours$ = this.appointmentService.getOperationHours(this.businessId, this.locationId, this.serviceId, this.datepipe.transform(this.monday, 'yyyy-MM-dd')).pipe(
+    this.operationHours$ = this.appointmentService.getOperationHours(this.businessId, this.locationId, this.providerId, this.datepipe.transform(this.monday, 'yyyy-MM-dd')).pipe(
       map((res: any) => {
         if (res.Code == 200){
           this.hours = res.Hours;
@@ -282,7 +282,7 @@ export class ScheduleComponent implements OnInit {
   onSelectLocation(event){
     this.locationData = event.value;
     this.locationId = event.value.split('#')[0];
-    this.serviceId = event.value.split('#')[1];
+    this.providerId = event.value.split('#')[1];
 
     let search = this.locations.filter(x => x.LocationId == this.locationId);
     this.doors = search[0].Doors;
@@ -291,7 +291,7 @@ export class ScheduleComponent implements OnInit {
 
   cancelTime(timeGrl: string, day: any){
     var spinnerRef = this.spinnerService.start("Cancel Appointments...");
-    this.cancelAppos$ = this.appointmentService.getAppointmentsSche(this.businessId, this.locationId, this.serviceId, this.datepipe.transform(day, 'yyyy-MM-dd') + '-' + timeGrl).pipe(
+    this.cancelAppos$ = this.appointmentService.getAppointmentsSche(this.businessId, this.locationId, this.providerId, this.datepipe.transform(day, 'yyyy-MM-dd') + '-' + timeGrl).pipe(
       map((res: any) => {
         if (res != null) {
         }
@@ -303,7 +303,7 @@ export class ScheduleComponent implements OnInit {
     const dialogRef = this.dialog.open(ShowappoDialogComponent, {
       width: '450px',
       height: '700px',
-      data: {businessId: this.businessId, locationId: this.locationId, serviceId: this.serviceId, appoTime: timeGrl, appoDate: this.datepipe.transform(day, 'yyyy-MM-dd')}
+      data: {businessId: this.businessId, locationId: this.locationId, providerId: this.providerId, appoTime: timeGrl, appoDate: this.datepipe.transform(day, 'yyyy-MM-dd')}
     });
   }
 

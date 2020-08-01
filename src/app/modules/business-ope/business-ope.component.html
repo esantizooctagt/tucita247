@@ -8,13 +8,13 @@
           </nav>
     </div>
     <ng-container *ngIf="updateParentHours$ | async"></ng-container>
-    <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="locationId != '_' && serviceId == '_'">
+    <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="locationId != '_' && providerId == '_'">
         <div class="col-md-6 col-lg-6">
             Configure your week settings here:
         </div>
         <mat-slide-toggle [(ngModel)]="providerParentHours" (change)="updateData($event, 2)">Inherit schedule data from company</mat-slide-toggle>
     </div>
-    <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="locationId != '_' && serviceId == '_'">
+    <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="locationId != '_' && providerId == '_'">
         <div class="col-md-6 col-lg-6">
             <mat-select name="locations" [(value)]="locationId" (selectionChange)="onLocationChange($event)">
                 <mat-option *ngFor="let item of locationData" [value]="item.LocationId">
@@ -23,18 +23,18 @@
             </mat-select>
         </div>
     </div>
-    <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="serviceId != '_'">
+    <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="providerId != '_'">
         <div class="col-md-6 col-lg-6">
             Select service provider to set up the schedule:
         </div>
         <mat-slide-toggle [(ngModel)]="providerParentHours" (change)="updateData($event, 2)">Inherit schedule data from location</mat-slide-toggle>
     </div>
-    <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="serviceId != '_'">
+    <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="providerId != '_'">
         <div class="col-md-6 col-lg-6">
-            <mat-select name="services" [(value)]="serviceId" (selectionChange)="onServiceChange($event)">
+            <mat-select name="services" [(value)]="providerId" (selectionChange)="onServiceChange($event)">
                 <mat-optgroup *ngFor="let item of serviceData">
                     {{item.Name}}
-                    <mat-option *ngFor="let serv of item.Services" [value]="item.LocationId + '#' + serv.ServiceId">
+                    <mat-option *ngFor="let serv of item.Services" [value]="item.LocationId + '#' + serv.ProviderId">
                         {{serv.Name}}
                     </mat-option>
                 </mat-optgroup>

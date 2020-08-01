@@ -13,8 +13,8 @@
                     <ng-container *ngIf="getWalkIns$ | async"></ng-container>
                     <ng-container *ngIf="manualCheckOut$ | async"></ng-container>
                     <!-- El primero que es el manual se debe pedir la cantidad de gente aca afuera + __ - por default 1 -->
-                    <mat-select name="services" class="col-sm-6 pr-3" [(value)]="serviceId" (selectionChange)="onServiceChange($event)">
-                        <mat-option *ngFor="let item of Services" [value]="item.ServiceId">
+                    <mat-select name="services" class="col-sm-6 pr-3" [(value)]="providerId" (selectionChange)="onServiceChange($event)">
+                        <mat-option *ngFor="let item of Services" [value]="item.ProviderId">
                             {{item.Name}}
                         </mat-option>
                     </mat-select>

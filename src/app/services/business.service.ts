@@ -18,8 +18,8 @@ export class BusinessService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  getBusinessOpeHours(businessId, locationId, serviceId): Observable<any> {
-    return this.http.get<any>(this.apiURL + '/business/opehours/' + businessId + '/' + locationId + '/' + serviceId)
+  getBusinessOpeHours(businessId, locationId, providerId): Observable<any> {
+    return this.http.get<any>(this.apiURL + '/business/opehours/' + businessId + '/' + locationId + '/' + providerId)
                     .pipe(catchError(this.errorHandler));
   }
 
@@ -43,28 +43,28 @@ export class BusinessService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  getDaysOff(businessId, locationId, serviceId, year): Observable<any>{
-    return this.http.get<any>(this.apiURL + '/business/daysoff/' + businessId + '/' + locationId + '/' + serviceId + '/' + year)
+  getDaysOff(businessId, locationId, providerId, year): Observable<any>{
+    return this.http.get<any>(this.apiURL + '/business/daysoff/' + businessId + '/' + locationId + '/' + providerId + '/' + year)
                     .pipe(catchError(this.errorHandler));
   }
 
-  getOpeningHours(businessId, locationId, serviceId): Observable<any>{
-    return this.http.get<any>(this.apiURL + '/business/openinghours/' + businessId + '/' + locationId + '/' + serviceId)
+  getOpeningHours(businessId, locationId, providerId): Observable<any>{
+    return this.http.get<any>(this.apiURL + '/business/openinghours/' + businessId + '/' + locationId + '/' + providerId)
                     .pipe(catchError(this.errorHandler));
   }
 
-  updateBusinessParms(businessId, locationId, serviceId, value, tipo){
-    return this.http.put(this.apiURL + '/business/params/' + businessId + '/' + locationId + '/' + serviceId + '/' + value + '/' + tipo, '')
+  updateBusinessParms(businessId, locationId, providerId, value, tipo){
+    return this.http.put(this.apiURL + '/business/params/' + businessId + '/' + locationId + '/' + providerId + '/' + value + '/' + tipo, '')
                     .pipe(catchError(this.errorHandler));
   }
 
-  updateOpeningHours(businessId, locationId, serviceId, dataForm){
-    return this.http.put(this.apiURL + '/business/openinghours/' + businessId + '/' + locationId + '/' + serviceId, dataForm)
+  updateOpeningHours(businessId, locationId, providerId, dataForm){
+    return this.http.put(this.apiURL + '/business/openinghours/' + businessId + '/' + locationId + '/' + providerId, dataForm)
                     .pipe(catchError(this.errorHandler));
   }
 
-  updateDaysOff(businessId, locationId, serviceId, dateOpe, tipo){
-    return this.http.put(this.apiURL + '/business/daysoff/' + businessId + '/' + locationId + '/' + serviceId + '/' + dateOpe + '/' + tipo, '')
+  updateDaysOff(businessId, locationId, providerId, dateOpe, tipo){
+    return this.http.put(this.apiURL + '/business/daysoff/' + businessId + '/' + locationId + '/' + providerId + '/' + dateOpe + '/' + tipo, '')
                     .pipe(catchError(this.errorHandler));
   }
 

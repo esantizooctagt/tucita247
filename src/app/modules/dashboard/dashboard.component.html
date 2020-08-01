@@ -67,7 +67,7 @@
                             <mat-select name="locations" [(value)]="selectedLoc" (selectionChange)="onSelectLocation($event)"> 
                                 <mat-optgroup *ngFor="let item of resultLoc">
                                     {{item.Name}}
-                                    <mat-option *ngFor="let serv of item.Services" [value]="item.LocationId + '#' + serv.ServiceId">
+                                    <mat-option *ngFor="let serv of item.Services" [value]="item.LocationId + '#' + serv.ProviderId">
                                         {{serv.Name}}
                                     </mat-option>
                                 </mat-optgroup>

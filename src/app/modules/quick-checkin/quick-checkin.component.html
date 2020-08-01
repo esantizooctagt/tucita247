@@ -8,8 +8,8 @@
         <div class="p-0 pt-2 m-auto">
             <mat-slide-toggle [checked]="locationStatus == 0" (change)="locationStatusChange()">{{(locationStatus == 0 ? 'Your location is closed' : (closedLoc == 1 ? 'You need to reopen your location' : 'Your location is open'))}}</mat-slide-toggle>
         </div>
-        <mat-select name="services" class="pt-2 pr-3" [(value)]="serviceId" (selectionChange)="onServiceChange($event)">
-            <mat-option *ngFor="let item of Services" [value]="item.ServiceId">
+        <mat-select name="services" class="pt-2 pr-3" [(value)]="providerId" (selectionChange)="onServiceChange($event)">
+            <mat-option *ngFor="let item of Services" [value]="item.ProviderId">
                 {{item.Name}}
             </mat-option>
         </mat-select>

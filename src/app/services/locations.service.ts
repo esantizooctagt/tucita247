@@ -22,13 +22,13 @@ export class LocationService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  updateOpenLocation(locationId, businessId, serviceId){
-    return this.http.put(this.apiURL + '/location/open/' + locationId + '/' + businessId + '/' + serviceId, '')
+  updateOpenLocation(locationId, businessId, providerId){
+    return this.http.put(this.apiURL + '/location/open/' + locationId + '/' + businessId + '/' + providerId, '')
                     .pipe(catchError(this.errorHandler))
   }
 
-  updateClosedLocation(locationId, businessId, serviceId){
-    return this.http.put(this.apiURL + '/location/closed/' + locationId + '/' + businessId + '/' + serviceId, '')
+  updateClosedLocation(locationId, businessId, providerId){
+    return this.http.put(this.apiURL + '/location/closed/' + locationId + '/' + businessId + '/' + providerId, '')
                     .pipe(catchError(this.errorHandler))
   }
   

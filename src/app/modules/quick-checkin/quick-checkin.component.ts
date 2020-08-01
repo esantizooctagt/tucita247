@@ -23,7 +23,7 @@ export class QuickCheckinComponent implements OnInit {
   qrCode: string = '';
   businessId: string  = '';
   locationId: string = '';
-  serviceId: string = '';
+  providerId: string = '';
   doorId: string = '';
   onError: string = '';
   userId: string = '';
@@ -118,7 +118,7 @@ export class QuickCheckinComponent implements OnInit {
           if (this.Services.length > 0){
             this.locationStatus = res.Locs.Services[0].Open;
             this.closedLoc = res.Locs.Services[0].Closed;
-            this.serviceId = res.Locs.Services[0].ServiceId;
+            this.providerId = res.Locs.Services[0].ProviderId;
           }
           this.spinnerService.stop(spinnerRef);
           return res;
@@ -138,7 +138,7 @@ export class QuickCheckinComponent implements OnInit {
           }
         })
       )),
-      switchMap(val => val = this.businessService.getBusinessOpeHours(this.businessId, this.locationId, this.serviceId)),
+      switchMap(val => val = this.businessService.getBusinessOpeHours(this.businessId, this.locationId, this.providerId)),
       map((res: any) => {
         if (res.Code == 200) {
           this.bucketInterval = parseFloat(res.BucketInterval);
@@ -202,7 +202,7 @@ export class QuickCheckinComponent implements OnInit {
   }
 
   setManualCheckOut(qtyOut){
-    this.manualCheckOut$ = this.appointmentService.updateManualCheckOut(this.businessId, this.locationId, this.serviceId, qtyOut).pipe(
+    this.manualCheckOut$ = this.appointmentService.updateManualCheckOut(this.businessId, this.locationId, this.providerId, qtyOut).pipe(
       map((res: any) => {
         if (res.Code == 200){
           this.openSnackBar("La Cita check-out successfull","Check-Out");
@@ -231,7 +231,7 @@ export class QuickCheckinComponent implements OnInit {
       qrCode: qrCode,
       BusinessId: this.businessId,
       LocationId: this.locationId,
-      ServiceId: this.serviceId
+      ProviderId: this.providerId
     }
     this.check$ = this.appointmentService.updateAppointmentCheckOut(formData).pipe(
       map((res: any) => {
@@ -286,7 +286,7 @@ export class QuickCheckinComponent implements OnInit {
       Guests: guests,
       BusinessId: this.businessId,
       LocationId: this.locationId,
-      ServiceId: this.serviceId
+      ProviderId: this.providerId
     }
     this.check$ = this.appointmentService.updateAppointmentCheckInQR(qrCode, formData).pipe(
       map((res: any) => {
@@ -367,7 +367,7 @@ export class QuickCheckinComponent implements OnInit {
     let formData = {
       BusinessId: this.businessId,
       LocationId: this.locationId,
-      ServiceId: this.serviceId,
+      ProviderId: this.providerId,
       Door: this.doorId,
       Phone: (phoneNumber == '' ?  '00000000000' : (phoneNumber.length <= 10 ? '1' + phoneNumber : phoneNumber)),
       Name: this.clientForm.value.Name,
@@ -451,14 +451,14 @@ export class QuickCheckinComponent implements OnInit {
   }
 
   onServiceChange(event){
-    let res = this.Services.filter(val => val.ServiceId == event.value);
+    let res = this.Services.filter(val => val.ProviderId == event.value);
     if (res.length > 0){
       this.locationStatus = res[0].Open;
       this.closedLoc = res[0].Closed;
-      this.serviceId = res[0].ServiceId;
+      this.providerId = res[0].ProviderId;
     }
     var spinnerRef = this.spinnerService.start("Loading Locations Data...");
-    this.getLocInfo$ = this.businessService.getBusinessOpeHours(this.businessId, this.locationId, this.serviceId).pipe(
+    this.getLocInfo$ = this.businessService.getBusinessOpeHours(this.businessId, this.locationId, this.providerId).pipe(
       map((res: any) => {
         if (res.Code == 200) {
           this.bucketInterval = parseFloat(res.BucketInterval);
@@ -510,7 +510,7 @@ export class QuickCheckinComponent implements OnInit {
 
   openLocation(){
     var spinnerRef = this.spinnerService.start("Loading Open Location...");
-    this.openLoc$ = this.locationService.updateOpenLocation(this.locationId, this.businessId, this.serviceId).pipe(
+    this.openLoc$ = this.locationService.updateOpenLocation(this.locationId, this.businessId, this.providerId).pipe(
       map((res: any) => {
         if (res != null){
           if (res['Business'].OPEN == 1){
@@ -553,7 +553,7 @@ export class QuickCheckinComponent implements OnInit {
 
   closedLocation(){
     var spinnerRef = this.spinnerService.start("Closing Location...");
-    this.closedLoc$ = this.locationService.updateClosedLocation(this.locationId, this.businessId, this.serviceId).pipe(
+    this.closedLoc$ = this.locationService.updateClosedLocation(this.locationId, this.businessId, this.providerId).pipe(
       map((res: any) => {
         if (res != null){
           if (res['Business'].OPEN == 0){

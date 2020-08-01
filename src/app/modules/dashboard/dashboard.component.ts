@@ -106,9 +106,9 @@ export class DashboardComponent implements OnInit {
             if (res != null){
               this.resultLoc = res.Data;
               if (this.resultLoc.length > 0){
-                this.selectedLoc = this.resultLoc[0].LocationId + '#' + this.resultLoc[0].Services[0].ServiceId;
+                this.selectedLoc = this.resultLoc[0].LocationId + '#' + this.resultLoc[0].Services[0].ProviderId;
                 this.perLocation = this.resultLoc[0].Services[0].PerLocation;
-                this.selectedSer = this.resultLoc[0].Services[0].ServiceId;
+                this.selectedSer = this.resultLoc[0].Services[0].ProviderId;
                 this.quantity = this.resultLoc[0].Services[0].Quantity;
               }
               this.spinnerService.stop(spinnerRef);
@@ -149,9 +149,9 @@ export class DashboardComponent implements OnInit {
           if (res != null){
             this.resultLoc = res.Data;
             if (this.resultLoc.length > 0){
-              this.selectedLoc = this.resultLoc[0].LocationId + '#' + this.resultLoc[0].Services[0].ServiceId;
+              this.selectedLoc = this.resultLoc[0].LocationId + '#' + this.resultLoc[0].Services[0].ProviderId;
               this.perLocation = this.resultLoc[0].Services[0].PerLocation;
-              this.selectedSer = this.resultLoc[0].Services[0].ServiceId;
+              this.selectedSer = this.resultLoc[0].Services[0].ProviderId;
               this.quantity = this.resultLoc[0].Services[0].Quantity;
             }
             this.spinnerService.stop(spinnerRef);
@@ -193,9 +193,9 @@ export class DashboardComponent implements OnInit {
             if (res != null){
               this.resultLoc = res.Data;
               if (this.resultLoc.length > 0){
-                this.selectedLoc = this.resultLoc[0].LocationId + '#' + this.resultLoc[0].Services[0].ServiceId;
+                this.selectedLoc = this.resultLoc[0].LocationId + '#' + this.resultLoc[0].Services[0].ProviderId;
                 this.perLocation = this.resultLoc[0].Services[0].PerLocation;
-                this.selectedSer = this.resultLoc[0].Services[0].ServiceId;
+                this.selectedSer = this.resultLoc[0].Services[0].ProviderId;
                 this.quantity = this.resultLoc[0].Services[0].Quantity;
               }
               return res;
@@ -223,13 +223,13 @@ export class DashboardComponent implements OnInit {
     this.selectedLoc = value;
     locId = this.selectedLoc.replace('LOC#','').split('#')[0];
     serLocation = this.resultLoc.filter(x => x.LocationId.replace('LOC#','') == locId);
-    serSelected = serLocation[0].Services.filter(x => x.ServiceId == this.selectedLoc.replace('LOC#','').split('#')[1]);
+    serSelected = serLocation[0].Services.filter(x => x.ProviderId == this.selectedLoc.replace('LOC#','').split('#')[1]);
     initDate = yearCurr+'-'+monthCurr+'-'+dayCurr;    
 
     if (serSelected.length > 0){
       this.perLocation = serSelected[0].PerLocation;
       this.quantity = serSelected[0].Quantity;
-      this.selectedSer = serSelected[0].ServiceId;
+      this.selectedSer = serSelected[0].ProviderId;
       this.avgData$ = this.appointmentService.getApposAverage(locId, this.selectedSer, initDate).pipe(
         map((res: any) => {
           if (res != null){

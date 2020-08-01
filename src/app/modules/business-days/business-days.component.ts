@@ -33,7 +33,7 @@ export class BusinessDaysComponent implements OnInit {
   currYearAct: number = 0;
   businessId: string = '';
   locationId: string = '_';
-  serviceId: string = '_';
+  providerId: string = '_';
   daysOff$: Observable<any>;
   savedaysOff$: Observable<any>;
   updateParentDaysOff$: Observable<any>;
@@ -71,27 +71,27 @@ export class BusinessDaysComponent implements OnInit {
     this.businessId = this.authService.businessId();
     this.locationId = this.route.snapshot.paramMap.get('locations') == null ? "_" : "1";
     if (this.route.snapshot.paramMap.get('provider') == null){
-      this.serviceId = "_";
+      this.providerId = "_";
     } else {
       this.locationId = "1";
-      this.serviceId = "1";
+      this.providerId = "1";
     }
     var spinnerRef = this.spinnerService.start("Loading Special Days...");
-    this.daysOff$ = this.businessService.getDaysOff(this.businessId, this.locationId, this.serviceId, this.currYear).pipe(
+    this.daysOff$ = this.businessService.getDaysOff(this.businessId, this.locationId, this.providerId, this.currYear).pipe(
       map((res: any) => {
         if (res.Code == 200){
           if (this.locationId == "_") {
             this.businessData = res.Data[0];
             this.dateSelected = this.businessData.DaysOff;
           }
-          if (this.locationId != "_" && this.serviceId == "_"){
+          if (this.locationId != "_" && this.providerId == "_"){
             this.locationData = res.Data;
             this.locationId = this.locationData[0].LocationId;
             this.dateSelected = this.locationData[0].DaysOff;
           }
-          if (this.serviceId != "_"){
+          if (this.providerId != "_"){
             this.serviceData = res.Data;
-            this.serviceId = this.serviceData[0].LocationId + '#' + this.serviceData[0].Services[0].ServiceId;
+            this.providerId = this.serviceData[0].LocationId + '#' + this.serviceData[0].Services[0].ProviderId;
             this.dateSelected = this.serviceData[0].Services[0].DaysOff;
             this.providerParentDO = this.serviceData[0].Services[0].ParentDaysOff;
           }
@@ -171,7 +171,7 @@ export class BusinessDaysComponent implements OnInit {
     if (index < 0) {
       this.dateSelected.push(date);
       // add special days
-      this.savedaysOff$ = this.businessService.updateDaysOff(this.businessId, (this.serviceId != '_' ? this.serviceId.split('#')[0] : this.locationId), (this.serviceId == '_' ? '_' : this.serviceId.split('#')[1]), date, 'add').pipe(
+      this.savedaysOff$ = this.businessService.updateDaysOff(this.businessId, (this.providerId != '_' ? this.providerId.split('#')[0] : this.locationId), (this.providerId == '_' ? '_' : this.providerId.split('#')[1]), date, 'add').pipe(
         map((res: any) => {
           if (res.Code == 200){
             this.openSnackBar("Day add successfully","Special Days"); 
@@ -188,7 +188,7 @@ export class BusinessDaysComponent implements OnInit {
     else { 
       this.dateSelected.splice(index, 1);
       // remove special days
-      this.savedaysOff$ = this.businessService.updateDaysOff(this.businessId, (this.serviceId != '_' ? this.serviceId.split('#')[0] : this.locationId), (this.serviceId == '_' ? '_' : this.serviceId.split('#')[1]), date, 'rem').pipe(
+      this.savedaysOff$ = this.businessService.updateDaysOff(this.businessId, (this.providerId != '_' ? this.providerId.split('#')[0] : this.locationId), (this.providerId == '_' ? '_' : this.providerId.split('#')[1]), date, 'rem').pipe(
         map((res: any) => {
           if (res.Code == 200){
             this.openSnackBar("Day remove successfully","Special Days"); 
@@ -210,7 +210,7 @@ export class BusinessDaysComponent implements OnInit {
     if (this.navYear == this.currYear) { this.currYearAct = 1; } else { this.currYearAct = 0;}
 
     var spinnerRef = this.spinnerService.start("Loading Special Days...");
-    this.daysOff$ = this.businessService.getDaysOff(this.businessId, this.locationId, (this.serviceId == '_' ? '_' : this.serviceId.split('#')[1]), this.navYear).pipe(
+    this.daysOff$ = this.businessService.getDaysOff(this.businessId, this.locationId, (this.providerId == '_' ? '_' : this.providerId.split('#')[1]), this.navYear).pipe(
       map((res: any) => {
         this.dateSelected = [];
         if (res.Code == 200){
@@ -218,17 +218,17 @@ export class BusinessDaysComponent implements OnInit {
             this.businessData = res.Data[0];
             this.dateSelected = this.businessData.DaysOff;
           }
-          if (this.locationId != "_" && this.serviceId == "_"){
+          if (this.locationId != "_" && this.providerId == "_"){
             this.locationData = res.Data;
             this.locationId = this.locationId;
             let loc = this.locationData.filter(x => x.LocationId == this.locationId);
             this.dateSelected = loc[0].DaysOff;
           }
-          if (this.serviceId != "_"){
+          if (this.providerId != "_"){
             this.serviceData = res.Data;
-            this.serviceId = this.serviceId;
-            let loc = this.serviceData.filter(y => y.LocationId == this.serviceId.split('#')[0]);
-            let serv = loc[0].Services.filter(z => z.ServiceId == this.serviceId.split('#')[1]);
+            this.providerId = this.providerId;
+            let loc = this.serviceData.filter(y => y.LocationId == this.providerId.split('#')[0]);
+            let serv = loc[0].Services.filter(z => z.ProviderId == this.providerId.split('#')[1]);
             this.dateSelected = serv[0].DaysOff;
           }
         }
@@ -251,7 +251,7 @@ export class BusinessDaysComponent implements OnInit {
     if (this.navYear == this.currYear) { this.currYearAct = 1; } else { this.currYearAct = 0;}
 
     var spinnerRef = this.spinnerService.start("Loading Special Days...");
-    this.daysOff$ = this.businessService.getDaysOff(this.businessId, this.locationId, (this.serviceId == '_' ? '_' : this.serviceId.split('#')[1]), this.navYear).pipe(
+    this.daysOff$ = this.businessService.getDaysOff(this.businessId, this.locationId, (this.providerId == '_' ? '_' : this.providerId.split('#')[1]), this.navYear).pipe(
       map((res: any) => {
         this.dateSelected = [];
         if (res.Code == 200){
@@ -259,17 +259,17 @@ export class BusinessDaysComponent implements OnInit {
             this.businessData = res.Data[0];
             this.dateSelected = this.businessData.DaysOff;
           }
-          if (this.locationId != "_" && this.serviceId == "_"){
+          if (this.locationId != "_" && this.providerId == "_"){
             this.locationData = res.Data;
             this.locationId = this.locationId;
             let loc = this.locationData.filter(x => x.LocationId == this.locationId);
             this.dateSelected = loc[0].DaysOff;
           }
-          if (this.serviceId != "_"){
+          if (this.providerId != "_"){
             this.serviceData = res.Data;
-            this.serviceId = this.serviceId;
-            let loc = this.serviceData.filter(y => y.LocationId == this.serviceId.split('#')[0]);
-            let serv = loc[0].Services.filter(z => z.ServiceId == this.serviceId.split('#')[1]);
+            this.providerId = this.providerId;
+            let loc = this.serviceData.filter(y => y.LocationId == this.providerId.split('#')[0]);
+            let serv = loc[0].Services.filter(z => z.ProviderId == this.providerId.split('#')[1]);
             this.dateSelected = serv[0].DaysOff;
           }
         }
@@ -300,10 +300,10 @@ export class BusinessDaysComponent implements OnInit {
   onServiceChange(event){
     if (event.value == '') {return;}
     let loc = this.serviceData.filter(x => x.LocationId == event.value.split('#')[0]);
-    let serv = loc[0].Services.filter(y => y.ServiceId == event.value.split('#')[1]);
+    let serv = loc[0].Services.filter(y => y.ProviderId == event.value.split('#')[1]);
 
     this.dateSelected = [];
-    this.serviceId = event.value;
+    this.providerId = event.value;
     this.dateSelected = serv[0].DaysOff;
     this.providerParentDO = serv[0].ParentDaysOff;
     setTimeout(() => {
@@ -312,7 +312,7 @@ export class BusinessDaysComponent implements OnInit {
   }
 
   updateData(event, tipo){
-    this.updateParentDaysOff$ = this.businessService.updateBusinessParms(this.businessId, this.locationId, (this.serviceId == '_' ? '_' : this.serviceId.split('#')[1]), (event.checked == true ? 1 : 0), tipo).pipe(
+    this.updateParentDaysOff$ = this.businessService.updateBusinessParms(this.businessId, this.locationId, (this.providerId == '_' ? '_' : this.providerId.split('#')[1]), (event.checked == true ? 1 : 0), tipo).pipe(
       map((res: any) => {
         if (res.Code == 200){
           this.providerParentDO = (event.checked == true ? 1 : 0);

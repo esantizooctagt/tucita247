@@ -39,7 +39,7 @@ export class ProviderComponent implements OnInit {
   }
 
   providerForm = this.fb.group({
-    ServiceId: [''],
+    ProviderId: [''],
     Name: ['', [Validators.required, Validators.maxLength(100), Validators.minLength(3)]],
     LocationId: ['', [Validators.required]],
     CustomerPerBucket: ['', [Validators.required, Validators.max(999), Validators.min(1)]],
@@ -87,11 +87,11 @@ export class ProviderComponent implements OnInit {
   onDisplay(){
     if (this.providerDataList != undefined){
       var spinnerRef = this.spinnerService.start("Loading Service provider...");
-      this.providerForm.reset({ ServiceId: '', Name: '', LocationId: '', CustomerPerBucket: '', Status: true});
+      this.providerForm.reset({ ProviderId: '', Name: '', LocationId: '', CustomerPerBucket: '', Status: true});
       this.provider$ = this.providerService.getProvider(this.businessId, this.providerDataList).pipe(
         map(provider => {
           this.providerForm.setValue({
-            ServiceId: provider.ServiceId,
+            ProviderId: provider.ProviderId,
             Name: provider.Name,
             LocationId: provider.LocationId,
             CustomerPerBucket: provider.CustomerPerBucket,
@@ -129,14 +129,14 @@ export class ProviderComponent implements OnInit {
   }
 
   onCancel(){
-    this.providerForm.reset({ ServiceId: '', Name: '', LocationId: '', CustomerPerBucket: '', Status: true});
+    this.providerForm.reset({ ProviderId: '', Name: '', LocationId: '', CustomerPerBucket: '', Status: true});
   }
 
   onSubmit(){
     if (this.providerForm.invalid) { return; }
 
     let dataForm = {
-      ServiceId: this.providerForm.value.ServiceId,
+      ProviderId: this.providerForm.value.ProviderId,
       BusinessId: this.businessId,
       LocationId: this.providerForm.value.LocationId,
       Name: this.providerForm.value.Name,
@@ -150,7 +150,7 @@ export class ProviderComponent implements OnInit {
         if (res != null){
           if (res.Code == 200){
             this.spinnerService.stop(spinnerRef);
-            this.providerForm.patchValue({ServiceId: res.ServiceId});
+            this.providerForm.patchValue({ProviderId: res.ProviderId});
             // this.pollForm.reset({ PollId: '', Name: '', LocationId: '', DatePoll: '', DateFinPoll: '', Happy: 0, Neutral: 0, Angry: 0, Status: true});
             this.openDialog('Service provider', 'Saving successfully', true, false, false);
           } else {

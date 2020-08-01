@@ -42,7 +42,7 @@ export class BusinessOpeComponent implements OnInit {
 
   businessId: string = '';
   locationId: string = '_';
-  serviceId: string = '_';
+  providerId: string = '_';
 
   providerParentHours: number = 0;
 
@@ -102,10 +102,10 @@ export class BusinessOpeComponent implements OnInit {
     this.businessId = this.authService.businessId();
     this.locationId = this.route.snapshot.paramMap.get('locations') == null ? "_" : "1";
     if (this.route.snapshot.paramMap.get('provider') == null){
-      this.serviceId = "_";
+      this.providerId = "_";
     } else {
       this.locationId = "1";
-      this.serviceId = "1";
+      this.providerId = "1";
     }
 
     this.options[0] = Object.assign({}, this.genOption);
@@ -134,7 +134,7 @@ export class BusinessOpeComponent implements OnInit {
 
     this.onValueChanges();
 
-    this.business$ = this.businessService.getOpeningHours(this.businessId, this.locationId, this.serviceId).pipe(
+    this.business$ = this.businessService.getOpeningHours(this.businessId, this.locationId, this.providerId).pipe(
       tap((res: any) => {
         if (res.Code == 200){
           if (this.locationId == "_"){
@@ -165,7 +165,7 @@ export class BusinessOpeComponent implements OnInit {
               SunEnabled: ("SUN" in opeHour ? 1 : 0),
             });
           }
-          if (this.locationId != "_" && this.serviceId == "_"){
+          if (this.locationId != "_" && this.providerId == "_"){
             this.locationData = res.Data;
             this.locationId = res.Data[0].LocationId;
             var opeHour = JSON.parse(res.Data[0].OperationHours);
@@ -195,9 +195,9 @@ export class BusinessOpeComponent implements OnInit {
               SunEnabled: ("SUN" in opeHour ? 1 : 0),
             });
           }
-          if (this.serviceId != "_"){
+          if (this.providerId != "_"){
             this.serviceData = res.Data;
-            this.serviceId = res.Data[0].LocationId + '#' + res.Data[0].Services[0].ServiceId;
+            this.providerId = res.Data[0].LocationId + '#' + res.Data[0].Services[0].ProviderId;
             var opeHour = JSON.parse(res.Data[0].Services[0].OperationHours);
             this.businessForm.setValue({
               BusinessId: this.businessId,
@@ -711,7 +711,7 @@ export class BusinessOpeComponent implements OnInit {
       "OpeHours": JSON.stringify(opeHours)
     }
     var spinnerRef = this.spinnerService.start("Saving Business...");
-    this.opeHoursSave$ = this.businessService.updateOpeningHours(this.businessId, (this.serviceId != '_' ? this.serviceId.split('#')[0] : this.locationId), (this.serviceId == '_' ? '_' : this.serviceId.split('#')[1]), dataForm).pipe(
+    this.opeHoursSave$ = this.businessService.updateOpeningHours(this.businessId, (this.providerId != '_' ? this.providerId.split('#')[0] : this.locationId), (this.providerId == '_' ? '_' : this.providerId.split('#')[1]), dataForm).pipe(
       tap((res: any) => { 
         if (res.Code == 200){
           this.spinnerService.stop(spinnerRef);
@@ -1052,7 +1052,7 @@ export class BusinessOpeComponent implements OnInit {
   onServiceChange(event){
     if (event.value == "") {return;}
     var spinnerRef = this.spinnerService.start("Loading Opening hours...");
-    this.serviceId = event.value;
+    this.providerId = event.value;
     this.businessForm.reset({BusinessId: '', OperationHours: '', Mon:[8,17], Mon02:[18,24], MonEnabled: 0, Tue:[8,17], Tue02:[18,24], TueEnabled: 0, Wed:[8,17], Wed02:[18,24], WedEnabled: 0, Thu:[8,17], Thu02:[18,24], ThuEnabled: 0, Fri:[8,17], Fri02:[18,24], FriEnabled: 0, Sat:[8,17], Sat02:[18,24], SatEnabled: 0, Sun:[8,17], Sun02:[18,24], SunEnabled: 0});
 
     this.options[0] = Object.assign({}, this.genOption);
@@ -1080,7 +1080,7 @@ export class BusinessOpeComponent implements OnInit {
     this.newInterval[6] = "0";
 
     let loc = this.serviceData.filter(x => x.LocationId == event.value.split('#')[0]);
-    let serv = loc[0].Services.filter(y => y.ServiceId == event.value.split('#')[1]);
+    let serv = loc[0].Services.filter(y => y.ProviderId == event.value.split('#')[1]);
 
     var opeHour = JSON.parse(serv[0].OperationHours);
     this.businessForm.setValue({
@@ -1373,7 +1373,7 @@ export class BusinessOpeComponent implements OnInit {
   }
 
   updateData(event, tipo){
-    this.updateParentHours$ = this.businessService.updateBusinessParms(this.businessId, this.locationId, (this.serviceId == '_' ? '_' : this.serviceId.split('#')[1]), (event.checked == true ? 1 : 0), tipo).pipe(
+    this.updateParentHours$ = this.businessService.updateBusinessParms(this.businessId, this.locationId, (this.providerId == '_' ? '_' : this.providerId.split('#')[1]), (event.checked == true ? 1 : 0), tipo).pipe(
       map((res: any) => {
         if (res.Code == 200){
           this.providerParentHours = (event.checked == true ? 1 : 0);

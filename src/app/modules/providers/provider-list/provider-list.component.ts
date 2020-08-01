@@ -49,7 +49,7 @@ export class ProviderListComponent implements OnInit {
 
   addProviders(): FormGroup{
     return this.fb.group({
-      ServiceId: [''],
+      ProviderId: [''],
       Name: ['', [Validators.required, Validators.maxLength(100), Validators.minLength(3)]],
       LocationId: [''],
       Status: []
@@ -90,9 +90,9 @@ export class ProviderListComponent implements OnInit {
   ngOnInit(): void {
     this.businessId = this.authService.businessId();
     this._page = 1;
-    this._currentPage.push({page: this._page, serviceId: ''});
+    this._currentPage.push({page: this._page, providerId: ''});
     this.loadProviders(
-      this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].serviceId
+      this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].providerId
     );
 
     this.data.handleMessage.subscribe(res => this.changeData = res);
@@ -111,9 +111,9 @@ export class ProviderListComponent implements OnInit {
       this._currentSearchValue = changes.filterValue.currentValue;
       this._currentPage = [];
       this._page = 1;
-      this._currentPage.push({page: this._page, serviceId: ''});
+      this._currentPage.push({page: this._page, providerId: ''});
       this.loadProviders(
-        this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].serviceId
+        this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].providerId
       );
     }
   }
@@ -128,7 +128,7 @@ export class ProviderListComponent implements OnInit {
         if (res != null) {
           if (res.lastItem != ''){
             this.length = (this.pageSize*this._page)+1;
-            this._currentPage.push({page: this._page+1, serviceId: res.lastItem});
+            this._currentPage.push({page: this._page+1, providerId: res.lastItem});
           }
         }
         this.providerForm.setControl('Providers', this.setExistingServices(res.services));
@@ -147,7 +147,7 @@ export class ProviderListComponent implements OnInit {
     const formArray = new FormArray([]);
     services.forEach(res => {
       formArray.push(this.fb.group({
-          ServiceId: res.ServiceId,
+          ProviderId: res.ProviderId,
           Name: res.Name,
           LocationId: res.LocationId,
           Status: res.Status
@@ -169,7 +169,7 @@ export class ProviderListComponent implements OnInit {
       this._currentPage[this._page-1].page,
       this.pageSize,
       this._currentSearchValue,
-      this._currentPage[this._page-1].serviceId
+      this._currentPage[this._page-1].providerId
     );
   }
 
@@ -199,12 +199,12 @@ export class ProviderListComponent implements OnInit {
       if(result != undefined){
         var spinnerRef = this.spinnerService.start("Deleting Service...");
         if (result){ 
-          this.deleteProvider$ = this.providerService.deleteProvider(this.businessId, service.value.LocationId, service.value.ServiceId).pipe(
+          this.deleteProvider$ = this.providerService.deleteProvider(this.businessId, service.value.LocationId, service.value.ProviderId).pipe(
             tap(res => {
               this.spinnerService.stop(spinnerRef);
               this.displayYesNo = false;
               this.loadProviders(
-                this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].serviceId
+                this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].providerId
               );
               this.openDialog('Service provider', 'Service provider deleted successfully', true, false, false);
             }),
@@ -221,7 +221,7 @@ export class ProviderListComponent implements OnInit {
   }
 
   trackRow(index: number, item: any) {
-    return item.ServiceId;
+    return item.ProviderId;
   }
 
 }

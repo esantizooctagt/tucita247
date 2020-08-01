@@ -12,23 +12,23 @@ export class AppointmentService {
   readonly apiURL = environment.apiUrl;
   constructor(private http: HttpClient) { }
 
-  getAppointments(businessId, locationId, serviceId, dateAppoIni, dateAppoFin, status, type, lastItem, appId): Observable<Appointment[]> {
-      return this.http.get<Appointment[]>(this.apiURL + '/appointments/' + businessId + '/' + locationId + '/' + serviceId + '/' + dateAppoIni + '/' + dateAppoFin + '/' + status + '/' + type + '/' + lastItem + '/' + appId)
+  getAppointments(businessId, locationId, providerId, dateAppoIni, dateAppoFin, status, type, lastItem, appId): Observable<Appointment[]> {
+      return this.http.get<Appointment[]>(this.apiURL + '/appointments/' + businessId + '/' + locationId + '/' + providerId + '/' + dateAppoIni + '/' + dateAppoFin + '/' + status + '/' + type + '/' + lastItem + '/' + appId)
                       .pipe(catchError(this.errorHandler));
   }
 
-  getAppointmentsSche(businessId, locationId, serviceId, dateAppoIni): Observable<Appointment[]>{
-    return this.http.get<Appointment[]>(this.apiURL + '/appointments/' + businessId + '/' + locationId + '/' + serviceId + '/' + dateAppoIni)
+  getAppointmentsSche(businessId, locationId, providerId, dateAppoIni): Observable<Appointment[]>{
+    return this.http.get<Appointment[]>(this.apiURL + '/appointments/' + businessId + '/' + locationId + '/' + providerId + '/' + dateAppoIni)
                     .pipe(catchError(this.errorHandler));
   }
 
-  getPreviousAppointments(businessId, locationId, serviceId, dateAppo, status): Observable<Appointment[]> {
-    return this.http.get<Appointment[]>(this.apiURL + '/appointments/previous/' + businessId + '/' + locationId + '/' + serviceId + '/' + dateAppo + '/' + status)
+  getPreviousAppointments(businessId, locationId, providerId, dateAppo, status): Observable<Appointment[]> {
+    return this.http.get<Appointment[]>(this.apiURL + '/appointments/previous/' + businessId + '/' + locationId + '/' + providerId + '/' + dateAppo + '/' + status)
                     .pipe(catchError(this.errorHandler));
   }
 
-  getApposAverage(locationId, serviceId, initDate): Observable<any[]>{
-    return this.http.get<any[]>(this.apiURL + '/appointments/average/' + locationId + '/' + serviceId + '/' + initDate)
+  getApposAverage(locationId, providerId, initDate): Observable<any[]>{
+    return this.http.get<any[]>(this.apiURL + '/appointments/average/' + locationId + '/' + providerId + '/' + initDate)
                     .pipe(catchError(this.errorHandler));
   }
 
@@ -57,8 +57,8 @@ export class AppointmentService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  updateManualCheckOut(businessId, locationId, serviceId, qtyGuests){
-    return this.http.put(this.apiURL + '/appointment/checkout/manual/' + businessId + '/' + locationId + '/' + serviceId + '/' + qtyGuests,'')
+  updateManualCheckOut(businessId, locationId, providerId, qtyGuests){
+    return this.http.put(this.apiURL + '/appointment/checkout/manual/' + businessId + '/' + locationId + '/' + providerId + '/' + qtyGuests,'')
                     .pipe(catchError(this.errorHandler));
   }
 
@@ -77,8 +77,8 @@ export class AppointmentService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  putCancelAppos(businessId, locationId, serviceId, appoDate) {
-    return this.http.put(this.apiURL + '/appointment/' + businessId + '/' + locationId + '/' + serviceId + '/' + appoDate, '')
+  putCancelAppos(businessId, locationId, providerId, appoDate) {
+    return this.http.put(this.apiURL + '/appointment/' + businessId + '/' + locationId + '/' + providerId + '/' + appoDate, '')
                     .pipe(catchError(this.errorHandler));
   }
 
@@ -92,8 +92,8 @@ export class AppointmentService {
                     .pipe(catchError(this.errorHandler))
   }
 
-  getOperationHours(businessId, locationId, serviceId, initDay){
-    return this.http.get<any>(this.apiURL + '/appointment/opeHours/' + businessId + '/' + locationId + '/' + serviceId + '/' + initDay)
+  getOperationHours(businessId, locationId, providerId, initDay){
+    return this.http.get<any>(this.apiURL + '/appointment/opeHours/' + businessId + '/' + locationId + '/' + providerId + '/' + initDay)
                     .pipe(catchError(this.errorHandler));
   }
 

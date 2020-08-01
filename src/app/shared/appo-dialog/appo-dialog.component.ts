@@ -11,7 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export interface DialogData {
   businessId: string;
   locationId: string;
-  serviceId: string;
+  providerId: string;
   appoTime: string;
   appoDate: string;
   doors: string[];
@@ -95,7 +95,7 @@ export class AppoDialogComponent implements OnInit {
     let formData = {
       BusinessId: this.data.businessId,
       LocationId: this.data.locationId,
-      ServiceId: this.data.serviceId,
+      ProviderId: this.data.providerId,
       AppoDate: this.data.appoDate,
       AppoHour: this.data.appoTime.replace('-',':'),
       Door: this.clientForm.value.Door,
