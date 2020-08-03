@@ -121,7 +121,7 @@ export class ScheduleComponent implements OnInit {
     this.SatHours = [];
     this.SunHours = [];
     var spinnerRef = this.spinnerService.start("Loading Schedule...");
-    this.operationHours$ = this.appointmentService.getOperationHours(this.businessId, this.locationId, this.providerId, this.datepipe.transform(this.monday, 'yyyy-MM-dd')).pipe(
+    this.operationHours$ = this.appointmentService.getOperationHours(this.businessId, this.locationId, this.providerId, 'd75c40e3702d43cb9976a9df4ad1b769', this.datepipe.transform(this.monday, 'yyyy-MM-dd')).pipe(
       map((res: any) => {
         if (res.Code == 200){
           this.hours = res.Hours;
@@ -141,10 +141,6 @@ export class ScheduleComponent implements OnInit {
         return err;
       })
     )
-    // this.hours.push({'Time': '08:00 AM', 'Time24H': '08:00'},{'Time': '09:00 AM', 'Time24H': '09:00'},{'Time':'10:00 AM', 'Time24H': '10:00'},{'Time':'11:00 AM', 'Time24H': '11:00'}, {'Time': '02:00 PM', 'Time24H': '14:00'}, {'Time': '03:00 PM', 'Time24H': '15:00'}, {'Time': '04:00 PM', 'Time24H': '16:00'});
-    // this.MonHours.push({'Time': '09:00 AM', 'Bucket': 20, 'Available': 10, 'Used': 10}, {'Time': '10:00 AM', 'Bucket': 20, 'Available': 15, 'Used': 5}, {'Time': '11:00 AM', 'Bucket': 20, 'Available': 10, 'Used': 10});
-    // this.ThuHours.push({'Time': '10:00 AM', 'Bucket': 20, 'Available': 10, 'Used': 10}, {'Time': '03:00 PM', 'Bucket': 20, 'Available': 15, 'Used': 5});
-    // this.WedHours.push({'Time': '08:00 AM', 'Bucket': 20, 'Available': 20, 'Used': 0}, {'Time': '09:00 AM', 'Bucket': 20, 'Available': 20, 'Used': 0}, {'Time': '10:00 AM', 'Bucket': 20, 'Available': 20, 'Used': 0 }, {'Time': '03:00 PM', 'Bucket': 20, 'Available': 15, 'Used': 0});
   }
 
   addDays(date, days) {

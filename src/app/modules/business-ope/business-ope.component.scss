@@ -24,6 +24,11 @@
 .mat-tab-label-active{
   color: #000 !important;
 }
+:host ::ng-deep mat-slide-toggle .mat-slide-toggle-label .mat-slide-toggle-content{
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: 500;
+}
 .mat-tab-link{
   color: rgba(0, 0, 0, 0.87) !important;
 }

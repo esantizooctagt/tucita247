@@ -6,6 +6,11 @@
   background-color:#FF4F00!important;
   border-radius: 50%;
 }
+:host ::ng-deep mat-slide-toggle .mat-slide-toggle-label .mat-slide-toggle-content{
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: 500;
+}
 .list-form{
   background: #fff;
 }

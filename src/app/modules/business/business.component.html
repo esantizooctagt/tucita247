@@ -194,53 +194,54 @@
                                     {{fBusiness.TuCitaLink.value}}
                                 </div>
                             </ng-template>
-                            <div class="image-business mt-2 mb-2">
-                                Image for mobile App
-                                <form [formGroup]="imageForm" autocomplete="off" (ngSubmit)="onSubmitImage()">
-                                    <div class="sector">
-                                        <!-- User Profile Image -->
-                                        <img *ngIf="fBusiness.Imagen.value; else isIcon" class="imgbusiness-pic"
-                                            [src]="imgPath+fBusiness.Imagen.value">
-                                        <ng-template #isIcon>
-                                            <!-- Default Image -->
-                                            <div class="fill-overlay">IMAGE MOBILE APP</div>
-                                        </ng-template>
-                                        <div class="default-overlay">
-                                            <button type="button" class="camera-avatar" mat-icon-button
-                                                (click)="onSearchImage()">
-                                                <mat-icon>add_a_photo</mat-icon>
-                                            </button>
-                                            <input id="fileUpload" name="fileUpload" type="file" accept="image/*"
-                                                style="display:none;" />
+                            <div class="image-business mt-2 mb-2 row ml-0 mr-0">
+                                <div class="col-md-3 pl-0">
+                                    <h5>Image for mobile App</h5>
+                                    <form [formGroup]="imageForm" autocomplete="off" (ngSubmit)="onSubmitImage()">
+                                        <div class="sector">
+                                            <!-- User Profile Image -->
+                                            <img *ngIf="fBusiness.Imagen.value; else isIcon" class="imgbusiness-pic"
+                                                [src]="imgPath+fBusiness.Imagen.value">
+                                            <ng-template #isIcon>
+                                                <!-- Default Image -->
+                                                <div class="fill-overlay">IMAGE MOBILE APP</div>
+                                            </ng-template>
+                                            <div class="default-overlay">
+                                                <button type="button" class="camera-avatar" mat-icon-button
+                                                    (click)="onSearchImage()">
+                                                    <mat-icon>add_a_photo</mat-icon>
+                                                </button>
+                                                <input id="fileUpload" name="fileUpload" type="file" accept="image/*"
+                                                    style="display:none;" />
+                                            </div>
                                         </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="image-business mt-2 mb-2">
-                                Image for Tu Cita 24/7 web link
-                                <form [formGroup]="imageFormLink" autocomplete="off" (ngSubmit)="onSubmitImageLink()">
-                                    <div class="sector">
-                                        <!-- User Profile Image -->
-                                        <img *ngIf="fBusiness.ImagenLink.value; else isIconLink" class="imgbusiness-pic"
-                                            [src]="imgPath+fBusiness.ImagenLink.value">
-                                        <ng-template #isIconLink>
-                                            <!-- Default Image -->
-                                            <div class="fill-overlay">IMAGE WEB LINK</div>
-                                        </ng-template>
-                                        <div class="default-overlay">
-                                            <button type="button" class="camera-avatar" mat-icon-button
-                                                (click)="onSearchImageLink()">
-                                                <mat-icon>add_a_photo</mat-icon>
-                                            </button>
-                                            <input id="fileUploadLink" name="fileUploadLink" type="file"
-                                                accept="image/*" style="display:none;" />
+                                    </form>
+                                </div>
+                                <div class="col-md-4 pl-0">
+                                    <h5>Image for Tu Cita 24/7 web link</h5>
+                                    <form [formGroup]="imageFormLink" autocomplete="off" (ngSubmit)="onSubmitImageLink()">
+                                        <div class="sector">
+                                            <!-- User Profile Image -->
+                                            <img *ngIf="fBusiness.ImagenLink.value; else isIconLink" class="imgbusiness-pic"
+                                                [src]="imgPath+fBusiness.ImagenLink.value">
+                                            <ng-template #isIconLink>
+                                                <!-- Default Image -->
+                                                <div class="fill-overlay">IMAGE WEB LINK</div>
+                                            </ng-template>
+                                            <div class="default-overlay">
+                                                <button type="button" class="camera-avatar" mat-icon-button
+                                                    (click)="onSearchImageLink()">
+                                                    <mat-icon>add_a_photo</mat-icon>
+                                                </button>
+                                                <input id="fileUploadLink" name="fileUploadLink" type="file"
+                                                    accept="image/*" style="display:none;" />
+                                            </div>
                                         </div>
-                                    </div>
-                                </form>
+                                    </form>
+                                </div>
                             </div>
                         </mat-tab>
                     </mat-tab-group>
-
                 </form>
                 <ng-container *ngIf="imgBusiness$ | async"></ng-container>
                 <div>

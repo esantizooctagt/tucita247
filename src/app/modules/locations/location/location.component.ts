@@ -79,9 +79,9 @@ export class LocationComponent implements OnInit {
     MaxConcurrentCustomer: ['', [Validators.required, Validators.min(1)]],
     BucketInterval: ['', [Validators.required, Validators.min(0.5), Validators.max(5)]],
     TotalCustPerBucketInter: ['', [Validators.required, Validators.min(1)]],
-    ManualCheckOut: [''],
+    ManualCheckOut: [false],
     Doors: ['', [Validators.required]],
-    Status: [1]
+    Status: [true]
   });
 
   openDialog(header: string, message: string, success: boolean, error: boolean, warn: boolean): void {
@@ -149,7 +149,7 @@ export class LocationComponent implements OnInit {
   onDisplay() {
     if (this.locationDataList != undefined) {
       var spinnerRef = this.spinnerService.start("Loading Location...");
-      this.locationForm.reset({ LocationId: '', BusinessId: '', Name: '', City: '', Sector: '', Address: '', Geolocation : '{0.00,0.00}', ParentLocation : '0', MaxConcurrentCustomer: '', BucketInterval: '', TotalCustPerBucketInter: '', ManualCheckOut: '', Doors: '', Status: true});
+      this.locationForm.reset({ LocationId: '', BusinessId: '', Name: '', City: '', Sector: '', Address: '', Geolocation : '{0.00,0.00}', ParentLocation : '0', MaxConcurrentCustomer: '', BucketInterval: '', TotalCustPerBucketInter: '', ManualCheckOut: false, Doors: '', Status: true});
       this.location$ = this.locationService.getLocation(this.businessId, this.locationDataList, this.countryCode, this.language).pipe(
         map((res: any) => {
           if (res.Code == 200) {
@@ -170,6 +170,9 @@ export class LocationComponent implements OnInit {
               Doors: loc.Doors,
               Status: (loc.Status == 1 ? true : false)
             });
+            let geo = JSON.parse(loc.Geolocation);
+            this.lat = geo.LAT;
+            this.lng = geo.LNG;
             this.sectors = res.Data.Sectors;
             this.doors = loc.Doors;
             this.spinnerService.stop(spinnerRef);
@@ -251,11 +254,7 @@ export class LocationComponent implements OnInit {
     } else {
       this.doors = this.doors.replace(door, '');
     }
-  }
-
-  removeTag(tag: string) {
-    var data = this.tags.findIndex(e => e === tag);
-    this.tags.splice(data, 1);
+    this.locationForm.patchValue({Doors: this.doors});
   }
 
   addDoor(event: MatChipInputEvent): void {
@@ -269,31 +268,22 @@ export class LocationComponent implements OnInit {
         this.doors = value;
       }
     }
-    if (input) {
-      input.value = '';
-    }
-  }
-
-  addTag(event: MatChipInputEvent) {
-    const input = event.input;
-    const value = event.value;
-
-    if ((value || '').trim()) {
-      this.tags.push(value);
-    }
+    this.locationForm.patchValue({Doors: this.doors});
     if (input) {
       input.value = '';
     }
   }
 
   onCancel(){
-    this.locationForm.reset({ LocationId: '', BusinessId: '', Name: '', City: '', Sector: '', Address: '', Geolocation : '{0.00,0.00}', ParentLocation : '0', MaxConcurrentCustomer: '', BucketInterval: '', TotalCustPerBucketInter: '', ManualCheckOut: '', Doors: '', Status: true});
+    this.locationForm.reset({ LocationId: '', BusinessId: '', Name: '', City: '', Sector: '', Address: '', Geolocation : '{0.00,0.00}', ParentLocation : '0', MaxConcurrentCustomer: '', BucketInterval: '', TotalCustPerBucketInter: '', ManualCheckOut: false, Doors: '', Status: true});
+    this.doors = '';
   }
 
   onSubmit() {
     if (this.locationForm.invalid) { return; }
     if (this.locationForm.touched) {
       let location = {
+        BusinessId: this.businessId,
         LocationId: this.locationForm.value.LocationId,
         Name: this.locationForm.value.Name,
         Address: this.locationForm.value.Address,
@@ -308,8 +298,6 @@ export class LocationComponent implements OnInit {
         ManualCheckOut: (this.locationForm.value.ManualCheckOut == true ? 1 : 0),
         Doors: this.doors.toString()
       }
-      console.log(location);
-      return;
       var spinnerRef = this.spinnerService.start("Saving Locations...");
       this.saveLocation$ = this.locationService.postLocations(location).pipe(
         map((res:any) => {

@@ -27,9 +27,11 @@
             <div class="form-field pl-3 pr-3" *ngIf="f.ProviderId.value !=''">
                 <ng-container *ngIf="services$ | async"></ng-container>
                 <ng-container *ngIf="servProvider$ | async"></ng-container>
+                <h5>Select services</h5>
                 <mat-selection-list #serv (selectionChange)="onSelectService($event)">
                     <mat-list-option *ngFor="let item of services" [selected]="(item.Selected == 1 ? true : false)" [value]="item.ServiceId">
                         {{item.Name}}
+                        <p matLine class="time-service"> {{item.TimeService + ' hr'}} </p>
                     </mat-list-option>
                 </mat-selection-list>
             </div>
