@@ -34,7 +34,7 @@
     <button mat-icon-button (click)="data.guests=data.guests+1">
         <mat-icon class="site-color">add</mat-icon>
     </button>
-    <mat-form-field class="pt-3 num-guests">
+    <mat-form-field class="num-guests">
         <input matInput placeholder="Number of Guests" [(ngModel)]="data.guests">
     </mat-form-field>
     <button mat-icon-button (click)="(data.guests > 1 ? data.guests=data.guests-1 : data.guests)">

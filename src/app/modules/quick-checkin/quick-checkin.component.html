@@ -8,8 +8,8 @@
         <div class="p-0 pt-2 m-auto">
             <mat-slide-toggle color="primary" [checked]="locationStatus == 1" (change)="locationStatusChange()">{{(locationStatus == 0 ? 'Your location is closed' : (closedLoc == 1 ? 'You need to reopen your location' : 'Your location is open'))}}</mat-slide-toggle>
         </div>
-        <mat-select name="services" class="pt-2 pr-3" [(value)]="providerId" (selectionChange)="onServiceChange($event)">
-            <mat-option *ngFor="let item of Services" [value]="item.ProviderId">
+        <mat-select name="providers" class="pt-2 pr-3" [(value)]="providerId" (selectionChange)="onServiceChange($event)">
+            <mat-option *ngFor="let item of Providers" [value]="item.ProviderId">
                 {{item.Name}}
             </mat-option>
         </mat-select>
@@ -44,6 +44,16 @@
                         <input matInput #Name placeholder="Name" maxlength="100" minlength="3" formControlName="Name"
                             [errorStateMatcher]="confirmValidParentMatcher" required>
                         <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{getErrorMessage('Name')}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="form-field pl-3 pr-3">
+                    <mat-form-field hintLabel="Service">
+                        <mat-select placeholder="Service" name="services" formControlName="ServiceId" required>
+                            <mat-option *ngFor="let item of services" [value]="item.ServiceId">
+                                {{item.Name}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="f.ServiceId.invalid && f.ServiceId.touched">{{getErrorMessage('Service')}}</mat-error>
                     </mat-form-field>
                 </div>
                 <div class="form-field pl-3 pr-3">

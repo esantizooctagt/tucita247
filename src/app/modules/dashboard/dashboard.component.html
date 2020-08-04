@@ -47,7 +47,7 @@
                                 {{sumAvailable(appo.Packs, appo.Available)}}
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" *ngIf="appo.Packs.length > 0">
                             <div class="col-md-6 ml-3 labels-appo">Citas about to expire on </div>
                             <div class="col-md-2 labels-content">{{getExpire(appo.Packs) | date: 'MMM d'}}</div>
                             <div class="col-md-3 labels-content">{{getExpireCitas(appo.Packs)}}</div>

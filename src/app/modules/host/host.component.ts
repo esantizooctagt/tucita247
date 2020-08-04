@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { LocationService, ReasonsService, BusinessService, AppointmentService } from '@app/services';
+import { LocationService, ReasonsService, BusinessService, AppointmentService, ServService } from '@app/services';
 import { AuthService } from '@app/core/services';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { map, catchError, switchMap, mergeMap } from 'rxjs/operators';
@@ -106,7 +106,8 @@ export class HostComponent implements OnInit {
 
   manualGuests: number =  1;
 
-  Services: any[]=[];
+  Providers: any[]=[];
+  services: []=[];
   providerId: string = '';
 
   get f(){
@@ -124,6 +125,7 @@ export class HostComponent implements OnInit {
     private businessService: BusinessService,
     private reasonService: ReasonsService,
     private locationService: LocationService,
+    private serviceService: ServService,
     private fb: FormBuilder,
     private dialog: MatDialog,
     private matIconRegistry: MatIconRegistry,
@@ -144,6 +146,7 @@ export class HostComponent implements OnInit {
   clientForm = this.fb.group({
     Phone: ['',[Validators.maxLength(17)]],
     Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
+    ServiceId: ['', [Validators.required]],
     Email: ['', [Validators.maxLength(200), Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
     DOB: [''],
     Gender: [''],
@@ -192,11 +195,11 @@ export class HostComponent implements OnInit {
           this.doorId = res.Locs.Door;
           this.manualCheckOut = res.Locs.ManualCheckOut;
           this.totLocation = res.Locs.MaxCustomers;
-          this.Services = res.Locs.Services;
-          if (this.Services.length > 0){
-            this.locationStatus = res.Locs.Services[0].Open;
-            this.closedLoc = res.Locs.Services[0].Closed;
-            this.providerId = res.Locs.Services[0].ProviderId;
+          this.Providers = res.Locs.Providers;
+          if (this.Providers.length > 0){
+            this.locationStatus = res.Locs.Providers[0].Open;
+            this.closedLoc = res.Locs.Providers[0].Closed;
+            this.providerId = res.Locs.Providers[0].ProviderId;
           }
           return res;
         } else {
@@ -206,10 +209,17 @@ export class HostComponent implements OnInit {
           return;
         }
       }),
+      switchMap(val => val = this.serviceService.getServicesProvider(this.businessId, this.providerId).pipe(
+          map((res: any) =>{
+            this.services = res.services.filter(x => x.Selected === 1);
+            return res;
+          })
+        )
+      ),
       switchMap(val => val = this.businessService.getBusinessOpeHours(this.businessId, this.locationId, this.providerId)),
       map((res: any) => {
         if (res.Code == 200) {
-          this.bucketInterval = parseFloat(res.BucketInterval);
+          this.bucketInterval = 1;//parseFloat(res.BucketInterval);
           this.currHour = parseFloat(res.CurrHour);
           let hours = res.Hours;
           this.buckets = [];
@@ -358,7 +368,7 @@ export class HostComponent implements OnInit {
       switchMap(x => this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
         map((res: any) => {
           if (res.Locs != null){
-            this.Services = res.Locs.Services;
+            this.Providers = res.Locs.Providers;
             return res;
           } else {
             return;
@@ -392,7 +402,7 @@ export class HostComponent implements OnInit {
       switchMap(x => this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
         map((res: any) => {
           if (res.Locs != null){
-            this.Services = res.Locs.Services;
+            this.Providers = res.Locs.Providers;
             return res;
           } else {
             return;
@@ -578,6 +588,8 @@ export class HostComponent implements OnInit {
     let formData = {
       BusinessId: this.businessId,
       LocationId: this.locationId,
+      ProviderId: this.providerId,
+      ServiceId: this.clientForm.value.ServiceId,
       Door: this.doorId,
       Phone: (phoneNumber == '' ?  '00000000000' : (phoneNumber.length <= 10 ? '1' + phoneNumber : phoneNumber)),
       Name: this.clientForm.value.Name,
@@ -586,7 +598,6 @@ export class HostComponent implements OnInit {
       Gender: (this.clientForm.value.Gender == '' ? '': this.clientForm.value.Gender),
       Preference: (this.clientForm.value.Preference == '' ? '': this.clientForm.value.Preference),
       Disability: (this.clientForm.value.Disability == null ? '': this.clientForm.value.Disability),
-      ProviderId: this.providerId,
       Guests: this.clientForm.value.Guests,
       AppoDate: dateAppo,
       AppoHour: timeAppo,
@@ -599,7 +610,7 @@ export class HostComponent implements OnInit {
           this.walkIns.push(res.Appointment);
         }
         this.spinnerService.stop(spinnerRef);
-        this.clientForm.reset({Phone:'',Name:'',Email:'',DOB:'',Gender:'',Preference:'', Disability:'', ProviderId: '', Guests: 1});
+        this.clientForm.reset({Phone:'', Name:'', Email:'', DOB:'', Gender:'', Preference:'', Disability:'', ProviderId: '', ServiceId:'', Guests: 1});
         this.showApp = false;
         return res.Code;
       }),
@@ -615,12 +626,12 @@ export class HostComponent implements OnInit {
   showAppointment(){
     this.showApp = !this.showApp;
     if (this.showApp){
-      this.clientForm.reset({Phone:'',Name:'',Email:'',DOB:'',Gender:'',ProviderId:'',Preference:''});
+      this.clientForm.reset({Phone:'', Name:'', Email:'', DOB:'', Gender:'', Preference:'', Disability:'', ProviderId:'', ServiceId:'', Guests: 1});
     }
   }
 
   onCancelAddAppointment(){
-    this.clientForm.reset({Phone:'',Name:'',Email:'',DOB:'',Gender:'',ProviderId:'',Preference:''});
+    this.clientForm.reset({Phone:'', Name:'', Email:'', DOB:'', Gender:'', Preference:'', Disability:'', ProviderId:'', ServiceId:'', Guests: 1});
     this.showApp = false;
   }
 
@@ -635,6 +646,10 @@ export class HostComponent implements OnInit {
       return this.f.Name.hasError('required') ? 'You must enter a value' :
         this.f.Name.hasError('minlength') ? 'Minimun length 3' :
           this.f.Name.hasError('maxlength') ? 'Maximun length 100' :
+            '';
+    }
+    if (component === 'ServiceId'){
+      return this.f.ServiceId.hasError('required') ? 'You must select a valid value' :
             '';
     }
     if (component === 'Phone'){
@@ -1198,7 +1213,7 @@ export class HostComponent implements OnInit {
   }
 
   onServiceChange(event){
-    let res = this.Services.filter(val => val.ProviderId == event.value);
+    let res = this.Providers.filter(val => val.ProviderId == event.value);
     if (res.length > 0){
       this.locationStatus = res[0].Open;
       this.closedLoc = res[0].Closed;
@@ -1216,7 +1231,7 @@ export class HostComponent implements OnInit {
     this.getLocInfo$ = this.businessService.getBusinessOpeHours(this.businessId, this.locationId, this.providerId).pipe(
       map((res: any) => {
         if (res.Code == 200) {
-          this.bucketInterval = parseFloat(res.BucketInterval);
+          this.bucketInterval = 1; //parseFloat(res.BucketInterval);
           this.currHour = parseFloat(res.CurrHour);
           let hours = res.Hours;
           this.buckets = [];
@@ -1247,6 +1262,12 @@ export class HostComponent implements OnInit {
           return;
         }
       }),
+      switchMap(val => this.serviceService.getServicesProvider(this.businessId, this.providerId).pipe(
+        map((res: any) =>{
+          this.services = res.services.filter(x => x.Selected === 1);
+          return res;
+        })
+      )),
       switchMap((value: any) => {
         value = this.locationService.getLocationQuantity(this.businessId, this.locationId);
         return value;

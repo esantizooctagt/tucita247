@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { LocationService, BusinessService } from '@app/services';
+import { LocationService, BusinessService, ServService } from '@app/services';
 import { AuthService } from '@app/core/services';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { map, catchError, switchMap, mergeMap } from 'rxjs/operators';
@@ -50,8 +50,8 @@ export class QuickCheckinComponent implements OnInit {
   openLoc$: Observable<any>;
   closedLoc$: Observable<any>;
 
-  Services: any[] = [];
-
+  Providers: any[] = [];
+  services: []=[];
   get f(){
     return this.clientForm.controls;
   }
@@ -65,6 +65,7 @@ export class QuickCheckinComponent implements OnInit {
     private appointmentService: AppointmentService,
     private businessService: BusinessService,
     private locationService: LocationService,
+    private serviceService: ServService,
     private fb: FormBuilder,
     private dialog: MatDialog,
     private router: Router
@@ -73,6 +74,7 @@ export class QuickCheckinComponent implements OnInit {
   clientForm = this.fb.group({
     Phone: ['',[Validators.maxLength(14)]],
     Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
+    ServiceId: ['', [Validators.required]],
     Email: ['', [Validators.maxLength(200), Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
     DOB: [''],
     Gender: [''],
@@ -113,12 +115,12 @@ export class QuickCheckinComponent implements OnInit {
         if (res.Locs != null){
           this.locationId = res.Locs.LocationId;
           this.doorId = res.Locs.Door;
-          this.Services = res.Locs.Services;
+          this.Providers = res.Locs.Providers;
           this.totLocation = res.Locs.MaxCustomers;
-          if (this.Services.length > 0){
-            this.locationStatus = res.Locs.Services[0].Open;
-            this.closedLoc = res.Locs.Services[0].Closed;
-            this.providerId = res.Locs.Services[0].ProviderId;
+          if (this.Providers.length > 0){
+            this.locationStatus = res.Locs.Providers[0].Open;
+            this.closedLoc = res.Locs.Providers[0].Closed;
+            this.providerId = res.Locs.Providers[0].ProviderId;
           }
           this.spinnerService.stop(spinnerRef);
           return res;
@@ -129,6 +131,13 @@ export class QuickCheckinComponent implements OnInit {
           return;
         }
       }),
+      switchMap(val => val = this.serviceService.getServicesProvider(this.businessId, this.providerId).pipe(
+        map((res: any) =>{
+          this.services = res.services.filter(x => x.Selected === 1);
+          return res;
+        })
+        )
+      ),
       switchMap(v => this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
         map((res: any) => {
           if (res != null){
@@ -141,7 +150,7 @@ export class QuickCheckinComponent implements OnInit {
       switchMap(val => val = this.businessService.getBusinessOpeHours(this.businessId, this.locationId, this.providerId)),
       map((res: any) => {
         if (res.Code == 200) {
-          this.bucketInterval = parseFloat(res.BucketInterval);
+          this.bucketInterval = 1; //parseFloat(res.BucketInterval);
           this.currHour = parseFloat(res.CurrHour);
           let hours = res.Hours;
           this.buckets = [];
@@ -183,7 +192,7 @@ export class QuickCheckinComponent implements OnInit {
   checkOutQR(){
     const dialogRef = this.dialog.open(VideoDialogComponent, {
       width: '450px',
-      height: '595px',
+      height: '660px',
       data: {guests: 0, title: 'Check-Out', tipo: 2}
     });
 
@@ -264,7 +273,7 @@ export class QuickCheckinComponent implements OnInit {
     //READ QR CODE AND CHECK-IN PROCESS
     const dialogRef = this.dialog.open(VideoDialogComponent, {
       width: '450px',
-      height: '675px',
+      height: '660px',
       data: {guests: 0, title: 'Check-In', tipo: 3 }
     });
 
@@ -328,6 +337,10 @@ export class QuickCheckinComponent implements OnInit {
           this.f.Name.hasError('maxlength') ? 'Maximun length 100' :
             '';
     }
+    if (component === 'ServiceId'){
+      return this.f.ServiceId.hasError('required') ? 'You must select a valid value' :
+            '';
+    }
     if (component === 'Phone'){
       return this.f.Phone.hasError('minlength') ? 'Minimun length 6' :
         this.f.Phone.hasError('maxlength') ? 'Maximun length 14' :
@@ -343,7 +356,7 @@ export class QuickCheckinComponent implements OnInit {
   }
 
   onCancelAddAppointment(){
-    this.clientForm.reset({Phone:'',Name:'',Email:'',DOB:'',Gender:'',Preference:''});
+    this.clientForm.reset({Phone:'', Name:'', ServiceId:'', Email:'', DOB:'', Gender:'', Preference:'', Disability:'', Guests: 1});
     this.showCard = false;
   }
 
@@ -368,6 +381,7 @@ export class QuickCheckinComponent implements OnInit {
       BusinessId: this.businessId,
       LocationId: this.locationId,
       ProviderId: this.providerId,
+      ServiceId: this.clientForm.value.ServiceId,
       Door: this.doorId,
       Phone: (phoneNumber == '' ?  '00000000000' : (phoneNumber.length <= 10 ? '1' + phoneNumber : phoneNumber)),
       Name: this.clientForm.value.Name,
@@ -386,7 +400,7 @@ export class QuickCheckinComponent implements OnInit {
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
       map((res: any) => {
         this.spinnerService.stop(spinnerRef);
-        this.clientForm.reset({Phone:'',Name:'',Email:'',DOB:'',Gender:'',Preference:'', Disability:'', Guests: 1});
+        this.clientForm.reset({Phone:'', Name:'', ServiceId:'', Email:'', DOB:'', Gender:'', Preference:'', Disability:'', Guests: 1});
         this.showCard = false;
         this.openSnackBar("Walk-in added successfully","Check-In");
         return res.Code;
@@ -451,7 +465,7 @@ export class QuickCheckinComponent implements OnInit {
   }
 
   onServiceChange(event){
-    let res = this.Services.filter(val => val.ProviderId == event.value);
+    let res = this.Providers.filter(val => val.ProviderId == event.value);
     if (res.length > 0){
       this.locationStatus = res[0].Open;
       this.closedLoc = res[0].Closed;
@@ -461,7 +475,7 @@ export class QuickCheckinComponent implements OnInit {
     this.getLocInfo$ = this.businessService.getBusinessOpeHours(this.businessId, this.locationId, this.providerId).pipe(
       map((res: any) => {
         if (res.Code == 200) {
-          this.bucketInterval = parseFloat(res.BucketInterval);
+          this.bucketInterval = 1; // parseFloat(res.BucketInterval);
           this.currHour = parseFloat(res.CurrHour);
           let hours = res.Hours;
           this.buckets = [];
@@ -492,6 +506,13 @@ export class QuickCheckinComponent implements OnInit {
           return;
         }
       }),
+      switchMap(val => this.serviceService.getServicesProvider(this.businessId, this.providerId).pipe(
+        map((res: any) =>{
+          this.services = res.services.filter(x => x.Selected === 1);
+          return res;
+        })
+        )
+      ),
       switchMap((value: any) => {
         value = this.locationService.getLocationQuantity(this.businessId, this.locationId);
         return value;
@@ -535,7 +556,7 @@ export class QuickCheckinComponent implements OnInit {
       switchMap(x => this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
         map((res: any) => {
           if (res.Locs != null){
-            this.Services = res.Locs.Services;
+            this.Providers = res.Locs.Providers;
             return res;
           } else {
             return;
@@ -565,7 +586,7 @@ export class QuickCheckinComponent implements OnInit {
       switchMap(x => this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
         map((res: any) => {
           if (res.Locs != null){
-            this.Services = res.Locs.Services;
+            this.Providers = res.Locs.Providers;
             return res;
           } else {
             return;

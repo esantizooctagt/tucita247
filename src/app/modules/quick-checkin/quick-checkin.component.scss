@@ -62,3 +62,24 @@
     border-radius: 15px;
     height: 20px !important;
 }
+/* Use the button type you're using here */
+button.mat-icon-button
+{
+    &.cdk-program-focused 
+    {
+        ::ng-deep .mat-button-focus-overlay
+        {
+            opacity: 0;  // hide overlay
+        }
+    }
+}
+button.mat-stroked-button
+{
+    &.cdk-program-focused 
+    {
+        ::ng-deep .mat-button-focus-overlay
+        {
+            opacity: 0;  // hide overlay
+        }
+    }
+}

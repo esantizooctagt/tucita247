@@ -13,8 +13,8 @@
                     <ng-container *ngIf="getWalkIns$ | async"></ng-container>
                     <ng-container *ngIf="manualCheckOut$ | async"></ng-container>
                     <!-- El primero que es el manual se debe pedir la cantidad de gente aca afuera + __ - por default 1 -->
-                    <mat-select name="services" class="col-sm-6 pr-3" [(value)]="providerId" (selectionChange)="onServiceChange($event)">
-                        <mat-option *ngFor="let item of Services" [value]="item.ProviderId">
+                    <mat-select name="providers" class="col-sm-6 pr-3" [(value)]="providerId" (selectionChange)="onServiceChange($event)">
+                        <mat-option *ngFor="let item of Providers" [value]="item.ProviderId">
                             {{item.Name}}
                         </mat-option>
                     </mat-select>
@@ -305,6 +305,16 @@
                                         <input matInput #Name placeholder="Name" maxlength="100" minlength="3" formControlName="Name"
                                             [errorStateMatcher]="confirmValidParentMatcher" required>
                                         <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{getErrorMessage('Name')}}</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="form-field pl-3 pr-3">
+                                    <mat-form-field hintLabel="Name">
+                                        <mat-select placeholder="Service" name="services" formControlName="ServiceId">
+                                            <mat-option *ngFor="let item of services" [value]="item.ServiceId">
+                                                {{item.Name}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error *ngIf="f.ServiceId.invalid && f.ServiceId.touched">{{getErrorMessage('Service')}}</mat-error>
                                     </mat-form-field>
                                 </div>
                                 <div class="form-field pl-3 pr-3">
