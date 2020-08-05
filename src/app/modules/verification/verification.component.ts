@@ -23,7 +23,7 @@ export class VerificationComponent implements OnInit {
   hide = true;
   hideconf = true;
   userId: string = '';
-  code: string = '';
+  code: number = 0;
   userAct$: Observable<any>;
 
   readonly passKey = environment.passKey;
@@ -46,6 +46,7 @@ export class VerificationComponent implements OnInit {
     this.verifForm = this.fb.group({
       userCode: ['', [Validators.required]],
       Passwords : this.fb.group({
+        temppassword: ['', [Validators.minLength(8), Validators.maxLength(20), Validators.pattern("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}")]],
         password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}")]],
         confpassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}")]]
       }, {validator: this.checkPasswords})
@@ -54,7 +55,7 @@ export class VerificationComponent implements OnInit {
 
   ngOnInit(): void {
     this.userId = this.route.snapshot.paramMap.get('userId');
-    this.code = this.route.snapshot.paramMap.get('code');
+    this.code = +this.route.snapshot.paramMap.get('code');
   }
 
   openDialog(header: string, message: string, success: boolean, error: boolean, warn: boolean): void {
@@ -84,16 +85,52 @@ export class VerificationComponent implements OnInit {
   }
 
   onSubmit(){
-    if (this.code != this.verifForm.value.userCode) {
-      this.error = "Invalid Code";
-      return;
-    } 
-    if (this.code != '0' && this.verifForm.get('Passwords.password').value == ''){
-      this.error = "You must enter a valid password";
-      return;
-    }
-    let dataForm;
-    if (this.code != '0'){
+    if (this.code != 0){
+      if (this.code != this.verifForm.value.userCode) {
+        this.error = "Invalid Code";
+        return;
+      } 
+      if (this.code != 0 && this.verifForm.get('Passwords.password').value == ''){
+        this.error = "You must enter a valid password";
+        return;
+      }
+      let dataForm;
+      if (this.code != 0){
+        if (this.verifForm.invalid) { return; }
+        var CryptoJS = require("crypto-js");
+        var data = this.verifForm.get('Passwords.password').value;
+        var password = this.passKey;
+        var ctObj = CryptoJS.AES.encrypt(data, password);
+        var ctStr = ctObj.toString();
+
+        dataForm = {
+          UserId: this.userId,
+          Password: ctStr
+        }
+      } else {
+        dataForm = '';
+        return;
+      }
+      var spinnerRef = this.spinnerService.start("Activating account...");
+      this.userAct$ = this.usersService.putVerifCode(this.code, dataForm).pipe(
+        tap((res: any) => { 
+          if (res.Code == 200){
+            this.spinnerService.stop(spinnerRef);
+            this.router.navigate(['/login']);
+          } else {
+            this.spinnerService.stop(spinnerRef);
+            this.openDialog('Users', 'Error activating account try again', false, true, false);
+          }
+        }),
+        catchError(err => {
+          this.spinnerService.stop(spinnerRef);
+          this.openDialog('Error !', err.Message, false, true, false);
+          return throwError(err || err.message);
+        })
+      );
+    } else {
+      let dataForm;
+      this.verifForm.patchValue({'userCode': 0});
       if (this.verifForm.invalid) { return; }
       var CryptoJS = require("crypto-js");
       var data = this.verifForm.get('Passwords.password').value;
@@ -105,27 +142,24 @@ export class VerificationComponent implements OnInit {
         UserId: this.userId,
         Password: ctStr
       }
-    } else {
-      dataForm = '';
-      return;
+      var spinnerRef = this.spinnerService.start("Activating account...");
+      this.userAct$ = this.usersService.putActivationAccount(dataForm).pipe(
+        tap((res: any) => { 
+          if (res.Code == 200){
+            this.spinnerService.stop(spinnerRef);
+            this.router.navigate(['/login']);
+          } else {
+            this.spinnerService.stop(spinnerRef);
+            this.openDialog('Users', 'Error activating account try again', false, true, false);
+          }
+        }),
+        catchError(err => {
+          this.spinnerService.stop(spinnerRef);
+          this.openDialog('Error !', err.Message, false, true, false);
+          return throwError(err || err.message);
+        })
+      );
     }
-    var spinnerRef = this.spinnerService.start("Activating account...");
-    this.userAct$ = this.usersService.putVerifCode(this.code, dataForm).pipe(
-      tap((res: any) => { 
-        if (res.Code == 200){
-          this.spinnerService.stop(spinnerRef);
-          this.router.navigate(['/login']);
-        } else {
-          this.spinnerService.stop(spinnerRef);
-          this.openDialog('Users', 'Error activating account try again', false, true, false);
-        }
-      }),
-      catchError(err => {
-        this.spinnerService.stop(spinnerRef);
-        this.openDialog('Error !', err.Message, false, true, false);
-        return throwError(err || err.message);
-      })
-    );
   }
 
 }

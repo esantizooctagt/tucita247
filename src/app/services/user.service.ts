@@ -82,6 +82,11 @@ export class UserService {
                     .pipe(catchError(this.errorHandler));
   }
 
+  putActivationAccount(formData){
+    return this.http.put(this.apiURL + '/user/activate/admin', formData)
+                    .pipe(catchError(this.errorHandler));
+  }
+
   errorHandler(error) {
     return throwError(error || 'Server Error');
   }
