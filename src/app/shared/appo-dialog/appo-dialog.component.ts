@@ -7,14 +7,17 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ServService } from '@app/services';
 
 export interface DialogData {
   businessId: string;
   locationId: string;
   providerId: string;
+  serviceId: string;
   appoTime: string;
   appoDate: string;
   doors: string[];
+  dayData: any[];
 }
 
 @Component({
@@ -24,8 +27,15 @@ export interface DialogData {
 })
 export class AppoDialogComponent implements OnInit {
   newAppointment$: Observable<any>;
-  purpose$: Observable<any[]>;
+  services$: Observable<any[]>;
   doors: string[];
+  serviceId: string = '';
+  businessId: string = '';
+  locationId: string = '';
+  providerId: string = '';
+  dayInfo: any[]=[];
+
+  services: any[]=[];
 
   get f(){
     return this.clientForm.controls;
@@ -37,6 +47,7 @@ export class AppoDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<AppoDialogComponent>,
     private spinnerService: SpinnerService,
     private _snackBar: MatSnackBar,
+    private serviceService: ServService,
     private appointmentService: AppointmentService,
     private fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
@@ -50,7 +61,7 @@ export class AppoDialogComponent implements OnInit {
     Gender: [''],
     Door: [''],
     Preference: [''],
-    Purpose: [''],
+    ServiceId: ['',[Validators.required]],
     Disability: [''],
     Guests: ['1', [Validators.required, Validators.max(99), Validators.min(1)]]
   })
@@ -63,17 +74,28 @@ export class AppoDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.doors = this.data.doors;
+    this.serviceId = this.data.serviceId;
+    this.businessId = this.data.businessId;
+    this.providerId = this.data.providerId;
+    this.dayInfo = this.data.dayData;
+
     var spinnerRef = this.spinnerService.start("Loading Data...");
-    this.purpose$ = this.appointmentService.getPurpose(this.data.businessId).pipe(
-      map((res: any) => {
+    this.services$ = this.serviceService.getServicesProvider(this.businessId, this.providerId).pipe(
+      map((res: any) =>{
         this.spinnerService.stop(spinnerRef);
-        return res.Purpose;
+        if (this.serviceId == ''){
+          this.services = res.services.filter(x => x.Selected === 1);
+        } else {
+          this.services = res.services.filter(x => x.ServiceId == this.serviceId);
+        }
+        return res;
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
+        this.openSnackBar("Something goes wrong, try again","Loading Data");
         return err;
       })
-    );
+    )
   }
 
   onNoClick(){
@@ -96,8 +118,9 @@ export class AppoDialogComponent implements OnInit {
       BusinessId: this.data.businessId,
       LocationId: this.data.locationId,
       ProviderId: this.data.providerId,
+      ServiceId: this.data.serviceId,
       AppoDate: this.data.appoDate,
-      AppoHour: this.data.appoTime.replace('-',':'),
+      AppoHour: (this.data.appoTime.substring(6,8) == 'PM' ? (+this.data.appoTime.substring(0,2)+12).toString()+'-'+this.data.appoTime.substring(3,5) : this.data.appoTime.substring(0,2)+'-'+this.data.appoTime.substring(3,5)),
       Door: this.clientForm.value.Door,
       Phone: (phoneNumber == '' ?  '00000000000' : (phoneNumber.length <= 10 ? '1' + phoneNumber : phoneNumber)),
       Name: this.clientForm.value.Name,
@@ -106,7 +129,6 @@ export class AppoDialogComponent implements OnInit {
       Gender: (this.clientForm.value.Gender == '' ? '': this.clientForm.value.Gender),
       Preference: (this.clientForm.value.Preference == '' ? '': this.clientForm.value.Preference),
       Disability: (this.clientForm.value.Disability == null ? '': this.clientForm.value.Disability),
-      Purpose: this.clientForm.value.Purpose.toString(),
       Guests: this.clientForm.value.Guests,
       Status: 1,
       Type: 1
@@ -145,12 +167,41 @@ export class AppoDialogComponent implements OnInit {
         this.f.Phone.hasError('maxlength') ? 'Maximun length 14' :
           '';
     }
+    if (component === 'ServiceId'){
+      return this.f.ServiceId.hasError('required') ? 'You must select a value' :
+        '';
+    }
     if (component === 'Guests'){
       return this.f.Guests.hasError('required') ? 'You must enter a value' :
       this.f.Guests.hasError('maxlength') ? 'Maximun length 2' :
         this.f.Guests.hasError('min') ? 'Minimun value 1' :
           this.f.Guests.hasError('max') ? 'Maximun value 99' :
             '';
+    }
+  }
+
+  validateService(event){
+    let res = this.services.filter(x => x.ServiceId == event.value);
+    let validTime: number = 0;
+    let dateAppo = (this.data.appoTime.substring(6,8) == 'PM' ? +this.data.appoTime.substring(0,2)+12 : +this.data.appoTime.substring(0,2));
+
+    for (var _i = 0; _i < res[0].TimeService; _i++) {
+      let data = this.dayInfo.filter(x => (x.Time.substring(6,8) == 'PM' ? +x.Time.substring(0,2)+12 : +x.Time.substring(0,2)) == dateAppo+_i);
+      if (data.length > 0){        
+        if (data[0].Available > 0 && (data[0].ServiceId == '' || data[0].ServiceId == event.value)){
+          validTime = 1;
+        } else {
+          validTime = 0;
+          this.clientForm.patchValue({ServiceId: ''});
+          this.openSnackBar("Invalid time for this service","Schedule");
+          break;
+        }
+      } else {
+        validTime = 0;
+        this.clientForm.patchValue({ServiceId: ''});
+        this.openSnackBar("Invalid time for this service","Schedule");
+        break;
+      }
     }
   }
 

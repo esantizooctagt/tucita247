@@ -12,11 +12,10 @@
     font-weight: 600;
 }
 .hour-available{
-    background: white;
-    border: 1px solid lightgray;
-    background-color: #fff;
     color: green;
+    text-align: center;
     font-weight: 600;
+    line-height: 45px;
 }
 .hour-disabled{
     background: white;
@@ -27,12 +26,22 @@
     color: #F44F00;
 }
 .time-bucket{
-    height: 70px;
+    height: 46px;
 }
 .time-actions{
     height: 47px;
     background-color: #fff;
     border: 1px solid lightgray;
+}
+.time-disabled{
+    height: 47px;
+    background-color: #e5e3e2;
+    border: 1px solid lightgray;
+}
+.time-actions-disabled{
+    height: 47px;
+    background-color: #e5e3e2;
+    // border: 1px solid lightgray;
 }
 .time-week{
     height: 50px;

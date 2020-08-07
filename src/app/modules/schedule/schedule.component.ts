@@ -91,9 +91,9 @@ export class ScheduleComponent implements OnInit {
       map((res: any) => {
         if (res.Code == 200){
           if (res.Locs.length > 0){
-            if (res.Locs[0].Services.length > 0){
-              this.locationData = res.Locs[0].Services[0].ProviderId;
-              this.providerId = res.Locs[0].Services[0].ProviderId.split('#')[1];
+            if (res.Locs[0].Providers.length > 0){
+              this.locationData = res.Locs[0].Providers[0].ProviderId;
+              this.providerId = res.Locs[0].Providers[0].ProviderId.split('#')[1];
             }
             this.locationId = res.Locs[0].LocationId;
             this.doors = res.Locs[0].Doors;
@@ -121,7 +121,7 @@ export class ScheduleComponent implements OnInit {
     this.SatHours = [];
     this.SunHours = [];
     var spinnerRef = this.spinnerService.start("Loading Schedule...");
-    this.operationHours$ = this.appointmentService.getOperationHours(this.businessId, this.locationId, this.providerId, 'd75c40e3702d43cb9976a9df4ad1b769', this.datepipe.transform(this.monday, 'yyyy-MM-dd')).pipe(
+    this.operationHours$ = this.appointmentService.getOperationHours(this.businessId, this.locationId, this.providerId, this.datepipe.transform(this.monday, 'yyyy-MM-dd')).pipe(
       map((res: any) => {
         if (res.Code == 200){
           this.hours = res.Hours;
@@ -149,9 +149,9 @@ export class ScheduleComponent implements OnInit {
     return copy
   }
 
-  getBucket(timeGrl: string, dayNum: number): number{
+  getDayData(timeGrl: string, dayNum: number): any{
     let result;
-    let value = 0;
+    let value = {};
     switch (dayNum){
       case 1: 
         result = this.MonHours.filter(val => val.Time == timeGrl);
@@ -178,43 +178,39 @@ export class ScheduleComponent implements OnInit {
         break;
     }
     if (result.length > 0 && result != undefined){
-      value = result[0].Bucket;
+      value = result[0];
     }
     return value;
   }
 
-  getAvailability(timeGrl: string, dayNum: number): string{
+  getDayInfo(dayNum: number): any{
     let result;
-    let value = '0';
     switch (dayNum){
       case 1: 
-        result = this.MonHours.filter(val => val.Time == timeGrl);
+        result = this.MonHours;
         break;
       case 2: 
-        result = this.TueHours.filter(val => val.Time == timeGrl);
+        result = this.TueHours;
         break;
       case 3: 
-        result = this.WedHours.filter(val => val.Time == timeGrl);
+        result = this.WedHours;
         break;
       case 4: 
-        result = this.ThuHours.filter(val => val.Time == timeGrl);
+        result = this.ThuHours;
         break;
       case 5: 
-        result = this.FriHours.filter(val => val.Time == timeGrl);
+        result = this.FriHours;
         break;
       case 6: 
-        result = this.SatHours.filter(val => val.Time == timeGrl);
+        result = this.SatHours;
         break;
       case 7: 
-        result = this.SunHours.filter(val => val.Time == timeGrl);
+        result = this.SunHours;
         break;
       default: 
         break;
     }
-    if (result.length > 0 && result != undefined){
-      value = result[0].Available.toString();
-    }
-    return value;
+    return result;
   }
 
   nextWeek(){
@@ -265,13 +261,16 @@ export class ScheduleComponent implements OnInit {
   }
 
   newAppo(timeGrl: string, day: Date, dayNum: number){
-    let result = this.getAvailability(timeGrl, dayNum);
-    let timeSel = (timeGrl.substring(6) == 'PM' ? (+timeGrl.substring(0,2)+12).toString() + '-' + timeGrl.substring(3,5) : timeGrl.replace(':','-').substring(0,5));
-    if (result == '0') { return; }
+    let result = this.getDayData(timeGrl, dayNum);
+    let dayInfo = this.getDayInfo(dayNum);
+    if (result == {}) { return; }
+    
+    // let timeSel = (timeGrl.substring(6) == 'PM' ? (+timeGrl.substring(0,2)+12).toString() + '-' + timeGrl.substring(3,5) : timeGrl.replace(':','-').substring(0,5));
+    if (result.Available == 0) { return; }
     const dialogRef = this.dialog.open(AppoDialogComponent, {
       width: '450px',
       height: '700px',
-      data: {businessId: this.businessId, locationId: this.locationId, appoTime: timeSel, appoDate: this.datepipe.transform(day, 'yyyy-MM-dd'), doors: this.doors.split(',')}
+      data: {businessId: this.businessId, locationId: this.locationId, providerId: this.providerId, serviceId: result.ServiceId, appoTime: timeGrl, appoDate: this.datepipe.transform(day, 'yyyy-MM-dd'), doors: this.doors.split(','), dayData: dayInfo}
     });    
   }
 

@@ -1017,7 +1017,7 @@ export class HostComponent implements OnInit {
               DateFull: item['DateAppo'],
               DateAppo: hora,
               Type: item['Type'],
-              Purpose: item['Purpose'],
+              // Purpose: item['Purpose'],
               Unread: item['Unread']
             }
             this.previous.push(data);
@@ -1071,7 +1071,7 @@ export class HostComponent implements OnInit {
               Phone: item['Phone'],
               DateFull: item['DateAppo'],
               Type: item['Type'],
-              Purpose: item['Purpose'],
+              // Purpose: item['Purpose'],
               DateAppo: hora,
               Unread: item['Unread']
             }
@@ -1132,7 +1132,7 @@ export class HostComponent implements OnInit {
               DateFull: item['DateAppo'],
               DateAppo: hora,
               Type: item['Type'],
-              Purpose: item['Purpose'],
+              // Purpose: item['Purpose'],
               Unread: item['Unread']
             }
             this.walkIns.push(data);
@@ -1185,7 +1185,7 @@ export class HostComponent implements OnInit {
               DateFull: item['DateAppo'],
               DateAppo: hora,
               Type: item['Type'],
-              Purpose: item['Purpose'],
+              // Purpose: item['Purpose'],
               Unread: item['Unread'],
               CheckInTime: item['CheckInTime'],
               ElapsedTime: this.calculateTime(item['CheckInTime'])

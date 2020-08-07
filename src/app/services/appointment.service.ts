@@ -92,8 +92,8 @@ export class AppointmentService {
                     .pipe(catchError(this.errorHandler))
   }
 
-  getOperationHours(businessId, locationId, providerId, serviceId, initDay){
-    return this.http.get<any>(this.apiURL + '/appointment/opeHours/' + businessId + '/' + locationId + '/' + providerId + '/' + serviceId + '/' + initDay)
+  getOperationHours(businessId, locationId, providerId, initDay){
+    return this.http.get<any>(this.apiURL + '/appointment/opeHours/' + businessId + '/' + locationId + '/' + providerId + '/' + initDay)
                     .pipe(catchError(this.errorHandler));
   }
 

@@ -79,11 +79,12 @@
     </div>
     <div class="row pl-3 pr-3">
         <div class="form-field pl-3 pr-3 col-md">
-            <label>Purpose</label>
+            <label>Service</label>
             <mat-form-field>
-                <mat-select name="purpose" formControlName="Purpose" multiple>
-                    <mat-option *ngFor="let item of purpose$ | async" [value]="item">
-                        {{item}}
+                <ng-container *ngIf="services$ | async"></ng-container>
+                <mat-select name="service" formControlName="ServiceId" (selectionChange)="validateService($event)">
+                    <mat-option *ngFor="let item of services" [value]="item.ServiceId">
+                        {{item.Name}}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
