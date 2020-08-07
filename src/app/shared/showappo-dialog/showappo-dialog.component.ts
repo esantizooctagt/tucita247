@@ -103,7 +103,7 @@ export class ShowappoDialogComponent implements OnInit {
   getAppointmentsSche(){
     let hourIni = this.data.appoTime.replace(':','-');
     let dateAppoStr = this.data.appoDate + '-' + hourIni;
-    this.schedule = undefined;
+    this.schedule = [];
     var spinnerRef = this.spinnerService.start("Loading Appointments...");
     this.appointmentsSche$ = this.appointmentService.getAppointmentsSche(this.businessId, this.locationId, this.providerId, dateAppoStr).pipe(
       map((res: any) => {
@@ -122,7 +122,7 @@ export class ShowappoDialogComponent implements OnInit {
               Phone: item['Phone'],
               DateFull: item['DateAppo'],
               Type: item['Type'],
-              Purpose: item['Purpose'],
+              // Purpose: item['Purpose'],
               DateAppo: hora,
               Unread: item['Unread']
             }
