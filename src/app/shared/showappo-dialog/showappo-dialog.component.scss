@@ -5,6 +5,9 @@ mat-card{
     box-shadow: -3px 1px 4px rgba(0, 0, 0, 0.25) !important;
     border-radius: 0px; //10px;
 }
+:host ::ng-deep mat-dialog-container{
+    overflow:  hidden !important;
+}
 :host ::ng-deep .mat-form-field {
     .mat-form-field-wrapper {
         padding-bottom: 0;
@@ -341,7 +344,7 @@ mat-icon.mat-icon.notranslate.material-icons.mat-icon-no-color {
     padding-right: 15px;
 }
 .citas-content{
-    max-height: 77vh !important;
+    max-height: 570px !important;
 }
 mat-menu{
     overflow: auto;

@@ -33,6 +33,7 @@ export class AppoDialogComponent implements OnInit {
   businessId: string = '';
   locationId: string = '';
   providerId: string = '';
+  newTime: string = '';
   dayInfo: any[]=[];
 
   services: any[]=[];
@@ -189,6 +190,7 @@ export class AppoDialogComponent implements OnInit {
       let data = this.dayInfo.filter(x => (x.Time.substring(6,8) == 'PM' ? +x.Time.substring(0,2)+12 : +x.Time.substring(0,2)) == dateAppo+_i);
       if (data.length > 0){        
         if (data[0].Available > 0 && (data[0].ServiceId == '' || data[0].ServiceId == event.value)){
+          this.newTime = dateAppo+_i > 12 ? (dateAppo+_i-12).toString().padStart(2,'0') + ':00 PM' : (dateAppo+_i).toString().padStart(2,'0') +':00 AM';
           validTime = 1;
         } else {
           validTime = 0;

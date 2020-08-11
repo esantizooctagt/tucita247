@@ -72,6 +72,7 @@ import { PhoneMaskDirective } from '@shared/phone-mask.directive';
 import { AgmCoreModule } from '@agm/core';
 import { PhonePipe } from '@shared/phone.pipe';
 import { HourdataPipe } from './shared/hourdata.pipe';
+import { ServcolorPipe } from './shared/servcolor.pipe';
 import { AppoDialogComponent } from './shared/appo-dialog/appo-dialog.component';
 import { ShowappoDialogComponent } from './shared/showappo-dialog/showappo-dialog.component';
 import { DatePipe } from '@angular/common';
@@ -110,7 +111,8 @@ import { LocationListComponent } from './modules/locations/location-list/locatio
     ServiceComponent,
     LocationComponent,
     LocationListComponent,
-    HourdataPipe
+    HourdataPipe,
+    ServcolorPipe
   ],
   imports: [
     BrowserModule,

@@ -1,7 +1,19 @@
 <ng-container *ngIf="newAppointment$ | async"></ng-container>
 <h3 class="pl-3 pr-3 pb-3">Add New Appointment</h3>
-<h5 class="pl-3 pr-3 pb-3">{{ (data.appoDate | date: 'MMM, d') + ' ' + data.appoTime.replace('-',':')}}</h5>
+<h5 class="pl-3 pr-3 pb-3">{{ (data.appoDate | date: 'MMM, d') + ' ' + data.appoTime.replace('-',':') + (newTime != '' ? ' - ' + newTime: '')}}</h5>
 <form [formGroup]="clientForm">
+    <div class="row pl-3 pr-3">
+        <div class="form-field pl-3 pr-3 col-md">
+            <mat-form-field hint="select service">
+                <ng-container *ngIf="services$ | async"></ng-container>
+                <mat-select placeholder="Service" name="service" formControlName="ServiceId" (selectionChange)="validateService($event)" required>
+                    <mat-option *ngFor="let item of services" [value]="item.ServiceId">
+                        {{item.Name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
     <div class="form-field pl-3 pr-3">
         <mat-form-field hintLabel="Phone number">
             <input matInput #Phone placeholder="+1 (555) 555-1234" appPhoneMask maxlength="17" formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher">
@@ -53,7 +65,7 @@
             <mat-radio-group aria-label="Select an option" formControlName="Disability" class="client_gender mt-0">
                 <mat-radio-button matLine value="1">Senior</mat-radio-button>
                 <mat-radio-button matLine value="2">Pregnant</mat-radio-button>
-                <mat-radio-button matLine value="3">Disable</mat-radio-button>
+                <mat-radio-button matLine value="3">Disability</mat-radio-button>
             </mat-radio-group>
         </div>
     </div>
@@ -75,19 +87,6 @@
                 <mat-radio-button matLine value="2">Email</mat-radio-button>
                 <mat-radio-button matLine value="3">Push Notification</mat-radio-button>
             </mat-radio-group>
-        </div>
-    </div>
-    <div class="row pl-3 pr-3">
-        <div class="form-field pl-3 pr-3 col-md">
-            <label>Service</label>
-            <mat-form-field>
-                <ng-container *ngIf="services$ | async"></ng-container>
-                <mat-select name="service" formControlName="ServiceId" (selectionChange)="validateService($event)">
-                    <mat-option *ngFor="let item of services" [value]="item.ServiceId">
-                        {{item.Name}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
         </div>
     </div>
     <!-- {{ clientForm.value | json }} -->

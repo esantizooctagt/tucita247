@@ -65,6 +65,21 @@
     background: #F5F5F5;
     height: calc(100vh - 64px) !important;
 }
+.square-color{
+    width: 20px;
+    height: 20px;
+    border: 2px solid #e5e3e2;
+    border-radius: 90%;
+    margin-right: 5px;
+}
+:host ::ng-deep .mat-list.list-horizontal {
+    padding: 0;
+    .mat-list-item {
+      display: inline-block;
+      height: auto;
+      width: auto;
+    }
+  }
 button.mat-icon-button
 {
     &.cdk-program-focused 

@@ -1,5 +1,6 @@
-<h3 mat-dialog-title class="pr-3 mb-1">Citas</h3>
-<h5 mat-dialog-title class="pr-3 mb-1">{{ (data.appoDate | date: 'MMM, d') + ' ' + data.appoTime.replace('-',':')}}</h5>
+<h3 class="pl-3 pr-3">Citas</h3>
+<h5 class="pl-3 pr-3">{{ (data.appoDate | date: 'MMM, d') + ' ' + newTime}}</h5>
+<h5 class="pl-3 pr-3">{{data.service}}</h5>
 <div class="container-fluid host-container">
     <div mat-dialog-content class="citas-content row pb-2">
         <ng-container *ngIf="comments$ | async"></ng-container>
@@ -29,10 +30,6 @@
                         <div class="card-contentprio col-md-6 pl-0">Number of guests: </div>
                         <div class="card-resultprio col-md">{{item.Guests}}</div>
                     </div>
-                    <!-- <div class="row pr-3 pl-3 mt-2 mb-2">
-                        <div class="card-contentprio col-md-6 pl-0">Purpose: </div>
-                        <div class="card-resultprio-door col-md">{{item.Purpose}}</div>
-                    </div> -->
                     <div class="row pr-3 pl-3 mt-2 mb-2">
                         <div class="card-contentprio col-md-6 pl-0">Door: </div>
                         <div class="card-resultprio-door col-md">{{item.Door}}</div>

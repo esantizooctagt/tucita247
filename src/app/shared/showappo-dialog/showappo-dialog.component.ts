@@ -16,6 +16,7 @@ export interface DialogData {
   providerId: string;
   appoTime: string;
   appoDate: string;
+  service: string;
 }
 
 @Component({
@@ -46,6 +47,7 @@ export class ShowappoDialogComponent implements OnInit {
   providerId: string = '';
   userId: string = '';
   onError: string = '';
+  newTime: string = '';
 
   constructor(
     public dialogRef: MatDialogRef<ShowappoDialogComponent>,
@@ -83,6 +85,7 @@ export class ShowappoDialogComponent implements OnInit {
     this.locationId = this.data.locationId;
     this.providerId = this.data.providerId;
 
+    this.newTime = +this.data.appoTime.substring(0,2) > 12 ? (+this.data.appoTime.substring(0,2)-12).toString() + ':00 PM' : this.data.appoTime + ' AM';
     this.reasons$ = this.reasonService.getReasons(this.businessId).pipe(
       map((res: any) => {
         if (res != null ){
@@ -103,8 +106,8 @@ export class ShowappoDialogComponent implements OnInit {
   getAppointmentsSche(){
     let hourIni = this.data.appoTime.replace(':','-');
     let dateAppoStr = this.data.appoDate + '-' + hourIni;
-    this.schedule = [];
     var spinnerRef = this.spinnerService.start("Loading Appointments...");
+    this.schedule = [];
     this.appointmentsSche$ = this.appointmentService.getAppointmentsSche(this.businessId, this.locationId, this.providerId, dateAppoStr).pipe(
       map((res: any) => {
         if (res != null) {
@@ -122,7 +125,6 @@ export class ShowappoDialogComponent implements OnInit {
               Phone: item['Phone'],
               DateFull: item['DateAppo'],
               Type: item['Type'],
-              // Purpose: item['Purpose'],
               DateAppo: hora,
               Unread: item['Unread']
             }
@@ -134,6 +136,7 @@ export class ShowappoDialogComponent implements OnInit {
       }),
       catchError(err => {
         this.onError = err.Message;
+        this.schedule = [];
         this.spinnerService.stop(spinnerRef);
         return this.onError;
       })

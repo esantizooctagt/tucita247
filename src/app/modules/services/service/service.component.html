@@ -27,6 +27,11 @@
                     <mat-error *ngIf="f.CustomerPerTime.invalid && f.CustomerPerTime.touched">{{getErrorMessage('CustomerPerTime')}}</mat-error>
                 </mat-form-field>
             </div>
+            <div class="form-field pl-3 pr-3">
+                <mat-radio-group formControlName="Color" required>
+                    <mat-radio-button class="mb-2" *ngFor="let item of palette" [value]="item.id"><div class="square-color" [ngStyle]="{'background': item.value}"></div></mat-radio-button>
+                </mat-radio-group>
+            </div>
             <div class="form-field-check ml-3 pr-3"
                 *ngIf="serviceForm.value.ServiceId !== '' && serviceForm.value.ServiceId !== null">
                 <mat-checkbox formControlName="Status">Status</mat-checkbox>

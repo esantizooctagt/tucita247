@@ -21,6 +21,11 @@ export class ServService {
                       .pipe(catchError(this.errorHandler));
   }
 
+  getServicesColor(businessId): Observable<any[]> {
+    return this.http.get<any[]>(this.apiURL + '/services/' + businessId)
+                    .pipe(catchError(this.errorHandler));
+  }
+
   postServices(formData) {
     return this.http.post(this.apiURL + '/service', formData)
                     .pipe(catchError(this.errorHandler));

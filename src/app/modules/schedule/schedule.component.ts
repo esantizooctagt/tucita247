@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
-import { LocationService } from '@app/services';
+import { LocationService, ServService } from '@app/services';
 import { map, catchError } from 'rxjs/operators';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { AuthService } from '@app/core/services';
 import { AppoDialogComponent } from '@app/shared/appo-dialog/appo-dialog.component';
 import { ShowappoDialogComponent } from '@app/shared/showappo-dialog/showappo-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '@app/shared/dialog/dialog.component';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
 import { AppointmentService } from '@app/services/appointment.service';
 
@@ -44,11 +45,15 @@ export class ScheduleComponent implements OnInit {
 
   locationData$: Observable<any[]>;
   cancelAppos$: Observable<any>;
+  services$: Observable<any[]>;
   locations: any[]=[];
   operationHours$: Observable<any>;
   locationData: string = '';
   locationId: string = '';
   providerId: string = '';
+  resServices: any[]=[];
+
+  displayYesNo: boolean = false;
   
   constructor(
     private authService: AuthService,
@@ -56,6 +61,7 @@ export class ScheduleComponent implements OnInit {
     private matIconRegistry: MatIconRegistry,
     private locationService: LocationService,
     private spinnerService: SpinnerService,
+    private serviceService: ServService,
     private appointmentService: AppointmentService,
     public dialog: MatDialog,
     public datepipe: DatePipe
@@ -64,6 +70,23 @@ export class ScheduleComponent implements OnInit {
     this.matIconRegistry.addSvgIcon('cancel02',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/cancelAppos.svg'));
     this.matIconRegistry.addSvgIcon('view',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/expand02.svg'));
    }
+
+  openDialog(header: string, message: string, success: boolean, error: boolean, warn: boolean): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      header: header, 
+      message: message, 
+      success: success, 
+      error: error, 
+      warn: warn
+    };
+    dialogConfig.width ='280px';
+    dialogConfig.minWidth = '280px';
+    dialogConfig.maxWidth = '280px';
+
+    this.dialog.open(DialogComponent, dialogConfig);
+  }
 
   ngOnInit(): void {
     let yearCurr = this.getYear();
@@ -87,6 +110,17 @@ export class ScheduleComponent implements OnInit {
 
     this.businessId = this.authService.businessId();
     var spinnerRef = this.spinnerService.start("Loading Schedule...");
+
+    this.services$ = this.serviceService.getServicesColor(this.businessId).pipe(
+      map((res: any) => {
+        this.resServices = res;
+        return res;
+      }),
+      catchError(err => {
+        this.spinnerService.stop(spinnerRef);
+        return err;
+      })
+    );
     this.locationData$ = this.locationService.getLocationsHost(this.businessId).pipe(
       map((res: any) => {
         if (res.Code == 200){
@@ -265,7 +299,6 @@ export class ScheduleComponent implements OnInit {
     let dayInfo = this.getDayInfo(dayNum);
     if (result == {}) { return; }
     
-    // let timeSel = (timeGrl.substring(6) == 'PM' ? (+timeGrl.substring(0,2)+12).toString() + '-' + timeGrl.substring(3,5) : timeGrl.replace(':','-').substring(0,5));
     if (result.Available == 0) { return; }
     const dialogRef = this.dialog.open(AppoDialogComponent, {
       width: '450px',
@@ -285,20 +318,51 @@ export class ScheduleComponent implements OnInit {
   }
 
   cancelTime(timeGrl: string, day: any){
-    var spinnerRef = this.spinnerService.start("Cancel Appointments...");
-    this.cancelAppos$ = this.appointmentService.getAppointmentsSche(this.businessId, this.locationId, this.providerId, this.datepipe.transform(day, 'yyyy-MM-dd') + '-' + timeGrl).pipe(
-      map((res: any) => {
-        if (res != null) {
-        }
-      })
-    );
+    this.displayYesNo = true;
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      header: 'Citas', 
+      message: 'Are you sure to delete this Citas?', 
+      success: false, 
+      error: false, 
+      warn: false,
+      ask: this.displayYesNo
+    };
+    dialogConfig.width ='280px';
+    dialogConfig.minWidth = '280px';
+    dialogConfig.maxWidth = '280px';
+
+    const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(result => {
+      if(result != undefined){
+        var spinnerRef = this.spinnerService.start("Deleting Citas...");
+        this.cancelAppos$ = this.appointmentService.putCancelAppos(this.businessId, this.locationId, this.providerId, this.datepipe.transform(day, 'yyyy-MM-dd') + '-' + timeGrl.replace(':','-')).pipe(
+          map((res: any) => {
+            if (res != null) {
+              if (res.Code == 200){
+                this.openDialog('Citas', 'Citas deleted successfully', true, false, false);
+                this.spinnerService.stop(spinnerRef);
+              }
+            }
+          })
+        );
+      }
+    });
   }
 
-  expandTime(timeGrl: Date, day: any){
+  expandTime(timeGrl: string, day: any, timeNom: string, dayNum: number){
+    let result = this.getDayData(timeNom, dayNum);
+    if (result == {}) { return; }
+    let res = this.resServices.filter(x => x.ServiceId == result.ServiceId);
+    let nameService = '';
+    if (res.length > 0){
+      nameService = res[0].Name;
+    }
     const dialogRef = this.dialog.open(ShowappoDialogComponent, {
       width: '450px',
       height: '700px',
-      data: {businessId: this.businessId, locationId: this.locationId, providerId: this.providerId, appoTime: timeGrl, appoDate: this.datepipe.transform(day, 'yyyy-MM-dd')}
+      data: {businessId: this.businessId, locationId: this.locationId, providerId: this.providerId, service: nameService, appoTime: timeGrl, appoDate: this.datepipe.transform(day, 'yyyy-MM-dd')}
     });
   }
 

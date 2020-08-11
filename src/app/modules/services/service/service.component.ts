@@ -20,6 +20,9 @@ export class ServiceComponent implements OnInit {
   service$: Observable<any>;
   saveService$: Observable<any>; 
   serviceDataList: any;
+  palette: any[] = [];
+  
+  // ,"EDEDED","FFF2CC","DDEBF7","8EA9DB","F4B084","C9C9C9","FFD966","9BC2E6","F2E5FF","FFFFB3","ABDBFF","FFC1EF","E2EFDA","CC99FF","FFFF00","47B0FF","FF6DD9","A9D08E"];
 
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
@@ -41,6 +44,7 @@ export class ServiceComponent implements OnInit {
     Name: ['', [Validators.required, Validators.maxLength(100), Validators.minLength(3)]],
     TimeService: ['', [Validators.required, Validators.max(999), Validators.min(1)]],
     CustomerPerTime: ['', [Validators.required, Validators.max(999), Validators.min(1)]],
+    Color: ['', [Validators.required]],
     Status: [true]
   });
 
@@ -63,7 +67,7 @@ export class ServiceComponent implements OnInit {
 
   ngOnInit(): void {
     this.businessId = this.authService.businessId();
-
+    this.palette = [{id:"#D9E1F2",value:"#D9E1F2"},{id:"#FCE4D6",value:"#FCE4D6"},{id:"#EDEDED",value:"#EDEDED"},{id:"#FFF2CC",value:"#FFF2CC"},{id:"#DDEBF7",value:"#DDEBF7"},{id:"#8EA9DB",value:"#8EA9DB"},{id:"#F4B084",value:"#F4B084"},{id:"#C9C9C9",value:"#C9C9C9"},{id:"#FFD966",value:"#FFD966"},{id:"#9BC2E6",value:"#9BC2E6"},{id:"#F2E5FF",value:"#F2E5FF"},{id:"#FFFFB3",value:"#FFFFB3"},{id:"#ABDBFF",value:"#ABDBFF"},{id:"#FFC1EF",value:"#FFC1EF"},{id:"#E2EFDA",value:"#E2EFDA"},{id:"#CC99FF",value:"#CC99FF"},{id:"#FFFF00",value:"#FFFF00"},{id:"#47B0FF",value:"#47B0FF"},{id:"#FF6DD9",value:"#FF6DD9"},{id:"#A9D08E",value:"#A9D08E"}];
     this.data.objectMessage.subscribe(res => this.serviceDataList = res);
     this.onDisplay();
   }
@@ -71,7 +75,7 @@ export class ServiceComponent implements OnInit {
   onDisplay(){
     if (this.serviceDataList != undefined){
       var spinnerRef = this.spinnerService.start("Loading Service...");
-      this.serviceForm.reset({ ServiceId: '', Name: '', TimeService: '', CustomerPerTime: '', Status: true});
+      this.serviceForm.reset({ ServiceId: '', Name: '', TimeService: '', CustomerPerTime: '', Color: '', Status: true});
       this.service$ = this.serviceService.getService(this.businessId, this.serviceDataList).pipe(
         map(res => {
           this.serviceForm.setValue({
@@ -79,6 +83,7 @@ export class ServiceComponent implements OnInit {
             Name: res.Name,
             TimeService: res.TimeService,
             CustomerPerTime: res.CustomerPerTime,
+            Color: res.Color,
             Status: (res.Status == 1 ? true : false)
           });
           this.spinnerService.stop(spinnerRef);
@@ -112,10 +117,14 @@ export class ServiceComponent implements OnInit {
           this.f.CustomerPerTime.hasError('max') ? 'Maximun length 999' :
           '';
     }
+    if (component === 'Color'){
+      return this.f.Color.hasError('required') ? 'You must select a valid value' :
+        '';
+    }
   }
 
   onCancel(){
-    this.serviceForm.reset({ ServiceId: '', Name: '', TimeService: '', CustomerPerTime: '', Status: true});
+    this.serviceForm.reset({ ServiceId: '', Name: '', TimeService: '', CustomerPerTime: '', Color: '', Status: true});
   }
 
   onSubmit(){
@@ -127,6 +136,7 @@ export class ServiceComponent implements OnInit {
       TimeService: this.serviceForm.value.TimeService,
       Name: this.serviceForm.value.Name,
       CustomerPerTime: this.serviceForm.value.CustomerPerTime,
+      Color: this.serviceForm.value.Color,
       Status: this.serviceForm.value.Status == true ? 1 : 0
     }
 
