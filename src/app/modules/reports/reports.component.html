@@ -6,35 +6,85 @@
             </div>
             <div class="row p-0 m-0">
                 <mat-card class="col-sm col-md-12 col-lg-12 mr-3">
-                    <div class="row ml-2 mb-2">
-                        <h2>Average time</h2>
+                    <div class="row ml-4 mb-2 mr-2">
+                        <h2>Select Options</h2>
                     </div>
-                    <div class="">
-                        <h5 class="">Location</h5>
-                        <mat-form-field>
-                            <mat-select>
-                                <mat-option [value]="9">
-                                    ZONA 09
-                                </mat-option>
-                                <mat-option [value]="10">
-                                    ZONA 10
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                        <h5 class="">Period of time</h5>
-                        <mat-form-field class="col-md-4">
-                            <mat-label>Choose a init date</mat-label>
-                            <input matInput [matDatepicker]="pickerInit">
-                            <mat-datepicker-toggle matSuffix [for]="pickerInit"></mat-datepicker-toggle>
-                            <mat-datepicker #pickerInit></mat-datepicker>
-                        </mat-form-field>
-                        <mat-form-field class="col-md-4">
-                            <mat-label>Choose a final date</mat-label>
-                            <input matInput [matDatepicker]="pickerFinal">
-                            <mat-datepicker-toggle matSuffix [for]="pickerFinal"></mat-datepicker-toggle>
-                            <mat-datepicker #pickerFinal></mat-datepicker>
-                        </mat-form-field>
+                    <div class="row ml-4 mb-2 mr-2">
+                        <div class="col-md-4 ml-0 mb-2 mr-0 p-0">
+                            <h5 class="m-0">Location</h5>
+                            <mat-form-field hintLabel="Location">
+                                <mat-select name="locations" (selectionChange)="onLocationChange($event)">
+                                    <mat-option *ngFor="let item of locations$ | async" [value]="item.LocationId">
+                                        {{item.Name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4 ml-3 mb-2 mr-0 p-0">
+                            <h5 class="m-0">Service Provider</h5>
+                            <mat-form-field hintLabel="Service Provider">
+                                <mat-select name="providers" [(ngModel)]="providerId">
+                                    <mat-option *ngFor="let item of providers$ | async" [value]="item.ProviderId">
+                                        {{item.Name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
                     </div>
+                    <div class="row ml-4 mb-2 mr-2">
+                        <div class="col-md-4 ml-0 mb-2 mr-0 p-0">
+                            <mat-form-field>
+                                <mat-label>Period of time</mat-label>
+                                <mat-date-range-input [rangePicker]="picker" [max]="maxDate" [min]="minDate">
+                                    <input matStartDate [(ngModel)]="dateIni" placeholder="Start date">
+                                    <input matEndDate [(ngModel)]="dateFin" placeholder="End date">
+                                </mat-date-range-input>
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-date-range-picker #picker></mat-date-range-picker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row ml-4 mb-2 mr-2">
+                        <mat-radio-group [(ngModel)]="report">
+                            <mat-radio-button class="mr-2" name="radio" [checked]="true" [value]="1">Promedio de visita
+                            </mat-radio-button>
+                            <mat-radio-button class="mr-2" name="radio" [value]="2">Visitantes</mat-radio-button>
+                            <mat-radio-button class="mr-2" name="radio" [value]="3">Cancelaciones</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                    <div class="row ml-4 mb-2 mr-2 mt-4">
+                        <button mat-flat-button color="primary" id="generar" class="mr-3"
+                            (click)="genReporte()">Generar</button>
+                        <button mat-flat-button color="primary" id="generar" (click)="exportExcel()">Exportar</button>
+                    </div>
+                </mat-card>
+            </div>
+            <div class="mat-data mt-3">
+                <ng-container *ngIf="report$ | async"></ng-container>
+                <mat-card *ngIf="report == 1">
+                    <form [formGroup]="averageForm">
+                        <div class="data-container" #TABLE>
+                            <table mat-table #table [dataSource]="fAverage.controls" formArrayName="Average"
+                                class="pl-0 pr-0 pt-1 pb-2 col-md-12 mt-1 mb-1 mat-elevation-z2">
+                                <ng-container matColumnDef="Qty">
+                                    <th mat-header-cell *matHeaderCellDef class="col-md-6"> Qty </th>
+                                    <td mat-cell *matCellDef="let element" class="col-md-6">
+                                        {{element.value.Qty}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Time">
+                                    <th mat-header-cell *matHeaderCellDef class="col-md-6"> Time </th>
+                                    <td mat-cell *matCellDef="let element" class="col-md-6">
+                                        {{element.value.Time}}
+                                    </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="aveColumns; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: aveColumns;"></tr>
+                            </table>
+                        </div>
+                    </form>
                 </mat-card>
             </div>
         </div>

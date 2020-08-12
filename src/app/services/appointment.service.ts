@@ -97,6 +97,11 @@ export class AppointmentService {
                     .pipe(catchError(this.errorHandler));
   }
 
+  getRepoAverage(businessId, locationId, providerId, dateIni, dateFin){
+    return this.http.get<any>(this.apiURL + '/appointments/repAverage/' + businessId + '/' + locationId + '/' + providerId + '/' + dateIni + '/' + dateFin)
+                    .pipe(catchError(this.errorHandler));
+  }
+
   errorHandler(error) {
     return throwError(error || 'Server Error');
   }

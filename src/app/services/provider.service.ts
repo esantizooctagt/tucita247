@@ -21,6 +21,11 @@ export class ProviderService {
                       .pipe(catchError(this.errorHandler));
   }
 
+  getProvidersLoc(businessId, locationId): Observable<any[]> {
+    return this.http.get<any[]>(this.apiURL + '/providers/' + businessId + '/' + locationId)
+                    .pipe(catchError(this.errorHandler));
+}
+
   postProviders(formData) {
     return this.http.post(this.apiURL + '/provider', formData)
                     .pipe(catchError(this.errorHandler));

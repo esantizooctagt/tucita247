@@ -1,0 +1,12 @@
+// :host ::ng-deep mat-form-field .mat-form-field-flex{
+//     background-color: #fff !important;
+// }
+
+.data-container {
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+    min-width: 300px;
+    overflow: auto;
+}
+  
