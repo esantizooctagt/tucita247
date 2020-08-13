@@ -19,7 +19,11 @@
                 <mat-form-field>
                     <mat-label>Password</mat-label>
                     <input type="password" matInput placeholder="Password" formControlName="password"
-                        [errorStateMatcher]="confirmValidParentMatcher" required>
+                        [errorStateMatcher]="confirmValidParentMatcher" [type]="hide ? 'password' : 'text'" required>
+                    <button type="button" mat-icon-button matSuffix (click)="hide = !hide"
+                        [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
                     <mat-error *ngIf="f.password.invalid">{{getErrorMessage('Password')}}</mat-error>
                 </mat-form-field>
             </div>

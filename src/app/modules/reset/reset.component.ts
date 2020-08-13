@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { UserService } from "@app/services";
 import { map, catchError, tap } from 'rxjs/operators';
+import { PasswordValidators } from '@app/validators';
 import { Observable, throwError } from 'rxjs';
 import { AuthService } from '@core/services';
 import { SpinnerService } from '@app/shared/spinner.service';
@@ -47,8 +48,8 @@ export class ResetComponent implements OnInit {
 
     this.resetForm = this.fb.group({
       Passwords : this.fb.group({
-        password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}")]],
-        confpassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}")]]
+        password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), PasswordValidators.strong]],
+        confpassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), PasswordValidators.strong]]
       }, {validator: this.checkPasswords})
     });
   }

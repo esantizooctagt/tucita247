@@ -83,6 +83,8 @@ import { ServiceComponent } from '@modules/services/service/service.component';
 import { LocationComponent } from './modules/locations/location/location.component';
 import { LocationListComponent } from './modules/locations/location-list/location-list.component';
 
+// apiKey: 'AIzaSyCyKdLcjPnI3n5Eb2VmMJk-sgan83LEsCM'
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -156,7 +158,7 @@ import { LocationListComponent } from './modules/locations/location-list/locatio
     InfiniteScrollModule,
     NgxChartsModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyCyKdLcjPnI3n5Eb2VmMJk-sgan83LEsCM'
+      apiKey: 'AIzaSyBdQ6vAlbIi3u_KdiMv8KILsjYExJLDUGU'
     })
   ],
   exports: [

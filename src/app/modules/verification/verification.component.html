@@ -5,7 +5,6 @@
 <div class="container login-container">
     <form [formGroup]="verifForm" class="loginForm" (ngSubmit)="onSubmit()">
         <ng-container *ngIf="userAct$ | async"></ng-container>
-        {{verifForm.value | json}}
         <div class="main-logo mb-5 mt-5"></div>
         <div class="login-form">
             <h3 class="sign-in pt-3 pl-4 pb-2">Activate Account</h3>
@@ -22,7 +21,7 @@
                         <mat-label>Password</mat-label>
                         <input matInput formControlName="password" placeholder="Password"
                             [errorStateMatcher]="confirmValidParentMatcher" [type]="hide ? 'password' : 'text'"
-                            minlength="8" maxlength="20" pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}"
+                            minlength="8" maxlength="20" strong
                             required>
                         <button type="button" mat-icon-button matSuffix (click)="hide = !hide"
                             [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
@@ -30,11 +29,8 @@
                         </button>
                         <mat-error *ngIf="verifForm.get('Passwords.password').errors?.required">You must enter a password</mat-error>
                         <mat-error *ngIf="verifForm.get('Passwords.password').errors?.minlength">Minimun length 8</mat-error>
-                        <mat-error *ngIf="verifForm.get('Passwords.password').errors?.pattern">
-                            <div>Require at least 1 number</div>
-                            <!-- <div>Require at least 1 special character !#$%&?</div> -->
-                            <div>Require at least 1 uppercase letters</div>
-                            <div>Require at least 1 lowercase letters</div>
+                        <mat-error *ngIf="verifForm.get('Passwords.password').errors?.strong">
+                            <div>Require at least 1 number, 1 uppercase and 1 lowercase letter</div>
                         </mat-error>
                     </mat-form-field>
                 </div>
@@ -43,7 +39,7 @@
                         <mat-label>Confirm Password</mat-label>
                         <input matInput formControlName="confpassword" placeholder="Password"
                             [errorStateMatcher]="confirmValidParentMatcher" [type]="hideconf ? 'password' : 'text'"
-                            minlength="8" maxlength="20" pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}"
+                            minlength="8" maxlength="20" strong
                             required>
                         <button type="button" mat-icon-button matSuffix (click)="hideconf = !hideconf"
                             [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
@@ -51,11 +47,8 @@
                         </button>
                         <mat-error *ngIf="verifForm.get('Passwords.confpassword').errors?.required">You must enter a password</mat-error>
                         <mat-error *ngIf="verifForm.get('Passwords.confpassword').errors?.minlength">Minimun length 8</mat-error>
-                        <mat-error *ngIf="verifForm.get('Passwords.confpassword').errors?.pattern">
-                            <div>Require at least 1 number</div>
-                            <!-- <div>Require at least 1 special character !#$%&?</div> -->
-                            <div>Require at least 1 uppercase letters</div>
-                            <div>Require at least 1 lowercase letters</div>
+                        <mat-error *ngIf="verifForm.get('Passwords.confpassword').errors?.strong">
+                            <div>Require at least 1 number, 1 uppercase and 1 lowercase letter</div>
                         </mat-error>
                         <mat-error *ngIf="verifForm.get('Passwords.confpassword').errors?.notSame">Confirm Password does not match</mat-error>
                     </mat-form-field>
@@ -67,7 +60,7 @@
                         <mat-label>Temporary Password</mat-label>
                         <input matInput formControlName="temppassword" placeholder="Temporary Password"
                             [errorStateMatcher]="confirmValidParentMatcher" [type]="hide ? 'password' : 'text'"
-                            minlength="8" maxlength="20"
+                            minlength="8" maxlength="20" strong
                             required>
                         <button type="button" mat-icon-button matSuffix (click)="hide = !hide"
                             [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
@@ -75,11 +68,8 @@
                         </button>
                         <mat-error *ngIf="verifForm.get('Passwords.temppassword').errors?.required">You must enter a password</mat-error>
                         <mat-error *ngIf="verifForm.get('Passwords.temppassword').errors?.minlength">Minimun length 8</mat-error>
-                        <mat-error *ngIf="verifForm.get('Passwords.temppassword').errors?.pattern">
-                            <div>Require at least 1 number</div>
-                            <!-- <div>Require at least 1 special character !#$%&?</div> -->
-                            <div>Require at least 1 uppercase letters</div>
-                            <div>Require at least 1 lowercase letters</div>
+                        <mat-error *ngIf="verifForm.get('Passwords.temppassword').errors?.strong">
+                            <div>Require at least 1 number, 1 uppercase and 1 lowercase letter</div>
                         </mat-error>
                     </mat-form-field>
                 </div>
@@ -88,7 +78,7 @@
                         <mat-label>Password</mat-label>
                         <input matInput formControlName="password" placeholder="Password"
                             [errorStateMatcher]="confirmValidParentMatcher" [type]="hide ? 'password' : 'text'"
-                            minlength="8" maxlength="20" pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}"
+                            minlength="8" maxlength="20" strong
                             required>
                         <button type="button" mat-icon-button matSuffix (click)="hide = !hide"
                             [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
@@ -96,11 +86,8 @@
                         </button>
                         <mat-error *ngIf="verifForm.get('Passwords.password').errors?.required">You must enter a password</mat-error>
                         <mat-error *ngIf="verifForm.get('Passwords.password').errors?.minlength">Minimun length 8</mat-error>
-                        <mat-error *ngIf="verifForm.get('Passwords.password').errors?.pattern">
-                            <div>Require at least 1 number</div>
-                            <!-- <div>Require at least 1 special character !#$%&?</div> -->
-                            <div>Require at least 1 uppercase letters</div>
-                            <div>Require at least 1 lowercase letters</div>
+                        <mat-error *ngIf="verifForm.get('Passwords.password').errors?.strong">
+                            <div>Require at least 1 number, 1 uppercase and 1 lowercase letter</div>
                         </mat-error>
                     </mat-form-field>
                 </div>
@@ -109,7 +96,7 @@
                         <mat-label>Confirm Password</mat-label>
                         <input matInput formControlName="confpassword" placeholder="Password"
                             [errorStateMatcher]="confirmValidParentMatcher" [type]="hideconf ? 'password' : 'text'"
-                            minlength="8" maxlength="20" pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}"
+                            minlength="8" maxlength="20" strong
                             required>
                         <button type="button" mat-icon-button matSuffix (click)="hideconf = !hideconf"
                             [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
@@ -117,11 +104,8 @@
                         </button>
                         <mat-error *ngIf="verifForm.get('Passwords.confpassword').errors?.required">You must enter a password</mat-error>
                         <mat-error *ngIf="verifForm.get('Passwords.confpassword').errors?.minlength">Minimun length 8</mat-error>
-                        <mat-error *ngIf="verifForm.get('Passwords.confpassword').errors?.pattern">
-                            <div>Require at least 1 number</div>
-                            <!-- <div>Require at least 1 special character !#$%&?</div> -->
-                            <div>Require at least 1 uppercase letters</div>
-                            <div>Require at least 1 lowercase letters</div>
+                        <mat-error *ngIf="verifForm.get('Passwords.confpassword').errors?.strong">
+                            <div>Require at least 1 number, 1 uppercase and 1 lowercase letter</div>
                         </mat-error>
                         <mat-error *ngIf="verifForm.get('Passwords.confpassword').errors?.notSame">Confirm Password does not match</mat-error>
                     </mat-form-field>

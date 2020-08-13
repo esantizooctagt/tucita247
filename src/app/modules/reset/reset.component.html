@@ -14,8 +14,7 @@
                         <mat-label>Password</mat-label>
                         <input type="password" matInput placeholder="Password" formControlName="password"
                             [errorStateMatcher]="confirmValidParentMatcher" [type]="hide ? 'password' : 'text'"
-                            minlength="8" maxlength="20"
-                            pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}" required>
+                            minlength="8" maxlength="20" strong required>
                         <button type="button" mat-icon-button matSuffix (click)="hide = !hide"
                             [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                             <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
@@ -25,10 +24,8 @@
                         </mat-error>
                         <mat-error *ngIf="resetForm.get('Passwords.password').errors?.minlength">Minimun length 8
                         </mat-error>
-                        <mat-error *ngIf="resetForm.get('Passwords.password').errors?.pattern">
-                            <div>Require at least 1 number</div>
-                            <div>Require at least 1 uppercase letters</div>
-                            <div>Require at least 1 lowercase letters</div>
+                        <mat-error *ngIf="resetForm.get('Passwords.password').errors?.strong">
+                            <div>Require at least 1 number, 1 uppercase and 1 lowercase letter</div>
                         </mat-error>
                     </mat-form-field>
                 </div>
@@ -37,8 +34,7 @@
                         <mat-label>Confirm Password</mat-label>
                         <input type="password" matInput placeholder="Password" formControlName="confpassword"
                             [errorStateMatcher]="confirmValidParentMatcher" [type]="hideconf ? 'password' : 'text'"
-                            minlength="8" maxlength="20"
-                            pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}" required>
+                            minlength="8" maxlength="20" strong required>
                         <button type="button" mat-icon-button matSuffix (click)="hideconf = !hideconf"
                             [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                             <mat-icon>{{hideconf ? 'visibility_off' : 'visibility'}}</mat-icon>
@@ -47,10 +43,8 @@
                             password</mat-error>
                         <mat-error *ngIf="resetForm.get('Passwords.confpassword').errors?.minlength">Minimun length 8
                         </mat-error>
-                        <mat-error *ngIf="resetForm.get('Passwords.confpassword').errors?.pattern">
-                            <div>Require at least 1 number</div>
-                            <div>Require at least 1 uppercase letters</div>
-                            <div>Require at least 1 lowercase letters</div>
+                        <mat-error *ngIf="resetForm.get('Passwords.confpassword').errors?.strong">
+                            <div>Require at least 1 number, 1 uppercase and 1 lowercase letter</div>
                         </mat-error>
                         <mat-error *ngIf="resetForm.get('Passwords.confpassword').errors?.notSame">Confirm Password does
                             not

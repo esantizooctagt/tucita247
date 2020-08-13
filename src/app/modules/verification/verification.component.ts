@@ -4,6 +4,7 @@ import { UserService } from '@app/services';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { PasswordValidators } from '@app/validators';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { catchError, tap } from 'rxjs/operators';
 import { throwError, Observable } from 'rxjs';
@@ -46,9 +47,9 @@ export class VerificationComponent implements OnInit {
     this.verifForm = this.fb.group({
       userCode: ['', [Validators.required]],
       Passwords : this.fb.group({
-        temppassword: ['', [Validators.minLength(8), Validators.maxLength(20), Validators.pattern("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}")]],
-        password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}")]],
-        confpassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}")]]
+        temppassword: ['', [Validators.minLength(8), Validators.maxLength(20), PasswordValidators.strong]],
+        password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), PasswordValidators.strong]],
+        confpassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), PasswordValidators.strong]]
       }, {validator: this.checkPasswords})
     });
   }
