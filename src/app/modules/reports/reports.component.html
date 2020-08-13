@@ -46,36 +46,44 @@
                     </div>
                     <div class="row ml-4 mb-2 mr-2">
                         <mat-radio-group [(ngModel)]="report">
-                            <mat-radio-button class="mr-2" name="radio" [checked]="true" [value]="1">Promedio de visita
+                            <mat-radio-button class="mr-2" name="radio" (change)="repoChange($event)" [checked]="true" [value]="1">Promedio de visita
                             </mat-radio-button>
-                            <mat-radio-button class="mr-2" name="radio" [value]="2">Visitantes</mat-radio-button>
-                            <mat-radio-button class="mr-2" name="radio" [value]="3">Cancelaciones</mat-radio-button>
+                            <mat-radio-button class="mr-2" name="radio" (change)="repoChange($event)" [value]="2">Visitantes</mat-radio-button>
+                            <mat-radio-button class="mr-2" name="radio" (change)="repoChange($event)" [value]="3">Cancelaciones</mat-radio-button>
                         </mat-radio-group>
                     </div>
                     <div class="row ml-4 mb-2 mr-2 mt-4">
                         <button mat-flat-button color="primary" id="generar" class="mr-3"
                             (click)="genReporte()">Generar</button>
                         <button mat-flat-button color="primary" id="generar" (click)="exportExcel()">Exportar</button>
+                        <button mat-flat-button color="primary" id="cancelar" class="ml-3"
+                            (click)="cleanFields()">Cancelar</button>
                     </div>
                 </mat-card>
             </div>
             <div class="mat-data mt-3">
                 <ng-container *ngIf="report$ | async"></ng-container>
-                <mat-card *ngIf="report == 1">
+                <ng-container *ngIf="report == 1">
                     <form [formGroup]="averageForm">
                         <div class="data-container" #TABLE>
-                            <table mat-table #table [dataSource]="fAverage.controls" formArrayName="Average"
-                                class="pl-0 pr-0 pt-1 pb-2 col-md-12 mt-1 mb-1 mat-elevation-z2">
+                            <table mat-table #table class="pl-0 pr-0 pt-1 pb-2 col-md-12 mt-1 mb-1 mat-elevation-z8" [dataSource]="fAverage.controls" formArrayName="Average">
+                                <ng-container matColumnDef="Date">
+                                    <th mat-header-cell *matHeaderCellDef fxFlex="33%"> Date </th>
+                                    <td mat-cell *matCellDef="let element" fxFlex="33%">
+                                        {{element.value.Date | date: 'MMM, d, yyyy'}}
+                                    </td>
+                                </ng-container>
+
                                 <ng-container matColumnDef="Qty">
-                                    <th mat-header-cell *matHeaderCellDef class="col-md-6"> Qty </th>
-                                    <td mat-cell *matCellDef="let element" class="col-md-6">
+                                    <th mat-header-cell *matHeaderCellDef fxFlex="33%"> Qty </th>
+                                    <td mat-cell *matCellDef="let element" fxFlex="33%">
                                         {{element.value.Qty}}
                                     </td>
                                 </ng-container>
 
                                 <ng-container matColumnDef="Time">
-                                    <th mat-header-cell *matHeaderCellDef class="col-md-6"> Time </th>
-                                    <td mat-cell *matCellDef="let element" class="col-md-6">
+                                    <th mat-header-cell *matHeaderCellDef fxFlex="33%"> Time </th>
+                                    <td mat-cell *matCellDef="let element" fxFlex="33%">
                                         {{element.value.Time}}
                                     </td>
                                 </ng-container>
@@ -85,7 +93,151 @@
                             </table>
                         </div>
                     </form>
-                </mat-card>
+                </ng-container>
+                <ng-container *ngIf="report == 2">
+                    <form [formGroup]="visitasForm">
+                        <div class="data-container" #TABLE>
+                            <table mat-table #table class="pl-0 pr-0 pt-1 pb-2 col-md-12 mt-1 mb-1 mat-elevation-z8" [dataSource]="fVisitas.controls" formArrayName="Visitas">
+                                <ng-container matColumnDef="Date">
+                                    <th mat-header-cell *matHeaderCellDef fxFlex="10%"> Date </th>
+                                    <td mat-cell *matCellDef="let element" fxFlex="10%">
+                                        {{element.value.Date | date: 'MMM, d, yyyy'}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Name">
+                                    <th mat-header-cell *matHeaderCellDef fxFlex="25%"> Name </th>
+                                    <td mat-cell *matCellDef="let element" fxFlex="25%">
+                                        {{element.value.Name}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Phone">
+                                    <th mat-header-cell *matHeaderCellDef fxFlex="10%"> Phone </th>
+                                    <td mat-cell *matCellDef="let element" fxFlex="10%">
+                                        {{element.value.Phone | phone}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Door">
+                                    <th mat-header-cell *matHeaderCellDef fxFlex="10%"> Door </th>
+                                    <td mat-cell *matCellDef="let element" fxFlex="10%">
+                                        {{element.value.Door}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Qty">
+                                    <th mat-header-cell *matHeaderCellDef fxFlex="5%"> Qty </th>
+                                    <td mat-cell *matCellDef="let element" fxFlex="5%">
+                                        {{element.value.Qty}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Type">
+                                    <th mat-header-cell *matHeaderCellDef fxFlex="10%"> Type </th>
+                                    <td mat-cell *matCellDef="let element" fxFlex="10%">
+                                        {{element.value.Type}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="CheckIn">
+                                    <th mat-header-cell *matHeaderCellDef fxFlex="10%"> Check In </th>
+                                    <td mat-cell *matCellDef="let element" fxFlex="10%">
+                                        {{element.value.CheckIn | date: 'MMM, d, yyyy'}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="CheckOut">
+                                    <th mat-header-cell *matHeaderCellDef fxFlex="10%"> Check Out </th>
+                                    <td mat-cell *matCellDef="let element" fxFlex="10%">
+                                        {{element.value.CheckOut | date: 'MMM, d, yyyy'}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Priority">
+                                    <th mat-header-cell *matHeaderCellDef fxFlex="10%"> Priority </th>
+                                    <td mat-cell *matCellDef="let element" fxFlex="10%">
+                                        {{element.value.Priority}}
+                                    </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="visitaColumns; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: visitaColumns;"></tr>
+                            </table>
+                        </div>
+                    </form>
+                </ng-container>
+                <ng-container *ngIf="report == 3">
+                    <form [formGroup]="cancelForm">
+                        <div class="data-container" #TABLE>
+                            <table mat-table #table class="pl-0 pr-0 pt-1 pb-2 col-md-12 mt-1 mb-1 mat-elevation-z8" [dataSource]="fCancel.controls" formArrayName="Cancel">
+                                <ng-container matColumnDef="Date">
+                                    <th mat-header-cell *matHeaderCellDef fxFlex="10%"> Date </th>
+                                    <td mat-cell *matCellDef="let element" fxFlex="10%">
+                                        {{element.value.Date | date: 'MMM, d, yyyy'}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Cancel">
+                                    <th mat-header-cell *matHeaderCellDef fxFlex="10%"> Cancel </th>
+                                    <td mat-cell *matCellDef="let element" fxFlex="10%">
+                                        {{element.value.Cancel | date: 'MMM, d, yyyy'}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Name">
+                                    <th mat-header-cell *matHeaderCellDef fxFlex="30%"> Name </th>
+                                    <td mat-cell *matCellDef="let element" fxFlex="30%">
+                                        {{element.value.Name}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Phone">
+                                    <th mat-header-cell *matHeaderCellDef fxFlex="15%"> Phone </th>
+                                    <td mat-cell *matCellDef="let element" fxFlex="15%">
+                                        {{element.value.Phone | phone}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Door">
+                                    <th mat-header-cell *matHeaderCellDef fxFlex="10%"> Door </th>
+                                    <td mat-cell *matCellDef="let element" fxFlex="10%">
+                                        {{element.value.Door}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Qty">
+                                    <th mat-header-cell *matHeaderCellDef fxFlex="5%"> Qty </th>
+                                    <td mat-cell *matCellDef="let element" fxFlex="5%">
+                                        {{element.value.Qty}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Type">
+                                    <th mat-header-cell *matHeaderCellDef fxFlex="5%"> Type </th>
+                                    <td mat-cell *matCellDef="let element" fxFlex="5%">
+                                        {{element.value.Type}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="Priority">
+                                    <th mat-header-cell *matHeaderCellDef fxFlex="15%"> Priority </th>
+                                    <td mat-cell *matCellDef="let element" fxFlex="15%">
+                                        {{element.value.Priority}}
+                                    </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="cancelColumns; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: cancelColumns;"></tr>
+                            </table>
+                        </div>
+                    </form>
+                </ng-container>
+                <mat-paginator [length]="length"
+                            [pageSize]="pageSize"
+                            [pageSizeOptions]= "[5, 10, 25, 100]"
+                            (page)="goToPage($event.pageIndex, $event.pageSize)">
+                </mat-paginator>
             </div>
         </div>
     </div>

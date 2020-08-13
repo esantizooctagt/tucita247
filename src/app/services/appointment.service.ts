@@ -10,6 +10,7 @@ import { Appointment } from '@app/_models';
 })
 export class AppointmentService {
   readonly apiURL = environment.apiUrl;
+  readonly apiRepoUrl = environment.apiRepoUrl;
   constructor(private http: HttpClient) { }
 
   getAppointments(businessId, locationId, providerId, dateAppoIni, dateAppoFin, status, type, lastItem, appId): Observable<Appointment[]> {
@@ -97,8 +98,18 @@ export class AppointmentService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  getRepoAverage(businessId, locationId, providerId, dateIni, dateFin){
-    return this.http.get<any>(this.apiURL + '/appointments/repAverage/' + businessId + '/' + locationId + '/' + providerId + '/' + dateIni + '/' + dateFin)
+  getRepoAverage(businessId, locationId, providerId, dateIni, dateFin, lastItem){
+    return this.http.get<any>(this.apiRepoUrl + '/appointments/repAverage/' + businessId + '/' + locationId + '/' + providerId + '/' + dateIni + '/' + dateFin + '/' + lastItem)
+                    .pipe(catchError(this.errorHandler));
+  }
+
+  getRepoVisitas(businessId, locationId, providerId, dateIni, dateFin, lastItem){
+    return this.http.get<any>(this.apiRepoUrl + '/appointments/repVisitas/' + businessId + '/' + locationId + '/' + providerId + '/' + dateIni + '/' + dateFin + '/' + lastItem)
+                    .pipe(catchError(this.errorHandler));
+  }
+
+  getRepoCancel(businessId, locationId, providerId, dateIni, dateFin, lastItem){
+    return this.http.get<any>(this.apiRepoUrl + '/appointments/repCancel/' + businessId + '/' + locationId + '/' + providerId + '/' + dateIni + '/' + dateFin + '/' + lastItem)
                     .pipe(catchError(this.errorHandler));
   }
 
