@@ -11,8 +11,8 @@
             <ng-container formGroupName="Passwords">
                 <div class="form-field mb-0 pl-4 pb-2 pr-4 pt-3">
                     <mat-form-field hintLabel="Min 8 characters">
-                        <mat-label>Password</mat-label>
-                        <input type="password" matInput placeholder="Password" formControlName="password"
+                        <mat-label i18n="Password@@shared.Password">Password</mat-label>
+                        <input type="password" i18n-placeholder="Password@@shared.Password" matInput placeholder="Password" formControlName="password"
                             [errorStateMatcher]="confirmValidParentMatcher" [type]="hide ? 'password' : 'text'"
                             minlength="8" maxlength="20" strong required>
                         <button type="button" mat-icon-button matSuffix (click)="hide = !hide"

@@ -10,8 +10,8 @@
                 <h3 class="sign-in pt-4 pl-4 pb-2">Forgot password</h3>
                 <div class="form-field mb-0 pl-4 pb-2 pr-4 pt-3">
                     <mat-form-field>
-                        <mat-label>Email</mat-label>
-                        <input matInput placeholder="Email" formControlName="Email"
+                        <mat-label i18n="Email@@shared.Email">Email</mat-label>
+                        <input i18n-placeholder="Email@@shared.Email" matInput placeholder="Email" formControlName="Email"
                             [errorStateMatcher]="confirmValidParentMatcher" maxlength="200"
                             pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
                         <mat-error *ngIf="f.Email.invalid && f.Email.touched">{{getErrorMessage('Email')}}</mat-error>

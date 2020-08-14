@@ -57,8 +57,8 @@
                     </mat-form-field>
                 </div>
                 <div class="form-field pl-3 pr-3">
-                    <mat-form-field hintLabel="Email">
-                        <input matInput #Email placeholder="Email" maxlength="200" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" formControlName="Email"
+                    <mat-form-field i18n-hintLabel="Email@@shared.Email" hintLabel="Email">
+                        <input matInput #Email i18n-placeholder="Email@@shared.Email" placeholder="Email" maxlength="200" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" formControlName="Email"
                             [errorStateMatcher]="confirmValidParentMatcher">
                         <mat-error *ngIf="f.Email.invalid && f.Email.touched">{{getErrorMessage('Email')}}</mat-error>
                     </mat-form-field>
@@ -98,7 +98,7 @@
                     <label>Preference</label>
                     <mat-radio-group aria-label="Select an option" formControlName="Preference" class="client_gender mt-0">
                         <mat-radio-button matLine value="1">SMS</mat-radio-button>
-                        <mat-radio-button matLine value="2">Email</mat-radio-button>
+                        <mat-radio-button i18n="Email@@shared.Email" matLine value="2">Email</mat-radio-button>
                         <mat-radio-button matLine value="3">Push Notification</mat-radio-button>
                     </mat-radio-group>
                 </div>

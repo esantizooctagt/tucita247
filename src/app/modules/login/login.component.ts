@@ -93,7 +93,8 @@ export class LoginComponent implements OnInit {
 
   getErrorMessage(component: string) {
     if (component === 'Email'){
-      return this.f.email.hasError('required') ? 'You must enter an email' :
+      // 'You must enter an email' :
+      return this.f.email.hasError('required') ? $localize`:@@login.error:` :
         '';
     }
     if (component === 'Password'){

@@ -18,8 +18,8 @@
             <ng-container formGroupName="Passwords" *ngIf="code != 0">
                 <div class="form-field mb-0 pl-4 pb-2 pr-4 pt-3">
                     <mat-form-field hintLabel="Min 8 characters">
-                        <mat-label>Password</mat-label>
-                        <input matInput formControlName="password" placeholder="Password"
+                        <mat-label i18n="Password@@shared.Password">Password</mat-label>
+                        <input matInput formControlName="password" i18n-placeholder="Password@@shared.Password" placeholder="Password"
                             [errorStateMatcher]="confirmValidParentMatcher" [type]="hide ? 'password' : 'text'"
                             minlength="8" maxlength="20" strong
                             required>
@@ -75,8 +75,8 @@
                 </div>
                 <div class="form-field mb-0 pl-4 pb-2 pr-4 pt-3">
                     <mat-form-field hintLabel="Min 8 characters">
-                        <mat-label>Password</mat-label>
-                        <input matInput formControlName="password" placeholder="Password"
+                        <mat-label i18n="Password@@shared.Password">Password</mat-label>
+                        <input matInput formControlName="password" i18n-placeholder="Password@@shared.Password" placeholder="Password"
                             [errorStateMatcher]="confirmValidParentMatcher" [type]="hide ? 'password' : 'text'"
                             minlength="8" maxlength="20" strong
                             required>

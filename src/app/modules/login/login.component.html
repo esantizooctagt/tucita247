@@ -9,16 +9,16 @@
             <h3 class="sign-in pt-4 pl-4 pb-2" i18n="Sign In@@login.signin">Sign In</h3>
             <div class="form-field mb-0 pl-4 pb-2 pr-4 pt-3">
                 <mat-form-field>
-                    <mat-label>Email</mat-label>
-                    <input matInput placeholder="Email" formControlName="email"
+                    <mat-label i18n="Email@@shared.Email">Email</mat-label>
+                    <input matInput i18n-placeholder="Email@@shared.Email" placeholder="Email" formControlName="email"
                         [errorStateMatcher]="confirmValidParentMatcher" required>
                     <mat-error *ngIf="f.email.invalid">{{getErrorMessage('Email')}}</mat-error>
                 </mat-form-field>
             </div>
             <div class="form-field mb-0 pl-4 pb-2 pr-4 pt-3">
                 <mat-form-field>
-                    <mat-label>Password</mat-label>
-                    <input type="password" matInput placeholder="Password" formControlName="password"
+                    <mat-label i18n="Password@@shared.Password">Password</mat-label>
+                    <input type="password" matInput i18n-placeholder="Password@@shared.Password" placeholder="Password" formControlName="password"
                         [errorStateMatcher]="confirmValidParentMatcher" [type]="hide ? 'password' : 'text'" required>
                     <button type="button" mat-icon-button matSuffix (click)="hide = !hide"
                         [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
@@ -28,11 +28,11 @@
                 </mat-form-field>
             </div>
         </div>
-        <div class="forgot-form mt-3 mb-3"><a class="text-forgot" [routerLink]="['/forgotpassword']">Forgot your
+        <div class="forgot-form mt-3 mb-3"><a i18n="Forgot your password ?@@login.ForgotPassword" class="text-forgot" [routerLink]="['/forgotpassword']">Forgot your
                 password ?</a>
         </div>
         <div class="forgot-form mt-3 mb-3">
-            <button mat-flat-button color="primary" id="save" [disabled]="loading" class="text-left w-100">Sign Up
+            <button mat-flat-button i18n="Sign Up@@login.signup" color="primary" id="save" [disabled]="loading" class="text-left w-100">Sign Up
             </button>
             <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
         </div>
