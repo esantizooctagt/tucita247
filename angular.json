@@ -14,8 +14,8 @@
       "sourceRoot": "src",
       "prefix": "app",
       "i18n": {
-        "sourceLocale": "en",
         "locales": {
+          "en": "src/locale/messages.en.xlf",
           "es": "src/locale/messages.es.xlf"
         }
       },
@@ -72,6 +72,9 @@
             },
             "es": {
               "localize": ["es"]
+            },
+            "en": {
+              "localize": ["en"]
             }
           }
         },
@@ -86,7 +89,11 @@
             },
             "es": {
               "browserTarget": "tucita247:build:es"
+            },
+            "en": {
+              "browserTarget": "tucita247:build:en"
             }
+
           }
         },
         "extract-i18n": {

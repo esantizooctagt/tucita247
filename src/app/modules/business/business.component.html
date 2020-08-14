@@ -51,7 +51,6 @@
                                         {{getErrorMessage('ZipCode')}}</mat-error>
                                 </mat-form-field>
                                 <mat-form-field class="col-md" hintLabel="Phone">
-                                    <span matPrefix>+1 &nbsp;</span>
                                     <input matInput appPhoneMask placeholder="Phone" formControlName="Phone"
                                         maxlength="15" minlength="3" [errorStateMatcher]="confirmValidParentMatcher">
                                     <mat-error *ngIf="fBusiness.Phone.invalid && fBusiness.Phone.touched">
@@ -75,17 +74,21 @@
                         <mat-tab label="Additional Data">
                             <mat-form-field hintLabel="Categories">
                                 <ng-container *ngIf="categories$ | async"></ng-container>
-                                <mat-chip-list #chipCategoriesList formControlName="Categories">
-                                    <mat-chip *ngFor="let category of categories" [selectable]="selectableCategory"
-                                        [removable]="removableCategory" (removed)="removeCategory(category)">
+                                <mat-chip-list #chipCategoriesList formControlName="CategoryId">
+                                    <mat-chip *ngFor="let category of categories" 
+                                        [selectable]="selectableCategory"
+                                        [removable]="removableCategory" 
+                                        (removed)="removeCategory(category)">
                                         {{ category.Name }}
                                         <mat-icon matChipRemove *ngIf="removableCategory">cancel</mat-icon>
                                     </mat-chip>
-                                    <input placeholder="New category..." #categoryInput [matAutocomplete]="autoCategory"
+                                    <input placeholder="New category..." #categoryInput 
+                                        [matAutocomplete]="autoCategory"
                                         [matChipInputFor]="chipCategoriesList"
                                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
                                 </mat-chip-list>
-                                <mat-autocomplete #autoCategory="matAutocomplete"
+                                <mat-autocomplete 
+                                    #autoCategory="matAutocomplete"
                                     (optionSelected)="selectedCategory($event)">
                                     <mat-option *ngFor="let category of filteredCategories$ | async"
                                         [value]="category.CategoryId">
