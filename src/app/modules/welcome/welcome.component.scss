@@ -1,3 +1,51 @@
 .card-welcome{
     height: 500px;
 }
+.company{
+    height: 256px;
+    background: url('../../../assets/images/company.png');
+    width: 256px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin: 0 auto;
+    display: inline-block;
+    cursor: pointer;
+}
+.calendar{
+    height: 256px;
+    background: url('../../../assets/images/calendar.png');
+    width: 256px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin: 0 auto;
+    display: inline-block;
+    cursor: pointer;
+}
+.hours{
+    height: 256px;
+    background: url('../../../assets/images/hours.png');
+    width: 256px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin: 0 auto;
+    display: inline-block;
+    cursor: pointer;
+}
+.card-company{
+    top: 30px;
+    position: relative;
+    text-align: center;
+}
+h1{
+    font-family: Montserrat;
+    text-align: center;
+    color: #0088ce;
+}
+h2{
+    font-family: Montserrat;
+    text-align: center;
+    color: #66b8e2;
+}

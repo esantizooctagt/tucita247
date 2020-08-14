@@ -1,19 +1,26 @@
 <div class="container-fluid">
-    <div class="row justify-content-md-center pl-2 pr-1">
+    <div class="row justify-content-md-center pl-2 pr-1 mt-3 mb-3">
+        <h1 class="col-md-12">Welcome to Tu Cita 24/7</h1>
+        <h2 class="col-md-12">Setup your preference</h2>
+    </div>
+    <div class="row justify-content-md-center pl-2 pr-1 mt-3">
         <mat-card class="card-welcome col-md-3 mt-3 mr-3">
-            <div class="">
+            <div class="card-company">
+                <div class="company mb-4 mt-4"></div>
                 Setup your company
                 <button mat-stroked-button [routerLink]="['/company']" class="action-buttons col-md-12" color="secondary" type="button">Company</button>
             </div>
         </mat-card>
         <mat-card class="card-welcome col-md-3 mt-3 mr-3">
-            <div class="">
+            <div class="card-company">
+                <div class="hours mb-4 mt-4"></div>
                 Setup your opening hours
                 <button mat-stroked-button [routerLink]="['/businessope']" class="action-buttons col-md-12" color="secondary" type="button">Opening hours</button>
             </div>
         </mat-card>
         <mat-card class="card-welcome col-md-3 mt-3 mr-3">
-            <div class="">
+            <div class="card-company">
+                <div class="calendar mb-4 mt-4"></div>
                 Setup your days off
                 <button mat-stroked-button [routerLink]="['/businessdays']" class="action-buttons col-md-12" color="secondary" type="button">Days off</button>
             </div>
