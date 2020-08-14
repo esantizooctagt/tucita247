@@ -107,6 +107,10 @@ export class AuthService {
     let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
     return user.Avatar;
   }
+  language() {
+    let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
+    return user.Language;
+  }
   get userAvatar() {
     if (sessionStorage.getItem('TC247_USS') != null) {
       var user = JSON.parse(sessionStorage.getItem('TC247_USS'));

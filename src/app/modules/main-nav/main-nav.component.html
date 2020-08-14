@@ -79,12 +79,12 @@
           <img [src]="language" width="20"/>
         </button>
         <mat-menu #languageMenu="matMenu" xPosition="before">
-          <a class="item-language" mat-menu-item href="https://console.tucita247.com/en"><img class="mr-4 ml-1" width="30"/>  English</a> <!--src="assets/images/icon/EN.svg"-->
-          <a class="item-language" mat-menu-item href="https://console.tucita247.com/es"><img class="mr-4 ml-1" width="30"/>  Español</a> <!-- src="assets/images/icon/ES.svg"-->
+          <a class="item-language" mat-menu-item href="https://console.tucita247.com/en"><img src="assets/images/icon/EN.svg" class="mr-4 ml-1" width="30"/>  English</a>
+          <a class="item-language" mat-menu-item href="https://console.tucita247.com/es"><img src="assets/images/icon/ES.svg" class="mr-4 ml-1" width="30"/>  Español</a>
         </mat-menu>
-        <button mat-icon-button class="mr-1" [routerLink]="['/help']">
+        <!-- <button mat-icon-button class="mr-1" [routerLink]="['/help']">
           <mat-icon>help</mat-icon>
-        </button>
+        </button> -->
         <button mat-icon-button [matMenuTriggerFor]="userMenu">
           <img *ngIf="avatar!=''; else isIcon" id="img-profile" class="img-profile rounded-circle" [src]="authService.userAvatar?authService.userAvatar:avatar">
           <ng-template #isIcon>

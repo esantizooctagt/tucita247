@@ -77,6 +77,9 @@ export class MainNavComponent implements OnInit {
     this.roleId = this.authService.roleId();
     this.userId = this.authService.userId();
     this.isAdmin = this.authService.isAdmin();
+    if (this.authService.language() != ''){
+      this.language = this.authService.language() == "EN" ? "assets/images/icon/EN.svg" : "assets/images/icon/ES.svg";
+    }
     if (this.authService.avatar() != '') {
       this.avatar = this.imgPath + this.authService.avatar();
     }

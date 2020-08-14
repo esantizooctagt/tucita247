@@ -50,8 +50,7 @@
                     </div>
                     <div class="form-field pl-3 pr-3">
                         <mat-form-field>
-                            <span matPrefix>+1 &nbsp;</span>
-                            <input matInput #Phone placeholder="(555) 555-1234" appPhoneMask maxlength="15"
+                            <input matInput #Phone placeholder="+1 (555) 555-1234" appPhoneMask maxlength="15"
                                 formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher" required>
                             <mat-error *ngIf="f.Phone.invalid && f.Phone.touched">{{getErrorMessage('Phone')}}
                             </mat-error>
