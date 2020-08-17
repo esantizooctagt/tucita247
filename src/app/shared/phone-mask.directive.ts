@@ -17,7 +17,6 @@ export class PhoneMaskDirective {
   keydownBackspace(event) {
     this.onInputChange(event.target.value, true);
   }
-  
 
   onInputChange(event, backspace) {
     let newVal = event.replace(/\D/g, '');

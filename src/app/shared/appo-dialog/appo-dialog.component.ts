@@ -9,7 +9,7 @@ import { ConfirmValidParentMatcher } from '@app/validators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ServService } from '@app/services';
 
-export interface DialogData {
+export interface DialogData {   
   businessId: string;
   locationId: string;
   providerId: string;
@@ -139,7 +139,7 @@ export class AppoDialogComponent implements OnInit {
       map((res: any) => {
         this.spinnerService.stop(spinnerRef);
         this.openSnackBar($localize`:@@appos.created:`, $localize`:@@appos.schedule:`);
-        this.dialogRef.close();
+        this.dialogRef.close({newAppo: 'OK'});
         return res.Code;
       }),
       catchError(err => {
@@ -190,7 +190,7 @@ export class AppoDialogComponent implements OnInit {
       let data = this.dayInfo.filter(x => (x.Time.substring(6,8) == 'PM' ? +x.Time.substring(0,2)+12 : +x.Time.substring(0,2)) == dateAppo+_i);
       if (data.length > 0){        
         if (data[0].Available > 0 && (data[0].ServiceId == '' || data[0].ServiceId == event.value)){
-          this.newTime = dateAppo+_i > 12 ? (dateAppo+_i-12).toString().padStart(2,'0') + ':00 PM' : (dateAppo+_i).toString().padStart(2,'0') +':00 AM';
+          this.newTime = dateAppo+res[0].TimeService > 12 ? (dateAppo+res[0].TimeService-12).toString().padStart(2,'0') + ':00 PM' : (dateAppo+res[0].TimeService).toString().padStart(2,'0') +':00 AM';
           validTime = 1;
         } else {
           validTime = 0;

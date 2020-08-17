@@ -304,7 +304,12 @@ export class ScheduleComponent implements OnInit {
       width: '450px',
       height: '700px',
       data: {businessId: this.businessId, locationId: this.locationId, providerId: this.providerId, serviceId: result.ServiceId, appoTime: timeGrl, appoDate: this.datepipe.transform(day, 'yyyy-MM-dd'), doors: this.doors.split(','), dayData: dayInfo}
-    });    
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != undefined){
+        this.loadHours();
+      }
+    });
   }
 
   onSelectLocation(event){

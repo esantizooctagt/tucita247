@@ -51,7 +51,7 @@ export class ProfileComponent implements OnInit {
     First_Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     Last_Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     Avatar: [''],
-    Phone: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(15)]],
+    Phone: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(17)]],
     Language: ['']
   })
 
@@ -116,7 +116,7 @@ export class ProfileComponent implements OnInit {
     }
     if (component === 'Phone'){
       return this.f.Phone.hasError('minlength') ? $localize`:@@shared.minimun: 6` :
-            this.f.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: 15` :
+            this.f.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: 17` :
               '';
     }
   }

@@ -61,7 +61,7 @@ export class UserComponent implements OnInit {
     Last_Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     Password: ['',[Validators.minLength(8), Validators.maxLength(20), Validators.pattern("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}")]],
     Avatar: [''],
-    Phone: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(14)]],
+    Phone: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(17)]],
     RoleId: ['', [Validators.required]],
     Is_Admin: [{value: 0, disabled: true}],
     Status: [1]
@@ -129,7 +129,7 @@ export class UserComponent implements OnInit {
     }
     if (component === 'Phone'){
       return this.f.Phone.hasError('minlength') ? $localize`:@@shared.minimun: 6` :
-            this.f.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: 14` :
+            this.f.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: 17` :
               '';
     }
     if (component === 'RoleId'){
