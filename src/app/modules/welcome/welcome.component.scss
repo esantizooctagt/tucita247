@@ -12,6 +12,39 @@
     display: inline-block;
     cursor: pointer;
 }
+.location{
+    height: 256px;
+    background: url('../../../assets/images/location.png');
+    width: 256px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin: 0 auto;
+    display: inline-block;
+    cursor: pointer;
+}
+.provider{
+    height: 256px;
+    background: url('../../../assets/images/provider.png');
+    width: 256px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin: 0 auto;
+    display: inline-block;
+    cursor: pointer;
+}
+.service{
+    height: 256px;
+    background: url('../../../assets/images/service.png');
+    width: 256px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin: 0 auto;
+    display: inline-block;
+    cursor: pointer;
+}
 .calendar{
     height: 256px;
     background: url('../../../assets/images/calendar.png');
