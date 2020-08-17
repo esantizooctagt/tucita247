@@ -101,8 +101,9 @@ export class LocationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    var spinnerRef = this.spinnerService.start("Loading Location...");
+    var spinnerRef = this.spinnerService.start($localize`:@@locations.loadlocation:`);
     this.businessId = this.authService.businessId();
+    this.language = this.authService.language() == "" ? "EN" : this.authService.language();
 
     this.sectors = [];
     this.sectors.push({ SectorId: "0", Name: "N/A" });
@@ -140,7 +141,7 @@ export class LocationComponent implements OnInit {
       )),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
-        this.openDialog('Error !', err.Message, false, true, false);
+        this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
         return throwError(err || err.message);
       })
     );
@@ -148,7 +149,7 @@ export class LocationComponent implements OnInit {
 
   onDisplay() {
     if (this.locationDataList != undefined) {
-      var spinnerRef = this.spinnerService.start("Loading Location...");
+      var spinnerRef = this.spinnerService.start($localize`:@@locations.loadlocation:`);
       this.locationForm.reset({ LocationId: '', BusinessId: '', Name: '', City: '', Sector: '', Address: '', Geolocation : '{0.00,0.00}', ParentLocation : '0', MaxConcurrentCustomer: '', BucketInterval: '', TotalCustPerBucketInter: '', ManualCheckOut: false, Doors: '', Status: true});
       this.location$ = this.locationService.getLocation(this.businessId, this.locationDataList, this.countryCode, this.language).pipe(
         map((res: any) => {
@@ -181,7 +182,7 @@ export class LocationComponent implements OnInit {
         }),
         catchError(err => {
           this.spinnerService.stop(spinnerRef);
-          this.openDialog('Error !', err.Message, false, true, false);
+          this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
           return throwError(err || err.Message);
         })
       );
@@ -204,39 +205,39 @@ export class LocationComponent implements OnInit {
 
   getErrorMessage(component: string) {
     if (component === 'Name') {
-      return this.f.Name.hasError('required') ? 'You must enter a value' :
-        this.f.Name.hasError('minlength') ? 'Minimun length 3' :
-          this.f.Name.hasError('maxlength') ? 'Maximun length 500' :
+      return this.f.Name.hasError('required') ? $localize`:@@shared.entervalue:` :
+        this.f.Name.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
+          this.f.Name.hasError('maxlength') ? $localize`:@@shared.maximun: 500` :
             '';
     }
     if (component === 'Address') {
-      return this.f.Address.hasError('required') ? 'You must enter a value' :
-        this.f.Address.hasError('minlength') ? 'Minimun length 3' :
-          this.f.Address.hasError('maxlength') ? 'Maximum length 500' :
+      return this.f.Address.hasError('required') ? $localize`:@@shared.entervalue:` :
+        this.f.Address.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
+          this.f.Address.hasError('maxlength') ? $localize`:@@shared.maximun: 500` :
             '';
     }
     if (component === 'City') {
-      return this.f.City.hasError('required') ? 'You must enter a value' :
+      return this.f.City.hasError('required') ? $localize`:@@shared.entervalue:` :
         '';
     }
     if (component === 'Sector') {
-      return this.f.Sector.hasError('required') ? 'You must enter a value' :
+      return this.f.Sector.hasError('required') ? $localize`:@@shared.entervalue:` :
         '';
     }
     if (component === 'ParentLocation') {
-      return this.f.ParentLocation.hasError('required') ? 'You must enter a value' :
+      return this.f.ParentLocation.hasError('required') ? $localize`:@@shared.entervalue:` :
         '';
     }
     if (component === 'MaxConcurrentCustomer') {
-      return this.f.maxConcurrentCustomer.hasError('required') ? 'You must enter a value' :
+      return this.f.maxConcurrentCustomer.hasError('required') ? $localize`:@@shared.entervalue:` :
         '';
     }
     if (component === 'BucketInterval') {
-      return this.f.bucketInterval.hasError('required') ? 'You must enter a value' :
+      return this.f.bucketInterval.hasError('required') ? $localize`:@@shared.entervalue:` :
         '';
     }
     if (component === 'TotalCustPerBucketInter') {
-      return this.f.totalCustPerBucketInter.hasError('required') ? 'You must enter a value' :
+      return this.f.totalCustPerBucketInter.hasError('required') ? $localize`:@@shared.entervalue:` :
         '';
     }
   }
@@ -298,27 +299,27 @@ export class LocationComponent implements OnInit {
         ManualCheckOut: (this.locationForm.value.ManualCheckOut == true ? 1 : 0),
         Doors: this.doors.toString()
       }
-      var spinnerRef = this.spinnerService.start("Saving Locations...");
+      var spinnerRef = this.spinnerService.start($localize`:@@locations.savinglocations:`);
       this.saveLocation$ = this.locationService.postLocations(location).pipe(
         map((res:any) => {
           if (res != null){
             if (res.Code == 200){
               this.spinnerService.stop(spinnerRef);
               this.locationForm.patchValue({LocationId: res.LocationId});
-              this.openDialog('Location', 'Location saved successfully', true, false, false);
+              this.openDialog($localize`:@@locations.subtitlesing:`, $localize`:@@locations.savedsuccess:`, true, false, false);
             } else {
               this.spinnerService.stop(spinnerRef);
-              this.openDialog('Error ! ', 'Something goes wrong, try again', false, true, false);
+              this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.wrong:`, false, true, false);
             }
           } else {
             this.spinnerService.stop(spinnerRef);
-            this.openDialog('Error ! ', 'Something goes wrong, try again', false, true, false);
+            this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.wrong:`, false, true, false);
           }
           return res;
         }),
         catchError(err => {
           this.spinnerService.stop(spinnerRef);
-          this.openDialog('Error !', err.Message, false, true, false);
+          this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
           return throwError(err || err.message);
         })
       );

@@ -59,7 +59,7 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    var spinnerRef = this.spinnerService.start("Loading Dashboard...");
+    var spinnerRef = this.spinnerService.start($localize`:@@dashboard.loading:`);
     this.businessId = this.authService.businessId();
     this.isAdmin = this.authService.isAdmin();
     this.userId = this.authService.userId();

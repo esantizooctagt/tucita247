@@ -30,6 +30,7 @@ export class RoleComponent implements OnInit {
   }
 
   businessId: string = '';
+  languageInit: string = '';
   displayForm: boolean = true;
   savingRole: boolean=false;
   roleDataList: Role;
@@ -90,6 +91,7 @@ export class RoleComponent implements OnInit {
 
   ngOnInit(): void {
     this.businessId = this.authService.businessId();
+    this.languageInit = this.authService.language() == "" ? "EN" : this.authService.language();
     this.onValueChanges();
     this.loadAccess();
 
@@ -100,7 +102,7 @@ export class RoleComponent implements OnInit {
   onDisplay(){
     // changes.prop contains the old and the new value...
     if (this.roleDataList != undefined) {
-      var spinnerRef = this.spinnerService.start("Loading Role...");
+      var spinnerRef = this.spinnerService.start($localize`:@@roles.loadingrolesingle:`);
       this.roleForm.reset({RoleId: '', BusinessId: '', Name: '', Status: 1});
       this.g.clear();
       this.role$ = this.roleService.getRole(this.roleDataList, this.businessId).pipe(
@@ -120,7 +122,7 @@ export class RoleComponent implements OnInit {
         }),
         catchError(err => {
           this.spinnerService.stop(spinnerRef);
-          this.openDialog('Error !', err.Message, false, true, false);
+          this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
           return throwError(err || err.message);
         })
       );
@@ -147,7 +149,7 @@ export class RoleComponent implements OnInit {
     }
     if (this.roleForm.touched){
       let roleId = this.roleForm.value.RoleId;
-      var spinnerRef = this.spinnerService.start("Saving Role...");
+      var spinnerRef = this.spinnerService.start($localize`:@@roles.savingrole:`);
       if (roleId !== '' && roleId !== null) {
         let dataForm =  { 
           "RoleId": this.roleForm.value.RoleId,
@@ -166,12 +168,12 @@ export class RoleComponent implements OnInit {
             this.loadAccess();
             this.roleForm.reset({RoleId: '', BusinessId: this.businessId, Name: '', Status:1, Access: this.apps$});
             this.data.changeData('roles');
-            this.openDialog('Roles', 'Role updated successful', true, false, false);
+            this.openDialog($localize`:@@roles.rolestext:`, $localize`:@@roles.roleupdated:`, true, false, false);
           }),
           catchError(err => {
             this.spinnerService.stop(spinnerRef);
             this.savingRole = false;
-            this.openDialog('Error !', err.Message, false, true, false);
+            this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
             return throwError(err || err.message);
           })
         );
@@ -192,12 +194,12 @@ export class RoleComponent implements OnInit {
             this.loadAccess();
             this.roleForm.reset({RoleId: '', BusinessId: this.businessId, Name: '', Status:1, Access: this.apps$});
             this.data.changeData('roles');
-            this.openDialog('Roles', 'Role created successful', true, false, false);
+            this.openDialog($localize`:@@roles.rolestext:`, $localize`:@@roles.rolecreated:`, true, false, false);
           }),
           catchError(err => {
             this.spinnerService.stop(spinnerRef);
             this.savingRole = false;
-            this.openDialog('Error !', err.Message, false, true, false);
+            this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
             return throwError(err || err.message);
           })
         );
@@ -206,7 +208,7 @@ export class RoleComponent implements OnInit {
   }
 
   loadAccess(){
-    this.apps$ = this.roleService.getApplications(this.roleForm.get('RoleId').value, this.businessId).pipe(
+    this.apps$ = this.roleService.getApplications(this.roleForm.get('RoleId').value, this.businessId, this.languageInit).pipe(
       map((res: any)=>{
         if (res != null){
           this.roleForm.setControl('Access', this.setExistingApps(res));
@@ -235,9 +237,9 @@ export class RoleComponent implements OnInit {
 
   getErrorMessage(component: string) {
     if (component === 'Name'){
-      return this.f.Name.hasError('required') ? 'You must enter a value' :
-        this.f.Name.hasError('minlength') ? 'Minimun length 3' :
-          this.f.Name.hasError('maxlength') ? 'Maximun length 50' :
+      return this.f.Name.hasError('required') ? $localize`:@@shared.entervalue:` :
+        this.f.Name.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
+          this.f.Name.hasError('maxlength') ? $localize`:@@shared.maximun: 50` :
             '';
     }
   }

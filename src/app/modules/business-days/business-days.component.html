@@ -9,10 +9,10 @@
     </div>
     <ng-container *ngIf="updateParentDaysOff$ | async"></ng-container>
     <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="locationId != '_' && providerId == '_'">
-        <div class="col-md-6 col-lg-6">
+        <div class="col-md-6 col-lg-6" i18n="Configure your year schedule here. Just click on a date to set the days off.|text business days@@businessdays.maintext">
             Configure your year schedule here. Just click on a date to set the days off.
         </div>
-        <mat-slide-toggle [(ngModel)]="providerParentDO" (change)="updateData($event, 1)">Inherit special days from company</mat-slide-toggle>
+        <mat-slide-toggle [(ngModel)]="providerParentDO" (change)="updateData($event, 1)" i18n="Inherit special days from company|business day text@@businessdays.secontext">Inherit special days from company</mat-slide-toggle>
     </div>
     <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="locationId != '_' && providerId == '_'">
         <div class="col-md-6 col-lg-6">
@@ -24,10 +24,10 @@
         </div>
     </div>
     <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="providerId != '_'">
-        <div class="col-md-6 col-lg-6">
+        <div class="col-md-6 col-lg-6" i18n="Configure your year schedule here. Just click on a date to set the days off.|text business days@@businessdays.maintext">
             Configure your year schedule here. Just click on a date to set the days off.
         </div>
-        <mat-slide-toggle [(ngModel)]="providerParentDO" (change)="updateData($event, 1)">Inherit special days from location</mat-slide-toggle>
+        <mat-slide-toggle [(ngModel)]="providerParentDO" (change)="updateData($event, 1)" i18n="Inherit special days from location|business day text@@businessdays.secontextlocation">Inherit special days from location</mat-slide-toggle>
     </div>
     <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="providerId != '_'">
         <div class="col-md-6 col-lg-6">
@@ -47,11 +47,11 @@
                 <mat-icon [ngClass]="{'back-disabled': currYearAct == 1,
                     'back-enabled': currYearAct == 0}">arrow_back</mat-icon>
             </button>
-            <span class="text-nav" [ngClass]="{'back-disabled': currYearAct == 1, 'back-enabled': currYearAct == 0}">Previous year</span>
+            <span class="text-nav" [ngClass]="{'back-disabled': currYearAct == 1, 'back-enabled': currYearAct == 0}" i18n="Previous year|text in business days@@businessdays.previous">Previous year</span>
         </div>
         <div class="col-sm col-md-5 col-lg-5 pt-2 pb-2 year-qeue">{{(navYear == 0 ? currYear : navYear)}}</div>
         <div class="col-md-3 col-lg-3 pr-4 next-button">
-            <span class="text-next">Next year</span>
+            <span class="text-next" i18n="Next year|text in business days@@businessdays.next">Next year</span>
             <button mat-icon-button class="mr-3 nav-buttons" type="button" (click)="nextYear()">
                 <mat-icon>arrow_forward</mat-icon>
             </button>

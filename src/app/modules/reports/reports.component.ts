@@ -136,7 +136,7 @@ export class ReportsComponent implements OnInit {
     let finD = this.dateFin.getFullYear() + '-' + (this.dateFin.getMonth()+1 < 10 ? (this.dateFin.getMonth()+1).toString().padStart(2, '0') : this.dateIni.getMonth()+1) + '-' + (this.dateFin.getDate() < 10 ? this.dateFin.getDate().toString().padStart(2,'0') : this.dateFin.getDate());
     if (this.providerId == '') { this.providerId = '_';}
     if (this.locationId == '') { this.locationId = '_'; }
-    var spinnerRef = this.spinnerService.start("Loading Data...");
+    var spinnerRef = this.spinnerService.start($localize`:@@lite.loadingdata:`);
     this.report$ = this.appointmentService.getRepoAverage(this.businessId, this.locationId, this.providerId, initD, finD, this.lastItem).pipe(
       map((res: any) => {
         if (res != null){
@@ -193,7 +193,7 @@ export class ReportsComponent implements OnInit {
     let finD = this.dateFin.getFullYear() + '-' + (this.dateFin.getMonth()+1 < 10 ? (this.dateFin.getMonth()+1).toString().padStart(2, '0') : this.dateIni.getMonth()+1) + '-' + (this.dateFin.getDate() < 10 ? this.dateFin.getDate().toString().padStart(2,'0') : this.dateFin.getDate());
     if (this.providerId == '') { this.providerId = '_';}
     if (this.locationId == '') { this.locationId = '_'; }
-    var spinnerRef = this.spinnerService.start("Loading Data...");
+    var spinnerRef = this.spinnerService.start($localize`:@@lite.loadingdata:`);
     this.report$ = this.appointmentService.getRepoVisitas(this.businessId, this.locationId, this.providerId, initD, finD, this.lastItem).pipe(
       map((res: any) => {
         if (res != null){
@@ -238,7 +238,7 @@ export class ReportsComponent implements OnInit {
     let finD = this.dateFin.getFullYear() + '-' + (this.dateFin.getMonth()+1 < 10 ? (this.dateFin.getMonth()+1).toString().padStart(2, '0') : this.dateIni.getMonth()+1) + '-' + (this.dateFin.getDate() < 10 ? this.dateFin.getDate().toString().padStart(2,'0') : this.dateFin.getDate());
     if (this.providerId == '') { this.providerId = '_';}
     if (this.locationId == '') { this.locationId = '_'; }
-    var spinnerRef = this.spinnerService.start("Loading Data...");
+    var spinnerRef = this.spinnerService.start($localize`:@@lite.loadingdata:`);
     this.report$ = this.appointmentService.getRepoCancel(this.businessId, this.locationId, this.providerId, initD, finD, this.lastItem).pipe(
       map((res: any) => {
         if (res != null){

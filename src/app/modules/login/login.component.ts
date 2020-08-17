@@ -98,7 +98,8 @@ export class LoginComponent implements OnInit {
         '';
     }
     if (component === 'Password'){
-      return this.f.password.hasError('required') ? 'You must enter a password' :
+      //'You must enter a password'
+      return this.f.password.hasError('required') ? $localize`:@@login.passerror:` :
         '';
     }
   }

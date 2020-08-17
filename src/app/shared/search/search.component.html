@@ -1,6 +1,6 @@
 <div class="search-bar pt-2 pb-2 mt-2">
   <mat-form-field class="input-search" appearance="outline">
-    <mat-label>Search</mat-label>
+    <mat-label i18n="Search@@shared.search">Search</mat-label>
     <input matInput [placeholder]="placeholder" [(ngModel)]="searchValue"
       (keyup)="updateSearchUp($event, $event.target.value)" [disabled]="changeData=='Add'">
     <button mat-button *ngIf="searchValue" matSuffix mat-icon-button (click)="searchValue='';cleanValue();">
@@ -8,5 +8,5 @@
     </button>
   </mat-form-field>
   <span class="spacer"></span>
-  <button mat-flat-button color="primary" class="btn-add" (click)="changeView()">{{(changeData == 'Add' ? 'Search' : '+ Add')}}</button>
+  <button mat-flat-button color="primary" class="btn-add" (click)="changeView()">{{contentButton}}</button>
 </div>

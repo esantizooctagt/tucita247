@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>Select walk-ins to check out</h1>
+<h1 mat-dialog-title i18n="Select walk-ins to check out|text in directory@@dirdialog.texto">Select walk-ins to check out</h1>
 <mat-tab-group (selectedTabChange)="filterLetter($event)" dynamicHeight>
     <ng-container *ngFor="let item of letter_arr">
         <div mat-dialog-content>
@@ -14,5 +14,5 @@
 </mat-tab-group>
 <mat-dialog-actions align="end">
     <ng-container *ngIf="getLocInfo$ | async"></ng-container>
-    <button mat-flat-button color="primary" type="button" (click)="checkOutWalkIn()">Check Out</button>
+    <button mat-flat-button color="primary" type="button" (click)="checkOutWalkIn()" i18n="Check Out|text in directory@@dirdialog.directory">Check Out</button>
 </mat-dialog-actions>

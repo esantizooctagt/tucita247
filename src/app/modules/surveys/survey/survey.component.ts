@@ -89,7 +89,7 @@ export class SurveyComponent implements OnInit {
   }
   
   ngOnInit(): void {
-    var spinnerRef = this.spinnerService.start("Loading Survey...");
+    var spinnerRef = this.spinnerService.start($localize`:@@survey.loadingsurv:`);
     this.businessId = this.authService.businessId();
 
     this.locs$ = this.locationService.getLocationsCode(this.businessId).pipe(
@@ -111,7 +111,7 @@ export class SurveyComponent implements OnInit {
 
   onDisplay(){
     if (this.surveyDataList != undefined){
-      var spinnerRef = this.spinnerService.start("Loading Survey...");
+      var spinnerRef = this.spinnerService.start($localize`:@@survey.loadingsurv:`);
       this.surveyForm.reset({ SurveyId: '', Name: '', LocationId: '', DateSurvey: '', Status: true});
       this.fQuestions.clear();
       this.survey$ = this.surveyService.getSurvey(this.surveyDataList).pipe(
@@ -131,7 +131,7 @@ export class SurveyComponent implements OnInit {
         }),
         catchError(err => {
           this.spinnerService.stop(spinnerRef);
-          this.openDialog('Error !', err.Message, false, true, false);
+          this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
           return throwError(err || err.Message);
         })
       );
@@ -156,24 +156,24 @@ export class SurveyComponent implements OnInit {
 
   getErrorMessage(component: string, index: number =0){
     if (component === 'Name'){
-      return this.f.Name.hasError('required') ? 'You must enter a value' :
-        this.f.Name.hasError('minlength') ? 'Minimun length 3':
-          this.f.Name.hasError('maxlength') ? 'Maximun length 100' :
+      return this.f.Name.hasError('required') ? $localize`:@@shared.entervalue:` :
+        this.f.Name.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
+          this.f.Name.hasError('maxlength') ? $localize`:@@shared.maximun: 100` :
             '';
     }
     if (component === 'LocationId'){
-      return this.f.LocationId.hasError('required') ? 'You must select a value' :
+      return this.f.LocationId.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
         '';
     }
     if (component === 'DateSurvey'){
-      return this.f.DateSurvey.hasError('required') ? 'You must enter a value' :
+      return this.f.DateSurvey.hasError('required') ? $localize`:@@shared.entervalue:` :
         '';
     }
     if (component === 'QDescription'){
       let sDescription = (<FormArray>this.surveyForm.get('Questions')).controls[index].get('Description');
-      return sDescription.hasError('required') ? 'You must enter a Description' :
-        sDescription.hasError('minlength') ? 'Minimun length 3':
-          sDescription.hasError('maxlength') ? 'Maximun length 100' :
+      return sDescription.hasError('required') ? $localize`:@@shared.entervalue:` :
+        sDescription.hasError('minlength') ? $localize`:@@shared.minimun: 3`:
+          sDescription.hasError('maxlength') ? $localize`:@@shared.maximun: 100` :
             '';
     }
   }
@@ -200,7 +200,7 @@ export class SurveyComponent implements OnInit {
       Status: 1,
       Questions: this.surveyForm.value.Questions
     }
-    var spinnerRef = this.spinnerService.start("Saving Survey...");
+    var spinnerRef = this.spinnerService.start($localize`:@@survey.savingsurvey:`);
     this.saveSurvey$ =  this.surveyService.postSurveys(dataForm).pipe(
       map((res:any) => {
         if (res != null){
@@ -209,19 +209,19 @@ export class SurveyComponent implements OnInit {
             this.surveyForm.reset({ SurveyId: '', Name: '', LocationId: '', DateSurvey: '', Status: true});
             this.fQuestions.clear();
             (<FormArray>this.surveyForm.get('Questions')).push(this.addQuestion());
-            this.openDialog('Surveys', 'Saving successfully', true, false, false);
+            this.openDialog($localize`:@@surveys.surveys:`, $localize`:@@surveys.savingsuccess:`, true, false, false);
           } else {
             this.spinnerService.stop(spinnerRef);
-            this.openDialog('Error ! ', 'Something goes wrong, try again', false, true, false);
+            this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.wrong:`, false, true, false);
           }
         } else {
           this.spinnerService.stop(spinnerRef);
-          this.openDialog('Error ! ', 'Something goes wrong, try again', false, true, false);
+          this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.wrong:`, false, true, false);
         }
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
-        this.openDialog('Error ! ', err.Message, false, true, false);
+        this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
         return throwError (err || err.message);
       })
     );

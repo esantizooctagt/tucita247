@@ -23,7 +23,6 @@ export class LandingComponent implements OnInit {
   ngOnInit(): void {
     this.link = this.route.snapshot.paramMap.get('landing');
 
-    console.log("landing page response");
     this.business$ = this.businessService.getBusinessLanding(this.link).pipe(
       map((res: any) => {
         if (res != null){

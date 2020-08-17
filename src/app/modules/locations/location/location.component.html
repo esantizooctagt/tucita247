@@ -1,5 +1,5 @@
 <div class="pl-0 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
-    <h3>LOCATIONS</h3>
+    <h3 i18n="LOCATIONS|title in locations@@locations.title">LOCATIONS</h3>
 </div>
 <ng-container *ngIf="location$ | async"></ng-container>
 <ng-container *ngIf="locationParams$ | async"></ng-container>
@@ -8,15 +8,15 @@
     <mat-card class="col-sm col-md col-lg-7">
         <form [formGroup]="locationForm" (ngSubmit)="onSubmit()" class="mt-4">
             <div class="form-field pl-3 pr-3">
-                <mat-form-field hintLabel="Name">
-                    <input matInput placeholder="Location Name" formControlName="Name" maxlength="500" minlength="3"
+                <mat-form-field i18n-hintLabel="Name@@shared.name" hintLabel="Name">
+                    <input matInput i18n-placeholder="Name@@shared.name" placeholder="Name" formControlName="Name" maxlength="500" minlength="3"
                         [errorStateMatcher]="confirmValidParentMatcher" required>
                     <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{getErrorMessage('Name')}}</mat-error>
                 </mat-form-field>
             </div>
             <div class="form-field pl-3 pr-3">
-                <mat-form-field hintLabel="Address">
-                    <input matInput placeholder="Address" formControlName="Address" maxlength="500" minlength="3"
+                <mat-form-field i18n-hintLabel="Address|text in locations@@locations.address" hintLabel="Address">
+                    <input matInput i18n-placeholder="Address|text in locations@@locations.address" placeholder="Address" formControlName="Address" maxlength="500" minlength="3"
                         [errorStateMatcher]="confirmValidParentMatcher" required>
                     <mat-error *ngIf="f.Address.invalid && f.Address.touched">{{getErrorMessage('Address')}}</mat-error>
                 </mat-form-field>
@@ -24,7 +24,7 @@
             <div class="row pl-3 pr-3">
                 <ng-container *ngIf="sectors$ | async"></ng-container>
                 <div class="form-field col-md-6">
-                    <mat-form-field hintLabel="City">
+                    <mat-form-field i18n-hintLabel="City|text in locations@@locations.city" hintLabel="City">
                         <mat-select formControlName="City" (selectionChange)="loadSectors($event.value)" required>
                             <mat-option *ngFor="let city of cities" [value]="city.CityId">
                                 {{ city.Name }}
@@ -34,7 +34,7 @@
                     </mat-form-field>
                 </div>
                 <div class="form-field col-md-6">
-                    <mat-form-field hintLabel="Sector">
+                    <mat-form-field i18n-hintLabel="Sector|text in locations@@locations.sector" hintLabel="Sector">
                         <mat-select formControlName="Sector" required>
                             <mat-option *ngFor="let sector of sectors" [value]="sector.SectorId">
                                 {{ sector.Name }}
@@ -45,25 +45,25 @@
                 </div>
             </div>
             <div class="row pl-3 pr-3">
-                <mat-form-field class="col-md-5" hintLabel="Max concurrent customer">
-                    <input matInput placeholder="Max Concurrent Customers" formControlName="MaxConcurrentCustomer"
+                <mat-form-field class="col-md-5" i18n-hintLabel="Max concurrent customer|text in locations@@locations.maxcustomer" hintLabel="Max concurrent customer">
+                    <input matInput i18n-placeholder="Max concurrent customer|text in locations@@locations.maxcustomer" placeholder="Max Concurrent Customers" formControlName="MaxConcurrentCustomer"
                         [errorStateMatcher]="confirmValidParentMatcher" required>
                     <mat-error *ngIf="f.MaxConcurrentCustomer.invalid && f.MaxConcurrentCustomer.touched">{{getErrorMessage('MaxConcurrentCustomer')}}</mat-error>
                 </mat-form-field>
-                <mat-form-field class="col-md" hintLabel="Service Time interval">
-                    <input matInput placeholder="Service Time Interval" formControlName="BucketInterval"
+                <mat-form-field class="col-md" i18n-hintLabel="Service Time interval|text in locations@@locations.serviceinterval" hintLabel="Service Time interval">
+                    <input matInput i18n-placeholder="Service Time interval|text in locations@@locations.serviceinterval" placeholder="Service Time Interval" formControlName="BucketInterval"
                         [errorStateMatcher]="confirmValidParentMatcher" required>
                     <mat-error *ngIf="f.BucketInterval.invalid && f.BucketInterval.touched">{{getErrorMessage('BucketInterval')}}</mat-error>
                 </mat-form-field>
-                <mat-form-field class="col-md-5" hintLabel="Number of bookings by service interval">
-                    <input matInput placeholder="Number of bookings by service interval"
+                <mat-form-field class="col-md-5" i18n-hintLabel="Number of bookings by service interval|text in locations@@locations.numberbookings" hintLabel="Number of bookings by service interval">
+                    <input matInput i18n-placeholder="Number of bookings by service interval|text in locations@@locations.numberbookings" placeholder="Number of bookings by service interval"
                         formControlName="TotalCustPerBucketInter" [errorStateMatcher]="confirmValidParentMatcher"
                         required>
                     <mat-error *ngIf="f.TotalCustPerBucketInter.invalid && f.TotalCustPerBucketInter.touched">{{getErrorMessage('TotalCustPerBucketInter')}}</mat-error>
                 </mat-form-field>
             </div>
             <div class="row pl-3 pr-3">
-                <mat-form-field class="col-md-12" hintLabel="Doors">
+                <mat-form-field class="col-md-12" i18n-hintLabel="Doors|text in locations@@locations.doors" hintLabel="Doors">
                     <mat-chip-list #chipDoors>
                         <ng-container *ngIf="doors.length > 0">
                             <mat-chip *ngFor="let door of doors.split(',')" [selectable]="selectable"
@@ -77,7 +77,7 @@
                             (matChipInputTokenEnd)="addDoor($event)">
                     </mat-chip-list>
                 </mat-form-field>
-                <mat-form-field class="col-md-12" hintLabel="Parent location">
+                <mat-form-field class="col-md-12" i18n-hintLabel="Parent location|text in locations@@locations.parentlocation" hintLabel="Parent location">
                     <mat-select formControlName="ParentLocation" required>
                         <mat-option *ngFor="let parentBus of businessParent" [value]="parentBus.BusinessId">
                             {{parentBus.Name}}
@@ -94,15 +94,15 @@
                 </agm-map>
             </div>
             <div class="form-field-check ml-3">
-                <mat-checkbox formControlName="ManualCheckOut">Manual Check Out</mat-checkbox>
+                <mat-checkbox formControlName="ManualCheckOut" i18n="Manual Check Out|text in location@@location.manualcheckout">Manual Check Out</mat-checkbox>
             </div>
             <div class="form-field-check ml-3 mt-2 mb-3" *ngIf="locationForm.value.LocationId !== '' && locationForm.value.LocationId !== null">
-                <mat-checkbox formControlName="Status">Status</mat-checkbox>
+                <mat-checkbox formControlName="Status" i18n="Status@@shared.status">Status</mat-checkbox>
             </div>
             <div>
                 <button mat-flat-button color="primary" id="save" [disabled]="!locationForm.valid"
-                    class="button-action ml-3 mr-3 mt-2">Save</button>
-                <button mat-flat-button color="accent" id="cancel" type="button" (click)="onCancel()"
+                    class="button-action ml-3 mr-3 mt-2" i18n="Save@@shared.save">Save</button>
+                <button mat-flat-button color="accent" id="cancel" type="button" i18n="Cancel@@shared.cancel" (click)="onCancel()"
                     class="button-action mt-2">Cancel</button>
             </div>
         </form>

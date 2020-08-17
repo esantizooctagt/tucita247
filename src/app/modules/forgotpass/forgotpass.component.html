@@ -7,7 +7,7 @@
         <form [formGroup]="forgotForm" class="loginForm" (ngSubmit)="onSubmit()">
             <div class="main-logo mb-5 mt-5"></div>
             <div class="login-form">
-                <h3 class="sign-in pt-4 pl-4 pb-2">Forgot password</h3>
+                <h3 class="sign-in pt-4 pl-4 pb-2" i18n="Forgot password@@shared.forgot">Forgot password</h3>
                 <div class="form-field mb-0 pl-4 pb-2 pr-4 pt-3">
                     <mat-form-field>
                         <mat-label i18n="Email@@shared.Email">Email</mat-label>
@@ -18,9 +18,9 @@
                     </mat-form-field>
                 </div>
             </div>
-            <div class="forgot-form mt-3 mb-3"><a class="text-forgot" [routerLink]="['/login']">Login</a></div>
+            <div class="forgot-form mt-3 mb-3"><a class="text-forgot" i18n="Login@@forgot.login" [routerLink]="['/login']">Login</a></div>
             <div class="forgot-form mt-3 mb-3">
-                <button mat-flat-button color="primary" id="reset" [disabled]="loading" class="text-left w-100">Reset
+                <button mat-flat-button color="primary" id="reset" [disabled]="loading" i18n="Reset Password@@shared.reset" class="text-left w-100">Reset
                     Password
                 </button>
                 <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>

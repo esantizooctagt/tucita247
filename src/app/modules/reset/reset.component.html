@@ -7,7 +7,7 @@
     <form [formGroup]="resetForm" class="loginForm" (ngSubmit)="onSubmit()">
         <div class="main-logo mb-5 mt-5"></div>
         <div class="login-form">
-            <h3 class="sign-in pt-4 pl-4 pb-2">Reset Password</h3>
+            <h3 class="sign-in pt-4 pl-4 pb-2" i18n="Reset Password@@shared.reset">Reset Password</h3>
             <ng-container formGroupName="Passwords">
                 <div class="form-field mb-0 pl-4 pb-2 pr-4 pt-3">
                     <mat-form-field hintLabel="Min 8 characters">
@@ -19,42 +19,40 @@
                             [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                             <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                         </button>
-                        <mat-error *ngIf="resetForm.get('Passwords.password').errors?.required">You must enter a
+                        <mat-error *ngIf="resetForm.get('Passwords.password').errors?.required" i18n="You must enter a password@@reset.invalidpass">You must enter a
                             password
                         </mat-error>
-                        <mat-error *ngIf="resetForm.get('Passwords.password').errors?.minlength">Minimun length 8
+                        <mat-error *ngIf="resetForm.get('Passwords.password').errors?.minlength" i18n="Minimun length 8@@reset.invalidlength">Minimun length 8
                         </mat-error>
-                        <mat-error *ngIf="resetForm.get('Passwords.password').errors?.strong">
+                        <mat-error *ngIf="resetForm.get('Passwords.password').errors?.strong" i18n="Require at least 1 number, 1 uppercase and 1 lowercase letter@@reset.invalidpolicy">
                             <div>Require at least 1 number, 1 uppercase and 1 lowercase letter</div>
                         </mat-error>
                     </mat-form-field>
                 </div>
                 <div class="form-field mb-0 pl-4 pb-2 pr-4 pt-3">
                     <mat-form-field hintLabel="Min 8 characters">
-                        <mat-label>Confirm Password</mat-label>
-                        <input type="password" matInput placeholder="Password" formControlName="confpassword"
+                        <mat-label i18n="Confirm Password@@reset.confirmpass">Confirm Password</mat-label>
+                        <input type="password" matInput i18n-placeholder="Password@@reset.password" placeholder="Password" formControlName="confpassword"
                             [errorStateMatcher]="confirmValidParentMatcher" [type]="hideconf ? 'password' : 'text'"
                             minlength="8" maxlength="20" strong required>
                         <button type="button" mat-icon-button matSuffix (click)="hideconf = !hideconf"
                             [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                             <mat-icon>{{hideconf ? 'visibility_off' : 'visibility'}}</mat-icon>
                         </button>
-                        <mat-error *ngIf="resetForm.get('Passwords.confpassword').errors?.required">You must enter a
+                        <mat-error *ngIf="resetForm.get('Passwords.confpassword').errors?.required" i18n="You must enter a password@@reset.invalidpass">You must enter a
                             password</mat-error>
-                        <mat-error *ngIf="resetForm.get('Passwords.confpassword').errors?.minlength">Minimun length 8
+                        <mat-error *ngIf="resetForm.get('Passwords.confpassword').errors?.minlength" i18n="Minimun length 8@@reset.invalidlength">Minimun length 8
                         </mat-error>
                         <mat-error *ngIf="resetForm.get('Passwords.confpassword').errors?.strong">
-                            <div>Require at least 1 number, 1 uppercase and 1 lowercase letter</div>
+                            <div i18n="Require at least 1 number, 1 uppercase and 1 lowercase letter@@reset.invalidpolicy">Require at least 1 number, 1 uppercase and 1 lowercase letter</div>
                         </mat-error>
-                        <mat-error *ngIf="resetForm.get('Passwords.confpassword').errors?.notSame">Confirm Password does
-                            not
-                            match</mat-error>
+                        <mat-error *ngIf="resetForm.get('Passwords.confpassword').errors?.notSame" i18n="Confirm Password does not match@@reset.invalidconfpass">Confirm Password does not match</mat-error>
                     </mat-form-field>
                 </div>
             </ng-container>
         </div>
         <div class="forgot-form mt-3 mb-3">
-            <button mat-flat-button color="primary" id="save" [disabled]="loading" class="text-left w-100">Reset
+            <button mat-flat-button color="primary" id="save" [disabled]="loading" class="text-left w-100" i18n="Reset@@reset.reset">Reset
             </button>
             <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
         </div>

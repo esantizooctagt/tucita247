@@ -80,7 +80,7 @@ export class AppoDialogComponent implements OnInit {
     this.providerId = this.data.providerId;
     this.dayInfo = this.data.dayData;
 
-    var spinnerRef = this.spinnerService.start("Loading Data...");
+    var spinnerRef = this.spinnerService.start($localize`:@@lite.loadingdata:`);
     this.services$ = this.serviceService.getServicesProvider(this.businessId, this.providerId).pipe(
       map((res: any) =>{
         this.spinnerService.stop(spinnerRef);
@@ -93,7 +93,7 @@ export class AppoDialogComponent implements OnInit {
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
-        this.openSnackBar("Something goes wrong, try again","Loading Data");
+        this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@shared.error:`);
         return err;
       })
     )
@@ -119,7 +119,7 @@ export class AppoDialogComponent implements OnInit {
       BusinessId: this.data.businessId,
       LocationId: this.data.locationId,
       ProviderId: this.data.providerId,
-      ServiceId: this.data.serviceId,
+      ServiceId: this.clientForm.value.ServiceId,
       AppoDate: this.data.appoDate,
       AppoHour: (this.data.appoTime.substring(6,8) == 'PM' ? (+this.data.appoTime.substring(0,2)+12).toString()+'-'+this.data.appoTime.substring(3,5) : this.data.appoTime.substring(0,2)+'-'+this.data.appoTime.substring(3,5)),
       Door: this.clientForm.value.Door,
@@ -134,17 +134,17 @@ export class AppoDialogComponent implements OnInit {
       Status: 1,
       Type: 1
     }
-    var spinnerRef = this.spinnerService.start("Adding Appointment...");
+    var spinnerRef = this.spinnerService.start($localize`:@@host.addingappo:`);
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
       map((res: any) => {
         this.spinnerService.stop(spinnerRef);
-        this.openSnackBar("Appointment created succesfully","Schedule");
+        this.openSnackBar($localize`:@@appos.created:`, $localize`:@@appos.schedule:`);
         this.dialogRef.close();
         return res.Code;
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
-        this.openSnackBar("Error on created appointment, try again","Schedule");
+        this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@appos.schedule:`);
         return err;
       })
     );
@@ -152,31 +152,31 @@ export class AppoDialogComponent implements OnInit {
 
   getErrorMessage(component: string){
     if (component === 'Email'){
-      return this.f.Email.hasError('required') ? 'You must enter an Email' :
-        this.f.Email.hasError('maxlength') ? 'Maximun length 200' :
-          this.f.Email.hasError('pattern') ? 'Invalid Email' :
+      return this.f.Email.hasError('required') ?  $localize`:@@shared.entervalue:` :
+        this.f.Email.hasError('maxlength') ? $localize`:@@shared.maximun: 200` :
+          this.f.Email.hasError('pattern') ? $localize`:@@forgot.emailformat:` :
           '';
     }
     if (component === 'Name'){
-      return this.f.Name.hasError('required') ? 'You must enter a value' :
-        this.f.Name.hasError('minlength') ? 'Minimun length 3' :
-          this.f.Name.hasError('maxlength') ? 'Maximun length 100' :
+      return this.f.Name.hasError('required') ? $localize`:@@shared.entervalue:` :
+        this.f.Name.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
+          this.f.Name.hasError('maxlength') ? $localize`:@@shared.maximun: 100` :
             '';
     }
     if (component === 'Phone'){
-      return this.f.Phone.hasError('minlength') ? 'Minimun length 6' :
-        this.f.Phone.hasError('maxlength') ? 'Maximun length 14' :
+      return this.f.Phone.hasError('minlength') ? $localize`:@@shared.minimun: 6` :
+        this.f.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: 14` :
           '';
     }
     if (component === 'ServiceId'){
-      return this.f.ServiceId.hasError('required') ? 'You must select a value' :
+      return this.f.ServiceId.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
         '';
     }
     if (component === 'Guests'){
-      return this.f.Guests.hasError('required') ? 'You must enter a value' :
-      this.f.Guests.hasError('maxlength') ? 'Maximun length 2' :
-        this.f.Guests.hasError('min') ? 'Minimun value 1' :
-          this.f.Guests.hasError('max') ? 'Maximun value 99' :
+      return this.f.Guests.hasError('required') ? $localize`:@@shared.entervalue:` :
+      this.f.Guests.hasError('maxlength') ? $localize`:@@shared.maximun: 2` :
+        this.f.Guests.hasError('min') ? $localize`:@@shared.minvalue: 1` :
+          this.f.Guests.hasError('max') ? $localize`:@@shared.maxvalue: 99` :
             '';
     }
   }
@@ -195,13 +195,13 @@ export class AppoDialogComponent implements OnInit {
         } else {
           validTime = 0;
           this.clientForm.patchValue({ServiceId: ''});
-          this.openSnackBar("Invalid time for this service","Schedule");
+          this.openSnackBar($localize`:@@appos.invalidserv:`, $localize`:@@appos.schedule:`);
           break;
         }
       } else {
         validTime = 0;
         this.clientForm.patchValue({ServiceId: ''});
-        this.openSnackBar("Invalid time for this service","Schedule");
+        this.openSnackBar($localize`:@@appos.invalidserv:`, $localize`:@@appos.schedule:`);
         break;
       }
     }

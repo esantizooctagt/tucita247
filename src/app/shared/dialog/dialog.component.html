@@ -13,6 +13,6 @@
     </div>
 </div>
 <div mat-dialog-actions *ngIf="ask">
-    <button mat-raised-button (click)="close()" color="warn">No</button>
-    <button mat-raised-button [mat-dialog-close]="accepted" color="primary">Yes</button>
+    <button mat-raised-button (click)="close()" color="warn" i18n="No@@shared.no">No</button>
+    <button mat-raised-button [mat-dialog-close]="accepted" color="primary" i18n="Yes@@shared.yes">Yes</button>
 </div>

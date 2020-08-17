@@ -1,5 +1,5 @@
 <div class="pl-0 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
-    <h3>SURVEYS</h3>
+    <h3 i18n="SURVEYS|title surveys@@surveys.title">SURVEYS</h3>
 </div>
 <ng-container *ngIf="survey$ | async"></ng-container>
 <ng-container *ngIf="saveSurvey$ | async"></ng-container>
@@ -7,14 +7,14 @@
     <mat-card class="col-sm col-md col-lg-7">
         <form [formGroup]="surveyForm" (ngSubmit)="onSubmit()" class="mt-4">
             <div class="form-field pl-3 pr-3">
-                <mat-form-field hintLabel="Name">
-                    <input matInput #Name placeholder="Name" maxlength="100" minlength="3" formControlName="Name"
+                <mat-form-field hintLabel="Name" i18n-hintLabel="Name@@shared.name">
+                    <input matInput #Name placeholder="Name" i18n-placeholder="Name@@shared.name" maxlength="100" minlength="3" formControlName="Name"
                         [errorStateMatcher]="confirmValidParentMatcher" required>
                     <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{getErrorMessage('Name')}}</mat-error>
                 </mat-form-field>
             </div>
             <div class="form-field pl-3 pr-3">
-                <mat-form-field hintLabel="Location">
+                <mat-form-field hintLabel="Location" i18n-hintLabel="Location@@shared.location">
                     <mat-select formControlName="LocationId">
                         <mat-option *ngFor="let res of locs$ | async" [value]="res.LocationId">
                             {{res.Name}}
@@ -25,8 +25,8 @@
                 </mat-form-field>
             </div>
             <div class="form-field pl-3 pr-3">
-                <mat-form-field hintLabel="Init survey date">
-                    <mat-label>Choose a init date</mat-label>
+                <mat-form-field hintLabel="Init survey date" i18n-hintLabel="Init survey date|text in survey@@surveys.initsurvey">
+                    <mat-label i18n="Choose a init date|text in surveys@@surveys.dateinit">Choose a init date</mat-label>
                     <input matInput formControlName="DateSurvey" [min]="minDate" [disabled]="f.DateSurvey.value<minDate"
                         [matDatepicker]="picker" required>
                     <mat-datepicker-toggle matSuffix [for]="picker" [disabled]="f.DateSurvey.value<minDate">
@@ -37,13 +37,13 @@
                 </mat-form-field>
             </div>
             <div class="panel-array col-md p-0 pt-3">
-                <button mat-flat-button color="primary" id="add" (click)="onAddQuestion()" class="ml-3 mt-0 pl-3 mb-4">+
+                <button mat-flat-button color="primary" id="add" (click)="onAddQuestion()" class="ml-3 mt-0 pl-3 mb-4" i18n="+ Add|text in surveys@@surveys.add">+
                     Add</button>
                 <ng-container formArrayName="Questions" *ngFor="let item of fQuestions.controls; let i=index">
                     <ng-container [formGroupName]="i">
                         <div class="form-field row pl-3 pr-3" *ngIf="item.get('Status').value == 1">
-                            <mat-form-field hintLabel="Question description" class="col-md-10">
-                                <input matInput placeholder="Question description" maxlength="100" minlength="3"
+                            <mat-form-field i18n-hintLabel="Question description|text in surveys@@surveys.questdescrip" hintLabel="Question description" class="col-md-10">
+                                <input matInput i18n-placeholder="Question description|text in surveys@@surveys.questdescrip" placeholder="Question description" maxlength="100" minlength="3"
                                     formControlName="Description" [errorStateMatcher]="confirmValidParentMatcher"
                                     required>
                                 <mat-error *ngIf="item.get('Description').invalid && item.get('Description').touched">
@@ -64,8 +64,8 @@
             </div>
             <div>
                 <button mat-flat-button color="primary" id="save" [disabled]="!surveyForm.valid"
-                    class="ml-3 mr-3 mt-2">Save</button>
-                <button mat-flat-button color="accent" id="cancel" type="button" (click)="onCancel()"
+                    class="ml-3 mr-3 mt-2" i18n="Save@@shared.save">Save</button>
+                <button mat-flat-button color="accent" id="cancel" i18n="Cancel@@shared.cancel" type="button" (click)="onCancel()"
                     class="mt-2">Cancel</button>
             </div>
             <!-- {{ surveyForm.value | json }} -->

@@ -75,7 +75,7 @@ export class ProviderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    var spinnerRef = this.spinnerService.start("Loading Service provider...");
+    var spinnerRef = this.spinnerService.start($localize`:@@providers.loadserviceprov:`);
     this.businessId = this.authService.businessId();
 
     this.locs$ = this.locationService.getLocationsCode(this.businessId).pipe(
@@ -98,7 +98,7 @@ export class ProviderComponent implements OnInit {
   onDisplay(){
     if (this.providerDataList != undefined){
       let provId = '';
-      var spinnerRef = this.spinnerService.start("Loading Service provider...");
+      var spinnerRef = this.spinnerService.start($localize`:@@providers.loadserviceprov:`);
       this.providerForm.reset({ ProviderId: '', Name: '', LocationId: '', Status: true});
       this.provider$ = this.providerService.getProvider(this.businessId, this.providerDataList).pipe(
         map((res: any) => {
@@ -123,7 +123,7 @@ export class ProviderComponent implements OnInit {
         )),
         catchError(err => {
           this.spinnerService.stop(spinnerRef);
-          this.openDialog('Error !', err.Message, false, true, false);
+          this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
           return throwError(err || err.Message);
         })
       );
@@ -142,13 +142,13 @@ export class ProviderComponent implements OnInit {
 
   getErrorMessage(component: string){
     if (component === 'Name'){
-      return this.f.Name.hasError('required') ? 'You must enter a value' :
-        this.f.Name.hasError('minlength') ? 'Minimun length 3':
-          this.f.Name.hasError('maxlength') ? 'Maximun length 100' :
+      return this.f.Name.hasError('required') ? $localize`:@@shared.entervalue:` :
+        this.f.Name.hasError('minlength') ? $localize`:@@shared.minimun: 3`:
+          this.f.Name.hasError('maxlength') ? $localize`:@@shared.maximun: 100` :
             '';
     }
     if (component === 'LocationId'){
-      return this.f.LocationId.hasError('required') ? 'You must select a value' :
+      return this.f.LocationId.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
         '';
     }
   }
@@ -177,14 +177,14 @@ export class ProviderComponent implements OnInit {
             this.spinnerService.stop(spinnerRef);
             this.providerForm.patchValue({ProviderId: res.ProviderId});
             provId = res.ProviderId;
-            this.openDialog('Service provider', 'Saving successfully', true, false, false);
+            this.openDialog($localize`:@@providers.servprovider:`, $localize`:@@providers.savingserviprov:`, true, false, false);
           } else {
             this.spinnerService.stop(spinnerRef);
-            this.openDialog('Error ! ', 'Something goes wrong, try again', false, true, false);
+            this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.wrong:`, false, true, false);
           }
         } else {
           this.spinnerService.stop(spinnerRef);
-          this.openDialog('Error ! ', 'Something goes wrong, try again', false, true, false);
+          this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.wrong:`, false, true, false);
         }
       }),
       switchMap(_ => this.serviceService.getServicesProvider(this.businessId, provId).pipe(
@@ -195,7 +195,7 @@ export class ProviderComponent implements OnInit {
       )),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
-        this.openDialog('Error ! ', err.Message, false, true, false);
+        this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
         return throwError (err || err.message);
       })
     );
@@ -211,14 +211,14 @@ export class ProviderComponent implements OnInit {
       map((res: any) => {
         if (res.Code == 200){
           if (activo == 1){
-            this.openSnackBar("Service added successfully","Service Provider");
+            this.openSnackBar($localize`:@@providers.servadded:`,$localize`:@@providers.servprovider:`);
           } else {
-            this.openSnackBar("Service remove successfully","Service Provider");
+            this.openSnackBar($localize`:@@providers.servremove:`,$localize`:@@providers.servprovider:`);
           }
         }
       }),
       catchError(err => {
-        this.openSnackBar("Something goes wrong, try again","Service Provider");
+        this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@providers.servprovider:`);
         return err;
       })
     );

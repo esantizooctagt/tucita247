@@ -92,7 +92,7 @@ export class ResetComponent implements OnInit {
         return;
     }
     if (this.resetForm.touched){
-      var spinnerRef = this.spinnerService.start("Reseting Password...");
+      var spinnerRef = this.spinnerService.start($localize`:@@reset.console:`);
       if (this.userId !== '') {  
         var CryptoJS = require("crypto-js");
         var data = this.resetForm.get('Passwords.password').value;
@@ -107,16 +107,16 @@ export class ResetComponent implements OnInit {
           tap((res: any) => { 
             if (res.Code == 200){
               this.spinnerService.stop(spinnerRef);
-              this.openDialog('Users', 'Password reset successful', true, false, false);
+              this.openDialog($localize`:@@reset.titleusers:`, $localize`:@@reset.successful:`, true, false, false);
               this.router.navigate(['/login']);
             } else {
               this.spinnerService.stop(spinnerRef);
-              this.openDialog('Users', 'The new password must be different', false, true, false);
+              this.openDialog($localize`:@@reset.titleusers:`, $localize`:@@reset.errormessage:`, false, true, false);
             }
           }),
           catchError(err => {
             this.spinnerService.stop(spinnerRef);
-            this.openDialog('Error !', err.Message, false, true, false);
+            this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
             return throwError(err || err.message);
           })
         );

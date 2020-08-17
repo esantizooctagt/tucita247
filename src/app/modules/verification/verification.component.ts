@@ -88,11 +88,11 @@ export class VerificationComponent implements OnInit {
   onSubmit(){
     if (this.code != 0){
       if (this.code != this.verifForm.value.userCode) {
-        this.error = "Invalid Code";
+        this.error = $localize`:@@verification.invalidcode:`;
         return;
       } 
       if (this.code != 0 && this.verifForm.get('Passwords.password').value == ''){
-        this.error = "You must enter a valid password";
+        this.error = $localize`:@@verification.enterpassword:`;
         return;
       }
       let dataForm;
@@ -112,7 +112,7 @@ export class VerificationComponent implements OnInit {
         dataForm = '';
         return;
       }
-      var spinnerRef = this.spinnerService.start("Activating account...");
+      var spinnerRef = this.spinnerService.start($localize`:@@vverification.actaccount:`);
       this.userAct$ = this.usersService.putVerifCode(this.code, dataForm).pipe(
         tap((res: any) => { 
           if (res.Code == 200){
@@ -120,12 +120,12 @@ export class VerificationComponent implements OnInit {
             this.router.navigate(['/login']);
           } else {
             this.spinnerService.stop(spinnerRef);
-            this.openDialog('Users', 'Error activating account try again', false, true, false);
+            this.openDialog($localize`:@@reset.titleusers:`, $localize`:@@verification.erroraccount:`, false, true, false);
           }
         }),
         catchError(err => {
           this.spinnerService.stop(spinnerRef);
-          this.openDialog('Error !', err.Message, false, true, false);
+          this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
           return throwError(err || err.message);
         })
       );
@@ -143,7 +143,7 @@ export class VerificationComponent implements OnInit {
         UserId: this.userId,
         Password: ctStr
       }
-      var spinnerRef = this.spinnerService.start("Activating account...");
+      var spinnerRef = this.spinnerService.start($localize`:@@vverification.actaccount:`);
       this.userAct$ = this.usersService.putActivationAccount(dataForm).pipe(
         tap((res: any) => { 
           if (res.Code == 200){
@@ -151,12 +151,12 @@ export class VerificationComponent implements OnInit {
             this.router.navigate(['/login']);
           } else {
             this.spinnerService.stop(spinnerRef);
-            this.openDialog('Users', 'Error activating account try again', false, true, false);
+            this.openDialog($localize`:@@reset.titleusers:`, $localize`:@@verification.erroraccount:`, false, true, false);
           }
         }),
         catchError(err => {
           this.spinnerService.stop(spinnerRef);
-          this.openDialog('Error !', err.Message, false, true, false);
+          this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
           return throwError(err || err.message);
         })
       );

@@ -1,4 +1,4 @@
-<h3 class="pl-3 pr-3">Citas</h3>
+<h3 class="pl-3 pr-3" i18n="Citas|text in Las Citas@@shows.citas">Citas</h3>
 <h5 class="pl-3 pr-3">{{ (data.appoDate | date: 'MMM, d') + ' ' + newTime}}</h5>
 <h5 class="pl-3 pr-3">{{data.service}}</h5>
 <div class="container-fluid host-container">
@@ -27,16 +27,17 @@
                 </div>
                 <ng-container *ngIf="showDetailsSche[i]">
                     <div class="row pr-3 pl-3 mt-2 mb-2">
-                        <div class="card-contentprio col-md-6 pl-0">Number of guests: </div>
+                        <div class="card-contentprio col-md-6 pl-0" i18n="Number of guests: |text in show appo@@shows.numberguests">Number of guests: </div>
                         <div class="card-resultprio col-md">{{item.Guests}}</div>
                     </div>
                     <div class="row pr-3 pl-3 mt-2 mb-2">
-                        <div class="card-contentprio col-md-6 pl-0">Door: </div>
+                        <div class="card-contentprio col-md-6 pl-0" i18n="Door: |text in show appo@@shows.door">Door: </div>
                         <div class="card-resultprio-door col-md">{{item.Door}}</div>
                     </div>
                     <div class="row pr-3 pl-3 mt-2 mb-2">
-                        <div class="card-contentprio col-md-6 pl-0">On Behalf: </div>
-                        <div class="card-resultprio col-md">{{item.OnBehalf == '0' ? 'No' : 'Yes'}}</div>
+                        <div class="card-contentprio col-md-6 pl-0" i18n="On Behalf: |text in show appo@@shows.onbehalf">On Behalf: </div>
+                        <div class="card-resultprio col-md" *ngIf="item.OnBehalf  == 0" i18n="Yes@@shared.no">No</div>
+                        <div class="card-resultprio col-md" *ngIf="item.OnBehalf  != 0" i18n="Yes@@shared.yes">Yes</div>
                     </div>
                 </ng-container>
                 <div class="row mb-0 mt-2">
@@ -63,7 +64,7 @@
                 <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showCancelOptionsSche[i]">
                     <div class="col-md-12 pl-0 pr-0">
                         <mat-form-field>
-                            <mat-label>Cancel reasons</mat-label>
+                            <mat-label i18n="Cancel reasons|text in citas@@host.cancelreasons">Cancel reasons</mat-label>
                             <mat-select [(value)]="selectedSche[i]">
                                 <mat-option *ngFor="let reason of reasons" [value]="reason.ReasonId">
                                     {{reason.Description}}
@@ -74,14 +75,14 @@
                     <div class="col-md-12 pl-0 pr-0 mt-2 mb-2">
                         <button mat-flat-button type="button" color="primary"
                             (click)="onCancelApp(item, selectedSche[i], i, 'schedule')"
-                            [disabled]="selectedSche[i] == undefined">
+                            [disabled]="selectedSche[i] == undefined" i18n="Cancel Appointment|text in citas@@host.cancelappo">
                             Cancel Appointment
                         </button>
                     </div>
                 </div>
                 <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showMessageSche[i]">
                     <div class="col-sm-10 pl-0 pr-0">
-                        <textarea class="card-text" #messageText matInput placeholder="Write a comment..."></textarea>
+                        <textarea class="card-text" #messageText matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
                     </div>
                     <div class="button-send col-md pr-0 pl-0">
                         <button mat-icon-button type="button"
@@ -108,7 +109,7 @@
                 </div>
             </mat-card>
             <mat-card class="m-1" *ngIf="schedule.length == 0">
-                <h3 class="">No bookings for this time</h3>
+                <h3 class="" i18n="No bookings for this time|text in show citas@@shows.nobookings">No bookings for this time</h3>
             </mat-card>
         </div>
     </div>

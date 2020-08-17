@@ -1,7 +1,7 @@
 <div class="container-fluid h-100 main-background">
     <div class="row p-0">
         <div class="list-form col-md-12 pl-4 m-0">
-            <app-search placeholder="Search by name" (setValue)="filterList($event)"></app-search>
+            <app-search i18n-placeholder="Search by name|search in roles@@roles.searchtext" placeholder="Search by name" (setValue)="filterList($event)"></app-search>
         </div> 
         <app-role-list class="col-md-12 pl-4 m-0" *ngIf="changeData == 'Search'" [filterValue]="filterData"></app-role-list>
         <app-role class="col-md-12 pl-4 m-0" *ngIf="changeData == 'Add'"></app-role>

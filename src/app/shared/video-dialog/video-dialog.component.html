@@ -27,21 +27,21 @@
         </div>
     </div>
     <mat-form-field class="pt-3">
-        <mat-label>Cita Code</mat-label>
+        <mat-label i18n="Cita Code|text in checkin/checkout@@video.citacode">Cita Code</mat-label>
         <input matInput placeholder="QR Code" [(ngModel)]="qrCode">
     </mat-form-field>
-    <mat-label class="label-guests">Guests</mat-label>
+    <mat-label class="label-guests" i18n="Guests|text in guests@@video.guests">Guests</mat-label>
     <button mat-icon-button (click)="data.guests=data.guests+1">
         <mat-icon class="site-color">add</mat-icon>
     </button>
     <mat-form-field class="num-guests">
-        <input matInput placeholder="Number of Guests" [(ngModel)]="data.guests">
+        <input matInput placeholder="Number of Guests" i18n="Number of Guests|text in guests@@video.number" [(ngModel)]="data.guests">
     </mat-form-field>
     <button mat-icon-button (click)="(data.guests > 1 ? data.guests=data.guests-1 : data.guests)">
         <mat-icon class="site-color">remove</mat-icon>
     </button>
     <div>
-        <button mat-flat-button class="mr-3 btn-cancel" (click)="onNoClick()">Cancel</button>
-        <button mat-flat-button color="primary" class="btn-ok" (click)="onOK()" cdkFocusInitial>Ok</button>
+        <button mat-flat-button class="mr-3 btn-cancel" (click)="onNoClick()" i18n="Cancel@@shared.cancel">Cancel</button>
+        <button mat-flat-button color="primary" class="btn-ok" (click)="onOK()" cdkFocusInitial i18n="Ok@@shared.ok">Ok</button>
     </div>
 </div>

@@ -24,6 +24,7 @@ export class MainNavComponent implements OnInit {
   avatar: string='';
   roleId: string='';
   language: string='';
+  languageInit: string='EN';
   isAdmin: boolean=false;
   resetToken$: Observable<any>;
   apps$: Observable<Access[]>;
@@ -80,6 +81,7 @@ export class MainNavComponent implements OnInit {
     if (this.authService.language() != ''){
       this.language = this.authService.language() == "EN" ? "assets/images/icon/EN.svg" : "assets/images/icon/ES.svg";
     }
+    this.languageInit = this.authService.language() == "" ? "EN" : this.authService.language();
     if (this.authService.avatar() != '') {
       this.avatar = this.imgPath + this.authService.avatar();
     }
@@ -111,7 +113,7 @@ export class MainNavComponent implements OnInit {
 }
 
   loadAccess(){
-    this.apps$ = this.roleService.getApplications((this.roleId != '' ? this.roleId : 1), this.businessId).pipe(
+    this.apps$ = this.roleService.getApplications((this.roleId != '' ? this.roleId : 1), this.businessId, this.languageInit).pipe(
       map(res => res.sort(function (a, b) {
         if (a.OrderApp > b.OrderApp) {
           return 1;

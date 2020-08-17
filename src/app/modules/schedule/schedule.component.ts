@@ -109,7 +109,7 @@ export class ScheduleComponent implements OnInit {
     this.sunday = this.addDays(this.weekStart, 6);
 
     this.businessId = this.authService.businessId();
-    var spinnerRef = this.spinnerService.start("Loading Schedule...");
+    var spinnerRef = this.spinnerService.start($localize`:@@sche.loadingsche:`);
 
     this.services$ = this.serviceService.getServicesColor(this.businessId).pipe(
       map((res: any) => {
@@ -154,7 +154,7 @@ export class ScheduleComponent implements OnInit {
     this.FriHours = [];
     this.SatHours = [];
     this.SunHours = [];
-    var spinnerRef = this.spinnerService.start("Loading Schedule...");
+    var spinnerRef = this.spinnerService.start($localize`:@@sche.loadingsche:`);
     this.operationHours$ = this.appointmentService.getOperationHours(this.businessId, this.locationId, this.providerId, this.datepipe.transform(this.monday, 'yyyy-MM-dd')).pipe(
       map((res: any) => {
         if (res.Code == 200){
@@ -322,8 +322,8 @@ export class ScheduleComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = false;
     dialogConfig.data = {
-      header: 'Citas', 
-      message: 'Are you sure to delete this Citas?', 
+      header: $localize`:@@sche.citastext:`, 
+      message: $localize`:@@sche.deletetext:`, 
       success: false, 
       error: false, 
       warn: false,
@@ -336,12 +336,12 @@ export class ScheduleComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
       if(result != undefined){
-        var spinnerRef = this.spinnerService.start("Deleting Citas...");
+        var spinnerRef = this.spinnerService.start($localize`:@@sche.deletingcitas:`);
         this.cancelAppos$ = this.appointmentService.putCancelAppos(this.businessId, this.locationId, this.providerId, this.datepipe.transform(day, 'yyyy-MM-dd') + '-' + timeGrl.replace(':','-')).pipe(
           map((res: any) => {
             if (res != null) {
               if (res.Code == 200){
-                this.openDialog('Citas', 'Citas deleted successfully', true, false, false);
+                this.openDialog($localize`:@@sche.citastext:`, $localize`:@@sche.deletedssuccess:`, true, false, false);
                 this.spinnerService.stop(spinnerRef);
               }
             }

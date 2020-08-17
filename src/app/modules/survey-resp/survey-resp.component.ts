@@ -65,7 +65,7 @@ export class SurveyRespComponent implements OnInit {
     this.surveyId = this.route.snapshot.paramMap.get('surveyId');
     this.custId = this.route.snapshot.paramMap.get('custId');
 
-    var spinnerRef = this.spinnerService.start("Loading Survey...");
+    var spinnerRef = this.spinnerService.start($localize`:@@survey.loadingsurv:`);
     this.surveyData$ = this.surveyService.getSurvey(this.surveyId).pipe(
       map((survey: any) => {
         this.surveyForm.setValue({
@@ -82,7 +82,7 @@ export class SurveyRespComponent implements OnInit {
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
-        this.openSnackBar("Something goes wrong, try again","Error !");
+        this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@shared.error:`);
         return err.message;
       })
     );
@@ -119,7 +119,7 @@ export class SurveyRespComponent implements OnInit {
       Questions: detail
     }
     this.saveSurvey = false;
-    var spinnerRef = this.spinnerService.start("Saving Survey...");
+    var spinnerRef = this.spinnerService.start($localize`:@@survey.savingsurvey:`);
     this.saveSurvey$ =  this.surveyService.postSurveyUser(formData).pipe(
       map((res:any) => {
         if (res != null){
@@ -128,16 +128,16 @@ export class SurveyRespComponent implements OnInit {
             this.saveSurvey = true
           } else {
             this.spinnerService.stop(spinnerRef);
-            this.openSnackBar("Something goes wrong, try again","Error !");
+            this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@shared.error:`);
           }
         } else {
           this.spinnerService.stop(spinnerRef);
-          this.openSnackBar("Something goes wrong, try again","Error !");
+          this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@shared.error:`);
         }
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
-        this.openSnackBar("Something goes wrong, try again","Error !");
+        this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@shared.error:`);
         return err.message;
       })
     );

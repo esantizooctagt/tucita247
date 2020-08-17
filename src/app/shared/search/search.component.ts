@@ -45,7 +45,14 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(){
-    this.monitorService.handleMessage.subscribe(res => this.changeData = res);
+    this.monitorService.handleMessage.subscribe(res => { 
+      this.changeData = res;
+      if (this.changeData == "Add"){
+        this.contentButton = $localize`:@@search.search:`;
+      } else {
+        this.contentButton = $localize`:@@search.addplus:`;
+      }
+    });
   }
 
   changeView(){

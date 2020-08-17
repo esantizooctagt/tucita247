@@ -23,8 +23,8 @@
                         </mat-button-toggle>
                     </mat-button-toggle-group>
                     <div class="mt-4">
-                        <button *ngIf="i<noItems-1" [disabled]="item.get('Result').value == 0" mat-flat-button matStepperNext color="primary" type="button">Next</button>
-                        <button *ngIf="i==noItems-1" [disabled]="item.get('Result').value == 0" mat-flat-button matStepperNext color="primary" type="submit">Save</button>
+                        <button *ngIf="i<noItems-1" [disabled]="item.get('Result').value == 0" mat-flat-button matStepperNext color="primary" type="button" i18n="Next@@shared.next">Next</button>
+                        <button *ngIf="i==noItems-1" [disabled]="item.get('Result').value == 0" mat-flat-button matStepperNext color="primary" type="submit" i18n="Save@@shared.save">Save</button>
                     </div>
                 </mat-step>
             </mat-horizontal-stepper>
@@ -32,6 +32,6 @@
         <!-- {{ surveyForm.value | json }} -->
     </form>
 </mat-card>
-<div class="" *ngIf="saveSurvey">
+<div class="" *ngIf="saveSurvey" i18n="Thank you for your time|text in survey response@@survey.thanks">
     Thank you for your time
 </div>

@@ -1,28 +1,51 @@
 <div class="container-fluid">
     <div class="row justify-content-md-center pl-2 pr-1 mt-3 mb-3">
-        <h1 class="col-md-12">Welcome to Tu Cita 24/7</h1>
-        <h2 class="col-md-12">Setup your preference</h2>
+        <h1 class="col-md-12" i18n="Welcome to Tu Cita 24/7@@welcome.mainmessage">Welcome to Tu Cita 24/7</h1>
+        <h2 class="col-md-12" i18n="Setup your preference@@welcome.secondarymessage">Setup your preference</h2>
     </div>
     <div class="row justify-content-md-center pl-2 pr-1 mt-3">
         <mat-card class="card-welcome col-md-3 mt-3 mr-3">
             <div class="card-company">
                 <div class="company mb-4 mt-4"></div>
-                Setup your company
-                <button mat-stroked-button [routerLink]="['/company']" class="action-buttons col-md-12" color="secondary" type="button">Company</button>
+                <ng-container i18n="Setup your company|Welcome text@@welcome.setupcompany">Setup your company</ng-container>
+                <button mat-stroked-button [routerLink]="['/company']" class="action-buttons col-md-12" color="secondary" type="button" i18n="Company|Welcome text@@welcome.company">Company</button>
             </div>
         </mat-card>
         <mat-card class="card-welcome col-md-3 mt-3 mr-3">
             <div class="card-company">
                 <div class="hours mb-4 mt-4"></div>
-                Setup your opening hours
-                <button mat-stroked-button [routerLink]="['/businessope']" class="action-buttons col-md-12" color="secondary" type="button">Opening hours</button>
+                <ng-container i18n="Setup your opening hours|Welcome text@@welcome.setupope">Setup your opening hours</ng-container>
+                <button mat-stroked-button [routerLink]="['/businessope']" class="action-buttons col-md-12" color="secondary" type="button" i18n="Opening hours|Welcome text@@welcome.opehours">Opening hours</button>
             </div>
         </mat-card>
         <mat-card class="card-welcome col-md-3 mt-3 mr-3">
             <div class="card-company">
                 <div class="calendar mb-4 mt-4"></div>
-                Setup your days off
-                <button mat-stroked-button [routerLink]="['/businessdays']" class="action-buttons col-md-12" color="secondary" type="button">Days off</button>
+                <ng-container i18n="Setup your days off|Welcome text@@welcome.setupdaysoff">Setup your days off</ng-container>
+                <button mat-stroked-button [routerLink]="['/businessdays']" class="action-buttons col-md-12" color="secondary" type="button" i18n="Days off|Welcome text@@welcome.daysoff">Days off</button>
+            </div>
+        </mat-card>
+    </div>
+    <div class="row justify-content-md-center pl-2 pr-1 mt-3">
+        <mat-card class="card-welcome col-md-3 mt-3 mr-3">
+            <div class="card-company">
+                <div class="locations mb-4 mt-4"></div>
+                <ng-container i18n="Setup your location|Welcome text@@welcome.setuplocation">Setup your location</ng-container>
+                <button mat-stroked-button [routerLink]="['/locations']" class="action-buttons col-md-12" color="secondary" type="button" i18n="Locations|Welcome text@@welcome.location">Locations</button>
+            </div>
+        </mat-card>
+        <mat-card class="card-welcome col-md-3 mt-3 mr-3">
+            <div class="card-company">
+                <div class="serv-providers mb-4 mt-4"></div>
+                <ng-container i18n="Setup your Service Provider|Welcome text@@welcome.setupservprovider">Setup your Service Provider</ng-container>
+                <button mat-stroked-button [routerLink]="['/providers']" class="action-buttons col-md-12" color="secondary" type="button" i18n="Service Provider|Welcome text@@welcome.servprovider">Service Provider</button>
+            </div>
+        </mat-card>
+        <mat-card class="card-welcome col-md-3 mt-3 mr-3">
+            <div class="card-company">
+                <div class="services mb-4 mt-4"></div>
+                <ng-container i18n="Setup your services|Welcome text@@welcome.setupservices">Setup your services</ng-container>
+                <button mat-stroked-button [routerLink]="['/services']" class="action-buttons col-md-12" color="secondary" type="button" i18n="Services|Welcome text@@welcome.services">Services</button>
             </div>
         </mat-card>
     </div>

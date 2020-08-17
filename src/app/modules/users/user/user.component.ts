@@ -68,7 +68,7 @@ export class UserComponent implements OnInit {
   })
 
   ngOnInit(): void {
-    var spinnerRef = this.spinnerService.start("Loading User...");
+    var spinnerRef = this.spinnerService.start($localize`:@@userloc.loadingusersingle:`);
     this.businessId = this.authService.businessId();
 
     this.roles$ = this.rolesService.getRoles(this.businessId + '/10/_/_').pipe(
@@ -80,7 +80,7 @@ export class UserComponent implements OnInit {
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
-        this.openDialog('Error !', err.Message, false, true, false);
+        this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
         return throwError(err || err.Message);
       })
     );
@@ -109,31 +109,31 @@ export class UserComponent implements OnInit {
 
   getErrorMessage(component: string) {
     if (component === 'Email'){
-      return this.f.Email.hasError('required') ? 'You must enter an Email' :
-        this.f.Email.hasError('notUnique') ? 'Email already registered':
-          this.f.Email.hasError('maxlength') ? 'Maximun length 200' :
-            this.f.Email.hasError('pattern') ? 'Invalid Email' :
+      return this.f.Email.hasError('required') ? $localize`:@@login.error:` :
+        this.f.Email.hasError('notUnique') ? $localize`:@@shared.emailregis:`:
+          this.f.Email.hasError('maxlength') ? $localize`:@@shared.maximun: 200` :
+            this.f.Email.hasError('pattern') ? $localize`:@@forgot.emailformat:` :
             '';
     }
     if (component === 'First_Name'){
-      return this.f.First_Name.hasError('required') ? 'You must enter a value' :
-          this.f.First_Name.hasError('minlength') ? 'Minimun length 3' :
-            this.f.First_Name.hasError('maxlength') ? 'Maximun length 100' :
+      return this.f.First_Name.hasError('required') ? $localize`:@@shared.entervalue:` :
+          this.f.First_Name.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
+            this.f.First_Name.hasError('maxlength') ? $localize`:@@shared.maximun: 100` :
               '';
     }
     if (component === 'Last_Name'){
-      return this.f.Last_Name.hasError('required') ? 'You must enter a value' :
-          this.f.Last_Name.hasError('minlength') ? 'Minimun length 3' :
-            this.f.Last_Name.hasError('maxlength') ? 'Maximun length 100' :
+      return this.f.Last_Name.hasError('required') ? $localize`:@@shared.entervalue:` :
+          this.f.Last_Name.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
+            this.f.Last_Name.hasError('maxlength') ? $localize`:@@shared.maximun: 100` :
               '';
     }
     if (component === 'Phone'){
-      return this.f.Phone.hasError('minlength') ? 'Minimun length 6' :
-            this.f.Phone.hasError('maxlength') ? 'Maximun length 14' :
+      return this.f.Phone.hasError('minlength') ? $localize`:@@shared.minimun: 6` :
+            this.f.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: 14` :
               '';
     }
     if (component === 'RoleId'){
-      return this.f.RoleId.hasError('required') ? 'You must select a value' :
+      return this.f.RoleId.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
         '';
     }
   }
@@ -161,7 +161,7 @@ export class UserComponent implements OnInit {
         this.businessId = this.authService.businessId();
       }
       this.statTemp = 0;
-      var spinnerRef = this.spinnerService.start("Loading User...");
+      var spinnerRef = this.spinnerService.start($localize`:@@userloc.loadingusersingle:`);
       this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', Is_Admin: 0, Status: 1});
       this.user$ = this.usersService.getUser(this.userDataList, this.businessId).pipe(
         tap(user => { 
@@ -190,7 +190,7 @@ export class UserComponent implements OnInit {
         }),
         catchError(err => {
           this.spinnerService.stop(spinnerRef);
-          this.openDialog('Error !', err.Message, false, true, false);
+          this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
           return throwError(err || err.Message);
         })
       );
@@ -203,7 +203,7 @@ export class UserComponent implements OnInit {
     }
     if (this.userForm.touched){
       let userId = this.userForm.value.UserId;
-      var spinnerRef = this.spinnerService.start("Saving User...");
+      var spinnerRef = this.spinnerService.start($localize`:@@users.savinguser:`);
       if (userId !== '' && userId !== null) {  
         let dataForm =  {
           "UserId": userId,
@@ -226,12 +226,12 @@ export class UserComponent implements OnInit {
             this.statTemp = 0;
             this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', Is_Admin: 0, Status: 1});
             this.data.changeData('users');
-            this.openDialog('Users', 'User updated successful', true, false, false);
+            this.openDialog($localize`:@@users.usertexts:`, $localize`:@@userloc.userupdated:`, true, false, false);
           }),
           catchError(err => {
             this.spinnerService.stop(spinnerRef);
             this.savingUser = false;
-            this.openDialog('Error !', err.Message, false, true, false);
+            this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
             return throwError(err || err.message);
           })
         );
@@ -261,12 +261,12 @@ export class UserComponent implements OnInit {
             this.statTemp = 0;
             this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', Is_Admin: 0, Status: 1});
             this.data.changeData('users');
-            this.openDialog('Users', 'User created successful', true, false, false);
+            this.openDialog($localize`:@@users.usertexts:`, $localize`:@@userloc.usercreated:`, true, false, false);
           }),
           catchError(err => {
             this.spinnerService.stop(spinnerRef);
             this.savingUser = false;
-            this.openDialog('Error !', err.Message, false, true, false);
+            this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
             return throwError(err || err.message);
           })
         );
@@ -310,7 +310,7 @@ export class UserComponent implements OnInit {
       return;
     }
     
-    var spinnerRef = this.spinnerService.start("Sending activation code...");
+    var spinnerRef = this.spinnerService.start($localize`:@@users.sendingcode:`);
     let dataForm =  {
       "Email": email,
       "BusinessId": this.businessId,
@@ -321,14 +321,14 @@ export class UserComponent implements OnInit {
       tap((res: any) => { 
         this.spinnerService.stop(spinnerRef);
         if (res.Code == 200){
-          this.openDialog('Users', 'Code send successfully', true, false, false);
+          this.openDialog($localize`:@@users.usertexts:`, $localize`:@@users.codesend:`, true, false, false);
         } else {
-          this.openDialog('Users', 'Error activating account try again', false, true, false);
+          this.openDialog($localize`:@@users.usertexts:`, $localize`:@@shared.wrong:`, false, true, false);
         }
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
-        this.openDialog('Error !', err.Message, false, true, false);
+        this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
         return throwError(err || err.message);
       })
     );

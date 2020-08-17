@@ -106,7 +106,7 @@ export class ShowappoDialogComponent implements OnInit {
   getAppointmentsSche(){
     let hourIni = this.data.appoTime.replace(':','-');
     let dateAppoStr = this.data.appoDate + '-' + hourIni;
-    var spinnerRef = this.spinnerService.start("Loading Appointments...");
+    var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
     this.schedule = [];
     this.appointmentsSche$ = this.appointmentService.getAppointmentsSche(this.businessId, this.locationId, this.providerId, dateAppoStr).pipe(
       map((res: any) => {
@@ -146,7 +146,7 @@ export class ShowappoDialogComponent implements OnInit {
   onCancelApp(appo: any, reasonId: string, index: number, origin: string){
     //CANCELAR APPOINTMENT
     if (reasonId == undefined){
-      this.openSnackBar("You must select a reason","Cancel Appointment");
+      this.openSnackBar($localize`:@@host.selectreason:`,$localize`:@@host.cancelappodyn:`);
     }
     let formData = {
       Status: 5,
@@ -160,12 +160,12 @@ export class ShowappoDialogComponent implements OnInit {
           this.schedule.splice(data, 1);
           this.showCancelOptionsSche[index] = false;
           this.selectedSche[index] = undefined; 
-          this.openSnackBar("La Cita cancelled successfull","Cancel");
+          this.openSnackBar($localize`:@@host.cancelsuccess:`,$localize`:@@appos.cancel:`);
         }
       }),
       catchError(err => {
         this.onError = err.Message;
-        this.openSnackBar("Something goes wrong try again","Cancel");
+        this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@shared.error:`);
         return this.onError;
       })
     );
@@ -183,7 +183,7 @@ export class ShowappoDialogComponent implements OnInit {
               this.getCommentsSche[i] = res.Messages;
             }
           } else {
-            this.openSnackBar("Something goes wrong try again","Messages");
+            this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@shared.error:`);
           }
         }
       }),
@@ -206,16 +206,16 @@ export class ShowappoDialogComponent implements OnInit {
             if (qeue == 'schedule'){
               this.showMessageSche[i] = false;
             }
-            this.openSnackBar("Messages send successfull","Messages");
+            this.openSnackBar($localize`:@@host.messagessend:`,$localize`:@@host.messages:`);
           } else {
-            this.openSnackBar("Something goes wrong try again","Messages");
+            this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@shared.error:`);
           }
         } else {
-          this.openSnackBar("Something goes wrong try again","Messages");
+          this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@shared.error:`);
         }
       }),
       catchError(err => {
-        this.openSnackBar("Something goes wrong try again","Messages");
+        this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@shared.error:`);
         this.onError = err.Message;
         return this.onError;
       })

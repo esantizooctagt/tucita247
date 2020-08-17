@@ -118,7 +118,7 @@ export class RoleListComponent implements OnInit {
 
   loadRoles(crPage, crItems, crSearch, crlastItem) {
     this.onError = '';
-    var spinnerRef = this.spinnerService.start("Loading Roles...");
+    var spinnerRef = this.spinnerService.start($localize`:@@roles.loadingrole:`);
     let data = this.businessId + "/" + crItems + (crSearch === '' ? '/_' : '/' + crSearch) + (crlastItem === '' ? '/_' : '/' +  crlastItem);
 
     this.roles$ = this.rolesService.getRoles(data).pipe(
@@ -179,8 +179,8 @@ export class RoleListComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = false;
     dialogConfig.data = {
-      header: 'Role', 
-      message: 'Are you sure to delete this Role?', 
+      header: $localize`:@@roles.rolepop:`, 
+      message: $localize`:@@roles.deletemessage:`, 
       success: false, 
       error: false, 
       warn: false,
@@ -193,7 +193,7 @@ export class RoleListComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
       if(result != undefined){
-        var spinnerRef = this.spinnerService.start("Deleting Role...");
+        var spinnerRef = this.spinnerService.start($localize`:@@roles.deletingrole:`);
         if (result){
           this.deleteRole$ = this.rolesService.deleteRole(role, this.businessId).pipe(
             tap(res => {
@@ -202,12 +202,12 @@ export class RoleListComponent implements OnInit {
               this.loadRoles(
                 this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].roleId
               );
-              this.openDialog('Role', 'Role deleted successful', true, false, false);
+              this.openDialog($localize`:@@roles.rolepop:`, $localize`:@@roles.roledeleted:`, true, false, false);
             }),
             catchError(err => {
               this.spinnerService.stop(spinnerRef);
               this.displayYesNo = false;
-              this.openDialog('Error ! ', err.Message, false, true, false);
+              this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
               return throwError (err || err.message);
             })
           );

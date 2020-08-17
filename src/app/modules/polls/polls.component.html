@@ -1,7 +1,7 @@
 <div class="container-fluid main-background">
     <div class="row p-0">
         <div class="list-form col-md-12 pl-4 m-0">
-            <app-search placeholder="Search by description" (setValue)="filterList($event)"></app-search>
+            <app-search i18n-placeholder="Search by description|text in poll@@polls.searchtext" placeholder="Search by description" (setValue)="filterList($event)"></app-search>
         </div> 
         <app-poll-list class="col-md-12 pl-4 m-0" *ngIf="changeData == 'Search'" [filterValue]="filterData"></app-poll-list>
         <app-poll class="col-md-12 pl-4 m-0" *ngIf="changeData == 'Add'"></app-poll>

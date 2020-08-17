@@ -1,5 +1,5 @@
 <div class="pl-0 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
-    <h3>USERS</h3>
+    <h3 i18n="USERS|title users@@users.title">USERS</h3>
 </div>
 <ng-container *ngIf="user$ | async"></ng-container>
 <ng-container *ngIf="userSave$ | async"></ng-container>
@@ -22,16 +22,16 @@
                 </mat-form-field>
             </div>
             <div class="form-field pl-3 pr-3">
-                <mat-form-field hintLabel="Min 5 characters">
-                    <input matInput #First_Name placeholder="First Name" maxlength="100" minlength="3"
+                <mat-form-field hintLabel="Min 5 characters" i18n-hintLabel="Min 5 characters|text in users@@users.minchars">
+                    <input matInput #First_Name i18n-placeholder="First Name|text in users@@users.firstname" placeholder="First Name" maxlength="100" minlength="3"
                         formControlName="First_Name" [errorStateMatcher]="confirmValidParentMatcher" required>
                     <mat-error *ngIf="f.First_Name.invalid && f.First_Name.touched">{{getErrorMessage('First_Name')}}
                     </mat-error>
                 </mat-form-field>
             </div>
             <div class="form-field pl-3 pr-3">
-                <mat-form-field hintLabel="Min 5 characters">
-                    <input matInput #Last_Name placeholder="Last Name" maxlength="100" minlength="3"
+                <mat-form-field hintLabel="Min 5 characters" i18n-hintLabel="Min 5 characters|text in users@@users.minchars">
+                    <input matInput #Last_Name i18n-placeholder="Last Name|text in users@@users.lastname" placeholder="Last Name" maxlength="100" minlength="3"
                         formControlName="Last_Name" [errorStateMatcher]="confirmValidParentMatcher" required>
                     <mat-error *ngIf="f.Last_Name.invalid && f.Last_Name.touched">{{getErrorMessage('Last_Name')}}
                     </mat-error>
@@ -39,14 +39,13 @@
             </div>
             <div class="form-field pl-3 pr-3">
                 <mat-form-field>
-                    <span matPrefix>+1 &nbsp;</span>
                     <input matInput #Phone placeholder="(555) 555-1234" appPhoneMask maxlength="14"
                         formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher" required>
                     <mat-error *ngIf="f.Phone.invalid && f.Phone.touched">{{getErrorMessage('Phone')}}</mat-error>
                 </mat-form-field>
             </div>
             <div class="form-field pl-3 pr-3">
-                <mat-form-field hintLabel="Min 8 characters" *ngIf="f.UserId.value == ''">
+                <mat-form-field hintLabel="Min 8 characters" i18n-hintLabel="Min 8 characters|text in users@@users.mninchars2" *ngIf="f.UserId.value == ''">
                     <input matInput #Password i18n-placeholder="Password@@shared.Password" placeholder="Password" maxlength="20" minlength="8"
                         formControlName="Password" [errorStateMatcher]="confirmValidParentMatcher"
                         [type]="hide ? 'password' : 'text'" pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}">
@@ -55,21 +54,18 @@
                         [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                         <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                     </button>
-                    <mat-error *ngIf="f.Password.invalid && f.Password.touched && f.Password.errors?.minlength">Minimun
+                    <mat-error *ngIf="f.Password.invalid && f.Password.touched && f.Password.errors?.minlength" i18n="Min 8 characters|text in users@@users.mninchars2">Minimun
                         length 8</mat-error>
                     <mat-error *ngIf="f.Password.invalid && f.Password.touched && f.Password.errors?.pattern">
-                        <div>Require at least 1 number</div>
-                        <!-- <div>Require at least 1 special character !#$%&?</div> -->
-                        <div>Require at least 1 uppercase letters</div>
-                        <div>Require at least 1 lowercase letters</div>
+                        <div i18n="Require at least 1 number, 1 uppercase and 1 lowercase letters|text in users@@users.policy">Require at least 1 number, 1 uppercase and 1 lowercase letters</div>
                     </mat-error>
                 </mat-form-field>
             </div>
             <div class="form-field pl-3 pr-3">
                 <mat-form-field>
-                    <mat-label>Role:</mat-label>
+                    <mat-label i18n="Role:|text in users@@users.role">Role:</mat-label>
                     <mat-select #roles formControlName="RoleId" required>
-                        <mat-option>None</mat-option>
+                        <mat-option i18n="None@@shared.none">None</mat-option>
                         <mat-option *ngFor="let rol of roles$ | async" [value]="rol.Role_Id">
                             {{rol.Name}}
                         </mat-option>
@@ -78,20 +74,20 @@
                 </mat-form-field>
             </div>
             <div class="form-field-check ml-3 pr-3">
-                <mat-checkbox formControlName="Is_Admin">Is Admin</mat-checkbox>
+                <mat-checkbox formControlName="Is_Admin" i18n="Is Admin@@shared.isadmin">Is Admin</mat-checkbox>
             </div>
             <div class="form-field-check ml-3 pr-3"
                 *ngIf="userForm.value.UserId !== '' && userForm.value.UserId !== null">
-                <mat-checkbox formControlName="Status">Status</mat-checkbox>
+                <mat-checkbox formControlName="Status" i18n="Status@@shared.status">Status</mat-checkbox>
             </div>
             <div>
                 <button mat-flat-button color="primary" id="save" [disabled]="!userForm.valid"
-                    class="ml-3 mr-3 mt-2">Save</button>
+                    class="ml-3 mr-3 mt-2" i18n="Save@@shared.save">Save</button>
                 <button mat-flat-button color="accent" id="cancel" type="button" (click)="onCancel()"
-                    class="mt-2">Cancel</button>
+                    class="mt-2" i18n="Cancel@@shared.cancel">Cancel</button>
                 <button mat-icon-button class="pl-4" type="button" *ngIf="userForm.value.Status === 3"
                     (click)="onSendCode()">
-                    <mat-icon>autorenew</mat-icon> Re-Send Verification Code
+                    <mat-icon>autorenew</mat-icon><ng-container i18n="Re-Send Verification Code|text in users@@users.resendcode">Re-Send Verification Code</ng-container>
                 </button>
             </div>
             <!-- {{ userForm.value | json }} -->

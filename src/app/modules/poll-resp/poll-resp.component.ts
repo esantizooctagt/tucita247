@@ -41,7 +41,7 @@ export class PollRespComponent implements OnInit {
   ngOnInit(): void {
     this.PollId = this.route.snapshot.paramMap.get('pollId');
     this.CustId = this.route.snapshot.paramMap.get('custId');
-    var spinnerRef = this.spinnerService.start("Loading Poll...");
+    var spinnerRef = this.spinnerService.start($localize`:@@polls.loadingpoll:`);
     this.pollData$ = this.pollService.getPoll(this.PollId).pipe(
       map((poll: any) => {
         let actualDate = new Date();
@@ -52,14 +52,14 @@ export class PollRespComponent implements OnInit {
           this.Name = poll.Name;
         }
         else {
-          this.error = "Poll is not active";          
+          this.error = $localize`:@@polls.errorpoll:`;          
         }
         this.spinnerService.stop(spinnerRef);
         return '';
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
-        this.openSnackBar("Something goes wrong, try again","Error !");
+        this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@shared.error:`);
         return err.message;
       })
     );
@@ -75,7 +75,7 @@ export class PollRespComponent implements OnInit {
       Angry: (i == 3 ? 1 : 0)
     }
     this.savePoll = false;
-    var spinnerRef = this.spinnerService.start("Saving Poll...");
+    var spinnerRef = this.spinnerService.start($localize`:@@host.savingpoll:`);
     this.savePoll$ =  this.pollService.postPollUser(formData).pipe(
       map((res:any) => {
         if (res != null){
@@ -84,16 +84,16 @@ export class PollRespComponent implements OnInit {
             this.savePoll = true
           } else {
             this.spinnerService.stop(spinnerRef);
-            this.openSnackBar("Something goes wrong, try again","Error !");
+            this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@shared.error:`);
           }
         } else {
           this.spinnerService.stop(spinnerRef);
-          this.openSnackBar("Something goes wrong, try again","Error !");
+          this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@shared.error:`);
         }
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
-        this.openSnackBar("Something goes wrong, try again","Error !");
+        this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@shared.error:`);
         return err.message;
       })
     );

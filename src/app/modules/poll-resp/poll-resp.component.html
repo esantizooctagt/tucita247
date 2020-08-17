@@ -11,13 +11,14 @@
             <div class="angry-img mr-2" (click)="onSubmit(3)"></div>
         </div>
     </mat-card>
-    <div class="" *ngIf="savePoll">
+    <div class="" *ngIf="savePoll" i18n="Poll saved successfull
+    Thanks!!!|text in polls@@polls.thanks">
         Poll saved successfull
         Thanks!!!
     </div>
 </ng-container>
 <ng-template #Error>
-    <div class="" *ngIf="savePoll">
+    <div class="" *ngIf="savePoll" i18n="Poll is already inactive|text in polls@@polls.inactive">
         Poll is already inactive
     </div>
 </ng-template>

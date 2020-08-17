@@ -76,7 +76,7 @@ export class BusinessDaysComponent implements OnInit {
       this.locationId = "1";
       this.providerId = "1";
     }
-    var spinnerRef = this.spinnerService.start("Loading Special Days...");
+    var spinnerRef = this.spinnerService.start($localize`:@@businessdays.loadingdays:`);
     this.daysOff$ = this.businessService.getDaysOff(this.businessId, this.locationId, this.providerId, this.currYear).pipe(
       map((res: any) => {
         if (res.Code == 200){
@@ -174,13 +174,13 @@ export class BusinessDaysComponent implements OnInit {
       this.savedaysOff$ = this.businessService.updateDaysOff(this.businessId, (this.providerId != '_' ? this.providerId.split('#')[0] : this.locationId), (this.providerId == '_' ? '_' : this.providerId.split('#')[1]), date, 'add').pipe(
         map((res: any) => {
           if (res.Code == 200){
-            this.openSnackBar("Day add successfully","Special Days"); 
+            this.openSnackBar($localize`:@@businessdays.addsuccess:`,$localize`:@@businessdays.specdays:`); 
           } else {
-            this.openSnackBar("Something goes wrong, try again","Special Days");
+            this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@businessdays.specdays:`);
           }
         }),
         catchError(err => {
-          this.openSnackBar("Something goes wrong, try again","Special Days");
+          this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@businessdays.specdays:`);
           return err;
         })
       );
@@ -191,13 +191,13 @@ export class BusinessDaysComponent implements OnInit {
       this.savedaysOff$ = this.businessService.updateDaysOff(this.businessId, (this.providerId != '_' ? this.providerId.split('#')[0] : this.locationId), (this.providerId == '_' ? '_' : this.providerId.split('#')[1]), date, 'rem').pipe(
         map((res: any) => {
           if (res.Code == 200){
-            this.openSnackBar("Day remove successfully","Special Days"); 
+            this.openSnackBar($localize`:@@businessdays.remove:`,$localize`:@@businessdays.specdays:`); 
           } else {
-            this.openSnackBar("Something goes wrong, try again","Special Days");
+            this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@businessdays.specdays:`);
           }
         }),
         catchError(err => {
-          this.openSnackBar("Something goes wrong, try again","Special Days");
+          this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@businessdays.specdays:`);
           return err;
         })
       );
@@ -209,7 +209,7 @@ export class BusinessDaysComponent implements OnInit {
     this.navYear = (this.navYear == 0 ? this.currYear + 1 : this.navYear + 1);
     if (this.navYear == this.currYear) { this.currYearAct = 1; } else { this.currYearAct = 0;}
 
-    var spinnerRef = this.spinnerService.start("Loading Special Days...");
+    var spinnerRef = this.spinnerService.start($localize`:@@businessdays.loadingdays:`);
     this.daysOff$ = this.businessService.getDaysOff(this.businessId, this.locationId, (this.providerId == '_' ? '_' : this.providerId.split('#')[1]), this.navYear).pipe(
       map((res: any) => {
         this.dateSelected = [];
@@ -250,7 +250,7 @@ export class BusinessDaysComponent implements OnInit {
     this.navYear = this.navYear - 1;
     if (this.navYear == this.currYear) { this.currYearAct = 1; } else { this.currYearAct = 0;}
 
-    var spinnerRef = this.spinnerService.start("Loading Special Days...");
+    var spinnerRef = this.spinnerService.start($localize`:@@businessdays.loadingdays:`);
     this.daysOff$ = this.businessService.getDaysOff(this.businessId, this.locationId, (this.providerId == '_' ? '_' : this.providerId.split('#')[1]), this.navYear).pipe(
       map((res: any) => {
         this.dateSelected = [];
@@ -316,12 +316,12 @@ export class BusinessDaysComponent implements OnInit {
       map((res: any) => {
         if (res.Code == 200){
           this.providerParentDO = (event.checked == true ? 1 : 0);
-          this.openSnackBar("Update data successfully","Special Days");
+          this.openSnackBar($localize`:@@businessdays.updatedata:`,$localize`:@@businessdays.specdays:`);
         }
       }),
       catchError(err => {
         this.providerParentDO = (!event.checked == true ? 1 : 0);
-        this.openSnackBar("Something goes wrong, try again","Special Days");
+        this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@businessdays.specdays:`);
         return err;
       })
     );

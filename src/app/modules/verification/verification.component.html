@@ -7,17 +7,17 @@
         <ng-container *ngIf="userAct$ | async"></ng-container>
         <div class="main-logo mb-5 mt-5"></div>
         <div class="login-form">
-            <h3 class="sign-in pt-3 pl-4 pb-2">Activate Account</h3>
+            <h3 class="sign-in pt-3 pl-4 pb-2" i18n="Activate Account@@verification.activateacct">Activate Account</h3>
             <div class="form-field mb-0 pl-4 pb-2 pr-4 pt-3" *ngIf="code != 0">
                 <mat-form-field>
-                    <mat-label>Code</mat-label>
-                    <input matInput formControlName="userCode" placeholder="Activation Code" max="999999" min="000001"
+                    <mat-label i18n="Code@@verification.Code">Code</mat-label>
+                    <input matInput formControlName="userCode" i18n-placeholder="Activation Code@@verification.activationcode" placeholder="Activation Code" max="999999" min="000001"
                         maxlength="6" minlength="6" required>
                 </mat-form-field>
             </div>
             <ng-container formGroupName="Passwords" *ngIf="code != 0">
                 <div class="form-field mb-0 pl-4 pb-2 pr-4 pt-3">
-                    <mat-form-field hintLabel="Min 8 characters">
+                    <mat-form-field hintLabel="Min 8 characters" i18n-hintLabel="Min 8 characters@@verification.minchar">
                         <mat-label i18n="Password@@shared.Password">Password</mat-label>
                         <input matInput formControlName="password" i18n-placeholder="Password@@shared.Password" placeholder="Password"
                             [errorStateMatcher]="confirmValidParentMatcher" [type]="hide ? 'password' : 'text'"
@@ -27,17 +27,17 @@
                             [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                             <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                         </button>
-                        <mat-error *ngIf="verifForm.get('Passwords.password').errors?.required">You must enter a password</mat-error>
-                        <mat-error *ngIf="verifForm.get('Passwords.password').errors?.minlength">Minimun length 8</mat-error>
+                        <mat-error *ngIf="verifForm.get('Passwords.password').errors?.required" i18n="You must enter a password@@reset.invalidpass">You must enter a password</mat-error>
+                        <mat-error *ngIf="verifForm.get('Passwords.password').errors?.minlength" i18n="Minimun length 8@@reset.invalidlength">Minimun length 8</mat-error>
                         <mat-error *ngIf="verifForm.get('Passwords.password').errors?.strong">
-                            <div>Require at least 1 number, 1 uppercase and 1 lowercase letter</div>
+                            <div i18n="Require at least 1 number, 1 uppercase and 1 lowercase letter@@reset.invalidpolicy">Require at least 1 number, 1 uppercase and 1 lowercase letter</div>
                         </mat-error>
                     </mat-form-field>
                 </div>
                 <div class="form-field mb-0 pl-4 pb-2 pr-4 pt-3">
-                    <mat-form-field hintLabel="Min 8 characters">
-                        <mat-label>Confirm Password</mat-label>
-                        <input matInput formControlName="confpassword" placeholder="Password"
+                    <mat-form-field hintLabel="Min 8 characters" i18n-hintLabel="Min 8 characters@@verification.minchar">
+                        <mat-label i18n="Confirm Password@@reset.confirmpass">Confirm Password</mat-label>
+                        <input matInput formControlName="confpassword" i18n-placeholder="Password@@shared.Password" placeholder="Password"
                             [errorStateMatcher]="confirmValidParentMatcher" [type]="hideconf ? 'password' : 'text'"
                             minlength="8" maxlength="20" strong
                             required>
@@ -45,20 +45,20 @@
                             [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                             <mat-icon>{{hideconf ? 'visibility_off' : 'visibility'}}</mat-icon>
                         </button>
-                        <mat-error *ngIf="verifForm.get('Passwords.confpassword').errors?.required">You must enter a password</mat-error>
-                        <mat-error *ngIf="verifForm.get('Passwords.confpassword').errors?.minlength">Minimun length 8</mat-error>
+                        <mat-error *ngIf="verifForm.get('Passwords.confpassword').errors?.required" i18n="You must enter a password@@reset.invalidpass">You must enter a password</mat-error>
+                        <mat-error *ngIf="verifForm.get('Passwords.confpassword').errors?.minlength" i18n="Minimun length 8@@reset.invalidlength">Minimun length 8</mat-error>
                         <mat-error *ngIf="verifForm.get('Passwords.confpassword').errors?.strong">
-                            <div>Require at least 1 number, 1 uppercase and 1 lowercase letter</div>
+                            <div i18n="Require at least 1 number, 1 uppercase and 1 lowercase letter@@reset.invalidpolicy">Require at least 1 number, 1 uppercase and 1 lowercase letter</div>
                         </mat-error>
-                        <mat-error *ngIf="verifForm.get('Passwords.confpassword').errors?.notSame">Confirm Password does not match</mat-error>
+                        <mat-error *ngIf="verifForm.get('Passwords.confpassword').errors?.notSame" i18n="Confirm Password does not match@@reset.invalidconfpass">Confirm Password does not match</mat-error>
                     </mat-form-field>
                 </div>
             </ng-container>
             <ng-container formGroupName="Passwords" *ngIf="code == 0">
                 <div class="form-field mb-0 pl-4 pb-2 pr-4 pt-3">
                     <mat-form-field hintLabel="Min 8 characters">
-                        <mat-label>Temporary Password</mat-label>
-                        <input matInput formControlName="temppassword" placeholder="Temporary Password"
+                        <mat-label i18n="Temporary Password@@verification.temporarypass">Temporary Password</mat-label>
+                        <input matInput formControlName="temppassword" i18n-placeholder="Temporary Password|placeholder@@verification.tempplaceholder" placeholder="Temporary Password"
                             [errorStateMatcher]="confirmValidParentMatcher" [type]="hide ? 'password' : 'text'"
                             minlength="8" maxlength="20" strong
                             required>
@@ -66,10 +66,10 @@
                             [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                             <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                         </button>
-                        <mat-error *ngIf="verifForm.get('Passwords.temppassword').errors?.required">You must enter a password</mat-error>
-                        <mat-error *ngIf="verifForm.get('Passwords.temppassword').errors?.minlength">Minimun length 8</mat-error>
+                        <mat-error *ngIf="verifForm.get('Passwords.temppassword').errors?.required" i18n="You must enter a password@@reset.invalidpass">You must enter a password</mat-error>
+                        <mat-error *ngIf="verifForm.get('Passwords.temppassword').errors?.minlength" i18n="Minimun length 8@@reset.invalidlength">Minimun length 8</mat-error>
                         <mat-error *ngIf="verifForm.get('Passwords.temppassword').errors?.strong">
-                            <div>Require at least 1 number, 1 uppercase and 1 lowercase letter</div>
+                            <div i18n="Require at least 1 number, 1 uppercase and 1 lowercase letter@@reset.invalidpolicy">Require at least 1 number, 1 uppercase and 1 lowercase letter</div>
                         </mat-error>
                     </mat-form-field>
                 </div>
@@ -84,17 +84,17 @@
                             [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                             <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                         </button>
-                        <mat-error *ngIf="verifForm.get('Passwords.password').errors?.required">You must enter a password</mat-error>
-                        <mat-error *ngIf="verifForm.get('Passwords.password').errors?.minlength">Minimun length 8</mat-error>
+                        <mat-error *ngIf="verifForm.get('Passwords.password').errors?.required" i18n="You must enter a password@@reset.invalidpass">You must enter a password</mat-error>
+                        <mat-error *ngIf="verifForm.get('Passwords.password').errors?.minlength" i18n="Minimun length 8@@reset.invalidlength">Minimun length 8</mat-error>
                         <mat-error *ngIf="verifForm.get('Passwords.password').errors?.strong">
-                            <div>Require at least 1 number, 1 uppercase and 1 lowercase letter</div>
+                            <div i18n="Require at least 1 number, 1 uppercase and 1 lowercase letter@@reset.invalidpolicy">Require at least 1 number, 1 uppercase and 1 lowercase letter</div>
                         </mat-error>
                     </mat-form-field>
                 </div>
                 <div class="form-field mb-0 pl-4 pb-2 pr-4 pt-3">
                     <mat-form-field hintLabel="Min 8 characters">
-                        <mat-label>Confirm Password</mat-label>
-                        <input matInput formControlName="confpassword" placeholder="Password"
+                        <mat-label i18n="Confirm Password@@reset.confirmpass">Confirm Password</mat-label>
+                        <input matInput formControlName="confpassword" i18n-placeholder="Password@@shared.Password" placeholder="Password"
                             [errorStateMatcher]="confirmValidParentMatcher" [type]="hideconf ? 'password' : 'text'"
                             minlength="8" maxlength="20" strong
                             required>
@@ -102,17 +102,17 @@
                             [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                             <mat-icon>{{hideconf ? 'visibility_off' : 'visibility'}}</mat-icon>
                         </button>
-                        <mat-error *ngIf="verifForm.get('Passwords.confpassword').errors?.required">You must enter a password</mat-error>
-                        <mat-error *ngIf="verifForm.get('Passwords.confpassword').errors?.minlength">Minimun length 8</mat-error>
+                        <mat-error *ngIf="verifForm.get('Passwords.confpassword').errors?.required" i18n="You must enter a password@@reset.invalidpass">You must enter a password</mat-error>
+                        <mat-error *ngIf="verifForm.get('Passwords.confpassword').errors?.minlength" i18n="Minimun length 8@@reset.invalidlength">Minimun length 8</mat-error>
                         <mat-error *ngIf="verifForm.get('Passwords.confpassword').errors?.strong">
-                            <div>Require at least 1 number, 1 uppercase and 1 lowercase letter</div>
+                            <div i18n="Require at least 1 number, 1 uppercase and 1 lowercase letter@@reset.invalidpolicy">Require at least 1 number, 1 uppercase and 1 lowercase letter</div>
                         </mat-error>
-                        <mat-error *ngIf="verifForm.get('Passwords.confpassword').errors?.notSame">Confirm Password does not match</mat-error>
+                        <mat-error *ngIf="verifForm.get('Passwords.confpassword').errors?.notSame" i18n="Confirm Password does not match@@reset.invalidconfpass">Confirm Password does not match</mat-error>
                     </mat-form-field>
                 </div>
             </ng-container>
             <div class="forgot-form mt-3 mb-3">
-                <button mat-flat-button color="primary" id="save" type="submit" [disabled]="loading" class="text-left w-100">Activate Account</button>
+                <button mat-flat-button color="primary" id="save" type="submit" [disabled]="loading" class="text-left w-100" i18n="Activate Account@@verification.activateacct">Activate Account</button>
                 <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
             </div>
         </div>

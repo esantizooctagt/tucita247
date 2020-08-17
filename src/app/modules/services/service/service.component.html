@@ -1,5 +1,5 @@
 <div class="pl-0 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
-    <h3>SERVICES</h3>
+    <h3 i18n="SERVICES|services title@@services.title">SERVICES</h3>
 </div>
 <ng-container *ngIf="service$ | async"></ng-container>
 <ng-container *ngIf="saveService$ | async"></ng-container>
@@ -7,22 +7,22 @@
     <mat-card class="col-sm col-md col-lg-7">
         <form [formGroup]="serviceForm" (ngSubmit)="onSubmit()" class="mt-4">
             <div class="form-field pl-3 pr-3">
-                <mat-form-field hintLabel="Name">
-                    <input matInput #Name placeholder="Name" maxlength="100" minlength="3" formControlName="Name"
+                <mat-form-field hintLabel="Name" i18n-hintLabel="Name@@shared.name">
+                    <input matInput #Name i18n-placeholder="Name@@shared.name" placeholder="Name" maxlength="100" minlength="3" formControlName="Name"
                         [errorStateMatcher]="confirmValidParentMatcher" required>
                     <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{getErrorMessage('Name')}}</mat-error>
                 </mat-form-field>
             </div>
             <div class="form-field pl-3 pr-3">
-                <mat-form-field hintLabel="Service duration">
-                    <input matInput #Name placeholder="Service duration" maxlength="3" minlength="1" formControlName="TimeService"
+                <mat-form-field hintLabel="Service duration" i18n-hintLabel="Service duration|text in services@@services.textduration">
+                    <input matInput #Name i18n-placeholder="Service duration|text in services@@services.textduration" placeholder="Service duration" maxlength="3" minlength="1" formControlName="TimeService"
                         [errorStateMatcher]="confirmValidParentMatcher" required>
                     <mat-error *ngIf="f.TimeService.invalid && f.TimeService.touched">{{getErrorMessage('TimeService')}}</mat-error>
                 </mat-form-field>
             </div>
             <div class="form-field pl-3 pr-3">
-                <mat-form-field hintLabel="Customer per Bucket">
-                    <input matInput #Name placeholder="Customer per Bucket" maxlength="3" minlength="1" formControlName="CustomerPerTime"
+                <mat-form-field hintLabel="Customer per Bucket" i18n-hintLabel="Customer per Bucket|text in services@@services.customerbucket">
+                    <input matInput #Name i18n-placeholder="Customer per Bucket|text in services@@services.customerbucket" placeholder="Customer per Bucket" maxlength="3" minlength="1" formControlName="CustomerPerTime"
                         [errorStateMatcher]="confirmValidParentMatcher" required>
                     <mat-error *ngIf="f.CustomerPerTime.invalid && f.CustomerPerTime.touched">{{getErrorMessage('CustomerPerTime')}}</mat-error>
                 </mat-form-field>
@@ -34,12 +34,12 @@
             </div>
             <div class="form-field-check ml-3 pr-3"
                 *ngIf="serviceForm.value.ServiceId !== '' && serviceForm.value.ServiceId !== null">
-                <mat-checkbox formControlName="Status">Status</mat-checkbox>
+                <mat-checkbox formControlName="Status" i18n="Status@@shared.status">Status</mat-checkbox>
             </div>
             <div>
                 <button mat-flat-button color="primary" id="save" [disabled]="!serviceForm.valid"
-                    class="button-action ml-3 mr-3 mt-2">Save</button>
-                <button mat-flat-button color="accent" id="cancel" type="button" (click)="onCancel()"
+                    class="button-action ml-3 mr-3 mt-2" i18n="Save@@shared.save">Save</button>
+                <button mat-flat-button color="accent" id="cancel" type="button" i18n="Cancel@@shared.cancel" (click)="onCancel()"
                     class="button-action mt-2">Cancel</button>
             </div>
         </form>

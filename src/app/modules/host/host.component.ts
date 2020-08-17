@@ -90,6 +90,7 @@ export class HostComponent implements OnInit {
   showApp: boolean = false;
   locationStatus: number = 0;
   closedLoc: number = 0;
+  textOpenLocation: string = '';
 
   locationId: string = '';
   doorId: string = '';
@@ -187,7 +188,7 @@ export class HostComponent implements OnInit {
     this.businessId = this.authService.businessId();
     this.userId = this.authService.userId();
 
-    var spinnerRef = this.spinnerService.start("Loading Locations Data...");
+    var spinnerRef = this.spinnerService.start($localize`:@@host.loadinglocs:`);
     this.getLocInfo$ = this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
       map((res: any) => {
         if (res.Locs != null){
@@ -200,11 +201,12 @@ export class HostComponent implements OnInit {
             this.locationStatus = res.Locs.Providers[0].Open;
             this.closedLoc = res.Locs.Providers[0].Closed;
             this.providerId = res.Locs.Providers[0].ProviderId;
+            this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
           }
           return res;
         } else {
           this.spinnerService.stop(spinnerRef);
-          this.openDialog('Error !', "User must have a location assigned, try again", false, true, false);
+          this.openDialog($localize`:@@shared.error:`, $localize`:@@host.missloc:`, false, true, false);
           this.router.navigate(['/']);
           return;
         }
@@ -336,7 +338,7 @@ export class HostComponent implements OnInit {
   }
 
   openLocation(){
-    var spinnerRef = this.spinnerService.start("Loading Open Location...");
+    var spinnerRef = this.spinnerService.start($localize`:@@host.loadingopeloc:`);
     this.openLoc$ = this.locationService.updateOpenLocation(this.locationId, this.businessId, this.providerId).pipe(
       map((res: any) => {
         if (res != null){
@@ -346,6 +348,7 @@ export class HostComponent implements OnInit {
             this.lastItem = "_";
             this.lastItemPre = "_";
             this.lastItemWalk = "_";
+            this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
             this.spinnerService.stop(spinnerRef);
             this.getAppointmentsSche();
             this.getAppointmentsWalk();
@@ -378,6 +381,7 @@ export class HostComponent implements OnInit {
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
         this.locationStatus = 0;
+        this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
         this.onError = err.Message;
         return this.onError;
       })
@@ -385,12 +389,13 @@ export class HostComponent implements OnInit {
   }
 
   closedLocation(){
-    var spinnerRef = this.spinnerService.start("Closing Location...");
+    var spinnerRef = this.spinnerService.start($localize`:@@host.closingloc:`);
     this.closedLoc$ = this.locationService.updateClosedLocation(this.locationId, this.businessId, this.providerId).pipe(
       map((res: any) => {
         if (res != null){
           if (res['Business'].OPEN == 0){
             this.locationStatus = 0;
+            this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
             this.spinnerService.stop(spinnerRef);
             this.previous = [];
             this.schedule = [];
@@ -424,6 +429,7 @@ export class HostComponent implements OnInit {
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
         this.locationStatus = 1;
+        this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
         this.onError = err.Message;
         return this.onError;
       })
@@ -434,7 +440,7 @@ export class HostComponent implements OnInit {
     const dialogRef = this.dialog.open(VideoDialogComponent, {
       width: '450px',
       height: '595px',
-      data: {guests: 0, title: 'Check-Out', tipo: 2}
+      data: {guests: 0, title: $localize`:@@host.checkoutpop:`, tipo: 2}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -462,7 +468,7 @@ export class HostComponent implements OnInit {
     this.checkIn$ = this.appointmentService.updateAppointmentCheckOut(formData).pipe(
       map((res: any) => {
         if (res.Code == 200){
-          this.openSnackBar("La Cita check-out successfull","Check-Out");
+          this.openSnackBar($localize`:@@host.checkoutsuccess:`, $localize`:@@host.checkoutpop:`);
         }
       }),
       mergeMap(v => 
@@ -479,11 +485,11 @@ export class HostComponent implements OnInit {
       ),
       catchError(err => {
         if (err.Status == 404){
-          this.openSnackBar(err.Message,"Check-out");
+          this.openSnackBar(err.Message, $localize`:@@host.checkoutpop:`);
           return err.Message;
         }
         this.onError = err.Message;
-        this.openSnackBar("Something goes wrong try again","Check-out");
+        this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@host.checkoutpop:`);
         return this.onError;
       })
     );
@@ -493,7 +499,7 @@ export class HostComponent implements OnInit {
     this.manualCheckOut$ = this.appointmentService.updateManualCheckOut(this.businessId, this.locationId, this.providerId, qtyOut).pipe(
       map((res: any) => {
         if (res.Code == 200){
-          this.openSnackBar("La Cita check-out successfull","Check-Out");
+          this.openSnackBar($localize`:@@host.checkoutsuccess:`, $localize`:@@host.checkoutpop:`);
         }
       }),
       mergeMap(v =>
@@ -510,7 +516,7 @@ export class HostComponent implements OnInit {
       ),
       catchError(err => {
         this.onError = err.Message;
-        this.openSnackBar("Something goes wrong try again","Check-out");
+        this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@host.checkoutpop:`);
         return this.onError;
       })
     );
@@ -522,7 +528,7 @@ export class HostComponent implements OnInit {
     let dayCurr = this.getDay();
     let dateAppo = yearCurr + '-' + monthCurr + '-' + dayCurr;
 
-    var spinnerRef = this.spinnerService.start("Loading Walk-Ins...");
+    var spinnerRef = this.spinnerService.start($localize`:@@host.loadingwalkins:`);
     this.getWalkIns$ = this.locationService.getWalkInsCheckOut(this.businessId, this.locationId, dateAppo).pipe(
       map((res: any) => {
         if (res.Code == 200){
@@ -603,7 +609,7 @@ export class HostComponent implements OnInit {
       AppoHour: timeAppo,
       Type: 2
     }
-    var spinnerRef = this.spinnerService.start("Adding Appointment...");
+    var spinnerRef = this.spinnerService.start($localize`:@@host.addingappo:`);
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
       map((res: any) => {
         if (res.Code == 200){
@@ -617,7 +623,7 @@ export class HostComponent implements OnInit {
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
         this.onError = err.Message;
-        this.openDialog('Error !', "Error on created appointment, try again", false, true, false);
+        this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.wrong:`, false, true, false);
         return this.onError;
       })
     );
@@ -637,31 +643,31 @@ export class HostComponent implements OnInit {
 
   getErrorMessage(component: string){
     if (component === 'Email'){
-      return this.f.Email.hasError('required') ? 'You must enter an Email' :
-        this.f.Email.hasError('maxlength') ? 'Maximun length 200' :
-          this.f.Email.hasError('pattern') ? 'Invalid Email' :
+      return this.f.Email.hasError('required') ? $localize`:@@shared.entervalue:` :
+        this.f.Email.hasError('maxlength') ? $localize`:@@shared.maximun: 200` :
+          this.f.Email.hasError('pattern') ? $localize`:@@forgot.emailformat:` :
           '';
     }
     if (component === 'Name'){
-      return this.f.Name.hasError('required') ? 'You must enter a value' :
-        this.f.Name.hasError('minlength') ? 'Minimun length 3' :
-          this.f.Name.hasError('maxlength') ? 'Maximun length 100' :
+      return this.f.Name.hasError('required') ? $localize`:@@shared.entervalue:` :
+        this.f.Name.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
+          this.f.Name.hasError('maxlength') ? $localize`:@@shared.maximun: 100` :
             '';
     }
     if (component === 'ServiceId'){
-      return this.f.ServiceId.hasError('required') ? 'You must select a valid value' :
+      return this.f.ServiceId.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
             '';
     }
     if (component === 'Phone'){
-      return this.f.Phone.hasError('minlength') ? 'Minimun length 6' :
-        this.f.Phone.hasError('maxlength') ? 'Maximun length 14' :
+      return this.f.Phone.hasError('minlength') ? $localize`:@@shared.minimun: 6` :
+        this.f.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: 14` :
           '';
     }
     if (component === 'Guests'){
-      return this.f.Guests.hasError('required') ? 'You must enter a value' :
-      this.f.Guests.hasError('maxlength') ? 'Maximun length 2' :
-        this.f.Guests.hasError('min') ? 'Minimun value 1' :
-          this.f.Guests.hasError('max') ? 'Maximun value 99' :
+      return this.f.Guests.hasError('required') ? $localize`:@@shared.entervalue:` :
+      this.f.Guests.hasError('maxlength') ? $localize`:@@shared.maximun: 2` :
+        this.f.Guests.hasError('min') ? $localize`:@@shared.minvalue: 1` :
+          this.f.Guests.hasError('max') ? $localize`:@@shared.maxvalue: 99` :
             '';
     }
   }
@@ -669,7 +675,7 @@ export class HostComponent implements OnInit {
   onCancelApp(appo: any, reasonId: string, index: number, origin: string){
     //CANCELAR APPOINTMENT
     if (reasonId == undefined){
-      this.openSnackBar("You must select a reason","Cancel Appointment");
+      this.openSnackBar($localize`:@@host.selectreason:`,$localize`:@@host.cancelappodyn:`);
     }
     let formData = {
       Status: 5,
@@ -703,12 +709,12 @@ export class HostComponent implements OnInit {
             this.showCancelOptionsPrev[index] = false;
             this.selectedPrev[index] = undefined; 
           }
-          this.openSnackBar("La Cita cancelled successfull","Cancel");
+          this.openSnackBar($localize`:@@host.cancelsuccess:`, $localize`:@@shared.cancel:`);
         }
       }),
       catchError(err => {
         this.onError = err.Message;
-        this.openSnackBar("Something goes wrong try again","Cancel");
+        this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@shared.cancel:`);
         return this.onError;
       })
     );
@@ -720,7 +726,7 @@ export class HostComponent implements OnInit {
       const dialogRef = this.dialog.open(VideoDialogComponent, {
         width: '450px',
         height: '675px',
-        data: {guests: appo.Guests, title: 'Check-In', tipo: 1 }
+        data: {guests: appo.Guests, title: $localize`:@@host.checkintitle:`, tipo: 1 }
       });
 
       dialogRef.afterClosed().subscribe(result => {
@@ -753,7 +759,7 @@ export class HostComponent implements OnInit {
           var data = this.preCheckIn.findIndex(e => e.AppId === appo.AppId);
           this.preCheckIn.splice(data, 1);
           
-          this.openSnackBar("La Cita check-in successfull","Check-In");
+          this.openSnackBar($localize`:@@host.checkinsuccess:`,$localize`:@@host.checkintitle:`);
         }
       }),
       mergeMap(v => 
@@ -770,11 +776,11 @@ export class HostComponent implements OnInit {
       ),
       catchError(err => {
         if (err.Status == 404){
-          this.openSnackBar("Invalid qr code","Check-in");
+          this.openSnackBar($localize`:@@host.invalidqrcode:`,$localize`:@@host.checkintitle:`);
           return err.Message;
         }
         this.onError = err.Message;
-        this.openSnackBar("Something goes wrong try again","Check-in");
+        this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@host.checkintitle:`);
         return this.onError;
       })
     );
@@ -801,16 +807,16 @@ export class HostComponent implements OnInit {
             if (qeue == 'previous'){
               this.showMessagePrev[i] = false;
             }
-            this.openSnackBar("Messages send successfull","Messages");
+            this.openSnackBar($localize`:@@host.messagessend:`,$localize`:@@host.messages:`);
           } else {
-            this.openSnackBar("Something goes wrong try again","Messages");
+            this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@host.messages:`);
           }
         } else {
-          this.openSnackBar("Something goes wrong try again","Messages");
+          this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@host.messages:`);
         }
       }),
       catchError(err => {
-        this.openSnackBar("Something goes wrong try again","Messages");
+        this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@host.messages:`);
         this.onError = err.Message;
         return this.onError;
       })
@@ -838,7 +844,7 @@ export class HostComponent implements OnInit {
               this.getCommentsPrev[i] = res.Messages;
             }
           } else {
-            this.openSnackBar("Something goes wrong try again","Messages");
+            this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@host.messages:`);
           }
         }
       }),
@@ -875,12 +881,12 @@ export class HostComponent implements OnInit {
           appo.CheckInTime = appoObj['TIMECHEK'];
           appo.ElapsedTime = "0";
           this.preCheckIn.push(appo);
-          this.openSnackBar("Ready to check-in successfull","Ready to Check-In");
+          this.openSnackBar($localize`:@@host.readytocheckin:`,$localize`:@@host.textreadytocheckin:`);
         }
       }),
       catchError(err => {
         this.onError = err.Message;
-        this.openSnackBar("Something goes wrong try again","Transfer");
+        this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@host.texttransfer:`);
         return this.onError;
       })
     );
@@ -997,7 +1003,7 @@ export class HostComponent implements OnInit {
     let monthCurr = this.getMonth();
     let dayCurr = this.getDay();
     let dateAppo = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + time.replace(':','-');
-    var spinnerRef = this.spinnerService.start("Loading Appointments...");
+    var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
     this.appointmentsPrevious$ = this.appointmentService.getPreviousAppointments(this.businessId, this.locationId, this.providerId, dateAppo, 1).pipe(
       map((res: any) => {
         if (res != null) {
@@ -1051,7 +1057,7 @@ export class HostComponent implements OnInit {
     let dateAppoStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourIni;
     let dateAppoFinStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourFin;
 
-    var spinnerRef = this.spinnerService.start("Loading Appointments...");
+    var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
     this.appointmentsSche$ = this.appointmentService.getAppointments(this.businessId, this.locationId, this.providerId, dateAppoStr, dateAppoFinStr, 1, 1, this.lastItem, this.appoIdSche).pipe(
       map((res: any) => {
         if (res != null) {
@@ -1111,7 +1117,7 @@ export class HostComponent implements OnInit {
     let dateAppoStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourIni;
     let dateAppoFinStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourFin;
 
-    var spinnerRef = this.spinnerService.start("Loading Appointments...");
+    var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
     this.appointmentsWalk$ = this.appointmentService.getAppointments(this.businessId, this.locationId, this.providerId, dateAppoStr, dateAppoFinStr, 1, 2, this.lastItemWalk, this.appoIdWalk).pipe(
       map((res: any) => {
         if (res != null) {
@@ -1164,7 +1170,7 @@ export class HostComponent implements OnInit {
     let dayCurr = this.getDay();
     let dateAppoStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourIni;
     let dateAppoFinStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourFin;
-    var spinnerRef = this.spinnerService.start("Loading Appointments...");
+    var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
     this.appointmentsPre$ = this.appointmentService.getAppointments(this.businessId, this.locationId, this.providerId, dateAppoStr, dateAppoFinStr, 2, '_', this.lastItemPre, this.appoIdPre).pipe(
       map((res: any) => {
         if (res != null) {
@@ -1218,6 +1224,7 @@ export class HostComponent implements OnInit {
       this.locationStatus = res[0].Open;
       this.closedLoc = res[0].Closed;
       this.providerId = res[0].ProviderId;
+      this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
     }
     this.previous = [];
     this.schedule = [];
@@ -1227,7 +1234,7 @@ export class HostComponent implements OnInit {
     this.lastItem = '_';
     this.lastItemPre = '_';
     this.lastItemWalk = '_';
-    var spinnerRef = this.spinnerService.start("Loading Locations Data...");
+    var spinnerRef = this.spinnerService.start($localize`:@@host.loadinglocationsdata:`);
     this.getLocInfo$ = this.businessService.getBusinessOpeHours(this.businessId, this.locationId, this.providerId).pipe(
       map((res: any) => {
         if (res.Code == 200) {
@@ -1337,7 +1344,7 @@ export class HostComponent implements OnInit {
             let appoGet = this.preCheckIn[this.preCheckIn.length-1];
             appoGet.CheckInTime = appoObj['TIMECHEK'];
             appoGet.ElapsedTime = "0";
-            this.openSnackBar("Ready to check-in successfull","Ready to Check-In");
+            this.openSnackBar($localize`:@@host.readytocheckin:`,$localize`:@@host.textreadytocheckin:`);
           }
         }),
         catchError(err => {
@@ -1351,7 +1358,7 @@ export class HostComponent implements OnInit {
           }
 
           this.onError = err.Message;
-          this.openSnackBar("Something goes wrong try again","Transfer");
+          this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@host.texttransfer:`);
           return this.onError;
         })
       );

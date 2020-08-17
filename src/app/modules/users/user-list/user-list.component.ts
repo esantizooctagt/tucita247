@@ -120,7 +120,7 @@ export class UserListComponent implements OnInit {
 
   loadUsers(crPage, crItems, crSearch, crlastItem) {
     this.onError = '';
-    var spinnerRef = this.spinnerService.start("Loading Users...");
+    var spinnerRef = this.spinnerService.start($localize`:@@userloc.loadinguser:`);
     let data = this.businessId + "/" + crItems + (crSearch === '' ? '/_' : '/' + crSearch) + (crlastItem === '' ? '/_' : '/' +  crlastItem);
 
     this.users$ = this.userService.getUsers(data).pipe(
@@ -183,8 +183,8 @@ export class UserListComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = false;
     dialogConfig.data = {
-      header: 'User', 
-      message: 'Are you sure to delete this User?', 
+      header: $localize`:@@users.usertext:`, 
+      message: $localize`:@@users.deleteuserquest:`, 
       success: false, 
       error: false, 
       warn: false,
@@ -197,7 +197,7 @@ export class UserListComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
       if(result != undefined){
-        var spinnerRef = this.spinnerService.start("Deleting User...");
+        var spinnerRef = this.spinnerService.start($localize`:@@users.deletinguser:`);
         if (result){
           this.deleteUser$ = this.userService.deleteUser(user, this.businessId).pipe(
             tap(res => {
@@ -206,12 +206,12 @@ export class UserListComponent implements OnInit {
               this.loadUsers(
                 this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].userId
               );
-              this.openDialog('User', 'User deleted successful', true, false, false);
+              this.openDialog($localize`:@@users.usertext:`, $localize`:@@users.deletedsuccess:`, true, false, false);
             }),
             catchError(err => {
               this.spinnerService.stop(spinnerRef);
               this.displayYesNo = false;
-              this.openDialog('Error ! ', err.Message, false, true, false);
+              this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
               return throwError (err || err.message);
             })
           );

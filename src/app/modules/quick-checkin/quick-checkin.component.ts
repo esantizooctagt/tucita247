@@ -37,6 +37,7 @@ export class QuickCheckinComponent implements OnInit {
   qtyPeople: number = 0;
   perLocation: number = 0;
   totLocation: number = 0;
+  textOpenLocation: string = '';
   buckets=[];
 
   showCard: boolean =false;
@@ -52,6 +53,7 @@ export class QuickCheckinComponent implements OnInit {
 
   Providers: any[] = [];
   services: []=[];
+
   get f(){
     return this.clientForm.controls;
   }
@@ -109,7 +111,7 @@ export class QuickCheckinComponent implements OnInit {
     this.businessId = this.authService.businessId();
     this.userId = this.authService.userId();
 
-    var spinnerRef = this.spinnerService.start("Loading Locations Data...");
+    var spinnerRef = this.spinnerService.start($localize`:@@lite.loadlocs:`);
     this.Locs$ = this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
       map((res: any) => {
         if (res.Locs != null){
@@ -121,12 +123,13 @@ export class QuickCheckinComponent implements OnInit {
             this.locationStatus = res.Locs.Providers[0].Open;
             this.closedLoc = res.Locs.Providers[0].Closed;
             this.providerId = res.Locs.Providers[0].ProviderId;
+            this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
           }
           this.spinnerService.stop(spinnerRef);
           return res;
         } else {
           this.spinnerService.stop(spinnerRef);
-          this.openDialog('Error !', "User must have a location assigned, try again", false, true, false);
+          this.openDialog($localize`:@@shared.error:`, $localize`:@@lite.locsassigned:`, false, true, false);
           this.router.navigate(['/']);
           return;
         }
@@ -193,7 +196,7 @@ export class QuickCheckinComponent implements OnInit {
     const dialogRef = this.dialog.open(VideoDialogComponent, {
       width: '450px',
       height: '660px',
-      data: {guests: 0, title: 'Check-Out', tipo: 2}
+      data: {guests: 0, title: $localize`:@@host.checkoutpop:`, tipo: 2}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -214,7 +217,7 @@ export class QuickCheckinComponent implements OnInit {
     this.manualCheckOut$ = this.appointmentService.updateManualCheckOut(this.businessId, this.locationId, this.providerId, qtyOut).pipe(
       map((res: any) => {
         if (res.Code == 200){
-          this.openSnackBar("La Cita check-out successfull","Check-Out");
+          this.openSnackBar($localize`:@@lite.checkoutsuccess:`, $localize`:@@host.checkoutpop:`);
         }
       }),
       switchMap(v => this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
@@ -228,7 +231,7 @@ export class QuickCheckinComponent implements OnInit {
       )),
       catchError(err => {
         this.onError = err.Message;
-        this.openSnackBar("Something goes wrong try again","Check-out");
+        this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@host.checkoutpop:`);
         return this.onError;
       })
     );
@@ -245,7 +248,7 @@ export class QuickCheckinComponent implements OnInit {
     this.check$ = this.appointmentService.updateAppointmentCheckOut(formData).pipe(
       map((res: any) => {
         if (res.Code == 200){
-          this.openSnackBar("La Cita check-out successfull","Check-Out");
+          this.openSnackBar($localize`:@@host.checkoutsuccess:`, $localize`:@@host.checkoutpop:`);
         }
       }),
       switchMap(v => this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
@@ -259,11 +262,11 @@ export class QuickCheckinComponent implements OnInit {
       )),
       catchError(err => {
         if (err.Status == 404){
-          this.openSnackBar("Invalid qr code","Check-out");
+          this.openSnackBar($localize`:@@host.invalidqrcode:`,$localize`:@@host.checkoutpop:`);
           return err.Message;
         }
         this.onError = err.Message;
-        this.openSnackBar("Something goes wrong try again","Check-out");
+        this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@host.checkoutpop:`);
         return this.onError;
       })
     );
@@ -274,7 +277,7 @@ export class QuickCheckinComponent implements OnInit {
     const dialogRef = this.dialog.open(VideoDialogComponent, {
       width: '450px',
       height: '660px',
-      data: {guests: 0, title: 'Check-In', tipo: 3 }
+      data: {guests: 0, title: $localize`:@@host.checkintitle:`, tipo: 3 }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -300,7 +303,7 @@ export class QuickCheckinComponent implements OnInit {
     this.check$ = this.appointmentService.updateAppointmentCheckInQR(qrCode, formData).pipe(
       map((res: any) => {
         if (res.Code == 200){
-          this.openSnackBar("La Cita check-in successfull","Check-In");
+          this.openSnackBar($localize`:@@host.checkinsuccess:`,$localize`:@@host.checkintitle:`);
         }
       }),
       switchMap(v => this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
@@ -314,11 +317,11 @@ export class QuickCheckinComponent implements OnInit {
       )),
       catchError(err => {
         if (err.Status == 404){
-          this.openSnackBar("Invalid qr code","Check-in");
+          this.openSnackBar($localize`:@@host.invalidqrcode:`,$localize`:@@host.checkintitle:`);
           return err.Message;
         }
         this.onError = err.Message;
-        this.openSnackBar("Something goes wrong try again","Check-in");
+        this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@host.checkintitle:`);
         return this.onError;
       })
     );
@@ -326,31 +329,31 @@ export class QuickCheckinComponent implements OnInit {
 
   getErrorMessage(component: string){
     if (component === 'Email'){
-      return this.f.Email.hasError('required') ? 'You must enter an Email' :
-        this.f.Email.hasError('maxlength') ? 'Maximun length 200' :
-          this.f.Email.hasError('pattern') ? 'Invalid Email' :
+      return this.f.Email.hasError('required') ? $localize`:@@login.error:` :
+        this.f.Email.hasError('maxlength') ? $localize`:@@shared.maximun: 200` :
+          this.f.Email.hasError('pattern') ? $localize`:@@forgot.emailformat:` :
           '';
     }
     if (component === 'Name'){
-      return this.f.Name.hasError('required') ? 'You must enter a value' :
-        this.f.Name.hasError('minlength') ? 'Minimun length 3' :
-          this.f.Name.hasError('maxlength') ? 'Maximun length 100' :
+      return this.f.Name.hasError('required') ? $localize`:@@shared.entervalue:` :
+        this.f.Name.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
+          this.f.Name.hasError('maxlength') ? $localize`:@@shared.maximun: 100` :
             '';
     }
     if (component === 'ServiceId'){
-      return this.f.ServiceId.hasError('required') ? 'You must select a valid value' :
+      return this.f.ServiceId.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
             '';
     }
     if (component === 'Phone'){
-      return this.f.Phone.hasError('minlength') ? 'Minimun length 6' :
-        this.f.Phone.hasError('maxlength') ? 'Maximun length 14' :
+      return this.f.Phone.hasError('minlength') ? $localize`:@@shared.minimun: 6` :
+        this.f.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: 14` :
           '';
     }
     if (component === 'Guests'){
-      return this.f.Guests.hasError('required') ? 'You must enter a value' :
-      this.f.Guests.hasError('maxlength') ? 'Maximun length 2' :
-        this.f.Guests.hasError('min') ? 'Minimun value 1' :
-          this.f.Guests.hasError('max') ? 'Maximun value 99' :
+      return this.f.Guests.hasError('required') ? $localize`:@@shared.entervalue:` :
+      this.f.Guests.hasError('maxlength') ? $localize`:@@shared.maximun: 2` :
+        this.f.Guests.hasError('min') ? $localize`:@@shared.minvalue: 1` :
+          this.f.Guests.hasError('max') ? $localize`:@@shared.maxvalue: 99` :
             '';
     }
   }
@@ -396,13 +399,13 @@ export class QuickCheckinComponent implements OnInit {
       AppoHour: timeAppo,
       Type: 2
     }
-    var spinnerRef = this.spinnerService.start("Adding Booking...");
+    var spinnerRef = this.spinnerService.start($localize`:@@lite.addingbook:`);
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
       map((res: any) => {
         this.spinnerService.stop(spinnerRef);
         this.clientForm.reset({Phone:'', Name:'', ServiceId:'', Email:'', DOB:'', Gender:'', Preference:'', Disability:'', Guests: 1});
         this.showCard = false;
-        this.openSnackBar("Walk-in added successfully","Check-In");
+        this.openSnackBar($localize`:@@lite.walkinadded:`,$localize`:@@host.checkintitle:`);
         return res.Code;
       }),
       switchMap((res: any) => {
@@ -416,7 +419,7 @@ export class QuickCheckinComponent implements OnInit {
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
         this.onError = err.Message;
-        this.openSnackBar("Error on created booking, try again","Check-In");
+        this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@host.checkintitle:`);
         return this.onError;
       })
     );
@@ -428,7 +431,7 @@ export class QuickCheckinComponent implements OnInit {
     let dayCurr = this.getDay();
     let dateAppo = yearCurr + '-' + monthCurr + '-' + dayCurr;
 
-    var spinnerRef = this.spinnerService.start("Loading Walk-Ins...");
+    var spinnerRef = this.spinnerService.start($localize`:@@lite.loadingwalkins:`);
     this.getWalkIns$ = this.locationService.getWalkInsCheckOut(this.businessId, this.locationId, dateAppo).pipe(
       map((res: any) => {
         if (res.Code == 200){
@@ -470,8 +473,9 @@ export class QuickCheckinComponent implements OnInit {
       this.locationStatus = res[0].Open;
       this.closedLoc = res[0].Closed;
       this.providerId = res[0].ProviderId;
+      this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
     }
-    var spinnerRef = this.spinnerService.start("Loading Locations Data...");
+    var spinnerRef = this.spinnerService.start($localize`:@@host.loadinglocs:`);
     this.getLocInfo$ = this.businessService.getBusinessOpeHours(this.businessId, this.locationId, this.providerId).pipe(
       map((res: any) => {
         if (res.Code == 200) {
@@ -530,13 +534,14 @@ export class QuickCheckinComponent implements OnInit {
   }
 
   openLocation(){
-    var spinnerRef = this.spinnerService.start("Loading Open Location...");
+    var spinnerRef = this.spinnerService.start($localize`:@@host.loadingopeloc:`);
     this.openLoc$ = this.locationService.updateOpenLocation(this.locationId, this.businessId, this.providerId).pipe(
       map((res: any) => {
         if (res != null){
           if (res['Business'].OPEN == 1){
             this.locationStatus = 1;
             this.closedLoc = 0;
+            this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
             this.spinnerService.stop(spinnerRef);
           }
         }
@@ -566,6 +571,7 @@ export class QuickCheckinComponent implements OnInit {
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
         this.locationStatus = 0;
+        this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
         this.onError = err.Message;
         return this.onError;
       })
@@ -573,12 +579,13 @@ export class QuickCheckinComponent implements OnInit {
   }
 
   closedLocation(){
-    var spinnerRef = this.spinnerService.start("Closing Location...");
+    var spinnerRef = this.spinnerService.start($localize`:@@host.closingloc:`);
     this.closedLoc$ = this.locationService.updateClosedLocation(this.locationId, this.businessId, this.providerId).pipe(
       map((res: any) => {
         if (res != null){
           if (res['Business'].OPEN == 0){
             this.locationStatus = 0;
+            this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
             this.spinnerService.stop(spinnerRef);
           }
         }
@@ -608,6 +615,7 @@ export class QuickCheckinComponent implements OnInit {
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
         this.locationStatus = 1;
+        this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
         this.onError = err.Message;
         return this.onError;
       })

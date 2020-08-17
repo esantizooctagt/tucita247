@@ -74,7 +74,7 @@ export class ServiceComponent implements OnInit {
 
   onDisplay(){
     if (this.serviceDataList != undefined){
-      var spinnerRef = this.spinnerService.start("Loading Service...");
+      var spinnerRef = this.spinnerService.start($localize`:@@services.loadingserv:`);
       this.serviceForm.reset({ ServiceId: '', Name: '', TimeService: '', CustomerPerTime: '', Color: '', Status: true});
       this.service$ = this.serviceService.getService(this.businessId, this.serviceDataList).pipe(
         map(res => {
@@ -91,7 +91,7 @@ export class ServiceComponent implements OnInit {
         }),
         catchError(err => {
           this.spinnerService.stop(spinnerRef);
-          this.openDialog('Error !', err.Message, false, true, false);
+          this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
           return throwError(err || err.Message);
         })
       );
@@ -100,25 +100,25 @@ export class ServiceComponent implements OnInit {
 
   getErrorMessage(component: string){
     if (component === 'Name'){
-      return this.f.Name.hasError('required') ? 'You must enter a value' :
-        this.f.Name.hasError('minlength') ? 'Minimun length 3':
+      return this.f.Name.hasError('required') ? $localize`:@@shared.entervalue:` :
+        this.f.Name.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
           this.f.Name.hasError('maxlength') ? 'Maximun length 100' :
             '';
     }
     if (component === 'TimeService'){
-      return this.f.TimeService.hasError('required') ? 'You must enter a value' :
-        this.f.TimeService.hasError('min') ? 'Minimun length 1':
-          this.f.TimeService.hasError('max') ? 'Maximun length 999' :
+      return this.f.TimeService.hasError('required') ? $localize`:@@shared.entervalue:` :
+        this.f.TimeService.hasError('min') ? $localize`:@@shared.minimun: 1` :
+          this.f.TimeService.hasError('max') ? $localize`:@@shared.maximun: 999` :
           '';
     }
     if (component === 'CustomerPerTime'){
-      return this.f.CustomerPerTime.hasError('required') ? 'You must enter a value' :
-        this.f.CustomerPerTime.hasError('min') ? 'Minimun length 1':
-          this.f.CustomerPerTime.hasError('max') ? 'Maximun length 999' :
+      return this.f.CustomerPerTime.hasError('required') ? $localize`:@@shared.entervalue:` :
+        this.f.CustomerPerTime.hasError('min') ? $localize`:@@shared.minimun: 1`:
+          this.f.CustomerPerTime.hasError('max') ? $localize`:@@shared.maximun: 999` :
           '';
     }
     if (component === 'Color'){
-      return this.f.Color.hasError('required') ? 'You must select a valid value' :
+      return this.f.Color.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
         '';
     }
   }
@@ -140,26 +140,26 @@ export class ServiceComponent implements OnInit {
       Status: this.serviceForm.value.Status == true ? 1 : 0
     }
 
-    var spinnerRef = this.spinnerService.start("Saving Service...");
+    var spinnerRef = this.spinnerService.start($localize`:@@services.savingserv:`);
     this.saveService$ =  this.serviceService.postServices(dataForm).pipe(
       map((res:any) => {
         if (res != null){
           if (res.Code == 200){
             this.spinnerService.stop(spinnerRef);
             this.serviceForm.patchValue({ServiceId: res.ServiceId});
-            this.openDialog('Service', 'Saving successfully', true, false, false);
+            this.openDialog($localize`:@@services.service:`, $localize`:@@services.savingsuccess:`, true, false, false);
           } else {
             this.spinnerService.stop(spinnerRef);
-            this.openDialog('Error ! ', 'Something goes wrong, try again', false, true, false);
+            this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.wrong:`, false, true, false);
           }
         } else {
           this.spinnerService.stop(spinnerRef);
-          this.openDialog('Error ! ', 'Something goes wrong, try again', false, true, false);
+          this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.wrong:`, false, true, false);
         }
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
-        this.openDialog('Error ! ', err.Message, false, true, false);
+        this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
         return throwError (err || err.message);
       })
     );

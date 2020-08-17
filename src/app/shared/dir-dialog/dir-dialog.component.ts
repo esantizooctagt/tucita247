@@ -108,25 +108,25 @@ export class DirDialogComponent implements OnInit {
         LocationId: this.locationId,
         Appos: appId
       }
-      var spinnerRef = this.spinnerService.start("Check Out Walk-Ins...");
+      var spinnerRef = this.spinnerService.start($localize`:@@dirdialog.walkins:`);
       this.getLocInfo$ = this.appointmentService.updateAppointmentWalkInsCheckOut(formData).pipe(
         map((res: any) => {
           if (res != null){
             if (res.Code == 200){
-              this.openSnackBar("Check out successfull","Check-Out");
+              this.openSnackBar($localize`:@@dirdialog.checkout:`,$localize`:@@host.checkoutpop:`);
               this.spinnerService.stop(spinnerRef);
             } else {
-              this.openSnackBar("Something goes wrong, try again","Check-Out");
+              this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@shared.error:`);
               this.spinnerService.stop(spinnerRef);
             }
           } else {
-            this.openSnackBar("Something goes wrong, try again","Check-Out");
+            this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@shared.error:`);
             this.spinnerService.stop(spinnerRef);
           }
           this.dialogRef.close();
         }),
         catchError(err => {
-          this.openSnackBar("Something goes wrong on process, try again","Check-Out");
+          this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@shared.error:`);
           this.spinnerService.stop(spinnerRef);
           return err.message;
         })

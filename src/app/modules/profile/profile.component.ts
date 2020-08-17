@@ -63,7 +63,7 @@ export class ProfileComponent implements OnInit {
     this.businessId = this.authService.businessId();
     this.userId = this.authService.userId();
 
-    var spinnerRef = this.spinnerService.start("Loading Profile...");
+    var spinnerRef = this.spinnerService.start($localize`:@@profile.loading:`);
     this.profileForm.reset({Email:'', First_Name: '', Last_Name: '', Avatar: '', Phone: '', Language: ''});
     this.user$ = this.usersService.getUser(this.userId, this.businessId).pipe(
       tap(res => {
@@ -79,7 +79,7 @@ export class ProfileComponent implements OnInit {
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
-        this.openDialog('Error !', err.Message, false, true, false);
+        this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
         return throwError(err || err.message);
       })
     );
@@ -103,20 +103,20 @@ export class ProfileComponent implements OnInit {
 
   getErrorMessage(component: string) {
     if (component === 'First_Name'){
-      return this.f.First_Name.hasError('required') ? 'You must enter a value' :
-          this.f.First_Name.hasError('minlength') ? 'Minimun length 3' :
-            this.f.First_Name.hasError('maxlength') ? 'Maximun length 100' :
+      return this.f.First_Name.hasError('required') ? $localize`:@@shared.entervalue:` :
+          this.f.First_Name.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
+            this.f.First_Name.hasError('maxlength') ? $localize`:@@shared.maximun: 100` :
               '';
     }
     if (component === 'Last_Name'){
-      return this.f.Last_Name.hasError('required') ? 'You must enter a value' :
-          this.f.Last_Name.hasError('minlength') ? 'Minimun length 3' :
-            this.f.Last_Name.hasError('maxlength') ? 'Maximun length 100' :
+      return this.f.Last_Name.hasError('required') ? $localize`:@@shared.entervalue:` :
+          this.f.Last_Name.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
+            this.f.Last_Name.hasError('maxlength') ? $localize`:@@shared.maximun: 100` :
               '';
     }
     if (component === 'Phone'){
-      return this.f.Phone.hasError('minlength') ? 'Minimun length 6' :
-            this.f.Phone.hasError('maxlength') ? 'Maximun length 15' :
+      return this.f.Phone.hasError('minlength') ? $localize`:@@shared.minimun: 6` :
+            this.f.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: 15` :
               '';
     }
   }
@@ -128,7 +128,7 @@ export class ProfileComponent implements OnInit {
       if (file === undefined) {return;}
       this.fileName = file['name'];
       if (file['type'] != "image/png" && file['type'] != "image/jpg" && file['type'] != "image/jpeg") { 
-        this.openDialog('User', 'File extension not allowed', false, true, false);
+        this.openDialog($localize`:@@shared.userpopup:`, $localize`:@@profile.fileextension:`, false, true, false);
         return; 
       }
       
@@ -137,7 +137,7 @@ export class ProfileComponent implements OnInit {
         let dimX = 75;
         let dimY = 75;
         if (file['size'] > 60000){
-          this.openDialog('User', 'File exced maximun allowed', false, true, false);
+          this.openDialog($localize`:@@shared.userpopup:`, $localize`:@@profile.filemaximun:`, false, true, false);
           return;
         }
         this.fileString = reader.result;
@@ -173,7 +173,7 @@ export class ProfileComponent implements OnInit {
     if (this.profileForm.invalid){
       return;
     }
-    var spinnerRef = this.spinnerService.start("Saving Profile...");
+    var spinnerRef = this.spinnerService.start($localize`:@@profile.saving:`);
     let dataForm =  { 
       "Email": this.profileForm.value.Email,
       "First_Name": this.profileForm.value.First_Name,
@@ -185,11 +185,11 @@ export class ProfileComponent implements OnInit {
     this.userUpdate$ = this.usersService.updateProfile(this.userId, dataForm).pipe(
       tap(res =>  {
         this.spinnerService.stop(spinnerRef);
-        this.openDialog('User', 'User updated successful', true, false, false);
+        this.openDialog($localize`:@@shared.userpopup:`, $localize`:@@profile.updated:`, true, false, false);
       }),
       catchError(err => { 
         this.spinnerService.stop(spinnerRef);
-        this.openDialog('Error !', err.Message, false, true, false);
+        this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
         return throwError(err || err.message);
       })
     );
@@ -197,7 +197,7 @@ export class ProfileComponent implements OnInit {
 
   onSubmitAvatar() {
     const formData: FormData = new FormData();
-    var spinnerRef = this.spinnerService.start("Loading Profile Image...");
+    var spinnerRef = this.spinnerService.start($localize`:@@profile.loadprof:`);
     formData.append('Image', this.fileString);
     let type: string ='';
     if (this.fileString.toString().indexOf('data:image/') >= 0){
@@ -216,12 +216,12 @@ export class ProfileComponent implements OnInit {
           this.authService.setUserAvatar(this.businessId+'/img/avatars/'+this.userId+type);
           this.avatarForm.reset({'Avatar':null});
           this.fileString = null;
-          this.openDialog('User', 'Avatar uploaded successful', true, false, false);
+          this.openDialog($localize`:@@shared.userpopup:`, $localize`:@@profile.uploadsuccess:`, true, false, false);
         }
       ),
       catchError(err => { 
         this.spinnerService.stop(spinnerRef);
-        this.openDialog('Error !', err.Message, false, true, false);
+        this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
         return throwError(err || err.message);
       })
     );

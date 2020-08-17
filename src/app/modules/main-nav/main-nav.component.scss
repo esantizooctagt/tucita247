@@ -12,6 +12,13 @@
 .spacer{
   flex: 1 1 auto;
 }
+.language-string{
+  color: #fff !important;
+  font-weight: 600;
+  font-family: Montserrat;
+  font-size: 14px;
+  line-height: 13px;
+}
 ::ng-deep div.mat-menu-panel {
   min-width: 180px !important;
   max-width: 300px !important;

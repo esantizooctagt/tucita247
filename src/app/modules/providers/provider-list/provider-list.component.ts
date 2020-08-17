@@ -120,7 +120,7 @@ export class ProviderListComponent implements OnInit {
 
   loadProviders(crPage, crItems, crSearch, crlastItem) {
     this.onError = '';
-    var spinnerRef = this.spinnerService.start("Loading Service providers...");
+    var spinnerRef = this.spinnerService.start($localize`:@@providers.loadservice:`);
     let data = this.businessId + "/" + crItems + (crSearch === '' ? '/_' : '/' + crSearch) + (crlastItem === '' ? '/_' : '/' +  crlastItem);
 
     this.providers$ = this.providerService.getProviders(data).pipe(
@@ -183,8 +183,8 @@ export class ProviderListComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = false;
     dialogConfig.data = {
-      header: 'Service provider', 
-      message: 'Are you sure to delete this Service provider?', 
+      header: $localize`:@@providers.servprovider:`, 
+      message: $localize`:@@providers.deletemessage:`, 
       success: false, 
       error: false, 
       warn: false,
@@ -197,7 +197,7 @@ export class ProviderListComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
       if(result != undefined){
-        var spinnerRef = this.spinnerService.start("Deleting Service...");
+        var spinnerRef = this.spinnerService.start($localize`:@@providers.deletingservice:`);
         if (result){ 
           this.deleteProvider$ = this.providerService.deleteProvider(this.businessId, service.value.LocationId, service.value.ProviderId).pipe(
             tap(res => {
@@ -206,12 +206,12 @@ export class ProviderListComponent implements OnInit {
               this.loadProviders(
                 this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].providerId
               );
-              this.openDialog('Service provider', 'Service provider deleted successfully', true, false, false);
+              this.openDialog($localize`:@@providers.servprovider:`, $localize`:@@providers.deletedsuccess:`, true, false, false);
             }),
             catchError(err => {
               this.spinnerService.stop(spinnerRef);
               this.displayYesNo = false;
-              this.openDialog('Error ! ', err.Message, false, true, false);
+              this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
               return throwError (err || err.message);
             })
           );

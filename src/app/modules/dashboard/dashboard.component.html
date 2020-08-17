@@ -3,14 +3,14 @@
         <div class="col-md-12 pl-4 m-0">
             <div class="pl-0 pt-1 pb-2 col-md-12 mt-1 mb-1 pr-0 header-route">
                 <div class="row p-0 m-0 line-height">
-                    <h3 class="col-md-8 line-height pl-0">DASHBOARD</h3>
+                    <h3 class="col-md-8 line-height pl-0" i18n="DASHBOARD|Title Dashboard@@dashboard.title">DASHBOARD</h3>
                 </div>
             </div>
             <div class="row p-0 m-0 line-cards">
                 <mat-card class="col-sm col-md col-lg mr-3 dashboard-plan">
                     <ng-container *ngIf="appos$ | async as appo">
                         <div class="row ml-2 mb-2">
-                            <h3 class="col-md-3 pl-2">Citas available</h3>
+                            <h3 class="col-md-3 pl-2" i18n="Citas available|Text in Dashboard@@dashboard.citas" >Citas available</h3>
                             <div class="col-md labels-content">
                                 {{appo.DueDate | date: 'MMM d'}}
                             </div>
@@ -25,14 +25,14 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 ml-3 labels-appo">
-                                <span class="">Additional Citas Packages</span>
+                                <span class="" i18n="Additional Citas Packages|Text in dashboard@@dashboard.additionalpackages">Additional Citas Packages</span>
                             </div>
                             <div class="col-md labels-content">
                                 {{sumAdditional(appo.Packs)}}
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 ml-3 labels-appo">
+                            <div class="col-md-6 ml-3 labels-appo" i18n="Citas used|Text in dashboard@@citasused">
                                 Citas used
                             </div>
                             <div class="col-md used-label">
@@ -40,7 +40,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 ml-3 labels-appo">
+                            <div class="col-md-6 ml-3 labels-appo" i18n="Available|Text in dashboard@@available">
                                 Available
                             </div>
                             <div class="col-md labels-content">
@@ -48,19 +48,19 @@
                             </div>
                         </div>
                         <div class="row" *ngIf="appo.Packs.length > 0">
-                            <div class="col-md-6 ml-3 labels-appo">Citas about to expire on </div>
+                            <div class="col-md-6 ml-3 labels-appo" i18n="Citas about to expire on|Text in dashboard@@dashboard.largetext">Citas about to expire on </div>
                             <div class="col-md-2 labels-content">{{getExpire(appo.Packs) | date: 'MMM d'}}</div>
                             <div class="col-md-3 labels-content">{{getExpireCitas(appo.Packs)}}</div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 ml-3"></div>
-                            <button mat-stroked-button class="col-md-3 ml-3" color="secondary" type="button" (click)="addCitas()">+ Add Citas</button>
+                            <button mat-stroked-button class="col-md-3 ml-3" color="secondary" type="button" (click)="addCitas()" i18n="+ Add Citas|Buton en dashboard@@dashboard.button">+ Add Citas</button>
                         </div>
                     </ng-container>
                 </mat-card>
                 <mat-card class="col-sm col-md-4 col-lg-4">
                     <div class="row ml-2 mb-2">
-                        <h3>Current visitors</h3>
+                        <h3 i18n="Current visitors|text in dashboard@@currentvisitors">Current visitors</h3>
                     </div>
                     <div class="row ml-2 mb-2">
                         <mat-form-field class="col-md selection-line pl-0">
@@ -86,7 +86,7 @@
             <div class="row p-0 m-0 mt-3 mb-3">
                 <ng-container *ngIf="avgData$ | async"></ng-container>
                 <mat-card class="col-sm col-md col-lg graph-style">
-                    <h3 class="title-graph">Month to Date</h3>
+                    <h3 class="title-graph" i18n="Month to Date|text in dashboard@@Month to Date">Month to Date</h3>
                     <div class="row ml-2 mb-2">
                         <mat-tab-group (selectedTabChange)="changeGraph($event)">
                             <mat-tab label="Citas"></mat-tab>
@@ -111,7 +111,7 @@
                                 </ngx-charts-bar-vertical>
                             </ng-container>
                             <ng-template #nodata>
-                                <div class="not-found">No data found</div>
+                                <div class="not-found" i18n="No data found|text in dashboard@@nodatafound">No data found</div>
                             </ng-template>
                         </ng-container>
                     </div>

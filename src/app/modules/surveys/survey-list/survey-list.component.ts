@@ -119,7 +119,7 @@ export class SurveyListComponent implements OnInit {
 
   loadSurveys(crPage, crItems, crSearch, crlastItem) {
     this.onError = '';
-    var spinnerRef = this.spinnerService.start("Loading Surveys...");
+    var spinnerRef = this.spinnerService.start($localize`:@@surveys.loadingsurvs:`);
     let data = this.businessId + "/" + crItems + (crSearch === '' ? '/_' : '/' + crSearch) + (crlastItem === '' ? '/_' : '/' +  crlastItem);
 
     this.surveys$ = this.surveyService.getSurveys(data).pipe(
@@ -181,8 +181,8 @@ export class SurveyListComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = false;
     dialogConfig.data = {
-      header: 'Survey', 
-      message: 'Are you sure to delete this Survey?', 
+      header: $localize`:@@surveys.survey:`, 
+      message: $localize`:@@surveys.deletedtext:`, 
       success: false, 
       error: false, 
       warn: false,
@@ -195,7 +195,7 @@ export class SurveyListComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
       if(result != undefined){
-        var spinnerRef = this.spinnerService.start("Deleting Survey...");
+        var spinnerRef = this.spinnerService.start($localize`:@@surveys.deleting:`);
         if (result){ 
           this.deleteSurvey$ = this.surveyService.deleteSurvey(survey.value.SurveyId, this.businessId, survey.value.DateSurvey).pipe(
             tap(res => {
@@ -204,12 +204,12 @@ export class SurveyListComponent implements OnInit {
               this.loadSurveys(
                 this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].surveyId
               );
-              this.openDialog('Surveys', 'Survey deleted successful', true, false, false);
+              this.openDialog($localize`:@@surveys.survey:`, $localize`:@@surveys.deletedsuccessful:`, true, false, false);
             }),
             catchError(err => {
               this.spinnerService.stop(spinnerRef);
               this.displayYesNo = false;
-              this.openDialog('Error ! ', err.Message, false, true, false);
+              this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
               return throwError (err || err.message);
             })
           );

@@ -45,8 +45,8 @@ export class ForgotpassComponent implements OnInit {
 
   getErrorMessage(component: string) {
     if (component === 'Email'){
-      return this.f.Email.hasError('required') ? 'You must enter an Email' :
-        this.f.Email.hasError('pattern') ? 'Invalid email format':
+      return this.f.Email.hasError('required') ? $localize`:@@login.error:`:
+        this.f.Email.hasError('pattern') ? $localize`:@@forgot.emailformat:`:
           '';
     }
   }

@@ -1,5 +1,5 @@
 <div class="pl-0 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
-    <h3>POLLS</h3>
+    <h3 i18n="POLLS|title in polls@@polls.title">POLLS</h3>
 </div>
 <ng-container *ngIf="deletePoll$ | async"></ng-container>
 <ng-container *ngIf="polls$ | async"></ng-container>
@@ -7,28 +7,28 @@
     <mat-table [dataSource]="fPolls.controls" formArrayName="Polls" [trackBy]="trackRow"
         class="pl-0 pr-0 pt-1 pb-2 col-md-12 mt-1 mb-1 mat-elevation-z8">
         <ng-container matColumnDef="Name">
-            <mat-header-cell *matHeaderCellDef class="col-md-7"> Name </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef class="col-md-7" i18n="Name@@shared.name"> Name </mat-header-cell>
             <mat-cell *matCellDef="let element;let i=index" class="col-md-7">
                 {{element.value.Name}}
             </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="DatePoll">
-            <mat-header-cell *matHeaderCellDef class="col-md-2"> Initial Date Poll </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef class="col-md-2" i18n="Initial Date Poll|text in polls@@polls.initialdatepoll"> Initial Date Poll </mat-header-cell>
             <mat-cell *matCellDef="let element;let i=index" class="col-md-2">
                 {{element.value.DatePoll}}
             </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="DateFinPoll">
-            <mat-header-cell *matHeaderCellDef class="col-md-2"> Final Date Poll </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef class="col-md-2" i18n="Final Date Poll|text in polls@@polls.finaldatepoll"> Final Date Poll </mat-header-cell>
             <mat-cell *matCellDef="let element;let i=index" class="col-md-2">
                 {{element.value.DateFinPoll}}
             </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="Actions">
-            <mat-header-cell *matHeaderCellDef class="col-md-1"> Actions </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef class="col-md-1" i18n="Actions@@shared.actions"> Actions </mat-header-cell>
             <mat-cell *matCellDef="let element;let i=index" class="col-md-1 mat-column-Actions">
                 <button mat-icon-button (click)="onSelect(element.value.PollId)">
                     <mat-icon svgIcon="edit"></mat-icon>

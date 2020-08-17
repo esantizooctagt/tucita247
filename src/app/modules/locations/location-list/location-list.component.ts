@@ -117,7 +117,7 @@ export class LocationListComponent implements OnInit {
 
   loadLocations(crPage, crItems, crSearch, crlastItem) {
     this.onError = '';
-    var spinnerRef = this.spinnerService.start("Loading Service locations...");
+    var spinnerRef = this.spinnerService.start($localize`:@@locations.loadlocations:`);
     let data = this.businessId + "/" + crItems + (crSearch === '' ? '/_' : '/' + crSearch) + (crlastItem === '' ? '/_' : '/' +  crlastItem);
 
     this.locations$ = this.locationService.getLocationsData(data).pipe(

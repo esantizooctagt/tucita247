@@ -6,7 +6,8 @@
         <div class="col-md-12">
             <div class="row space-row mt-2 mb-2">
                 <div class="col-sm-5 p-0 m-auto">
-                    <mat-slide-toggle color="primary" [checked]="locationStatus == 1" (change)="locationStatusChange()">{{(locationStatus == 0 ? 'Your location is closed' : (closedLoc == 1 ? 'You need to reopen your location' : 'Your location is open'))}}</mat-slide-toggle>
+                    <!-- locationStatus == 0 ? 'Your location is closed' : (closedLoc == 1 ? 'You need to reopen your location' : 'Your location is open' -->
+                    <mat-slide-toggle color="primary" [checked]="locationStatus == 1" (change)="locationStatusChange()">{{textOpenLocation}}</mat-slide-toggle>
                 </div>
                 <div class="operation-buttons col-sm-7 p-0">
                     <!-- <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 0" color="secondary" type="button" (click)="getWalkInsCheckOut()">Walk-Ins Check Out</button> -->
@@ -19,7 +20,7 @@
                         </mat-option>
                     </mat-select>
                     <ng-container *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 1">
-                        <mat-label class="label-guests">Guests</mat-label>
+                        <mat-label class="label-guests" i18n="Guests|text in citas@@host.guests">Guests</mat-label>
                         <button mat-icon-button (click)="manualGuests=manualGuests+1">
                             <mat-icon class="site-color">add</mat-icon>
                         </button>
@@ -31,8 +32,8 @@
                             <mat-icon class="site-color">remove</mat-icon>
                         </button>
                     </ng-container>
-                    <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 1" color="secondary" type="button" (click)="setManualCheckOut(manualGuests)">Check Out</button>
-                    <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 0" color="secondary" type="button" (click)="checkOutQR()">Check Out</button>
+                    <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 1" color="secondary" type="button" (click)="setManualCheckOut(manualGuests)" i18n="Check Out|text in citas@@host.checkout">Check Out</button>
+                    <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 0" color="secondary" type="button" (click)="checkOutQR()" i18n="Check Out|text in citas@@host.checkout">Check Out</button>
                 </div>
             </div>
             <div class="row space-row">
@@ -54,16 +55,16 @@
         <ng-container *ngIf="reasons$ | async"></ng-container>
         <div class="col-sm col-md col-lg-12">
             <div class="row space-row mb-2">
-                <div class="col-md mt-2 title-qeue">
+                <div class="col-md mt-2 title-qeue" i18n="Citas|text in citas@@host.citas">
                     Citas
                 </div>
                 <div class="col-md mt-2 title-qeue">
-                    Walk-Ins
+                    <ng-container i18n="Walk-Ins|text in citas@@host.walk-ins">Walk-Ins</ng-container>
                     <button mat-mini-fab class="add_client" *ngIf="locationStatus == 1 && closedLoc == 0" (click)="showAppointment()">
                         <mat-icon>add</mat-icon>
                     </button>
                 </div>
-                <div class="col-md mt-2 title-qeue">
+                <div class="col-md mt-2 title-qeue" i18n="Ready To Check-In|text in citas@@host.readycheckin">
                     Ready To Check-In
                 </div>
             </div>
@@ -84,7 +85,7 @@
                             <mat-card-content>
                                 <div class="card-previous" (click)="showPrevious = !showPrevious; getPreviousAppos(prevHour)">
                                     <mat-icon *ngIf="showPrevious" svgIcon="menos"></mat-icon>
-                                    <mat-icon *ngIf="!showPrevious" svgIcon="mas"></mat-icon> Pending Citas from previous periods</div>
+                                    <mat-icon *ngIf="!showPrevious" svgIcon="mas" i18n=" Pending Citas from previous periods|text in citas@@host.pendingcitas"></mat-icon> Pending Citas from previous periods</div>
                             </mat-card-content>
                         </mat-card>
                         <ng-container *ngIf="appointmentsPrevious$ | async"></ng-container>
@@ -105,16 +106,16 @@
                                 </div>
                                 <ng-container *ngIf="showDetailsPrev[i]">
                                     <div class="row pr-3 pl-3 mt-2 mb-2">
-                                        <div class="card-contentprio col-md-6 pl-0">No. of guests: </div><div class="card-resultprio col-md">{{item.Guests}}</div>
+                                        <div class="card-contentprio col-md-6 pl-0" i18n="No. of guests: |text in citas@@host.noguests">No. of guests: </div><div class="card-resultprio col-md">{{item.Guests}}</div>
                                     </div>
                                     <!-- <div class="row pr-3 pl-3 mt-2 mb-2">
                                         <div class="card-contentprio col-md-6 pl-0">Purpose: </div><div class="card-resultprio-door col-md">{{item.Purpose}}</div>
                                     </div> -->
                                     <div class="row pr-3 pl-3 mt-2 mb-2">
-                                        <div class="card-contentprio col-md-6 pl-0">Door: </div><div class="card-resultprio-door col-md">{{item.Door}}</div>
+                                        <div class="card-contentprio col-md-6 pl-0" i18n="Door: |text in citas@@host.door">Door: </div><div class="card-resultprio-door col-md">{{item.Door}}</div>
                                     </div>
                                     <div class="row pr-3 pl-3 mt-2 mb-2">
-                                        <div class="card-contentprio col-md-6 pl-0">On Behalf: </div><div class="card-resultprio col-md">{{item.OnBehalf == '0' ? 'No' : 'Yes'}}</div>
+                                        <div class="card-contentprio col-md-6 pl-0" i18n="On Behalf: |text in citas@@host.onbehalf">On Behalf: </div><div class="card-resultprio col-md" *ngIf="item.OnBehalf  == 0" i18n="Yes@@shared.no">No</div><div class="card-resultprio col-md" *ngIf="item.OnBehalf  != 0" i18n="Yes@@shared.yes">Yes</div>
                                     </div>
                                 </ng-container>
                                 <div class="row mb-0 mt-2">
@@ -142,7 +143,7 @@
                                 <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showCancelOptionsPrev[i]">
                                     <div class="col-md-12 pl-0 pr-0">
                                         <mat-form-field>
-                                            <mat-label>Cancel reasons</mat-label>
+                                            <mat-label i18n="Cancel reasons|text in citas@@host.cancelreasons">Cancel reasons</mat-label>
                                             <mat-select [(value)]="selectedPrev[i]">
                                                 <mat-option *ngFor="let reason of reasons" [value]="reason.ReasonId">
                                                     {{reason.Description}}
@@ -151,14 +152,14 @@
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-12 pl-0 pr-0 mt-2 mb-2">
-                                        <button mat-flat-button type="button" color="primary" (click)="onCancelApp(item, selectedPrev[i], i, 'previous')" [disabled]="selectedPrev[i] == undefined">
+                                        <button mat-flat-button type="button" color="primary" (click)="onCancelApp(item, selectedPrev[i], i, 'previous')" [disabled]="selectedPrev[i] == undefined" i18n="Cancel Appointment|text in citas@@host.cancelappo">
                                             Cancel Appointment
                                         </button>
                                     </div>
                                 </div>
                                 <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showMessagePrev[i]">
                                     <div class="col-sm-10 pl-0 pr-0">
-                                        <textarea class="card-text" #messageText matInput placeholder="Write a comment..."></textarea>
+                                        <textarea class="card-text" #messageText matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
                                     </div>
                                     <div class="button-send col-md pr-0 pl-0">
                                         <button mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageText.value ,i, 'previous')">
@@ -200,16 +201,13 @@
                             </div>
                             <ng-container *ngIf="showDetailsSche[i]">
                                 <div class="row pr-3 pl-3 mt-2 mb-2">
-                                    <div class="card-contentprio col-md-6 pl-0">Number of guests: </div><div class="card-resultprio col-md">{{item.Guests}}</div>
-                                </div>
-                                <!-- <div class="row pr-3 pl-3 mt-2 mb-2">
-                                    <div class="card-contentprio col-md-6 pl-0">Purpose: </div><div class="card-resultprio-door col-md">{{item.Purpose}}</div>
-                                </div> -->
-                                <div class="row pr-3 pl-3 mt-2 mb-2">
-                                    <div class="card-contentprio col-md-6 pl-0">Door: </div><div class="card-resultprio-door col-md">{{item.Door}}</div>
+                                    <div class="card-contentprio col-md-6 pl-0" i18n="No. of guests: |text in citas@@host.noguests">Number of guests: </div><div class="card-resultprio col-md">{{item.Guests}}</div>
                                 </div>
                                 <div class="row pr-3 pl-3 mt-2 mb-2">
-                                    <div class="card-contentprio col-md-6 pl-0">On Behalf: </div><div class="card-resultprio col-md">{{item.OnBehalf == '0' ? 'No' : 'Yes'}}</div>
+                                    <div class="card-contentprio col-md-6 pl-0" i18n="Door: |text in citas@@host.door">Door: </div><div class="card-resultprio-door col-md">{{item.Door}}</div>
+                                </div>
+                                <div class="row pr-3 pl-3 mt-2 mb-2">
+                                    <div class="card-contentprio col-md-6 pl-0" i18n="On Behalf: |text in citas@@host.onbehalf">On Behalf: </div><div class="card-resultprio col-md" *ngIf="item.OnBehalf  == 0" i18n="Yes@@shared.no">No</div><div class="card-resultprio col-md" *ngIf="item.OnBehalf  != 0" i18n="Yes@@shared.yes">Yes</div>
                                 </div>
                             </ng-container>
                             <div class="row mb-0 mt-2">
@@ -237,7 +235,7 @@
                             <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showCancelOptionsSche[i]">
                                 <div class="col-md-12 pl-0 pr-0">
                                     <mat-form-field>
-                                        <mat-label>Cancel reasons</mat-label>
+                                        <mat-label i18n="Cancel reasons|text in citas@@host.cancelreasons">Cancel reasons</mat-label>
                                         <mat-select [(value)]="selectedSche[i]">
                                             <mat-option *ngFor="let reason of reasons" [value]="reason.ReasonId">
                                                 {{reason.Description}}
@@ -246,14 +244,14 @@
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-12 pl-0 pr-0 mt-2 mb-2">
-                                    <button mat-flat-button type="button" color="primary" (click)="onCancelApp(item, selectedSche[i], i, 'schedule')" [disabled]="selectedSche[i] == undefined">
+                                    <button mat-flat-button type="button" color="primary" (click)="onCancelApp(item, selectedSche[i], i, 'schedule')" [disabled]="selectedSche[i] == undefined" i18n="Cancel Appointment|text in citas@@host.cancelappo">
                                         Cancel Appointment
                                     </button>
                                 </div>
                             </div>
                             <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showMessageSche[i]">
                                 <div class="col-sm-10 pl-0 pr-0">
-                                    <textarea class="card-text" #messageText matInput placeholder="Write a comment..."></textarea>
+                                    <textarea class="card-text" #messageText matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
                                 </div>
                                 <div class="button-send col-md pr-0 pl-0">
                                     <button mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageText.value ,i, 'schedule')">
@@ -295,21 +293,21 @@
                             <ng-container *ngIf="newAppointment$ | async"></ng-container>
                             <form [formGroup]="clientForm" (ngSubmit)="addAppointment()">
                                 <div class="form-field pl-3 pr-3">
-                                    <mat-form-field hintLabel="Phone number">
+                                    <mat-form-field i18n-hintLabel="Phone number|text in citas@@host.phonenumber" hintLabel="Phone number">
                                         <input matInput #Phone placeholder="+1 (555) 555-1234" appPhoneMask maxlength="17" formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher">
                                         <mat-error *ngIf="f.Phone.invalid && f.Phone.touched">{{getErrorMessage('Phone')}}</mat-error>
                                     </mat-form-field>
                                 </div>
                                 <div class="form-field pl-3 pr-3">
-                                    <mat-form-field hintLabel="Name">
-                                        <input matInput #Name placeholder="Name" maxlength="100" minlength="3" formControlName="Name"
+                                    <mat-form-field i18n-hintLabel="Name|text in citas@@host.name" hintLabel="Name">
+                                        <input matInput #Name i18n-placeholder="Name|text in citas@@host.name" placeholder="Name" maxlength="100" minlength="3" formControlName="Name"
                                             [errorStateMatcher]="confirmValidParentMatcher" required>
                                         <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{getErrorMessage('Name')}}</mat-error>
                                     </mat-form-field>
                                 </div>
                                 <div class="form-field pl-3 pr-3">
-                                    <mat-form-field hintLabel="Name">
-                                        <mat-select placeholder="Service" name="services" formControlName="ServiceId">
+                                    <mat-form-field i18n-hintLabel="Service|text in citas@@host.service" hintLabel="Service">
+                                        <mat-select i18n-placeholder="Service|text in citas@@host.service" placeholder="Service" name="services" formControlName="ServiceId">
                                             <mat-option *ngFor="let item of services" [value]="item.ServiceId">
                                                 {{item.Name}}
                                             </mat-option>
@@ -325,47 +323,47 @@
                                     </mat-form-field>
                                 </div>
                                 <div class="form-field pl-3 pr-3">
-                                    <mat-form-field hintLabel="No of People">
-                                        <input matInput #Guests placeholder="No of People" maxlength="2" min="1" max="20" formControlName="Guests"
+                                    <mat-form-field i18n-hintLabel="No of People|text in citas@@host.noofpeople" hintLabel="No of People">
+                                        <input matInput #Guests i18n-placeholder="No of People|text in citas@@host.noofpeople" placeholder="No of People" maxlength="2" min="1" max="20" formControlName="Guests"
                                             [errorStateMatcher]="confirmValidParentMatcher" required>
                                         <mat-error *ngIf="f.Guests.invalid && f.Guests.touched">{{getErrorMessage('Guests')}}</mat-error>
                                     </mat-form-field>
                                 </div>
                                 <div class="form-field pl-3 pr-3">
-                                    <mat-form-field hintLabel="Date of birth">
-                                        <mat-label>Date of birth</mat-label>
+                                    <mat-form-field i18n-hintLabel="Date of birth|text in citas@@host.dateofbirth" hintLabel="Date of birth">
+                                        <mat-label i18n="Date of birth|text in citas@@host.dateofbirth">Date of birth</mat-label>
                                         <input matInput [matDatepicker]="dobClient" formControlName="DOB">
                                         <mat-datepicker-toggle matSuffix [for]="dobClient"></mat-datepicker-toggle>
                                         <mat-datepicker #dobClient></mat-datepicker>
                                     </mat-form-field>
                                 </div>
                                 <div class="form-field pl-3 pr-3">
-                                    <label>Gender</label>
+                                    <label i18n="Gender|text in citas@@host.gender">Gender</label>
                                     <mat-radio-group aria-label="Select an option" formControlName="Gender" class="client_gender mt-0">
-                                        <mat-radio-button matLine value="M">Male</mat-radio-button>
-                                        <mat-radio-button matLine value="F">Female</mat-radio-button>
-                                        <mat-radio-button matLine value="NA">Doesn't want to answer</mat-radio-button>
+                                        <mat-radio-button matLine value="M" i18n="Male|text in citas@@host.male">Male</mat-radio-button>
+                                        <mat-radio-button matLine value="F" i18n="Female|text in citas@@host.female">Female</mat-radio-button>
+                                        <mat-radio-button matLine value="NA" i18n="Doesn't want to answer|text in citas@@host.na">Doesn't want to answer</mat-radio-button>
                                     </mat-radio-group>
                                 </div>
                                 <div class="form-field pl-3 pr-3">
-                                    <label>Priority</label>
+                                    <label i18n="Priority|text in citas@@host.priority">Priority</label>
                                     <mat-radio-group aria-label="Select an option" formControlName="Disability" class="client_gender mt-0">
-                                        <mat-radio-button matLine value="1">Senior</mat-radio-button>
-                                        <mat-radio-button matLine value="2">Pregnant</mat-radio-button>
-                                        <mat-radio-button matLine value="3">Disable</mat-radio-button>
+                                        <mat-radio-button matLine value="1" i18n="Senior|text in citas@@host.senior">Senior</mat-radio-button>
+                                        <mat-radio-button matLine value="2" i18n="Pregnant|text in citas@@host.pregnant">Pregnant</mat-radio-button>
+                                        <mat-radio-button matLine value="3" i18n="Disability|text in citas@@host.disability">Disability</mat-radio-button>
                                     </mat-radio-group>
                                 </div>
                                 <div class="form-field pl-3 pr-3">
-                                    <label>Preference</label>
+                                    <label i18n="Preference|text in citas@@host.preference">Preference</label>
                                     <mat-radio-group aria-label="Select an option" formControlName="Preference" class="client_gender mt-0">
-                                        <mat-radio-button matLine value="1">SMS</mat-radio-button>
+                                        <mat-radio-button matLine value="1" i18n="SMS|text in citas@@host.sms">SMS</mat-radio-button>
                                         <mat-radio-button matLine value="2" i18n="Email@@shared.Email">Email</mat-radio-button>
-                                        <mat-radio-button matLine value="3">Push Notification</mat-radio-button>
+                                        <mat-radio-button matLine value="3" i18n="Push Notification|text in citas@@host.pushnot">Push Notification</mat-radio-button>
                                     </mat-radio-group>
                                 </div>
                                 <div>
-                                    <button mat-flat-button color="primary" id="save" [disabled]="!clientForm.valid" class="ml-3 mr-3 mt-2">Save</button>
-                                    <button mat-flat-button color="accent" id="cancel" type="button" (click)="onCancelAddAppointment()" class="mt-2">Cancel</button>
+                                    <button mat-flat-button color="primary" id="save" [disabled]="!clientForm.valid" class="ml-3 mr-3 mt-2" i18n="Save@@shared.save">Save</button>
+                                    <button mat-flat-button color="accent" id="cancel" type="button" (click)="onCancelAddAppointment()" class="mt-2" i18n="Cancel@@shared.cancel">Cancel</button>
                                 </div>
                                 <!-- {{ clientForm.value | json }} -->
                             </form>
@@ -386,16 +384,13 @@
                             </div>
                             <ng-container *ngIf="showDetailsWalk[i]">
                                 <div class="row pr-3 pl-3 mt-2 mb-2">
-                                    <div class="card-contentprio col-md-6 pl-0">Number of guests: </div><div class="card-resultprio col-md">{{item.Guests}}</div>
-                                </div>
-                                <!-- <div class="row pr-3 pl-3 mt-2 mb-2">
-                                    <div class="card-contentprio col-md-6 pl-0">Purpose: </div><div class="card-resultprio-door col-md">{{item.Purpose}}</div>
-                                </div> -->
-                                <div class="row pr-3 pl-3 mt-2 mb-2">
-                                    <div class="card-contentprio col-md-6 pl-0">Door: </div><div class="card-resultprio-door col-md">{{item.Door}}</div>
+                                    <div class="card-contentprio col-md-6 pl-0" i18n="No. of guests: |text in citas@@host.noguests">Number of guests: </div><div class="card-resultprio col-md">{{item.Guests}}</div>
                                 </div>
                                 <div class="row pr-3 pl-3 mt-2 mb-2">
-                                    <div class="card-contentprio col-md-6 pl-0">On Behalf: </div><div class="card-resultprio col-md">{{item.OnBehalf == '0' ? 'No' : 'Yes'}}</div>
+                                    <div class="card-contentprio col-md-6 pl-0" i18n="Door: |text in citas@@host.door">Door: </div><div class="card-resultprio-door col-md">{{item.Door}}</div>
+                                </div>
+                                <div class="row pr-3 pl-3 mt-2 mb-2">
+                                    <div class="card-contentprio col-md-6 pl-0" i18n="On Behalf: |text in citas@@host.onbehalf">On Behalf: </div><div class="card-resultprio col-md" *ngIf="item.OnBehalf  == 0" i18n="Yes@@shared.no">No</div><div class="card-resultprio col-md" *ngIf="item.OnBehalf  != 0" i18n="Yes@@shared.yes">Yes</div>
                                 </div>
                             </ng-container>
                             <div class="row mb-0 mt-2">
@@ -423,7 +418,7 @@
                             <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showCancelOptionsWalk[i]">
                                 <div class="col-md-12 pl-0 pr-0">
                                     <mat-form-field>
-                                        <mat-label>Cancel reasons</mat-label>
+                                        <mat-label i18n="Cancel reasons|text in citas@@host.cancelreasons">Cancel reasons</mat-label>
                                         <mat-select [(value)]="selectedWalk[i]">
                                             <mat-option *ngFor="let reason of reasons" [value]="reason.ReasonId">
                                                 {{reason.Description}}
@@ -432,14 +427,14 @@
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-12 pl-0 pr-0 mt-2 mb-2">
-                                    <button mat-flat-button type="button" color="primary" (click)="onCancelApp(item, selectedWalk[i], i, 'walkin')" [disabled]="selectedWalk[i] == undefined">
+                                    <button mat-flat-button type="button" color="primary" (click)="onCancelApp(item, selectedWalk[i], i, 'walkin')" [disabled]="selectedWalk[i] == undefined" i18n="Cancel Appointment|text in citas@@host.cancelappo">
                                         Cancel Appointment
                                     </button>
                                 </div>
                             </div>
                             <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showMessageWalk[i]">
                                 <div class="col-sm-10 pl-0 pr-0">
-                                    <textarea class="card-text" #messageText matInput placeholder="Write a comment..."></textarea>
+                                    <textarea class="card-text" #messageText matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
                                 </div>
                                 <div class="button-send col-md pr-0 pl-0">
                                     <button mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageText.value ,i, 'walkin')">
@@ -501,16 +496,13 @@
                             </div>
                             <ng-container *ngIf="showDetailsCheck[i]">
                                 <div class="row pr-3 pl-3 mt-2 mb-2">
-                                    <div class="card-contentprio col-md-6 pl-0">Number of guests: </div><div class="card-resultprio col-md">{{item.Guests}}</div>
-                                </div>
-                                <!-- <div class="row pr-3 pl-3 mt-2 mb-2">
-                                    <div class="card-contentprio col-md-6 pl-0">Purpose: </div><div class="card-resultprio-door col-md">{{item.Purpose}}</div>
-                                </div> -->
-                                <div class="row pr-3 pl-3 mt-2 mb-2">
-                                    <div class="card-contentprio col-md-6 pl-0">Door: </div><div class="card-resultprio-door col-md">{{item.Door}}</div>
+                                    <div class="card-contentprio col-md-6 pl-0" i18n="No. of guests: |text in citas@@host.noguests">Number of guests: </div><div class="card-resultprio col-md">{{item.Guests}}</div>
                                 </div>
                                 <div class="row pr-3 pl-3 mt-2 mb-2">
-                                    <div class="card-contentprio col-md-6 pl-0">On Behalf: </div><div class="card-resultprio col-md">{{item.OnBehalf == '0' ? 'No' : 'Yes'}}</div>
+                                    <div class="card-contentprio col-md-6 pl-0" i18n="Door: |text in citas@@host.door">Door: </div><div class="card-resultprio-door col-md">{{item.Door}}</div>
+                                </div>
+                                <div class="row pr-3 pl-3 mt-2 mb-2">
+                                    <div class="card-contentprio col-md-6 pl-0" i18n="On Behalf: |text in citas@@host.onbehalf">On Behalf: </div><div class="card-resultprio col-md" *ngIf="item.OnBehalf  == 0" i18n="Yes@@shared.no">No</div><div class="card-resultprio col-md" *ngIf="item.OnBehalf  != 0" i18n="Yes@@shared.yes">Yes</div>
                                 </div>
                             </ng-container>
                             <div class="row mb-0 mt-2 p-0">
@@ -538,7 +530,7 @@
                             <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showCancelOptionsCheck[i]">
                                 <div class="col-md-12 pl-0 pr-0">
                                     <mat-form-field>
-                                        <mat-label>Cancel reasons</mat-label>
+                                        <mat-label i18n="Cancel reasons|text in citas@@host.cancelreasons">Cancel reasons</mat-label>
                                         <mat-select [(value)]="selectedCheck[i]">
                                             <mat-option *ngFor="let reason of reasons" [value]="reason.ReasonId">
                                                 {{reason.Description}}
@@ -547,14 +539,14 @@
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-12 pl-0 pr-0 mt-2 mb-2">
-                                    <button mat-flat-button type="button" color="primary" (click)="onCancelApp(item, selectedCheck[i], i, 'checkin')" [disabled]="selectedCheck[i] == undefined">
+                                    <button mat-flat-button type="button" color="primary" (click)="onCancelApp(item, selectedCheck[i], i, 'checkin')" [disabled]="selectedCheck[i] == undefined" i18n="Cancel Appointment|text in citas@@host.cancelappo">
                                         Cancel Appointment
                                     </button>
                                 </div>
                             </div>
                             <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showMessageCheck[i]">
                                 <div class="col-sm-10 pl-0 pr-0">
-                                    <textarea class="card-text" #messageText matInput placeholder="Write a comment..."></textarea>
+                                    <textarea class="card-text" #messageText matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
                                 </div>
                                 <div class="button-send col-md pr-0 pl-0">
                                     <button mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageText.value ,i, 'checkin')">

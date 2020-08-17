@@ -149,7 +149,7 @@ export class BusinessComponent implements OnInit {
   })
 
   ngOnInit() {
-    var spinnerRef = this.spinnerService.start("Loading Business...");
+    var spinnerRef = this.spinnerService.start($localize`:@@business.loading:`);
     this.businessId = this.authService.businessId();
 
     this.sectors[0] = [];
@@ -288,7 +288,7 @@ export class BusinessComponent implements OnInit {
       if (file === undefined) {return;}
       this.fileName = file['name'];
       if (file['type'] != "image/png" && file['type'] != "image/jpg" && file['type'] != "image/jpeg") { 
-        this.openDialog('Business', 'File extension not allowed', false, true, false);
+        this.openDialog($localize`:@@business.businesstextpopup:`, $localize`:@@profile.fileextension:`, false, true, false);
         return; 
       }
       
@@ -297,7 +297,7 @@ export class BusinessComponent implements OnInit {
         let dimX = 75;
         let dimY = 75;
         if (file['size'] > 60000){
-          this.openDialog('Business', 'File exced maximun allowed', false, true, false);
+          this.openDialog($localize`:@@business.businesstextpopup:`, $localize`:@@profile.filemaximun:`, false, true, false);
           return;
         }
         this.fileString = reader.result;
@@ -310,7 +310,7 @@ export class BusinessComponent implements OnInit {
 
   onSubmitImage(){
     const formData: FormData = new FormData();
-    var spinnerRef = this.spinnerService.start("Loading Monile App Image...");
+    var spinnerRef = this.spinnerService.start($localize`:@@business.loadinbmobimg:`);
     formData.append('Image', this.fileString);
     let type: string ='';
     if (this.fileString.toString().indexOf('data:image/') >= 0){
@@ -329,7 +329,7 @@ export class BusinessComponent implements OnInit {
           // this.authService.setUserAvatar(this.businessId+'/img/mobile/'+this.businessId+type);
           this.imageForm.reset({'Imagen':null});
           this.fileString = null;
-          this.openDialog('Business', 'Image uploaded successful', true, false, false);
+          this.openDialog($localize`:@@business.businesstextpopup:`, $localize`:@@business.uploadimg:`, true, false, false);
         }
       ),
       catchError(err => { 
@@ -347,7 +347,7 @@ export class BusinessComponent implements OnInit {
       if (file === undefined) {return;}
       this.fileNameLink = file['name'];
       if (file['type'] != "image/png" && file['type'] != "image/jpg" && file['type'] != "image/jpeg") { 
-        this.openDialog('Business', 'File extension not allowed', false, true, false);
+        this.openDialog($localize`:@@business.businesstextpopup:`, $localize`:@@profile.fileextension:`, false, true, false);
         return; 
       }
       
@@ -356,7 +356,7 @@ export class BusinessComponent implements OnInit {
         let dimX = 75;
         let dimY = 75;
         if (file['size'] > 900000){
-          this.openDialog('Business', 'File exced maximun allowed', false, true, false);
+          this.openDialog($localize`:@@business.businesstextpopup:`, $localize`:@@profile.filemaximun:`, false, true, false);
           return;
         }
         this.fileStringLink = reader.result;
@@ -369,7 +369,7 @@ export class BusinessComponent implements OnInit {
 
   onSubmitImageLink(){
     const formData: FormData = new FormData();
-    var spinnerRef = this.spinnerService.start("Loading Web Link Image...");
+    var spinnerRef = this.spinnerService.start($localize`:@@business.laodweblink:`);
     formData.append('Image', this.fileStringLink);
     let type: string ='';
     if (this.fileStringLink.toString().indexOf('data:image/') >= 0){
@@ -387,12 +387,12 @@ export class BusinessComponent implements OnInit {
           this.businessForm.patchValue({'ImagenLink': this.businessId+'/img/link/'+this.businessId+type});
           this.imageFormLink.reset({'Imagen_Link':null});
           this.fileStringLink = null;
-          this.openDialog('Business', 'Image uploaded successful', true, false, false);
+          this.openDialog($localize`:@@business.businesstextpopup:`, $localize`:@@business.uploadimg:`, true, false, false);
         }
       ),
       catchError(err => { 
         this.spinnerService.stop(spinnerRef);
-        this.openDialog('Error !', err.Message, false, true, false);
+        this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
         return throwError(err || err.message);
       })
     );
@@ -438,88 +438,88 @@ export class BusinessComponent implements OnInit {
 
   getErrorMessage(component: string, index: number=0) {
     if (component === 'Name'){
-      return this.fBusiness.Name.hasError('required') ? 'You must enter a value' :
-        this.fBusiness.Name.hasError('minlength') ? 'Minimun length 3' :
-          this.fBusiness.Name.hasError('maxlength') ? 'Maximum length 500' :
+      return this.fBusiness.Name.hasError('required') ? $localize`:@@shared.entervalue:` :
+        this.fBusiness.Name.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
+          this.fBusiness.Name.hasError('maxlength') ? $localize`:@@shared.maximun: 500` :
             '';
     }
     if (component === 'Country'){
-      return this.fBusiness.Country.hasError('required') ? 'You must select a valid value' :
-        this.fBusiness.Country.hasError('validObject') ? 'Invalid value' :
+      return this.fBusiness.Country.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
+        this.fBusiness.Country.hasError('validObject') ? $localize`:@@shared.invalidvalue:` :
           '';
     }
     if (component === 'Address'){
-      return this.fBusiness.Address.hasError('required') ? 'You must enter a value' :
-        this.fBusiness.Address.hasError('minlength') ? 'Minimun length 3' :
-          this.fBusiness.Address.hasError('maxlength') ? 'Maximum length 500' :
+      return this.fBusiness.Address.hasError('required') ? $localize`:@@shared.entervalue:` :
+        this.fBusiness.Address.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
+          this.fBusiness.Address.hasError('maxlength') ? $localize`:@@shared.maximun: 500` :
             '';
     }
     if (component === 'LongDescription'){
-      return this.fBusiness.LongDescription.hasError('required') ? 'You must enter a value' :
-        this.fBusiness.LongDescription.hasError('minlength') ? 'Minimun length 10' :
-          this.fBusiness.LongDescription.hasError('maxlength') ? 'Maximum length 255' :
+      return this.fBusiness.LongDescription.hasError('required') ? $localize`:@@shared.entervalue:` :
+        this.fBusiness.LongDescription.hasError('minlength') ? $localize`:@@shared.minimun: 10` :
+          this.fBusiness.LongDescription.hasError('maxlength') ? $localize`:@@shared.maximun: 255` :
             '';
     }
     if (component === 'ShortDescription'){
-      return this.fBusiness.ShortDescription.hasError('required') ? 'You must enter a value' :
-        this.fBusiness.ShortDescription.hasError('minlength') ? 'Minimun length 10' :
-          this.fBusiness.ShortDescription.hasError('maxlength') ? 'Maximum length 100' :
+      return this.fBusiness.ShortDescription.hasError('required') ? $localize`:@@shared.entervalue:` :
+        this.fBusiness.ShortDescription.hasError('minlength') ? $localize`:@@shared.minimun: 10` :
+          this.fBusiness.ShortDescription.hasError('maxlength') ? $localize`:@@shared.maximun: 100` :
             '';
     }
     if (component === 'TuCitaLink'){
-      return this.fBusiness.TuCitaLink.hasError('required') ? 'You must enter a value' :
-        this.fBusiness.TuCitaLink.hasError('minlength') ? 'Minimun length 2' :
-          this.fBusiness.TuCitaLink.hasError('maxlength') ? 'Maximum length 50' :
+      return this.fBusiness.TuCitaLink.hasError('required') ? $localize`:@@shared.entervalue:` :
+        this.fBusiness.TuCitaLink.hasError('minlength') ? $localize`:@@shared.minimun: 2` :
+          this.fBusiness.TuCitaLink.hasError('maxlength') ? $localize`:@@shared.maximun: 50` :
             '';
     }
     if (component === 'City'){
-      return this.fBusiness.State.hasError('required') ? 'You must enter a value' :
-        this.fBusiness.State.hasError('maxlength') ? 'Maximun length 100' :
-          this.fBusiness.State.hasError('minlength') ? 'Minimun length 2' :
+      return this.fBusiness.State.hasError('required') ? $localize`:@@shared.entervalue:` :
+        this.fBusiness.State.hasError('maxlength') ? $localize`:@@shared.maximun: 100` :
+          this.fBusiness.State.hasError('minlength') ? $localize`:@@shared.minimun: 2` :
           '';
     }
     if (component === 'ZipCode'){
-      return this.fBusiness.ZipCode.hasError('maxlength') ? 'Maximun length 10' :
-        this.fBusiness.ZipCode.hasError('minlength') ? 'Minimun length 3' :
+      return this.fBusiness.ZipCode.hasError('maxlength') ? $localize`:@@shared.maximun: 10` :
+        this.fBusiness.ZipCode.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
         '';
     }
     if (component === 'Geolocation'){
-      return this.fBusiness.House_No.hasError('maxlength') ? 'Maximun length 50' :
-        this.fBusiness.House_No.hasError('minlength') ? 'Minimun length 5' :
+      return this.fBusiness.House_No.hasError('maxlength') ? $localize`:@@shared.maximun: 50` :
+        this.fBusiness.House_No.hasError('minlength') ? $localize`:@@shared.minimun: 5` :
         '';
     }
     if (component === 'Phone'){
-      return this.fBusiness.Phone.hasError('maxlength') ? 'Maximun length 15' :
-        this.fBusiness.Phone.hasError('minlength') ? 'Minimun length 3' :
+      return this.fBusiness.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: 15` :
+        this.fBusiness.Phone.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
         '';
     }
     if (component === 'Website'){
-      return this.fBusiness.Phone.hasError('maxlength') ? 'Maximun length 150' :
-        this.fBusiness.Phone.hasError('minlength') ? 'Minimun length 4' :
+      return this.fBusiness.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: 150` :
+        this.fBusiness.Phone.hasError('minlength') ? $localize`:@@shared.minimun: 4` :
         '';
     }
     if (component === 'Facebook'){
-      return this.fBusiness.Phone.hasError('maxlength') ? 'Maximun length 150' :
-        this.fBusiness.Phone.hasError('minlength') ? 'Minimun length 4' :
+      return this.fBusiness.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: 150` :
+        this.fBusiness.Phone.hasError('minlength') ? $localize`:@@shared.minimun: 4` :
         '';
     }
     if (component === 'Twitter'){
-      return this.fBusiness.Phone.hasError('maxlength') ? 'Maximun length 150' :
-        this.fBusiness.Phone.hasError('minlength') ? 'Minimun length 4' :
+      return this.fBusiness.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: 150` :
+        this.fBusiness.Phone.hasError('minlength') ? $localize`:@@shared.minimun: 4` :
         '';
     }
     if (component === 'Instagram'){
-      return this.fBusiness.Phone.hasError('maxlength') ? 'Maximun length 150' :
-        this.fBusiness.Phone.hasError('minlength') ? 'Minimun length 4' :
+      return this.fBusiness.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: 150` :
+        this.fBusiness.Phone.hasError('minlength') ? $localize`:@@shared.minimun: 4` :
         '';
     }
     if (component === 'Email'){
-      return this.fBusiness.Email.hasError('required') ? 'You must enter a value' :
-        this.fBusiness.Email.hasError('pattern') ? 'Email invalid' :
+      return this.fBusiness.Email.hasError('required') ? $localize`:@@shared.entervalue:` :
+        this.fBusiness.Email.hasError('pattern') ? $localize`:@@forgot.emailformat:` :
         '';
     }
     if (component === 'CategoryId'){
-      return this.fBusiness.CategoryId.hasError('required') ? 'You must select a value' :
+      return this.fBusiness.CategoryId.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
         '';
     }
   }
@@ -580,7 +580,7 @@ export class BusinessComponent implements OnInit {
       "CategoryId": this.businessForm.value.CategoryId.toString(),
       "ParentBusiness": (this.businessForm.value.ParentBusiness ? 1 : 0)
     }
-    var spinnerRef = this.spinnerService.start("Saving Business...");
+    var spinnerRef = this.spinnerService.start($localize`:@@business.saving:`);
     this.businessSave$ = this.businessService.updateBusiness(this.businessId, dataForm).pipe(
       tap(res => { 
         this.spinnerService.stop(spinnerRef);
@@ -589,12 +589,12 @@ export class BusinessComponent implements OnInit {
         this.businessForm.controls.TuCitaLink.enable();
         this.businessForm.markAsPristine();
         this.businessForm.markAsUntouched();
-        this.openDialog('Business', 'Business updated successful', true, false, false);
+        this.openDialog($localize`:@@business.businesstextpopup:`, $localize`:@@business.businessupdate:`, true, false, false);
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
         this.savingBusiness = false;
-        this.openDialog('Error !', err.Message, false, true, false);
+        this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
         return throwError(err || err.message);
       })
     );

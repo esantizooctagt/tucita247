@@ -67,7 +67,7 @@ export class UserlocComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    var spinnerRef = this.spinnerService.start("Loading Users...");
+    var spinnerRef = this.spinnerService.start($localize`:@@userloc.loadinguser:`);
     this.businessId = this.authService.businessId();
     this._page = 1;
     this._currentPage.push({ page: this._page, userId: '' });
@@ -108,7 +108,7 @@ export class UserlocComponent implements OnInit {
 
   setUsers(usrs: any[]) {
     const formArray = new FormArray([]);
-    var spinnerRef = this.spinnerService.start("Loading Users...");
+    var spinnerRef = this.spinnerService.start($localize`:@@userloc.loadinguser:`);
     let i: number = 0;
     usrs.forEach((res: any) => {
       if (res.LocationId != "") {
@@ -153,12 +153,12 @@ export class UserlocComponent implements OnInit {
     this.saveUser$ = this.userService.updateUsersLocs(this.businessId, formData).pipe(
       map((res: any) => {
         if (res != null) {
-          this.openSnackBar("User updated successfully", "User Location");
+          this.openSnackBar($localize`:@@userloc.userupdated:`, $localize`:@@userloc.subtitle:`);
           return res.locs;
         }
       }),
       catchError(err => {
-        this.openSnackBar("Something goes wrong, try again", "User Location");
+        this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@userloc.subtitle:`);
         return throwError(err || err.message);
       })
     );
@@ -178,7 +178,7 @@ export class UserlocComponent implements OnInit {
   }
 
   loadUsers(crNumber: number, crItem: string) {
-    var spinnerRef = this.spinnerService.start("Loading Users...");
+    var spinnerRef = this.spinnerService.start($localize`:@@userloc.loadinguser:`);
     let data = this.businessId + "/" + crNumber + (crItem === '' ? '/_' : '/' + crItem);
 
     this.users$ = this.userService.getUsersLoc(data).pipe(

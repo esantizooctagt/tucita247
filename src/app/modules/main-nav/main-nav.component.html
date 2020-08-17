@@ -9,7 +9,7 @@
       <mat-nav-list color="primary">
         <a class="list-item-business" mat-list-item pt-2 mb-2>{{businessName}}</a>
         <mat-divider></mat-divider>
-        <a *ngIf="isAdmin" class="list-item" mat-list-item [routerLink]="['/welcome']" routerLinkActive="menu-active">Welcome</a>
+        <a *ngIf="isAdmin" class="list-item" mat-list-item [routerLink]="['/welcome']" routerLinkActive="menu-active" i18n="Welcome@@main.welcome">Welcome</a>
         <ng-container class="" *ngFor="let item of apps$ | async">
           <a class="list-item" *ngIf="item.Active == '1'" mat-list-item [routerLink]="['/'+item.Route]" routerLinkActive="menu-active">{{ item.Name }}</a>
         </ng-container>
@@ -19,39 +19,39 @@
           <mat-accordion multi="true" [displayMode]="displayMode">
             <mat-expansion-panel class="no-shadow">
               <mat-expansion-panel-header fxLayout="row" [expandedHeight]="expandHeight" [collapsedHeight]="collapseHeight">
-                <mat-panel-title>
+                <mat-panel-title i18n="Time Settings@@main.timesettings">
                   Time Settings
                 </mat-panel-title>
               </mat-expansion-panel-header>
               <mat-nav-list class="accordion-menu ml-0" dense>
                 <mat-list-item class="submenu-item">
-                  <a [routerLink]="['/businessope']" routerLinkActive="submenu-active" class="value-submenu-item">Company hours</a>
+                  <a [routerLink]="['/businessope']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Company hours@@main.companyh">Company hours</a>
                 </mat-list-item>
                 <mat-list-item class="submenu-item">
-                  <a [routerLink]="['/businessdays']" routerLinkActive="submenu-active" class="value-submenu-item">Company days off</a>
+                  <a [routerLink]="['/businessdays']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Company days off@@main.companydays">Company days off</a>
                 </mat-list-item>
                 <mat-list-item class="submenu-item">
-                  <a [routerLink]="['/locationope/1']" routerLinkActive="submenu-active" class="value-submenu-item">Location hours</a>
+                  <a [routerLink]="['/locationope/1']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Location hours@@main.locationh">Location hours</a>
                 </mat-list-item>
                 <mat-list-item class="submenu-item">
-                  <a [routerLink]="['/locationdays/1']" routerLinkActive="submenu-active" class="value-submenu-item">Location days off</a>
+                  <a [routerLink]="['/locationdays/1']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Location days off@@main.locationdays">Location days off</a>
                 </mat-list-item>
                 <mat-list-item class="submenu-item">
-                  <a [routerLink]="['/providerope/2']" routerLinkActive="submenu-active" class="value-submenu-item">Provider schedule</a>
+                  <a [routerLink]="['/providerope/2']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Provider schedule@@main.providerh">Provider schedule</a>
                 </mat-list-item>
                 <mat-list-item class="submenu-item">
-                  <a [routerLink]="['/providerdays/2']" routerLinkActive="submenu-active" class="value-submenu-item">Provider days off</a>
+                  <a [routerLink]="['/providerdays/2']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Provider days off@@main.providerdays">Provider days off</a>
                 </mat-list-item>
               </mat-nav-list>
             </mat-expansion-panel>
           </mat-accordion>
-          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/company']" routerLinkActive="menu-active">Company</a>
-          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/locations']" routerLinkActive="menu-active">Locations</a>
-          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/providers']" routerLinkActive="menu-active">Service Providers</a>
-          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/services']" routerLinkActive="menu-active">Services</a>
-          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/users']" routerLinkActive="menu-active">Users</a>
-          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/userloc']" routerLinkActive="menu-active">User Locations</a>
-          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/roles']" routerLinkActive="menu-active">Roles</a>
+          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/company']" routerLinkActive="menu-active" i18n="Company@@main.company">Company</a>
+          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/locations']" routerLinkActive="menu-active" i18n="Locations@@main.location">Locations</a>
+          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/providers']" routerLinkActive="menu-active" i18n="Service Providers@@main.provider">Service Providers</a>
+          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/services']" routerLinkActive="menu-active" i18n="Services@@main.services">Services</a>
+          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/users']" routerLinkActive="menu-active" i18n="Users@@main.users">Users</a>
+          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/userloc']" routerLinkActive="menu-active" i18n="User Locations@@main.userlocation">User Locations</a>
+          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/roles']" routerLinkActive="menu-active" i18n="Roles@@main.roles">Roles</a>
         </div>
       </mat-nav-list>
     </mat-sidenav>
@@ -74,13 +74,13 @@
         </button>
         <!-- <span></span> -->
         <span class="spacer"></span>
+        <a class="language-string">{{languageInit}}</a>
         <button mat-icon-button [matMenuTriggerFor]="languageMenu" class="mr-1">
-          <mat-icon *ngIf="language === ''">language</mat-icon>
-          <img [src]="language" width="20"/>
+          <mat-icon>language</mat-icon>
         </button>
         <mat-menu #languageMenu="matMenu" xPosition="before">
-          <a class="item-language" mat-menu-item href="https://console.tucita247.com/en"><img src="assets/images/icon/EN.svg" class="mr-4 ml-1" width="30"/>  English</a>
-          <a class="item-language" mat-menu-item href="https://console.tucita247.com/es"><img src="assets/images/icon/ES.svg" class="mr-4 ml-1" width="30"/>  Español</a>
+          <a class="item-language" mat-menu-item href="https://console.tucita247.com/en">English</a>
+          <a class="item-language" mat-menu-item href="https://console.tucita247.com/es">Español</a>
         </mat-menu>
         <!-- <button mat-icon-button class="mr-1" [routerLink]="['/help']">
           <mat-icon>help</mat-icon>
@@ -92,8 +92,8 @@
           </ng-template>
         </button>
         <mat-menu #userMenu="matMenu" xPosition="before">
-          <button mat-menu-item [routerLink]="['/profile']"><mat-icon>perm_identity</mat-icon>Profle</button>
-          <button mat-menu-item (click)="logout()"><mat-icon>exit_to_app</mat-icon>Logout</button>
+          <button mat-menu-item [routerLink]="['/profile']"><mat-icon>perm_identity</mat-icon><ng-container i18n="Profile@@main.profile">Profile</ng-container></button>
+          <button mat-menu-item (click)="logout()"><mat-icon>exit_to_app</mat-icon><ng-container i18n="Logout@@main.logout">Logout</ng-container></button>
         </mat-menu>
       </mat-toolbar>
       <router-outlet></router-outlet>
