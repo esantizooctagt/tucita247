@@ -210,9 +210,7 @@ export class AppoDialogComponent implements OnInit {
 
   addGuests(){
     let data = this.services.filter(x => x.ServiceId == this.serviceId);
-    console.log(data[0]['CustomerPerBooking']);
     let allowCustomer = data[0]['CustomerPerBooking'];
-    console.log(allowCustomer);
     this.varGuests = (this.varGuests+1 > allowCustomer ? this.varGuests : this.varGuests+1);
     this.clientForm.patchValue({Guests: this.varGuests});
   }
