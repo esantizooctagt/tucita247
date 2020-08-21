@@ -74,7 +74,7 @@ export class QuickCheckinComponent implements OnInit {
   ) { }
 
   clientForm = this.fb.group({
-    Phone: ['',[Validators.maxLength(14)]],
+    Phone: ['',[Validators.maxLength(17)]],
     Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     ServiceId: ['', [Validators.required]],
     Email: ['', [Validators.maxLength(200), Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
