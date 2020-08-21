@@ -34,6 +34,7 @@ export class AppoDialogComponent implements OnInit {
   locationId: string = '';
   providerId: string = '';
   newTime: string = '';
+  varGuests: number = 1;
   dayInfo: any[]=[];
 
   services: any[]=[];
@@ -205,6 +206,20 @@ export class AppoDialogComponent implements OnInit {
         break;
       }
     }
+  }
+
+  addGuests(){
+    let data = this.services.filter(x => x.ServiceId == this.serviceId);
+    console.log(data[0]['CustomerPerBooking']);
+    let allowCustomer = data[0]['CustomerPerBooking'];
+    console.log(allowCustomer);
+    this.varGuests = (this.varGuests+1 > allowCustomer ? this.varGuests : this.varGuests+1);
+    this.clientForm.patchValue({Guests: this.varGuests});
+  }
+
+  remGuests(){
+    this.varGuests = (this.varGuests > 1 ? this.varGuests-1 : this.varGuests);
+    this.clientForm.patchValue({Guests: this.varGuests});
   }
 
 }

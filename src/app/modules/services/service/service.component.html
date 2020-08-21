@@ -15,16 +15,24 @@
             </div>
             <div class="form-field pl-3 pr-3">
                 <mat-form-field hintLabel="Service duration" i18n-hintLabel="Service duration|text in services@@services.textduration">
-                    <input matInput #Name i18n-placeholder="Service duration|text in services@@services.textduration" placeholder="Service duration" maxlength="3" minlength="1" formControlName="TimeService"
+                    <input matInput #Name i18n-placeholder="Service duration|text in services@@services.textduration" placeholder="Service duration" max="4" min="1" minlength="1" formControlName="TimeService"
                         [errorStateMatcher]="confirmValidParentMatcher" required>
+                    <span matSuffix>hr</span>
                     <mat-error *ngIf="f.TimeService.invalid && f.TimeService.touched">{{getErrorMessage('TimeService')}}</mat-error>
                 </mat-form-field>
             </div>
             <div class="form-field pl-3 pr-3">
                 <mat-form-field hintLabel="Customer per Bucket" i18n-hintLabel="Customer per Bucket|text in services@@services.customerbucket">
-                    <input matInput #Name i18n-placeholder="Customer per Bucket|text in services@@services.customerbucket" placeholder="Customer per Bucket" maxlength="3" minlength="1" formControlName="CustomerPerTime"
+                    <input matInput #Name i18n-placeholder="Customer per Bucket|text in services@@services.customerbucket" placeholder="Customer per Bucket" max="9999" min="1" formControlName="CustomerPerTime"
                         [errorStateMatcher]="confirmValidParentMatcher" required>
                     <mat-error *ngIf="f.CustomerPerTime.invalid && f.CustomerPerTime.touched">{{getErrorMessage('CustomerPerTime')}}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="form-field pl-3 pr-3">
+                <mat-form-field hintLabel="Customer per Booking" i18n-hintLabel="Customer per Booking|text in services@@services.customerbooking">
+                    <input matInput #Name i18n-placeholder="Customer per Booking|text in services@@services.customerbooking" placeholder="Customer per Booking" max="9999" min="1" formControlName="CustomerPerBooking"
+                        [errorStateMatcher]="confirmValidParentMatcher" required>
+                    <mat-error *ngIf="f.CustomerPerTime.invalid && f.CustomerPerTime.touched">{{getErrorMessage('CustomerPerBooking')}}</mat-error>
                 </mat-form-field>
             </div>
             <div class="form-field pl-3 pr-3">

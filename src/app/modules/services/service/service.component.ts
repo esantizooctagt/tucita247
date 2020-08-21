@@ -42,8 +42,9 @@ export class ServiceComponent implements OnInit {
   serviceForm = this.fb.group({
     ServiceId: [''],
     Name: ['', [Validators.required, Validators.maxLength(100), Validators.minLength(3)]],
-    TimeService: ['', [Validators.required, Validators.max(999), Validators.min(1)]],
-    CustomerPerTime: ['', [Validators.required, Validators.max(999), Validators.min(1)]],
+    TimeService: ['', [Validators.required, Validators.max(4), Validators.min(1)]],
+    CustomerPerTime: ['', [Validators.required, Validators.max(9999), Validators.min(1)]],
+    CustomerPerBooking: ['', [Validators.required, Validators.max(9999), Validators.min(1)]],
     Color: ['', [Validators.required]],
     Status: [true]
   });
@@ -75,13 +76,14 @@ export class ServiceComponent implements OnInit {
   onDisplay(){
     if (this.serviceDataList != undefined){
       var spinnerRef = this.spinnerService.start($localize`:@@services.loadingserv:`);
-      this.serviceForm.reset({ ServiceId: '', Name: '', TimeService: '', CustomerPerTime: '', Color: '', Status: true});
+      this.serviceForm.reset({ ServiceId: '', Name: '', TimeService: '', CustomerPerTime: '', CustomerPerBooking: '', Color: '', Status: true});
       this.service$ = this.serviceService.getService(this.businessId, this.serviceDataList).pipe(
         map(res => {
           this.serviceForm.setValue({
             ServiceId: res.ServiceId,
             Name: res.Name,
             TimeService: res.TimeService,
+            CustomerPerBooking: res.CustomerPerBooking,
             CustomerPerTime: res.CustomerPerTime,
             Color: res.Color,
             Status: (res.Status == 1 ? true : false)
@@ -108,13 +110,19 @@ export class ServiceComponent implements OnInit {
     if (component === 'TimeService'){
       return this.f.TimeService.hasError('required') ? $localize`:@@shared.entervalue:` :
         this.f.TimeService.hasError('min') ? $localize`:@@shared.minimun: 1` :
-          this.f.TimeService.hasError('max') ? $localize`:@@shared.maximun: 999` :
+          this.f.TimeService.hasError('max') ? $localize`:@@shared.maximun: 4` :
           '';
     }
     if (component === 'CustomerPerTime'){
       return this.f.CustomerPerTime.hasError('required') ? $localize`:@@shared.entervalue:` :
         this.f.CustomerPerTime.hasError('min') ? $localize`:@@shared.minimun: 1`:
-          this.f.CustomerPerTime.hasError('max') ? $localize`:@@shared.maximun: 999` :
+          this.f.CustomerPerTime.hasError('max') ? $localize`:@@shared.maximun: 9999` :
+          '';
+    }
+    if (component === 'CustomerPerBooking'){
+      return this.f.CustomerPerBooking.hasError('required') ? $localize`:@@shared.entervalue:` :
+        this.f.CustomerPerBooking.hasError('min') ? $localize`:@@shared.minimun: 1`:
+          this.f.CustomerPerBooking.hasError('max') ? $localize`:@@shared.maximun: 9999` :
           '';
     }
     if (component === 'Color'){
@@ -124,7 +132,7 @@ export class ServiceComponent implements OnInit {
   }
 
   onCancel(){
-    this.serviceForm.reset({ ServiceId: '', Name: '', TimeService: '', CustomerPerTime: '', Color: '', Status: true});
+    this.serviceForm.reset({ ServiceId: '', Name: '', TimeService: '', CustomerPerTime: '', CustomerPerBooking: '', Color: '', Status: true});
   }
 
   onSubmit(){
@@ -136,6 +144,7 @@ export class ServiceComponent implements OnInit {
       TimeService: this.serviceForm.value.TimeService,
       Name: this.serviceForm.value.Name,
       CustomerPerTime: this.serviceForm.value.CustomerPerTime,
+      CustomerPerBooking: this.serviceForm.value.CustomerPerBooking,
       Color: this.serviceForm.value.Color,
       Status: this.serviceForm.value.Status == true ? 1 : 0
     }

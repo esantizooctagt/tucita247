@@ -94,24 +94,24 @@ export class MainNavComponent implements OnInit {
   }
 
   refreshToken(){
-    let token = this.authService.currentRefreshToken();
-    let userName = this.authService.cognitoUser();
-    let formData = {
-        RefreshTkn: token,
-        Email: userName
-    };
-    this.resetToken$ =  this.userService.updateToken(formData).pipe(
-      map((res: any) => {
-        if (res.Code == 200){
-            sessionStorage.setItem('TC247_TKN', JSON.stringify(res.token));
-            sessionStorage.setItem('TC247_ACT', JSON.stringify(res.access));
-        }
-    }),
-    catchError(res => {
-      return res;
-    })
-  );
-}
+      let token = this.authService.currentRefreshToken();
+      let userName = this.authService.cognitoUser();
+      let formData = {
+          RefreshTkn: token,
+          Email: userName
+      };
+      this.resetToken$ =  this.userService.updateToken(formData).pipe(
+        map((res: any) => {
+          if (res.Code == 200){
+              sessionStorage.setItem('TC247_TKN', JSON.stringify(res.token));
+              sessionStorage.setItem('TC247_ACT', JSON.stringify(res.access));
+          }
+      }),
+      catchError(res => {
+        return res;
+      })
+    );
+  }
 
   loadAccess(){
     this.apps$ = this.roleService.getApplications((this.roleId != '' ? this.roleId : 1), this.businessId, this.languageInit).pipe(

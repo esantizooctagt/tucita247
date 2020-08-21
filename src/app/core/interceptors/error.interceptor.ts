@@ -34,8 +34,9 @@ export class ErrorInterceptor implements HttpInterceptor {
                         // }
                         if (err.status === 401) {
                             // auto logout if 401 response returned from api
-                            this.authService.logout();
-                            location.reload(true);
+                            // this.authService.logout();
+                            // location.reload(true);
+                            this.refreshToken();
                         }
                         message = err.error.Message || err.statusText;
                         if (err.status === 404) {
@@ -52,5 +53,26 @@ export class ErrorInterceptor implements HttpInterceptor {
                     return throwError(error);
                 })
             );
+    }
+
+    refreshToken(){
+        let token = this.authService.currentRefreshToken();
+        let userName = this.authService.cognitoUser();
+        let formData = {
+            RefreshTkn: token,
+            Email: userName
+        };
+        this.userService.updateToken(formData).subscribe(
+        (res: any) => {
+            if (res.Code == 200){
+                console.log("error 401, refresh token");
+                sessionStorage.setItem('TC247_TKN', JSON.stringify(res.token));
+                sessionStorage.setItem('TC247_ACT', JSON.stringify(res.access));
+            }
+        },
+        catchError(res => {
+          return res;
+        })
+      );
     }
 }
