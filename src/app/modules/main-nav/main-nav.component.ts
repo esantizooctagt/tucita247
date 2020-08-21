@@ -89,7 +89,8 @@ export class MainNavComponent implements OnInit {
 
     setInterval(() => { 
       this.refreshToken();
-    }, 2700000);
+    }, 1800000);
+      //}, 2700000);
   }
 
   refreshToken(){
