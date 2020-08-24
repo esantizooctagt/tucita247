@@ -141,10 +141,12 @@ export class ProviderComponent implements OnInit {
   }
 
   getErrorMessage(component: string){
+    const val3 = '3';
+    const val100 = '100';
     if (component === 'Name'){
       return this.f.Name.hasError('required') ? $localize`:@@shared.entervalue:` :
-        this.f.Name.hasError('minlength') ? $localize`:@@shared.minimun: 3`:
-          this.f.Name.hasError('maxlength') ? $localize`:@@shared.maximun: 100` :
+        this.f.Name.hasError('minlength') ? $localize`:@@shared.minimun: ${val3}`:
+          this.f.Name.hasError('maxlength') ? $localize`:@@shared.maximun: ${val100}` :
             '';
     }
     if (component === 'LocationId'){

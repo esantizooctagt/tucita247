@@ -155,10 +155,12 @@ export class SurveyComponent implements OnInit {
   }
 
   getErrorMessage(component: string, index: number =0){
+    const val3 = '3';
+    const val100 = '100';
     if (component === 'Name'){
       return this.f.Name.hasError('required') ? $localize`:@@shared.entervalue:` :
-        this.f.Name.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
-          this.f.Name.hasError('maxlength') ? $localize`:@@shared.maximun: 100` :
+        this.f.Name.hasError('minlength') ? $localize`:@@shared.minimun: ${val3}` :
+          this.f.Name.hasError('maxlength') ? $localize`:@@shared.maximun: ${val100}` :
             '';
     }
     if (component === 'LocationId'){
@@ -172,8 +174,8 @@ export class SurveyComponent implements OnInit {
     if (component === 'QDescription'){
       let sDescription = (<FormArray>this.surveyForm.get('Questions')).controls[index].get('Description');
       return sDescription.hasError('required') ? $localize`:@@shared.entervalue:` :
-        sDescription.hasError('minlength') ? $localize`:@@shared.minimun: 3`:
-          sDescription.hasError('maxlength') ? $localize`:@@shared.maximun: 100` :
+        sDescription.hasError('minlength') ? $localize`:@@shared.minimun: ${val3}`:
+          sDescription.hasError('maxlength') ? $localize`:@@shared.maximun: ${val100}` :
             '';
     }
   }

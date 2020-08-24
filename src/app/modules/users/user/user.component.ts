@@ -108,28 +108,33 @@ export class UserComponent implements OnInit {
   }
 
   getErrorMessage(component: string) {
+    const val200 = '200';
+    const val3 = '3';
+    const val100 = '100';
+    const val6 = '6';
+    const val17 = '17';
     if (component === 'Email'){
       return this.f.Email.hasError('required') ? $localize`:@@login.error:` :
         this.f.Email.hasError('notUnique') ? $localize`:@@shared.emailregis:`:
-          this.f.Email.hasError('maxlength') ? $localize`:@@shared.maximun: 200` :
+          this.f.Email.hasError('maxlength') ? $localize`:@@shared.maximun: ${val200}` :
             this.f.Email.hasError('pattern') ? $localize`:@@forgot.emailformat:` :
             '';
     }
     if (component === 'First_Name'){
       return this.f.First_Name.hasError('required') ? $localize`:@@shared.entervalue:` :
-          this.f.First_Name.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
-            this.f.First_Name.hasError('maxlength') ? $localize`:@@shared.maximun: 100` :
+          this.f.First_Name.hasError('minlength') ? $localize`:@@shared.minimun: ${val3}` :
+            this.f.First_Name.hasError('maxlength') ? $localize`:@@shared.maximun: ${val100}` :
               '';
     }
     if (component === 'Last_Name'){
       return this.f.Last_Name.hasError('required') ? $localize`:@@shared.entervalue:` :
-          this.f.Last_Name.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
-            this.f.Last_Name.hasError('maxlength') ? $localize`:@@shared.maximun: 100` :
+          this.f.Last_Name.hasError('minlength') ? $localize`:@@shared.minimun: ${val3}` :
+            this.f.Last_Name.hasError('maxlength') ? $localize`:@@shared.maximun: ${val100}` :
               '';
     }
     if (component === 'Phone'){
-      return this.f.Phone.hasError('minlength') ? $localize`:@@shared.minimun: 6` :
-            this.f.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: 17` :
+      return this.f.Phone.hasError('minlength') ? $localize`:@@shared.minimun: ${val6}` :
+            this.f.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: ${val17}` :
               '';
     }
     if (component === 'RoleId'){

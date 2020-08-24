@@ -90,7 +90,7 @@ export class ShowappoDialogComponent implements OnInit {
       map((res: any) => {
         if (res != null ){
           if (res.Code == 200){
-            this.reasons = res.Reasons;
+            this.reasons = res.Reasons.split(',');
             return res.Reasons;
           }
         }
@@ -143,7 +143,7 @@ export class ShowappoDialogComponent implements OnInit {
     );
   }
 
-  onCancelApp(appo: any, reasonId: string, index: number, origin: string){
+  onCancelApp(appo: any, reasonId: string, index: number){
     //CANCELAR APPOINTMENT
     if (reasonId == undefined){
       this.openSnackBar($localize`:@@host.selectreason:`,$localize`:@@host.cancelappodyn:`);

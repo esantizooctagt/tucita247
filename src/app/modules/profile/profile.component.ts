@@ -102,21 +102,25 @@ export class ProfileComponent implements OnInit {
   }
 
   getErrorMessage(component: string) {
+    const val3 = '3';
+    const val6 = '6';
+    const val17 = '17';
+    const val100 = '100';
     if (component === 'First_Name'){
       return this.f.First_Name.hasError('required') ? $localize`:@@shared.entervalue:` :
-          this.f.First_Name.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
-            this.f.First_Name.hasError('maxlength') ? $localize`:@@shared.maximun: 100` :
+          this.f.First_Name.hasError('minlength') ? $localize`:@@shared.minimun: ${val3}` :
+            this.f.First_Name.hasError('maxlength') ? $localize`:@@shared.maximun: ${val100}` :
               '';
     }
     if (component === 'Last_Name'){
       return this.f.Last_Name.hasError('required') ? $localize`:@@shared.entervalue:` :
-          this.f.Last_Name.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
-            this.f.Last_Name.hasError('maxlength') ? $localize`:@@shared.maximun: 100` :
+          this.f.Last_Name.hasError('minlength') ? $localize`:@@shared.minimun: ${val3}` :
+            this.f.Last_Name.hasError('maxlength') ? $localize`:@@shared.maximun: ${val100}` :
               '';
     }
     if (component === 'Phone'){
-      return this.f.Phone.hasError('minlength') ? $localize`:@@shared.minimun: 6` :
-            this.f.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: 17` :
+      return this.f.Phone.hasError('minlength') ? $localize`:@@shared.minimun: ${val6}` :
+            this.f.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: ${val17}` :
               '';
     }
   }

@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '@core/services';
 import { Country, Category } from '@app/_models';
 import { Observable, Subscription, throwError } from 'rxjs';
-import { startWith, map, shareReplay, catchError, tap } from 'rxjs/operators';
+import { startWith, map, shareReplay, catchError, tap, switchMap } from 'rxjs/operators';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { BusinessService, LocationService, CategoryService } from '@app/services/index';
@@ -35,10 +35,12 @@ export class BusinessComponent implements OnInit {
   imgBusiness$: Observable<any>;
   business$: Observable<any>;
   savingBusiness: boolean = false;
-  displayBusiness: boolean = true;
 
   //Tags
   public tags =[];
+
+  //Reasons
+  public reasons=[];
   
   language: string = 'EN';
 
@@ -137,6 +139,7 @@ export class BusinessComponent implements OnInit {
     Imagen: [''],
     ImagenLink:[''],
     Tags: [''],
+    Reasons: [''],
     Status: ['']
   });
 
@@ -151,6 +154,7 @@ export class BusinessComponent implements OnInit {
   ngOnInit() {
     var spinnerRef = this.spinnerService.start($localize`:@@business.loading:`);
     this.businessId = this.authService.businessId();
+    this.language = this.authService.language();
 
     this.sectors[0] = [];
     this.sectors[0].push({SectorId: "0", Name: "N/A"});
@@ -158,17 +162,17 @@ export class BusinessComponent implements OnInit {
 
     this.onValueChanges();
 
-    this.categories$ = this.categoryService.getCategories(this.language).pipe(
-      map(res => {
-        this.allCategories = res;
-        this.filteredCategories$ = this.businessForm.get('CategoryId').valueChanges
-          .pipe(
-            startWith(null),
-            map((category: Category | null) => category ? this._filterCategory(category) : this.allCategories.slice())
-        );
-        return this.allCategories;
-      })
-    ); 
+    // this.categories$ = this.categoryService.getCategories(this.language).pipe(
+    //   map(res => {
+    //     this.allCategories = res;
+    //     this.filteredCategories$ = this.businessForm.get('CategoryId').valueChanges
+    //       .pipe(
+    //         startWith(null),
+    //         map((category: Category | null) => category ? this._filterCategory(category) : this.allCategories.slice())
+    //     );
+    //     return this.allCategories;
+    //   })
+    // ); 
 
     this.filteredCountries$ = this.businessForm.get('Country').valueChanges
       .pipe(
@@ -177,65 +181,80 @@ export class BusinessComponent implements OnInit {
         map(country => country ? this._filterCountry(country) : this.countries.slice())
       );
     
+    this.filteredCategories$ = this.businessForm.get('CategoryId').valueChanges
+      .pipe(
+        startWith(null),
+        map((category: Category | null) => category ? this._filterCategory(category) : this.allCategories.slice())
+      );
+    
     let item = 0;
-    this.businessForm.reset({BusinessId: '', CategoryId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', Tags: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen: '', ParentBusiness: 0, Status: 1});
-    this.business$ = this.businessService.getBusiness(this.businessId).pipe(
-      tap((res: any) => {
-        if (res != null){
-          let countryValue : Country[];
-          if (res.Country != '' && res.Country != undefined){
-            countryValue = this.countries.filter(country => country.c.indexOf(res.Country) === 0);
-          }
-          var locMap = JSON.parse(res.Geolocation);
-          if ("LAT" in locMap) {
-            this.lat = locMap['LAT'];
-          } else {
-            this.lat = 0;
-          }
-          if ("LNG" in locMap){
-            this.lng = locMap['LNG'];
-          } else {
-            this.lng = 0;
-          }
-          this.countryCode = (countryValue != undefined ? countryValue[0].c : '');
-          if (res.TuCitaLink != ''){
-            this.existLink = true;
-          }
-          this.businessForm.setValue({
-            BusinessId: res.Business_Id,
-            Name: res.Name,
-            Country: (countryValue != undefined ? countryValue[0] : ''),
-            Address: res.Address,
-            City: res.City,
-            ZipCode: res.ZipCode,
-            Geolocation: res.Geolocation,
-            Phone: res.Phone,
-            WebSite: res.WebSite,
-            Facebook: res.Facebook,
-            Twitter: res.Twitter,
-            Instagram: res.Instagram,
-            Email: res.Email,
-            CategoryId: res.CategoryId,
-            LongDescription: res.LongDescription, 
-            ShortDescription: res.ShortDescription,
-            TuCitaLink: res.TuCitaLink,
-            Imagen: res.Imagen,
-            ImagenLink: res.ImagenLink,
-            ParentBusiness: res.ParentBusiness,
-            Tags: res.Tags,
-            Status: res.Status
-          });
-          this.categories = this.allCategories.filter(x => x.CategoryId == res.CategoryId);
-          this.tags = (res.Tags != '' ? res.Tags.split(',') : []);
-          this.spinnerService.stop(spinnerRef);
-        } else {
-          this.spinnerService.stop(spinnerRef);
-          this.businessForm.reset({BusinessId: '', CategoryId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', ParentBusiness: 0, Status: 1});
+    this.businessForm.reset({BusinessId: '', CategoryId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', Tags: '', Reasons: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen: '', ParentBusiness: 0, Status: 1});
+    this.business$ = this.categoryService.getCategories(this.language).pipe(
+      map((res: any) => {
+        this.allCategories = res;
         }
-      }),
+      ),
+      switchMap(_ => 
+        this.businessService.getBusiness(this.businessId).pipe(
+        tap((res: any) => {
+          if (res != null){
+            let countryValue : Country[];
+            if (res.Country != '' && res.Country != undefined){
+              countryValue = this.countries.filter(country => country.c.indexOf(res.Country) === 0);
+            }
+            var locMap = JSON.parse(res.Geolocation);
+            if ("LAT" in locMap) {
+              this.lat = locMap['LAT'];
+            } else {
+              this.lat = 0;
+            }
+            if ("LNG" in locMap){
+              this.lng = locMap['LNG'];
+            } else {
+              this.lng = 0;
+            }
+            this.countryCode = (countryValue != undefined ? countryValue[0].c : '');
+            if (res.TuCitaLink != ''){
+              this.existLink = true;
+            }
+            this.businessForm.setValue({
+              BusinessId: res.Business_Id,
+              Name: res.Name,
+              Country: (countryValue != undefined ? countryValue[0] : ''),
+              Address: res.Address,
+              City: res.City,
+              ZipCode: res.ZipCode,
+              Geolocation: res.Geolocation,
+              Phone: res.Phone,
+              WebSite: res.WebSite,
+              Facebook: res.Facebook,
+              Twitter: res.Twitter,
+              Instagram: res.Instagram,
+              Email: res.Email,
+              CategoryId: res.CategoryId,
+              LongDescription: res.LongDescription, 
+              ShortDescription: res.ShortDescription,
+              TuCitaLink: res.TuCitaLink,
+              Imagen: res.Imagen,
+              ImagenLink: res.ImagenLink,
+              ParentBusiness: res.ParentBusiness,
+              Tags: res.Tags,
+              Reasons: res.Reasons,
+              Status: res.Status
+            });
+            this.categories = this.allCategories.filter(x => x.CategoryId == res.CategoryId);
+            this.tags = (res.Tags != '' ? res.Tags.split(',') : []);
+            this.reasons = (res.Reaons != '' ? res.Reasons.split(',') : []);
+            this.spinnerService.stop(spinnerRef);
+          } else {
+            this.spinnerService.stop(spinnerRef);
+            this.businessForm.reset({BusinessId: '', CategoryId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', Reasons: '', ParentBusiness: 0, Status: 1});
+          }
+        }),
+      )),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
-        this.businessForm.reset({BusinessId: '', CategoryId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', ParentBusiness: 0, Status: 1});
+        this.businessForm.reset({BusinessId: '', CategoryId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', Reasons: '', ParentBusiness: 0, Status: 1});
         this.openDialog('Error !', err.Message, false, true, false);
         return throwError(err || err.message);
       })
@@ -437,10 +456,21 @@ export class BusinessComponent implements OnInit {
   }
 
   getErrorMessage(component: string, index: number=0) {
+    const min2 = '2';
+    const min3 = '3';
+    const min4 = '4';
+    const min5 = '5';
+    const min10 = '10';
+    const max15 = '15';
+    const max50 = '50';
+    const max100 = '100';
+    const max150 = '150';
+    const max255 = '255';
+    const max500 = '500';
     if (component === 'Name'){
       return this.fBusiness.Name.hasError('required') ? $localize`:@@shared.entervalue:` :
-        this.fBusiness.Name.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
-          this.fBusiness.Name.hasError('maxlength') ? $localize`:@@shared.maximun: 500` :
+        this.fBusiness.Name.hasError('minlength') ? $localize`:@@shared.minimun: ${min3}` :
+          this.fBusiness.Name.hasError('maxlength') ? $localize`:@@shared.maximun: ${max500}` :
             '';
     }
     if (component === 'Country'){
@@ -450,67 +480,67 @@ export class BusinessComponent implements OnInit {
     }
     if (component === 'Address'){
       return this.fBusiness.Address.hasError('required') ? $localize`:@@shared.entervalue:` :
-        this.fBusiness.Address.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
-          this.fBusiness.Address.hasError('maxlength') ? $localize`:@@shared.maximun: 500` :
+        this.fBusiness.Address.hasError('minlength') ? $localize`:@@shared.minimun: ${min3}` :
+          this.fBusiness.Address.hasError('maxlength') ? $localize`:@@shared.maximun: ${max500}` :
             '';
     }
     if (component === 'LongDescription'){
       return this.fBusiness.LongDescription.hasError('required') ? $localize`:@@shared.entervalue:` :
-        this.fBusiness.LongDescription.hasError('minlength') ? $localize`:@@shared.minimun: 10` :
-          this.fBusiness.LongDescription.hasError('maxlength') ? $localize`:@@shared.maximun: 255` :
+        this.fBusiness.LongDescription.hasError('minlength') ? $localize`:@@shared.minimun: ${min10}` :
+          this.fBusiness.LongDescription.hasError('maxlength') ? $localize`:@@shared.maximun: ${max255}` :
             '';
     }
     if (component === 'ShortDescription'){
       return this.fBusiness.ShortDescription.hasError('required') ? $localize`:@@shared.entervalue:` :
-        this.fBusiness.ShortDescription.hasError('minlength') ? $localize`:@@shared.minimun: 10` :
-          this.fBusiness.ShortDescription.hasError('maxlength') ? $localize`:@@shared.maximun: 100` :
+        this.fBusiness.ShortDescription.hasError('minlength') ? $localize`:@@shared.minimun: ${min10}` :
+          this.fBusiness.ShortDescription.hasError('maxlength') ? $localize`:@@shared.maximun: ${max100}` :
             '';
     }
     if (component === 'TuCitaLink'){
       return this.fBusiness.TuCitaLink.hasError('required') ? $localize`:@@shared.entervalue:` :
-        this.fBusiness.TuCitaLink.hasError('minlength') ? $localize`:@@shared.minimun: 2` :
-          this.fBusiness.TuCitaLink.hasError('maxlength') ? $localize`:@@shared.maximun: 50` :
+        this.fBusiness.TuCitaLink.hasError('minlength') ? $localize`:@@shared.minimun: ${min2}` :
+          this.fBusiness.TuCitaLink.hasError('maxlength') ? $localize`:@@shared.maximun: ${max50}` :
             '';
     }
     if (component === 'City'){
       return this.fBusiness.State.hasError('required') ? $localize`:@@shared.entervalue:` :
-        this.fBusiness.State.hasError('maxlength') ? $localize`:@@shared.maximun: 100` :
-          this.fBusiness.State.hasError('minlength') ? $localize`:@@shared.minimun: 2` :
+        this.fBusiness.State.hasError('maxlength') ? $localize`:@@shared.maximun: ${max100}` :
+          this.fBusiness.State.hasError('minlength') ? $localize`:@@shared.minimun: ${min2}` :
           '';
     }
     if (component === 'ZipCode'){
-      return this.fBusiness.ZipCode.hasError('maxlength') ? $localize`:@@shared.maximun: 10` :
-        this.fBusiness.ZipCode.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
+      return this.fBusiness.ZipCode.hasError('maxlength') ? $localize`:@@shared.maximun: ${min10}` :
+        this.fBusiness.ZipCode.hasError('minlength') ? $localize`:@@shared.minimun: ${min3}` :
         '';
     }
     if (component === 'Geolocation'){
-      return this.fBusiness.House_No.hasError('maxlength') ? $localize`:@@shared.maximun: 50` :
-        this.fBusiness.House_No.hasError('minlength') ? $localize`:@@shared.minimun: 5` :
+      return this.fBusiness.House_No.hasError('maxlength') ? $localize`:@@shared.maximun: ${max50}` :
+        this.fBusiness.House_No.hasError('minlength') ? $localize`:@@shared.minimun: ${min5}` :
         '';
     }
     if (component === 'Phone'){
-      return this.fBusiness.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: 15` :
-        this.fBusiness.Phone.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
+      return this.fBusiness.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: ${max15}` :
+        this.fBusiness.Phone.hasError('minlength') ? $localize`:@@shared.minimun: ${min3}` :
         '';
     }
     if (component === 'Website'){
-      return this.fBusiness.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: 150` :
-        this.fBusiness.Phone.hasError('minlength') ? $localize`:@@shared.minimun: 4` :
+      return this.fBusiness.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: ${max150}` :
+        this.fBusiness.Phone.hasError('minlength') ? $localize`:@@shared.minimun: ${min4}` :
         '';
     }
     if (component === 'Facebook'){
-      return this.fBusiness.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: 150` :
-        this.fBusiness.Phone.hasError('minlength') ? $localize`:@@shared.minimun: 4` :
+      return this.fBusiness.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: ${max150}` :
+        this.fBusiness.Phone.hasError('minlength') ? $localize`:@@shared.minimun: ${min4}` :
         '';
     }
     if (component === 'Twitter'){
-      return this.fBusiness.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: 150` :
-        this.fBusiness.Phone.hasError('minlength') ? $localize`:@@shared.minimun: 4` :
+      return this.fBusiness.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: ${max150}` :
+        this.fBusiness.Phone.hasError('minlength') ? $localize`:@@shared.minimun: ${min4}` :
         '';
     }
     if (component === 'Instagram'){
-      return this.fBusiness.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: 150` :
-        this.fBusiness.Phone.hasError('minlength') ? $localize`:@@shared.minimun: 4` :
+      return this.fBusiness.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: ${max150}` :
+        this.fBusiness.Phone.hasError('minlength') ? $localize`:@@shared.minimun: ${min4}` :
         '';
     }
     if (component === 'Email'){
@@ -577,6 +607,7 @@ export class BusinessComponent implements OnInit {
       "Instagram": this.businessForm.value.Instagram,
       "Email": this.businessForm.value.Email,
       "Tags": this.tags.toString(),
+      "Reasons": this.reasons.toString(),
       "CategoryId": this.businessForm.value.CategoryId.toString(),
       "ParentBusiness": (this.businessForm.value.ParentBusiness ? 1 : 0)
     }
@@ -632,6 +663,23 @@ export class BusinessComponent implements OnInit {
       this.tags.push(value);
     }
     if (input) {
+      input.value = '';
+    }
+  }
+
+  removeReason(reason: string){
+    var data = this.reasons.findIndex(e => e === reason);
+    this.reasons.splice(data, 1);
+  }
+
+  addReason(event: MatChipInputEvent){
+    const input = event.input;
+    const value = event.value;
+
+    if ((value || '').trim()){
+      this.reasons.push(value);
+    }
+    if (input){
       input.value = '';
     }
   }

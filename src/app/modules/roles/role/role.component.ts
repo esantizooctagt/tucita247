@@ -236,10 +236,12 @@ export class RoleComponent implements OnInit {
   }
 
   getErrorMessage(component: string) {
+    const val3 ='3';
+    const val50='50';
     if (component === 'Name'){
       return this.f.Name.hasError('required') ? $localize`:@@shared.entervalue:` :
-        this.f.Name.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
-          this.f.Name.hasError('maxlength') ? $localize`:@@shared.maximun: 50` :
+        this.f.Name.hasError('minlength') ? $localize`:@@shared.minimun: ${val3}` :
+          this.f.Name.hasError('maxlength') ? $localize`:@@shared.maximun: ${val50}` :
             '';
     }
   }

@@ -95,12 +95,14 @@ export class CategoriesComponent implements OnInit {
   }
 
   getErrorMessage(component: string) {
-    if (component === 'Description'){
-      return this.categoryForm.controls.Description.hasError('required') ? 'You must enter a value' :
-        this.categoryForm.controls.Description.hasError('maxlength') ? 'Maximun length 70' :
-          this.categoryForm.controls.Description.hasError('minlength') ? 'Minimun length 3' :
-              '';
-    }
+    // const val70 = '70';
+    // const val3 = '3';
+    // if (component === 'Description'){
+    //   return this.categoryForm.controls.Description.hasError('required') ? 'You must enter a value' :
+    //     this.categoryForm.controls.Description.hasError('maxlength') ? 'Maximun length ${val70}' :
+    //       this.categoryForm.controls.Description.hasError('minlength') ? 'Minimun length 3' :
+    //           '';
+    // }
   }
 
   onSelect(value: string){

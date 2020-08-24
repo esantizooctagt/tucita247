@@ -328,16 +328,24 @@ export class QuickCheckinComponent implements OnInit {
   }
 
   getErrorMessage(component: string){
+    const val200 = '200';
+    const val3 = '3';
+    const val100 = '100';
+    const val6 = '6';
+    const val14 = '14';
+    const val2 = '2';
+    const val1 = '1';
+    const val99 = '99';
     if (component === 'Email'){
       return this.f.Email.hasError('required') ? $localize`:@@login.error:` :
-        this.f.Email.hasError('maxlength') ? $localize`:@@shared.maximun: 200` :
+        this.f.Email.hasError('maxlength') ? $localize`:@@shared.maximun: ${val200}` :
           this.f.Email.hasError('pattern') ? $localize`:@@forgot.emailformat:` :
           '';
     }
     if (component === 'Name'){
       return this.f.Name.hasError('required') ? $localize`:@@shared.entervalue:` :
-        this.f.Name.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
-          this.f.Name.hasError('maxlength') ? $localize`:@@shared.maximun: 100` :
+        this.f.Name.hasError('minlength') ? $localize`:@@shared.minimun: ${val3}` :
+          this.f.Name.hasError('maxlength') ? $localize`:@@shared.maximun: ${val100}` :
             '';
     }
     if (component === 'ServiceId'){
@@ -345,15 +353,15 @@ export class QuickCheckinComponent implements OnInit {
             '';
     }
     if (component === 'Phone'){
-      return this.f.Phone.hasError('minlength') ? $localize`:@@shared.minimun: 6` :
-        this.f.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: 14` :
+      return this.f.Phone.hasError('minlength') ? $localize`:@@shared.minimun: ${val6}` :
+        this.f.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: ${val14}` :
           '';
     }
     if (component === 'Guests'){
       return this.f.Guests.hasError('required') ? $localize`:@@shared.entervalue:` :
-      this.f.Guests.hasError('maxlength') ? $localize`:@@shared.maximun: 2` :
-        this.f.Guests.hasError('min') ? $localize`:@@shared.minvalue: 1` :
-          this.f.Guests.hasError('max') ? $localize`:@@shared.maxvalue: 99` :
+      this.f.Guests.hasError('maxlength') ? $localize`:@@shared.maximun: ${val2}` :
+        this.f.Guests.hasError('min') ? $localize`:@@shared.minvalue: ${val1}` :
+          this.f.Guests.hasError('max') ? $localize`:@@shared.maxvalue: ${val99}` :
             '';
     }
   }

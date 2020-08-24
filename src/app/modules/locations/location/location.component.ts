@@ -204,16 +204,18 @@ export class LocationComponent implements OnInit {
   }
 
   getErrorMessage(component: string) {
+    const val3 = '3';
+    const val500 = '500';
     if (component === 'Name') {
       return this.f.Name.hasError('required') ? $localize`:@@shared.entervalue:` :
-        this.f.Name.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
-          this.f.Name.hasError('maxlength') ? $localize`:@@shared.maximun: 500` :
+        this.f.Name.hasError('minlength') ? $localize`:@@shared.minimun: ${val3}` :
+          this.f.Name.hasError('maxlength') ? $localize`:@@shared.maximun: ${val500}` :
             '';
     }
     if (component === 'Address') {
       return this.f.Address.hasError('required') ? $localize`:@@shared.entervalue:` :
-        this.f.Address.hasError('minlength') ? $localize`:@@shared.minimun: 3` :
-          this.f.Address.hasError('maxlength') ? $localize`:@@shared.maximun: 500` :
+        this.f.Address.hasError('minlength') ? $localize`:@@shared.minimun: ${val3}` :
+          this.f.Address.hasError('maxlength') ? $localize`:@@shared.maximun: ${val500}` :
             '';
     }
     if (component === 'City') {

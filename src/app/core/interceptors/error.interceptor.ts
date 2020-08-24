@@ -65,9 +65,9 @@ export class ErrorInterceptor implements HttpInterceptor {
         this.userService.updateToken(formData).subscribe(
         (res: any) => {
             if (res.Code == 200){
-                console.log("error 401, refresh token");
                 sessionStorage.setItem('TC247_TKN', JSON.stringify(res.token));
                 sessionStorage.setItem('TC247_ACT', JSON.stringify(res.access));
+                location.reload(true);
             }
         },
         catchError(res => {

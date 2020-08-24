@@ -2,6 +2,28 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="services.customerbooking" datatype="html">
+        <source>Customer per Booking</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/services/service/service.component.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/services/service/service.component.html</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+        <note priority="1" from="description">text in services</note>
+        <note priority="1" from="meaning">Customer per Booking</note>
+      </trans-unit>
+      <trans-unit id="business.reasons" datatype="html">
+        <source>Reasons</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
+          <context context-type="linenumber">99</context>
+        </context-group>
+        <note priority="1" from="description">text in services</note>
+        <note priority="1" from="meaning">Reasons</note>
+      </trans-unit>
       <trans-unit id="login.signin" datatype="html">
         <source>Sign In</source>
         <context-group purpose="location">

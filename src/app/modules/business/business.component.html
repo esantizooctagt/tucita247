@@ -6,7 +6,7 @@
         <div class="pl-15 pt-1 col-md-12">
             <mat-card class="col-sm col-md-11 col-lg-11">
                 <ng-container *ngIf="(businessSave$ | async) && savingBusiness"></ng-container>
-                <ng-container *ngIf="(business$ | async) || displayBusiness"></ng-container>
+                <ng-container *ngIf="business$ | async"></ng-container>
                 <form [formGroup]="businessForm">
                     <ng-template matStepLabel i18n="Business|Business Label@@business.businesslabel">Business</ng-template>
                     <mat-tab-group mat-align-tabs="start">
@@ -71,30 +71,46 @@
                             </div>
                         </mat-tab>
                         <mat-tab label="Additional Data">
-                            <mat-form-field i18n-hintLabel="Categories|Categories in business@@business.categories" hintLabel="Categories">
-                                <ng-container *ngIf="categories$ | async"></ng-container>
-                                <mat-chip-list #chipCategoriesList formControlName="CategoryId">
-                                    <mat-chip *ngFor="let category of categories" 
-                                        [selectable]="selectableCategory"
-                                        [removable]="removableCategory" 
-                                        (removed)="removeCategory(category)">
-                                        {{ category.Name }}
-                                        <mat-icon matChipRemove *ngIf="removableCategory">cancel</mat-icon>
-                                    </mat-chip>
-                                    <input placeholder="New category..." #categoryInput 
-                                        [matAutocomplete]="autoCategory"
-                                        [matChipInputFor]="chipCategoriesList"
-                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
-                                </mat-chip-list>
-                                <mat-autocomplete 
-                                    #autoCategory="matAutocomplete"
-                                    (optionSelected)="selectedCategory($event)">
-                                    <mat-option *ngFor="let category of filteredCategories$ | async"
-                                        [value]="category.CategoryId">
-                                        {{ category.Name }}
-                                    </mat-option>
-                                </mat-autocomplete>
-                            </mat-form-field>
+                            <div class="row">
+                                <mat-form-field class="col-md-6" i18n-hintLabel="Categories|Categories in business@@business.categories" hintLabel="Categories">
+                                    <ng-container *ngIf="allCategories"></ng-container>
+                                    <mat-chip-list #chipCategoriesList formControlName="CategoryId">
+                                        <mat-chip *ngFor="let category of categories" 
+                                            [selectable]="selectableCategory"
+                                            [removable]="removableCategory" 
+                                            (removed)="removeCategory(category)">
+                                            {{ category.Name }}
+                                            <mat-icon matChipRemove *ngIf="removableCategory">cancel</mat-icon>
+                                        </mat-chip>
+                                        <input placeholder="New category..." #categoryInput 
+                                            [matAutocomplete]="autoCategory"
+                                            [matChipInputFor]="chipCategoriesList"
+                                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+                                    </mat-chip-list>
+                                    <mat-autocomplete 
+                                        #autoCategory="matAutocomplete"
+                                        (optionSelected)="selectedCategory($event)">
+                                        <mat-option *ngFor="let category of filteredCategories$ | async"
+                                            [value]="category.CategoryId">
+                                            {{ category.Name }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                                <mat-form-field class="col-md-6" i18n-hintLabel="Reasons|Reasons in business@@business.reasons" hintLabel="Reasons">
+                                    <mat-chip-list #chipReasons>
+                                        <ng-container *ngIf="reasons.length > 0">
+                                            <mat-chip *ngFor="let reason of reasons" [selectable]="selectable"
+                                                [removable]="removable" (removed)="removeReason(reason)">
+                                                {{reason}}
+                                                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                            </mat-chip>
+                                        </ng-container>
+                                        <input placeholder="New Reason..." [matChipInputFor]="chipReasons"
+                                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                            [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addReason($event)">
+                                    </mat-chip-list>
+                                </mat-form-field>
+                            </div>
                             <div class="row">
                                 <mat-form-field class="col-md-12" i18n-hintLabel="Tags|Tags in business@@business.tags" hintLabel="Tags">
                                     <mat-chip-list #chipTags>

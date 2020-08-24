@@ -62,19 +62,20 @@
                     </div>
                 </div>
                 <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showCancelOptionsSche[i]">
+                    <ng-container *ngIf="updAppointment$ | async"></ng-container>
                     <div class="col-md-12 pl-0 pr-0">
                         <mat-form-field>
                             <mat-label i18n="Cancel reasons|text in citas@@host.cancelreasons">Cancel reasons</mat-label>
                             <mat-select [(value)]="selectedSche[i]">
-                                <mat-option *ngFor="let reason of reasons" [value]="reason.ReasonId">
-                                    {{reason.Description}}
+                                <mat-option *ngFor="let reason of reasons" [value]="reason">
+                                    {{reason}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
                     <div class="col-md-12 pl-0 pr-0 mt-2 mb-2">
                         <button mat-flat-button type="button" color="primary"
-                            (click)="onCancelApp(item, selectedSche[i], i, 'schedule')"
+                            (click)="onCancelApp(item, selectedSche[i], i)"
                             [disabled]="selectedSche[i] == undefined" i18n="Cancel Appointment|text in citas@@host.cancelappo">
                             Cancel Appointment
                         </button>
