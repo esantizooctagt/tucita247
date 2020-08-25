@@ -49,6 +49,7 @@ export class ShowappoDialogComponent implements OnInit {
   onError: string = '';
   newTime: string = '';
 
+  cancelAppo: number = 0;
   constructor(
     public dialogRef: MatDialogRef<ShowappoDialogComponent>,
     private spinnerService: SpinnerService,
@@ -151,11 +152,13 @@ export class ShowappoDialogComponent implements OnInit {
     let formData = {
       Status: 5,
       DateAppo: appo.DateFull,
-      Reason: reasonId
+      Reason: reasonId,
+      Guests: appo.Guests
     }
     this.updAppointment$ = this.appointmentService.updateAppointment(appo.AppId, formData).pipe(
       map((res: any) => {
         if (res.Code == 200){
+          this.cancelAppo = 1;
           var data = this.schedule.findIndex(e => e.AppId === appo.AppId);
           this.schedule.splice(data, 1);
           this.showCancelOptionsSche[index] = false;
@@ -171,6 +174,13 @@ export class ShowappoDialogComponent implements OnInit {
     );
   }
   
+  close(){
+    let values = {
+      cancelAppo: this.cancelAppo
+    }
+    this.dialogRef.close(values);
+  }
+
   onShowMessage(appo: any, i: number, type: string){
     if (appo.Unread == 'H') {
       appo.Unread = '0';

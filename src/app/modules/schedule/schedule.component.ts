@@ -369,6 +369,14 @@ export class ScheduleComponent implements OnInit {
       height: '700px',
       data: {businessId: this.businessId, locationId: this.locationId, providerId: this.providerId, service: nameService, appoTime: timeGrl, appoDate: this.datepipe.transform(day, 'yyyy-MM-dd')}
     });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != undefined) {
+        if (result.cancelAppo ==1){
+          this.loadHours();
+        }
+      }
+    });
   }
 
   getActTime(): string{

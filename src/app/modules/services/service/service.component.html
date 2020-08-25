@@ -32,8 +32,9 @@
                 <mat-form-field hintLabel="Customer per Booking" i18n-hintLabel="Customer per Booking|text in services@@services.customerbooking">
                     <input matInput #Name i18n-placeholder="Customer per Booking|text in services@@services.customerbooking" placeholder="Customer per Booking" max="9999" min="1" formControlName="CustomerPerBooking"
                         [errorStateMatcher]="confirmValidParentMatcher" required>
-                    <mat-error *ngIf="f.CustomerPerTime.invalid && f.CustomerPerTime.touched">{{getErrorMessage('CustomerPerBooking')}}</mat-error>
+                    <mat-error *ngIf="f.CustomerPerBooking.invalid && f.CustomerPerBooking.touched">{{getErrorMessage('CustomerPerBooking')}}</mat-error>
                 </mat-form-field>
+                <mat-error *ngIf="serviceForm.errors?.greaterthan">{{getErrorMessage('GreaterThan')}}</mat-error>
             </div>
             <div class="form-field pl-3 pr-3">
                 <mat-radio-group formControlName="Color" required>

@@ -9,14 +9,7 @@ import { ServService } from '@app/services';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-
-const rangeValidator: ValidatorFn = (f: FormGroup) => {
-  const start = f.get('CustomerPerBooking').value;
-  const end = f.get('CustomerPerTime').value;
-  return start !== null && end !== null && start <= end
-    ? null
-    : { range: true };
-};
+import { GreaterThanValidator } from '@app/validators';
 
 @Component({
   selector: 'app-service',
@@ -55,7 +48,7 @@ export class ServiceComponent implements OnInit {
     CustomerPerBooking: ['', [Validators.required, Validators.max(9999), Validators.min(1)]],
     Color: ['', [Validators.required]],
     Status: [true]
-  }, { validator: rangeValidator });
+  }, { validator: GreaterThanValidator });
 
   openDialog(header: string, message: string, success: boolean, error: boolean, warn: boolean): void {
     const dialogConfig = new MatDialogConfig();
@@ -117,26 +110,31 @@ export class ServiceComponent implements OnInit {
     if (component === 'Name'){
       return this.f.Name.hasError('required') ? $localize`:@@shared.entervalue:` :
         this.f.Name.hasError('minlength') ? $localize`:@@shared.minimun: ${val3}` :
-          this.f.Name.hasError('maxlength') ? `Maximun length ${val100}` :
+          this.f.Name.hasError('maxlength') ? $localize`:@@shared.maximun: ${val100}` :
             '';
     }
     if (component === 'TimeService'){
       return this.f.TimeService.hasError('required') ? $localize`:@@shared.entervalue:` :
-        this.f.TimeService.hasError('min') ? $localize`:@@shared.minimun: ${val1}` :
-          this.f.TimeService.hasError('max') ? $localize`:@@shared.maximun: ${val4}` :
+        this.f.TimeService.hasError('min') ? $localize`:@@shared.minvalue: ${val1}` :
+          this.f.TimeService.hasError('max') ? $localize`:@@shared.maxvalue: ${val4}` :
           '';
     }
     if (component === 'CustomerPerTime'){
       return this.f.CustomerPerTime.hasError('required') ? $localize`:@@shared.entervalue:` :
-        this.f.CustomerPerTime.hasError('min') ? $localize`:@@shared.minimun: ${val1}`:
-          this.f.CustomerPerTime.hasError('max') ? $localize`:@@shared.maximun: ${val9999}` :
+        this.f.CustomerPerTime.hasError('min') ? $localize`:@@shared.minvalue: ${val1}`:
+          this.f.CustomerPerTime.hasError('max') ? $localize`:@@shared.maxvalue: ${val9999}` :
           '';
     }
     if (component === 'CustomerPerBooking'){
       return this.f.CustomerPerBooking.hasError('required') ? $localize`:@@shared.entervalue:` :
-        this.f.CustomerPerBooking.hasError('min') ? $localize`:@@shared.minimun: ${val1}`:
-          this.f.CustomerPerBooking.hasError('max') ? $localize`:@@shared.maximun: ${val9999}` :
-          '';
+        this.f.CustomerPerBooking.hasError('min') ? $localize`:@@shared.minvalue: ${val1}`:
+          this.f.CustomerPerBooking.hasError('max') ? $localize`:@@shared.maxvalue: ${val9999}` :
+            '';
+    }
+    if (component === 'GreaterThan'){
+      const valVar = this.f.CustomerPerTime.value.toString();
+      return this.serviceForm.hasError('greaterthan') ? $localize`:@@shared.maxvalue: ${valVar}`:
+        '';
     }
     if (component === 'Color'){
       return this.f.Color.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
