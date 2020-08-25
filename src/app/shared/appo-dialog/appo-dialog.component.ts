@@ -121,13 +121,14 @@ export class AppoDialogComponent implements OnInit {
     }
     //NEW FULL APPOINTMENT
     let phoneNumber = this.clientForm.value.Phone.replace( /\D+/g, '');
+    let dateAppo = (this.data.appoTime.substring(6,8) == 'PM' ? (+this.data.appoTime.substring(0,2) == 12 ? this.data.appoTime.substring(0,2) : +this.data.appoTime.substring(0,2)+12) : +this.data.appoTime.substring(0,2));
     let formData = {
       BusinessId: this.data.businessId,
       LocationId: this.data.locationId,
       ProviderId: this.data.providerId,
       ServiceId: this.clientForm.value.ServiceId,
       AppoDate: this.data.appoDate,
-      AppoHour: (this.data.appoTime.substring(6,8) == 'PM' ? (+this.data.appoTime.substring(0,2)+12).toString()+'-'+this.data.appoTime.substring(3,5) : this.data.appoTime.substring(0,2)+'-'+this.data.appoTime.substring(3,5)),
+      AppoHour: dateAppo+'-'+this.data.appoTime.substring(3,5),
       Door: this.clientForm.value.Door,
       Phone: (phoneNumber == '' ?  '00000000000' : (phoneNumber.length <= 10 ? '1' + phoneNumber : phoneNumber)),
       Name: this.clientForm.value.Name,
@@ -198,10 +199,10 @@ export class AppoDialogComponent implements OnInit {
   validateService(event){
     let res = this.services.filter(x => x.ServiceId == event.value);
     let validTime: number = 0;
-    let dateAppo = (this.data.appoTime.substring(6,8) == 'PM' ? +this.data.appoTime.substring(0,2)+12 : +this.data.appoTime.substring(0,2));
-
+    let dateAppo = (this.data.appoTime.substring(6,8) == 'PM' ? (+this.data.appoTime.substring(0,2) == 12 ? this.data.appoTime.substring(0,2) : +this.data.appoTime.substring(0,2)+12) : +this.data.appoTime.substring(0,2));
+    
     for (var _i = 0; _i < res[0].TimeService; _i++) {
-      let data = this.dayInfo.filter(x => (x.Time.substring(6,8) == 'PM' ? +x.Time.substring(0,2)+12 : +x.Time.substring(0,2)) == dateAppo+_i);
+      let data = this.dayInfo.filter(x => (x.Time.substring(6,8) == 'PM' ? (+x.Time.substring(0,2) == 12 ? +x.Time.substring(0,2) : +x.Time.substring(0,2)+12) : +x.Time.substring(0,2)) == +dateAppo+_i);
       if (data.length > 0){        
         if (data[0].Available > 0 && (data[0].ServiceId == '' || data[0].ServiceId == event.value)){
           this.newTime = dateAppo+res[0].TimeService > 12 ? (dateAppo+res[0].TimeService-12).toString().padStart(2,'0') + ':00 PM' : (dateAppo+res[0].TimeService).toString().padStart(2,'0') +':00 AM';

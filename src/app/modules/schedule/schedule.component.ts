@@ -12,6 +12,7 @@ import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
 import { AppointmentService } from '@app/services/appointment.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-schedule',
@@ -46,6 +47,7 @@ export class ScheduleComponent implements OnInit {
   locationData$: Observable<any[]>;
   cancelAppos$: Observable<any>;
   services$: Observable<any[]>;
+  putAppo$: Observable<any>;
   locations: any[]=[];
   operationHours$: Observable<any>;
   locationData: string = '';
@@ -64,11 +66,13 @@ export class ScheduleComponent implements OnInit {
     private serviceService: ServService,
     private appointmentService: AppointmentService,
     public dialog: MatDialog,
+    private _snackBar: MatSnackBar,
     public datepipe: DatePipe
   ) {
     this.matIconRegistry.addSvgIcon('new',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/newAppo.svg'));
     this.matIconRegistry.addSvgIcon('cancel02',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/cancelAppos.svg'));
     this.matIconRegistry.addSvgIcon('view',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/expand02.svg'));
+    this.matIconRegistry.addSvgIcon('check',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/check01.svg'));
    }
 
   openDialog(header: string, message: string, success: boolean, error: boolean, warn: boolean): void {
@@ -86,6 +90,12 @@ export class ScheduleComponent implements OnInit {
     dialogConfig.maxWidth = '280px';
 
     this.dialog.open(DialogComponent, dialogConfig);
+  }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 2000,
+    });
   }
 
   ngOnInit(): void {
@@ -346,8 +356,10 @@ export class ScheduleComponent implements OnInit {
           map((res: any) => {
             if (res != null) {
               if (res.Code == 200){
-                this.openDialog($localize`:@@sche.citastext:`, $localize`:@@sche.deletedssuccess:`, true, false, false);
+                // this.openDialog($localize`:@@sche.citastext:`, $localize`:@@sche.deletedssuccess:`, true, false, false);
+                this.openSnackBar($localize`:@@sche.deletedssuccess:`, $localize`:@@sche.citastext:`);
                 this.spinnerService.stop(spinnerRef);
+                location.reload(true);
               }
             }
           })
@@ -377,6 +389,22 @@ export class ScheduleComponent implements OnInit {
         }
       }
     });
+  }
+
+  enableHour(timeGrl: string, day: any, timeNom: string, dayNum: number){
+    var spinnerRef = this.spinnerService.start($localize`:@@sche.openhour:`);
+    this.putAppo$ = this.appointmentService.putTimeAvailable(this.businessId, this.locationId, this.providerId, this.datepipe.transform(day, 'yyyy-MM-dd') + '-' + timeGrl.replace(':','-')).pipe(
+      map((res: any) => {
+        if (res != null) {
+          if (res.Code == 200){
+            // this.openDialog($localize`:@@sche.citastext:`, $localize`:@@sche.openhoursuccess:`, true, false, false);
+            this.openSnackBar($localize`:@@sche.openhoursuccess:`, $localize`:@@sche.citastext:`);
+            this.spinnerService.stop(spinnerRef);
+            this.loadHours();
+          }
+        }
+      })
+    );
   }
 
   getActTime(): string{

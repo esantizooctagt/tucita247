@@ -83,6 +83,11 @@ export class AppointmentService {
                     .pipe(catchError(this.errorHandler));
   }
 
+  putTimeAvailable(businessId, locationId, providerId, appoDate){
+    return this.http.put(this.apiURL + '/appointment/timeava/' + businessId + '/' + locationId + '/' + providerId + '/' + appoDate, '')
+                    .pipe(catchError(this.errorHandler));
+  }
+
   getMessages(appointmentId, type): Observable<any[]> {
     return this.http.get<any[]>(this.apiURL + '/appointment/messages/' + appointmentId + '/' + type)
                     .pipe(catchError(this.errorHandler));
