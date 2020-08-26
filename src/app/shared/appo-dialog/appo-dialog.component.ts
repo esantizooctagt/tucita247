@@ -121,7 +121,7 @@ export class AppoDialogComponent implements OnInit {
     }
     //NEW FULL APPOINTMENT
     let phoneNumber = this.clientForm.value.Phone.replace( /\D+/g, '');
-    let dateAppo = (this.data.appoTime.substring(6,8) == 'PM' ? (+this.data.appoTime.substring(0,2) == 12 ? this.data.appoTime.substring(0,2) : +this.data.appoTime.substring(0,2)+12) : +this.data.appoTime.substring(0,2));
+    let dateAppo = (this.data.appoTime.substring(6,8) == 'PM' ? (+this.data.appoTime.substring(0,2) == 12 ? this.data.appoTime.substring(0,2) : +this.data.appoTime.substring(0,2)+12) : +this.data.appoTime.substring(0,2).padStart(2,'0'));
     let formData = {
       BusinessId: this.data.businessId,
       LocationId: this.data.locationId,
