@@ -356,7 +356,6 @@ export class ScheduleComponent implements OnInit {
           map((res: any) => {
             if (res != null) {
               if (res.Code == 200){
-                // this.openDialog($localize`:@@sche.citastext:`, $localize`:@@sche.deletedssuccess:`, true, false, false);
                 this.openSnackBar($localize`:@@sche.deletedssuccess:`, $localize`:@@sche.citastext:`);
                 this.spinnerService.stop(spinnerRef);
                 location.reload(true);
