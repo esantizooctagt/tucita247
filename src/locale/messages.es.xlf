@@ -1,9 +1,42 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en-US" datatype="plaintext" original="ng2.template">
+  <file source-language="en-US" datatype="plaintext" original="ng2.template" target-language="es">
     <body>
+      <trans-unit id="sche.openhour">
+        <source>Open hour...</source>
+        <target state="translated">XXX</target>
+      </trans-unit>
+      <trans-unit id="sche.openhoursuccess">
+        <source>Open hour successfully...</source>
+        <target state="translated">XXX</target>
+      </trans-unit>
+      <trans-unit id="services.customerbooking" datatype="html">
+        <source>Customer per Booking</source>
+        <target state="translated">XXX</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/services/service/service.component.html</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/services/service/service.component.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+        <note priority="1" from="description">text in services</note>
+        <note priority="1" from="meaning">Customer per Booking</note>
+      </trans-unit>
+      <trans-unit id="business.reasons" datatype="html">
+        <source>Reasons</source>
+        <target state="translated">XXX</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
+          <context context-type="linenumber">99</context>
+        </context-group>
+        <note priority="1" from="description">Reasons in business</note>
+        <note priority="1" from="meaning">Reasons</note>
+      </trans-unit>
       <trans-unit id="login.signin" datatype="html">
         <source>Sign In</source>
+        <target state="translated">Sign-in</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/login/login.component.html</context>
           <context context-type="linenumber">9</context>
@@ -12,6 +45,7 @@
       </trans-unit>
       <trans-unit id="shared.Email" datatype="html">
         <source>Email</source>
+        <target state="translated">E-mail</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/login/login.component.html</context>
           <context context-type="linenumber">12</context>
@@ -88,6 +122,7 @@
       </trans-unit>
       <trans-unit id="shared.Password" datatype="html">
         <source>Password</source>
+        <target state="translated">Password</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/login/login.component.html</context>
           <context context-type="linenumber">20</context>
@@ -137,6 +172,8 @@
       <trans-unit id="login.ForgotPassword" datatype="html">
         <source>Forgot your
                 password ?</source>
+        <target state="translated">Forgot your
+                password ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/login/login.component.html</context>
           <context context-type="linenumber">31</context>
@@ -146,6 +183,8 @@
       <trans-unit id="login.signup" datatype="html">
         <source>Sign Up
             </source>
+        <target state="translated">Sign-up
+            </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/login/login.component.html</context>
           <context context-type="linenumber">35</context>
@@ -154,6 +193,7 @@
       </trans-unit>
       <trans-unit id="shared.no" datatype="html">
         <source>No</source>
+        <target state="translated">No</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/dialog/dialog.component.html</context>
           <context context-type="linenumber">16</context>
@@ -182,6 +222,7 @@
       </trans-unit>
       <trans-unit id="shared.yes" datatype="html">
         <source>Yes</source>
+        <target state="translated">Yes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/dialog/dialog.component.html</context>
           <context context-type="linenumber">17</context>
@@ -210,6 +251,7 @@
       </trans-unit>
       <trans-unit id="main.welcome" datatype="html">
         <source>Welcome</source>
+        <target state="translated">Welcome</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/main-nav/main-nav.component.html</context>
           <context context-type="linenumber">12</context>
@@ -220,6 +262,9 @@
         <source>
                   Time Settings
                 </source>
+        <target state="translated">
+                  Time settings
+                </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/main-nav/main-nav.component.html</context>
           <context context-type="linenumber">22</context>
@@ -228,6 +273,7 @@
       </trans-unit>
       <trans-unit id="main.companyh" datatype="html">
         <source>Company hours</source>
+        <target state="translated">Business hours</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/main-nav/main-nav.component.html</context>
           <context context-type="linenumber">28</context>
@@ -236,6 +282,7 @@
       </trans-unit>
       <trans-unit id="main.companydays" datatype="html">
         <source>Company days off</source>
+        <target state="translated">Business days off</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/main-nav/main-nav.component.html</context>
           <context context-type="linenumber">31</context>
@@ -244,6 +291,7 @@
       </trans-unit>
       <trans-unit id="main.locationh" datatype="html">
         <source>Location hours</source>
+        <target state="translated">Location hours</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/main-nav/main-nav.component.html</context>
           <context context-type="linenumber">34</context>
@@ -252,6 +300,7 @@
       </trans-unit>
       <trans-unit id="main.locationdays" datatype="html">
         <source>Location days off</source>
+        <target state="translated">Location days off</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/main-nav/main-nav.component.html</context>
           <context context-type="linenumber">37</context>
@@ -260,6 +309,7 @@
       </trans-unit>
       <trans-unit id="main.providerh" datatype="html">
         <source>Provider schedule</source>
+        <target state="translated">Service provider schedule</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/main-nav/main-nav.component.html</context>
           <context context-type="linenumber">40</context>
@@ -268,6 +318,7 @@
       </trans-unit>
       <trans-unit id="main.providerdays" datatype="html">
         <source>Provider days off</source>
+        <target state="translated">Service provider days off</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/main-nav/main-nav.component.html</context>
           <context context-type="linenumber">43</context>
@@ -276,6 +327,7 @@
       </trans-unit>
       <trans-unit id="main.company" datatype="html">
         <source>Company</source>
+        <target state="translated">Business</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/main-nav/main-nav.component.html</context>
           <context context-type="linenumber">48</context>
@@ -284,6 +336,7 @@
       </trans-unit>
       <trans-unit id="main.location" datatype="html">
         <source>Locations</source>
+        <target state="translated">Locations</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/main-nav/main-nav.component.html</context>
           <context context-type="linenumber">49</context>
@@ -292,6 +345,7 @@
       </trans-unit>
       <trans-unit id="main.provider" datatype="html">
         <source>Service Providers</source>
+        <target state="translated">Service providers</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/main-nav/main-nav.component.html</context>
           <context context-type="linenumber">50</context>
@@ -300,6 +354,7 @@
       </trans-unit>
       <trans-unit id="main.services" datatype="html">
         <source>Services</source>
+        <target state="translated">Services</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/main-nav/main-nav.component.html</context>
           <context context-type="linenumber">51</context>
@@ -308,6 +363,7 @@
       </trans-unit>
       <trans-unit id="main.users" datatype="html">
         <source>Users</source>
+        <target state="translated">Users</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/main-nav/main-nav.component.html</context>
           <context context-type="linenumber">52</context>
@@ -316,6 +372,7 @@
       </trans-unit>
       <trans-unit id="main.userlocation" datatype="html">
         <source>User Locations</source>
+        <target state="translated">User locations</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/main-nav/main-nav.component.html</context>
           <context context-type="linenumber">53</context>
@@ -324,6 +381,7 @@
       </trans-unit>
       <trans-unit id="main.roles" datatype="html">
         <source>Roles</source>
+        <target state="translated">Roles</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/main-nav/main-nav.component.html</context>
           <context context-type="linenumber">54</context>
@@ -332,6 +390,7 @@
       </trans-unit>
       <trans-unit id="main.profile" datatype="html">
         <source>Profile</source>
+        <target state="translated">Profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/main-nav/main-nav.component.html</context>
           <context context-type="linenumber">95</context>
@@ -340,6 +399,7 @@
       </trans-unit>
       <trans-unit id="main.logout" datatype="html">
         <source>Logout</source>
+        <target state="translated">Logout</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/main-nav/main-nav.component.html</context>
           <context context-type="linenumber">96</context>
@@ -348,6 +408,7 @@
       </trans-unit>
       <trans-unit id="dashboard.title" datatype="html">
         <source>DASHBOARD</source>
+        <target state="translated">DASHBOARD</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/dashboard/dashboard.component.html</context>
           <context context-type="linenumber">6</context>
@@ -357,6 +418,7 @@
       </trans-unit>
       <trans-unit id="dashboard.citas" datatype="html">
         <source>Citas available</source>
+        <target state="translated">Bookings available</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/dashboard/dashboard.component.html</context>
           <context context-type="linenumber">13</context>
@@ -366,6 +428,7 @@
       </trans-unit>
       <trans-unit id="dashboard.additionalpackages" datatype="html">
         <source>Additional Citas Packages</source>
+        <target state="translated">Additional bookings packages</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/dashboard/dashboard.component.html</context>
           <context context-type="linenumber">28</context>
@@ -377,6 +440,9 @@
         <source>
                                 Citas used
                             </source>
+        <target state="translated">
+                                Bookings used
+                            </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/dashboard/dashboard.component.html</context>
           <context context-type="linenumber">35</context>
@@ -388,6 +454,9 @@
         <source>
                                 Available
                             </source>
+        <target state="translated">
+                                Available
+                            </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/dashboard/dashboard.component.html</context>
           <context context-type="linenumber">43</context>
@@ -397,6 +466,7 @@
       </trans-unit>
       <trans-unit id="dashboard.largetext" datatype="html">
         <source>Citas about to expire on </source>
+        <target state="translated">Bookings about to expire on </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/dashboard/dashboard.component.html</context>
           <context context-type="linenumber">51</context>
@@ -406,6 +476,7 @@
       </trans-unit>
       <trans-unit id="dashboard.button" datatype="html">
         <source>+ Add Citas</source>
+        <target state="translated">+ Add bookings</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/dashboard/dashboard.component.html</context>
           <context context-type="linenumber">57</context>
@@ -415,6 +486,7 @@
       </trans-unit>
       <trans-unit id="currentvisitors" datatype="html">
         <source>Current visitors</source>
+        <target state="translated">Current visitors</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/dashboard/dashboard.component.html</context>
           <context context-type="linenumber">63</context>
@@ -424,6 +496,7 @@
       </trans-unit>
       <trans-unit id="Month to Date" datatype="html">
         <source>Month to Date</source>
+        <target state="translated">Month to date</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/dashboard/dashboard.component.html</context>
           <context context-type="linenumber">89</context>
@@ -433,6 +506,7 @@
       </trans-unit>
       <trans-unit id="nodatafound" datatype="html">
         <source>No data found</source>
+        <target state="translated">No data found</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/dashboard/dashboard.component.html</context>
           <context context-type="linenumber">114</context>
@@ -442,6 +516,7 @@
       </trans-unit>
       <trans-unit id="profile.profile" datatype="html">
         <source>PROFILE</source>
+        <target state="translated">PROFILE</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/profile/profile.component.html</context>
           <context context-type="linenumber">5</context>
@@ -451,6 +526,7 @@
       </trans-unit>
       <trans-unit id="profile.firstname" datatype="html">
         <source>First Name</source>
+        <target state="translated">First name</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/profile/profile.component.html</context>
           <context context-type="linenumber">37</context>
@@ -459,6 +535,7 @@
       </trans-unit>
       <trans-unit id="profile.mincharacters" datatype="html">
         <source>Min 3 characters</source>
+        <target state="translated">Min 3 characters</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/profile/profile.component.html</context>
           <context context-type="linenumber">36</context>
@@ -471,6 +548,7 @@
       </trans-unit>
       <trans-unit id="profile.lastname" datatype="html">
         <source>Last Name</source>
+        <target state="translated">Last name</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/profile/profile.component.html</context>
           <context context-type="linenumber">45</context>
@@ -481,6 +559,9 @@
         <source>
                             Language :
                         </source>
+        <target state="translated">
+                            Language :
+                        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/profile/profile.component.html</context>
           <context context-type="linenumber">60</context>
@@ -489,6 +570,7 @@
       </trans-unit>
       <trans-unit id="shared.save" datatype="html">
         <source>Save</source>
+        <target state="translated">Save</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/profile/profile.component.html</context>
           <context context-type="linenumber">70</context>
@@ -549,6 +631,7 @@
       </trans-unit>
       <trans-unit id="shared.forgot" datatype="html">
         <source>Forgot password</source>
+        <target state="translated">Forgot password</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/forgotpass/forgotpass.component.html</context>
           <context context-type="linenumber">10</context>
@@ -557,6 +640,7 @@
       </trans-unit>
       <trans-unit id="forgot.login" datatype="html">
         <source>Login</source>
+        <target state="translated">Login</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/forgotpass/forgotpass.component.html</context>
           <context context-type="linenumber">21</context>
@@ -567,6 +651,9 @@
         <source>Reset
                     Password
                 </source>
+        <target state="translated">Reset
+                    password
+                </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/forgotpass/forgotpass.component.html</context>
           <context context-type="linenumber">23</context>
@@ -579,6 +666,7 @@
       </trans-unit>
       <trans-unit id="verification.activateacct" datatype="html">
         <source>Activate Account</source>
+        <target state="translated">Activate account</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/verification/verification.component.html</context>
           <context context-type="linenumber">10</context>
@@ -591,6 +679,7 @@
       </trans-unit>
       <trans-unit id="verification.Code" datatype="html">
         <source>Code</source>
+        <target state="translated">Code</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/verification/verification.component.html</context>
           <context context-type="linenumber">13</context>
@@ -599,6 +688,7 @@
       </trans-unit>
       <trans-unit id="verification.activationcode" datatype="html">
         <source>Activation Code</source>
+        <target state="translated">Activation code</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/verification/verification.component.html</context>
           <context context-type="linenumber">14</context>
@@ -607,6 +697,7 @@
       </trans-unit>
       <trans-unit id="reset.invalidpass" datatype="html">
         <source>You must enter a password</source>
+        <target state="translated">You must enter a password</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/verification/verification.component.html</context>
           <context context-type="linenumber">30</context>
@@ -639,6 +730,7 @@
       </trans-unit>
       <trans-unit id="reset.invalidlength" datatype="html">
         <source>Minimun length 8</source>
+        <target state="translated">Min 8 characters</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/verification/verification.component.html</context>
           <context context-type="linenumber">31</context>
@@ -671,6 +763,7 @@
       </trans-unit>
       <trans-unit id="reset.invalidpolicy" datatype="html">
         <source>Require at least 1 number, 1 uppercase and 1 lowercase letter</source>
+        <target state="translated">At least 1 number, 1 uppercase and 1 lowercase letter is required</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/verification/verification.component.html</context>
           <context context-type="linenumber">33</context>
@@ -703,6 +796,7 @@
       </trans-unit>
       <trans-unit id="verification.minchar" datatype="html">
         <source>Min 8 characters</source>
+        <target state="translated">Min 8 characters</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/verification/verification.component.html</context>
           <context context-type="linenumber">20</context>
@@ -715,6 +809,7 @@
       </trans-unit>
       <trans-unit id="reset.confirmpass" datatype="html">
         <source>Confirm Password</source>
+        <target state="translated">Confirm password</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/verification/verification.component.html</context>
           <context context-type="linenumber">39</context>
@@ -731,6 +826,7 @@
       </trans-unit>
       <trans-unit id="reset.invalidconfpass" datatype="html">
         <source>Confirm Password does not match</source>
+        <target state="translated">Passwords don't match</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/verification/verification.component.html</context>
           <context context-type="linenumber">53</context>
@@ -747,6 +843,7 @@
       </trans-unit>
       <trans-unit id="verification.temporarypass" datatype="html">
         <source>Temporary Password</source>
+        <target state="translated">Temporary password</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/verification/verification.component.html</context>
           <context context-type="linenumber">60</context>
@@ -755,6 +852,7 @@
       </trans-unit>
       <trans-unit id="verification.tempplaceholder" datatype="html">
         <source>Temporary Password</source>
+        <target state="translated">Temporary password</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/verification/verification.component.html</context>
           <context context-type="linenumber">61</context>
@@ -764,6 +862,7 @@
       </trans-unit>
       <trans-unit id="reset.password" datatype="html">
         <source>Password</source>
+        <target state="translated">Password</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/reset/reset.component.html</context>
           <context context-type="linenumber">35</context>
@@ -773,6 +872,8 @@
       <trans-unit id="reset.reset" datatype="html">
         <source>Reset
             </source>
+        <target state="translated">Reset
+            </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/reset/reset.component.html</context>
           <context context-type="linenumber">55</context>
@@ -781,6 +882,7 @@
       </trans-unit>
       <trans-unit id="reports.title" datatype="html">
         <source>REPORTS</source>
+        <target state="translated">REPORTS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/reports/reports.component.html</context>
           <context context-type="linenumber">5</context>
@@ -790,6 +892,7 @@
       </trans-unit>
       <trans-unit id="reports.subtitle" datatype="html">
         <source>Select Options</source>
+        <target state="translated">Select options</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/reports/reports.component.html</context>
           <context context-type="linenumber">10</context>
@@ -799,6 +902,7 @@
       </trans-unit>
       <trans-unit id="shared.location" datatype="html">
         <source>Location</source>
+        <target state="translated">Location</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/reports/reports.component.html</context>
           <context context-type="linenumber">14</context>
@@ -827,6 +931,7 @@
       </trans-unit>
       <trans-unit id="reports.serviceprov" datatype="html">
         <source>Service Provider</source>
+        <target state="translated">Service provider</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/reports/reports.component.html</context>
           <context context-type="linenumber">24</context>
@@ -840,6 +945,7 @@
       </trans-unit>
       <trans-unit id="reports.periodtime" datatype="html">
         <source>Period of time</source>
+        <target state="translated">Time period</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/reports/reports.component.html</context>
           <context context-type="linenumber">37</context>
@@ -850,6 +956,8 @@
       <trans-unit id="reports.promvisita" datatype="html">
         <source>Promedio de visita
                             </source>
+        <target state="translated">Avg time per visit
+                            </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/reports/reports.component.html</context>
           <context context-type="linenumber">49</context>
@@ -859,6 +967,7 @@
       </trans-unit>
       <trans-unit id="reports.visitantes" datatype="html">
         <source>Visitantes</source>
+        <target state="translated">Guest</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/reports/reports.component.html</context>
           <context context-type="linenumber">51</context>
@@ -868,6 +977,7 @@
       </trans-unit>
       <trans-unit id="reports.cancelaciones" datatype="html">
         <source>Cancelaciones</source>
+        <target state="translated">Cancelations</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/reports/reports.component.html</context>
           <context context-type="linenumber">52</context>
@@ -877,6 +987,7 @@
       </trans-unit>
       <trans-unit id="reports.generar" datatype="html">
         <source>Generar</source>
+        <target state="translated">Generate</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/reports/reports.component.html</context>
           <context context-type="linenumber">57</context>
@@ -886,6 +997,7 @@
       </trans-unit>
       <trans-unit id="reports.exportar" datatype="html">
         <source>Exportar</source>
+        <target state="translated">Export</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/reports/reports.component.html</context>
           <context context-type="linenumber">58</context>
@@ -895,6 +1007,7 @@
       </trans-unit>
       <trans-unit id="shared.cancelar" datatype="html">
         <source>Cancelar</source>
+        <target state="translated">Cancel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/reports/reports.component.html</context>
           <context context-type="linenumber">60</context>
@@ -903,6 +1016,7 @@
       </trans-unit>
       <trans-unit id="reports.date" datatype="html">
         <source> Date </source>
+        <target state="translated"> Date </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/reports/reports.component.html</context>
           <context context-type="linenumber">71</context>
@@ -920,6 +1034,7 @@
       </trans-unit>
       <trans-unit id="reports.qty" datatype="html">
         <source> Qty </source>
+        <target state="translated"> Qty </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/reports/reports.component.html</context>
           <context context-type="linenumber">78</context>
@@ -937,6 +1052,7 @@
       </trans-unit>
       <trans-unit id="reports.time" datatype="html">
         <source> Time </source>
+        <target state="needs-l10n"> Time </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/reports/reports.component.html</context>
           <context context-type="linenumber">85</context>
@@ -946,6 +1062,7 @@
       </trans-unit>
       <trans-unit id="shared.name" datatype="html">
         <source> Name </source>
+        <target state="translated"> Name </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/reports/reports.component.html</context>
           <context context-type="linenumber">109</context>
@@ -1050,6 +1167,7 @@
       </trans-unit>
       <trans-unit id="reports.phone" datatype="html">
         <source> Phone </source>
+        <target state="translated"> Phone </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/reports/reports.component.html</context>
           <context context-type="linenumber">116</context>
@@ -1059,6 +1177,7 @@
       </trans-unit>
       <trans-unit id="reports.door" datatype="html">
         <source> Door </source>
+        <target state="translated"> Entrance </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/reports/reports.component.html</context>
           <context context-type="linenumber">123</context>
@@ -1072,6 +1191,7 @@
       </trans-unit>
       <trans-unit id="reports.type" datatype="html">
         <source> Type </source>
+        <target state="translated"> Type </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/reports/reports.component.html</context>
           <context context-type="linenumber">137</context>
@@ -1085,6 +1205,7 @@
       </trans-unit>
       <trans-unit id="reports.checkin" datatype="html">
         <source> Check In </source>
+        <target state="translated"> Check-in </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/reports/reports.component.html</context>
           <context context-type="linenumber">144</context>
@@ -1094,6 +1215,7 @@
       </trans-unit>
       <trans-unit id="reports.checkout" datatype="html">
         <source> Check Out </source>
+        <target state="translated"> Check-out </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/reports/reports.component.html</context>
           <context context-type="linenumber">151</context>
@@ -1103,6 +1225,7 @@
       </trans-unit>
       <trans-unit id="reports.priority" datatype="html">
         <source> Priority </source>
+        <target state="translated"> Priority </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/reports/reports.component.html</context>
           <context context-type="linenumber">158</context>
@@ -1116,6 +1239,7 @@
       </trans-unit>
       <trans-unit id="shared.cancel" datatype="html">
         <source> Cancel </source>
+        <target state="translated"> Cancel </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/reports/reports.component.html</context>
           <context context-type="linenumber">182</context>
@@ -1168,6 +1292,7 @@
       </trans-unit>
       <trans-unit id="shared.phone" datatype="html">
         <source> Phone </source>
+        <target state="translated"> Phone </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/reports/reports.component.html</context>
           <context context-type="linenumber">196</context>
@@ -1176,6 +1301,7 @@
       </trans-unit>
       <trans-unit id="userloc.title" datatype="html">
         <source>USERS LOCATIONS</source>
+        <target state="translated">USERS LOCATIONS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/userloc/userloc.component.html</context>
           <context context-type="linenumber">5</context>
@@ -1185,6 +1311,7 @@
       </trans-unit>
       <trans-unit id="userloc.door" datatype="html">
         <source> Door </source>
+        <target state="translated"> Entrance </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/userloc/userloc.component.html</context>
           <context context-type="linenumber">42</context>
@@ -1194,6 +1321,7 @@
       </trans-unit>
       <trans-unit id="shared.actions" datatype="html">
         <source> Actions </source>
+        <target state="translated"> Actions </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/userloc/userloc.component.html</context>
           <context context-type="linenumber">54</context>
@@ -1230,6 +1358,7 @@
       </trans-unit>
       <trans-unit id="users.searchtext" datatype="html">
         <source>Search by first name</source>
+        <target state="translated">Search by first name</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/users/users.component.html</context>
           <context context-type="linenumber">4</context>
@@ -1239,6 +1368,7 @@
       </trans-unit>
       <trans-unit id="polls.searchtext" datatype="html">
         <source>Search by description</source>
+        <target state="translated">Search by description</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/polls/polls.component.html</context>
           <context context-type="linenumber">4</context>
@@ -1248,6 +1378,7 @@
       </trans-unit>
       <trans-unit id="business.business" datatype="html">
         <source>BUSINESS</source>
+        <target state="translated">BUSINESS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">4</context>
@@ -1257,6 +1388,7 @@
       </trans-unit>
       <trans-unit id="business.businesslabel" datatype="html">
         <source>Business</source>
+        <target state="translated">Business</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">11</context>
@@ -1266,6 +1398,7 @@
       </trans-unit>
       <trans-unit id="business.name" datatype="html">
         <source>Name</source>
+        <target state="translated">Name</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">14</context>
@@ -1275,6 +1408,7 @@
       </trans-unit>
       <trans-unit id="business.address" datatype="html">
         <source>Address</source>
+        <target state="translated">Address</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">21</context>
@@ -1288,6 +1422,7 @@
       </trans-unit>
       <trans-unit id="business.country" datatype="html">
         <source>Country</source>
+        <target state="translated">Country</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">28</context>
@@ -1301,6 +1436,7 @@
       </trans-unit>
       <trans-unit id="business.city" datatype="html">
         <source>City</source>
+        <target state="translated">City</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">41</context>
@@ -1314,6 +1450,7 @@
       </trans-unit>
       <trans-unit id="3ffd1957572435b28e81d80ad190999daf52c1bb" datatype="html">
         <source>Zip Code</source>
+        <target state="translated">Zip code</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">47</context>
@@ -1327,6 +1464,7 @@
       </trans-unit>
       <trans-unit id="business.phone" datatype="html">
         <source>Phone</source>
+        <target state="translated">Phone</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">53</context>
@@ -1340,6 +1478,7 @@
       </trans-unit>
       <trans-unit id="business.parent" datatype="html">
         <source>Parent Business</source>
+        <target state="translated">Parent business</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">61</context>
@@ -1349,6 +1488,7 @@
       </trans-unit>
       <trans-unit id="business.categories" datatype="html">
         <source>Categories</source>
+        <target state="translated">Categories</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">75</context>
@@ -1356,17 +1496,9 @@
         <note priority="1" from="description">Categories in business</note>
         <note priority="1" from="meaning">Categories</note>
       </trans-unit>
-      <trans-unit id="business.reasons" datatype="html">
-        <source>Reasons</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
-          <context context-type="linenumber">99</context>
-        </context-group>
-        <note priority="1" from="description">Reasons in business</note>
-        <note priority="1" from="meaning">Reasons</note>
-      </trans-unit>
       <trans-unit id="business.tags" datatype="html">
         <source>Tags</source>
+        <target state="translated">Tags</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">115</context>
@@ -1376,6 +1508,7 @@
       </trans-unit>
       <trans-unit id="shared.email" datatype="html">
         <source>Email</source>
+        <target state="translated">E-mail</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">133</context>
@@ -1384,6 +1517,7 @@
       </trans-unit>
       <trans-unit id="business.emailformat" datatype="html">
         <source>Email format</source>
+        <target state="translated">E-mail format</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">132</context>
@@ -1395,6 +1529,9 @@
         <source>
                                             Email :
                                         </source>
+        <target state="translated">
+                                            E-mail :
+                                        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">142</context>
@@ -1404,6 +1541,7 @@
       </trans-unit>
       <trans-unit id="business.website" datatype="html">
         <source>WebSite</source>
+        <target state="translated">WebSite</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">149</context>
@@ -1417,6 +1555,7 @@
       </trans-unit>
       <trans-unit id="business.facebook" datatype="html">
         <source>Facebook</source>
+        <target state="translated">Facebook page</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">157</context>
@@ -1430,6 +1569,7 @@
       </trans-unit>
       <trans-unit id="48710f43cff31b076534135a2498effde5735a31" datatype="html">
         <source>Twitter</source>
+        <target state="translated">Twitter page</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">163</context>
@@ -1443,6 +1583,7 @@
       </trans-unit>
       <trans-unit id="4792acfedcd6b5d5f3549c0f6fdb0e1ec3a2a880" datatype="html">
         <source>Instagram</source>
+        <target state="translated">Instagram page</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">169</context>
@@ -1456,6 +1597,7 @@
       </trans-unit>
       <trans-unit id="business.longtext" datatype="html">
         <source>Long Description</source>
+        <target state="translated">Long description</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">176</context>
@@ -1469,6 +1611,7 @@
       </trans-unit>
       <trans-unit id="business.shorttext" datatype="html">
         <source>Short Description</source>
+        <target state="translated">Short description</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">184</context>
@@ -1482,6 +1625,7 @@
       </trans-unit>
       <trans-unit id="business.tucitalink" datatype="html">
         <source>Tu Cita 24/7 Link</source>
+        <target state="translated">Your Cita 24/7 Link</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">193</context>
@@ -1497,6 +1641,9 @@
         <source>
                                         Tu Cita 24/7 Link :
                                     </source>
+        <target state="translated">
+                                        Tu Cita 24/7 link :
+                                    </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">209</context>
@@ -1506,6 +1653,7 @@
       </trans-unit>
       <trans-unit id="business.imagemobileapp" datatype="html">
         <source>Image for mobile App</source>
+        <target state="translated">Mobile App image</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">217</context>
@@ -1515,6 +1663,7 @@
       </trans-unit>
       <trans-unit id="business.imagemobileappimg" datatype="html">
         <source>IMAGE MOBILE APP</source>
+        <target state="translated">MOBILE APP IMAGE</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">225</context>
@@ -1524,6 +1673,7 @@
       </trans-unit>
       <trans-unit id="business.imagefortucita" datatype="html">
         <source>Image for Tu Cita 24/7 web link</source>
+        <target state="translated">Image for Tu Cita 24/7 web link</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">239</context>
@@ -1533,6 +1683,7 @@
       </trans-unit>
       <trans-unit id="business.imageblock" datatype="html">
         <source>IMAGE WEB LINK</source>
+        <target state="translated">IMAGE WEB LINK</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">247</context>
@@ -1542,6 +1693,7 @@
       </trans-unit>
       <trans-unit id="locations.searchtext" datatype="html">
         <source>Search by description</source>
+        <target state="translated">Search by description</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/locations/locations.component.html</context>
           <context context-type="linenumber">4</context>
@@ -1551,6 +1703,7 @@
       </trans-unit>
       <trans-unit id="provider.searchtext" datatype="html">
         <source>Search by description</source>
+        <target state="translated">Search by description</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/providers/providers.component.html</context>
           <context context-type="linenumber">4</context>
@@ -1563,6 +1716,10 @@
         Poll saved successfull
         Thanks!!!
     </source>
+        <target state="translated">
+        Poll successfully saved
+        Thanks!
+    </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/poll-resp/poll-resp.component.html</context>
           <context context-type="linenumber">15</context>
@@ -1575,6 +1732,9 @@
         <source>
         Poll is already inactive
     </source>
+        <target state="translated">
+        Poll is inactive
+    </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/poll-resp/poll-resp.component.html</context>
           <context context-type="linenumber">21</context>
@@ -1584,6 +1744,7 @@
       </trans-unit>
       <trans-unit id="shared.next" datatype="html">
         <source>Next</source>
+        <target state="translated">Next</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/survey-resp/survey-resp.component.html</context>
           <context context-type="linenumber">26</context>
@@ -1594,6 +1755,10 @@
         <source>
     Thank you for your time
 </source>
+        <target state="translated">
+    Thank you for your time
+
+</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/survey-resp/survey-resp.component.html</context>
           <context context-type="linenumber">35</context>
@@ -1603,6 +1768,7 @@
       </trans-unit>
       <trans-unit id="surveys.searchtext" datatype="html">
         <source>Search by description</source>
+        <target state="translated">Search by description</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/surveys/surveys.component.html</context>
           <context context-type="linenumber">4</context>
@@ -1612,6 +1778,7 @@
       </trans-unit>
       <trans-unit id="landing.locations" datatype="html">
         <source>Locations</source>
+        <target state="translated">Locations</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/landing/landing.component.html</context>
           <context context-type="linenumber">21</context>
@@ -1621,6 +1788,7 @@
       </trans-unit>
       <trans-unit id="landing.aboutus" datatype="html">
         <source>About Us</source>
+        <target state="translated">About us</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/landing/landing.component.html</context>
           <context context-type="linenumber">29</context>
@@ -1630,6 +1798,7 @@
       </trans-unit>
       <trans-unit id="roles.searchtext" datatype="html">
         <source>Search by name</source>
+        <target state="translated">Search by name</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/roles/roles.component.html</context>
           <context context-type="linenumber">4</context>
@@ -1639,6 +1808,7 @@
       </trans-unit>
       <trans-unit id="video.citacode" datatype="html">
         <source>Cita Code</source>
+        <target state="translated">Booking code</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-dialog/video-dialog.component.html</context>
           <context context-type="linenumber">30</context>
@@ -1648,6 +1818,7 @@
       </trans-unit>
       <trans-unit id="video.guests" datatype="html">
         <source>Guests</source>
+        <target state="translated">Guests</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-dialog/video-dialog.component.html</context>
           <context context-type="linenumber">33</context>
@@ -1657,6 +1828,7 @@
       </trans-unit>
       <trans-unit id="shared.ok" datatype="html">
         <source>Ok</source>
+        <target state="translated">Ok</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-dialog/video-dialog.component.html</context>
           <context context-type="linenumber">45</context>
@@ -1665,6 +1837,7 @@
       </trans-unit>
       <trans-unit id="dirdialog.texto" datatype="html">
         <source>Select walk-ins to check out</source>
+        <target state="translated">Select walk-ins to check-out</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/dir-dialog/dir-dialog.component.html</context>
           <context context-type="linenumber">1</context>
@@ -1674,6 +1847,7 @@
       </trans-unit>
       <trans-unit id="dirdialog.directory" datatype="html">
         <source>Check Out</source>
+        <target state="translated">Check-out</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/dir-dialog/dir-dialog.component.html</context>
           <context context-type="linenumber">17</context>
@@ -1683,6 +1857,7 @@
       </trans-unit>
       <trans-unit id="host.guests" datatype="html">
         <source>Guests</source>
+        <target state="translated">Guests</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">23</context>
@@ -1692,6 +1867,7 @@
       </trans-unit>
       <trans-unit id="host.checkout" datatype="html">
         <source>Check Out</source>
+        <target state="translated">Check-out</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">35</context>
@@ -1707,6 +1883,9 @@
         <source>
                     Citas
                 </source>
+        <target state="translated">
+                    Bookings
+                </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">58</context>
@@ -1716,6 +1895,7 @@
       </trans-unit>
       <trans-unit id="host.walk-ins" datatype="html">
         <source>Walk-Ins</source>
+        <target state="translated">Walk-ins</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">62</context>
@@ -1727,6 +1907,9 @@
         <source>
                     Ready To Check-In
                 </source>
+        <target state="translated">
+                    Ready to check-in
+                </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">67</context>
@@ -1736,6 +1919,7 @@
       </trans-unit>
       <trans-unit id="host.noguests" datatype="html">
         <source>No. of guests: </source>
+        <target state="translated">No. of guests: </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">109</context>
@@ -1757,6 +1941,7 @@
       </trans-unit>
       <trans-unit id="host.door" datatype="html">
         <source>Door: </source>
+        <target state="translated">Entrance: </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">115</context>
@@ -1778,6 +1963,7 @@
       </trans-unit>
       <trans-unit id="host.onbehalf" datatype="html">
         <source>On Behalf: </source>
+        <target state="translated">On behalf: </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">118</context>
@@ -1799,6 +1985,7 @@
       </trans-unit>
       <trans-unit id="host.cancelreasons" datatype="html">
         <source>Cancel reasons</source>
+        <target state="translated">Cancel reasons</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">146</context>
@@ -1826,6 +2013,9 @@
         <source>
                                             Cancel Appointment
                                         </source>
+        <target state="translated">
+                                            Cancel booking
+                                        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">155</context>
@@ -1851,6 +2041,7 @@
       </trans-unit>
       <trans-unit id="host.comments" datatype="html">
         <source>Write a comment...</source>
+        <target state="translated">Write a comment...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">162</context>
@@ -1876,6 +2067,7 @@
       </trans-unit>
       <trans-unit id="host.phonenumber" datatype="html">
         <source>Phone number</source>
+        <target state="translated">Phone number</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">296</context>
@@ -1885,6 +2077,7 @@
       </trans-unit>
       <trans-unit id="host.name" datatype="html">
         <source>Name</source>
+        <target state="translated">Name</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">303</context>
@@ -1898,6 +2091,7 @@
       </trans-unit>
       <trans-unit id="host.service" datatype="html">
         <source>Service</source>
+        <target state="translated">Service</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">310</context>
@@ -1911,6 +2105,7 @@
       </trans-unit>
       <trans-unit id="host.noofpeople" datatype="html">
         <source>No of People</source>
+        <target state="translated">Total of guests</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">327</context>
@@ -1924,6 +2119,7 @@
       </trans-unit>
       <trans-unit id="host.dateofbirth" datatype="html">
         <source>Date of birth</source>
+        <target state="translated">Date of birth</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">334</context>
@@ -1945,6 +2141,7 @@
       </trans-unit>
       <trans-unit id="host.gender" datatype="html">
         <source>Gender</source>
+        <target state="translated">Gender</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">341</context>
@@ -1962,6 +2159,7 @@
       </trans-unit>
       <trans-unit id="host.male" datatype="html">
         <source>Male</source>
+        <target state="translated">Male</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">343</context>
@@ -1979,6 +2177,7 @@
       </trans-unit>
       <trans-unit id="host.female" datatype="html">
         <source>Female</source>
+        <target state="translated">Female</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">344</context>
@@ -1996,6 +2195,7 @@
       </trans-unit>
       <trans-unit id="host.na" datatype="html">
         <source>Doesn&apos;t want to answer</source>
+        <target state="translated">Prefer not to answer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">345</context>
@@ -2013,6 +2213,7 @@
       </trans-unit>
       <trans-unit id="host.priority" datatype="html">
         <source>Priority</source>
+        <target state="translated">Priority</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">349</context>
@@ -2030,6 +2231,7 @@
       </trans-unit>
       <trans-unit id="host.senior" datatype="html">
         <source>Senior</source>
+        <target state="translated">Senior</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">351</context>
@@ -2047,6 +2249,7 @@
       </trans-unit>
       <trans-unit id="host.pregnant" datatype="html">
         <source>Pregnant</source>
+        <target state="translated">Pregnant</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">352</context>
@@ -2064,6 +2267,7 @@
       </trans-unit>
       <trans-unit id="host.disability" datatype="html">
         <source>Disability</source>
+        <target state="translated">Disability</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">353</context>
@@ -2081,6 +2285,7 @@
       </trans-unit>
       <trans-unit id="host.preference" datatype="html">
         <source>Preference</source>
+        <target state="translated">Communication preference</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">357</context>
@@ -2098,6 +2303,7 @@
       </trans-unit>
       <trans-unit id="host.sms" datatype="html">
         <source>SMS</source>
+        <target state="translated">SMS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">359</context>
@@ -2115,6 +2321,7 @@
       </trans-unit>
       <trans-unit id="host.pushnot" datatype="html">
         <source>Push Notification</source>
+        <target state="translated">Push notification</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">361</context>
@@ -2132,6 +2339,7 @@
       </trans-unit>
       <trans-unit id="welcome.mainmessage" datatype="html">
         <source>Welcome to Tu Cita 24/7</source>
+        <target state="translated">Welcome to Tu Cita 24/7</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
           <context context-type="linenumber">3</context>
@@ -2140,6 +2348,7 @@
       </trans-unit>
       <trans-unit id="welcome.secondarymessage" datatype="html">
         <source>Setup your preference</source>
+        <target state="translated">Set-up your preferences</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
           <context context-type="linenumber">4</context>
@@ -2148,6 +2357,7 @@
       </trans-unit>
       <trans-unit id="welcome.setupcompany" datatype="html">
         <source>Setup your company</source>
+        <target state="translated">Set-up your buisness</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
           <context context-type="linenumber">10</context>
@@ -2157,6 +2367,7 @@
       </trans-unit>
       <trans-unit id="welcome.company" datatype="html">
         <source>Company</source>
+        <target state="translated">Business</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
           <context context-type="linenumber">11</context>
@@ -2166,6 +2377,7 @@
       </trans-unit>
       <trans-unit id="welcome.setupope" datatype="html">
         <source>Setup your opening hours</source>
+        <target state="translated">Set-up your operations hours</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
           <context context-type="linenumber">17</context>
@@ -2175,6 +2387,7 @@
       </trans-unit>
       <trans-unit id="welcome.opehours" datatype="html">
         <source>Opening hours</source>
+        <target state="translated">Operating hours</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
           <context context-type="linenumber">18</context>
@@ -2184,6 +2397,7 @@
       </trans-unit>
       <trans-unit id="welcome.setupdaysoff" datatype="html">
         <source>Setup your days off</source>
+        <target state="translated">Set-up your days off</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
           <context context-type="linenumber">24</context>
@@ -2193,6 +2407,7 @@
       </trans-unit>
       <trans-unit id="welcome.daysoff" datatype="html">
         <source>Days off</source>
+        <target state="translated">Days off</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
           <context context-type="linenumber">25</context>
@@ -2202,6 +2417,7 @@
       </trans-unit>
       <trans-unit id="welcome.setuplocation" datatype="html">
         <source>Setup your location</source>
+        <target state="translated">Set-up your locations</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
           <context context-type="linenumber">33</context>
@@ -2211,6 +2427,7 @@
       </trans-unit>
       <trans-unit id="welcome.location" datatype="html">
         <source>Locations</source>
+        <target state="translated">Locations</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
           <context context-type="linenumber">34</context>
@@ -2220,6 +2437,7 @@
       </trans-unit>
       <trans-unit id="welcome.setupservprovider" datatype="html">
         <source>Setup your Service Provider</source>
+        <target state="translated">Set-up your service providers</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
           <context context-type="linenumber">40</context>
@@ -2229,6 +2447,7 @@
       </trans-unit>
       <trans-unit id="welcome.servprovider" datatype="html">
         <source>Service Provider</source>
+        <target state="translated">Service provider</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
           <context context-type="linenumber">41</context>
@@ -2238,6 +2457,7 @@
       </trans-unit>
       <trans-unit id="welcome.setupservices" datatype="html">
         <source>Setup your services</source>
+        <target state="translated">Set-up your services</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
           <context context-type="linenumber">47</context>
@@ -2247,6 +2467,7 @@
       </trans-unit>
       <trans-unit id="welcome.services" datatype="html">
         <source>Services</source>
+        <target state="translated">Services</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
           <context context-type="linenumber">48</context>
@@ -2256,6 +2477,7 @@
       </trans-unit>
       <trans-unit id="services.searchtext" datatype="html">
         <source>Search by description</source>
+        <target state="translated">Search by description</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/services/services.component.html</context>
           <context context-type="linenumber">4</context>
@@ -2267,6 +2489,9 @@
         <source>
             Configure your week settings here:
         </source>
+        <target state="translated">
+            Configure your week settings here:
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-ope/business-ope.component.html</context>
           <context context-type="linenumber">12</context>
@@ -2276,6 +2501,7 @@
       </trans-unit>
       <trans-unit id="businessope.inheritschedule" datatype="html">
         <source>Inherit schedule data from company</source>
+        <target state="translated">Use schedule data from business settings</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-ope/business-ope.component.html</context>
           <context context-type="linenumber">15</context>
@@ -2287,6 +2513,9 @@
         <source>
             Select service provider to set up the schedule:
         </source>
+        <target state="translated">
+            Select service provider to set-up the schedule:
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-ope/business-ope.component.html</context>
           <context context-type="linenumber">27</context>
@@ -2296,6 +2525,7 @@
       </trans-unit>
       <trans-unit id="businessope.inheritloc" datatype="html">
         <source>Inherit schedule data from location</source>
+        <target state="translated">Use schedule data from location settings</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-ope/business-ope.component.html</context>
           <context context-type="linenumber">30</context>
@@ -2305,6 +2535,7 @@
       </trans-unit>
       <trans-unit id="businessope.operationhours" datatype="html">
         <source>Operation Hours</source>
+        <target state="translated">Operating hours</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-ope/business-ope.component.html</context>
           <context context-type="linenumber">49</context>
@@ -2314,6 +2545,7 @@
       </trans-unit>
       <trans-unit id="businessope.daymon" datatype="html">
         <source>Mon</source>
+        <target state="translated">Mon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-ope/business-ope.component.html</context>
           <context context-type="linenumber">52</context>
@@ -2324,6 +2556,8 @@
       <trans-unit id="businessope.addinterval" datatype="html">
         <source>+ Add
                         Interval</source>
+        <target state="translated">+ Add
+                        interval</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-ope/business-ope.component.html</context>
           <context context-type="linenumber">59</context>
@@ -2358,6 +2592,8 @@
       <trans-unit id="businessope.delinterval" datatype="html">
         <source>-
                         Delete</source>
+        <target state="translated">-
+                        Delete</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-ope/business-ope.component.html</context>
           <context context-type="linenumber">66</context>
@@ -2391,6 +2627,7 @@
       </trans-unit>
       <trans-unit id="businessope.daytue" datatype="html">
         <source>Tue</source>
+        <target state="translated">Tue</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-ope/business-ope.component.html</context>
           <context context-type="linenumber">71</context>
@@ -2400,6 +2637,7 @@
       </trans-unit>
       <trans-unit id="businessope.daywed" datatype="html">
         <source>Wed</source>
+        <target state="translated">Wed</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-ope/business-ope.component.html</context>
           <context context-type="linenumber">90</context>
@@ -2409,6 +2647,7 @@
       </trans-unit>
       <trans-unit id="businessope.daythu" datatype="html">
         <source>Thu</source>
+        <target state="translated">Thu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-ope/business-ope.component.html</context>
           <context context-type="linenumber">109</context>
@@ -2418,6 +2657,7 @@
       </trans-unit>
       <trans-unit id="businessope.dayfri" datatype="html">
         <source>Fri</source>
+        <target state="translated">Fri</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-ope/business-ope.component.html</context>
           <context context-type="linenumber">128</context>
@@ -2427,6 +2667,7 @@
       </trans-unit>
       <trans-unit id="businessope.daysat" datatype="html">
         <source>Sat</source>
+        <target state="translated">Sat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-ope/business-ope.component.html</context>
           <context context-type="linenumber">147</context>
@@ -2436,6 +2677,7 @@
       </trans-unit>
       <trans-unit id="businessope.daysun" datatype="html">
         <source>Sun</source>
+        <target state="translated">Sun</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-ope/business-ope.component.html</context>
           <context context-type="linenumber">166</context>
@@ -2447,6 +2689,9 @@
         <source>
             Configure your year schedule here. Just click on a date to set the days off.
         </source>
+        <target state="translated">
+            Just click on a date to set the business days off.
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-days/business-days.component.html</context>
           <context context-type="linenumber">12</context>
@@ -2460,6 +2705,7 @@
       </trans-unit>
       <trans-unit id="businessdays.secontext" datatype="html">
         <source>Inherit special days from company</source>
+        <target state="translated">Use days off from business configuration</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-days/business-days.component.html</context>
           <context context-type="linenumber">15</context>
@@ -2469,6 +2715,7 @@
       </trans-unit>
       <trans-unit id="businessdays.secontextlocation" datatype="html">
         <source>Inherit special days from location</source>
+        <target state="translated">Use days off from location configuration</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-days/business-days.component.html</context>
           <context context-type="linenumber">30</context>
@@ -2478,6 +2725,7 @@
       </trans-unit>
       <trans-unit id="businessdays.previous" datatype="html">
         <source>Previous year</source>
+        <target state="translated">Previous year</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-days/business-days.component.html</context>
           <context context-type="linenumber">50</context>
@@ -2487,6 +2735,7 @@
       </trans-unit>
       <trans-unit id="businessdays.next" datatype="html">
         <source>Next year</source>
+        <target state="translated">Next year</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-days/business-days.component.html</context>
           <context context-type="linenumber">54</context>
@@ -2496,6 +2745,7 @@
       </trans-unit>
       <trans-unit id="appos.title" datatype="html">
         <source>Add New Appointment</source>
+        <target state="translated">Add new booking</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/appo-dialog/appo-dialog.component.html</context>
           <context context-type="linenumber">2</context>
@@ -2505,6 +2755,7 @@
       </trans-unit>
       <trans-unit id="appos.newservice" datatype="html">
         <source>Service</source>
+        <target state="translated">Service</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/appo-dialog/appo-dialog.component.html</context>
           <context context-type="linenumber">9</context>
@@ -2514,6 +2765,7 @@
       </trans-unit>
       <trans-unit id="appos.selectservice" datatype="html">
         <source>select service</source>
+        <target state="translated">Select a service</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/appo-dialog/appo-dialog.component.html</context>
           <context context-type="linenumber">7</context>
@@ -2523,6 +2775,7 @@
       </trans-unit>
       <trans-unit id="appos.phonenumber" datatype="html">
         <source>Phone number</source>
+        <target state="translated">Phone number</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/appo-dialog/appo-dialog.component.html</context>
           <context context-type="linenumber">19</context>
@@ -2532,6 +2785,7 @@
       </trans-unit>
       <trans-unit id="9a95ba46162f88e9cf7f83dc59e4b5697372a85d" datatype="html">
         <source>Date of birth</source>
+        <target state="translated">Date of birth</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/appo-dialog/appo-dialog.component.html</context>
           <context context-type="linenumber">26</context>
@@ -2545,6 +2799,7 @@
       </trans-unit>
       <trans-unit id="ebaee1f71163fbf511c6f4d058f77f93cd8f1efc" datatype="html">
         <source>Number of Guests</source>
+        <target state="translated">Number of guests</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/appo-dialog/appo-dialog.component.html</context>
           <context context-type="linenumber">53</context>
@@ -2558,6 +2813,7 @@
       </trans-unit>
       <trans-unit id="appos.door" datatype="html">
         <source>Door</source>
+        <target state="translated">Entrance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/appo-dialog/appo-dialog.component.html</context>
           <context context-type="linenumber">82</context>
@@ -2567,6 +2823,7 @@
       </trans-unit>
       <trans-unit id="shows.citas" datatype="html">
         <source>Citas</source>
+        <target state="translated">Bookings</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/showappo-dialog/showappo-dialog.component.html</context>
           <context context-type="linenumber">2</context>
@@ -2576,6 +2833,7 @@
       </trans-unit>
       <trans-unit id="shows.numberguests" datatype="html">
         <source>Number of guests: </source>
+        <target state="translated">Number of guests: </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/showappo-dialog/showappo-dialog.component.html</context>
           <context context-type="linenumber">35</context>
@@ -2585,6 +2843,7 @@
       </trans-unit>
       <trans-unit id="shows.door" datatype="html">
         <source>Door: </source>
+        <target state="translated">Entrance: </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/showappo-dialog/showappo-dialog.component.html</context>
           <context context-type="linenumber">39</context>
@@ -2594,6 +2853,7 @@
       </trans-unit>
       <trans-unit id="shows.onbehalf" datatype="html">
         <source>On Behalf: </source>
+        <target state="translated">On behalf: </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/showappo-dialog/showappo-dialog.component.html</context>
           <context context-type="linenumber">43</context>
@@ -2603,6 +2863,7 @@
       </trans-unit>
       <trans-unit id="shows.nobookings" datatype="html">
         <source>No bookings for this time</source>
+        <target state="translated">No bookings available for this period</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/showappo-dialog/showappo-dialog.component.html</context>
           <context context-type="linenumber">118</context>
@@ -2614,6 +2875,9 @@
         <source>
                     Time
                 </source>
+        <target state="translated">
+                    Time
+                </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
           <context context-type="linenumber">33</context>
@@ -2623,6 +2887,7 @@
       </trans-unit>
       <trans-unit id="sche.mon" datatype="html">
         <source>Mon</source>
+        <target state="translated">Mon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
           <context context-type="linenumber">37</context>
@@ -2632,6 +2897,7 @@
       </trans-unit>
       <trans-unit id="sche.tue" datatype="html">
         <source>Tue</source>
+        <target state="translated">Tue</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
           <context context-type="linenumber">40</context>
@@ -2641,6 +2907,7 @@
       </trans-unit>
       <trans-unit id="sche.wed" datatype="html">
         <source>Wed</source>
+        <target state="translated">Wed</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
           <context context-type="linenumber">43</context>
@@ -2650,6 +2917,7 @@
       </trans-unit>
       <trans-unit id="sche.thu" datatype="html">
         <source>Thu</source>
+        <target state="translated">Thu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
           <context context-type="linenumber">46</context>
@@ -2659,6 +2927,7 @@
       </trans-unit>
       <trans-unit id="sche.fri" datatype="html">
         <source>Fri</source>
+        <target state="translated">Fri</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
           <context context-type="linenumber">49</context>
@@ -2668,6 +2937,7 @@
       </trans-unit>
       <trans-unit id="sche.sat" datatype="html">
         <source>Sat</source>
+        <target state="translated">Sat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
           <context context-type="linenumber">52</context>
@@ -2677,6 +2947,7 @@
       </trans-unit>
       <trans-unit id="sche.sun" datatype="html">
         <source>Sun</source>
+        <target state="translated">Sun</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
           <context context-type="linenumber">55</context>
@@ -2686,6 +2957,7 @@
       </trans-unit>
       <trans-unit id="lite..walkins" datatype="html">
         <source>Walk-Ins Check In</source>
+        <target state="translated">Walk-ins check-in</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/quick-checkin/quick-checkin.component.html</context>
           <context context-type="linenumber">33</context>
@@ -2695,6 +2967,7 @@
       </trans-unit>
       <trans-unit id="lite.phonenumber" datatype="html">
         <source>Phone number</source>
+        <target state="translated">Phone number</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/quick-checkin/quick-checkin.component.html</context>
           <context context-type="linenumber">38</context>
@@ -2704,6 +2977,7 @@
       </trans-unit>
       <trans-unit id="lite.service" datatype="html">
         <source>Service</source>
+        <target state="translated">Service</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/quick-checkin/quick-checkin.component.html</context>
           <context context-type="linenumber">52</context>
@@ -2717,6 +2991,7 @@
       </trans-unit>
       <trans-unit id="lite.numberguests" datatype="html">
         <source>Number of Guests</source>
+        <target state="translated">Number of guests</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/quick-checkin/quick-checkin.component.html</context>
           <context context-type="linenumber">69</context>
@@ -2730,6 +3005,7 @@
       </trans-unit>
       <trans-unit id="lite.checkin" datatype="html">
         <source>Check In</source>
+        <target state="translated">Check-in</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/quick-checkin/quick-checkin.component.html</context>
           <context context-type="linenumber">117</context>
@@ -2739,6 +3015,7 @@
       </trans-unit>
       <trans-unit id="lite.checkout" datatype="html">
         <source>Check Out</source>
+        <target state="translated">Check-out</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/quick-checkin/quick-checkin.component.html</context>
           <context context-type="linenumber">122</context>
@@ -2750,6 +3027,9 @@
         <source>
     Location is closed
 </source>
+        <target state="translated">
+    Location is closed
+</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/quick-checkin/quick-checkin.component.html</context>
           <context context-type="linenumber">131</context>
@@ -2759,6 +3039,7 @@
       </trans-unit>
       <trans-unit id="roles.title" datatype="html">
         <source>ROLES</source>
+        <target state="translated">ROLES</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/roles/role/role.component.html</context>
           <context context-type="linenumber">2</context>
@@ -2772,6 +3053,7 @@
       </trans-unit>
       <trans-unit id="roles.minchar" datatype="html">
         <source>Min 3 characters</source>
+        <target state="translated">Min 3 characters</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/roles/role/role.component.html</context>
           <context context-type="linenumber">10</context>
@@ -2781,6 +3063,7 @@
       </trans-unit>
       <trans-unit id="roles.levelaccess" datatype="html">
         <source>Level Access:</source>
+        <target state="translated">Level Access:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/roles/role/role.component.html</context>
           <context context-type="linenumber">22</context>
@@ -2790,6 +3073,7 @@
       </trans-unit>
       <trans-unit id="roles.na" datatype="html">
         <source>N/A</source>
+        <target state="translated">N/A</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/roles/role/role.component.html</context>
           <context context-type="linenumber">24</context>
@@ -2799,6 +3083,7 @@
       </trans-unit>
       <trans-unit id="roles.fullacess" datatype="html">
         <source>Full Access</source>
+        <target state="translated">Full access</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/roles/role/role.component.html</context>
           <context context-type="linenumber">25</context>
@@ -2808,6 +3093,7 @@
       </trans-unit>
       <trans-unit id="roles.editaccess" datatype="html">
         <source>Edit Access</source>
+        <target state="translated">Edit access</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/roles/role/role.component.html</context>
           <context context-type="linenumber">26</context>
@@ -2817,6 +3103,7 @@
       </trans-unit>
       <trans-unit id="roles.readaccess" datatype="html">
         <source>Read Access</source>
+        <target state="translated">Read access</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/roles/role/role.component.html</context>
           <context context-type="linenumber">27</context>
@@ -2826,6 +3113,7 @@
       </trans-unit>
       <trans-unit id="shared.status" datatype="html">
         <source>Status</source>
+        <target state="translated">Status</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/roles/role/role.component.html</context>
           <context context-type="linenumber">37</context>
@@ -2850,6 +3138,7 @@
       </trans-unit>
       <trans-unit id="users.title" datatype="html">
         <source>USERS</source>
+        <target state="translated">USERS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">2</context>
@@ -2863,6 +3152,7 @@
       </trans-unit>
       <trans-unit id="users.firstname" datatype="html">
         <source>First Name</source>
+        <target state="translated">First name</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/users/user/user.component.html</context>
           <context context-type="linenumber">26</context>
@@ -2872,6 +3162,7 @@
       </trans-unit>
       <trans-unit id="users.minchars" datatype="html">
         <source>Min 5 characters</source>
+        <target state="translated">Min 5 characters</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/users/user/user.component.html</context>
           <context context-type="linenumber">25</context>
@@ -2885,6 +3176,7 @@
       </trans-unit>
       <trans-unit id="users.lastname" datatype="html">
         <source>Last Name</source>
+        <target state="translated">Last name</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/users/user/user.component.html</context>
           <context context-type="linenumber">34</context>
@@ -2895,6 +3187,8 @@
       <trans-unit id="users.mninchars2" datatype="html">
         <source>Minimun
                         length 8</source>
+        <target state="translated">Min
+                        8 characters</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/users/user/user.component.html</context>
           <context context-type="linenumber">57</context>
@@ -2908,6 +3202,7 @@
       </trans-unit>
       <trans-unit id="users.policy" datatype="html">
         <source>Require at least 1 number, 1 uppercase and 1 lowercase letters</source>
+        <target state="translated">At least 1 number, 1 uppercase and 1 lowercase letter is required</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/users/user/user.component.html</context>
           <context context-type="linenumber">60</context>
@@ -2917,6 +3212,7 @@
       </trans-unit>
       <trans-unit id="users.role" datatype="html">
         <source>Role:</source>
+        <target state="translated">Role:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/users/user/user.component.html</context>
           <context context-type="linenumber">66</context>
@@ -2926,6 +3222,7 @@
       </trans-unit>
       <trans-unit id="shared.none" datatype="html">
         <source>None</source>
+        <target state="translated">None</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/users/user/user.component.html</context>
           <context context-type="linenumber">68</context>
@@ -2934,6 +3231,7 @@
       </trans-unit>
       <trans-unit id="shared.isadmin" datatype="html">
         <source>Is Admin</source>
+        <target state="translated">Is admin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/users/user/user.component.html</context>
           <context context-type="linenumber">77</context>
@@ -2942,6 +3240,7 @@
       </trans-unit>
       <trans-unit id="users.resendcode" datatype="html">
         <source>Re-Send Verification Code</source>
+        <target state="translated">Re-send verification code</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/users/user/user.component.html</context>
           <context context-type="linenumber">90</context>
@@ -2951,6 +3250,7 @@
       </trans-unit>
       <trans-unit id="shared.search" datatype="html">
         <source>Search</source>
+        <target state="translated">Search</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/search/search.component.html</context>
           <context context-type="linenumber">3</context>
@@ -2959,6 +3259,7 @@
       </trans-unit>
       <trans-unit id="polls.title" datatype="html">
         <source>POLLS</source>
+        <target state="translated">POLLS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/polls/poll/poll.component.html</context>
           <context context-type="linenumber">2</context>
@@ -2972,6 +3273,7 @@
       </trans-unit>
       <trans-unit id="polls.chooseinitdate" datatype="html">
         <source>Choose a Initial date</source>
+        <target state="translated">Choose starting date</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/polls/poll/poll.component.html</context>
           <context context-type="linenumber">29</context>
@@ -2981,6 +3283,7 @@
       </trans-unit>
       <trans-unit id="polls.initdate" datatype="html">
         <source>Initial poll date</source>
+        <target state="translated">Poll starting date</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/polls/poll/poll.component.html</context>
           <context context-type="linenumber">28</context>
@@ -2990,6 +3293,7 @@
       </trans-unit>
       <trans-unit id="polls.choosefinaldate" datatype="html">
         <source>Choose a Final date</source>
+        <target state="translated">Choose ending date</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/polls/poll/poll.component.html</context>
           <context context-type="linenumber">40</context>
@@ -2999,6 +3303,7 @@
       </trans-unit>
       <trans-unit id="polls.finaldate" datatype="html">
         <source>Final poll date</source>
+        <target state="translated">Poll ending date</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/polls/poll/poll.component.html</context>
           <context context-type="linenumber">39</context>
@@ -3008,6 +3313,7 @@
       </trans-unit>
       <trans-unit id="polls.initialdatepoll" datatype="html">
         <source> Initial Date Poll </source>
+        <target state="translated"> Poll start date </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/polls/poll-list/poll-list.component.html</context>
           <context context-type="linenumber">17</context>
@@ -3017,6 +3323,7 @@
       </trans-unit>
       <trans-unit id="polls.finaldatepoll" datatype="html">
         <source> Final Date Poll </source>
+        <target state="translated"> Poll end date </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/polls/poll-list/poll-list.component.html</context>
           <context context-type="linenumber">24</context>
@@ -3026,6 +3333,7 @@
       </trans-unit>
       <trans-unit id="surveys.title" datatype="html">
         <source>SURVEYS</source>
+        <target state="translated">SURVEYS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/surveys/survey/survey.component.html</context>
           <context context-type="linenumber">2</context>
@@ -3039,6 +3347,7 @@
       </trans-unit>
       <trans-unit id="surveys.dateinit" datatype="html">
         <source>Choose a init date</source>
+        <target state="translated">Choose starting date</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/surveys/survey/survey.component.html</context>
           <context context-type="linenumber">29</context>
@@ -3048,6 +3357,7 @@
       </trans-unit>
       <trans-unit id="surveys.initsurvey" datatype="html">
         <source>Init survey date</source>
+        <target state="translated">Survey starting date</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/surveys/survey/survey.component.html</context>
           <context context-type="linenumber">28</context>
@@ -3058,6 +3368,8 @@
       <trans-unit id="surveys.add" datatype="html">
         <source>+
                     Add</source>
+        <target state="translated">+
+                    Add</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/surveys/survey/survey.component.html</context>
           <context context-type="linenumber">40</context>
@@ -3067,6 +3379,7 @@
       </trans-unit>
       <trans-unit id="surveys.questdescrip" datatype="html">
         <source>Question description</source>
+        <target state="translated">Question description</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/surveys/survey/survey.component.html</context>
           <context context-type="linenumber">46</context>
@@ -3080,6 +3393,7 @@
       </trans-unit>
       <trans-unit id="surveys.date" datatype="html">
         <source> Date Survey </source>
+        <target state="translated"> Survey date </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/surveys/survey-list/survey-list.component.html</context>
           <context context-type="linenumber">17</context>
@@ -3089,6 +3403,7 @@
       </trans-unit>
       <trans-unit id="providers.title" datatype="html">
         <source>SERVICE PROVIDERS</source>
+        <target state="translated">SERVICE PROVIDERS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/providers/provider/provider.component.html</context>
           <context context-type="linenumber">2</context>
@@ -3102,6 +3417,7 @@
       </trans-unit>
       <trans-unit id="providers.selectservice" datatype="html">
         <source>Select services</source>
+        <target state="translated">Select services</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/providers/provider/provider.component.html</context>
           <context context-type="linenumber">30</context>
@@ -3111,6 +3427,7 @@
       </trans-unit>
       <trans-unit id="providers.servsche" datatype="html">
         <source>Service provider schedule</source>
+        <target state="translated">Service provider schedule</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/providers/provider/provider.component.html</context>
           <context context-type="linenumber">43</context>
@@ -3120,6 +3437,7 @@
       </trans-unit>
       <trans-unit id="providers.specdays" datatype="html">
         <source>Special days</source>
+        <target state="translated">Days off</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/providers/provider/provider.component.html</context>
           <context context-type="linenumber">44</context>
@@ -3129,6 +3447,7 @@
       </trans-unit>
       <trans-unit id="services.title" datatype="html">
         <source>SERVICES</source>
+        <target state="translated">SERVICES</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/services/service-list/service-list.component.html</context>
           <context context-type="linenumber">2</context>
@@ -3142,6 +3461,7 @@
       </trans-unit>
       <trans-unit id="services.textduration" datatype="html">
         <source>Service duration</source>
+        <target state="translated">Service duration</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/services/service/service.component.html</context>
           <context context-type="linenumber">18</context>
@@ -3155,6 +3475,7 @@
       </trans-unit>
       <trans-unit id="services.customerbucket" datatype="html">
         <source>Customer per Bucket</source>
+        <target state="translated">Customers per service duration</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/services/service/service.component.html</context>
           <context context-type="linenumber">26</context>
@@ -3166,21 +3487,9 @@
         <note priority="1" from="description">text in services</note>
         <note priority="1" from="meaning">Customer per Bucket</note>
       </trans-unit>
-      <trans-unit id="services.customerbooking" datatype="html">
-        <source>Customer per Booking</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/modules/services/service/service.component.html</context>
-          <context context-type="linenumber">33</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/modules/services/service/service.component.html</context>
-          <context context-type="linenumber">32</context>
-        </context-group>
-        <note priority="1" from="description">text in services</note>
-        <note priority="1" from="meaning">Customer per Booking</note>
-      </trans-unit>
       <trans-unit id="locations.title" datatype="html">
         <source>LOCATIONS</source>
+        <target state="translated">LOCATIONS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/locations/location/location.component.html</context>
           <context context-type="linenumber">2</context>
@@ -3194,6 +3503,7 @@
       </trans-unit>
       <trans-unit id="locations.address" datatype="html">
         <source>Address</source>
+        <target state="translated">Address</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/locations/location/location.component.html</context>
           <context context-type="linenumber">19</context>
@@ -3207,6 +3517,7 @@
       </trans-unit>
       <trans-unit id="locations.city" datatype="html">
         <source>City</source>
+        <target state="translated">City</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/locations/location/location.component.html</context>
           <context context-type="linenumber">27</context>
@@ -3216,6 +3527,7 @@
       </trans-unit>
       <trans-unit id="locations.sector" datatype="html">
         <source>Sector</source>
+        <target state="translated">County</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/locations/location/location.component.html</context>
           <context context-type="linenumber">37</context>
@@ -3225,6 +3537,7 @@
       </trans-unit>
       <trans-unit id="locations.maxcustomer" datatype="html">
         <source>Max Concurrent Customers</source>
+        <target state="translated">Max concurrent customers at the location</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/locations/location/location.component.html</context>
           <context context-type="linenumber">49</context>
@@ -3238,6 +3551,7 @@
       </trans-unit>
       <trans-unit id="locations.serviceinterval" datatype="html">
         <source>Service Time Interval</source>
+        <target state="translated">Service duration</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/locations/location/location.component.html</context>
           <context context-type="linenumber">54</context>
@@ -3251,6 +3565,7 @@
       </trans-unit>
       <trans-unit id="locations.numberbookings" datatype="html">
         <source>Number of bookings by service interval</source>
+        <target state="translated">Number of bookings per service duration</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/locations/location/location.component.html</context>
           <context context-type="linenumber">59</context>
@@ -3264,6 +3579,7 @@
       </trans-unit>
       <trans-unit id="locations.doors" datatype="html">
         <source>Doors</source>
+        <target state="translated">Entrances</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/locations/location/location.component.html</context>
           <context context-type="linenumber">66</context>
@@ -3273,6 +3589,7 @@
       </trans-unit>
       <trans-unit id="locations.parentlocation" datatype="html">
         <source>Parent location</source>
+        <target state="translated">Business parent location</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/locations/location/location.component.html</context>
           <context context-type="linenumber">80</context>
@@ -3282,6 +3599,7 @@
       </trans-unit>
       <trans-unit id="location.manualcheckout" datatype="html">
         <source>Manual Check Out</source>
+        <target state="translated">Manual check-out</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/locations/location/location.component.html</context>
           <context context-type="linenumber">97</context>
@@ -3291,468 +3609,615 @@
       </trans-unit>
       <trans-unit id="login.error">
         <source>You must enter an email</source>
+        <target state="translated">You must enter an e-mail</target>
       </trans-unit>
       <trans-unit id="login.passerror">
         <source>You must enter a password</source>
+        <target state="translated">You must enter a password</target>
       </trans-unit>
       <trans-unit id="shared.emailregis">
         <source>Email already registered</source>
+        <target state="translated">E-mail already registered</target>
       </trans-unit>
       <trans-unit id="forgot.emailformat">
         <source>Invalid email format</source>
+        <target state="translated">Invalid e-mail format</target>
       </trans-unit>
       <trans-unit id="reset.console">
         <source>Reseting Password...</source>
+        <target state="translated">Resetting password...</target>
       </trans-unit>
       <trans-unit id="reset.titleusers">
         <source>Users</source>
+        <target state="translated">Users</target>
       </trans-unit>
       <trans-unit id="shared.error">
         <source>Error !</source>
+        <target state="needs-l10n">Error</target>
       </trans-unit>
       <trans-unit id="reset.successful">
         <source>Password reset successful</source>
+        <target state="translated">Your password was reset</target>
       </trans-unit>
       <trans-unit id="reset.errormessage">
         <source>The new password must be different</source>
+        <target state="translated">The new password can't match an old password</target>
       </trans-unit>
       <trans-unit id="verification.invalidcode">
         <source>Invalid Code</source>
+        <target state="translated">Invalid code</target>
       </trans-unit>
       <trans-unit id="verification.enterpassword">
         <source>You must enter a valid password</source>
+        <target state="translated">You must enter a valid password</target>
       </trans-unit>
       <trans-unit id="verification.actaccount">
         <source>Activating account...</source>
+        <target state="translated">Activating account...</target>
       </trans-unit>
       <trans-unit id="verification.erroraccount">
         <source>Error activating account try again</source>
+        <target state="translated">Error activating account; please try again</target>
       </trans-unit>
       <trans-unit id="profile.loading">
         <source>Loading Profile...</source>
+        <target state="translated">Loading profile...</target>
       </trans-unit>
       <trans-unit id="shared.entervalue">
         <source>You must enter a value</source>
+        <target state="translated">You must enter a value</target>
       </trans-unit>
       <trans-unit id="shared.invalidvalue">
         <source>Invalid value</source>
+        <target state="translated">Invalid value</target>
       </trans-unit>
       <trans-unit id="shared.invalidselectvalue">
         <source>You must select a valid value</source>
+        <target state="translated">You must select a valid value</target>
       </trans-unit>
       <trans-unit id="shared.minimun">
         <source>Minimun length <x id="PH"/></source>
+        <target state="translated">Minimun length <x id="PH"/></target>
       </trans-unit>
       <trans-unit id="shared.maximun">
         <source>Maximun length <x id="PH"/></source>
+        <target state="translated">Maximun length <x id="PH"/></target>
       </trans-unit>
       <trans-unit id="shared.minvalue">
         <source>Minimun value <x id="PH"/></source>
+        <target state="translated">Minimun value <x id="PH"/></target>
       </trans-unit>
       <trans-unit id="shared.maxvalue">
         <source>Maximun value <x id="PH"/></source>
+        <target state="translated">Maximun value <x id="PH"/></target>
       </trans-unit>
       <trans-unit id="shared.userpopup">
         <source>User</source>
+        <target state="translated">User</target>
       </trans-unit>
       <trans-unit id="profile.fileextension">
         <source>File extension not allowed</source>
+        <target state="translated">File extension not allowed</target>
       </trans-unit>
       <trans-unit id="profile.filemaximun">
         <source>File exced maximun allowed</source>
+        <target state="translated">File exceeds the maximum size allowed</target>
       </trans-unit>
       <trans-unit id="profile.saving">
         <source>Saving Profile...</source>
+        <target state="translated">Saving profile...</target>
       </trans-unit>
       <trans-unit id="profile.updated">
         <source>User updated successful</source>
+        <target state="translated">User information was updated successfully</target>
       </trans-unit>
       <trans-unit id="profile.loadprof">
         <source>Loading Profile Image...</source>
+        <target state="translated">Loading profile image...</target>
       </trans-unit>
       <trans-unit id="profile.uploadsuccess">
         <source>Avatar uploaded successful</source>
+        <target state="translated">Avatar successfully uploaded</target>
       </trans-unit>
       <trans-unit id="dashboard.loading">
         <source>Loading Dashboard...</source>
+        <target state="translated">Loading dashboard...</target>
       </trans-unit>
       <trans-unit id="business.loading">
         <source>Loading Business...</source>
+        <target state="translated">Loading business...</target>
       </trans-unit>
       <trans-unit id="business.businesstextpopup">
         <source>Business</source>
+        <target state="translated">Business</target>
       </trans-unit>
       <trans-unit id="business.loadinbmobimg">
         <source>Loading Mobile App Image...</source>
+        <target state="translated">Loading mobile App image...</target>
       </trans-unit>
       <trans-unit id="business.uploadimg">
         <source>Image uploaded successful</source>
+        <target state="translated">Image successfully uploaded</target>
       </trans-unit>
       <trans-unit id="business.laodweblink">
         <source>Loading Web Link Image...</source>
+        <target state="translated">Loading web link image...</target>
       </trans-unit>
       <trans-unit id="business.saving">
         <source>Saving Business...</source>
+        <target state="translated">Saving business...</target>
       </trans-unit>
       <trans-unit id="business.businessupdate">
         <source>Business updated successful.</source>
+        <target state="translated">Business successfully updated</target>
       </trans-unit>
       <trans-unit id="businessdays.loadingdays">
         <source>Loading Special Days...</source>
+        <target state="translated">Loading days off...</target>
       </trans-unit>
       <trans-unit id="businessdays.addsuccess">
         <source>Day add successfully</source>
+        <target state="translated">Day successfully added</target>
       </trans-unit>
       <trans-unit id="businessdays.specdays">
         <source>Special Days</source>
+        <target state="translated">Days off</target>
       </trans-unit>
       <trans-unit id="shared.wrong">
         <source>Something goes wrong, try again</source>
+        <target state="translated">Ops, something went wrong - please try again</target>
       </trans-unit>
       <trans-unit id="businessdays.remove">
         <source>Day remove successfully</source>
+        <target state="translated">Day successfully removed</target>
       </trans-unit>
       <trans-unit id="businessdays.updatedata">
         <source>Data updated successfully</source>
+        <target state="translated">Data successfully updated</target>
       </trans-unit>
       <trans-unit id="host.loadinglocs">
         <source>Loading Locations Data...</source>
+        <target state="translated">Loading locations data...</target>
       </trans-unit>
       <trans-unit id="host.missloc">
         <source>User must have a location assigned, try again</source>
+        <target state="translated">User must have a location assigned, please try again</target>
       </trans-unit>
       <trans-unit id="host.loadingopeloc">
         <source>Loading Open Location...</source>
+        <target state="translated">Loading open location...</target>
       </trans-unit>
       <trans-unit id="host.closingloc">
         <source>Closing Location...</source>
+        <target state="translated">Closing location...</target>
       </trans-unit>
       <trans-unit id="host.checkoutpop">
         <source>Check-Out</source>
+        <target state="translated">Check-out</target>
       </trans-unit>
       <trans-unit id="host.checkoutsuccess">
         <source>La Cita check-out successfull</source>
+        <target state="translated">Booking successfully checked-out</target>
       </trans-unit>
       <trans-unit id="host.loadingwalkins">
         <source>Loading Walk-Ins...</source>
+        <target state="translated">Loading walk-ins...</target>
       </trans-unit>
       <trans-unit id="host.addingappo">
         <source>Adding Appointment...</source>
+        <target state="translated">Adding booking...</target>
       </trans-unit>
       <trans-unit id="host.readytocheckin">
         <source>Ready to check-in successfull</source>
+        <target state="translated">Ready to check-in successful</target>
       </trans-unit>
       <trans-unit id="host.textreadytocheckin">
         <source>Ready to Check-In</source>
+        <target state="translated">Ready to check-in</target>
       </trans-unit>
       <trans-unit id="host.texttransfer">
         <source>Transfer</source>
+        <target state="translated">Transfer</target>
       </trans-unit>
       <trans-unit id="host.loadinglocationsdata">
         <source>Loading Locations Data...</source>
+        <target state="translated">Loading locations data...</target>
       </trans-unit>
       <trans-unit id="host.loadingappos1">
         <source>Loading Appointments...</source>
+        <target state="translated">Loading bookings...</target>
       </trans-unit>
       <trans-unit id="host.messages">
         <source>Messages</source>
+        <target state="translated">Messages</target>
       </trans-unit>
       <trans-unit id="host.messagessend">
         <source>Messages send successfull</source>
+        <target state="translated">Messages successfully sent</target>
       </trans-unit>
       <trans-unit id="host.checkintitle">
         <source>Check-in</source>
+        <target state="translated">Check-in</target>
       </trans-unit>
       <trans-unit id="host.invalidqrcode">
         <source>Invalid qr code</source>
+        <target state="translated">Invalid QR code</target>
       </trans-unit>
       <trans-unit id="host.checkinsuccess">
         <source>La Cita check-in successfull</source>
+        <target state="translated">Booking successfully checked-in</target>
       </trans-unit>
       <trans-unit id="host.cancelsuccess">
         <source>La Cita cancelled successfull</source>
+        <target state="translated">Booking successfully cancelled</target>
       </trans-unit>
       <trans-unit id="host.cancelappodyn">
         <source>Cancel Appointment</source>
+        <target state="translated">Cancel booking</target>
       </trans-unit>
       <trans-unit id="host.selectreason">
         <source>You must select a reason</source>
+        <target state="translated">You must select a reason</target>
       </trans-unit>
       <trans-unit id="polls.loadingpoll">
         <source>Loading Poll...</source>
+        <target state="translated">Loading poll...</target>
       </trans-unit>
       <trans-unit id="polls.loadingpolls">
         <source>Loading Polls...</source>
+        <target state="translated">Loading polls...</target>
       </trans-unit>
       <trans-unit id="polls.errorpoll">
         <source>Poll is not active</source>
+        <target state="translated">Poll inactive</target>
       </trans-unit>
       <trans-unit id="polls.savingpoll">
         <source>Saving Poll...</source>
+        <target state="translated">Saving poll...</target>
       </trans-unit>
       <trans-unit id="polls.savingpoll">
         <source>Saving Poll...</source>
+        <target state="translated">Saving poll...</target>
       </trans-unit>
       <trans-unit id="polls.pollssub">
         <source>Polls</source>
+        <target state="translated">Polls</target>
       </trans-unit>
       <trans-unit id="polls.pollsing">
         <source>Poll</source>
+        <target state="translated">Poll</target>
       </trans-unit>
       <trans-unit id="polls.deletepoll">
         <source>Are you sure to delete this Poll?</source>
+        <target state="translated">Are you sure you want to delete this poll?</target>
       </trans-unit>
       <trans-unit id="polls.deletingpoll">
         <source>Deleting Poll...</source>
+        <target state="translated">Deleting poll...</target>
       </trans-unit>
       <trans-unit id="polls.deletedsuccessful">
         <source>Poll deleted successful</source>
+        <target state="translated">Poll successfully deleted </target>
       </trans-unit>
       <trans-unit id="polls.savingsuccess">
         <source>Saving successfully</source>
+        <target state="translated">Poll successfully saved</target>
       </trans-unit>      
       <trans-unit id="providers.loadservice">
         <source>Loading Service providers...</source>
+        <target state="translated">Loading service providers...</target>
       </trans-unit>
       <trans-unit id="providers.loadserviceprov">
         <source>Loading Service provider...</source>
+        <target state="translated">Loading service provider...</target>
       </trans-unit>
       <trans-unit id="providers.subtitle">
         <source>Providers</source>
+        <target state="translated">Service providers</target>
       </trans-unit>
       <trans-unit id="providers.servprovider">
         <source>Service provider</source>
+        <target state="translated">Service provider</target>
       </trans-unit>      
       <trans-unit id="providers.deletemessage">
         <source>Are you sure to delete this Service provider?</source>
+        <target state="translated">Are you sure you want to delete this service provider?</target>
       </trans-unit>
       <trans-unit id="providers.deletingservice">
         <source>Deleting Service...</source>
+        <target state="translated">Deleting service...</target>
       </trans-unit>
       <trans-unit id="providers.deletedsuccess">
         <source>Service provider deleted successfully</source>
+        <target state="translated">Service provider successfully deleted</target>
       </trans-unit>
       <trans-unit id="providers.savingserviprov">
         <source>Saving service provider successfully</source>
+        <target state="translated">Service provider successfully saved</target>
       </trans-unit>
       <trans-unit id="providers.servadded">
         <source>Service added successfully</source>
+        <target state="translated">Service successfully added</target>
       </trans-unit>
       <trans-unit id="providers.servremove">
         <source>Service remove successfully</source>
+        <target state="translated">Service successfully removed</target>
       </trans-unit>
       <trans-unit id="locations.loadlocation">
         <source>Loading Location...</source>
+        <target state="translated">Loading location...</target>
       </trans-unit>
       <trans-unit id="locations.loadlocations">
         <source>Loading Locations...</source>
+        <target state="translated">Loading locations...</target>
       </trans-unit>
       <trans-unit id="locations.subtitle">
         <source>Locations</source>
+        <target state="translated">Locations</target>
       </trans-unit>
       <trans-unit id="locations.subtitlesing">
         <source>Location</source>
+        <target state="translated">Location</target>
       </trans-unit>
       <trans-unit id="locations.savedsuccess">
         <source>Location saved successfully</source>
+        <target state="translated">Location successfully saved</target>
       </trans-unit>
       <trans-unit id="locations.savinglocations">
         <source>Saving Locations...</source>
+        <target state="translated">Saving locations...</target>
       </trans-unit>
       <trans-unit id="lite.loadlocs">
         <source>Loading Locations Data...</source>
+        <target state="translated">Loading locations data...</target>
       </trans-unit>
       <trans-unit id="lite.locsassigned">
         <source>User must have a location assigned, try again</source>
+        <target state="translated">User must have a location assigned, please try again</target>
       </trans-unit>
       <trans-unit id="lite.checkoutsuccess">
         <source>La Cita check-out successfull</source>
+        <target state="translated">Booking successfully checked-out</target>
       </trans-unit>
       <trans-unit id="lite.addingbook">
         <source>Adding Booking...</source>
+        <target state="translated">Adding booking...</target>
       </trans-unit>
       <trans-unit id="lite.walkinadded">
         <source>Walk-in added successfully</source>
+        <target state="translated">Walk-in successfully added</target>
       </trans-unit>
       <trans-unit id="lite.loadingwalkins">
         <source>Loading Walk-Ins...</source>
+        <target state="translated">Loading walk-ins...</target>
       </trans-unit>
       <trans-unit id="lite.loadingdata">
         <source>Loading Data...</source>
+        <target state="translated">Loading data...</target>
       </trans-unit>
       <trans-unit id="roles.rolepop">
         <source>Role</source>
+        <target state="translated">Role</target>
       </trans-unit> 
       <trans-unit id="roles.roledeleted">
         <source>Role deleted successful</source>
+        <target state="translated">Role successfully deleted</target>
       </trans-unit> 
       <trans-unit id="roles.deletingrole">
         <source>Deleting Role...</source>
+        <target state="translated">Deleting role...</target>
       </trans-unit> 
       <trans-unit id="roles.deletemessage">
         <source>Are you sure to delete this Role?</source>
+        <target state="translated">Are you sure you want to delete this role?</target>
       </trans-unit> 
       <trans-unit id="roles.loadingrole">
         <source>Loading Roles...</source>
+        <target state="translated">Loading roles...</target>
       </trans-unit> 
       <trans-unit id="roles.loadingrolesingle">
         <source>Loading Role...</source>
+        <target state="translated">Loading role...</target>
       </trans-unit> 
       <trans-unit id="roles.savingrole">
         <source>Saving Role...</source>
+        <target state="translated">Saving role...</target>
       </trans-unit> 
       <trans-unit id="roles.rolestext">
         <source>Roles</source>
+        <target state="translated">Roles</target>
       </trans-unit>
       <trans-unit id="roles.roleupdated">
         <source>Role updated successful</source>
+        <target state="translated">Role successfully updated</target>
       </trans-unit>
       <trans-unit id="roles.rolecreated">
         <source>Role created successful</source>
+        <target state="translated">Role successfully created</target>
       </trans-unit>
       <trans-unit id="sche.loadingsche">
         <source>Loading Schedule...</source>
+        <target state="translated">Loading schedule...</target>
       </trans-unit>
       <trans-unit id="sche.citastext">
         <source>Citas</source>
+        <target state="translated">Bookings</target>
       </trans-unit>
       <trans-unit id="sche.deletetext">
         <source>Are you sure to delete this Citas?</source>
+        <target state="translated">Are you sure you want to delete this booking?</target>
       </trans-unit>
       <trans-unit id="sche.deletingcitas">
         <source>Deleting Citas...</source>
+        <target state="translated">Deleting bookings...</target>
       </trans-unit>
       <trans-unit id="sche.deletedssuccess">
         <source>Citas deleted successfully</source>
+        <target state="translated">Bookings successfully deleted</target>
       </trans-unit>
       <trans-unit id="services.loadingservs">
         <source>Loading Services...</source>
+        <target state="translated">Loading services...</target>
       </trans-unit>
       <trans-unit id="services.loadingserv">
         <source>Loading Service...</source>
+        <target state="translated">Loading service...</target>
       </trans-unit>
       <trans-unit id="services.service">
         <source>Service</source>
+        <target state="translated">Service</target>
       </trans-unit>
       <trans-unit id="services.deletedtext">
         <source>Are you sure to delete this Service?</source>
+        <target state="translated">Are you sure you want to delete this service?</target>
       </trans-unit>
       <trans-unit id="services.deletedsuccess">
         <source>Service deleted successfully</source>
+        <target state="translated">Service successfully deleted</target>
       </trans-unit>
       <trans-unit id="services.deletingserv">
         <source>Deleting Service...</source>
+        <target state="translated">Deleting service...</target>
       </trans-unit>
       <trans-unit id="services.savingsuccess">
         <source>Saving successfully</source>
+        <target state="translated">Service successfully saved</target>
       </trans-unit>
       <trans-unit id="services.savingserv">
         <source>Saving Service...</source>
+        <target state="translated">Saving service...</target>
       </trans-unit>
       <trans-unit id="survey.savingsurvey">
         <source>Saving Survey...</source>
+        <target state="translated">Saving survey...</target>
       </trans-unit>
       <trans-unit id="survey.loadingsurv">
         <source>Loading Survey...</source>
+        <target state="translated">Loading survey...</target>
       </trans-unit>
       <trans-unit id="dirdialog.checkout">
         <source>Check out successfull</source>
+        <target state="translated">Check-out successful</target>
       </trans-unit>
       <trans-unit id="dirdialog.walkins">
         <source>Check Out Walk-Ins...</source>
+        <target state="translated">Check-out walk-ins...</target>
       </trans-unit>
       <trans-unit id="surveys.survey">
         <source>Survey</source>
+        <target state="translated">Survey</target>
       </trans-unit>
       <trans-unit id="surveys.surveys">
         <source>Surveys</source>
+        <target state="translated">Surveys</target>
       </trans-unit>
       <trans-unit id="surveys.deletedtext">
         <source>Are you sure to delete this Survey?</source>
+        <target state="translated">Are you sure you want to delete this survey?</target>
       </trans-unit>
       <trans-unit id="surveys.deleting">
         <source>Deleting Survey...</source>
+        <target state="translated">Deleting survey...</target>
       </trans-unit>
       <trans-unit id="surveys.deletedsuccessful">
         <source>Survey deleted successful</source>
+        <target state="translated">Survey successfully deleted</target>
       </trans-unit>
       <trans-unit id="surveys.loadingsurvs">
         <source>Loading Surveys...</source>
+        <target state="translated">Loading surveys...</target>
       </trans-unit>
       <trans-unit id="surveys.savingsuccess">
         <source>Saving successfully</source>
+        <target state="translated">Survey successfully saved</target>
       </trans-unit>
       <trans-unit id="userloc.loadinguser">
         <source>Loading Users...</source>
+        <target state="translated">Loading users...</target>
       </trans-unit>
       <trans-unit id="userloc.loadingusersingle">
         <source>Loading User...</source>
+        <target state="translated">Loading user...</target>
       </trans-unit>
       <trans-unit id="userloc.subtitle">
         <source>User Location</source>
+        <target state="translated">User location</target>
       </trans-unit>
       <trans-unit id="userloc.userupdated">
         <source>User updated successfully</source>
+        <target state="translated">User successfully updated</target>
       </trans-unit>
       <trans-unit id="userloc.usercreated">
         <source>User created successfully</source>
+        <target state="translated">User successfully created</target>
       </trans-unit>
       <trans-unit id="users.usertext">
         <source>User</source>
+        <target state="translated">User</target>
       </trans-unit>
       <trans-unit id="users.usertexts">
         <source>Users</source>
+        <target state="translated">Users</target>
       </trans-unit>
       <trans-unit id="users.deletedsuccess">
         <source>User deleted successful</source>
+        <target state="translated">User successfully deleted</target>
       </trans-unit>
       <trans-unit id="users.deletinguser">
         <source>Deleting User...</source>
+        <target state="translated">Deleting user...</target>
       </trans-unit>
       <trans-unit id="users.savinguser">
         <source>Saving User...</source>
+        <target state="translated">Saving user...</target>
       </trans-unit>
       <trans-unit id="users.deleteuserquest">
         <source>Are you sure to delete this User?</source>
+        <target state="translated">Are you sure you want to delete this user?</target>
       </trans-unit>
       <trans-unit id="users.codesend">
         <source>Code send successfully</source>
+        <target state="translated">Code successfully sent</target>
       </trans-unit>
       <trans-unit id="users.sendingcode">
         <source>Sending activation code...</source>
+        <target state="translated">Sending activation code...</target>
       </trans-unit>
       <trans-unit id="appos.created">
         <source>Appointment created succesfully</source>
+        <target state="translated">Booking successfully created</target>
       </trans-unit>
       <trans-unit id="appos.schedule">
         <source>Schedule</source>
+        <target state="translated">Schedule</target>
       </trans-unit>
       <trans-unit id="appos.invalidserv">
         <source>Invalid time for this service</source>
+        <target state="translated">Service not available for this time</target>
       </trans-unit>
       <trans-unit id="appos.cancel">
         <source>Cancel</source>
+        <target state="translated">Cancel</target>
       </trans-unit>
       <trans-unit id="search.search">
         <source>Search</source>
+        <target state="translated">Search</target>
       </trans-unit>
       <trans-unit id="search.addplus">
         <source>+ Add</source>
+        <target state="translated">+ Add</target>
       </trans-unit>
       <trans-unit id="host.locclosed">
         <source>Your location is closed</source>
+        <target state="translated">Your location is closed</target>
       </trans-unit>
       <trans-unit id="host.loccopenandclosed">
         <source>You need to reopen your location</source>
+        <target state="translated">You need to reopen your location</target>
       </trans-unit>
       <trans-unit id="host.locopen">
         <source>Your location is open</source>
-      </trans-unit>
-      <trans-unit id="sche.openhour">
-        <source>Open hour...</source>
-      </trans-unit>
-      <trans-unit id="sche.openhoursuccess">
-        <source>Open hour successfully...</source>
+        <target state="translated">Your location is opened</target>
       </trans-unit>
     </body>
   </file>
