@@ -358,7 +358,7 @@ export class ScheduleComponent implements OnInit {
               if (res.Code == 200){
                 this.openSnackBar($localize`:@@sche.deletedssuccess:`, $localize`:@@sche.citastext:`);
                 this.spinnerService.stop(spinnerRef);
-                location.reload(true);
+                this.loadHours();
               }
             }
           })
