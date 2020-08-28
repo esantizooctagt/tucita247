@@ -3,7 +3,7 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
 import { LocationService, ServService } from '@app/services';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, switchMap } from 'rxjs/operators';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { AuthService } from '@app/core/services';
 import { AppoDialogComponent } from '@app/shared/appo-dialog/appo-dialog.component';
@@ -362,7 +362,32 @@ export class ScheduleComponent implements OnInit {
               }
             }
           })
-        );
+          // switchMap(x => this.appointmentService.getOperationHours(this.businessId, this.locationId, this.providerId, this.datepipe.transform(this.monday, 'yyyy-MM-dd')).pipe(
+          //   map((res: any) => {
+          //     console.log("recarga con otro metodo");
+          //     this.hours = [];
+          //     this.MonHours = [];
+          //     this.TueHours = [];
+          //     this.WedHours = [];
+          //     this.ThuHours = [];
+          //     this.FriHours = [];
+          //     this.SatHours = [];
+          //     this.SunHours = [];
+          //     if (res.Code == 200){
+          //       this.hours = res.Hours;
+          //       this.MonHours = res.Monday;
+          //       this.TueHours = res.Tuesday;
+          //       this.WedHours = res.Wednesday;
+          //       this.ThuHours = res.Thursday;
+          //       this.FriHours = res.Friday;
+          //       this.SatHours = res.Saturday;
+          //       this.SunHours = res.Sunday;
+          //       this.spinnerService.stop(spinnerRef);
+          //       return res;
+          //     }
+          //   })
+          // )
+        )
       }
     });
   }
