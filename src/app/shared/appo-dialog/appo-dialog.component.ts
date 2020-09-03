@@ -200,7 +200,7 @@ export class AppoDialogComponent implements OnInit {
     let res = this.services.filter(x => x.ServiceId == event.value);
     let validTime: number = 0;
     let dateAppo = (this.data.appoTime.substring(6,8) == 'PM' ? (+this.data.appoTime.substring(0,2) == 12 ? this.data.appoTime.substring(0,2) : +this.data.appoTime.substring(0,2)+12) : this.data.appoTime.substring(0,2));
-    for (var _i = 0; _i < res[0].TimeService; _i++) {
+    for (var _i = 0; _i < 1; _i++) {
       let data = this.dayInfo.filter(x => (x.Time.substring(6,8) == 'PM' ? (+x.Time.substring(0,2) == 12 ? +x.Time.substring(0,2) : +x.Time.substring(0,2)+12) : +x.Time.substring(0,2)) == +dateAppo+_i);
       if (data.length > 0){        
         if (data[0].Available > 0 && (data[0].ServiceId == '' || data[0].ServiceId == event.value)){
