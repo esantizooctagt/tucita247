@@ -3754,6 +3754,9 @@
       <trans-unit id="sche.openhoursuccess">
         <source>Open hour successfully...</source>
       </trans-unit>
+      <trans-unit id="host.invalidTime">
+        <source>Invalid time for appointment</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

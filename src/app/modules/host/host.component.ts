@@ -278,8 +278,8 @@ export class HostComponent implements OnInit {
       map((res: any) => {
         if (res != null ){
           if (res.Code == 200){
-            this.reasons = res.Reasons;
-            return res.Reasons;
+            this.reasons = res.Reasons.split(',');
+            return res.Reasons.split(',');
           }
         }
       }),
@@ -575,6 +575,11 @@ export class HostComponent implements OnInit {
   }
 
   addAppointment(){
+    let timeAppo = this.getTime();
+    if (timeAppo == ""){
+      this.openSnackBar($localize`:@@host.invalidTime:`, $localize`:@@shared.error:`);
+      return;
+    }
     //AGREGAR WALK IN Y APPOINTMENT
     let dobClient: Date = this.clientForm.value.DOB;
     let dob: string = '';
@@ -590,7 +595,6 @@ export class HostComponent implements OnInit {
     let monthCurr = this.getMonth();
     let dayCurr = this.getDay();
     let dateAppo = yearCurr + '-' + monthCurr + '-' + dayCurr;
-    let timeAppo = this.getTime();
     let formData = {
       BusinessId: this.businessId,
       LocationId: this.locationId,

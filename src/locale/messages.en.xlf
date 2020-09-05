@@ -10,6 +10,10 @@
         <source>Open hour successfully...</source>
         <target state="translated">XXX</target>
       </trans-unit>
+      <trans-unit id="host.invalidTime">
+        <source>Invalid time for appointment</source>
+        <target>Invalid time for appointment</target>
+      </trans-unit>
       <trans-unit id="services.customerbooking" datatype="html">
         <source>Customer per Booking</source>
         <target state="translated">XXX</target>
