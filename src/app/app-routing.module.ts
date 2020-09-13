@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '@modules/authentication/guards/auth.guard';
 
 /**Main Components**/
-import { MainNavComponent, NotFoundComponent, ServiceComponent, PollComponent, ProviderComponent, LoginComponent, UserComponent, UsersComponent, ClientsComponent, DashboardComponent, ProfileComponent, BusinessComponent, CategoriesComponent, ReportsComponent, RoleComponent, RolesComponent, HelpComponent, ResetComponent, VerificationComponent, ForgotpassComponent, HomeComponent, HostComponent, UserlocComponent, PollsComponent, PollRespComponent, QuickCheckinComponent, SurveysComponent, SurveyRespComponent, LandingComponent, ScheduleComponent, BusinessOpeComponent, BusinessDaysComponent, LocationsComponent, ProvidersComponent, WelcomeComponent, ServicesComponent } from '@modules/index';
+import { MainNavComponent, NotFoundComponent, ServiceComponent, LocationComponent, PollComponent, ProviderComponent, LoginComponent, UserComponent, UsersComponent, ClientsComponent, DashboardComponent, ProfileComponent, BusinessComponent, CategoriesComponent, ReportsComponent, RoleComponent, RolesComponent, HelpComponent, ResetComponent, VerificationComponent, ForgotpassComponent, HomeComponent, HostComponent, UserlocComponent, PollsComponent, PollRespComponent, QuickCheckinComponent, SurveysComponent, SurveyRespComponent, LandingComponent, ScheduleComponent, BusinessOpeComponent, BusinessDaysComponent, LocationsComponent, ProvidersComponent, WelcomeComponent, ServicesComponent } from '@modules/index';
 
 const routes: Routes = [
   {
@@ -24,6 +24,7 @@ const routes: Routes = [
       { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
       { path: 'company', component: BusinessComponent, canActivate: [AuthGuard] },
       { path: 'locations', component: LocationsComponent, canActivate: [AuthGuard] },
+      { path: 'location/:locationId', component: LocationComponent, canActivate: [AuthGuard] },
       { path: 'providers', component: ProvidersComponent, canActivate: [AuthGuard] },
       { path: 'provider/:providerId', component: ProviderComponent, canActivate: [AuthGuard] },
       { path: 'services', component: ServicesComponent, canActivate: [AuthGuard] },
@@ -100,6 +101,7 @@ export const routingComponents = [
   ClientsComponent,
   BusinessComponent,
   LocationsComponent,
+  LocationComponent,
   ProvidersComponent,
   ProviderComponent,
   CategoriesComponent,

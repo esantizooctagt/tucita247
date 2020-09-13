@@ -61,7 +61,8 @@ export class LocationListComponent implements OnInit {
     private spinnerService: SpinnerService,
     private dialog: MatDialog,
     private locationService: LocationService,
-    private matIconRegistry: MatIconRegistry
+    private matIconRegistry: MatIconRegistry,
+    private router: Router
   ) { 
     this.matIconRegistry.addSvgIcon('edit',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/edit.svg'));
     this.matIconRegistry.addSvgIcon('delete',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/delete.svg'));
@@ -170,8 +171,7 @@ export class LocationListComponent implements OnInit {
   }
 
   onSelect(location: any){
-    this.data.setData(location);
-    this.data.handleData('Add');
+    this.router.navigate(['/location/'+location]);
   }
 
   trackRow(index: number, item: any) {

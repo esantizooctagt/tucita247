@@ -34,3 +34,4 @@ export * from './services/services.component';
 export * from './services/service/service.component';
 export * from './providers/provider/provider.component';
 export * from './polls/poll/poll.component';
+export * from './locations/location/location.component';

@@ -75,7 +75,6 @@ import { ShowappoDialogComponent } from './shared/showappo-dialog/showappo-dialo
 import { DatePipe } from '@angular/common';
 import { ProviderListComponent } from '@modules/providers/provider-list/provider-list.component';
 import { ServiceListComponent } from '@modules/services/service-list/service-list.component';
-import { LocationComponent } from './modules/locations/location/location.component';
 import { LocationListComponent } from './modules/locations/location-list/location-list.component';
 
 // apiKey: 'AIzaSyCyKdLcjPnI3n5Eb2VmMJk-sgan83LEsCM'
@@ -101,7 +100,6 @@ import { LocationListComponent } from './modules/locations/location-list/locatio
     ShowappoDialogComponent,
     ProviderListComponent,
     ServiceListComponent,
-    LocationComponent,
     LocationListComponent,
     HourdataPipe,
     ServcolorPipe

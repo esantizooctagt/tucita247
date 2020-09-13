@@ -12,6 +12,7 @@ import { map, catchError, switchMap, tap } from 'rxjs/operators';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MonitorService } from '@app/shared/monitor.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-location',
@@ -64,6 +65,8 @@ export class LocationComponent implements OnInit {
     private locationService: LocationService,
     private businessService: BusinessService,
     private data: MonitorService,
+    private route: ActivatedRoute,
+    private router: Router,
     private spinnerService: SpinnerService
   ) { }
 
@@ -101,6 +104,9 @@ export class LocationComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.data.handleData('Add');
+    this.locationDataList = this.route.snapshot.paramMap.get('locationId');
+
     var spinnerRef = this.spinnerService.start($localize`:@@locations.loadlocation:`);
     this.businessId = this.authService.businessId();
     this.language = this.authService.language() == "" ? "EN" : this.authService.language();
@@ -108,8 +114,6 @@ export class LocationComponent implements OnInit {
     this.sectors = [];
     this.sectors.push({ SectorId: "0", Name: "N/A" });
     this.cities.push({ CityId: "0", Name: "N/A" });
-
-    this.data.objectMessage.subscribe(res => this.locationDataList = res);
 
     this.parentBus$ = this.businessService.getBusinessParent().pipe(
       map(res => {
@@ -148,7 +152,7 @@ export class LocationComponent implements OnInit {
   }
 
   onDisplay() {
-    if (this.locationDataList != undefined) {
+    if (this.locationDataList != undefined && this.locationDataList != "0") {
       var spinnerRef = this.spinnerService.start($localize`:@@locations.loadlocation:`);
       this.locationForm.reset({ LocationId: '', BusinessId: '', Name: '', City: '', Sector: '', Address: '', Geolocation : '{0.00,0.00}', ParentLocation : '0', MaxConcurrentCustomer: '', BucketInterval: '', TotalCustPerBucketInter: '', ManualCheckOut: false, Doors: '', Status: true});
       this.location$ = this.locationService.getLocation(this.businessId, this.locationDataList, this.countryCode, this.language).pipe(
@@ -278,8 +282,7 @@ export class LocationComponent implements OnInit {
   }
 
   onCancel(){
-    this.locationForm.reset({ LocationId: '', BusinessId: '', Name: '', City: '', Sector: '', Address: '', Geolocation : '{0.00,0.00}', ParentLocation : '0', MaxConcurrentCustomer: '', BucketInterval: '', TotalCustPerBucketInter: '', ManualCheckOut: false, Doors: '', Status: true});
-    this.doors = '';
+    this.router.navigate(['/locations']);
   }
 
   onSubmit() {
