@@ -11,6 +11,7 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { map, catchError } from 'rxjs/operators';
 import { LocationService } from '@app/services';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-location-list',
