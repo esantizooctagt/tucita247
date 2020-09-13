@@ -152,6 +152,7 @@ export class AppoDialogComponent implements OnInit {
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
         this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@appos.schedule:`);
+        this.dialogRef.close({newAppo: 'OK'});
         return err;
       })
     );
