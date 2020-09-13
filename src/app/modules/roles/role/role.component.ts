@@ -11,6 +11,7 @@ import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { tap, catchError, map } from 'rxjs/operators';
 import { MatSelectionList } from '@angular/material/list';
 import { SpinnerService } from '@app/shared/spinner.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-role',
@@ -33,7 +34,7 @@ export class RoleComponent implements OnInit {
   languageInit: string = '';
   displayForm: boolean = true;
   savingRole: boolean=false;
-  roleDataList: Role;
+  roleDataList: string = '';
 
   role$: Observable<Role>;
   roleSave$: Observable<any>;
@@ -48,6 +49,8 @@ export class RoleComponent implements OnInit {
     private authService: AuthService,
     private data: MonitorService,
     private roleService: RolesService,
+    private route: ActivatedRoute,
+    private router: Router,
     private spinnerService: SpinnerService,
     private dialog: MatDialog
   ) { }
@@ -90,18 +93,20 @@ export class RoleComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.data.handleData('Add');
+    this.roleDataList = this.route.snapshot.paramMap.get('roleId');
+
     this.businessId = this.authService.businessId();
     this.languageInit = this.authService.language() == "" ? "EN" : this.authService.language();
     this.onValueChanges();
     this.loadAccess();
 
-    this.data.objectMessage.subscribe(res => this.roleDataList = res);
     this.onDisplay();
   }
 
   onDisplay(){
     // changes.prop contains the old and the new value...
-    if (this.roleDataList != undefined) {
+    if (this.roleDataList != undefined && this.roleDataList != "0") {
       var spinnerRef = this.spinnerService.start($localize`:@@roles.loadingrolesingle:`);
       this.roleForm.reset({RoleId: '', BusinessId: '', Name: '', Status: 1});
       this.g.clear();
@@ -134,9 +139,7 @@ export class RoleComponent implements OnInit {
   }
 
   onCancel(){
-    this.roleForm.patchValue({RoleId:''});
-    this.loadAccess();
-    this.roleForm.reset({RoleId: '', BusinessId: '', Name: '', Status:1, Access: this.apps$});
+    this.router.navigate(['/roles']);
   }
 
   onSubmit(){

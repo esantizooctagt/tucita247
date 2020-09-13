@@ -38,6 +38,7 @@ export class QuickCheckinComponent implements OnInit {
   perLocation: number = 0;
   totLocation: number = 0;
   textOpenLocation: string = '';
+  locName: string = '';
   buckets=[];
 
   showCard: boolean =false;
@@ -119,6 +120,7 @@ export class QuickCheckinComponent implements OnInit {
           this.doorId = res.Locs.Door;
           this.Providers = res.Locs.Providers;
           this.totLocation = res.Locs.MaxCustomers;
+          this.locName = res.Locs.Name;
           if (this.Providers.length > 0){
             this.locationStatus = res.Locs.Providers[0].Open;
             this.closedLoc = res.Locs.Providers[0].Closed;

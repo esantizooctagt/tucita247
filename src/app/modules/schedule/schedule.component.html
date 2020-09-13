@@ -22,7 +22,11 @@
             <mat-icon [ngClass]="{'back-disabled': currWeek == 1,
                 'back-enabled': currWeek == 0}">arrow_back</mat-icon>
         </button>
-        <div class="col-sm col-md col-lg pt-2 pb-2 month-qeue">{{(weekStart | date: 'MMM d') + ' - ' + (weekEnd | date: 'MMM d')}}</div>
+        <div class="col-sm col-md col-lg pt-2 pb-2 month-qeue">{{(weekStart | date: 'MMM d') + ' - ' + (weekEnd | date: 'MMM d') + '   '}}
+            <button mat-icon-button class="mr-3 nav-refresh" type="button" (click)="refresh()">
+                <mat-icon class="action-enabled" svgIcon="refresh"></mat-icon>
+            </button>
+        </div>
         <button mat-icon-button class="mr-3 nav-buttons" type="button" (click)="nextWeek()">
             <mat-icon>arrow_forward</mat-icon>
         </button>
@@ -58,7 +62,7 @@
         </div>
     </div>
     <ng-container *ngIf="cancelAppos$ | async"></ng-container>
-    <ng-container *ngIf="putAppo$ | async"></ng-container>
+    <ng-container *ngIf="putAppo$ | async"></ng-container><ng-container *ngIf="validBusiness$ | async"></ng-container>
     <div class="row" *ngFor="let item of hours">
         <div class="col-sm col-md col-lg-12">
             <div class="row space-row ml-1 mr-1">

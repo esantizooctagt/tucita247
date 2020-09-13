@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { shareReplay, map } from 'rxjs/operators';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MonitorService } from '../monitor.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-search',
@@ -13,12 +14,14 @@ import { MonitorService } from '../monitor.service';
 })
 export class SearchComponent implements OnInit, OnDestroy {
   @Input() readonly placeholder: string = '';
+  @Input() readonly newRoute: string = '';
   @Output() setValue: EventEmitter<string> = new EventEmitter();
 
   private _searchSubject: Subject<string> = new Subject();
   public loading:boolean = false;
   public searchValue: string='';
   public contentButton: string = '+ Add';
+
   changeData: string = '';
   
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
@@ -29,7 +32,8 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private monitorService: MonitorService
+    private monitorService: MonitorService,
+    private router: Router
   ) {
     this._setSearchSubscription();
    }
@@ -56,13 +60,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   changeView(){
-    let value = '';
-    if (this.changeData == 'Search'){
-      value = 'Add';
-    } else {
-      value = 'Search';
-    }
-    this.monitorService.handleData(value);
+    this.router.navigate(['/'+this.newRoute+'/0']);
   }
   
   public updateSearchUp(event, searchTextValue: string) {

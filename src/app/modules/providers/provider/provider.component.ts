@@ -10,6 +10,7 @@ import { ConfirmValidParentMatcher } from '@app/validators';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError, switchMap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-provider',
@@ -24,7 +25,7 @@ export class ProviderComponent implements OnInit {
   services$: Observable<any>;
   servProvider$: Observable<any>;
   saveProvider$: Observable<any>; 
-  providerDataList: any;
+  providerDataList: string = '';
 
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
@@ -35,6 +36,8 @@ export class ProviderComponent implements OnInit {
     private spinnerService: SpinnerService,
     private providerService: ProviderService,
     private serviceService: ServService,
+    private route: ActivatedRoute,
+    private router: Router,
     private dialog: MatDialog,
     private data: MonitorService,
     private locationService: LocationService
@@ -75,6 +78,9 @@ export class ProviderComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.data.handleData('Add');
+    this.providerDataList = this.route.snapshot.paramMap.get('provierId');
+
     var spinnerRef = this.spinnerService.start($localize`:@@providers.loadserviceprov:`);
     this.businessId = this.authService.businessId();
 
@@ -91,12 +97,11 @@ export class ProviderComponent implements OnInit {
       })
     );
 
-    this.data.objectMessage.subscribe(res => this.providerDataList = res);
     this.onDisplay();
   }
 
   onDisplay(){
-    if (this.providerDataList != undefined){
+    if (this.providerDataList != undefined && this.providerDataList != "0"){
       let provId = '';
       var spinnerRef = this.spinnerService.start($localize`:@@providers.loadserviceprov:`);
       this.providerForm.reset({ ProviderId: '', Name: '', LocationId: '', Status: true});
@@ -156,7 +161,7 @@ export class ProviderComponent implements OnInit {
   }
 
   onCancel(){
-    this.providerForm.reset({ ProviderId: '', Name: '', LocationId: '', Status: true});
+    this.router.navigate(['/providers']);
   }
 
   onSubmit(){

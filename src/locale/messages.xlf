@@ -3757,6 +3757,12 @@
       <trans-unit id="host.invalidTime">
         <source>Invalid time for appointment</source>
       </trans-unit>
+      <trans-unit id="host.companydisabled">
+        <source>Company disabled</source>
+      </trans-unit>
+      <trans-unit id="host.noappos">
+        <source>No available appos</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

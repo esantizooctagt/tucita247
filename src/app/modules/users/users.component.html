@@ -1,7 +1,7 @@
 <div class="container-fluid main-background">
     <div class="row p-0">
         <div class="list-form col-md-12 pl-4 m-0">
-            <app-search i18n-placeholder="Search by first name|search in users@@users.searchtext" placeholder="Search by first name" (setValue)="filterList($event)"></app-search>
+            <app-search i18n-placeholder="Search by first name|search in users@@users.searchtext" placeholder="Search by first name" (setValue)="filterList($event)" newRoute="user"></app-search>
         </div> 
         <app-user-list class="col-md-12 pl-4 m-0" *ngIf="changeData == 'Search'" [filterValue]="filterData"></app-user-list>
         <app-user class="col-md-12 pl-4 m-0" *ngIf="changeData == 'Add'"></app-user>

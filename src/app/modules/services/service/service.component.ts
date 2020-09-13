@@ -10,6 +10,7 @@ import { ConfirmValidParentMatcher } from '@app/validators';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { GreaterThanValidator } from '@app/validators';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-service',
@@ -20,7 +21,7 @@ export class ServiceComponent implements OnInit {
   businessId: string = '';
   service$: Observable<any>;
   saveService$: Observable<any>; 
-  serviceDataList: any;
+  serviceDataList: string = '';
   palette: any[] = [];
   
   // ,"EDEDED","FFF2CC","DDEBF7","8EA9DB","F4B084","C9C9C9","FFD966","9BC2E6","F2E5FF","FFFFB3","ABDBFF","FFC1EF","E2EFDA","CC99FF","FFFF00","47B0FF","FF6DD9","A9D08E"];
@@ -31,6 +32,8 @@ export class ServiceComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private spinnerService: SpinnerService,
+    private route: ActivatedRoute,
+    private router: Router,
     private serviceService: ServService,
     private dialog: MatDialog,
     private data: MonitorService
@@ -68,14 +71,16 @@ export class ServiceComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.data.handleData('Add');
+    this.serviceDataList = this.route.snapshot.paramMap.get('serviceId');
+
     this.businessId = this.authService.businessId();
     this.palette = [{id:"#D9E1F2",value:"#D9E1F2"},{id:"#FCE4D6",value:"#FCE4D6"},{id:"#EDEDED",value:"#EDEDED"},{id:"#FFF2CC",value:"#FFF2CC"},{id:"#DDEBF7",value:"#DDEBF7"},{id:"#8EA9DB",value:"#8EA9DB"},{id:"#F4B084",value:"#F4B084"},{id:"#C9C9C9",value:"#C9C9C9"},{id:"#FFD966",value:"#FFD966"},{id:"#9BC2E6",value:"#9BC2E6"},{id:"#F2E5FF",value:"#F2E5FF"},{id:"#FFFFB3",value:"#FFFFB3"},{id:"#ABDBFF",value:"#ABDBFF"},{id:"#FFC1EF",value:"#FFC1EF"},{id:"#E2EFDA",value:"#E2EFDA"},{id:"#CC99FF",value:"#CC99FF"},{id:"#FFFF00",value:"#FFFF00"},{id:"#47B0FF",value:"#47B0FF"},{id:"#FF6DD9",value:"#FF6DD9"},{id:"#A9D08E",value:"#A9D08E"}];
-    this.data.objectMessage.subscribe(res => this.serviceDataList = res);
     this.onDisplay();
   }
 
   onDisplay(){
-    if (this.serviceDataList != undefined){
+    if (this.serviceDataList != undefined && this.serviceDataList != "0"){
       var spinnerRef = this.spinnerService.start($localize`:@@services.loadingserv:`);
       this.serviceForm.reset({ ServiceId: '', Name: '', TimeService: '', CustomerPerTime: '', CustomerPerBooking: '', Color: '', Status: true});
       this.service$ = this.serviceService.getService(this.businessId, this.serviceDataList).pipe(
@@ -143,7 +148,7 @@ export class ServiceComponent implements OnInit {
   }
 
   onCancel(){
-    this.serviceForm.reset({ ServiceId: '', Name: '', TimeService: '', CustomerPerTime: '', CustomerPerBooking: '', Color: '', Status: true});
+    this.router.navigate(['/services']);
   }
 
   onSubmit(){

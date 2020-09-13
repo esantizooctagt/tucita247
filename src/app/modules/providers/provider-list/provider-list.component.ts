@@ -12,6 +12,7 @@ import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { map, catchError, tap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { ProviderService } from '@app/services';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-provider-list',
@@ -64,7 +65,8 @@ export class ProviderListComponent implements OnInit {
     private spinnerService: SpinnerService,
     private dialog: MatDialog,
     private providerService: ProviderService,
-    private matIconRegistry: MatIconRegistry
+    private matIconRegistry: MatIconRegistry,
+    private router: Router
   ) { 
     this.matIconRegistry.addSvgIcon('edit',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/edit.svg'));
     this.matIconRegistry.addSvgIcon('delete',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/delete.svg'));
@@ -174,8 +176,7 @@ export class ProviderListComponent implements OnInit {
   }
 
   onSelect(service: any){
-    this.data.setData(service);
-    this.data.handleData('Add');
+    this.router.navigate(['/provider/'+service]);
   }
 
   onDelete(service: any){

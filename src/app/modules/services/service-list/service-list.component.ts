@@ -12,6 +12,7 @@ import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { map, catchError, tap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { ServService } from '@app/services';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-service-list',
@@ -63,7 +64,8 @@ export class ServiceListComponent implements OnInit {
     private spinnerService: SpinnerService,
     private dialog: MatDialog,
     private serviceService: ServService,
-    private matIconRegistry: MatIconRegistry
+    private matIconRegistry: MatIconRegistry,
+    private router: Router
   ) { 
     this.matIconRegistry.addSvgIcon('edit',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/edit.svg'));
     this.matIconRegistry.addSvgIcon('delete',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/delete.svg'));
@@ -172,8 +174,7 @@ export class ServiceListComponent implements OnInit {
   }
 
   onSelect(service: any){
-    this.data.setData(service);
-    this.data.handleData('Add');
+    this.router.navigate(['/service/'+service]);
   }
 
   onDelete(service: any){

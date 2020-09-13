@@ -12,6 +12,7 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatTable } from '@angular/material/table';
 import { FormArray, FormGroup, FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-list',
@@ -64,7 +65,8 @@ export class UserListComponent implements OnInit {
     private spinnerService: SpinnerService,
     private dialog: MatDialog,
     private userService: UserService,
-    private matIconRegistry: MatIconRegistry
+    private matIconRegistry: MatIconRegistry,
+    private router: Router
   ) { 
     this.matIconRegistry.addSvgIcon('edit',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/edit.svg'));
     this.matIconRegistry.addSvgIcon('delete',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/delete.svg'));
@@ -172,9 +174,8 @@ export class UserListComponent implements OnInit {
     );
   }
 
-  onSelect(user: User) {
-    this.data.setData(user);
-    this.data.handleData('Add');
+  onSelect(user: any) {
+    this.router.navigate(['/user/'+user]);
   }
 
   onDelete(user: any) {

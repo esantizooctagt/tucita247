@@ -91,6 +91,7 @@ export class HostComponent implements OnInit {
   locationStatus: number = 0;
   closedLoc: number = 0;
   textOpenLocation: string = '';
+  locName: string = '';
 
   locationId: string = '';
   doorId: string = '';
@@ -197,6 +198,7 @@ export class HostComponent implements OnInit {
           this.manualCheckOut = res.Locs.ManualCheckOut;
           this.totLocation = res.Locs.MaxCustomers;
           this.Providers = res.Locs.Providers;
+          this.locName = res.Locs.Name;
           if (this.Providers.length > 0){
             this.locationStatus = res.Locs.Providers[0].Open;
             this.closedLoc = res.Locs.Providers[0].Closed;

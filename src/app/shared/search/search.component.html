@@ -8,5 +8,7 @@
     </button>
   </mat-form-field>
   <span class="spacer"></span>
-  <button mat-flat-button color="primary" class="btn-add" (click)="changeView()">{{contentButton}}</button>
+  <ng-container *ngIf="changeData!='Add'">
+    <button mat-flat-button color="primary" class="btn-add" (click)="changeView()">{{contentButton}}</button>
+  </ng-container>
 </div>

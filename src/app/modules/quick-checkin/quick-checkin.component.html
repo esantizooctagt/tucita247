@@ -9,7 +9,7 @@
             <!-- {{(locationStatus == 0 ? 'Your location is closed' : (closedLoc == 1 ? 'You need to reopen your location' : 'Your location is open'))}} -->
             <mat-slide-toggle color="primary" [checked]="locationStatus == 1" (change)="locationStatusChange()">{{textOpenLocation}}</mat-slide-toggle>
         </div>
-        <mat-select name="providers" class="pt-2 pr-3" [(value)]="providerId" (selectionChange)="onServiceChange($event)">
+        <div class="col-sm p-0">{{locName}}</div><mat-select name="providers" class="pt-2 pr-3" [(value)]="providerId" (selectionChange)="onServiceChange($event)">
             <mat-option *ngFor="let item of Providers" [value]="item.ProviderId">
                 {{item.Name}}
             </mat-option>

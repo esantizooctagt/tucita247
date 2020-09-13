@@ -12,6 +12,7 @@ import { MatTable } from '@angular/material/table';
 import { FormArray, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-role-list',
@@ -62,7 +63,8 @@ export class RoleListComponent implements OnInit {
     private spinnerService: SpinnerService,
     private dialog: MatDialog,
     private rolesService: RolesService,
-    private matIconRegistry: MatIconRegistry
+    private matIconRegistry: MatIconRegistry,
+    private router: Router
   ) {
     this.matIconRegistry.addSvgIcon('edit',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/edit.svg'));
     this.matIconRegistry.addSvgIcon('delete',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/delete.svg'));
@@ -170,8 +172,7 @@ export class RoleListComponent implements OnInit {
   }
 
   onSelect(role: any){
-    this.data.setData(role);
-    this.data.handleData('Add');
+    this.router.navigate(['/role/'+role]);
   }
 
   onDelete(role: any){

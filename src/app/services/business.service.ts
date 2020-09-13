@@ -23,6 +23,10 @@ export class BusinessService {
                     .pipe(catchError(this.errorHandler));
   }
 
+  getValidBusiness(businessId): Observable<any>{
+    return this.http.get<any>(this.apiURL + '/business/valid/' + businessId)
+                    .pipe(catchError(this.errorHandler));
+  }
   getBusinessParent(): Observable<any[]>{
     return this.http.get<any[]>(this.apiURL + '/business/parents')
                     .pipe(catchError(this.errorHandler));

@@ -4,19 +4,27 @@
     <body>
       <trans-unit id="sche.openhour">
         <source>Open hour...</source>
-        <target state="translated">XXX</target>
+        <target state="translated">Enabling time slot...</target>
       </trans-unit>
       <trans-unit id="sche.openhoursuccess">
         <source>Open hour successfully...</source>
-        <target state="translated">XXX</target>
+        <target state="translated">Time slot enabled...</target>
       </trans-unit>
       <trans-unit id="host.invalidTime">
         <source>Invalid time for appointment</source>
-        <target>Invalid time for appointment</target>
+        <target>Selected time not available</target>
+      </trans-unit>
+      <trans-unit id="host.companydisabled">
+        <source>Company disabled</source>
+        <target>Business disabled</target>
+      </trans-unit>
+      <trans-unit id="host.noappos">
+        <source>No available appos</source>
+        <target>No available appointments</target>
       </trans-unit>
       <trans-unit id="services.customerbooking" datatype="html">
         <source>Customer per Booking</source>
-        <target state="translated">XXX</target>
+        <target state="translated">Guests per booking</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/services/service/service.component.html</context>
           <context context-type="linenumber">33</context>

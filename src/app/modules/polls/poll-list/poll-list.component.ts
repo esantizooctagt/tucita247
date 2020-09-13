@@ -12,6 +12,7 @@ import { catchError, tap, map } from 'rxjs/operators';
 import { throwError, Observable } from 'rxjs';
 import { PollsService } from '@app/services';
 import { MatTable } from '@angular/material/table';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-poll-list',
@@ -63,7 +64,8 @@ export class PollListComponent implements OnInit {
     private spinnerService: SpinnerService,
     private dialog: MatDialog,
     private pollService: PollsService,
-    private matIconRegistry: MatIconRegistry
+    private matIconRegistry: MatIconRegistry,
+    private router: Router
   ) { 
     this.matIconRegistry.addSvgIcon('edit',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/edit.svg'));
     this.matIconRegistry.addSvgIcon('delete',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/delete.svg'));
@@ -173,8 +175,7 @@ export class PollListComponent implements OnInit {
   }
 
   onSelect(poll: any){
-    this.data.setData(poll);
-    this.data.handleData('Add');
+    this.router.navigate(['/poll/'+poll]);
   }
 
   onDelete(poll: any){

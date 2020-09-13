@@ -55,12 +55,9 @@ import { VideoDialogComponent } from '@shared/video-dialog/video-dialog.componen
 import { DirDialogComponent } from '@shared/dir-dialog/dir-dialog.component';
 
 import { LayoutModule } from '@angular/cdk/layout';
-import { RoleComponent } from '@modules/roles/role/role.component';
 import { RoleListComponent } from '@modules/roles/role-list/role-list.component';
 import { UserListComponent } from '@modules/users/user-list/user-list.component';
-import { UserComponent } from '@modules/users/user/user.component';
 import { SearchComponent } from '@shared/search/search.component';
-import { PollComponent } from '@modules/polls/poll/poll.component';
 import { PollListComponent } from '@modules/polls/poll-list/poll-list.component';
 import { UserlocComponent } from '@modules/userloc/userloc.component';
 import { SurveyComponent } from '@modules/surveys/survey/survey.component';
@@ -76,10 +73,8 @@ import { ServcolorPipe } from './shared/servcolor.pipe';
 import { AppoDialogComponent } from './shared/appo-dialog/appo-dialog.component';
 import { ShowappoDialogComponent } from './shared/showappo-dialog/showappo-dialog.component';
 import { DatePipe } from '@angular/common';
-import { ProviderComponent } from '@modules/providers/provider/provider.component';
 import { ProviderListComponent } from '@modules/providers/provider-list/provider-list.component';
 import { ServiceListComponent } from '@modules/services/service-list/service-list.component';
-import { ServiceComponent } from '@modules/services/service/service.component';
 import { LocationComponent } from './modules/locations/location/location.component';
 import { LocationListComponent } from './modules/locations/location-list/location-list.component';
 
@@ -92,25 +87,20 @@ import { LocationListComponent } from './modules/locations/location-list/locatio
     SpinnerComponent,
     DialogComponent,
     VideoDialogComponent,
-    RoleComponent,
     RoleListComponent,
     UserListComponent,
-    UserComponent,
     SearchComponent,
     PhoneMaskDirective,
     PhonePipe,
     DirDialogComponent,
     UserlocComponent,
-    PollComponent,
     PollListComponent,
     SurveyComponent,
     SurveyListComponent,
     AppoDialogComponent,
     ShowappoDialogComponent,
-    ProviderComponent,
     ProviderListComponent,
     ServiceListComponent,
-    ServiceComponent,
     LocationComponent,
     LocationListComponent,
     HourdataPipe,

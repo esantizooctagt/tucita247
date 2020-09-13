@@ -3,7 +3,7 @@ import { User, Role } from '@app/_models';
 import { FormBuilder, Validators } from '@angular/forms';
 import { UserService, RolesService } from "@app/services";
 import { AuthService } from '@core/services';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MonitorService } from "@shared/monitor.service";
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -36,7 +36,7 @@ export class UserComponent implements OnInit {
   emailValidated: boolean = false;
   loadingUser: boolean = false;
   savingUser: boolean = false;
-  userDataList: User;
+  userDataList: string="";
 
   readonly passKey = environment.passKey;
   //variable to handle errors on inputs components
@@ -48,6 +48,7 @@ export class UserComponent implements OnInit {
     private usersService: UserService,
     private rolesService: RolesService,
     private spinnerService: SpinnerService,
+    private route: ActivatedRoute,
     private router: Router,
     private data: MonitorService,
     private dialog: MatDialog
@@ -68,6 +69,9 @@ export class UserComponent implements OnInit {
   })
 
   ngOnInit(): void {
+    this.data.handleData('Add');
+    this.userDataList = this.route.snapshot.paramMap.get('userId');
+
     var spinnerRef = this.spinnerService.start($localize`:@@userloc.loadingusersingle:`);
     this.businessId = this.authService.businessId();
 
@@ -86,8 +90,6 @@ export class UserComponent implements OnInit {
     );
     
     this.onValueChanges();
-
-    this.data.objectMessage.subscribe(res => this.userDataList = res);
     this.onDisplay();
   }
 
@@ -161,7 +163,7 @@ export class UserComponent implements OnInit {
   }
 
   onDisplay(){
-    if (this.userDataList != undefined){
+    if (this.userDataList != undefined && this.userDataList != "0"){
       if (this.businessId == ''){
         this.businessId = this.authService.businessId();
       }
@@ -280,13 +282,7 @@ export class UserComponent implements OnInit {
   }
 
   onCancel(){
-    this.userForm.controls['RoleId'].setValidators([Validators.required]);
-    this.emailValidated = false;
-    this.userData = '';
-    this.statTemp = 0;
-    this.userForm.controls.Email.enable();
-    this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', Is_Admin: 0, Status: 1});
-    this.data.setData(undefined);
+    this.router.navigate(['/users']);
   }
 
   // allow only digits and dot

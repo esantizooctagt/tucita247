@@ -1,46 +1,66 @@
-<div class="pl-0 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
-    <h3 i18n="ROLES|title in roles@@roles.title">ROLES</h3>
-</div>
-<ng-container *ngIf="role$ | async"></ng-container>
-<ng-container *ngIf="roleSave$ | async"></ng-container>
-<div class="row p-0 m-0">
-    <mat-card class="col-sm col-md col-lg-7">
-        <form [formGroup]="roleForm" (ngSubmit)="onSubmit()" class="mt-4">
-            <div class="form-field pl-3 pr-3">
-                <mat-form-field i18n-hintLabel="Min 3 characters|text in roles@@roles.minchar" hintLabel="Min 3 characters">
-                    <input matInput #Name i18n-placeholder="Name@@shared.name" placeholder="Name" maxlength="50" minlength="3" formControlName="Name"
-                        [errorStateMatcher]="confirmValidParentMatcher" required>
-                    <mat-hint align="end">{{Name.value?.length || 0}}/50</mat-hint>
-                    <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{getErrorMessage('Name')}}</mat-error>
-                </mat-form-field>
+<div class="container-fluid main-background">
+    <div class="row p-0">
+        <div class="list-form col-md-12 pl-4 m-0">
+            <app-search i18n-placeholder="Search by name|search in roles@@roles.searchtext" placeholder="Search by name" (setValue)="filterList($event)" newRoute="role"></app-search>
+        </div> 
+        <div class="col-md-12 pl-4 m-0">
+            <div class="pl-0 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
+                <h3 i18n="ROLES|title in roles@@roles.title">ROLES</h3>
             </div>
-            <div class="form-field pl-3 pr-3">
-                <mat-list #lstApps>
-                    <mat-list-item class="disp-role" formArrayName="Access" *ngFor="let item of fAccess.controls; let i = index;">
-                        <div [formGroupName]="i">
-                            <mat-form-field class="level-access-list pr-3">
-                                <mat-label i18n="Level Access:|text in roles@@roles.levelaccess">Level Access:</mat-label>
-                                <mat-select formControlName="Level_Access">
-                                    <mat-option value="0" i18n="N/A|text in roles@@roles.na">N/A</mat-option>
-                                    <mat-option value="1" i18n="Full Access|text in roles@@roles.fullacess">Full Access</mat-option>
-                                    <mat-option value="2" i18n="Edit Access|text in roles@@roles.editaccess">Edit Access</mat-option>
-                                    <mat-option value="3" i18n="Read Access|text in roles@@roles.readaccess">Read Access</mat-option>
-                                </mat-select>
+            <ng-container *ngIf="role$ | async"></ng-container>
+            <ng-container *ngIf="roleSave$ | async"></ng-container>
+            <div class="row p-0 m-0">
+                <mat-card class="col-sm col-md col-lg-7">
+                    <form [formGroup]="roleForm" (ngSubmit)="onSubmit()" class="mt-4">
+                        <div class="form-field pl-3 pr-3">
+                            <mat-form-field i18n-hintLabel="Min 3 characters|text in roles@@roles.minchar"
+                                hintLabel="Min 3 characters">
+                                <input matInput #Name i18n-placeholder="Name@@shared.name" placeholder="Name"
+                                    maxlength="50" minlength="3" formControlName="Name"
+                                    [errorStateMatcher]="confirmValidParentMatcher" required>
+                                <mat-hint align="end">{{Name.value?.length || 0}}/50</mat-hint>
+                                <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{getErrorMessage('Name')}}
+                                </mat-error>
                             </mat-form-field>
                         </div>
-                        {{item.value.Name}}
-                    </mat-list-item>
-                </mat-list>
+                        <div class="form-field pl-3 pr-3">
+                            <mat-list #lstApps>
+                                <mat-list-item class="disp-role" formArrayName="Access"
+                                    *ngFor="let item of fAccess.controls; let i = index;">
+                                    <div [formGroupName]="i">
+                                        <mat-form-field class="level-access-list pr-3">
+                                            <mat-label i18n="Level Access:|text in roles@@roles.levelaccess">Level
+                                                Access:</mat-label>
+                                            <mat-select formControlName="Level_Access">
+                                                <mat-option value="0" i18n="N/A|text in roles@@roles.na">N/A
+                                                </mat-option>
+                                                <mat-option value="1" i18n="Full Access|text in roles@@roles.fullacess">
+                                                    Full Access</mat-option>
+                                                <mat-option value="2"
+                                                    i18n="Edit Access|text in roles@@roles.editaccess">Edit Access
+                                                </mat-option>
+                                                <mat-option value="3"
+                                                    i18n="Read Access|text in roles@@roles.readaccess">Read Access
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    {{item.value.Name}}
+                                </mat-list-item>
+                            </mat-list>
+                        </div>
+                        <div class="form-field-check ml-3 pr-3"
+                            *ngIf="roleForm.value.RoleId !== '' && roleForm.value.RoleId !== null">
+                            <mat-checkbox formControlName="Status" i18n="Status@@shared.status">Status</mat-checkbox>
+                        </div>
+                        <button mat-flat-button color="primary" id="save" [disabled]="!roleForm.valid"
+                            class="ml-3 mr-3 mt-2" i18n="Save@@shared.save">Save</button>
+                        <button mat-flat-button color="accent" type="button" id="cancel" (click)="onCancel()"
+                            class="mt-2" i18n="Cancel@@shared.cancel">Cancel</button>
+                        <!-- {{ roleForm.value | json }} -->
+                    </form>
+                </mat-card>
             </div>
-            <div class="form-field-check ml-3 pr-3"
-                *ngIf="roleForm.value.RoleId !== '' && roleForm.value.RoleId !== null">
-                <mat-checkbox formControlName="Status" i18n="Status@@shared.status">Status</mat-checkbox>
-            </div>
-            <button mat-flat-button color="primary" id="save" [disabled]="!roleForm.valid"
-                class="ml-3 mr-3 mt-2" i18n="Save@@shared.save">Save</button>
-            <button mat-flat-button color="accent" type="button" id="cancel" (click)="onCancel()"
-                class="mt-2" i18n="Cancel@@shared.cancel">Cancel</button>
-            <!-- {{ roleForm.value | json }} -->
-        </form>
-    </mat-card>
+        </div>
+    </div>
 </div>

@@ -13,7 +13,7 @@
                     <!-- <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 0" color="secondary" type="button" (click)="getWalkInsCheckOut()">Walk-Ins Check Out</button> -->
                     <ng-container *ngIf="getWalkIns$ | async"></ng-container>
                     <ng-container *ngIf="manualCheckOut$ | async"></ng-container>
-                    <!-- El primero que es el manual se debe pedir la cantidad de gente aca afuera + __ - por default 1 -->
+                    <div class="col-sm-6 text-loc">{{locName}}</div>
                     <mat-select name="providers" class="col-sm-6 pr-3" [(value)]="providerId" (selectionChange)="onServiceChange($event)">
                         <mat-option *ngFor="let item of Providers" [value]="item.ProviderId">
                             {{item.Name}}

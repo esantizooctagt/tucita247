@@ -10,6 +10,7 @@ import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { Poll } from '@app/_models';
 import { MonitorService } from '@app/shared/monitor.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-poll',
@@ -22,7 +23,7 @@ export class PollComponent implements OnInit {
   locs$: Observable<any[]>;
   poll$: Observable<Poll>;
   savePoll$: Observable<any>; 
-  pollDataList: Poll;
+  pollDataList: string = '';
 
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
@@ -32,6 +33,8 @@ export class PollComponent implements OnInit {
     private spinnerService: SpinnerService,
     private pollService: PollsService,
     private dialog: MatDialog,
+    private route: ActivatedRoute,
+    private router: Router,
     private data: MonitorService,
     private locationService: LocationService
   ) { }
@@ -70,6 +73,9 @@ export class PollComponent implements OnInit {
   }
   
   ngOnInit(): void {
+    this.data.handleData('Add');
+    this.pollDataList = this.route.snapshot.paramMap.get('pollId');
+
     var spinnerRef = this.spinnerService.start($localize`:@@polls.loadingpoll:`);
     this.businessId = this.authService.businessId();
 
@@ -86,12 +92,11 @@ export class PollComponent implements OnInit {
       })
     );
 
-    this.data.objectMessage.subscribe(res => this.pollDataList = res);
     this.onDisplay();
   }
 
   onDisplay(){
-    if (this.pollDataList != undefined){
+    if (this.pollDataList != undefined && this.pollDataList != "0"){
       var spinnerRef = this.spinnerService.start($localize`:@@polls.loadingpoll:`);
       this.pollForm.reset({ PollId: '', Name: '', LocationId: '', DatePoll: '', DateFinPoll: '', Happy: 0, Neutral: 0, Angry: 0, Status: true});
       this.poll$ = this.pollService.getPoll(this.pollDataList).pipe(
@@ -148,7 +153,7 @@ export class PollComponent implements OnInit {
   }
 
   onCancel(){
-    this.pollForm.reset({ PollId: '', Name: '', LocationId: '', DatePoll: this.minDate, DateFinPoll: this.minDate, Happy: 0, Neutral: 0, Angry: 0, Status: true});
+    this.router.navigate(['/polls']);
   }
 
   onSubmit(){

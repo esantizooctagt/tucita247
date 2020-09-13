@@ -10,6 +10,7 @@ import { MonitorService } from '@app/shared/monitor.service';
 })
 export class UsersComponent implements OnInit {
   public filterData: string = undefined;
+
   changeData: string;
   constructor(
     private authService: AuthService,

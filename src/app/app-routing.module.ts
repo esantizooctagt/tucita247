@@ -3,17 +3,19 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '@modules/authentication/guards/auth.guard';
 
 /**Main Components**/
-import { MainNavComponent, NotFoundComponent, LoginComponent, UsersComponent, ClientsComponent, DashboardComponent, ProfileComponent, BusinessComponent, CategoriesComponent, ReportsComponent, RolesComponent, HelpComponent, ResetComponent, VerificationComponent, ForgotpassComponent, HomeComponent, HostComponent, UserlocComponent, PollsComponent, PollRespComponent, QuickCheckinComponent, SurveysComponent, SurveyRespComponent, LandingComponent, ScheduleComponent, BusinessOpeComponent, BusinessDaysComponent, LocationsComponent, ProvidersComponent, WelcomeComponent, ServicesComponent } from '@modules/index';
+import { MainNavComponent, NotFoundComponent, ServiceComponent, PollComponent, ProviderComponent, LoginComponent, UserComponent, UsersComponent, ClientsComponent, DashboardComponent, ProfileComponent, BusinessComponent, CategoriesComponent, ReportsComponent, RoleComponent, RolesComponent, HelpComponent, ResetComponent, VerificationComponent, ForgotpassComponent, HomeComponent, HostComponent, UserlocComponent, PollsComponent, PollRespComponent, QuickCheckinComponent, SurveysComponent, SurveyRespComponent, LandingComponent, ScheduleComponent, BusinessOpeComponent, BusinessDaysComponent, LocationsComponent, ProvidersComponent, WelcomeComponent, ServicesComponent } from '@modules/index';
 
 const routes: Routes = [
   {
     path: '', component: MainNavComponent, canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
+      { path: 'user/:userId', component: UserComponent, canActivate: [AuthGuard] },
       { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
       { path: 'clients', component: ClientsComponent, canActivate: [AuthGuard] },
       { path: 'userloc', component: UserlocComponent, canActivate: [AuthGuard] },
       { path: 'polls', component: PollsComponent, canActivate: [AuthGuard] },
+      { path: 'poll/:pollId', component: PollComponent, canActivate: [AuthGuard] },
       { path: 'surveys', component: SurveysComponent, canActivate: [AuthGuard] },
       { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
       { path: 'welcome', component: WelcomeComponent, canActivate: [AuthGuard] },
@@ -23,9 +25,12 @@ const routes: Routes = [
       { path: 'company', component: BusinessComponent, canActivate: [AuthGuard] },
       { path: 'locations', component: LocationsComponent, canActivate: [AuthGuard] },
       { path: 'providers', component: ProvidersComponent, canActivate: [AuthGuard] },
+      { path: 'provider/:providerId', component: ProviderComponent, canActivate: [AuthGuard] },
       { path: 'services', component: ServicesComponent, canActivate: [AuthGuard] },
+      { path: 'service/:serviceId', component: ServiceComponent, canActivate: [AuthGuard] },
       { path: 'categories', component: CategoriesComponent, canActivate: [AuthGuard] },
       { path: 'reports', component: ReportsComponent, canActivate: [AuthGuard] },
+      { path: 'role/:roleId', component: RoleComponent, canActivate: [AuthGuard] },
       { path: 'roles', component: RolesComponent, canActivate: [AuthGuard] },
       { path: 'schedule', component: ScheduleComponent, canActivate: [AuthGuard] },
       { path: 'businessope', component: BusinessOpeComponent, canActivate: [AuthGuard] },
@@ -89,22 +94,27 @@ export const routingComponents = [
   ReportsComponent,
   UserlocComponent,
   UsersComponent,
+  UserComponent,
   PollsComponent,
+  PollComponent,
   ClientsComponent,
   BusinessComponent,
   LocationsComponent,
   ProvidersComponent,
+  ProviderComponent,
   CategoriesComponent,
   PollRespComponent,
   SurveyRespComponent,
   SurveysComponent,
   LandingComponent,
   RolesComponent,
+  RoleComponent,
   HelpComponent,
   HomeComponent,
   HostComponent,
   WelcomeComponent,
   ServicesComponent,
+  ServiceComponent,
   BusinessOpeComponent,
   BusinessDaysComponent,
   ScheduleComponent,

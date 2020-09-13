@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
-import { LocationService, ServService } from '@app/services';
+import { LocationService, ServService, BusinessService } from '@app/services';
 import { map, catchError, switchMap } from 'rxjs/operators';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { AuthService } from '@app/core/services';
@@ -48,6 +48,7 @@ export class ScheduleComponent implements OnInit {
   cancelAppos$: Observable<any>;
   services$: Observable<any[]>;
   putAppo$: Observable<any>;
+  validBusiness$: Observable<any>;
   locations: any[]=[];
   operationHours$: Observable<any>;
   locationData: string = '';
@@ -63,6 +64,7 @@ export class ScheduleComponent implements OnInit {
     private matIconRegistry: MatIconRegistry,
     private locationService: LocationService,
     private spinnerService: SpinnerService,
+    private businessService: BusinessService,
     private serviceService: ServService,
     private appointmentService: AppointmentService,
     public dialog: MatDialog,
@@ -73,6 +75,7 @@ export class ScheduleComponent implements OnInit {
     this.matIconRegistry.addSvgIcon('cancel02',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/cancelAppos.svg'));
     this.matIconRegistry.addSvgIcon('view',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/expand02.svg'));
     this.matIconRegistry.addSvgIcon('check',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/check01.svg'));
+    this.matIconRegistry.addSvgIcon('refresh',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/refresh.svg'));
    }
 
   openDialog(header: string, message: string, success: boolean, error: boolean, warn: boolean): void {
@@ -310,16 +313,43 @@ export class ScheduleComponent implements OnInit {
     if (result == {}) { return; }
     
     if (result.Available == 0) { return; }
-    const dialogRef = this.dialog.open(AppoDialogComponent, {
-      width: '450px',
-      height: '700px',
-      data: {businessId: this.businessId, locationId: this.locationId, providerId: this.providerId, serviceId: result.ServiceId, appoTime: timeGrl, appoDate: this.datepipe.transform(day, 'yyyy-MM-dd'), doors: this.doors.split(','), dayData: dayInfo}
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result != undefined){
-        this.loadHours();
-      }
-    });
+
+    var spinnerRef = this.spinnerService.start($localize`:@@sche.loadingsche:`);
+    this.validBusiness$ = this.businessService.getValidBusiness(this.businessId).pipe(
+      map((res: any) => {
+        if (res.Code == 200){
+          this.spinnerService.stop(spinnerRef);
+          const dialogRef = this.dialog.open(AppoDialogComponent, {
+            width: '450px',
+            height: '700px',
+            data: {businessId: this.businessId, locationId: this.locationId, providerId: this.providerId, serviceId: result.ServiceId, appoTime: timeGrl, appoDate: this.datepipe.transform(day, 'yyyy-MM-dd'), doors: this.doors.split(','), dayData: dayInfo}
+          });
+          dialogRef.afterClosed().subscribe(result => {
+            if (result != undefined){
+              this.loadHours();
+            }
+          });
+        }
+        if (res.Code == 404){
+          this.spinnerService.stop(spinnerRef);
+          this.openSnackBar($localize`:@@host.companydisabled:`,$localize`:@@shared.error:`);
+        }
+        if (res.Code == 400){
+          this.spinnerService.stop(spinnerRef);
+          this.openSnackBar($localize`:@@host.noappos:`,$localize`:@@shared.error:`);
+        }
+        if (res.Code == 500){
+          this.spinnerService.stop(spinnerRef);
+          this.openSnackBar($localize`:@@host.invalidTime:`,$localize`:@@shared.error:`);
+          this.loadHours();
+        }
+        return res;
+      }), 
+      catchError(err => {
+        this.spinnerService.stop(spinnerRef);
+        return err;
+      })
+    );
   }
 
   onSelectLocation(event){
@@ -332,6 +362,10 @@ export class ScheduleComponent implements OnInit {
     this.loadHours();
   }
 
+  refresh(){
+    this.loadHours();
+  }
+  
   cancelTime(timeGrl: string, day: any){
     this.displayYesNo = true;
     const dialogConfig = new MatDialogConfig();
