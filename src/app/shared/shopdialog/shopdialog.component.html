@@ -1,0 +1,12 @@
+<div class="header">
+    <h2 mat-dialog-title>{{header}}</h2>
+    <button mat-icon-button (click)="close()" class="icon-close">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+<div mat-dialog-content>
+    <p class="pt-3">{{message}}</p>
+</div>
+<div mat-dialog-actions>
+    <button mat-stroked-button (click)="goTo()" color="primary" i18n="shop@@shared.buynow">Buy now</button>
+</div>

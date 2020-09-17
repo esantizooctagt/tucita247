@@ -1,11 +1,15 @@
 import { Component, Output, EventEmitter, OnDestroy, Input, SimpleChanges, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { shareReplay, map } from 'rxjs/operators';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MonitorService } from '../monitor.service';
 import { Router } from '@angular/router';
+import { BusinessService } from '@app/services';
+import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
+import { ShopdialogComponent } from '../shopdialog/shopdialog.component';
+import { AuthService } from '@app/core/services';
 
 @Component({
   selector: 'app-search',
@@ -21,6 +25,9 @@ export class SearchComponent implements OnInit, OnDestroy {
   public loading:boolean = false;
   public searchValue: string='';
   public contentButton: string = '+ Add';
+  businessId: string = '';
+  email: string = '';
+  appos$: Observable<any>;
 
   changeData: string = '';
   
@@ -33,6 +40,9 @@ export class SearchComponent implements OnInit, OnDestroy {
   constructor(
     private breakpointObserver: BreakpointObserver,
     private monitorService: MonitorService,
+    private businessService: BusinessService,
+    private dialog: MatDialog,
+    private authService: AuthService,
     private router: Router
   ) {
     this._setSearchSubscription();
@@ -48,7 +58,24 @@ export class SearchComponent implements OnInit, OnDestroy {
     });
   }
 
+  openShopDialog(header: string, message: string, business: string, email: string): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      header: header,
+      message: message,
+      businessId: business,
+      email: email
+    };
+    dialogConfig.width = '280px';
+    dialogConfig.minWidth = '280px';
+    dialogConfig.maxWidth = '280px';
+    this.dialog.open(ShopdialogComponent, dialogConfig);
+  }
+  
   ngOnInit(){
+    this.businessId = this.authService.businessId();
+    this.email = this.authService.email();
     this.monitorService.handleMessage.subscribe(res => { 
       this.changeData = res;
       if (this.changeData == "Add"){
@@ -60,9 +87,43 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   changeView(){
-    this.router.navigate(['/'+this.newRoute+'/0']);
+    if (this.newRoute == 'location' || this.newRoute == 'service'){
+      this.appos$ = this.businessService.getBusinessAppos(this.businessId).pipe(
+        map((res: any) => {
+          if (res != null){
+            if (res.Name.toString().toUpperCase() == 'FREE' || res.Name.toString().toUpperCase() == 'GRATIS'){
+              this.openShopDialog($localize`:@@shared.shopheader:`, $localize`:@@shared.shopmessage:`, this.businessId, this.email);
+              if (this.newRoute == 'service'){
+                this.router.navigate(['/services']);  
+              }
+              if (this.newRoute == 'location'){
+                this.router.navigate(['/locations']);
+              }
+            } else {
+              this.redirectPage();
+            }
+            return res;
+          } else {
+            if (this.newRoute == 'service'){
+              this.router.navigate(['/services']);  
+            }
+            if (this.newRoute == 'location'){
+              this.router.navigate(['/locations']);
+            }
+          }
+        }),
+        catchError(err => {
+          return err;
+        })
+      );
+    } else {
+      this.redirectPage();
+    }
   }
   
+  redirectPage(){
+    this.router.navigate(['/'+this.newRoute+'/0']);
+  }
   public updateSearchUp(event, searchTextValue: string) {
     this.loading = true;
     debounceTime(500);

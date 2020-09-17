@@ -11,7 +11,13 @@ import { throwError } from 'rxjs';
 })
 export class BusinessService {
   readonly apiURL = environment.apiUrl;
+  readonly apiAdminUrl = environment.apiAdminUrl;
   constructor(private http: HttpClient) { }
+
+  getBusinessAdmin(): Observable<any>{
+    return this.http.get<Business>(this.apiAdminUrl + '/business/admin')
+                    .pipe(catchError(this.errorHandler));
+  }
 
   getBusiness(businessId): Observable<Business> {
     return this.http.get<Business>(this.apiURL + '/business/' + businessId)

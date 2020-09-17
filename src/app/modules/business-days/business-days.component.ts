@@ -45,7 +45,7 @@ export class BusinessDaysComponent implements OnInit {
 
   dateSelected: any[] = [];
 
-  links = [{label:'Opening hours',link:'/businessope',active:0}, {label:'Special days',link:'/businessdays',active:1}];
+  links = [{label:'Opening hours',link:'/businessope',active:0}, {label:'Days Off',link:'/businessdays',active:1}];
   activeLink = this.links[0];
   background: ThemePalette = undefined;
   

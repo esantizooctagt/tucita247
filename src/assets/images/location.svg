@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+	<style>
+		tspan { white-space:pre }
+		.shp0 { fill: none;stroke: #f55b00;stroke-linecap:round;stroke-width: 5 } 
+	</style>
+	<path id="Shape 3" class="shp0" d="" />
+	<path id="Shape 3" fill-rule="evenodd" class="shp0" d="M203 242C203 242 242.74 198.26 243 177C243.26 155.74 233.59 134.77 202 133C170.41 131.23 158.85 164.62 163 179C167.15 193.38 179.73 218.93 203 242Z" />
+	<path id="Shape 1" class="shp0" d="M148 187L86 230L13 181L14 15L86 63L156 16L227 65L227 117" />
+	<path id="Shape 1" class="shp0" d="M156 16L156 119" />
+	<path id="Shape 1" class="shp0" d="M86 64L86 230" />
+	<path id="Shape 2" class="shp0" d="M203 190C193.6 190 186 182.4 186 173C186 163.6 193.6 156 203 156C212.4 156 220 163.6 220 173C220 182.4 212.4 190 203 190Z" />
+</svg>

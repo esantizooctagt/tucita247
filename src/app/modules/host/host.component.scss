@@ -7,6 +7,8 @@ mat-card{
 }
 .text-loc{
     position: absolute;
+    font-weight: 500;
+    top: 9px;
 }
 :host ::ng-deep .mat-form-field {
     .mat-form-field-wrapper {

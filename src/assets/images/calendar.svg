@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+	<defs>
+		<image width="241" height="83" id="img1" href="data:image/png;base64,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"/>
+	</defs>
+	<style>
+		tspan { white-space:pre }
+		.shp0 { fill: none;stroke: #f55b00;stroke-linecap:round;stroke-width: 5 } 
+		.shp1 { fill: #f55b00;stroke: #f55b00;stroke-linecap:round;stroke-width: 5 } 
+	</style>
+	<use id="Shape 4" href="#img1" transform="matrix(1,0,0,1,7,124)"/>
+	<path id="Shape 3" class="shp0" d="M82 108L83 92" />
+	<path id="Shape 3 copy 8" class="shp0" d="M128 108L129 92" />
+	<path id="Shape 3 copy 9" class="shp0" d="M173 108L174 92" />
+	<path id="Shape 3 copy 10" class="shp0" d="M219 108L220 92" />
+	<path id="Shape 3 copy 7" class="shp0" d="M37 108L38 92" />
+	<path id="Shape 1" class="shp0" d="M8 43L247 43L247 235L8 235L8 43Z" />
+	<path id="Shape 3" class="shp0" d="M54 72C49.02 72 45 67.98 45 63C45 58.02 49.02 54 54 54C58.98 54 63 58.02 63 63C63 67.98 58.98 72 54 72Z" />
+	<path id="Shape 3 copy 19" class="shp1" d="M53.5 66C52.12 66 51 64.66 51 63C51 61.34 52.12 60 53.5 60C54.88 60 56 61.34 56 63C56 64.66 54.88 66 53.5 66Z" />
+	<path id="Shape 3 copy 20" class="shp1" d="M102.5 66C101.12 66 100 64.66 100 63C100 61.34 101.12 60 102.5 60C103.88 60 105 61.34 105 63C105 64.66 103.88 66 102.5 66Z" />
+	<path id="Shape 3 copy 22" class="shp1" d="M201.5 66C200.12 66 199 64.66 199 63C199 61.34 200.12 60 201.5 60C202.88 60 204 61.34 204 63C204 64.66 202.88 66 201.5 66Z" />
+	<path id="Shape 3 copy 21" class="shp1" d="M152.5 66C151.12 66 150 64.66 150 63C150 61.34 151.12 60 152.5 60C153.88 60 155 61.34 155 63C155 64.66 153.88 66 152.5 66Z" />
+	<path id="Shape 3 copy 12" class="shp0" d="M103 72C98.02 72 94 67.98 94 63C94 58.02 98.02 54 103 54C107.98 54 112 58.02 112 63C112 67.98 107.98 72 103 72Z" />
+	<path id="Shape 3 copy 14" class="shp0" d="M153 72C148.02 72 144 67.98 144 63C144 58.02 148.02 54 153 54C157.98 54 162 58.02 162 63C162 67.98 157.98 72 153 72Z" />
+	<path id="Shape 3" class="shp0" d="M203 54L203 36" />
+	<path id="Shape 3 copy 11" class="shp0" d="M153 54L153 36" />
+	<path id="Shape 3 copy 13" class="shp0" d="M103 54L103 36" />
+	<path id="Shape 3 copy 15" class="shp0" d="M53 54L53 36" />
+	<path id="Shape 3 copy 16" class="shp0" d="M202 72C197.02 72 193 67.98 193 63C193 58.02 197.02 54 202 54C206.98 54 211 58.02 211 63C211 67.98 206.98 72 202 72Z" />
+	<path id="Naranja3" class="shp0" d="M173.5 219C157.74 219 145 206.26 145 190.5C145 174.74 157.74 162 173.5 162C189.26 162 202 174.74 202 190.5C202 206.26 189.26 219 173.5 219Z" />
+	<path id="Naranja2" class="shp0" d="M82.5 193C66.74 193 54 180.26 54 164.5C54 148.74 66.74 136 82.5 136C98.26 136 111 148.74 111 164.5C111 180.26 98.26 193 82.5 193Z" />
+	<path id="Naranja1" class="shp0" d="M219.5 164C203.74 164 191 151.26 191 135.5C191 119.74 203.74 107 219.5 107C235.26 107 248 119.74 248 135.5C248 151.26 235.26 164 219.5 164Z" />
+	<path id="Cheque3" class="shp0" d="M71 160L78 174L91 146" />
+	<path id="Cheque2" class="shp0" d="M165 188L172 202L185 174" />
+	<path id="Cheque1" class="shp0" d="M212 135L219 149L232 121" />
+</svg>

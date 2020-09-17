@@ -18,8 +18,8 @@
             <ng-container formGroupName="Passwords" *ngIf="code != 0">
                 <div class="form-field mb-0 pl-4 pb-2 pr-4 pt-3">
                     <mat-form-field hintLabel="Min 8 characters" i18n-hintLabel="Min 8 characters@@verification.minchar">
-                        <mat-label i18n="Password@@shared.Password">Password</mat-label>
-                        <input matInput formControlName="password" i18n-placeholder="Password@@shared.Password" placeholder="Password"
+                        <mat-label i18n="Password@@shared.NewPassword">New Password</mat-label>
+                        <input matInput formControlName="password" i18n-placeholder="Password@@shared.NewPassword" placeholder="New Password"
                             [errorStateMatcher]="confirmValidParentMatcher" [type]="hide ? 'password' : 'text'"
                             minlength="8" maxlength="20" strong
                             required>
@@ -75,8 +75,8 @@
                 </div>
                 <div class="form-field mb-0 pl-4 pb-2 pr-4 pt-3">
                     <mat-form-field hintLabel="Min 8 characters">
-                        <mat-label i18n="Password@@shared.Password">Password</mat-label>
-                        <input matInput formControlName="password" i18n-placeholder="Password@@shared.Password" placeholder="Password"
+                        <mat-label i18n="Password@@shared.NewPassword">New Password</mat-label>
+                        <input matInput formControlName="password" i18n-placeholder="Password@@shared.NewPassword" placeholder="New Password"
                             [errorStateMatcher]="confirmValidParentMatcher" [type]="hide ? 'password' : 'text'"
                             minlength="8" maxlength="20" strong
                             required>
@@ -112,7 +112,7 @@
                 </div>
             </ng-container>
             <div class="forgot-form mt-3 mb-3">
-                <button mat-flat-button color="primary" id="save" type="submit" [disabled]="loading" class="text-left w-100" i18n="Activate Account@@verification.activateacct">Activate Account</button>
+                <button mat-flat-button color="primary" id="save" type="submit" [disabled]="loading" class="text-center w-100" i18n="Activate Account@@verification.activateacct">Activate Account</button>
                 <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
             </div>
         </div>

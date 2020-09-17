@@ -13,6 +13,9 @@ mat-icon{
 agm-map{
     height: 300px;
 }
+.form-field-check-slide{
+    text-align: right;
+}
 .button-action{
     width: 100px;
 }
@@ -31,6 +34,16 @@ agm-map{
     color: #FF4F00;
     height: 40px;
     width: 40px;
+}
+.learn-more{
+    color: #FF4F00;
+    font-size: 13px;
+    position: relative;
+    margin-top: 3px;
+    left: -3px;
+}
+.list-form{
+    background-color: #fff;
 }
 mat-card{
     margin-left:0px;

@@ -2,6 +2,26 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template" target-language="en">
     <body>
+      <trans-unit id="shared.shopmessage">
+        <source>You need to buy a license</source>
+        <target state="translated">You need to buy a license</target>
+      </trans-unit>
+      <trans-unit id="shared.shopheader">
+        <source>Free license</source>
+        <target state="translated">Free license</target>
+      </trans-unit>
+      <trans-unit id="shared.buynow">
+        <source>Shop now</source>
+        <target state="translated">Shop now</target>
+      </trans-unit>
+      <trans-unit id="shared.disabled">
+        <source>Disabled</source>
+        <target state="translated">Disabled</target>
+      </trans-unit>
+      <trans-unit id="shared.enabled">
+        <source>Enabled</source>
+        <target state="translated">Enabled</target>
+      </trans-unit>
       <trans-unit id="sche.openhour">
         <source>Open hour...</source>
         <target state="translated">Enabling time slot...</target>
@@ -38,7 +58,7 @@
       </trans-unit>
       <trans-unit id="business.reasons" datatype="html">
         <source>Reasons</source>
-        <target state="translated">XXX</target>
+        <target state="translated">Reasons for cancellation</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">99</context>
@@ -132,6 +152,34 @@
         </context-group>
         <note priority="1" from="description">Email</note>
       </trans-unit>
+      <trans-unit id="shared.learnmore" datatype="html">
+        <source>Learn More</source>
+        <target state="translated">Learn More</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/locations/location/location.component.html</context>
+          <context context-type="linenumber">138</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="location.learnmorecheck" datatype="html">
+        <source>Learn More Manual Check Out</source>
+        <target state="translated">Learn More Manual Check Out</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/locations/location/location.component.html</context>
+          <context context-type="linenumber">138</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="shared.NewPassword" datatype="html">
+        <source>New Password</source>
+        <target state="translated">New Password</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/verification/verification.component.html</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/verification/verification.component.html</context>
+          <context context-type="linenumber">79</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="shared.Password" datatype="html">
         <source>Password</source>
         <target state="translated">Password</target>
@@ -153,15 +201,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/verification/verification.component.html</context>
-          <context context-type="linenumber">40</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/modules/verification/verification.component.html</context>
           <context context-type="linenumber">78</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/modules/verification/verification.component.html</context>
-          <context context-type="linenumber">79</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/verification/verification.component.html</context>
@@ -195,7 +235,7 @@
       <trans-unit id="login.signup" datatype="html">
         <source>Sign Up
             </source>
-        <target state="translated">Sign-up
+        <target state="translated">Sign-in
             </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/login/login.component.html</context>
@@ -2360,7 +2400,7 @@
       </trans-unit>
       <trans-unit id="welcome.secondarymessage" datatype="html">
         <source>Setup your preference</source>
-        <target state="translated">Set-up your preferences</target>
+        <target state="translated">Follow these steps to set-up your preference</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
           <context context-type="linenumber">4</context>
@@ -2369,7 +2409,7 @@
       </trans-unit>
       <trans-unit id="welcome.setupcompany" datatype="html">
         <source>Setup your company</source>
-        <target state="translated">Set-up your buisness</target>
+        <target state="translated">1. Business</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
           <context context-type="linenumber">10</context>
@@ -2389,7 +2429,7 @@
       </trans-unit>
       <trans-unit id="welcome.setupope" datatype="html">
         <source>Setup your opening hours</source>
-        <target state="translated">Set-up your operations hours</target>
+        <target state="translated">2. Opening hours</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
           <context context-type="linenumber">17</context>
@@ -2399,7 +2439,7 @@
       </trans-unit>
       <trans-unit id="welcome.opehours" datatype="html">
         <source>Opening hours</source>
-        <target state="translated">Operating hours</target>
+        <target state="translated">Opening hours</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
           <context context-type="linenumber">18</context>
@@ -2409,7 +2449,7 @@
       </trans-unit>
       <trans-unit id="welcome.setupdaysoff" datatype="html">
         <source>Setup your days off</source>
-        <target state="translated">Set-up your days off</target>
+        <target state="translated">3. Days off</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
           <context context-type="linenumber">24</context>
@@ -2429,7 +2469,7 @@
       </trans-unit>
       <trans-unit id="welcome.setuplocation" datatype="html">
         <source>Setup your location</source>
-        <target state="translated">Set-up your locations</target>
+        <target state="translated">4. Locations</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
           <context context-type="linenumber">33</context>
@@ -2449,7 +2489,7 @@
       </trans-unit>
       <trans-unit id="welcome.setupservprovider" datatype="html">
         <source>Setup your Service Provider</source>
-        <target state="translated">Set-up your service providers</target>
+        <target state="translated">5. Service providers</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
           <context context-type="linenumber">40</context>
@@ -2469,7 +2509,7 @@
       </trans-unit>
       <trans-unit id="welcome.setupservices" datatype="html">
         <source>Setup your services</source>
-        <target state="translated">Set-up your services</target>
+        <target state="translated">6. services</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
           <context context-type="linenumber">47</context>
@@ -2547,7 +2587,7 @@
       </trans-unit>
       <trans-unit id="businessope.operationhours" datatype="html">
         <source>Operation Hours</source>
-        <target state="translated">Operating hours</target>
+        <target state="translated">Opening hours</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-ope/business-ope.component.html</context>
           <context context-type="linenumber">49</context>
@@ -2708,11 +2748,21 @@
           <context context-type="sourcefile">src/app/modules/business-days/business-days.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
+        <note priority="1" from="description">text business days</note>
+        <note priority="1" from="meaning">Configure your year schedule here. Just click on a date to set the days off.</note>
+      </trans-unit>
+      <trans-unit id="businessdays.maintextloc" datatype="html">
+        <source>
+            Configure your year schedule here. Just click on a date to set the days off.
+        </source>
+        <target state="translated">
+            Just click on a date to set the locations days off.
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-days/business-days.component.html</context>
           <context context-type="linenumber">27</context>
         </context-group>
-        <note priority="1" from="description">text business days</note>
+        <note priority="1" from="description">text locations days</note>
         <note priority="1" from="meaning">Configure your year schedule here. Just click on a date to set the days off.</note>
       </trans-unit>
       <trans-unit id="businessdays.secontext" datatype="html">
@@ -3125,7 +3175,7 @@
       </trans-unit>
       <trans-unit id="shared.status" datatype="html">
         <source>Status</source>
-        <target state="translated">Status</target>
+        <target state="translated">Disabled</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/roles/role/role.component.html</context>
           <context context-type="linenumber">37</context>
@@ -3926,6 +3976,34 @@
       <trans-unit id="providers.subtitle">
         <source>Providers</source>
         <target state="translated">Service providers</target>
+      </trans-unit>
+      <trans-unit id="providers.savingprovider">
+        <source>Saving Service provider...</source>
+        <target state="translated">Saving Service provider...</target>
+      </trans-unit>
+      <trans-unit id="business-ope.loadopeninghours">
+        <source>Loading Opening hours...</source>
+        <target state="translated">Loading Opening hours...</target>
+      </trans-unit>
+      <trans-unit id="business-ope.daysoff">
+        <source>Days off</source>
+        <target state="translated">Days off</target>
+      </trans-unit>
+      <trans-unit id="business-ope.opehours">
+        <source>Opening hours</source>
+        <target state="translated">Opening hours</target>
+      </trans-unit>
+      <trans-unit id="business-ope.openinghours">
+        <source>Opening hours</source>
+        <target state="translated">Opening hours</target>
+      </trans-unit>
+      <trans-unit id="business-ope.openinghoursupdate">
+        <source>Opening hours updated successful</source>
+        <target state="translated">Opening hours updated successful</target>
+      </trans-unit>
+      <trans-unit id="business-ope.updatedata">
+        <source>Update data successfully</source>
+        <target state="translated">Update data successfully</target>
       </trans-unit>
       <trans-unit id="providers.servprovider">
         <source>Service provider</source>

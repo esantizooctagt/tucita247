@@ -37,27 +37,28 @@ button.mat-stroked-button{
     letter-spacing: 0px;
     width:100%;
 }
+//DESCOMENTAR ESTE BLOQUE
+// .mat-form-field-appearance-legacy .mat-form-field-label{
+//     color: #ff4f00;
+// }
+//COMENTAR ESTE BLOQUE PARA CUMPLIR CON ITEM
 .mat-form-field-appearance-legacy .mat-form-field-label{
     color: #ff4f00;
-    font-size: 14px;
+    font-size: 15px;
     position: absolute;
     top: 0px;
+    // position:relative;
+    // top: 10px;
     font-weight: 500;
+    line-height: 14px;
 }
 .mat-form-field-prefix{
     color: #ff4f00;
-    font-size: 14px;
-    position: relative;
-    top: -22px;
-    font-weight: 500;
 }
 .mat-checkbox{
     margin-top: 0.3rem;
     margin-left: -1.25rem;
 }
-// .mat-paginator-range-label {
-//     display: none;
-// }
 .label-overlay{
     left: 50%;
     top: 70%;

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, empty } from 'rxjs';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { AuthService } from '@app/core/services';
@@ -13,6 +13,8 @@ import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MonitorService } from '@app/shared/monitor.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { link } from 'fs';
+import { ShopdialogComponent } from '@app/shared/shopdialog/shopdialog.component';
 
 @Component({
   selector: 'app-location',
@@ -27,6 +29,11 @@ export class LocationComponent implements OnInit {
   locationDataList: any;
   sectors$: Observable<any[]>;
   parentBus$: Observable<any[]>;
+  appos$: Observable<any>;
+
+  free: number = 0;
+  invalid: number = 0;
+  email: string = '';
 
   lat: number = 18.3796538;
   lng: number = -66.1989426;
@@ -35,6 +42,7 @@ export class LocationComponent implements OnInit {
   cities = [];
   sectors = [] = [];
   countryCode = '';
+  textStatus: string='';
 
   //Doors
   doors: string = '';
@@ -80,8 +88,6 @@ export class LocationComponent implements OnInit {
     Geolocation: ['{0.00,0.00}', [Validators.maxLength(50), Validators.minLength(5)]],
     ParentLocation: ['0', Validators.required],
     MaxConcurrentCustomer: ['', [Validators.required, Validators.min(1)]],
-    BucketInterval: ['', [Validators.required, Validators.min(0.5), Validators.max(5)]],
-    TotalCustPerBucketInter: ['', [Validators.required, Validators.min(1)]],
     ManualCheckOut: [false],
     Doors: ['', [Validators.required]],
     Status: [true]
@@ -103,12 +109,49 @@ export class LocationComponent implements OnInit {
     this.dialog.open(DialogComponent, dialogConfig);
   }
 
+  openShopDialog(header: string, message: string, business: string, email: string): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      header: header,
+      message: message,
+      businessId: business,
+      email: email
+    };
+    dialogConfig.width = '280px';
+    dialogConfig.minWidth = '280px';
+    dialogConfig.maxWidth = '280px';
+    this.dialog.open(ShopdialogComponent, dialogConfig);
+  }
+
   ngOnInit(): void {
     this.data.handleData('Add');
+    let language = this.authService.language();
+    this.email = this.authService.email();
     this.locationDataList = this.route.snapshot.paramMap.get('locationId');
 
     var spinnerRef = this.spinnerService.start($localize`:@@locations.loadlocation:`);
     this.businessId = this.authService.businessId();
+    if (this.locationDataList == "0"){
+      this.doors = (language == "EN" ? 'MAIN DOOR' : 'PUERTA PRINCIPAL');
+      this.appos$ = this.businessService.getBusinessAppos(this.businessId).pipe(
+        map((res: any) => {
+          if (res != null){
+            this.free  = (res.Name.toString().toUpperCase() == 'FREE' || res.Name.toString().toUpperCase() == 'GRATIS' ? 1: 0); 
+            if (this.free == 1){
+              this.spinnerService.stop(spinnerRef);
+              this.openShopDialog($localize`:@@shared.shopheader:`, $localize`:@@shared.shopmessage:`, this.businessId, this.email);
+              this.router.navigate(['/locations']);
+            }
+            return res;
+          }
+        }),
+        catchError(err => {
+          return err;
+        })
+      );
+    }
+
     this.language = this.authService.language() == "" ? "EN" : this.authService.language();
 
     this.sectors = [];
@@ -154,32 +197,35 @@ export class LocationComponent implements OnInit {
   onDisplay() {
     if (this.locationDataList != undefined && this.locationDataList != "0") {
       var spinnerRef = this.spinnerService.start($localize`:@@locations.loadlocation:`);
-      this.locationForm.reset({ LocationId: '', BusinessId: '', Name: '', City: '', Sector: '', Address: '', Geolocation : '{0.00,0.00}', ParentLocation : '0', MaxConcurrentCustomer: '', BucketInterval: '', TotalCustPerBucketInter: '', ManualCheckOut: false, Doors: '', Status: true});
+      this.locationForm.reset({ LocationId: '', BusinessId: '', Name: '', City: '', Sector: '', Address: '', Geolocation : '{0.00,0.00}', ParentLocation : '0', MaxConcurrentCustomer: '', ManualCheckOut: false, Doors: '', Status: true});
       this.location$ = this.locationService.getLocation(this.businessId, this.locationDataList, this.countryCode, this.language).pipe(
         map((res: any) => {
           if (res.Code == 200) {
             let loc = res.Data;
-            this.locationForm.setValue({
-              LocationId: loc.LocationId,
-              BusinessId: loc.BusinessId,
-              Name: loc.Name,
-              City: loc.City,
-              Sector: loc.Sector,
-              Address: loc.Address,
-              Geolocation: loc.Geolocation,
-              ParentLocation: loc.ParentLocation,
-              MaxConcurrentCustomer: loc.MaxConcurrentCustomer,
-              BucketInterval: loc.BucketInterval,
-              TotalCustPerBucketInter: loc.TotalCustPerBucketInter,
-              ManualCheckOut: loc.ManualCheckOut,
-              Doors: loc.Doors,
-              Status: (loc.Status == 1 ? true : false)
-            });
-            let geo = JSON.parse(loc.Geolocation);
-            this.lat = geo.LAT;
-            this.lng = geo.LNG;
-            this.sectors = res.Data.Sectors;
-            this.doors = loc.Doors;
+            if (loc != '') {
+              this.locationForm.setValue({
+                LocationId: loc.LocationId,
+                BusinessId: loc.BusinessId,
+                Name: loc.Name,
+                City: loc.City,
+                Sector: loc.Sector,
+                Address: loc.Address,
+                Geolocation: loc.Geolocation,
+                ParentLocation: loc.ParentLocation,
+                MaxConcurrentCustomer: loc.MaxConcurrentCustomer,
+                ManualCheckOut: loc.ManualCheckOut,
+                Doors: loc.Doors,
+                Status: (loc.Status == 1 ? true : false)
+              });
+              let geo = JSON.parse(loc.Geolocation);
+              this.lat = geo.LAT;
+              this.lng = geo.LNG;
+              this.sectors = res.Data.Sectors;
+              this.doors = loc.Doors;
+              this.textStatus = (loc.Status == 0 ? $localize`:@@shared.disabled:` : $localize`:@@shared.enabled:`);
+            } else {
+              this.invalid = 1;
+            }
             this.spinnerService.stop(spinnerRef);
             return location;
           }
@@ -187,6 +233,7 @@ export class LocationComponent implements OnInit {
         catchError(err => {
           this.spinnerService.stop(spinnerRef);
           this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
+          this.router.navigate(['/locations']);
           return throwError(err || err.Message);
         })
       );
@@ -236,14 +283,6 @@ export class LocationComponent implements OnInit {
     }
     if (component === 'MaxConcurrentCustomer') {
       return this.f.maxConcurrentCustomer.hasError('required') ? $localize`:@@shared.entervalue:` :
-        '';
-    }
-    if (component === 'BucketInterval') {
-      return this.f.bucketInterval.hasError('required') ? $localize`:@@shared.entervalue:` :
-        '';
-    }
-    if (component === 'TotalCustPerBucketInter') {
-      return this.f.totalCustPerBucketInter.hasError('required') ? $localize`:@@shared.entervalue:` :
         '';
     }
   }
@@ -298,8 +337,6 @@ export class LocationComponent implements OnInit {
         Geolocation: '{"LAT": ' + this.lat + ',"LNG": ' + this.lng + '}',
         ParentLocation: this.locationForm.value.ParentLocation,
         MaxConcurrentCustomer: this.locationForm.value.MaxConcurrentCustomer,
-        BucketInterval: this.locationForm.value.BucketInterval,
-        TotalCustPerBucketInter: this.locationForm.value.TotalCustPerBucketInter,
         Status: (this.locationForm.value.Status == true ? 1 : 0),
         ManualCheckOut: (this.locationForm.value.ManualCheckOut == true ? 1 : 0),
         Doors: this.doors.toString()
@@ -316,6 +353,7 @@ export class LocationComponent implements OnInit {
               this.spinnerService.stop(spinnerRef);
               this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.wrong:`, false, true, false);
             }
+            this.router.navigate(['/locations']);
           } else {
             this.spinnerService.stop(spinnerRef);
             this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.wrong:`, false, true, false);

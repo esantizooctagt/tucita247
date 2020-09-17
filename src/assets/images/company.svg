@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+	<style>
+		tspan { white-space:pre }
+		.shp0 { fill: none;stroke: #f55b00;stroke-linecap:round;stroke-width: 5 } 
+	</style>
+	<path id="Shape 1" class="shp0" d="M25 237L192 237" />
+	<path id="Shape 2" class="shp0" d="M43 237L43 107L74 107" />
+	<path id="Shape 3" class="shp0" d="M74 128L74 55L106 55L169 55L169 218" />
+	<path id="Shape 6" class="shp0" d="" />
+	<path id="Shape 6" class="shp0" d="M106 54L106 36L137 36L137 46" />
+	<path id="Shape 4" class="shp0" d="" />
+	<path id="Shape 5" class="shp0" d="M170 136L213 136L213 237" />
+	<path id="Shape 6" class="shp0" d="M121 35L121 18" />
+	<path id="Shape 7" class="shp0" d="M199 149L199 217" />
+	<path id="Shape 7 copy" class="shp0" d="M183 149L183 217" />
+	<path id="Shape 8" class="shp0" d="M64 119L64 218" />
+	<path id="Shape 8 copy" class="shp0" d="M54 119L54 218" />
+	<path id="Shape 9" class="shp0" d="M96 204L96 218" />
+	<path id="Shape 9 copy" class="shp0" d="M121 204L121 218" />
+	<path id="Shape 9 copy 2" class="shp0" d="M146 204L146 218" />
+	<path id="Shape 9 copy 3" class="shp0" d="M146 176L146 190" />
+	<path id="Shape 9 copy 4" class="shp0" d="M121 176L121 190" />
+	<path id="Shape 9 copy 5" class="shp0" d="M96 176L96 190" />
+	<path id="Shape 9 copy 6" class="shp0" d="M96 148L96 162" />
+	<path id="Shape 9 copy 7" class="shp0" d="M121 148L121 162" />
+	<path id="Shape 9 copy 8" class="shp0" d="M146 148L146 162" />
+	<path id="Shape 9 copy 9" class="shp0" d="M146 119L146 133" />
+	<path id="Shape 9 copy 10" class="shp0" d="M96 119L96 133" />
+	<path id="Shape 9 copy 11" class="shp0" d="M121 119L121 133" />
+	<path id="Shape 9 copy 12" class="shp0" d="M121 91L121 105" />
+	<path id="Shape 9 copy 13" class="shp0" d="M146 91L146 105" />
+	<path id="Shape 9 copy 14" class="shp0" d="M96 91L96 105" />
+	<path id="Shape 9 copy 15" class="shp0" d="M96 63L96 77" />
+	<path id="Shape 9 copy 16" class="shp0" d="M121 63L121 77" />
+	<path id="Shape 9 copy 17" class="shp0" d="M146 63L146 77" />
+</svg>

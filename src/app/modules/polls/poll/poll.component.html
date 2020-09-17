@@ -82,10 +82,10 @@
                             </div>
                         </div>
                         <div>
-                            <button mat-flat-button color="primary" id="save" [disabled]="!pollForm.valid"
+                            <button mat-flat-button color="primary" *ngIf="invalid == 0" id="save" [disabled]="!pollForm.valid"
                                 class="ml-3 mr-3 mt-2" i18n="Save@@shared.save">Save</button>
                             <button mat-flat-button color="accent" id="cancel" type="button" (click)="onCancel()"
-                                class="mt-2" i18n="Cancel@@shared.cancel">Cancel</button>
+                                class="mt-2 ml-3" i18n="Cancel@@shared.cancel">Cancel</button>
                         </div>
                         <!-- {{ pollForm.value | json }} -->
                     </form>

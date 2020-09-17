@@ -35,7 +35,9 @@ export class RoleComponent implements OnInit {
   displayForm: boolean = true;
   savingRole: boolean=false;
   roleDataList: string = '';
-
+  textStatus: string = '';
+  invalid: number = 0;
+  
   role$: Observable<Role>;
   roleSave$: Observable<any>;
   apps$: Observable<Access[]>;
@@ -113,15 +115,20 @@ export class RoleComponent implements OnInit {
       this.role$ = this.roleService.getRole(this.roleDataList, this.businessId).pipe(
         tap(res => {
           if (res != null) {
-            this.roleForm.setValue({
-              RoleId: res.Role_Id,
-              Name: res.Name,
-              BusinessId: res.Business_Id,
-              Status: res.Status,
-              Access: []
-            });
-            this.loadAccess();
-            this.roleForm.patchValue({Access: this.apps$});
+            if (res.Role_Id != undefined){
+              this.roleForm.setValue({
+                RoleId: res.Role_Id,
+                Name: res.Name,
+                BusinessId: res.Business_Id,
+                Status: res.Status,
+                Access: []
+              });
+              this.textStatus = (res.Status == 0 ? $localize`:@@shared.disabled:` : $localize`:@@shared.enabled:`);
+              this.loadAccess();
+              this.roleForm.patchValue({Access: this.apps$});
+            } else {
+              this.invalid = 1;
+            }
           }
           this.spinnerService.stop(spinnerRef);
         }),
@@ -172,6 +179,7 @@ export class RoleComponent implements OnInit {
             this.roleForm.reset({RoleId: '', BusinessId: this.businessId, Name: '', Status:1, Access: this.apps$});
             this.data.changeData('roles');
             this.openDialog($localize`:@@roles.rolestext:`, $localize`:@@roles.roleupdated:`, true, false, false);
+            this.router.navigate(['/roles']);
           }),
           catchError(err => {
             this.spinnerService.stop(spinnerRef);
@@ -211,7 +219,8 @@ export class RoleComponent implements OnInit {
   }
 
   loadAccess(){
-    this.apps$ = this.roleService.getApplications(this.roleForm.get('RoleId').value, this.businessId, this.languageInit).pipe(
+    let rolId = (this.roleForm.get('RoleId').value == '' ? '0' : this.roleForm.get('RoleId').value);
+    this.apps$ = this.roleService.getApplications(rolId, this.businessId, this.languageInit).pipe(
       map((res: any)=>{
         if (res != null){
           this.roleForm.setControl('Access', this.setExistingApps(res));

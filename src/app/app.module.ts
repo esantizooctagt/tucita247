@@ -27,6 +27,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -53,6 +54,9 @@ import { SpinnerComponent } from '@shared/spinner/spinner.component';
 import { DialogComponent } from '@shared/dialog/dialog.component';
 import { VideoDialogComponent } from '@shared/video-dialog/video-dialog.component';
 import { DirDialogComponent } from '@shared/dir-dialog/dir-dialog.component';
+import { ShopdialogComponent } from '@shared/shopdialog/shopdialog.component';
+import { AppoDialogComponent } from '@shared/appo-dialog/appo-dialog.component';
+import { ShowappoDialogComponent } from '@shared/showappo-dialog/showappo-dialog.component';
 
 import { LayoutModule } from '@angular/cdk/layout';
 import { RoleListComponent } from '@modules/roles/role-list/role-list.component';
@@ -70,8 +74,6 @@ import { AgmCoreModule } from '@agm/core';
 import { PhonePipe } from '@shared/phone.pipe';
 import { HourdataPipe } from './shared/hourdata.pipe';
 import { ServcolorPipe } from './shared/servcolor.pipe';
-import { AppoDialogComponent } from './shared/appo-dialog/appo-dialog.component';
-import { ShowappoDialogComponent } from './shared/showappo-dialog/showappo-dialog.component';
 import { DatePipe } from '@angular/common';
 import { ProviderListComponent } from '@modules/providers/provider-list/provider-list.component';
 import { ServiceListComponent } from '@modules/services/service-list/service-list.component';
@@ -102,7 +104,8 @@ import { LocationListComponent } from './modules/locations/location-list/locatio
     ServiceListComponent,
     LocationListComponent,
     HourdataPipe,
-    ServcolorPipe
+    ServcolorPipe,
+    ShopdialogComponent
   ],
   imports: [
     BrowserModule,
@@ -119,6 +122,7 @@ import { LocationListComponent } from './modules/locations/location-list/locatio
     MatListModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    MatTooltipModule,
     MatCardModule,
     MatSnackBarModule,
     MatSelectModule,
@@ -161,6 +165,7 @@ import { LocationListComponent } from './modules/locations/location-list/locatio
   entryComponents: [
     SpinnerComponent,
     DialogComponent,
+    ShopdialogComponent,
     DirDialogComponent,
     VideoDialogComponent
   ],

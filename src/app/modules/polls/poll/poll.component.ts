@@ -24,6 +24,7 @@ export class PollComponent implements OnInit {
   poll$: Observable<Poll>;
   savePoll$: Observable<any>; 
   pollDataList: string = '';
+  invalid: number = 0;
 
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
@@ -101,19 +102,23 @@ export class PollComponent implements OnInit {
       this.pollForm.reset({ PollId: '', Name: '', LocationId: '', DatePoll: '', DateFinPoll: '', Happy: 0, Neutral: 0, Angry: 0, Status: true});
       this.poll$ = this.pollService.getPoll(this.pollDataList).pipe(
         map(poll => {
-          let dateP = new Date(poll.DatePoll+'T06:00:00');
-          let dateFinP = new Date(poll.DateFinPoll+'T06:00:00');
-          this.pollForm.setValue({
-            PollId: poll.PollId,
-            Name: poll.Name,
-            LocationId: poll.LocationId,
-            DatePoll: dateP,
-            DateFinPoll: dateFinP,
-            Happy: poll.Happy,
-            Neutral: poll.Neutral,
-            Angry: poll.Angry,
-            Status: (poll.Status == 1 ? true : false)
-          });
+          if (poll.PollId != undefined){
+            let dateP = new Date(poll.DatePoll+'T06:00:00');
+            let dateFinP = new Date(poll.DateFinPoll+'T06:00:00');
+            this.pollForm.setValue({
+              PollId: poll.PollId,
+              Name: poll.Name,
+              LocationId: poll.LocationId,
+              DatePoll: dateP,
+              DateFinPoll: dateFinP,
+              Happy: poll.Happy,
+              Neutral: poll.Neutral,
+              Angry: poll.Angry,
+              Status: (poll.Status == 1 ? true : false)
+            });
+          } else {
+            this.invalid = 1;
+          }
           this.spinnerService.stop(spinnerRef);
           return poll;
         }),
@@ -194,6 +199,7 @@ export class PollComponent implements OnInit {
             this.spinnerService.stop(spinnerRef);
             this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.wrong:`, false, true, false);
           }
+          this.router.navigate(['/polls']);
         } else {
           this.spinnerService.stop(spinnerRef);
           this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.wrong:`, false, true, false);

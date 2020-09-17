@@ -1,6 +1,7 @@
 export const environment = {
   production: true,
   apiUrl: 'https://api.tucita247.com', //'https://bxc56s4102.execute-api.us-east-1.amazonaws.com',
+  apiAdminUrl: 'https://apiadmin.tucita247.com',
   apiRepoUrl: 'https://apirep.tucita247.com',
   bucket: 'https://tucita247.s3.amazonaws.com',
   passKey: 'K968G66S4dC1Y5tNA5zKGT5KIjeMcpc8',

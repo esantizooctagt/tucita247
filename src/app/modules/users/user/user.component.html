@@ -12,7 +12,7 @@
             <ng-container *ngIf="userSave$ | async"></ng-container>
             <div class="row p-0 m-0">
                 <mat-card class="col-sm col-md col-lg-7">
-                    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="mt-4">
+                    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="mt-4"><div class="form-field-check-slide ml-3 pr-3 pb-3" *ngIf="userForm.value.UserId !== '' && userForm.value.UserId !== null"><mat-slide-toggle class="slide-pos" color="primary" formControlName="Status">{{textStatus}}</mat-slide-toggle></div>
                         <div class="form-field pl-3 pr-3">
                             <mat-form-field i18n-hintLabel="Email@@shared.Email" hintLabel="Email format">
                                 <input matInput #Email i18n-placeholder="Email@@shared.Email" placeholder="Email"
@@ -101,15 +101,15 @@
                             <mat-checkbox formControlName="Is_Admin" i18n="Is Admin@@shared.isadmin">Is Admin
                             </mat-checkbox>
                         </div>
-                        <div class="form-field-check ml-3 pr-3"
+                        <!-- <div class="form-field-check ml-3 pr-3"
                             *ngIf="userForm.value.UserId !== '' && userForm.value.UserId !== null">
                             <mat-checkbox formControlName="Status" i18n="Status@@shared.status">Status</mat-checkbox>
-                        </div>
+                        </div> -->
                         <div>
-                            <button mat-flat-button color="primary" id="save" [disabled]="!userForm.valid"
+                            <button mat-flat-button color="primary" *ngIf="invalid == 0" id="save" [disabled]="!userForm.valid"
                                 class="ml-3 mr-3 mt-2" i18n="Save@@shared.save">Save</button>
                             <button mat-flat-button color="accent" id="cancel" type="button" (click)="onCancel()"
-                                class="mt-2" i18n="Cancel@@shared.cancel">Cancel</button>
+                                class="mt-2 ml-3" i18n="Cancel@@shared.cancel">Cancel</button>
                             <button mat-icon-button class="pl-4" type="button" *ngIf="userForm.value.Status === 3"
                                 (click)="onSendCode()">
                                 <mat-icon>autorenew</mat-icon>

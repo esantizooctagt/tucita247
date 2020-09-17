@@ -86,6 +86,17 @@
         </context-group>
         <note priority="1" from="description">Email</note>
       </trans-unit>
+      <trans-unit id="shared.NewPassword" datatype="html">
+        <source>New Password</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/verification/verification.component.html</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/verification/verification.component.html</context>
+          <context context-type="linenumber">79</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="shared.Password" datatype="html">
         <source>Password</source>
         <context-group purpose="location">
@@ -106,15 +117,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/verification/verification.component.html</context>
-          <context context-type="linenumber">40</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/modules/verification/verification.component.html</context>
           <context context-type="linenumber">78</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/modules/verification/verification.component.html</context>
-          <context context-type="linenumber">79</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/verification/verification.component.html</context>
@@ -133,6 +136,20 @@
           <context context-type="linenumber">49</context>
         </context-group>
         <note priority="1" from="description">Password</note>
+      </trans-unit>
+      <trans-unit id="shared.learnmore" datatype="html">
+        <source>Learn More</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/locations/location/location.component.html</context>
+          <context context-type="linenumber">138</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="location.learnmorecheck" datatype="html">
+        <source>Learn More Manual Check Out</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/locations/location/location.component.html</context>
+          <context context-type="linenumber">138</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="login.ForgotPassword" datatype="html">
         <source>Forgot your
@@ -2451,11 +2468,18 @@
           <context context-type="sourcefile">src/app/modules/business-days/business-days.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
+        <note priority="1" from="description">text business days</note>
+        <note priority="1" from="meaning">Configure your year schedule here. Just click on a date to set the days off.</note>
+      </trans-unit>
+      <trans-unit id="businessdays.maintextloc" datatype="html">
+        <source>
+            Configure your year schedule here. Just click on a date to set the days off.
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-days/business-days.component.html</context>
           <context context-type="linenumber">27</context>
         </context-group>
-        <note priority="1" from="description">text business days</note>
+        <note priority="1" from="description">text locations days</note>
         <note priority="1" from="meaning">Configure your year schedule here. Just click on a date to set the days off.</note>
       </trans-unit>
       <trans-unit id="businessdays.secontext" datatype="html">
@@ -3522,7 +3546,28 @@
       </trans-unit>
       <trans-unit id="providers.servprovider">
         <source>Service provider</source>
-      </trans-unit>      
+      </trans-unit>    
+      <trans-unit id="providers.savingprovider">
+        <source>Saving Service provider...</source>
+      </trans-unit>  
+      <trans-unit id="business-ope.loadopeninghours">
+        <source>Loading Opening hours...</source>
+      </trans-unit>
+      <trans-unit id="business-ope.openinghoursupdate">
+        <source>Opening hours updated successful</source>
+      </trans-unit>
+      <trans-unit id="business-ope.daysoff">
+        <source>Days off</source>
+      </trans-unit>
+      <trans-unit id="business-ope.opehours">
+        <source>Opening hours</source>
+      </trans-unit>
+      <trans-unit id="business-ope.updatedata">
+        <source>Update data successfully</source>
+      </trans-unit>
+      <trans-unit id="business-ope.openinghours">
+        <source>Opening hours</source>
+      </trans-unit>
       <trans-unit id="providers.deletemessage">
         <source>Are you sure to delete this Service provider?</source>
       </trans-unit>
@@ -3762,6 +3807,21 @@
       </trans-unit>
       <trans-unit id="host.noappos">
         <source>No available appos</source>
+      </trans-unit>
+      <trans-unit id="shared.disabled">
+        <source>Disabled</source>
+      </trans-unit>
+      <trans-unit id="shared.enabled">
+        <source>Enabled</source>
+      </trans-unit>
+      <trans-unit id="shared.buynow">
+        <source>Shop now</source>
+      </trans-unit>
+      <trans-unit id="shared.shopmessage">
+        <source>You need to buy a license</source>
+      </trans-unit>
+      <trans-unit id="shared.shopheader">
+        <source>Free license</source>
       </trans-unit>
     </body>
   </file>

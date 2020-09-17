@@ -172,14 +172,6 @@
                                         {{getErrorMessage('Instagram')}}</mat-error>
                                 </mat-form-field>
                             </div>
-                            <mat-form-field i18n-hintLabel="Long description for mobile app|text in business@@business.longtext" hintLabel="Long description for mobile app">
-                                <input matInput i18n-placeholder="Long description for mobile app|text in business@@business.longtext" placeholder="Long Description" maxlength="255" minlength="10"
-                                    formControlName="LongDescription" [errorStateMatcher]="confirmValidParentMatcher"
-                                    required>
-                                <mat-error
-                                    *ngIf="fBusiness.LongDescription.invalid && fBusiness.LongDescription.touched">
-                                    {{getErrorMessage('LongDescription')}}</mat-error>
-                            </mat-form-field>
                             <mat-form-field i18n-hintLabel="Short description for mobile app|text in business@@business.shorttext" hintLabel="Short description for mobile app">
                                 <input matInput i18n-placeholder="Short description for mobile app|text in business@@business.shorttext" placeholder="Short Description" maxlength="75" minlength="10"
                                     formControlName="ShortDescription" [errorStateMatcher]="confirmValidParentMatcher"
@@ -187,6 +179,14 @@
                                 <mat-error
                                     *ngIf="fBusiness.ShortDescription.invalid && fBusiness.ShortDescription.touched">
                                     {{getErrorMessage('ShortDescription')}}</mat-error>
+                            </mat-form-field>
+                            <mat-form-field i18n-hintLabel="Long description for mobile app|text in business@@business.longtext" hintLabel="Long description for mobile app">
+                                <input matInput i18n-placeholder="Long description for mobile app|text in business@@business.longtext" placeholder="Long Description" maxlength="255" minlength="10"
+                                    formControlName="LongDescription" [errorStateMatcher]="confirmValidParentMatcher"
+                                    required>
+                                <mat-error
+                                    *ngIf="fBusiness.LongDescription.invalid && fBusiness.LongDescription.touched">
+                                    {{getErrorMessage('LongDescription')}}</mat-error>
                             </mat-form-field>
                             <ng-container *ngIf="!fBusiness.TuCitaLink.value; else labelTuCita">
                                 <mat-form-field i18n-hintLabel="Tu Cita 24/7 Link|text in business@@business.tucitalink" hintLabel="Tu Cita 24/7 Link">

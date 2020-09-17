@@ -74,13 +74,26 @@
         </button>
         <!-- <span></span> -->
         <span class="spacer"></span>
+        <ng-container *ngIf="business$ | async"></ng-container>
+        <mat-form-field class="col-md-4 input-search">          
+          <input placeholder="Search business..." 
+              matInput
+              type="text"
+              [formControl]="frmBusiness"
+              [matAutocomplete]="autoBusiness">
+          <mat-autocomplete #autoBusiness="matAutocomplete" [displayWith]="displayFn" (optionSelected)="selectedBusiness($event)">
+            <mat-option *ngFor="let business of filteredBusiness$ | async" [value]="business">
+                {{ business.Name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field> 
         <a class="language-string">{{languageInit}}</a>
         <button mat-icon-button [matMenuTriggerFor]="languageMenu" class="mr-1">
           <mat-icon>language</mat-icon>
         </button>
         <mat-menu #languageMenu="matMenu" xPosition="before">
           <a class="item-language" mat-menu-item href="https://console.tucita247.com/en">English</a>
-          <a class="item-language" mat-menu-item href="https://console.tucita247.com/es">Español</a>
+          <a class="item-language" mat-menu-item href="https://console.tucita247.com/es/index.html">Español</a>
         </mat-menu>
         <!-- <button mat-icon-button class="mr-1" [routerLink]="['/help']">
           <mat-icon>help</mat-icon>

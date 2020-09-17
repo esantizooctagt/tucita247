@@ -1,15 +1,17 @@
 import { Component, OnInit, LOCALE_ID, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
-import { map, shareReplay, catchError } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { map, shareReplay, catchError, startWith } from 'rxjs/operators';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
 
 import { User, Access } from '@app/_models';
 import { AuthService } from '@core/services';
 import { environment } from '@environments/environment';
-import { RolesService, UserService } from '@app/services';
+import { RolesService, UserService, BusinessService } from '@app/services';
+import { FormControl } from '@angular/forms';
+import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-main-nav',
@@ -27,7 +29,13 @@ export class MainNavComponent implements OnInit {
   languageInit: string='EN';
   isAdmin: boolean=false;
   resetToken$: Observable<any>;
+  business$: Observable<any>;
+  filteredBusiness$: Observable<any[]>;
+  allBusiness: []=[];
   apps$: Observable<Access[]>;
+  superAdmin: number=0;
+  md5Admin = 'c4ca4238a0b923820dcc509a6f75849b';
+  frmBusiness = new FormControl();
 
   opened = true;
   over = 'side';
@@ -52,7 +60,8 @@ export class MainNavComponent implements OnInit {
     private roleService: RolesService,
     private dialog: MatDialog,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private businessService: BusinessService
     ) {
   }
 
@@ -73,6 +82,9 @@ export class MainNavComponent implements OnInit {
   }
 
   ngOnInit(){
+    if (this.authService.superAdmin() == 'c4ca4238a0b923820dcc509a6f75849b'){
+      this.superAdmin = 1;
+    }
     this.businessId = this.authService.businessId();
     this.businessName = this.authService.businessName();
     this.roleId = this.authService.roleId();
@@ -85,12 +97,39 @@ export class MainNavComponent implements OnInit {
     if (this.authService.avatar() != '') {
       this.avatar = this.imgPath + this.authService.avatar();
     }
+
+    this.filteredBusiness$ = this.frmBusiness.valueChanges
+      .pipe(
+        startWith(null),
+        map((business: any | null) => business ? this._filterBusiness(business) : this.allBusiness.slice())
+      );
+
     this.loadAccess();
+
+    this.business$ = this.businessService.getBusinessAdmin().pipe(
+      map((res: any) => {
+        this.allBusiness = res.Business;
+        }
+      ),
+      catchError(err => {
+        return throwError(err || err.message);
+      })
+    );
 
     setInterval(() => { 
       this.refreshToken();
     }, 1800000);
       //}, 2700000);
+  }
+
+  selectedBusiness(event: MatAutocompleteSelectedEvent): void{
+    let userData = JSON.parse(sessionStorage.getItem('TC247_USS'));
+    userData.Business_Id = event.option.value.BusinessId;
+    userData.Business_Name = event.option.value.Name;
+    userData.User_Id = event.option.value.UserId;
+    userData.Email = event.option.value.Email;
+    sessionStorage.setItem('TC247_USS', JSON.stringify(userData));
+    window.location.reload();
   }
 
   refreshToken(){
@@ -140,5 +179,14 @@ export class MainNavComponent implements OnInit {
       return 1;
     return 0;
   };
+
+  displayFn(business?: any): string | undefined {
+    return business ? business.Name : undefined;
+  }
+
+  private _filterBusiness(value: any): any[] {
+    const filterValue = value.toString().toLowerCase();
+    return (filterValue != undefined ? this.allBusiness.filter((business: any) => business.Name.toLowerCase().indexOf(filterValue) === 0) : this.allBusiness);
+  }
 
 }

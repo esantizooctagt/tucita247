@@ -25,7 +25,9 @@ export class ProviderComponent implements OnInit {
   services$: Observable<any>;
   servProvider$: Observable<any>;
   saveProvider$: Observable<any>; 
-  providerDataList: string = '';
+  providerDataList: string='';
+  textStatus: string='';
+  invalid: number = 0;
 
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
@@ -79,10 +81,20 @@ export class ProviderComponent implements OnInit {
 
   ngOnInit(): void {
     this.data.handleData('Add');
-    this.providerDataList = this.route.snapshot.paramMap.get('provierId');
+    this.providerDataList = this.route.snapshot.paramMap.get('providerId');
 
     var spinnerRef = this.spinnerService.start($localize`:@@providers.loadserviceprov:`);
     this.businessId = this.authService.businessId();
+
+    this.services$ = this.serviceService.getServicesProvider(this.businessId, '_').pipe(
+      map((res: any) =>{
+        this.services = res.services;
+        return res.services;
+      }),
+      catchError(err => {
+        return throwError(err || err.message);
+      })
+    );
 
     this.locs$ = this.locationService.getLocationsCode(this.businessId).pipe(
       map((res: any) => {
@@ -109,13 +121,19 @@ export class ProviderComponent implements OnInit {
         map((res: any) => {
           if (res.Code == 200){
             let provider = res.Data;
-            this.providerForm.setValue({
-              ProviderId: provider.ProviderId,
-              Name: provider.Name,
-              LocationId: provider.LocationId,
-              Status: (provider.Status == 1 ? true : false)
-            });
-            provId = provider.ProviderId;
+            if (provider.ProviderId != undefined){
+              this.providerForm.setValue({
+                ProviderId: provider.ProviderId,
+                Name: provider.Name,
+                LocationId: provider.LocationId,
+                Status: (provider.Status == 1 ? true : false)
+              });
+              provId = provider.ProviderId;
+              this.textStatus = (provider.Status == 0 ? $localize`:@@shared.disabled:` : $localize`:@@shared.enabled:`);
+            } else {
+              this.invalid = 1;
+              provId='_';
+            }
             this.spinnerService.stop(spinnerRef);
             return provider;
           }
@@ -132,17 +150,7 @@ export class ProviderComponent implements OnInit {
           return throwError(err || err.Message);
         })
       );
-    } else {
-      this.services$ = this.serviceService.getServicesProvider(this.businessId, '_').pipe(
-        map((res: any) =>{
-          this.services = res.services;
-          return res.services;
-        }),
-        catchError(err => {
-          return throwError(err || err.message);
-        })
-      );
-    }
+    } 
   }
 
   getErrorMessage(component: string){
@@ -175,7 +183,7 @@ export class ProviderComponent implements OnInit {
       Status: this.providerForm.value.Status == true ? 1 : 0
     }
 
-    var spinnerRef = this.spinnerService.start("Saving Service provider...");
+    var spinnerRef = this.spinnerService.start($localize`:@@providers.savingprovider:`);
     let provId = '';
     this.saveProvider$ =  this.providerService.postProviders(dataForm).pipe(
       map((res:any) => {
@@ -189,6 +197,7 @@ export class ProviderComponent implements OnInit {
             this.spinnerService.stop(spinnerRef);
             this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.wrong:`, false, true, false);
           }
+          this.router.navigate(['/providers']);
         } else {
           this.spinnerService.stop(spinnerRef);
           this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.wrong:`, false, true, false);

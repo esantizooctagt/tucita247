@@ -48,9 +48,9 @@
             <form [formGroup]="businessForm">
                 <mat-label class="" i18n="Operation Hours|text in operation hours@@businessope.operationhours">Operation Hours</mat-label>
                 <div class="row pb-2">
-                    <mat-checkbox formControlName="MonEnabled" class="col-md-1 pl-4 mt-4"
+                    <mat-checkbox formControlName="MonEnabled" class="col-xl-1 pl-4 mt-4"
                         (change)="onChangeDisabled(0, $event)" i18n="Mon|text in operation hours@@businessope.daymon">Mon</mat-checkbox>
-                    <div class="slider col-md-4">
+                    <div class="slider col-xl-4">
                         <ng5-slider formControlName="Mon" [options]="options[0]" class="ml-1">
                         </ng5-slider>
                     </div>
@@ -58,7 +58,7 @@
                         *ngIf="newInterval[0] == '0'" mat-stroked-button color="primary"
                         class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(0)" i18n="+ Add Interval|text in operation hours@@businessope.addinterval">+ Add
                         Interval</button>
-                    <div class="slider col-md-4" *ngIf="newInterval[0] == '1'">
+                    <div class="slider col-xl-4" *ngIf="newInterval[0] == '1'">
                         <ng5-slider formControlName="Mon02" [options]="options02[0]" class="ml-1">
                         </ng5-slider>
                     </div>
@@ -67,9 +67,9 @@
                         Delete</button>
                 </div>
                 <div class="row pb-2">
-                    <mat-checkbox formControlName="TueEnabled" class="col-md-1 pl-4 mt-4"
+                    <mat-checkbox formControlName="TueEnabled" class="col-xl-1 pl-4 mt-4"
                         (change)="onChangeDisabled(1, $event)" i18n="Tue|text in operation hours@@businessope.daytue">Tue</mat-checkbox>
-                    <div class="slider col-md-4">
+                    <div class="slider col-xl-4">
                         <ng5-slider formControlName="Tue" [options]="options[1]" class="ml-1">
                         </ng5-slider>
                     </div>
@@ -77,7 +77,7 @@
                         *ngIf="newInterval[1] == '0'" mat-stroked-button color="primary"
                         class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(1)" i18n="+ Add Interval|text in operation hours@@businessope.addinterval">+ Add
                         Interval</button>
-                    <div class="slider col-md-4" *ngIf="newInterval[1] == '1'">
+                    <div class="slider col-xl-4" *ngIf="newInterval[1] == '1'">
                         <ng5-slider formControlName="Tue02" [options]="options02[1]" class="ml-1">
                         </ng5-slider>
                     </div>
@@ -86,9 +86,9 @@
                         Delete</button>
                 </div>
                 <div class="row pb-2">
-                    <mat-checkbox formControlName="WedEnabled" class="col-md-1 pl-4 mt-4"
+                    <mat-checkbox formControlName="WedEnabled" class="col-xl-1 pl-4 mt-4"
                         (change)="onChangeDisabled(2, $event)" i18n="Wed|text in operation hours@@businessope.daywed">Wed</mat-checkbox>
-                    <div class="slider col-md-4">
+                    <div class="slider col-xl-4">
                         <ng5-slider formControlName="Wed" [options]="options[2]" class="ml-1">
                         </ng5-slider>
                     </div>
@@ -96,7 +96,7 @@
                         *ngIf="newInterval[2] == '0'" mat-stroked-button color="primary"
                         class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(2)" i18n="+ Add Interval|text in operation hours@@businessope.addinterval">+ Add
                         Interval</button>
-                    <div class="slider col-md-4" *ngIf="newInterval[2] == '1'">
+                    <div class="slider col-xl-4" *ngIf="newInterval[2] == '1'">
                         <ng5-slider formControlName="Wed02" [options]="options02[2]" class="ml-1">
                         </ng5-slider>
                     </div>
@@ -105,9 +105,9 @@
                         Delete</button>
                 </div>
                 <div class="row pb-2">
-                    <mat-checkbox formControlName="ThuEnabled" class="col-md-1 pl-4 mt-4"
+                    <mat-checkbox formControlName="ThuEnabled" class="col-xl-1 pl-4 mt-4"
                         (change)="onChangeDisabled(3, $event)" i18n="Thu|text in operation hours@@businessope.daythu">Thu</mat-checkbox>
-                    <div class="slider col-md-4">
+                    <div class="slider col-xl-4">
                         <ng5-slider formControlName="Thu" [options]="options[3]" class="ml-1">
                         </ng5-slider>
                     </div>
@@ -115,7 +115,7 @@
                         *ngIf="newInterval[3] == '0'" mat-stroked-button color="primary"
                         class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(3)" i18n="+ Add Interval|text in operation hours@@businessope.addinterval">+ Add
                         Interval</button>
-                    <div class="slider col-md-4" *ngIf="newInterval[3] == '1'">
+                    <div class="slider col-xl-4" *ngIf="newInterval[3] == '1'">
                         <ng5-slider formControlName="Thu02" [options]="options02[3]" class="ml-1">
                         </ng5-slider>
                     </div>
@@ -124,9 +124,9 @@
                         Delete</button>
                 </div>
                 <div class="row pb-2">
-                    <mat-checkbox formControlName="FriEnabled" class="col-md-1 pl-4 mt-4"
+                    <mat-checkbox formControlName="FriEnabled" class="col-xl-1 pl-4 mt-4"
                         (change)="onChangeDisabled(4, $event)" i18n="Fri|text in operation hours@@businessope.dayfri">Fri</mat-checkbox>
-                    <div class="slider col-md-4">
+                    <div class="slider col-xl-4">
                         <ng5-slider formControlName="Fri" [options]="options[4]" class="ml-1">
                         </ng5-slider>
                     </div>
@@ -134,7 +134,7 @@
                         *ngIf="newInterval[4] == '0'" mat-stroked-button color="primary"
                         class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(4)" i18n="+ Add Interval|text in operation hours@@businessope.addinterval">+ Add
                         Interval</button>
-                    <div class="slider col-md-4" *ngIf="newInterval[4] == '1'">
+                    <div class="slider col-xl-4" *ngIf="newInterval[4] == '1'">
                         <ng5-slider formControlName="Fri02" [options]="options02[4]" class="ml-1">
                         </ng5-slider>
                     </div>
@@ -143,9 +143,9 @@
                         Delete</button>
                 </div>
                 <div class="row pb-2">
-                    <mat-checkbox formControlName="SatEnabled" class="col-md-1 pl-4 mt-4"
+                    <mat-checkbox formControlName="SatEnabled" class="col-xl-1 pl-4 mt-4"
                         (change)="onChangeDisabled(5, $event)" i18n="Sat|text in operation hours@@businessope.daysat">Sat</mat-checkbox>
-                    <div class="slider col-md-4">
+                    <div class="slider col-xl-4">
                         <ng5-slider formControlName="Sat" [options]="options[5]" class="ml-1">
                         </ng5-slider>
                     </div>
@@ -153,7 +153,7 @@
                         *ngIf="newInterval[5] == '0'" mat-stroked-button color="primary"
                         class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(5)" i18n="+ Add Interval|text in operation hours@@businessope.addinterval">+ Add
                         Interval</button>
-                    <div class="slider col-md-4" *ngIf="newInterval[5] == '1'">
+                    <div class="slider col-xl-4" *ngIf="newInterval[5] == '1'">
                         <ng5-slider formControlName="Sat02" [options]="options02[5]" class="ml-1">
                         </ng5-slider>
                     </div>
@@ -162,9 +162,9 @@
                         Delete</button>
                 </div>
                 <div class="row pb-2">
-                    <mat-checkbox formControlName="SunEnabled" class="col-md-1 pl-4 mt-4"
+                    <mat-checkbox formControlName="SunEnabled" class="col-xl-1 pl-4 mt-4"
                         (change)="onChangeDisabled(6, $event)" i18n="Sun|text in operation hours@@businessope.daysun">Sun</mat-checkbox>
-                    <div class="slider col-md-4">
+                    <div class="slider col-xl-4">
                         <ng5-slider formControlName="Sun" [options]="options[6]" class="ml-1">
                         </ng5-slider>
                     </div>
@@ -172,7 +172,7 @@
                         *ngIf="newInterval[6] == '0'" mat-stroked-button color="primary"
                         class="ml-2 mr-2 addSlider" type="button" (click)="onAddInterval(6)" i18n="+ Add Interval|text in operation hours@@businessope.addinterval">+ Add
                         Interval</button>
-                    <div class="slider col-md-4" *ngIf="newInterval[6] == '1'">
+                    <div class="slider col-xl-4" *ngIf="newInterval[6] == '1'">
                         <ng5-slider formControlName="Sun02" [options]="options02[6]" class="ml-1">
                         </ng5-slider>
                     </div>

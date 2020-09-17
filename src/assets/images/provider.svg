@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+	<style>
+		tspan { white-space:pre }
+		.shp0 { fill: none;stroke: #f55b00;stroke-width: 5 } 
+	</style>
+	<path id="Shape 3" class="shp0" d="M73 76L81 86L90 75" />
+	<path id="Shape 2" class="shp0" d="M167 75L176 85L184 75" />
+	<path id="Shape 2" class="shp0" d="M111 124C111 124 28.54 131.4 33 165C37.46 198.6 87.79 201.37 87 203" />
+	<path id="Shape 2 copy" class="shp0" d="M146 124C146 124 228.28 131.4 223.83 165C219.38 198.6 169.16 201.37 169.95 203" />
+	<path id="Shape 2" class="shp0" d="M151 217L151 185" />
+	<path id="Shape 2" class="shp0" d="M105 217L105 185" />
+	<path id="Shape 2" class="shp0" d="M87 217L87 170C87 170 95.91 139.59 128 147" />
+	<path id="Shape 2" class="shp0" d="" />
+	<path id="Shape 2" class="shp0" d="M87 217L169 217L169 171C169 171 166.14 142.32 128 147" />
+	<path id="Shape 2" class="shp0" d="M212 145L212 98C212 98 210.27 68.61 176 75" />
+	<path id="Shape 2" class="shp0" d="M138 112L138 96C138 96 142.16 69.24 176 75" />
+	<path id="Shape 2" class="shp0" d="M196 135L196 111" />
+	<path id="Shape 2" class="shp0" d="M155 124L155 111" />
+	<path id="Shape 2" class="shp0" d="M61 135L61 110" />
+	<path id="Shape 2" class="shp0" d="M102 124L102 111" />
+	<path id="Shape 2" class="shp0" d="M44 145L44 98C44 98 46.13 68.9 80 76" />
+	<path id="Cabeza2" class="shp0" d="M80.5 75C70.82 75 63 66.95 63 57C63 47.05 70.82 39 80.5 39C90.18 39 98 47.05 98 57C98 66.95 90.18 75 80.5 75Z" />
+	<path id="Shape 2" class="shp0" d="M118 113L118 96C118 96 115.63 69.18 81 75" />
+	<path id="Cabeza1" class="shp0" d="M128.5 146C118.82 146 111 137.95 111 128C111 118.05 118.82 110 128.5 110C138.18 110 146 118.05 146 128C146 137.95 138.18 146 128.5 146Z" />
+	<path id="Cabeza3" class="shp0" d="M175.5 75C165.82 75 158 66.95 158 57C158 47.05 165.82 39 175.5 39C185.18 39 193 47.05 193 57C193 66.95 185.18 75 175.5 75Z" />
+</svg>

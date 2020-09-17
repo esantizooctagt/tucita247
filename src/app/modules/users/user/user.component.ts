@@ -25,6 +25,7 @@ export class UserComponent implements OnInit {
 
   userData: string = '';
   statTemp: number = 0;
+  invalid: number = 0;
   userAct$: Observable<any>;
   businessId: string='';
   changesUser: Subscription;
@@ -37,6 +38,7 @@ export class UserComponent implements OnInit {
   loadingUser: boolean = false;
   savingUser: boolean = false;
   userDataList: string="";
+  textStatus: string ="";
 
   readonly passKey = environment.passKey;
   //variable to handle errors on inputs components
@@ -171,26 +173,31 @@ export class UserComponent implements OnInit {
       var spinnerRef = this.spinnerService.start($localize`:@@userloc.loadingusersingle:`);
       this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', Is_Admin: 0, Status: 1});
       this.user$ = this.usersService.getUser(this.userDataList, this.businessId).pipe(
-        tap(user => { 
-          this.userForm.controls.Email.disable();
-          if (user.Is_Admin === 1){
-            this.userForm.controls['RoleId'].clearValidators();
+        tap(user => {
+          if (user.User_Id != undefined){
+            this.userForm.controls.Email.disable();
+            if (user.Is_Admin === 1){
+              this.userForm.controls['RoleId'].clearValidators();
+            } else {
+              this.userForm.controls['RoleId'].setValidators([Validators.required]);
+            }
+            this.userForm.setValue({
+              UserId: user.User_Id,
+              BusinessId: user.Business_Id,
+              Email: user.Email,
+              First_Name: user.First_Name,
+              Last_Name: user.Last_Name,
+              Password: '',
+              Avatar: '',
+              Phone: user.Phone,
+              RoleId: (user.Is_Admin === 1 ? 'None' : user.Role_Id),
+              Is_Admin: user.Is_Admin,
+              Status: user.Status
+            });
+            this.textStatus = (user.Status == 0 ? $localize`:@@shared.disabled:` : $localize`:@@shared.enabled:`);
           } else {
-            this.userForm.controls['RoleId'].setValidators([Validators.required]);
+            this.invalid = 1;
           }
-          this.userForm.setValue({
-            UserId: user.User_Id,
-            BusinessId: user.Business_Id,
-            Email: user.Email,
-            First_Name: user.First_Name,
-            Last_Name: user.Last_Name,
-            Password: '',
-            Avatar: '',
-            Phone: user.Phone,
-            RoleId: (user.Is_Admin === 1 ? 'None' : user.Role_Id),
-            Is_Admin: user.Is_Admin,
-            Status: user.Status
-          });
           this.statTemp = user.Status;
           this.spinnerService.stop(spinnerRef);
           return user;   
@@ -234,6 +241,7 @@ export class UserComponent implements OnInit {
             this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', Is_Admin: 0, Status: 1});
             this.data.changeData('users');
             this.openDialog($localize`:@@users.usertexts:`, $localize`:@@userloc.userupdated:`, true, false, false);
+            this.router.navigate(['/users']);
           }),
           catchError(err => {
             this.spinnerService.stop(spinnerRef);

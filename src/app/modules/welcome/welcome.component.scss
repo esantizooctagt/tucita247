@@ -1,300 +1,130 @@
 .card-welcome{
-    height: 420px;
+    height: 280px;
+    box-shadow: none;
+    -webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	-o-border-radius: 0;
+	-ms-border-radius: 0;
+    border-radius: 0;
+    background-color: transparent;
+}
+.card-welcome:hover, .card-welcome:focus{
+    background-color: rgb(131 136 138 / 12%);
+    border-radius: 145px;
+    -webkit-border-radius: 145px;
+	-moz-border-radius: 145px;
+	-o-border-radius: 145px;
+	-ms-border-radius: 145px;
+	border-radius: 145px;
+	-webkit-transition: border-radius 0.5s   linear ;
+	-moz-transition: border-radius 0.5s   linear ;
+	-o-transition: border-radius 0.5s   linear ;
+	-ms-ransition: border-radius 0.5s   linear ;
+	transition: border-radius 0.5s   linear ;
+    .text-card{
+        color: #ff4f00;
+        font-size: 20px !important;
+        font-weight: bold !important;
+        letter-spacing: normal;
+        line-height: normal;
+        margin-bottom: 2px;
+        margin-top: 25px;
+        opacity: 1;
+    }
 }
 .text-card{
     text-align: center;
+    font-size: 20px;
+    overflow: hidden;
+    font-family: Open Sans,sans-serif;
+    text-overflow: ellipsis;
+    color: #2c495a !important;
+    font-weight: 700;
+    padding-bottom: 10px;
 }
-@media (min-width: 1300px){
-    .company{
-        height: 256px;
-        background: url('../../../assets/images/company.png');
-        width: 100%;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        margin: 0 auto;
-        display: inline-block;
-        cursor: pointer;
-    }
-    .location{
-        height: 256px;
-        background: url('../../../assets/images/location.png');
-        width: 100%;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        margin: 0 auto;
-        display: inline-block;
-        cursor: pointer;
-    }
-    .provider{
-        height: 256px;
-        background: url('../../../assets/images/provider.png');
-        width: 100%;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        margin: 0 auto;
-        display: inline-block;
-        cursor: pointer;
-    }
-    .service{
-        height: 256px;
-        background: url('../../../assets/images/service.png');
-        width: 100%;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        margin: 0 auto;
-        display: inline-block;
-        cursor: pointer;
-    }
-    .calendar{
-        height: 256px;
-        background: url('../../../assets/images/calendar.png');
-        width: 100%;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        margin: 0 auto;
-        display: inline-block;
-        cursor: pointer;
-    }
-    .hours{
-        height: 256px;
-        background: url('../../../assets/images/hours.png');
-        width: 100%;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        margin: 0 auto;
-        display: inline-block;
-        cursor: pointer;
-    }
+.company{
+    height: 120px;
+    background: url('../../../assets/images/company.svg');
+    width: 120px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin: 0 auto;
+    cursor: pointer;
 }
-@media (max-width: 1300px){
-    .company{
-        height: 200px;
-        background: url('../../../assets/images/company.png');
-        width: 100%;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        margin: 0 auto;
-        display: inline-block;
-        cursor: pointer;
-    }
-    .location{
-        height: 200px;
-        background: url('../../../assets/images/location.png');
-        width: 100%;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        margin: 0 auto;
-        display: inline-block;
-        cursor: pointer;
-    }
-    .provider{
-        height: 200px;
-        background: url('../../../assets/images/provider.png');
-        width: 100%;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        margin: 0 auto;
-        display: inline-block;
-        cursor: pointer;
-    }
-    .service{
-        height: 200px;
-        background: url('../../../assets/images/service.png');
-        width: 100%;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        margin: 0 auto;
-        display: inline-block;
-        cursor: pointer;
-    }
-    .calendar{
-        height: 200px;
-        background: url('../../../assets/images/calendar.png');
-        width: 100%;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        margin: 0 auto;
-        display: inline-block;
-        cursor: pointer;
-    }
-    .hours{
-        height: 200px;
-        background: url('../../../assets/images/hours.png');
-        width: 100%;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        margin: 0 auto;
-        display: inline-block;
-        cursor: pointer;
-    }
+.location{
+    height: 120px;
+    background: url('../../../assets/images/location.svg');
+    width: 120px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin: 0 auto;
+    cursor: pointer;
 }
-@media (max-width: 1100px){
-    .company{
-        height: 150px;
-        background: url('../../../assets/images/company.png');
-        width: 100%;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        margin: 0 auto;
-        display: inline-block;
-        cursor: pointer;
-    }
-    .location{
-        height: 150px;
-        background: url('../../../assets/images/location.png');
-        width: 100%;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        margin: 0 auto;
-        display: inline-block;
-        cursor: pointer;
-    }
-    .provider{
-        height: 150px;
-        background: url('../../../assets/images/provider.png');
-        width: 100%;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        margin: 0 auto;
-        display: inline-block;
-        cursor: pointer;
-    }
-    .service{
-        height: 150px;
-        background: url('../../../assets/images/service.png');
-        width: 100%;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        margin: 0 auto;
-        display: inline-block;
-        cursor: pointer;
-    }
-    .calendar{
-        height: 150px;
-        background: url('../../../assets/images/calendar.png');
-        width: 100%;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        margin: 0 auto;
-        display: inline-block;
-        cursor: pointer;
-    }
-    .hours{
-        height: 150px;
-        background: url('../../../assets/images/hours.png');
-        width: 100%;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        margin: 0 auto;
-        display: inline-block;
-        cursor: pointer;
-    }
+.provider{
+    height: 120px;
+    background: url('../../../assets/images/provider.svg');
+    width: 120px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin: 0 auto;
+    cursor: pointer;
 }
-@media (max-width: 570px){
-    .company{
-        height: 150px;
-        background: url('../../../assets/images/company.png');
-        width: 40%;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        margin: 0 auto;
-        display: inline-block;
-        cursor: pointer;
-        position: relative;
-        left: 140px;
-    }
-    .location{
-        height: 150px;
-        background: url('../../../assets/images/location.png');
-        width: 40%;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        margin: 0 auto;
-        display: inline-block;
-        cursor: pointer;
-        position: relative;
-        left: 140px;
-    }
-    .provider{
-        height: 150px;
-        background: url('../../../assets/images/provider.png');
-        width: 40%;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        margin: 0 auto;
-        display: inline-block;
-        cursor: pointer;
-        position: relative;
-        left: 140px;
-    }
-    .service{
-        height: 150px;
-        background: url('../../../assets/images/service.png');
-        width: 40%;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        margin: 0 auto;
-        display: inline-block;
-        cursor: pointer;
-        position: relative;
-        left: 140px;
-    }
-    .calendar{
-        height: 150px;
-        background: url('../../../assets/images/calendar.png');
-        width: 40%;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        margin: 0 auto;
-        display: inline-block;
-        cursor: pointer;
-        position: relative;
-        left: 140px;
-    }
-    .hours{
-        height: 150px;
-        background: url('../../../assets/images/hours.png');
-        width: 40%;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        margin: 0 auto;
-        display: inline-block;
-        cursor: pointer;
-        position: relative;
-        left: 140px;
-    }
+.service{
+    height: 120px;
+    background: url('../../../assets/images/service.svg');
+    width: 120px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin: 0 auto;
+    cursor: pointer;
+}
+.calendar{
+    height: 120px;
+    background: url('../../../assets/images/calendar.svg');
+    width: 120px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin: 0 auto;
+    cursor: pointer;
+}
+.hours{
+    height: 120px;
+    background: url('../../../assets/images/hours.svg');
+    width: 120px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin: 0 auto;
+    cursor: pointer;
 }
 h1{
     font-family: Montserrat;
     text-align: center;
-    color: #0088ce;
+    color: #2c495a !important
 }
 h2{
     font-family: Montserrat;
     text-align: center;
-    color: #66b8e2;
+    color: #2c495a !important;
+}
+.features{
+    background: #ff5b00;
+    border-color: #ff5b00;
+    margin-bottom: 30px;
+    width: 64px;
+    margin-top: 20px;
+    border: 2px solid #ff5b00;
+    margin: 10px auto;
+}
+.short-desc{
+    color: #ff5b00;
+    max-width: 315px;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
 }

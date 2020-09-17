@@ -14,11 +14,13 @@ export class AuthService {
   private currentUserTknSubject: BehaviorSubject<any>;
   private currentAccessTknSubject: BehaviorSubject<any>;
   private currentRefreshTknSubject: BehaviorSubject<any>;
+  private currentSuperAdminSubject: BehaviorSubject<any>;
 
   public currentUser: Observable<User>;
   public currentTkn: Observable<any>;
   public currentAccessTkn: Observable<any>;
   public currentRefresh: Observable<any>;
+  public currentSuperAdmin: Observable<any>;
 
   readonly apiURL = environment.apiUrl;
   constructor(private http: HttpClient) {
@@ -33,6 +35,9 @@ export class AuthService {
 
     this.currentRefreshTknSubject = new BehaviorSubject<User>(JSON.parse(sessionStorage.getItem('TC247_REF')));
     this.currentRefresh = this.currentRefreshTknSubject.asObservable();
+
+    this.currentSuperAdminSubject = new BehaviorSubject<any>(JSON.parse(sessionStorage.getItem('TC247_ADM')));
+    this.currentSuperAdmin = this.currentSuperAdminSubject.asObservable();
    }
 
   public get currentUserValue(): User {
@@ -57,14 +62,26 @@ export class AuthService {
           map(user => {
               if (user && user.token && user.Code == 100) {
                   // store user details in local storage to keep user logged in
-                  sessionStorage.setItem('TC247_USS', JSON.stringify(user.user));
-                  this.currentUserSubject.next(user.user);
                   sessionStorage.setItem('TC247_TKN', JSON.stringify(user.token));
                   this.currentUserTknSubject.next(user.token);
                   sessionStorage.setItem('TC247_ACT', JSON.stringify(user.access));
                   this.currentAccessTknSubject.next(user.access);
                   sessionStorage.setItem('TC247_REF', JSON.stringify(user.refresh));
                   this.currentRefreshTknSubject.next(user.refresh);
+
+                  let data = user.user;
+                  if (user.super_admin == 1){
+                    data.Email_Adm = data.Email;
+                    data.User_Adm = data.User_Id;
+                    sessionStorage.setItem('TC247_ADM', JSON.stringify('c4ca4238a0b923820dcc509a6f75849b'));
+                    this.currentSuperAdminSubject.next(user.super_admin);
+                  }else{
+                    sessionStorage.setItem('TC247_ADM', JSON.stringify('undefined'));
+                    this.currentSuperAdminSubject.next('undefined');
+                  }
+
+                  sessionStorage.setItem('TC247_USS', JSON.stringify(data));
+                  this.currentUserSubject.next(user.user);
               }
               return user;
           }),
@@ -102,6 +119,10 @@ export class AuthService {
   }
   currentRefreshToken(){
     return this.currentRefreshTknSubject.value;
+  }
+  superAdmin(){
+    let adm = JSON.parse(sessionStorage.getItem('TC247_ADM'));
+    return adm;
   }
   avatar(){
     let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
@@ -154,5 +175,7 @@ export class AuthService {
     this.currentAccessTknSubject.next(null);
     sessionStorage.removeItem('TC247_REF');
     this.currentRefreshTknSubject.next(null);
+    sessionStorage.removeItem('TC247_ADM');
+    this.currentSuperAdminSubject.next(null);
   }
 }

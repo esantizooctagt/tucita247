@@ -170,13 +170,15 @@
   padding-left: 5px;
 }
 :host ::-webkit-scrollbar {
-  width: 5px;
+  width: 10px;
 }
 :host ::-webkit-scrollbar-track {
   background: #f1f1f1; 
+  border-radius: 10px;
 }
 :host ::-webkit-scrollbar-thumb {
-  background: #ff4f00; 
+  background: #ff4f00;
+  border-radius: 10px;
 }
 :host ::-webkit-scrollbar-thumb:hover {
   background: #555; 
@@ -186,4 +188,7 @@
 }
 :host ::ng-deep mat-sidenav-container .mat-sidenav .mat-drawer-inner-container{
   overflow: initial !important;
+}
+.input-search{
+  font-size: 14px;
 }

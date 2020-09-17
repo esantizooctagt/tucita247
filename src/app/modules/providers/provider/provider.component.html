@@ -8,10 +8,12 @@
                 <h3 i18n="SERVICE PROVIDERS|title service providers@@providers.title">SERVICE PROVIDERS</h3>
             </div>
             <ng-container *ngIf="provider$ | async"></ng-container>
+            <ng-container *ngIf="services$ | async"></ng-container>
+            <ng-container *ngIf="servProvider$ | async"></ng-container>
             <ng-container *ngIf="saveProvider$ | async"></ng-container>
             <div class="row p-0 m-0">
                 <mat-card class="col-sm col-md col-lg-7">
-                    <form [formGroup]="providerForm" (ngSubmit)="onSubmit()" class="mt-4">
+                    <form [formGroup]="providerForm" (ngSubmit)="onSubmit()" class="mt-4"><div class="form-field-check-slide ml-3 pr-3 pb-3" *ngIf="providerForm.value.ProviderId !== '' && providerForm.value.ProviderId !== null"><mat-slide-toggle class="slide-pos" color="primary" formControlName="Status">{{textStatus}}</mat-slide-toggle></div>
                         <div class="form-field pl-3 pr-3">
                             <mat-form-field i18n-hintLabel="Name@@shared.name" hintLabel="Name">
                                 <input matInput #Name i18n-placeholder="Name@@shared.name" placeholder="Name"
@@ -34,8 +36,6 @@
                             </mat-form-field>
                         </div>
                         <div class="form-field pl-3 pr-3" *ngIf="f.ProviderId.value !=''">
-                            <ng-container *ngIf="services$ | async"></ng-container>
-                            <ng-container *ngIf="servProvider$ | async"></ng-container>
                             <h5 i18n="Select services|text in providers@@providers.selectservice">Select services</h5>
                             <mat-selection-list #serv (selectionChange)="onSelectService($event)">
                                 <mat-list-option *ngFor="let item of services"
@@ -45,10 +45,10 @@
                                 </mat-list-option>
                             </mat-selection-list>
                         </div>
-                        <div class="form-field-check ml-3 pr-3"
+                        <!-- <div class="form-field-check ml-3 pr-3"
                             *ngIf="providerForm.value.ProviderId !== '' && providerForm.value.ProviderId !== null">
                             <mat-checkbox formControlName="Status" i18n="Status@@shared.status">Status</mat-checkbox>
-                        </div>
+                        </div> -->
                         <div class="form-field pl-3 pr-3 mt-2">
                             <button mat-stroked-button class="col-md-4 mt-2 mb-2" color="secondary" type="button"
                                 [routerLink]="['/providerope/2']"
@@ -59,10 +59,10 @@
                                 i18n="Special days|text in providers@@providers.specdays">Special days</button>
                         </div>
                         <div>
-                            <button mat-flat-button color="primary" id="save" [disabled]="!providerForm.valid"
+                            <button mat-flat-button color="primary" *ngIf="invalid == 0" id="save" [disabled]="!providerForm.valid"
                                 class="button-action ml-3 mr-3 mt-2" i18n="Save@@shared.save">Save</button>
                             <button mat-flat-button color="accent" i18n="Cancel@@shared.cancel" id="cancel"
-                                type="button" (click)="onCancel()" class="button-action mt-2">Cancel</button>
+                                type="button" (click)="onCancel()" class="button-action mt-2 ml-3">Cancel</button>
                         </div>
                     </form>
                 </mat-card>

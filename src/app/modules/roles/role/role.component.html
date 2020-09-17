@@ -8,10 +8,11 @@
                 <h3 i18n="ROLES|title in roles@@roles.title">ROLES</h3>
             </div>
             <ng-container *ngIf="role$ | async"></ng-container>
+            <ng-container *ngIf="apps$ | async"></ng-container>
             <ng-container *ngIf="roleSave$ | async"></ng-container>
             <div class="row p-0 m-0">
                 <mat-card class="col-sm col-md col-lg-7">
-                    <form [formGroup]="roleForm" (ngSubmit)="onSubmit()" class="mt-4">
+                    <form [formGroup]="roleForm" (ngSubmit)="onSubmit()" class="mt-4"><div class="form-field-check-slide ml-3 pr-3 pb-3" *ngIf="roleForm.value.RoleId !== '' && roleForm.value.RoleId !== null"><mat-slide-toggle class="slide-pos" color="primary" formControlName="Status">{{textStatus}}</mat-slide-toggle></div>
                         <div class="form-field pl-3 pr-3">
                             <mat-form-field i18n-hintLabel="Min 3 characters|text in roles@@roles.minchar"
                                 hintLabel="Min 3 characters">
@@ -49,14 +50,14 @@
                                 </mat-list-item>
                             </mat-list>
                         </div>
-                        <div class="form-field-check ml-3 pr-3"
+                        <!-- <div class="form-field-check ml-3 pr-3"
                             *ngIf="roleForm.value.RoleId !== '' && roleForm.value.RoleId !== null">
                             <mat-checkbox formControlName="Status" i18n="Status@@shared.status">Status</mat-checkbox>
-                        </div>
-                        <button mat-flat-button color="primary" id="save" [disabled]="!roleForm.valid"
+                        </div> -->
+                        <button mat-flat-button color="primary" *ngIf="invalid == 0"  id="save" [disabled]="!roleForm.valid"
                             class="ml-3 mr-3 mt-2" i18n="Save@@shared.save">Save</button>
                         <button mat-flat-button color="accent" type="button" id="cancel" (click)="onCancel()"
-                            class="mt-2" i18n="Cancel@@shared.cancel">Cancel</button>
+                            class="mt-2 ml-3" i18n="Cancel@@shared.cancel">Cancel</button>
                         <!-- {{ roleForm.value | json }} -->
                     </form>
                 </mat-card>

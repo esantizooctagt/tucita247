@@ -57,7 +57,7 @@ export class BusinessOpeComponent implements OnInit {
     return this.businessForm.controls;
   }
 
-  links = [{label:'Opening hours',link:'/businessope',active:1}, {label:'Special days',link:'/businessdays',active:0}];
+  links = [{label:$localize`:@@business-ope.opehours:`,link:'/businessope',active:1}, {label:$localize`:@@business-ope.daysoff:`,link:'/businessdays',active:0}];
   activeLink = this.links[0];
   background: ThemePalette = undefined;
 
@@ -98,7 +98,7 @@ export class BusinessOpeComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    var spinnerRef = this.spinnerService.start("Loading Opening hours...");
+    var spinnerRef = this.spinnerService.start($localize`:@@business-ope.loadopeninghours:`);
     this.businessId = this.authService.businessId();
     this.locationId = this.route.snapshot.paramMap.get('locations') == null ? "_" : "1";
     if (this.route.snapshot.paramMap.get('provider') == null){
@@ -494,7 +494,7 @@ export class BusinessOpeComponent implements OnInit {
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
         this.businessForm.reset({BusinessId: '', OperationHours: '', Mon:[8,17], Mon02:[18,24], MonEnabled: 0, Tue:[8,17], Tue02:[18,24], TueEnabled: 0, Wed:[8,17], Wed02:[18,24], WedEnabled: 0, Thu:[8,17], Thu02:[18,24], ThuEnabled: 0, Fri:[8,17], Fri02:[18,24], FriEnabled: 0, Sat:[8,17], Sat02:[18,24], SatEnabled: 0, Sun:[8,17], Sun02:[18,24], SunEnabled: 0});
-        this.openDialog('Error !', err.Message, false, true, false);
+        this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
         return throwError(err || err.message);
       })
     );
@@ -710,19 +710,19 @@ export class BusinessOpeComponent implements OnInit {
     let dataForm =  { 
       "OpeHours": JSON.stringify(opeHours)
     }
-    var spinnerRef = this.spinnerService.start("Saving Business...");
+    var spinnerRef = this.spinnerService.start($localize`:@@business.saving:`);
     this.opeHoursSave$ = this.businessService.updateOpeningHours(this.businessId, (this.providerId != '_' ? this.providerId.split('#')[0] : this.locationId), (this.providerId == '_' ? '_' : this.providerId.split('#')[1]), dataForm).pipe(
       tap((res: any) => { 
         if (res.Code == 200){
           this.spinnerService.stop(spinnerRef);
-          this.openSnackBar("Opening hours updated successful","Opening hours");
+          this.openSnackBar($localize`:@@business-ope.openinghoursupdate:`,$localize`:@@business-ope.openinghours:`);
         } else {
-          this.openSnackBar("Something goes wrong, try again","Opening hours");
+          this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@business-ope.openinghours:`);
         }
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
-        this.openDialog('Error !', err.Message, false, true, false);
+        this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
         return throwError(err || err.message);
       })
     );
@@ -730,7 +730,7 @@ export class BusinessOpeComponent implements OnInit {
 
   onLocationChange(event){
     if (event.value == "") {return;}
-    var spinnerRef = this.spinnerService.start("Loading Opening hours...");
+    var spinnerRef = this.spinnerService.start($localize`:@@business-ope.loadopeninghours:`);
     this.locationId = event.value;
     this.businessForm.reset({BusinessId: '', OperationHours: '', Mon:[8,17], Mon02:[18,24], MonEnabled: 0, Tue:[8,17], Tue02:[18,24], TueEnabled: 0, Wed:[8,17], Wed02:[18,24], WedEnabled: 0, Thu:[8,17], Thu02:[18,24], ThuEnabled: 0, Fri:[8,17], Fri02:[18,24], FriEnabled: 0, Sat:[8,17], Sat02:[18,24], SatEnabled: 0, Sun:[8,17], Sun02:[18,24], SunEnabled: 0});
 
@@ -1051,7 +1051,7 @@ export class BusinessOpeComponent implements OnInit {
 
   onServiceChange(event){
     if (event.value == "") {return;}
-    var spinnerRef = this.spinnerService.start("Loading Opening hours...");
+    var spinnerRef = this.spinnerService.start($localize`:@@business-ope.loadopeninghours:`);
     this.providerId = event.value;
     this.businessForm.reset({BusinessId: '', OperationHours: '', Mon:[8,17], Mon02:[18,24], MonEnabled: 0, Tue:[8,17], Tue02:[18,24], TueEnabled: 0, Wed:[8,17], Wed02:[18,24], WedEnabled: 0, Thu:[8,17], Thu02:[18,24], ThuEnabled: 0, Fri:[8,17], Fri02:[18,24], FriEnabled: 0, Sat:[8,17], Sat02:[18,24], SatEnabled: 0, Sun:[8,17], Sun02:[18,24], SunEnabled: 0});
 
@@ -1377,12 +1377,12 @@ export class BusinessOpeComponent implements OnInit {
       map((res: any) => {
         if (res.Code == 200){
           this.providerParentHours = (event.checked == true ? 1 : 0);
-          this.openSnackBar("Update data successfully","Opening hours");
+          this.openSnackBar($localize`:@@business-ope.updatedata:`,$localize`:@@business-ope.openinghours:`);
         }
       }),
       catchError(err => {
         this.providerParentHours = (!event.checked == true ? 1 : 0);
-        this.openSnackBar("Something goes wrong, try again","Opening hours");
+        this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@business-ope.openinghours:`);
         return err;
       })
     );
