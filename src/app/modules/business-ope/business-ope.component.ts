@@ -101,11 +101,21 @@ export class BusinessOpeComponent implements OnInit {
     var spinnerRef = this.spinnerService.start($localize`:@@business-ope.loadopeninghours:`);
     this.businessId = this.authService.businessId();
     this.locationId = this.route.snapshot.paramMap.get('locations') == null ? "_" : "1";
+    
+    if (this.route.snapshot.paramMap.get('locations') != null){
+      if (this.route.snapshot.paramMap.get('locations') == "1"){
+        this.links = [{label:$localize`:@@business-ope.opehours:`,link:'/locationope/1',active:1}, {label:$localize`:@@business-ope.daysoff:`,link:'/locationdays/1',active:0}];
+      }
+    }
+    
     if (this.route.snapshot.paramMap.get('provider') == null){
       this.providerId = "_";
     } else {
       this.locationId = "1";
       this.providerId = "1";
+      if (this.route.snapshot.paramMap.get('provider') == "2"){
+        this.links = [{label:$localize`:@@business-ope.opehours:`,link:'/providerope/2',active:1}, {label:$localize`:@@business-ope.daysoff:`,link:'/providerdays/2',active:0}];
+      }
     }
 
     this.options[0] = Object.assign({}, this.genOption);

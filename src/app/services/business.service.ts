@@ -29,8 +29,8 @@ export class BusinessService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  getValidBusiness(businessId): Observable<any>{
-    return this.http.get<any>(this.apiURL + '/business/valid/' + businessId)
+  getValidBusiness(businessId, locationId, providerId, serviceId, appoDate, appoHour): Observable<any>{
+    return this.http.get<any>(this.apiURL + '/business/valid/' + businessId + '/' + locationId + '/' + providerId + '/' + serviceId + '/' + appoDate + '/' + appoHour)
                     .pipe(catchError(this.errorHandler));
   }
   getBusinessParent(): Observable<any[]>{

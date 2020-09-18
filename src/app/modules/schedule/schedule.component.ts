@@ -313,9 +313,8 @@ export class ScheduleComponent implements OnInit {
     if (result == {}) { return; }
     
     if (result.Available == 0) { return; }
-
     var spinnerRef = this.spinnerService.start($localize`:@@sche.loadingsche:`);
-    this.validBusiness$ = this.businessService.getValidBusiness(this.businessId).pipe(
+    this.validBusiness$ = this.businessService.getValidBusiness(this.businessId, this.locationId, this.providerId, (result.ServiceId == "" ? "_" : result.ServiceId), this.datepipe.transform(day, 'yyyy-MM-dd'), result.Time.replace(':','-').substring(0,5)).pipe(  //,  
       map((res: any) => {
         if (res.Code == 200){
           this.spinnerService.stop(spinnerRef);
@@ -337,6 +336,7 @@ export class ScheduleComponent implements OnInit {
         if (res.Code == 400){
           this.spinnerService.stop(spinnerRef);
           this.openSnackBar($localize`:@@host.noappos:`,$localize`:@@shared.error:`);
+          this.loadHours();
         }
         if (res.Code == 500){
           this.spinnerService.stop(spinnerRef);

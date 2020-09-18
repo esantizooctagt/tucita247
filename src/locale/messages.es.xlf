@@ -58,7 +58,7 @@
       </trans-unit>
       <trans-unit id="business.reasons" datatype="html">
         <source>Reasons</source>
-        <target state="translated">Razón de cancelación</target>
+        <target state="translated">Razones de cancelación</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">99</context>

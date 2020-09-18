@@ -68,7 +68,7 @@ export class LocationService {
   }
 
   getCities(countryId, language): Observable<any>{
-    return this.http.get<any>(this.apiURL + '/locations/cities/' + countryId + '/' + language)
+    return this.http.get<any>(this.apiURL + '/locations/cities/' + countryId + '/' + language + '/_')
                     .pipe(catchError(this.errorHandler));
   }
 

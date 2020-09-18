@@ -45,7 +45,7 @@ export class BusinessDaysComponent implements OnInit {
 
   dateSelected: any[] = [];
 
-  links = [{label:'Opening hours',link:'/businessope',active:0}, {label:'Days Off',link:'/businessdays',active:1}];
+  links = [{label:$localize`:@@business-ope.opehours:`,link:'/businessope',active:0}, {label:$localize`:@@business-ope.daysoff:`,link:'/businessdays',active:1}];
   activeLink = this.links[0];
   background: ThemePalette = undefined;
   
@@ -70,9 +70,19 @@ export class BusinessDaysComponent implements OnInit {
     this.currYearAct = 1;
     this.businessId = this.authService.businessId();
     this.locationId = this.route.snapshot.paramMap.get('locations') == null ? "_" : "1";
+    
+    if (this.route.snapshot.paramMap.get('locations') != null){
+      if (this.route.snapshot.paramMap.get('locations') == "1"){
+        this.links = [{label:$localize`:@@business-ope.opehours:`,link:'/locationope/1',active:0}, {label:$localize`:@@business-ope.daysoff:`,link:'/locationdays/1',active:1}];
+      }
+    }
+    
     if (this.route.snapshot.paramMap.get('provider') == null){
       this.providerId = "_";
     } else {
+      if (this.route.snapshot.paramMap.get('provider') == "2"){
+        this.links = [{label:$localize`:@@business-ope.opehours:`,link:'/providerope/2',active:0}, {label:$localize`:@@business-ope.daysoff:`,link:'/providerdays/2',active:1}];
+      }
       this.locationId = "1";
       this.providerId = "1";
     }
