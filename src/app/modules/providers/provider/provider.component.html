@@ -11,6 +11,7 @@
             <ng-container *ngIf="services$ | async"></ng-container>
             <ng-container *ngIf="servProvider$ | async"></ng-container>
             <ng-container *ngIf="saveProvider$ | async"></ng-container>
+            <ng-container *ngIf="appos$ | async"></ng-container>
             <div class="row p-0 m-0">
                 <mat-card class="col-sm col-md col-lg-7">
                     <form [formGroup]="providerForm" (ngSubmit)="onSubmit()" class="mt-4"><div class="form-field-check-slide ml-3 pr-3 pb-3" *ngIf="providerForm.value.ProviderId !== '' && providerForm.value.ProviderId !== null"><mat-slide-toggle class="slide-pos" color="primary" formControlName="Status">{{textStatus}}</mat-slide-toggle></div>

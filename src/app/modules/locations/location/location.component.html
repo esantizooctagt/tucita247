@@ -39,7 +39,7 @@
                                 <mat-form-field i18n-hintLabel="City|text in locations@@locations.city"
                                     hintLabel="City">
                                     <mat-select formControlName="City" (selectionChange)="loadSectors($event.value)"
-                                        required>
+                                    [errorStateMatcher]="confirmValidParentMatcher" required>
                                         <mat-option *ngFor="let city of cities" [value]="city.CityId">
                                             {{ city.Name }}
                                         </mat-option>
@@ -51,7 +51,7 @@
                             <div class="form-field col-md-6">
                                 <mat-form-field i18n-hintLabel="Sector|text in locations@@locations.sector"
                                     hintLabel="Sector">
-                                    <mat-select formControlName="Sector" required>
+                                    <mat-select formControlName="Sector" [errorStateMatcher]="confirmValidParentMatcher" required>
                                         <mat-option *ngFor="let sector of sectors" [value]="sector.SectorId">
                                             {{ sector.Name }}
                                         </mat-option>

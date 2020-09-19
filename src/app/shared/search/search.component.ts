@@ -87,7 +87,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   changeView(){
-    if (this.newRoute == 'location' || this.newRoute == 'service'){
+    if (this.newRoute == 'location' || this.newRoute == 'service' || this.newRoute == 'provider'){
       this.appos$ = this.businessService.getBusinessAppos(this.businessId).pipe(
         map((res: any) => {
           if (res != null){
@@ -99,6 +99,9 @@ export class SearchComponent implements OnInit, OnDestroy {
               if (this.newRoute == 'location'){
                 this.router.navigate(['/locations']);
               }
+              if (this.newRoute == 'provider'){
+                this.router.navigate(['/providers']);
+              }
             } else {
               this.redirectPage();
             }
@@ -109,6 +112,9 @@ export class SearchComponent implements OnInit, OnDestroy {
             }
             if (this.newRoute == 'location'){
               this.router.navigate(['/locations']);
+            }
+            if (this.newRoute == 'provider'){
+              this.router.navigate(['/providers']);
             }
           }
         }),

@@ -5,12 +5,13 @@ import { Validators, FormBuilder, FormArray } from '@angular/forms';
 import { AuthService } from '@app/core/services';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { MonitorService } from '@app/shared/monitor.service';
-import { LocationService, ProviderService, ServService } from '@app/services';
+import { LocationService, ProviderService, ServService, BusinessService } from '@app/services';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError, switchMap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ShopdialogComponent } from '@app/shared/shopdialog/shopdialog.component';
 
 @Component({
   selector: 'app-provider',
@@ -25,9 +26,12 @@ export class ProviderComponent implements OnInit {
   services$: Observable<any>;
   servProvider$: Observable<any>;
   saveProvider$: Observable<any>; 
+  appos$: Observable<any>;
   providerDataList: string='';
   textStatus: string='';
   invalid: number = 0;
+  free: number = 0;
+  email: string = '';
 
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
@@ -42,6 +46,7 @@ export class ProviderComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private data: MonitorService,
+    private businessService: BusinessService,
     private locationService: LocationService
   ) { }
 
@@ -79,12 +84,46 @@ export class ProviderComponent implements OnInit {
     this.dialog.open(DialogComponent, dialogConfig);
   }
 
+  openShopDialog(header: string, message: string, business: string, email: string): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      header: header,
+      message: message,
+      businessId: business,
+      email: email
+    };
+    dialogConfig.width = '280px';
+    dialogConfig.minWidth = '280px';
+    dialogConfig.maxWidth = '280px';
+    this.dialog.open(ShopdialogComponent, dialogConfig);
+  }
+  
   ngOnInit(): void {
     this.data.handleData('Add');
-    this.providerDataList = this.route.snapshot.paramMap.get('providerId');
-
-    var spinnerRef = this.spinnerService.start($localize`:@@providers.loadserviceprov:`);
     this.businessId = this.authService.businessId();
+    this.email = this.authService.email();
+    this.providerDataList = this.route.snapshot.paramMap.get('providerId');
+    
+    var spinnerRef = this.spinnerService.start($localize`:@@providers.loadserviceprov:`);
+    if (this.providerDataList == "0"){
+      this.appos$ = this.businessService.getBusinessAppos(this.businessId).pipe(
+        map((res: any) => {
+          if (res != null){
+            this.free  = (res.Name.toString().toUpperCase() == 'FREE' || res.Name.toString().toUpperCase() == 'GRATIS' ? 1: 0); 
+            if (this.free == 1){
+              this.spinnerService.stop(spinnerRef);
+              this.openShopDialog($localize`:@@shared.shopheader:`, $localize`:@@shared.shopmessage:`, this.businessId, this.email);
+              this.router.navigate(['/services']);
+            }
+            return res;
+          }
+        }),
+        catchError(err => {
+          return err;
+        })
+      );
+    }
 
     this.services$ = this.serviceService.getServicesProvider(this.businessId, '_').pipe(
       map((res: any) =>{

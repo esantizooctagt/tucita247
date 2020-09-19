@@ -99,6 +99,7 @@ export class ServiceComponent implements OnInit {
     this.serviceDataList = this.route.snapshot.paramMap.get('serviceId');
 
     this.businessId = this.authService.businessId();
+    this.email = this.authService.email();
     if (this.serviceDataList == "0"){
       this.appos$ = this.businessService.getBusinessAppos(this.businessId).pipe(
         map((res: any) => {

@@ -130,7 +130,17 @@ export class AuthService {
   }
   language() {
     let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
-    return user.Language;
+    let lang;
+    if (user.Language == ""){
+      if (window.location.href.indexOf("/es/") > -1){
+        lang = "ES";
+      } else {
+        lang = "EN";
+      }
+    } else {
+      lang = user.Language;
+    }
+    return lang;
   }
   get userAvatar() {
     if (sessionStorage.getItem('TC247_USS') != null) {

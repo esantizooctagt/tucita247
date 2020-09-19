@@ -86,7 +86,7 @@ export class LocationComponent implements OnInit {
     Sector: ['', Validators.required],
     Address: ['', [Validators.required, Validators.maxLength(500), Validators.minLength(3)]],
     Geolocation: ['{0.00,0.00}', [Validators.maxLength(50), Validators.minLength(5)]],
-    ParentLocation: ['0', Validators.required],
+    ParentLocation: ['0'],
     MaxConcurrentCustomer: ['', [Validators.required, Validators.min(1)]],
     ManualCheckOut: [false],
     Doors: ['', [Validators.required]],
@@ -127,13 +127,16 @@ export class LocationComponent implements OnInit {
   ngOnInit(): void {
     this.data.handleData('Add');
     let language = this.authService.language();
+
     this.email = this.authService.email();
+    this.businessId = this.authService.businessId();
     this.locationDataList = this.route.snapshot.paramMap.get('locationId');
 
     var spinnerRef = this.spinnerService.start($localize`:@@locations.loadlocation:`);
-    this.businessId = this.authService.businessId();
     if (this.locationDataList == "0"){
-      this.doors = (language == "EN" ? 'MAIN DOOR' : 'PUERTA PRINCIPAL');
+      this.doors = (language.toUpperCase() == "EN" ? 'MAIN DOOR' : 'PUERTA PRINCIPAL');
+      this.locationForm.patchValue({Doors: this.doors});
+
       this.appos$ = this.businessService.getBusinessAppos(this.businessId).pipe(
         map((res: any) => {
           if (res != null){
