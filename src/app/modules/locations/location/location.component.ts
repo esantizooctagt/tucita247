@@ -206,12 +206,14 @@ export class LocationComponent implements OnInit {
           if (res.Code == 200) {
             let loc = res.Data;
             if (loc != '') {
+              this.sectors = res.Data.Sectors;
+              this.sectors.push({ SectorId: "0", Name: "N/A" });
               this.locationForm.setValue({
                 LocationId: loc.LocationId,
                 BusinessId: loc.BusinessId,
                 Name: loc.Name,
                 City: loc.City,
-                Sector: loc.Sector,
+                Sector: (loc.Sector == "" ? "0" : loc.Sector),
                 Address: loc.Address,
                 Geolocation: loc.Geolocation,
                 ParentLocation: loc.ParentLocation,
@@ -223,7 +225,6 @@ export class LocationComponent implements OnInit {
               let geo = JSON.parse(loc.Geolocation);
               this.lat = geo.LAT;
               this.lng = geo.LNG;
-              this.sectors = res.Data.Sectors;
               this.doors = loc.Doors;
               this.textStatus = (loc.Status == 0 ? $localize`:@@shared.disabled:` : $localize`:@@shared.enabled:`);
             } else {
