@@ -60,7 +60,7 @@ const routes: Routes = [
     component: ResetComponent
   },
   {
-    path: 'verification/:userId/:code',
+    path: 'verification/:userId/:code/:password',
     component: VerificationComponent
   },
   {
@@ -86,7 +86,6 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-
 export class AppRoutingModule { }
 export const routingComponents = [
   LoginComponent,
