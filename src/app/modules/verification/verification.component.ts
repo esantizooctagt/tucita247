@@ -56,9 +56,9 @@ export class VerificationComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log("same path");
     this.userId = this.route.snapshot.paramMap.get('userId');
     this.code = +this.route.snapshot.paramMap.get('code');
-    console.log("prev pass temp");
     this.passTemp = this.route.snapshot.paramMap.get('password');
     if (this.passTemp != undefined && this.passTemp != ''){
       this.verifForm.get('Passwords.temppassword').patchValue(this.passTemp);
