@@ -59,10 +59,10 @@ const routes: Routes = [
     path: 'resetpassword/:user/:code',
     component: ResetComponent
   },
-  {
-    path: 'verification/:userId/:code',
-    component: VerificationComponent
-  },
+  // {
+  //   path: 'verification/:userId/:code',
+  //   component: VerificationComponent
+  // },
   {
     path: 'verification/:userId/:code/:password',
     component: VerificationComponent
