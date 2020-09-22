@@ -3,13 +3,13 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '@modules/authentication/guards/auth.guard';
 
 /**Main Components**/
-import { MainNavComponent, NotFoundComponent, ServiceComponent, LocationComponent, PollComponent, ProviderComponent, LoginComponent, UserComponent, UsersComponent, ClientsComponent, DashboardComponent, ProfileComponent, BusinessComponent, CategoriesComponent, ReportsComponent, RoleComponent, RolesComponent, HelpComponent, ResetComponent, VerificationComponent, ForgotpassComponent, HomeComponent, HostComponent, UserlocComponent, PollsComponent, PollRespComponent, QuickCheckinComponent, SurveysComponent, SurveyRespComponent, LandingComponent, ScheduleComponent, BusinessOpeComponent, BusinessDaysComponent, LocationsComponent, ProvidersComponent, WelcomeComponent, ServicesComponent } from '@modules/index';
+import { MainNavComponent, NotFoundComponent, ServiceComponent, LocationComponent, PollComponent, ProviderComponent, LoginComponent, UserComponent, UsersComponent, ClientsComponent, DashboardComponent, ProfileComponent, BusinessComponent, CategoriesComponent, ReportsComponent, RoleComponent, RolesComponent, HelpComponent, ResetComponent, VerificationComponent, ForgotpassComponent, HomeComponent, HostComponent, UserlocComponent, PollsComponent, PollRespComponent, QuickCheckinComponent, SurveysComponent, SurveyRespComponent, LandingComponent, ScheduleComponent, BusinessOpeComponent, BusinessDaysComponent, LocationsComponent, ProvidersComponent, WelcomeComponent, ServicesComponent, UsersAdminComponent, UserAdminComponent, RolesAdminComponent, RoleAdminComponent } from '@modules/index';
 
 const routes: Routes = [
   {
     path: '', component: MainNavComponent, canActivate: [AuthGuard],
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
+      { path: '', redirectTo: 'welcome', pathMatch: 'full'},
       { path: 'user/:userId', component: UserComponent, canActivate: [AuthGuard] },
       { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
       { path: 'clients', component: ClientsComponent, canActivate: [AuthGuard] },
@@ -40,7 +40,11 @@ const routes: Routes = [
       { path: 'locationdays/:locations', component: BusinessDaysComponent, canActivate: [AuthGuard] },
       { path: 'providerope/:provider', component: BusinessOpeComponent, canActivate: [AuthGuard] },
       { path: 'providerdays/:provider', component: BusinessDaysComponent, canActivate: [AuthGuard] },
-      { path: 'help', component: HelpComponent, canActivate: [AuthGuard] }
+      { path: 'help', component: HelpComponent, canActivate: [AuthGuard] },
+      { path: 'users-admin', component: UsersAdminComponent, canActivate: [AuthGuard] },
+      { path: 'roles-admin', component: RolesAdminComponent, canActivate: [AuthGuard] },
+      { path: 'user-admin/:userId', component: UserAdminComponent, canActivate: [AuthGuard] },
+      { path: 'role-admin/:roled', component: RoleAdminComponent, canActivate: [AuthGuard] }
     ]
   },
   {
@@ -57,6 +61,10 @@ const routes: Routes = [
   },
   {
     path: 'verification/:userId/:code',
+    component: VerificationComponent
+  },
+  {
+    path: 'verification/:userId/:code/:password',
     component: VerificationComponent
   },
   {
@@ -95,7 +103,9 @@ export const routingComponents = [
   ReportsComponent,
   UserlocComponent,
   UsersComponent,
+  UsersAdminComponent,
   UserComponent,
+  UserAdminComponent,
   PollsComponent,
   PollComponent,
   ClientsComponent,
@@ -111,6 +121,8 @@ export const routingComponents = [
   LandingComponent,
   RolesComponent,
   RoleComponent,
+  RolesAdminComponent,
+  RoleAdminComponent,
   HelpComponent,
   HomeComponent,
   HostComponent,

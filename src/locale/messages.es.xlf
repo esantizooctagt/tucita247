@@ -2553,7 +2553,7 @@
       </trans-unit>
       <trans-unit id="businessope.inheritschedule" datatype="html">
         <source>Inherit schedule data from company</source>
-        <target state="translated">Usar los mismos datos del negocio</target>
+        <target state="translated">Usar los horarios del del negocio</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-ope/business-ope.component.html</context>
           <context context-type="linenumber">15</context>

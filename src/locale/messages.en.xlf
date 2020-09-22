@@ -2553,7 +2553,7 @@
       </trans-unit>
       <trans-unit id="businessope.inheritschedule" datatype="html">
         <source>Inherit schedule data from company</source>
-        <target state="translated">Use schedule data from business settings</target>
+        <target state="translated">Use business opening hours</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-ope/business-ope.component.html</context>
           <context context-type="linenumber">15</context>
@@ -2577,7 +2577,7 @@
       </trans-unit>
       <trans-unit id="businessope.inheritloc" datatype="html">
         <source>Inherit schedule data from location</source>
-        <target state="translated">Use schedule data from location settings</target>
+        <target state="translated">Use location opening hours</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-ope/business-ope.component.html</context>
           <context context-type="linenumber">30</context>

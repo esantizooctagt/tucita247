@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { User, Role } from '@app/_models';
 import { FormBuilder, Validators } from '@angular/forms';
-import { UserService, RolesService } from "@app/services";
+import { AdminService } from "@app/services";
 import { AuthService } from '@core/services';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MonitorService } from "@shared/monitor.service";
@@ -12,13 +12,15 @@ import { Subscription, Observable, throwError } from 'rxjs';
 import { tap, catchError, map, switchMap } from 'rxjs/operators';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { environment } from '@environments/environment';
+import { PasswordValidators } from '@app/validators';
 
 @Component({
-  selector: 'app-user',
-  templateUrl: './user.component.html',
-  styleUrls: ['./user.component.scss']
+  selector: 'app-user-admin',
+  templateUrl: './user-admin.component.html',
+  styleUrls: ['./user-admin.component.scss']
 })
-export class UserComponent implements OnInit {
+export class UserAdminComponent implements OnInit {
+
   get f(){
     return this.userForm.controls;
   }
@@ -47,8 +49,7 @@ export class UserComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private usersService: UserService,
-    private rolesService: RolesService,
+    private adminService: AdminService,
     private spinnerService: SpinnerService,
     private route: ActivatedRoute,
     private router: Router,
@@ -62,11 +63,11 @@ export class UserComponent implements OnInit {
     Email: ['', [Validators.required, Validators.maxLength(200), Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
     First_Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     Last_Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
-    Password: ['',[Validators.minLength(8), Validators.maxLength(20), Validators.pattern("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}")]],
+    Password: ['',[Validators.minLength(8), Validators.maxLength(20), PasswordValidators.strong]],
     Avatar: [''],
     Phone: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(17)]],
-    RoleId: ['', [Validators.required]],
-    Is_Admin: [{value: 0, disabled: true}],
+    // RoleId: ['', [Validators.required]],
+    RoleId: [''],
     Status: [1]
   })
 
@@ -77,7 +78,7 @@ export class UserComponent implements OnInit {
     var spinnerRef = this.spinnerService.start($localize`:@@userloc.loadingusersingle:`);
     this.businessId = this.authService.businessId();
 
-    this.roles$ = this.rolesService.getRoles(this.businessId + '/10/_/_').pipe(
+    this.roles$ = this.adminService.getRoles(this.businessId + '/10/_/_').pipe(
       map((res: any) => {
         if (res != null) {
           this.spinnerService.stop(spinnerRef);
@@ -155,12 +156,6 @@ export class UserComponent implements OnInit {
       if (val.Status === false){
         this.userForm.controls["Status"].setValue(0);
       }
-      if (val.Is_Admin === true) {
-        this.userForm.controls["Is_Admin"].setValue(1);
-      }
-      if (val.Is_Admin === false){
-        this.userForm.controls["Is_Admin"].setValue(0);
-      }
     })
   }
 
@@ -171,16 +166,16 @@ export class UserComponent implements OnInit {
       }
       this.statTemp = 0;
       var spinnerRef = this.spinnerService.start($localize`:@@userloc.loadingusersingle:`);
-      this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', Is_Admin: 0, Status: 1});
-      this.user$ = this.usersService.getUser(this.userDataList, this.businessId).pipe(
+      this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', Status: 1});
+      this.user$ = this.adminService.getUser(this.userDataList, this.businessId).pipe(
         tap(user => {
           if (user.User_Id != undefined){
             this.userForm.controls.Email.disable();
-            if (user.Is_Admin === 1){
-              this.userForm.controls['RoleId'].clearValidators();
-            } else {
-              this.userForm.controls['RoleId'].setValidators([Validators.required]);
-            }
+            // if (user.Is_Admin === 1){
+            //   this.userForm.controls['RoleId'].clearValidators();
+            // } else {
+            //   this.userForm.controls['RoleId'].setValidators([Validators.required]);
+            // }
             this.userForm.setValue({
               UserId: user.User_Id,
               BusinessId: user.Business_Id,
@@ -190,8 +185,8 @@ export class UserComponent implements OnInit {
               Password: '',
               Avatar: '',
               Phone: user.Phone,
-              RoleId: (user.Is_Admin === 1 ? 'None' : user.Role_Id),
-              Is_Admin: user.Is_Admin,
+              RoleId: user.Role_Id,
+              // Is_Admin: user.Is_Admin,
               Status: user.Status
             });
             this.textStatus = (user.Status == 0 ? $localize`:@@shared.disabled:` : $localize`:@@shared.enabled:`);
@@ -226,11 +221,11 @@ export class UserComponent implements OnInit {
           "First_Name": this.userForm.value.First_Name,
           "Last_Name": this.userForm.value.Last_Name,
           "Password": '', //this.userForm.value.Password,
-          "Phone": this.userForm.value.Phone,
+          "Phone": '1'+this.userForm.value.Phone.replace(/\D/g,''),
           "RoleId": this.userForm.value.RoleId,
           "Status": (this.statTemp === 3 ? 3 : this.userForm.value.Status)
         }
-        this.userSave$ = this.usersService.updateUser(dataForm).pipe(
+        this.userSave$ = this.adminService.updateUser(dataForm).pipe(
           tap(res => { 
             this.savingUser = true;
             this.spinnerService.stop(spinnerRef);
@@ -238,10 +233,10 @@ export class UserComponent implements OnInit {
             this.userForm.controls.Email.enable();
             this.userData = '';
             this.statTemp = 0;
-            this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', Is_Admin: 0, Status: 1});
-            this.data.changeData('users');
+            this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', Status: 1});
+            this.data.changeData('users-admin');
             this.openDialog($localize`:@@users.usertexts:`, $localize`:@@userloc.userupdated:`, true, false, false);
-            this.router.navigate(['/users']);
+            this.router.navigate(['/users-admin']);
           }),
           catchError(err => {
             this.spinnerService.stop(spinnerRef);
@@ -263,10 +258,10 @@ export class UserComponent implements OnInit {
           "First_Name": this.userForm.value.First_Name,
           "Last_Name": this.userForm.value.Last_Name,
           "Password": ctStr,
-          "Phone": this.userForm.value.Phone,
+          "Phone": '1'+this.userForm.value.Phone.replace(/\D/g,''),
           "RoleId": this.userForm.value.RoleId
         }
-        this.userSave$ = this.usersService.postUser(dataForm).pipe(
+        this.userSave$ = this.adminService.postUser(dataForm).pipe(
           tap(res => { 
             this.savingUser = true;
             this.spinnerService.stop(spinnerRef);
@@ -274,8 +269,8 @@ export class UserComponent implements OnInit {
             this.userForm.controls.Email.enable();
             this.userData = '';
             this.statTemp = 0;
-            this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', Is_Admin: 0, Status: 1});
-            this.data.changeData('users');
+            this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', Status: 1});
+            this.data.changeData('users-admin');
             this.openDialog($localize`:@@users.usertexts:`, $localize`:@@userloc.usercreated:`, true, false, false);
           }),
           catchError(err => {
@@ -290,7 +285,7 @@ export class UserComponent implements OnInit {
   }
 
   onCancel(){
-    this.router.navigate(['/users']);
+    this.router.navigate(['/users-admin']);
   }
 
   // allow only digits and dot
@@ -310,56 +305,6 @@ export class UserComponent implements OnInit {
 
   ngOnDestroy() {
     this.changesUser.unsubscribe();
-  }
-
-  onSendCode(){
-    let userId = this.userForm.value.UserId;
-    let email = this.userData;
-    if (email == '' && userId == '') {
-      return;
-    }
-    
-    var spinnerRef = this.spinnerService.start($localize`:@@users.sendingcode:`);
-    let dataForm =  {
-      "Email": email,
-      "BusinessId": this.businessId,
-      "Password": ""
-    }
-    // userName, '0', 
-    this.userAct$ = this.usersService.putVerifCode('0', dataForm).pipe(
-      tap((res: any) => { 
-        this.spinnerService.stop(spinnerRef);
-        if (res.Code == 200){
-          this.openDialog($localize`:@@users.usertexts:`, $localize`:@@users.codesend:`, true, false, false);
-        } else {
-          this.openDialog($localize`:@@users.usertexts:`, $localize`:@@shared.wrong:`, false, true, false);
-        }
-      }),
-      catchError(err => {
-        this.spinnerService.stop(spinnerRef);
-        this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
-        return throwError(err || err.message);
-      })
-    );
-  }
-
-  checkEmailAvailability(data) { 
-    this.emailValidated = false;
-    if (data.target.value != ''){
-      this.loadingUser = true;
-      this.availability$ = this.usersService.validateEmail(data.target.value).pipe(
-        tap((result: any) => { 
-          this.emailValidated = true;
-          if (result.Available == 0){
-            this.userForm.controls.Email.setErrors({notUnique: true});
-          } else {
-            this.userForm.controls.Email.setErrors(null);
-          }
-          this.loadingUser = false;
-          return result; 
-        })
-      );
-    }
   }
 
 }

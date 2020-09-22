@@ -184,7 +184,10 @@ export class BusinessComponent implements OnInit {
     this.filteredCategories$ = this.businessForm.get('CategoryId').valueChanges
       .pipe(
         startWith(null),
-        map((category: Category | null) => category ? this._filterCategory(category) : this.allCategories.slice())
+        map((category: Category | null) => category ? this._filterCategory(category) : this.allCategories.slice()),
+        map(cats => {
+          return cats.sort((a, b) => (a.CategoryId < b.CategoryId ? -1 : 1))
+        })
       );
     
     let item = 0;

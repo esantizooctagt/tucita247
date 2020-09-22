@@ -35,3 +35,7 @@ export * from './services/service/service.component';
 export * from './providers/provider/provider.component';
 export * from './polls/poll/poll.component';
 export * from './locations/location/location.component';
+export * from './users-admin/users-admin.component';
+export * from './users-admin/user-admin/user-admin.component';
+export * from './roles-admin/roles-admin.component';
+export * from './roles-admin/role-admin/role-admin.component';

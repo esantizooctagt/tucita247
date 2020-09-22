@@ -54,7 +54,7 @@ export class LocationComponent implements OnInit {
   public tags = [];
 
   language: string = 'EN';
-
+  businessTemp = [];
   businessParent = [];
 
   get f() {
@@ -165,7 +165,10 @@ export class LocationComponent implements OnInit {
       map(res => {
         if (res != null) {
           this.businessParent.push({ BusinessId: "0", Name: "N/A" });
-          this.businessParent.push(res[0]);
+          res.forEach(x=>{
+            this.businessParent.push({ BusinessId: x.BusinessId, Name: x.Name});
+          });
+          this.businessParent = this.businessParent.sort((a, b) => (a.Name < b.Name ? -1 : 1));
           return res;
         }
       })

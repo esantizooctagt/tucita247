@@ -25,6 +25,7 @@ export class VerificationComponent implements OnInit {
   hideconf = true;
   userId: string = '';
   code: number = 0;
+  passTemp: string = '';
   userAct$: Observable<any>;
 
   readonly passKey = environment.passKey;
@@ -57,6 +58,13 @@ export class VerificationComponent implements OnInit {
   ngOnInit(): void {
     this.userId = this.route.snapshot.paramMap.get('userId');
     this.code = +this.route.snapshot.paramMap.get('code');
+    this.passTemp = this.route.snapshot.paramMap.get('password');
+    if (this.passTemp != undefined && this.passTemp != ''){
+      this.verifForm.get('Passwords.temppassword').patchValue(this.passTemp);
+    }
+    if (this.code != undefined && this.code > 0){
+      this.verifForm.get('userCode').patchValue(this.code);
+    }
   }
 
   openDialog(header: string, message: string, success: boolean, error: boolean, warn: boolean): void {
@@ -97,7 +105,7 @@ export class VerificationComponent implements OnInit {
       }
       let dataForm;
       if (this.code != 0){
-        if (this.verifForm.invalid) { return; }
+        // if (this.verifForm.invalid) { return; }
         var CryptoJS = require("crypto-js");
         var data = this.verifForm.get('Passwords.password').value;
         var password = this.passKey;
@@ -112,7 +120,7 @@ export class VerificationComponent implements OnInit {
         dataForm = '';
         return;
       }
-      var spinnerRef = this.spinnerService.start($localize`:@@vverification.actaccount:`);
+      var spinnerRef = this.spinnerService.start($localize`:@@verification.actaccount:`);
       this.userAct$ = this.usersService.putVerifCode(this.code, dataForm).pipe(
         tap((res: any) => { 
           if (res.Code == 200){
@@ -143,7 +151,7 @@ export class VerificationComponent implements OnInit {
         UserId: this.userId,
         Password: ctStr
       }
-      var spinnerRef = this.spinnerService.start($localize`:@@vverification.actaccount:`);
+      var spinnerRef = this.spinnerService.start($localize`:@@verification.actaccount:`);
       this.userAct$ = this.usersService.putActivationAccount(dataForm).pipe(
         tap((res: any) => { 
           if (res.Code == 200){

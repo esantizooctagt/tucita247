@@ -91,7 +91,7 @@
                                         #autoCategory="matAutocomplete"
                                         (optionSelected)="selectedCategory($event)">
                                         <mat-option *ngFor="let category of filteredCategories$ | async"
-                                            [value]="category.CategoryId">
+                                            [value]="category.CategoryId" [ngClass]="{'option-subcat':category.CategoryId.includes('#SUB#'),'option-cat':!category.CategoryId.includes('#SUB#')}">
                                             {{ category.Name }}
                                         </mat-option>
                                     </mat-autocomplete>

@@ -78,6 +78,8 @@ import { DatePipe } from '@angular/common';
 import { ProviderListComponent } from '@modules/providers/provider-list/provider-list.component';
 import { ServiceListComponent } from '@modules/services/service-list/service-list.component';
 import { LocationListComponent } from './modules/locations/location-list/location-list.component';
+import { UserListAdminComponent } from './modules/users-admin/user-list-admin/user-list-admin.component';
+import { RoleListAdminComponent } from './modules/roles-admin/role-list-admin/role-list-admin.component';
 
 // apiKey: 'AIzaSyCyKdLcjPnI3n5Eb2VmMJk-sgan83LEsCM'
 
@@ -105,7 +107,9 @@ import { LocationListComponent } from './modules/locations/location-list/locatio
     LocationListComponent,
     HourdataPipe,
     ServcolorPipe,
-    ShopdialogComponent
+    ShopdialogComponent,
+    UserListAdminComponent,
+    RoleListAdminComponent
   ],
   imports: [
     BrowserModule,
