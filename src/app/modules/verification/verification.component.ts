@@ -60,10 +60,10 @@ export class VerificationComponent implements OnInit {
     this.userId = this.route.snapshot.paramMap.get('userId');
     this.code = +this.route.snapshot.paramMap.get('code');
     console.log("prev pass TEmp");
-    this.passTemp = this.route.snapshot.paramMap.get('password');
-    if (this.passTemp != undefined && this.passTemp != ''){
-      this.verifForm.get('Passwords.temppassword').patchValue(this.passTemp);
-    }
+    // this.passTemp = this.route.snapshot.paramMap.get('password');
+    // if (this.passTemp != undefined && this.passTemp != ''){
+    //   this.verifForm.get('Passwords.temppassword').patchValue(this.passTemp);
+    // }
     if (this.code != undefined && this.code > 0){
       this.verifForm.get('userCode').patchValue(this.code);
     }

@@ -60,7 +60,7 @@ const routes: Routes = [
     component: ResetComponent
   },
   {
-    path: 'verification/:userId/:code/:password',
+    path: 'verification/:userId/:code',
     component: VerificationComponent
   },
   {
