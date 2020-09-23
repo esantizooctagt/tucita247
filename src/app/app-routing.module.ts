@@ -44,7 +44,7 @@ const routes: Routes = [
       { path: 'users-admin', component: UsersAdminComponent, canActivate: [AuthGuard] },
       { path: 'roles-admin', component: RolesAdminComponent, canActivate: [AuthGuard] },
       { path: 'user-admin/:userId', component: UserAdminComponent, canActivate: [AuthGuard] },
-      { path: 'role-admin/:roled', component: RoleAdminComponent, canActivate: [AuthGuard] }
+      { path: 'role-admin/:roleId', component: RoleAdminComponent, canActivate: [AuthGuard] }
     ]
   },
   {

@@ -44,7 +44,8 @@ export class BusinessOpeComponent implements OnInit {
   locationId: string = '_';
   providerId: string = '_';
 
-  providerParentHours: number = 0;
+  providerParentHours: number = 1;
+  locationParentHours: number = 1;
 
   locationData: any;
   serviceData: any;
@@ -178,6 +179,7 @@ export class BusinessOpeComponent implements OnInit {
           if (this.locationId != "_" && this.providerId == "_"){
             this.locationData = res.Data;
             this.locationId = res.Data[0].LocationId;
+            this.locationParentHours = res.Data[0].ParentHours;
             var opeHour = JSON.parse(res.Data[0].OperationHours);
             this.businessForm.setValue({
               BusinessId: this.businessId,
@@ -208,6 +210,7 @@ export class BusinessOpeComponent implements OnInit {
           if (this.providerId != "_"){
             this.serviceData = res.Data;
             this.providerId = res.Data[0].LocationId + '#' + res.Data[0].Services[0].ProviderId;
+            this.providerParentHours = res.Data[0].Services[0].ParentHours;
             var opeHour = JSON.parse(res.Data[0].Services[0].OperationHours);
             this.businessForm.setValue({
               BusinessId: this.businessId,
@@ -770,6 +773,9 @@ export class BusinessOpeComponent implements OnInit {
 
     let loc = this.locationData.filter(x => x.LocationId == event.value);
     var opeHour = JSON.parse(loc[0].OperationHours);
+    console.log(loc[0].ParentHours);
+    this.locationParentHours = loc[0].ParentHours;
+    console.log(this.locationParentHours);
     this.businessForm.setValue({
       BusinessId: this.businessId,
       OperationHours: loc[0].OperationHours,

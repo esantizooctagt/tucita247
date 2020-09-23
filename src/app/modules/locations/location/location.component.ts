@@ -37,7 +37,7 @@ export class LocationComponent implements OnInit {
 
   lat: number = 18.3796538;
   lng: number = -66.1989426;
-  zoom: number = 9;
+  zoom: number = 12;
 
   cities = [];
   sectors = [] = [];
@@ -385,6 +385,8 @@ export class LocationComponent implements OnInit {
           res.forEach(element => {
             this.sectors.push(element);
           });
+          console.log("set default value");
+          this.locationForm.patchValue({Sector: "0"});
           return res;
         }
       }),

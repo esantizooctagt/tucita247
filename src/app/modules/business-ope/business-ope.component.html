@@ -12,22 +12,22 @@
         <div class="col-md-6 col-lg-6" i18n="Configure your week settings here:|text in operation hours@@businessope.setup">
             Configure your week settings here:
         </div>
-        <mat-slide-toggle [(ngModel)]="providerParentHours" (change)="updateData($event, 2)" i18n="Inherit schedule data from company|text in operation hours@@businessope.inheritschedule">Inherit schedule data from company</mat-slide-toggle>
+        <mat-slide-toggle [checked]="locationParentHours == 1 ? true : false" color="primary" (change)="updateData($event, 2)" i18n="Inherit schedule data from company|text in operation hours@@businessope.inheritschedule">Inherit schedule data from company</mat-slide-toggle>
     </div>
-    <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="locationId != '_' && providerId == '_'">
-        <div class="col-md-6 col-lg-6">
+    <div class="row mt-3 mb-0 mr-5 ml-5 pl-3" *ngIf="locationId != '_' && providerId == '_'">
+        <mat-form-field appearance="fill" class="col-md-6 col-lg-6">
             <mat-select name="locations" [(value)]="locationId" (selectionChange)="onLocationChange($event)">
                 <mat-option *ngFor="let item of locationData" [value]="item.LocationId">
                     {{item.Name}}
                 </mat-option>
             </mat-select>
-        </div>
+        </mat-form-field>
     </div>
     <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="providerId != '_'">
         <div class="col-md-6 col-lg-6" i18n="Select service provider to set up the schedule:|text in operation hours@@businessope.serviceprovider">
             Select service provider to set up the schedule:
         </div>
-        <mat-slide-toggle [(ngModel)]="providerParentHours" (change)="updateData($event, 2)" i18n="Inherit schedule data from location|text in operation hours@@businessope.inheritloc">Inherit schedule data from location</mat-slide-toggle>
+        <mat-slide-toggle [(ngModel)]="providerParentHours" color="primary" (change)="updateData($event, 2)" i18n="Inherit schedule data from location|text in operation hours@@businessope.inheritloc">Inherit schedule data from location</mat-slide-toggle>
     </div>
     <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="providerId != '_'">
         <div class="col-md-6 col-lg-6">

@@ -1,1 +1,9 @@
-<p>roles-admin works!</p>
+<div class="container-fluid h-100 main-background">
+    <div class="row p-0">
+        <div class="list-form col-md-12 pl-4 m-0">
+            <app-search i18n-placeholder="Search by name|search in roles@@roles.searchtext" placeholder="Search by name" (setValue)="filterList($event)" newRoute="role-admin"></app-search>
+        </div> 
+        <app-role-list-admin class="col-md-12 pl-4 m-0" *ngIf="changeData == 'Search'" [filterValue]="filterData"></app-role-list-admin>
+        <app-role-admin class="col-md-12 pl-4 m-0" *ngIf="changeData == 'Add'"></app-role-admin>
+    </div>
+</div>

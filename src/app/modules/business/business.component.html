@@ -44,7 +44,7 @@
                                         {{getErrorMessage('City')}}</mat-error>
                                 </mat-form-field>
                                 <mat-form-field class="col-md-2" i18n-hintLabel="Zip Code|Zip code in business@business.zipcode" hintLabel="Zip Code">
-                                    <input matInput i18n-placeholder="Zip Code|Zip code in business@business.zipcode" placeholder="Zip Code" formControlName="ZipCode" maxlength="10"
+                                    <input #zipcode (change)="setMarker(zipcode.value)" matInput i18n-placeholder="Zip Code|Zip code in business@business.zipcode" placeholder="Zip Code" formControlName="ZipCode" maxlength="10"
                                         minlength="3" [errorStateMatcher]="confirmValidParentMatcher">
                                     <mat-error *ngIf="fBusiness.ZipCode.invalid && fBusiness.ZipCode.touched">
                                         {{getErrorMessage('ZipCode')}}</mat-error>
@@ -216,46 +216,32 @@
                                 <div class="col-md-3 pl-0">
                                     <h5 i18n="Image for mobile App|text in business@@business.imagemobileapp">Image for mobile App</h5>
                                     <form [formGroup]="imageForm" autocomplete="off" (ngSubmit)="onSubmitImage()">
-                                        <div class="sector">
-                                            <!-- User Profile Image -->
-                                            <img *ngIf="fBusiness.Imagen.value; else isIcon" class="imgbusiness-pic"
-                                                [src]="imgPath+fBusiness.Imagen.value">
-                                            <ng-template #isIcon>
-                                                <!-- Default Image -->
-                                                <div class="fill-overlay" i18n="IMAGE MOBILE APP|text in business@@business.imagemobileappimg">IMAGE MOBILE APP</div>
-                                            </ng-template>
-                                            <div class="default-overlay">
-                                                <button type="button" class="camera-avatar" mat-icon-button
-                                                    (click)="onSearchImage()">
-                                                    <mat-icon>add_a_photo</mat-icon>
-                                                </button>
-                                                <input id="fileUpload" name="fileUpload" type="file" accept="image/*"
-                                                    style="display:none;" />
-                                            </div>
-                                        </div>
+                                        <img *ngIf="fBusiness.Imagen.value && fileString == undefined" class="imgbusiness-pic" [src]="imgPath+fBusiness.Imagen.value">
+                                        <div *ngIf="fileString == undefined && !fBusiness.Imagen.value" class="fill-overlay" i18n="IMAGE MOBILE APP|text in business@@business.imagemobileappimg">IMAGE MOBILE APP</div>
+                                        <img *ngIf="fileString != undefined" [src]="fileString" class="imgbusiness-pic">
+                                        <input id="fileUpload" name="fileUpload" type="file" accept="image/*" style="display:none;" />
                                     </form>
+                                    <div class="row">
+                                        <button type="button" *ngIf="fileString == undefined" mat-icon-button class="upload-avatar" (click)="onSearchImage()" i18n="Choose File|text in business@@shared.chooseupload">Choose File <mat-icon>cloud_upload</mat-icon>
+                                        </button>
+                                        <button type="button" *ngIf="fileString != undefined" mat-icon-button class="upload-avatar" (click)="onSubmitImage()" i18n="Upload File|text in business@@shared.upload">Upload File <mat-icon>cloud_upload</mat-icon>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="col-md-4 pl-0">
+                                <div class="col-md-3 pl-0">
                                     <h5 i18n="Image for Tu Cita 24/7 web link|text in business@@business.imagefortucita">Image for Tu Cita 24/7 web link</h5>
                                     <form [formGroup]="imageFormLink" autocomplete="off" (ngSubmit)="onSubmitImageLink()">
-                                        <div class="sector">
-                                            <!-- User Profile Image -->
-                                            <img *ngIf="fBusiness.ImagenLink.value; else isIconLink" class="imgbusiness-pic"
-                                                [src]="imgPath+fBusiness.ImagenLink.value">
-                                            <ng-template #isIconLink>
-                                                <!-- Default Image -->
-                                                <div class="fill-overlay" i18n="IMAGE WEB LINK|block in business@@business.imageblock">IMAGE WEB LINK</div>
-                                            </ng-template>
-                                            <div class="default-overlay">
-                                                <button type="button" class="camera-avatar" mat-icon-button
-                                                    (click)="onSearchImageLink()">
-                                                    <mat-icon>add_a_photo</mat-icon>
-                                                </button>
-                                                <input id="fileUploadLink" name="fileUploadLink" type="file"
-                                                    accept="image/*" style="display:none;" />
-                                            </div>
-                                        </div>
+                                        <img *ngIf="fBusiness.ImagenLink.value && fileStringLink == undefined" class="imgbusiness-pic" [src]="imgPath+fBusiness.ImagenLink.value">
+                                        <div *ngIf="fileStringLink == undefined && !fBusiness.ImagenLink.value" class="fill-overlay" i18n="IMAGE WEB LINK|block in business@@business.imageblock">IMAGE WEB LINK</div>
+                                        <img *ngIf="fileStringLink != undefined" [src]="fileStringLink" class="imgbusiness-pic">
+                                        <input id="fileUploadLink" name="fileUploadLink" type="file" accept="image/*" style="display:none;" />
                                     </form>
+                                    <div class="row">
+                                        <button type="button" *ngIf="fileStringLink == undefined" class="upload-avatar" mat-icon-button (click)="onSearchImageLink()" i18n="Choose File|text in business@@shared.chooseupload">Choose File <mat-icon>cloud_upload</mat-icon>
+                                        </button>
+                                        <button type="button" *ngIf="fileStringLink != undefined" class="upload-avatar" mat-icon-button (click)="onSubmitImageLink()" i18n="Upload File|text in business@@shared.upload">Upload File <mat-icon>cloud_upload</mat-icon>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </mat-tab>

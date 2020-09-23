@@ -42,6 +42,36 @@ export class AdminService {
         return this.http.get<any[]>(this.apiURL + '/roles/' + data)
                         .pipe(catchError(this.errorHandler));
     }
+
+    getRole(roleId, businessId): Observable<any>{
+      return this.http.get<any>(this.apiURL + '/role/' + roleId + '/' + businessId)
+                      .pipe(catchError(this.errorHandler));
+    }
+  
+    getApplications(roleId, businessId, language): Observable<any[]>{
+      return this.http.get<any[]>(this.apiURL + '/apps/'+(roleId === '' ? '0' : roleId) + '/' + businessId + '/' + language)
+                      .pipe(catchError(this.errorHandler));
+    }
+  
+    getAccess(roleId, nameApp): Observable<any>{
+      return this.http.get<any>(this.apiURL + '/apps/'+roleId+'/'+nameApp)
+                      .pipe(catchError(this.errorHandler));
+    }
+  
+    postRole(formData) {
+      return this.http.post(this.apiURL + '/role', formData)
+                      .pipe(catchError(this.errorHandler));
+    }
+  
+    updateRole(formData) {
+      return this.http.patch(this.apiURL + '/role', formData)
+                      .pipe(catchError(this.errorHandler));
+    }
+  
+    deleteRole(roleId, businessId){
+      return this.http.delete(this.apiURL + '/role/' + roleId + '/' + businessId)
+                      .pipe(catchError(this.errorHandler));
+    }
   
     errorHandler(error) {
       return throwError(error || 'Server Error');

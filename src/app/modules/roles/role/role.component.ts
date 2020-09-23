@@ -33,7 +33,6 @@ export class RoleComponent implements OnInit {
   businessId: string = '';
   languageInit: string = '';
   displayForm: boolean = true;
-  savingRole: boolean=false;
   roleDataList: string = '';
   textStatus: string = '';
   invalid: number = 0;
@@ -101,7 +100,6 @@ export class RoleComponent implements OnInit {
     this.businessId = this.authService.businessId();
     this.languageInit = this.authService.language() == "" ? "EN" : this.authService.language();
     this.onValueChanges();
-    this.loadAccess();
 
     this.onDisplay();
   }
@@ -171,19 +169,14 @@ export class RoleComponent implements OnInit {
         let lines = this.roleForm.value.Access;
         dataForm['Access'] = lines.filter((s: any)=> s.Level_Access > 0);
         this.roleSave$ = this.roleService.updateRole(dataForm).pipe(
-          tap(res => { 
-            this.savingRole = true;
+          map(res => { 
             this.spinnerService.stop(spinnerRef);
-            this.roleForm.patchValue({RoleId: ''});
-            this.loadAccess();
-            this.roleForm.reset({RoleId: '', BusinessId: this.businessId, Name: '', Status:1, Access: this.apps$});
-            this.data.changeData('roles');
+            // this.data.changeData('roles');
             this.openDialog($localize`:@@roles.rolestext:`, $localize`:@@roles.roleupdated:`, true, false, false);
             this.router.navigate(['/roles']);
           }),
           catchError(err => {
             this.spinnerService.stop(spinnerRef);
-            this.savingRole = false;
             this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
             return throwError(err || err.message);
           })
@@ -198,18 +191,14 @@ export class RoleComponent implements OnInit {
         let lines = this.roleForm.value.Access;
         dataForm['Access'] = lines.filter((s: any)=> s.Level_Access > 0);
         this.roleSave$ = this.roleService.postRole(dataForm).pipe(
-          tap(res => { 
-            this.savingRole = true;
+          map(res => { 
             this.spinnerService.stop(spinnerRef);
-            this.roleForm.patchValue({RoleId: ''});
-            this.loadAccess();
-            this.roleForm.reset({RoleId: '', BusinessId: this.businessId, Name: '', Status:1, Access: this.apps$});
-            this.data.changeData('roles');
+            // this.data.changeData('roles');
             this.openDialog($localize`:@@roles.rolestext:`, $localize`:@@roles.rolecreated:`, true, false, false);
+            this.router.navigate(['/roles']);
           }),
           catchError(err => {
             this.spinnerService.stop(spinnerRef);
-            this.savingRole = false;
             this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
             return throwError(err || err.message);
           })
