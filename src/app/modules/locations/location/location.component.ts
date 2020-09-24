@@ -4,7 +4,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { AuthService } from '@app/core/services';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { LocationService, BusinessService } from '@app/services';
+import { LocationService, BusinessService, GeocodeService } from '@app/services';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
@@ -29,6 +29,7 @@ export class LocationComponent implements OnInit {
   locationDataList: any;
   sectors$: Observable<any[]>;
   parentBus$: Observable<any[]>;
+  geoLoc$: Observable<any>;
   appos$: Observable<any>;
 
   free: number = 0;
@@ -75,7 +76,8 @@ export class LocationComponent implements OnInit {
     private data: MonitorService,
     private route: ActivatedRoute,
     private router: Router,
-    private spinnerService: SpinnerService
+    private spinnerService: SpinnerService,
+    public geocodeService: GeocodeService
   ) { }
 
   locationForm = this.fb.group({
@@ -84,6 +86,7 @@ export class LocationComponent implements OnInit {
     Name: ['', [Validators.required, Validators.maxLength(500), Validators.minLength(3)]],
     City: ['', Validators.required],
     Sector: ['', Validators.required],
+    ZipCode: ['', [Validators.maxLength(10), Validators.minLength(3)]],
     Address: ['', [Validators.required, Validators.maxLength(500), Validators.minLength(3)]],
     Geolocation: ['{0.00,0.00}', [Validators.maxLength(50), Validators.minLength(5)]],
     ParentLocation: ['0'],
@@ -203,7 +206,7 @@ export class LocationComponent implements OnInit {
   onDisplay() {
     if (this.locationDataList != undefined && this.locationDataList != "0") {
       var spinnerRef = this.spinnerService.start($localize`:@@locations.loadlocation:`);
-      this.locationForm.reset({ LocationId: '', BusinessId: '', Name: '', City: '', Sector: '', Address: '', Geolocation : '{0.00,0.00}', ParentLocation : '0', MaxConcurrentCustomer: '', ManualCheckOut: false, Doors: '', Status: true});
+      this.locationForm.reset({ LocationId: '', BusinessId: '', Name: '', City: '', Sector: '', ZipCode: '', Address: '', Geolocation : '{0.00,0.00}', ParentLocation : '0', MaxConcurrentCustomer: '', ManualCheckOut: false, Doors: '', Status: true});
       this.location$ = this.locationService.getLocation(this.businessId, this.locationDataList, this.countryCode, this.language).pipe(
         map((res: any) => {
           if (res.Code == 200) {
@@ -218,6 +221,7 @@ export class LocationComponent implements OnInit {
                 City: loc.City,
                 Sector: (loc.Sector == "" ? "0" : loc.Sector),
                 Address: loc.Address,
+                ZipCode: loc.ZipCode,
                 Geolocation: loc.Geolocation,
                 ParentLocation: loc.ParentLocation,
                 MaxConcurrentCustomer: loc.MaxConcurrentCustomer,
@@ -264,6 +268,8 @@ export class LocationComponent implements OnInit {
   getErrorMessage(component: string) {
     const val3 = '3';
     const val500 = '500';
+    const min3 = '3';
+    const min10 = '10';
     if (component === 'Name') {
       return this.f.Name.hasError('required') ? $localize`:@@shared.entervalue:` :
         this.f.Name.hasError('minlength') ? $localize`:@@shared.minimun: ${val3}` :
@@ -278,6 +284,11 @@ export class LocationComponent implements OnInit {
     }
     if (component === 'City') {
       return this.f.City.hasError('required') ? $localize`:@@shared.entervalue:` :
+        '';
+    }
+    if (component === 'ZipCode'){
+      return this.f.ZipCode.hasError('maxlength') ? $localize`:@@shared.maximun: ${min10}` :
+        this.f.ZipCode.hasError('minlength') ? $localize`:@@shared.minimun: ${min3}` :
         '';
     }
     if (component === 'Sector') {
@@ -339,6 +350,7 @@ export class LocationComponent implements OnInit {
         LocationId: this.locationForm.value.LocationId,
         Name: this.locationForm.value.Name,
         Address: this.locationForm.value.Address,
+        ZipCode: this.locationForm.value.ZipCode,
         City: this.locationForm.value.City,
         Sector: this.locationForm.value.Sector,
         Geolocation: '{"LAT": ' + this.lat + ',"LNG": ' + this.lng + '}',
@@ -408,6 +420,24 @@ export class LocationComponent implements OnInit {
 
     this.lat = res.lat;
     this.lng = res.lng;
+  }
+
+  addressToCoordinates(data: string) {
+    this.geoLoc$ = this.geocodeService.geocodeAddress(data)
+    .pipe(map((location: any) => {
+        this.lat = Number(location.lat);
+        this.lng = Number(location.lng);
+        console.log(this.lat);
+        console.log(this.lng);
+        return location;
+      })   
+    );     
+  }
+
+  setMarker(data){
+    if (data.length >= 5){
+      this.addressToCoordinates(data);
+    }
   }
 
 }

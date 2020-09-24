@@ -6,7 +6,7 @@ import { Observable, Subscription, throwError } from 'rxjs';
 import { startWith, map, shareReplay, catchError, tap, switchMap } from 'rxjs/operators';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
-import { BusinessService, LocationService, CategoryService } from '@app/services/index';
+import { BusinessService, LocationService, CategoryService, GeocodeService } from '@app/services/index';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -50,6 +50,7 @@ export class BusinessComponent implements OnInit {
   removableCategory = true;
   categories: Category[]=[];
   categories$: Observable<Category[]>;
+  geoLoc$: Observable<any>;
   sectors$: Observable<any[]>;
   filteredCategories$: Observable<Category[]>;
   allCategories: Category[]=[];
@@ -113,7 +114,8 @@ export class BusinessComponent implements OnInit {
     private locationService: LocationService,
     private categoryService: CategoryService,
     private spinnerService: SpinnerService,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    public geocodeService: GeocodeService
   ) {
   }
 
@@ -701,116 +703,22 @@ export class BusinessComponent implements OnInit {
     }
   }
 
-  // initMap(): void {
-  //   const map = new google.maps.Map(
-  //     document.getElementById("map") as HTMLElement,
-  //     {
-  //       zoom: 12,
-  //       center: { lat: this.lat, lng: this.lng }
-  //     }
-  //   );
-  //   const geocoder = new google.maps.Geocoder();
-  //   const infowindow = new google.maps.InfoWindow();
-  
-  //   // (document.getElementById("submit") as HTMLElement).addEventListener(
-  //   //   "click",
-  //   //   () => {
-  //   //     this.geocodeLatLng(geocoder, map, infowindow);
-  //   //   }
-  //   // );
-  // }
-  
-  // geocodeLatLng(
-  //   geocoder: google.maps.Geocoder,
-  //   map: google.maps.Map,
-  //   infowindow: google.maps.InfoWindow
-  // ) {
-  //   const input = (document.getElementById("latlng") as HTMLInputElement).value;
-  //   const latlngStr = input.split(",", 2);
-  //   const latlng = {
-  //     lat: parseFloat(latlngStr[0]),
-  //     lng: parseFloat(latlngStr[1])
-  //   };
-  //   geocoder.geocode(
-  //     { location: latlng },
-  //     (
-  //       results: google.maps.GeocoderResult[],
-  //       status: google.maps.GeocoderStatus
-  //     ) => {
-  //       if (status === "OK") {
-  //         if (results[0]) {
-  //           map.setZoom(11);
-  //           const marker = new google.maps.Marker({
-  //             position: latlng,
-  //             map: map
-  //           });
-  //           infowindow.setContent(results[0].formatted_address);
-  //           infowindow.open(map, marker);
-  //         } else {
-  //           window.alert("No results found");
-  //         }
-  //       } else {
-  //         window.alert("Geocoder failed due to: " + status);
-  //       }
-  //     }
-  //   );
-  // }
+  addressToCoordinates(data: string) {
+    this.geoLoc$ = this.geocodeService.geocodeAddress(data)
+    .pipe(map((location: any) => {
+        this.lat = Number(location.lat);
+        this.lng = Number(location.lng);
+        console.log(this.lat);
+        console.log(this.lng);
+        return location;
+      })   
+    );     
+  }
 
   setMarker(data){
     if (data.length >= 5){
-    //   var geocoder;
-    //   var map;
-    //   var marker;
-    //   var address = data;
-    //   geocoder.geocode( { 'address': address}, function(results, status) {
-    //   if (status == 'OK') {
-    //     map.setCenter(results[0].geometry.location);
-		//     marker.setMap(null);
-    //     marker = new google.maps.Marker({map: map, position: results[0].geometry.location});
-    //   }
-    // });    
+      this.addressToCoordinates(data);
     }
-
-//     var geocoder;
-// var map;
-// var marker;
-//   function initMap() {
-//     geocoder = new google.maps.Geocoder();
-//     var lat = 18.2151152
-// 	var lng = -66.487384
-// 	var latlng = new google.maps.LatLng(lat, lng);
-// 	$("#coordenadasLat").val(lat);
-//     $("#coordenadasLng").val(lng);
-//     var mapOptions = {
-// 	  draggable: true,
-//       zoom: 12,
-//       center: latlng,
-// 	  mapTypeId: google.maps.MapTypeId.ROADMAP
-//     }
-//     map = new google.maps.Map(document.getElementById('map-selector'), mapOptions);
-//  	marker = new google.maps.Marker( {position: latlng, map: map} );
-// 	map.addListener('click', function(mapsMouseEvent) {
-// 		marker.setPosition( new google.maps.LatLng(mapsMouseEvent.latLng.lat(), mapsMouseEvent.latLng.lng()) );
-// 		$("#coordenadasLat").val(mapsMouseEvent.latLng.lat());
-// 		$("#coordenadasLng").val(mapsMouseEvent.latLng.lng());
-// 	});
-//   }
-
-//   function codeAddress(zipcode) {
-//     var address = zipcode;
-//     geocoder.geocode( { 'address': address}, function(results, status) {
-//       if (status == 'OK') {
-//         map.setCenter(results[0].geometry.location);
-// 		marker.setMap(null);
-//         marker = new google.maps.Marker({
-//             map: map,
-//             position: results[0].geometry.location
-//         });
-// //       } else {
-// //         alert('Geocode was not successful for the following reason: ' + status);
-//       }
-//     });
-//   }
   }
 
 }

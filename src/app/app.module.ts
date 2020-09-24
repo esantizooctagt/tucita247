@@ -43,6 +43,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 // services
 import { SpinnerService } from '@shared/spinner.service';
+import { GeocodeService } from './services/geocode.service'; 
 
 // helpers interceptors jwt, errors, cache
 import { JwtInterceptor, ErrorInterceptor } from '@app/core/interceptors';
@@ -65,21 +66,21 @@ import { SearchComponent } from '@shared/search/search.component';
 import { PollListComponent } from '@modules/polls/poll-list/poll-list.component';
 import { UserlocComponent } from '@modules/userloc/userloc.component';
 import { SurveyComponent } from '@modules/surveys/survey/survey.component';
-import { SurveyListComponent } from './modules/surveys/survey-list/survey-list.component';
+import { SurveyListComponent } from '@modules/surveys/survey-list/survey-list.component';
 
 //Directives
 import { PhoneMaskDirective } from '@shared/phone-mask.directive';
 
 import { AgmCoreModule } from '@agm/core';
 import { PhonePipe } from '@shared/phone.pipe';
-import { HourdataPipe } from './shared/hourdata.pipe';
-import { ServcolorPipe } from './shared/servcolor.pipe';
+import { HourdataPipe } from '@shared/hourdata.pipe';
+import { ServcolorPipe } from '@shared/servcolor.pipe';
 import { DatePipe } from '@angular/common';
 import { ProviderListComponent } from '@modules/providers/provider-list/provider-list.component';
 import { ServiceListComponent } from '@modules/services/service-list/service-list.component';
-import { LocationListComponent } from './modules/locations/location-list/location-list.component';
-import { UserListAdminComponent } from './modules/users-admin/user-list-admin/user-list-admin.component';
-import { RoleListAdminComponent } from './modules/roles-admin/role-list-admin/role-list-admin.component';
+import { LocationListComponent } from '@modules/locations/location-list/location-list.component';
+import { UserListAdminComponent } from '@modules/users-admin/user-list-admin/user-list-admin.component';
+import { RoleListAdminComponent } from '@modules/roles-admin/role-list-admin/role-list-admin.component';
 
 // apiKey: 'AIzaSyCyKdLcjPnI3n5Eb2VmMJk-sgan83LEsCM'
 
@@ -163,6 +164,7 @@ import { RoleListAdminComponent } from './modules/roles-admin/role-list-admin/ro
   providers: [
     SpinnerService,
     DatePipe,
+    GeocodeService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],

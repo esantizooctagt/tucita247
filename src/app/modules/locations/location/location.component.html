@@ -12,6 +12,7 @@
             <ng-container *ngIf="locationParams$ | async"></ng-container>
             <ng-container *ngIf="saveLocation$ | async"></ng-container>
             <ng-container *ngIf="parentBus$ | async"></ng-container>
+            <ng-container *ngIf="geoLoc$ | async"></ng-container>
             <div class="row p-0 m-0">
                 <mat-card class="col-sm col-md col-lg-7 mb-3">
                     <form [formGroup]="locationForm" (ngSubmit)="onSubmit()" class="mt-4">
@@ -40,7 +41,7 @@
                         </div>
                         <div class="row pl-3 pr-3">
                             <ng-container *ngIf="sectors$ | async"></ng-container>
-                            <div class="form-field col-md-6">
+                            <div class="form-field col-md-4">
                                 <mat-form-field i18n-hintLabel="City|text in locations@@locations.city"
                                     hintLabel="City">
                                     <mat-label i18n="City|text in locations@@locations.city">City</mat-label>
@@ -54,7 +55,7 @@
                                     </mat-error>
                                 </mat-form-field>
                             </div>
-                            <div class="form-field col-md-6">
+                            <div class="form-field col-md-4">
                                 <mat-form-field i18n-hintLabel="Sector|text in locations@@locations.sector"
                                     hintLabel="Sector">
                                     <mat-label i18n="Sector|text in locations@@locations.sector">Sector</mat-label>
@@ -65,6 +66,14 @@
                                     </mat-select>
                                     <mat-error *ngIf="f.Sector.invalid && f.Sector.touched">
                                         {{getErrorMessage('Sector')}}</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="form-field col-md-4">
+                                <mat-form-field i18n-hintLabel="Zip Code|Zip code in business@business.zipcode" hintLabel="Zip Code">
+                                    <input #zipcode matInput (change)="setMarker(zipcode.value)" i18n-placeholder="Zip Code|Zip code in business@business.zipcode" placeholder="Zip Code" formControlName="ZipCode" maxlength="10"
+                                        minlength="3" [errorStateMatcher]="confirmValidParentMatcher">
+                                    <mat-error *ngIf="f.ZipCode.invalid && f.ZipCode.touched">
+                                        {{getErrorMessage('ZipCode')}}</mat-error>
                                 </mat-form-field>
                             </div>
                         </div>

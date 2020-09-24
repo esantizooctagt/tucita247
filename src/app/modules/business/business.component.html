@@ -7,6 +7,7 @@
             <mat-card class="col-sm col-md-11 col-lg-11">
                 <ng-container *ngIf="(businessSave$ | async) && savingBusiness"></ng-container>
                 <ng-container *ngIf="business$ | async"></ng-container>
+                <ng-container *ngIf="geoLoc$ | async"></ng-container>
                 <form [formGroup]="businessForm">
                     <ng-template matStepLabel i18n="Business|Business Label@@business.businesslabel">Business</ng-template>
                     <mat-tab-group mat-align-tabs="start">
