@@ -12,6 +12,7 @@ export class GeocodeService {
   constructor(private mapLoader: MapsAPILoader) {}
 
   private initGeocoder() {
+    console.log('Initialize');
     this.geocoder = new google.maps.Geocoder();
   }
 
@@ -27,6 +28,7 @@ export class GeocodeService {
   }
 
   geocodeAddress(location: string): Observable<any> {
+    console.log('Get Address');
     return this.waitForMapsToLoad().pipe(
       // filter(loaded => loaded),
       switchMap(() => {

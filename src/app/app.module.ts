@@ -155,7 +155,8 @@ import { RoleListAdminComponent } from '@modules/roles-admin/role-list-admin/rol
     InfiniteScrollModule,
     NgxChartsModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyBdQ6vAlbIi3u_KdiMv8KILsjYExJLDUGU'
+      apiKey: 'AIzaSyBdQ6vAlbIi3u_KdiMv8KILsjYExJLDUGU',
+      libraries: ['places','geometry'] 
     })
   ],
   exports: [
