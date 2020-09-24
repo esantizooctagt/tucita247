@@ -96,7 +96,6 @@ export class RoleAdminComponent implements OnInit {
   ngOnInit(): void {
     this.data.handleData('Add');
     this.roleDataList = this.route.snapshot.paramMap.get('roleId');
-    console.log(this.route.snapshot.paramMap.get('roleId'));
 
     this.businessId = this.authService.businessId();
     this.languageInit = this.authService.language() == "" ? "EN" : this.authService.language();
@@ -108,7 +107,6 @@ export class RoleAdminComponent implements OnInit {
   onDisplay(){
     // changes.prop contains the old and the new value...
     if (this.roleDataList != undefined && this.roleDataList != "0") {
-      console.log('entro');
       var spinnerRef = this.spinnerService.start($localize`:@@roles.loadingrolesingle:`);
       this.roleForm.reset({RoleId: '', BusinessId: '', Name: '', Status: 1});
       this.g.clear();

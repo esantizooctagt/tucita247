@@ -10,4 +10,3 @@ export * from './appointment.service';
 export * from './provider.service';
 export * from './serv.services';
 export * from './admin.service';
-export * from './geocode.service';

@@ -53,8 +53,8 @@ export class AdminService {
                       .pipe(catchError(this.errorHandler));
     }
   
-    getAccess(roleId, nameApp): Observable<any>{
-      return this.http.get<any>(this.apiURL + '/apps/'+roleId+'/'+nameApp)
+    getAccess(businessId, roleId): Observable<any>{
+      return this.http.get<any>(this.apiURL + '/user/access/'+businessId+'/'+roleId)
                       .pipe(catchError(this.errorHandler));
     }
   
@@ -64,7 +64,7 @@ export class AdminService {
     }
   
     updateRole(formData) {
-      return this.http.patch(this.apiURL + '/role', formData)
+      return this.http.put(this.apiURL + '/role', formData)
                       .pipe(catchError(this.errorHandler));
     }
   

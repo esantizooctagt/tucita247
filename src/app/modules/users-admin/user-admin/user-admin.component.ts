@@ -63,11 +63,10 @@ export class UserAdminComponent implements OnInit {
     Email: ['', [Validators.required, Validators.maxLength(200), Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
     First_Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     Last_Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
-    Password: ['',[Validators.minLength(8), Validators.maxLength(20), PasswordValidators.strong]],
+    Password: ['',[Validators.required, Validators.minLength(8), Validators.maxLength(20), PasswordValidators.strong]],
     Avatar: [''],
-    Phone: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(17)]],
-    // RoleId: ['', [Validators.required]],
-    RoleId: [''],
+    Phone: ['', [, Validators.minLength(6), Validators.maxLength(17)]],
+    RoleId: ['', [Validators.required]],
     Status: [1]
   })
 
@@ -189,6 +188,10 @@ export class UserAdminComponent implements OnInit {
               // Is_Admin: user.Is_Admin,
               Status: user.Status
             });
+            this.userForm.get('Email').clearValidators();
+            this.userForm.get('Email').updateValueAndValidity();
+            this.userForm.get('Password').clearValidators();
+            this.userForm.get('Password').updateValueAndValidity();
             this.textStatus = (user.Status == 0 ? $localize`:@@shared.disabled:` : $localize`:@@shared.enabled:`);
           } else {
             this.invalid = 1;

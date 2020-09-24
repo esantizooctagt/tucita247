@@ -91,6 +91,10 @@ export class AuthService {
   errorHandler(error) {
     return throwError(error || 'Server Error');
   }
+  roleAdm(){
+    let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
+    return user.Role_Adm;
+  }
   businessId() {
     let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
     return user.Business_Id;

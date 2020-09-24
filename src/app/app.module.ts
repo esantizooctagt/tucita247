@@ -43,7 +43,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 // services
 import { SpinnerService } from '@shared/spinner.service';
-import { GeocodeService } from './services/geocode.service'; 
 
 // helpers interceptors jwt, errors, cache
 import { JwtInterceptor, ErrorInterceptor } from '@app/core/interceptors';

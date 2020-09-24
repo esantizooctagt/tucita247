@@ -9,7 +9,7 @@ import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { User, Access } from '@app/_models';
 import { AuthService } from '@core/services';
 import { environment } from '@environments/environment';
-import { RolesService, UserService, BusinessService } from '@app/services';
+import { RolesService, UserService, BusinessService, AdminService } from '@app/services';
 import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
 
@@ -29,6 +29,7 @@ export class MainNavComponent implements OnInit {
   languageInit: string='EN';
   isAdmin: boolean=false;
   resetToken$: Observable<any>;
+  access$: Observable<any>;
   business$: Observable<any>;
   filteredBusiness$: Observable<any[]>;
   allBusiness: []=[];
@@ -36,6 +37,9 @@ export class MainNavComponent implements OnInit {
   superAdmin: number=0;
   md5Admin = 'c4ca4238a0b923820dcc509a6f75849b';
   frmBusiness = new FormControl();
+  roleAdm: string = '';
+  superAccess: number = 0;
+  searchBar: number = 0;
 
   opened = true;
   over = 'side';
@@ -61,7 +65,8 @@ export class MainNavComponent implements OnInit {
     private dialog: MatDialog,
     private userService: UserService,
     private router: Router,
-    private businessService: BusinessService
+    private businessService: BusinessService,
+    private adminService: AdminService
     ) {
   }
 
@@ -82,14 +87,32 @@ export class MainNavComponent implements OnInit {
   }
 
   ngOnInit(){
-    if (this.authService.superAdmin() == 'c4ca4238a0b923820dcc509a6f75849b'){
-      this.superAdmin = 1;
-    }
     this.businessId = this.authService.businessId();
     this.businessName = this.authService.businessName();
     this.roleId = this.authService.roleId();
     this.userId = this.authService.userId();
     this.isAdmin = this.authService.isAdmin();
+    this.roleAdm = this.authService.roleAdm();
+    
+    if (this.roleAdm != ''){
+      this.access$ = this.adminService.getAccess(this.businessId, this.roleAdm).pipe(
+        map((res: any) => {
+          if (res.Code == 200){
+            if (res.Access.find(e => e.AppId === 'APP01')) {
+              this.superAccess = 1;
+            }
+            if (res.Access.find(e => e.AppId === 'APP03')){
+              this.searchBar = 1;
+            }
+          }
+          return res;
+        })
+      );
+    }
+
+    if (this.authService.superAdmin() == 'c4ca4238a0b923820dcc509a6f75849b'){
+      this.superAdmin = 1;
+    }
     if (this.authService.language() != ''){
       this.language = this.authService.language() == "EN" ? "assets/images/icon/EN.svg" : "assets/images/icon/ES.svg";
     }
