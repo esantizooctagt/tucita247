@@ -15,6 +15,7 @@ import { MonitorService } from '@app/shared/monitor.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { link } from 'fs';
 import { ShopdialogComponent } from '@app/shared/shopdialog/shopdialog.component';
+import { MapsAPILoader } from '@agm/core';
 
 @Component({
   selector: 'app-location',
@@ -58,6 +59,8 @@ export class LocationComponent implements OnInit {
   businessTemp = [];
   businessParent = [];
 
+  private geocoder: any;
+  
   get f() {
     return this.locationForm.controls;
   }
@@ -77,7 +80,8 @@ export class LocationComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private spinnerService: SpinnerService,
-    public geocodeService: GeocodeService
+    public geocodeService: GeocodeService,
+    private mapLoader: MapsAPILoader
   ) { }
 
   locationForm = this.fb.group({
@@ -128,6 +132,10 @@ export class LocationComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.mapLoader.load().then(() => {
+      this.geocoder = new google.maps.Geocoder;
+    });
+
     this.data.handleData('Add');
     let language = this.authService.language();
 
@@ -427,7 +435,7 @@ export class LocationComponent implements OnInit {
   }
 
   addressToCoordinates(data: string) {
-    this.geoLoc$ = this.geocodeService.geocodeAddress(data)
+    this.geoLoc$ = this.geocodeService.geocodeAddress(data, this.geocoder)
     .pipe(map((location: any) => {
         this.lat = Number(location.lat);
         this.lng = Number(location.lng);

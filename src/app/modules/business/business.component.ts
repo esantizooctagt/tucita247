@@ -15,6 +15,7 @@ import { environment } from '@environments/environment';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { MapsAPILoader } from '@agm/core';
 
 @Component({
   selector: 'app-business',
@@ -82,6 +83,8 @@ export class BusinessComponent implements OnInit {
   linkValidated: boolean = false;
   availability$: Observable<any>;
   loadingBusiness: boolean = false;
+
+  private geocoder: any;
   
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
@@ -115,7 +118,8 @@ export class BusinessComponent implements OnInit {
     private categoryService: CategoryService,
     private spinnerService: SpinnerService,
     private breakpointObserver: BreakpointObserver,
-    public geocodeService: GeocodeService
+    public geocodeService: GeocodeService,
+    private mapLoader: MapsAPILoader
   ) {
   }
 
@@ -154,6 +158,9 @@ export class BusinessComponent implements OnInit {
   })
 
   ngOnInit() {
+    this.mapLoader.load().then(() => {
+      this.geocoder = new google.maps.Geocoder;
+    });
     var spinnerRef = this.spinnerService.start($localize`:@@business.loading:`);
     this.businessId = this.authService.businessId();
     this.language = this.authService.language();
@@ -704,12 +711,11 @@ export class BusinessComponent implements OnInit {
   }
 
   addressToCoordinates(data: string) {
-    this.geoLoc$ = this.geocodeService.geocodeAddress(data)
+    this.geoLoc$ = this.geocodeService.geocodeAddress(data, this.geocoder)
     .pipe(map((location: any) => {
         this.lat = Number(location.lat);
         this.lng = Number(location.lng);
-        console.log(this.lat);
-        console.log(this.lng);
+        console.log(location);
         return location;
       })   
     );     
