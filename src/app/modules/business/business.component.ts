@@ -118,7 +118,7 @@ export class BusinessComponent implements OnInit {
     private categoryService: CategoryService,
     private spinnerService: SpinnerService,
     private breakpointObserver: BreakpointObserver,
-    public geocodeService: GeocodeService,
+    // public geocodeService: GeocodeService,
     private mapLoader: MapsAPILoader
   ) {
   }
@@ -710,21 +710,23 @@ export class BusinessComponent implements OnInit {
     }
   }
 
-  addressToCoordinates(data: string) {
-    this.geoLoc$ = this.geocodeService.geocodeAddress(data, this.geocoder)
-    .pipe(map((location: any) => {
-        this.lat = Number(location.lat);
-        this.lng = Number(location.lng);
-        console.log(location);
-        return location;
-      })   
-    );     
-  }
-
   setMarker(data){
     if (data.length >= 5){
-      this.addressToCoordinates(data);
+      this.geocodeAddress(data);
     }
   }
 
+  geocodeAddress(location: string){
+    console.log("previo a ingres a geocode");
+    this.geocoder.geocode({'address': location}, (results, status) => {
+      console.log("previo a status === ");
+      if (status == google.maps.GeocoderStatus.OK) {
+        console.log('Geocoding complete!');
+        this.lat = results[0].geometry.location.lat();
+        this.lng = results[0].geometry.location.lng();
+      } else {
+          console.log('Error - ', results, ' & Status - ', status);
+      }
+    });
+  }
 }

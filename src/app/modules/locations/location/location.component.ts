@@ -80,7 +80,7 @@ export class LocationComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private spinnerService: SpinnerService,
-    public geocodeService: GeocodeService,
+    // public geocodeService: GeocodeService,
     private mapLoader: MapsAPILoader
   ) { }
 
@@ -434,22 +434,22 @@ export class LocationComponent implements OnInit {
     this.lng = res.lng;
   }
 
-  addressToCoordinates(data: string) {
-    this.geoLoc$ = this.geocodeService.geocodeAddress(data, this.geocoder)
-    .pipe(map((location: any) => {
-        this.lat = Number(location.lat);
-        this.lng = Number(location.lng);
-        console.log(this.lat);
-        console.log(this.lng);
-        return location;
-      })   
-    );     
-  }
-
   setMarker(data){
     if (data.length >= 5){
-      this.addressToCoordinates(data);
+      this.geocodeAddress(data);
     }
+  }
+
+  geocodeAddress(location: string){
+    this.geocoder.geocode({'address': location}, (results, status) => {
+      if (status == google.maps.GeocoderStatus.OK) {
+        console.log('Geocoding complete!');
+        this.lat = results[0].geometry.location.lat();
+        this.lng = results[0].geometry.location.lng();
+      } else {
+          console.log('Error - ', results, ' & Status - ', status);
+      }
+    });
   }
 
 }

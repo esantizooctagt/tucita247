@@ -164,7 +164,6 @@ import { RoleListAdminComponent } from '@modules/roles-admin/role-list-admin/rol
   providers: [
     SpinnerService,
     DatePipe,
-    GeocodeService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],
