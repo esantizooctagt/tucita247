@@ -18,6 +18,7 @@ export class GeocodeService {
 
   private waitForMapsToLoad(): Observable<boolean> {
     if(!this.geocoder) {
+      console.log("entro");
       return fromPromise(this.mapLoader.load())
       .pipe(
         tap(() => this.initGeocoder()),
@@ -31,6 +32,7 @@ export class GeocodeService {
     console.log('Get Address');
     return this.waitForMapsToLoad().pipe(
       // filter(loaded => loaded),
+      map(() => {console.log("wait response");}),
       switchMap(() => {
         return new Observable(observer => {
           this.geocoder.geocode({'address': location}, (results, status) => {
