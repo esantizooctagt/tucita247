@@ -182,12 +182,12 @@ export class AuthService {
     this.currentAccessTknSubject.next(null);
     this.currentRefreshTknSubject.next(null);
     this.currentSuperAdminSubject.next(null);
+    sessionStorage.removeItem('TC247_USS');
+    sessionStorage.removeItem('TC247_TKN');
+    sessionStorage.removeItem('TC247_ACT');
+    sessionStorage.removeItem('TC247_REF');
+    sessionStorage.removeItem('TC247_ADM');
     window.localStorage.setItem('CREDENTIALS_FLUSH', 'tknTucita');
     window.localStorage.removeItem('CREDENTIALS_FLUSH');
-    // sessionStorage.removeItem('TC247_USS');
-    // sessionStorage.removeItem('TC247_TKN');
-    // sessionStorage.removeItem('TC247_ACT');
-    // sessionStorage.removeItem('TC247_REF');
-    // sessionStorage.removeItem('TC247_ADM');
   }
 }
