@@ -119,6 +119,13 @@ export class MainNavComponent implements OnInit {
     setInterval(() => { 
       this.refreshToken();
     }, 1800000);
+
+    setInterval(() => {
+      if (this.authService.getUserProfile() == null){
+        this.authService.logout();
+        this.router.navigate(['/login']);
+      }
+    }, 10000);
       //}, 2700000);
   }
 

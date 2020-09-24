@@ -177,15 +177,17 @@ export class AuthService {
     return user.Is_Admin;
   }
   logout() {
-    sessionStorage.removeItem('TC247_USS');
     this.currentUserSubject.next(null);
-    sessionStorage.removeItem('TC247_TKN');
     this.currentUserTknSubject.next(null);
-    sessionStorage.removeItem('TC247_ACT');
     this.currentAccessTknSubject.next(null);
-    sessionStorage.removeItem('TC247_REF');
     this.currentRefreshTknSubject.next(null);
-    sessionStorage.removeItem('TC247_ADM');
     this.currentSuperAdminSubject.next(null);
+    window.localStorage.setItem('CREDENTIALS_FLUSH', 'tknTucita');
+    window.localStorage.removeItem('CREDENTIALS_FLUSH');
+    // sessionStorage.removeItem('TC247_USS');
+    // sessionStorage.removeItem('TC247_TKN');
+    // sessionStorage.removeItem('TC247_ACT');
+    // sessionStorage.removeItem('TC247_REF');
+    // sessionStorage.removeItem('TC247_ADM');
   }
 }
