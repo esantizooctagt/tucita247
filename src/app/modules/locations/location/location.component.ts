@@ -41,7 +41,7 @@ export class LocationComponent implements OnInit {
   zoom: number = 12;
 
   cities = [];
-  sectors = [] = [];
+  sectors = [];
   countryCode = '';
   textStatus: string='';
 
@@ -213,7 +213,11 @@ export class LocationComponent implements OnInit {
             let loc = res.Data;
             if (loc != '') {
               this.sectors = res.Data.Sectors;
-              this.sectors.push({ SectorId: "0", Name: "N/A" });
+              let data = {
+                SectorId: "0",
+                Name: "N/A"
+              }
+              this.sectors.push(data);
               this.locationForm.setValue({
                 LocationId: loc.LocationId,
                 BusinessId: loc.BusinessId,
