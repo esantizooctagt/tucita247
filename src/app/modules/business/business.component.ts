@@ -469,6 +469,7 @@ export class BusinessComponent implements OnInit {
     const min10 = '10';
     const max15 = '15';
     const max50 = '50';
+    const max75 = '75';
     const max100 = '100';
     const max150 = '150';
     const max255 = '255';
@@ -499,7 +500,7 @@ export class BusinessComponent implements OnInit {
     if (component === 'ShortDescription'){
       return this.fBusiness.ShortDescription.hasError('required') ? $localize`:@@shared.entervalue:` :
         this.fBusiness.ShortDescription.hasError('minlength') ? $localize`:@@shared.minimun: ${min10}` :
-          this.fBusiness.ShortDescription.hasError('maxlength') ? $localize`:@@shared.maximun: ${max100}` :
+          this.fBusiness.ShortDescription.hasError('maxlength') ? $localize`:@@shared.maximun: ${max75}` :
             '';
     }
     if (component === 'TuCitaLink'){

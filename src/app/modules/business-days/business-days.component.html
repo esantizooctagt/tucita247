@@ -12,7 +12,7 @@
         <div class="col-md-6 col-lg-6" i18n="Configure your year schedule here. Just click on a date to set the days off.|text business days@@businessdays.maintext">
             Configure your year schedule here. Just click on a date to set the days off.
         </div>
-        <mat-slide-toggle [(ngModel)]="providerParentDO" (change)="updateData($event, 1)" i18n="Inherit special days from company|business day text@@businessdays.secontext">Inherit special days from company</mat-slide-toggle>
+        <mat-slide-toggle [checked]="locationParentDays == 1 ? true : false" color="primary" (change)="updateData($event, 1)" i18n="Inherit special days from company|business day text@@businessdays.secontext">Inherit special days from company</mat-slide-toggle>
     </div>
     <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="locationId != '_' && providerId == '_'">
         <div class="col-md-6 col-lg-6">
@@ -27,11 +27,11 @@
         <div class="col-md-6 col-lg-6" i18n="Configure your year schedule here. Just click on a date to set the days off.|text business days@@businessdays.maintextloc">
             Configure your year schedule here. Just click on a date to set the days off.
         </div>
-        <mat-slide-toggle [(ngModel)]="providerParentDO" (change)="updateData($event, 1)" i18n="Inherit special days from location|business day text@@businessdays.secontextlocation">Inherit special days from location</mat-slide-toggle>
+        <mat-slide-toggle [checked]="providerParentDO == 1 ? true : false" color="primary" (change)="updateData($event, 1)" i18n="Inherit special days from location|business day text@@businessdays.secontextlocation">Inherit special days from location</mat-slide-toggle>
     </div>
     <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="providerId != '_'">
         <div class="col-md-6 col-lg-6">
-            <mat-select name="services" [(value)]="providerId" (selectionChange)="onServiceChange($event)">
+            <mat-select name="services" [(value)]="providerVal" (selectionChange)="onServiceChange($event)">
                 <mat-optgroup *ngFor="let item of serviceData">
                     {{item.Name}}
                     <mat-option *ngFor="let serv of item.Services" [value]="item.LocationId + '#' + serv.ProviderId">

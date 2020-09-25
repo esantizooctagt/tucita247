@@ -214,9 +214,9 @@
                                 </div>
                             </ng-template>
                             <div class="image-business mt-2 mb-2 row ml-0 mr-0">
-                                <div class="col-md-3 pl-0">
+                                <div class="col-md-6 col-lg-6 col-xl-6 col-sm-12 pl-0">
                                     <h5 i18n="Image for mobile App|text in business@@business.imagemobileapp">Image for mobile App</h5>
-                                    <form [formGroup]="imageForm" autocomplete="off" (ngSubmit)="onSubmitImage()">
+                                    <form [formGroup]="imageForm" class="frm-Img" autocomplete="off" (ngSubmit)="onSubmitImage()">
                                         <img *ngIf="fBusiness.Imagen.value && fileString == undefined" class="imgbusiness-pic" [src]="imgPath+fBusiness.Imagen.value">
                                         <div *ngIf="fileString == undefined && !fBusiness.Imagen.value" class="fill-overlay" i18n="IMAGE MOBILE APP|text in business@@business.imagemobileappimg">IMAGE MOBILE APP</div>
                                         <img *ngIf="fileString != undefined" [src]="fileString" class="imgbusiness-pic">
@@ -229,9 +229,9 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div class="col-md-3 pl-0">
+                                <div class="col-md-6 col-lg-6 col-xl-6 col-sm-12 pl-0">
                                     <h5 i18n="Image for Tu Cita 24/7 web link|text in business@@business.imagefortucita">Image for Tu Cita 24/7 web link</h5>
-                                    <form [formGroup]="imageFormLink" autocomplete="off" (ngSubmit)="onSubmitImageLink()">
+                                    <form [formGroup]="imageFormLink" class="frm-Img" autocomplete="off" (ngSubmit)="onSubmitImageLink()">
                                         <img *ngIf="fBusiness.ImagenLink.value && fileStringLink == undefined" class="imgbusiness-pic" [src]="imgPath+fBusiness.ImagenLink.value">
                                         <div *ngIf="fileStringLink == undefined && !fBusiness.ImagenLink.value" class="fill-overlay" i18n="IMAGE WEB LINK|block in business@@business.imageblock">IMAGE WEB LINK</div>
                                         <img *ngIf="fileStringLink != undefined" [src]="fileStringLink" class="imgbusiness-pic">

@@ -34,6 +34,7 @@ export class BusinessDaysComponent implements OnInit {
   businessId: string = '';
   locationId: string = '_';
   providerId: string = '_';
+  providerVal: string = '';
   daysOff$: Observable<any>;
   savedaysOff$: Observable<any>;
   updateParentDaysOff$: Observable<any>;
@@ -41,7 +42,8 @@ export class BusinessDaysComponent implements OnInit {
   locationData: any;
   serviceData: any;
 
-  providerParentDO: number = 0;
+  providerParentDO: number = 1;
+  locationParentDays: number = 1;
 
   dateSelected: any[] = [];
 
@@ -98,12 +100,15 @@ export class BusinessDaysComponent implements OnInit {
             this.locationData = res.Data;
             this.locationId = this.locationData[0].LocationId;
             this.dateSelected = this.locationData[0].DaysOff;
+            this.locationParentDays = this.locationData[0].ParentDaysOff;
           }
           if (this.providerId != "_"){
             this.serviceData = res.Data;
-            this.providerId = this.serviceData[0].LocationId + '#' + this.serviceData[0].Services[0].ProviderId;
+            this.providerId = this.serviceData[0].Services[0].ProviderId;
+            this.locationId = this.serviceData[0].LocationId;
             this.dateSelected = this.serviceData[0].Services[0].DaysOff;
             this.providerParentDO = this.serviceData[0].Services[0].ParentDaysOff;
+            this.providerVal = this.locationId + '#' + this.providerId;
           }
           setTimeout(() => {
             this.setMoths(this.currYear);
@@ -177,11 +182,11 @@ export class BusinessDaysComponent implements OnInit {
   onSelect(event: any, calendar: any) {
     const date = event.getFullYear() + "-" + ("00" + (event.getMonth() + 1)).slice(-2) + "-" + ("00" + event.getDate()).slice(-2);
     const index = this.dateSelected.findIndex(x => x == date);
-    
+    // console.log('buss ' + this.businessId + ' loc ' + this.locationId + ' prov ' + this.providerId + ' date ' + date);
     if (index < 0) {
       this.dateSelected.push(date);
       // add special days
-      this.savedaysOff$ = this.businessService.updateDaysOff(this.businessId, (this.providerId != '_' ? this.providerId.split('#')[0] : this.locationId), (this.providerId == '_' ? '_' : this.providerId.split('#')[1]), date, 'add').pipe(
+      this.savedaysOff$ = this.businessService.updateDaysOff(this.businessId, this.locationId, this.providerId, date, 'add').pipe(
         map((res: any) => {
           if (res.Code == 200){
             this.openSnackBar($localize`:@@businessdays.addsuccess:`,$localize`:@@businessdays.specdays:`); 
@@ -198,7 +203,7 @@ export class BusinessDaysComponent implements OnInit {
     else { 
       this.dateSelected.splice(index, 1);
       // remove special days
-      this.savedaysOff$ = this.businessService.updateDaysOff(this.businessId, (this.providerId != '_' ? this.providerId.split('#')[0] : this.locationId), (this.providerId == '_' ? '_' : this.providerId.split('#')[1]), date, 'rem').pipe(
+      this.savedaysOff$ = this.businessService.updateDaysOff(this.businessId, this.locationId, this.providerId, date, 'rem').pipe(
         map((res: any) => {
           if (res.Code == 200){
             this.openSnackBar($localize`:@@businessdays.remove:`,$localize`:@@businessdays.specdays:`); 
@@ -302,6 +307,7 @@ export class BusinessDaysComponent implements OnInit {
     this.dateSelected = [];
     this.locationId = event.value;
     this.dateSelected = loc[0].DaysOff;
+    this.locationParentDays = loc[0].ParentDaysOff;
     setTimeout(() => {
       this.setMoths((this.navYear == 0 ? this.currYear : this.navYear));
     }, 1);
@@ -313,7 +319,8 @@ export class BusinessDaysComponent implements OnInit {
     let serv = loc[0].Services.filter(y => y.ProviderId == event.value.split('#')[1]);
 
     this.dateSelected = [];
-    this.providerId = event.value;
+    this.providerId = serv[0].ProviderId;
+    this.locationId = loc[0].LocationId;
     this.dateSelected = serv[0].DaysOff;
     this.providerParentDO = serv[0].ParentDaysOff;
     setTimeout(() => {
@@ -322,7 +329,8 @@ export class BusinessDaysComponent implements OnInit {
   }
 
   updateData(event, tipo){
-    this.updateParentDaysOff$ = this.businessService.updateBusinessParms(this.businessId, this.locationId, (this.providerId == '_' ? '_' : this.providerId.split('#')[1]), (event.checked == true ? 1 : 0), tipo).pipe(
+    // console.log('buss ' + this.businessId + ' loc ' + this.locationId + ' pro ' + this.providerId + ' check ' + (event.checked == true ? '1' : '0') + ' tipo ' + tipo);
+    this.updateParentDaysOff$ = this.businessService.updateBusinessParms(this.businessId, this.locationId, this.providerId, (event.checked == true ? 1 : 0), tipo).pipe(
       map((res: any) => {
         if (res.Code == 200){
           this.providerParentDO = (event.checked == true ? 1 : 0);

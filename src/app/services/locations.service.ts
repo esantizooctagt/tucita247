@@ -32,10 +32,10 @@ export class LocationService {
                       .pipe(catchError(this.errorHandler));
   }
 
-  updateLocations(dataForm, businessId){
-    return this.http.put(this.apiURL + '/locations/' +businessId, dataForm)
-                    .pipe(catchError(this.errorHandler));
-  }
+  // updateLocations(dataForm, businessId){
+  //   return this.http.put(this.apiURL + '/locations/' +businessId, dataForm)
+  //                   .pipe(catchError(this.errorHandler));
+  // }
 
   updateOpenLocation(locationId, businessId, providerId){
     return this.http.put(this.apiURL + '/location/open/' + locationId + '/' + businessId + '/' + providerId, '')

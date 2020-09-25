@@ -44,13 +44,16 @@
 .imgbusiness-pic {
   // width: 100%; 
   // height: 120px;
-  width: 270px;
-  height: 160px;
+  width: 366px;
+  height: 220px;
 }
 .image-business{
   font-family: Montserrat;
   font-weight: 600;
   font-size: 17px;
+}
+.frm-Img{
+  text-align: center;
 }
 .content-label{
   position:relative;
@@ -83,6 +86,9 @@ agm-map{
 }
 .button-save{
   width: 100px;
+}
+h5{
+  text-align:center;
 }
 ::ng-deep .ng5-slider .ng5-slider-bar {
   height: 50px;

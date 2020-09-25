@@ -8,8 +8,8 @@
                 <div class="div-content col-md-6">
                     <h1 class="masthead-heading mb-0">{{bus.Name}}</h1>
                     <h5 class="">{{bus.ShortDescript}}</h5>
-                    <p class="">{{ 'Contact Us : ' + (bus.Phone | phone) }}</p>
-                    <p class="">{{bus.WebSite}}</p>
+                    <a mat-button [attr.href]="'tel:'+bus.Phone">{{ 'Contact Us : ' + (bus.Phone | phone) }}</a>
+                    <a mat-button [attr.href]='bus.WebSite' target="_blank">{{bus.WebSite}}</a>
                 </div>
             </div>
         </div>
@@ -33,9 +33,20 @@
             </div>
         </div>
     </section>
-    <div class="py-5 bg-black">
+    <div class="bg-black">
         <div class="container">
             <div class="row">
+                <div class="col-12 text-center">
+                    <button *ngIf="bus.Facebook != ''" (click)="openLink(bus.Facebook)" mat-icon-button color="accent">
+                        <mat-icon class="color-icon" svgIcon="facebook"></mat-icon>
+                    </button>
+                    <button *ngIf="bus.Twitter != ''" (click)="openLink(bus.Twitter)" mat-icon-button color="accent">
+                        <mat-icon class="color-icon" svgIcon="twitter"></mat-icon>
+                    </button>
+                    <button *ngIf="bus.Instagram != ''" (click)="openLink(bus.Instagram)" mat-icon-button color="accent">
+                        <mat-icon class="color-icon" svgIcon="instagram"></mat-icon>
+                    </button>
+                </div>
                 <div class="col-12">
                     <p class="text-center text-white m-0 small">Copyright&nbsp;© <a class="link-website" href="https://www.tucita247.com">Tu Cita 24/7</a> 2020</p>
                 </div>

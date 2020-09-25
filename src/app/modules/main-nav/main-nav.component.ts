@@ -148,7 +148,7 @@ export class MainNavComponent implements OnInit {
         this.authService.logout();
         this.router.navigate(['/login']);
       }
-    }, 10000);
+    }, 5000);
       //}, 2700000);
   }
 
