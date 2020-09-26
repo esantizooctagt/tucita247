@@ -151,28 +151,6 @@
           <context context-type="linenumber">138</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="shared.upload" datatype="html">
-        <source>Upload file</source>
-        <context-group purpose="business">
-          <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
-          <context context-type="linenumber">235</context>
-        </context-group>
-        <context-group purpose="business">
-          <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
-          <context context-type="linenumber">257</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="shared.chooseupload" datatype="html">
-        <source>Choose file</source>
-        <context-group purpose="business">
-          <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
-          <context context-type="linenumber">235</context>
-        </context-group>
-        <context-group purpose="business">
-          <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
-          <context context-type="linenumber">257</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="login.ForgotPassword" datatype="html">
         <source>Forgot your
                 password ?</source>

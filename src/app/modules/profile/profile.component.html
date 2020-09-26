@@ -33,7 +33,7 @@
                         {{f.Email.value}}
                     </div>
                     <div class="form-field pl-3 pr-3">
-                        <mat-form-field i18n-hintLabel="Min 3 characters@@profile.mincharacters" hintLabel="Min 3 characters">
+                        <mat-form-field>
                             <input matInput #Name i18n-placeholder="First Name@@profile.firstname" placeholder="First Name" maxlength="100" formControlName="First_Name"
                                 [errorStateMatcher]="confirmValidParentMatcher" required>
                             <mat-error *ngIf="f.First_Name.invalid && f.First_Name.touched">
@@ -41,7 +41,7 @@
                         </mat-form-field>
                     </div>
                     <div class="form-field pl-3 pr-3">
-                        <mat-form-field i18n-hintLabel="Min 3 characters@@profile.mincharacters" hintLabel="Min 3 characters">
+                        <mat-form-field>
                             <input matInput #Name i18n-placeholder="Last Name@@profile.lastname" placeholder="Last Name" maxlength="100" formControlName="Last_Name"
                                 [errorStateMatcher]="confirmValidParentMatcher" required>
                             <mat-error *ngIf="f.Last_Name.invalid && f.Last_Name.touched">

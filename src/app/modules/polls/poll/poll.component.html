@@ -13,7 +13,7 @@
                 <mat-card class="col-sm col-md col-lg-7">
                     <form [formGroup]="pollForm" (ngSubmit)="onSubmit()" class="mt-4">
                         <div class="form-field pl-3 pr-3">
-                            <mat-form-field i18n-hintLabel="Name@@shared.name" hintLabel="Name">
+                            <mat-form-field>
                                 <input matInput #Name i18n-placeholder="Name@@shared.name" placeholder="Name"
                                     maxlength="100" minlength="3" formControlName="Name"
                                     [errorStateMatcher]="confirmValidParentMatcher" required>
@@ -22,7 +22,8 @@
                             </mat-form-field>
                         </div>
                         <div class="form-field pl-3 pr-3">
-                            <mat-form-field i18n-hintLabel="Location@@shared.location" hintLabel="Location">
+                            <mat-form-field>
+                                <mat-label i18n="Location@@shared.location">Location</mat-label>
                                 <mat-select formControlName="LocationId">
                                     <mat-option *ngFor="let res of locs$ | async" [value]="res.LocationId">
                                         {{res.Name}}
@@ -34,8 +35,7 @@
                             </mat-form-field>
                         </div>
                         <div class="form-field pl-3 pr-3">
-                            <mat-form-field i18n-hintLabel="Initial poll date|text in polls@@polls.initdate"
-                                hintLabel="Initial poll date">
+                            <mat-form-field>
                                 <mat-label i18n="Choose a Initial date|text in polls@@polls.chooseinitdate">Choose a
                                     Initial date</mat-label>
                                 <input matInput formControlName="DatePoll" [min]="minDate" [matDatepicker]="initPicker"
@@ -49,8 +49,7 @@
                             </mat-form-field>
                         </div>
                         <div class="form-field pl-3 pr-3">
-                            <mat-form-field i18n-hintLabel="Final poll date|text in polls@@polls.finaldate"
-                                hintLabel="Final poll date">
+                            <mat-form-field>
                                 <mat-label i18n="Choose a Final date|text in polls@@polls.choosefinaldate">Choose a
                                     Final date</mat-label>
                                 <input matInput formControlName="DateFinPoll" [min]="minDate"

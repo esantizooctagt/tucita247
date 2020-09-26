@@ -15,45 +15,61 @@
 }
 .sector {
   overflow: hidden;
-  // width: 50%;
-  // height: 120px;
-  width: 270px;
-  height: 160px;
+  width: 382px;
+  height: 285px;
   border: 3px solid #ff4f00;
-  // margin: 0 auto;
   text-align: center;
   position: relative;
   z-index: 10;
+  margin:auto;
 }
 .fill-overlay{
   overflow: hidden;
-  // width: 100%;
-  // height: 120px;
-  width: 270px;
-  height: 160px;
+  width: 375px;
+  height: 280px;
   margin: 0 auto;
   text-align: center;
   background-color: #ff4f00;
   color: #fff;
 }
-.upload-avatar{
-  color: #ff4f00;
+.default-overlay {
+  overflow: hidden;
+  width: 375px;
+  height: 280px;
   margin: 0 auto;
-  width: 125px;
+  text-align: center;
+  opacity: 0;
+  transition: 0.5s ease;
+  background-color: black;
+  z-index: 100;
+  position: relative;
+  top: -281px;
+  z-index: 100;
+  left: 0px;
+}
+.sector:hover button{
+  display: block;
+}
+.sector button{
+  display: none;
+}
+.sector:hover .default-overlay {
+  opacity: 0.58;
+}
+.camera-avatar {
+  margin: 0 auto;
+  color: white;
 }
 .imgbusiness-pic {
   // width: 100%; 
   // height: 120px;
-  width: 366px;
-  height: 220px;
+  width: 375px;
+  height: 280px;
 }
 .image-business{
   font-family: Montserrat;
   font-weight: 600;
   font-size: 17px;
-}
-.frm-Img{
-  text-align: center;
 }
 .content-label{
   position:relative;

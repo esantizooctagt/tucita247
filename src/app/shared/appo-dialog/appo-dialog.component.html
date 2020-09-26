@@ -4,7 +4,7 @@
 <form [formGroup]="clientForm">
     <div class="row pl-3 pr-3">
         <div class="form-field pl-3 pr-3 col-md">
-            <mat-form-field hintLabel="select service" i18n-hintLabel="select service|text in new appo@@appos.selectservice">
+            <mat-form-field>
                 <ng-container *ngIf="services$ | async"></ng-container>
                 <mat-select i18n-placeholder="Service|text in new appo@@appos.newservice" placeholder="Service" name="service" formControlName="ServiceId" (selectionChange)="validateService($event)" required>
                     <mat-option *ngFor="let item of services" [value]="item.ServiceId">
@@ -16,13 +16,13 @@
     </div>
     <div class="row pl-3 pr-3">
         <div class="form-field col-md-6">
-            <mat-form-field hintLabel="Phone number" i18n-hintLabel="Phone number|text in new appos@@appos.phonenumber">
+            <mat-form-field>
                 <input matInput #Phone placeholder="+1 (555) 555-1234" appPhoneMask maxlength="17" formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher">
                 <mat-error *ngIf="f.Phone.invalid && f.Phone.touched">{{getErrorMessage('Phone')}}</mat-error>
             </mat-form-field>
         </div>
         <div class="form-field pl-3 pr-3 col-md-6">
-            <mat-form-field hintLabel="Date of birth" i18n-hintLabel="Date of birth|text in new appo@appos.datebirth">
+            <mat-form-field>
                 <mat-label i18n="Date of birth|text in new appo@appos.datebirth">Date of birth</mat-label>
                 <input matInput [matDatepicker]="dobClient" formControlName="DOB">
                 <mat-datepicker-toggle matSuffix [for]="dobClient"></mat-datepicker-toggle>
@@ -31,14 +31,14 @@
         </div>
     </div>
     <div class="form-field pl-3 pr-3">
-        <mat-form-field hintLabel="Name" i18n-hintLabel="Name@@shared.name">
+        <mat-form-field>
             <input matInput #Name i18n-placeholder="Name@@shared.name" placeholder="Name" maxlength="100" minlength="3" formControlName="Name"
                 [errorStateMatcher]="confirmValidParentMatcher" required>
             <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{getErrorMessage('Name')}}</mat-error>
         </mat-form-field>
     </div>
     <div class="form-field pl-3 pr-3">
-        <mat-form-field i18n-hintLabel="Email@@shared.Email" hintLabel="Email">
+        <mat-form-field>
             <input matInput #Email i18n-placeholder="Email@@shared.Email" placeholder="Email" maxlength="200" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" formControlName="Email"
                 [errorStateMatcher]="confirmValidParentMatcher">
             <mat-error *ngIf="f.Email.invalid && f.Email.touched">{{getErrorMessage('Email')}}</mat-error>
@@ -49,7 +49,7 @@
             <button mat-icon-button (click)="addGuests()">
                 <mat-icon class="site-color">add</mat-icon>
             </button>
-            <mat-form-field class="col-md-8" hintLabel="Number of Guests" i18n-hintLabel="Number of Guests|text in new appo@appos.number">
+            <mat-form-field class="col-md-8">
                 <input matInput #Guests i18n-placeholder="Number of Guests|text in new appo@appos.number" placeholder="Number of Guests" maxlength="2" min="1" max="20" formControlName="Guests"
                     [errorStateMatcher]="confirmValidParentMatcher" required>
                 <mat-error *ngIf="f.Guests.invalid && f.Guests.touched">{{getErrorMessage('Guests')}}</mat-error>

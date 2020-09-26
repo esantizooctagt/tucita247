@@ -330,6 +330,7 @@ export class BusinessComponent implements OnInit {
           return;
         }
         this.fileString = reader.result;
+        this.onSubmitImage();
       }
       reader.readAsDataURL(fileUpload.files[0]);
     };
@@ -385,6 +386,7 @@ export class BusinessComponent implements OnInit {
           return;
         }
         this.fileStringLink = reader.result;
+        this.onSubmitImageLink();
       }
       reader.readAsDataURL(fileUpload.files[0]);
     };
@@ -392,7 +394,6 @@ export class BusinessComponent implements OnInit {
   }
 
   onSubmitImageLink(){
-    console.log(this.fileStringLink);
     const formData: FormData = new FormData();
     var spinnerRef = this.spinnerService.start($localize`:@@business.laodweblink:`);
     formData.append('Image', this.fileStringLink);
@@ -723,8 +724,13 @@ export class BusinessComponent implements OnInit {
       console.log("previo a status === ");
       if (status == google.maps.GeocoderStatus.OK) {
         console.log('Geocoding complete!');
+        console.log(this.lat);
+        console.log(this.lng);
         this.lat = results[0].geometry.location.lat();
         this.lng = results[0].geometry.location.lng();
+        console.log('-----------');
+        console.log(this.lat);
+        console.log(this.lng);
       } else {
           console.log('Error - ', results, ' & Status - ', status);
       }

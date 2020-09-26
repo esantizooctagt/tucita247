@@ -293,20 +293,20 @@
                             <ng-container *ngIf="newAppointment$ | async"></ng-container>
                             <form [formGroup]="clientForm" (ngSubmit)="addAppointment()">
                                 <div class="form-field pl-3 pr-3">
-                                    <mat-form-field i18n-hintLabel="Phone number|text in citas@@host.phonenumber" hintLabel="Phone number">
+                                    <mat-form-field>
                                         <input matInput #Phone placeholder="+1 (555) 555-1234" appPhoneMask maxlength="17" formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher">
                                         <mat-error *ngIf="f.Phone.invalid && f.Phone.touched">{{getErrorMessage('Phone')}}</mat-error>
                                     </mat-form-field>
                                 </div>
                                 <div class="form-field pl-3 pr-3">
-                                    <mat-form-field i18n-hintLabel="Name|text in citas@@host.name" hintLabel="Name">
+                                    <mat-form-field>
                                         <input matInput #Name i18n-placeholder="Name|text in citas@@host.name" placeholder="Name" maxlength="100" minlength="3" formControlName="Name"
                                             [errorStateMatcher]="confirmValidParentMatcher" required>
                                         <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{getErrorMessage('Name')}}</mat-error>
                                     </mat-form-field>
                                 </div>
                                 <div class="form-field pl-3 pr-3">
-                                    <mat-form-field i18n-hintLabel="Service|text in citas@@host.service" hintLabel="Service">
+                                    <mat-form-field>
                                         <mat-select i18n-placeholder="Service|text in citas@@host.service" placeholder="Service" name="services" formControlName="ServiceId">
                                             <mat-option *ngFor="let item of services" [value]="item.ServiceId">
                                                 {{item.Name}}
@@ -316,21 +316,21 @@
                                     </mat-form-field>
                                 </div>
                                 <div class="form-field pl-3 pr-3">
-                                    <mat-form-field i18n-hintLabel="Email@@shared.Email" hintLabel="Email">
+                                    <mat-form-field>
                                         <input matInput #Email i18n-placeholder="Email@@shared.Email" placeholder="Email" maxlength="200" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" formControlName="Email"
                                             [errorStateMatcher]="confirmValidParentMatcher">
                                         <mat-error *ngIf="f.Email.invalid && f.Email.touched">{{getErrorMessage('Email')}}</mat-error>
                                     </mat-form-field>
                                 </div>
                                 <div class="form-field pl-3 pr-3">
-                                    <mat-form-field i18n-hintLabel="No of People|text in citas@@host.noofpeople" hintLabel="No of People">
+                                    <mat-form-field>
                                         <input matInput #Guests i18n-placeholder="No of People|text in citas@@host.noofpeople" placeholder="No of People" maxlength="2" min="1" max="20" formControlName="Guests"
                                             [errorStateMatcher]="confirmValidParentMatcher" required>
                                         <mat-error *ngIf="f.Guests.invalid && f.Guests.touched">{{getErrorMessage('Guests')}}</mat-error>
                                     </mat-form-field>
                                 </div>
                                 <div class="form-field pl-3 pr-3">
-                                    <mat-form-field i18n-hintLabel="Date of birth|text in citas@@host.dateofbirth" hintLabel="Date of birth">
+                                    <mat-form-field>
                                         <mat-label i18n="Date of birth|text in citas@@host.dateofbirth">Date of birth</mat-label>
                                         <input matInput [matDatepicker]="dobClient" formControlName="DOB">
                                         <mat-datepicker-toggle matSuffix [for]="dobClient"></mat-datepicker-toggle>

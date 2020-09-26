@@ -9,8 +9,8 @@
         <div class="login-form">
             <h3 class="sign-in pt-4 pl-4 pb-2" i18n="Reset Password@@shared.reset">Reset Password</h3>
             <ng-container formGroupName="Passwords">
-                <div class="form-field mb-0 pl-4 pb-2 pr-4 pt-3">
-                    <mat-form-field hintLabel="Min 8 characters">
+                <div class="form-field mb-0 pl-4 pb-2 pr-4">
+                    <mat-form-field hintLabel="Min 8 characters" i18n-hintLabel="Min 8 characters@@verification.minchar">
                         <mat-label i18n="Password@@shared.Password">Password</mat-label>
                         <input type="password" i18n-placeholder="Password@@shared.Password" matInput placeholder="Password" formControlName="password"
                             [errorStateMatcher]="confirmValidParentMatcher" [type]="hide ? 'password' : 'text'"
@@ -29,8 +29,8 @@
                         </mat-error>
                     </mat-form-field>
                 </div>
-                <div class="form-field mb-0 pl-4 pb-2 pr-4 pt-3">
-                    <mat-form-field hintLabel="Min 8 characters">
+                <div class="form-field mb-0 pl-4 pb-2 pr-4">
+                    <mat-form-field>
                         <mat-label i18n="Confirm Password@@reset.confirmpass">Confirm Password</mat-label>
                         <input type="password" matInput i18n-placeholder="Password@@reset.password" placeholder="Password" formControlName="confpassword"
                             [errorStateMatcher]="confirmValidParentMatcher" [type]="hideconf ? 'password' : 'text'"

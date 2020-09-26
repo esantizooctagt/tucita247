@@ -12,20 +12,20 @@
                     <ng-template matStepLabel i18n="Business|Business Label@@business.businesslabel">Business</ng-template>
                     <mat-tab-group mat-align-tabs="start">
                         <mat-tab label="Address Info">
-                            <mat-form-field i18n-hintLabel="Name|Business Name@@business.name" hintLabel="Name">
+                            <mat-form-field class="pt-3">
                                 <input matInput i18n="Business Name|Business name placeholder@@business.busname" placeholder="Business Name" maxlength="500" minlength="3"
                                     formControlName="Name" [errorStateMatcher]="confirmValidParentMatcher" required>
                                 <mat-error *ngIf="fBusiness.Name.invalid && fBusiness.Name.touched">
                                     {{getErrorMessage('Name')}}</mat-error>
                             </mat-form-field>
-                            <mat-form-field i18n-hintLabel="Address|Address Business@@business.address" hintLabel="Address">
+                            <mat-form-field>
                                 <input matInput i18n-placeholder="Address|Address Business@@business.address" placeholder="Address" formControlName="Address" maxlength="500"
                                     minlength="3" [errorStateMatcher]="confirmValidParentMatcher" required>
                                 <mat-error *ngIf="fBusiness.Address.invalid && fBusiness.Address.touched">
                                     {{getErrorMessage('Address')}}</mat-error>
                             </mat-form-field>
                             <div class="row">
-                                <mat-form-field class="col-md-4" i18n-hintLabel="Country|Country in business@@business.country" hintLabel="Country">
+                                <mat-form-field class="col-md-4">
                                     <input type="text" i18n-placeholder="Country|Country in business@@business.country" placeholder="Country" matInput formControlName="Country"
                                         [matAutocomplete]="autoCountry" [errorStateMatcher]="confirmValidParentMatcher"
                                         required>
@@ -38,19 +38,19 @@
                                     </mat-autocomplete>
                                     <mat-error *ngIf="fBusiness.Country.invalid && fBusiness.Country.touched">{{getErrorMessage('Country')}}</mat-error>
                                 </mat-form-field>
-                                <mat-form-field class="col-md-4" i18n-hintLabel="City|City in business@@business.city" hintLabel="City">
+                                <mat-form-field class="col-md-4">
                                     <input matInput i18n-placeholder="City|City in business@@business.city" placeholder="City" formControlName="City" maxlength="100"
                                         minlength="2" [errorStateMatcher]="confirmValidParentMatcher" required>
                                     <mat-error *ngIf="fBusiness.City.invalid && fBusiness.City.touched">
                                         {{getErrorMessage('City')}}</mat-error>
                                 </mat-form-field>
-                                <mat-form-field class="col-md-2" i18n-hintLabel="Zip Code|Zip code in business@business.zipcode" hintLabel="Zip Code">
+                                <mat-form-field class="col-md-2">
                                     <input #zipcode (change)="setMarker(zipcode.value)" matInput i18n-placeholder="Zip Code|Zip code in business@business.zipcode" placeholder="Zip Code" formControlName="ZipCode" maxlength="10"
                                         minlength="3" [errorStateMatcher]="confirmValidParentMatcher">
                                     <mat-error *ngIf="fBusiness.ZipCode.invalid && fBusiness.ZipCode.touched">
                                         {{getErrorMessage('ZipCode')}}</mat-error>
                                 </mat-form-field>
-                                <mat-form-field class="col-md" i18n-hintLabel="Phone|Phone in business@@business.phone" hintLabel="Phone">
+                                <mat-form-field class="col-md">
                                     <input matInput appPhoneMask i18n-placeholder="Phone|Phone in business@@business.phone" placeholder="Phone" formControlName="Phone"
                                         maxlength="15" minlength="3" [errorStateMatcher]="confirmValidParentMatcher">
                                     <mat-error *ngIf="fBusiness.Phone.invalid && fBusiness.Phone.touched">
@@ -72,8 +72,8 @@
                             </div>
                         </mat-tab>
                         <mat-tab label="Additional Data">
-                            <div class="row">
-                                <mat-form-field class="col-md-6" i18n-hintLabel="Categories|Categories in business@@business.categories" hintLabel="Categories">
+                            <div class="row pt-3">
+                                <mat-form-field class="col-md-6">
                                     <ng-container *ngIf="allCategories"></ng-container>
                                     <mat-chip-list #chipCategoriesList formControlName="CategoryId">
                                         <mat-chip *ngFor="let category of categories" 
@@ -97,7 +97,7 @@
                                         </mat-option>
                                     </mat-autocomplete>
                                 </mat-form-field>
-                                <mat-form-field class="col-md-6" i18n-hintLabel="Reasons|Reasons in business@@business.reasons" hintLabel="Reasons">
+                                <mat-form-field class="col-md-6">
                                     <mat-chip-list #chipReasons>
                                         <ng-container *ngIf="reasons.length > 0">
                                             <mat-chip *ngFor="let reason of reasons" [selectable]="selectable"
@@ -113,7 +113,7 @@
                                 </mat-form-field>
                             </div>
                             <div class="row">
-                                <mat-form-field class="col-md-12" i18n-hintLabel="Tags|Tags in business@@business.tags" hintLabel="Tags">
+                                <mat-form-field class="col-md-12">
                                     <mat-chip-list #chipTags>
                                         <ng-container *ngIf="tags.length > 0">
                                             <mat-chip *ngFor="let tag of tags" [selectable]="selectable"
@@ -130,7 +130,7 @@
                             </div>
                             <div class="row">
                                 <ng-container *ngIf="!fBusiness.Email.value; else labelEmail">
-                                    <mat-form-field class="col-md-6" i18n-hintLabel="Email format|Email format in business@@business.emailformat" hintLabel="Email format">
+                                    <mat-form-field class="col-md-6">
                                         <input matInput i18n-placeholder="Email@@shared.email" placeholder="Email" maxlength="200"
                                             pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" formControlName="Email"
                                             [errorStateMatcher]="confirmValidParentMatcher" required>
@@ -146,7 +146,7 @@
                                         {{fBusiness.Email.value}}
                                     </div>
                                 </ng-template>
-                                <mat-form-field class="col-md-6" i18n-hintLabel="WebSite|Text in business@@business.website" hintLabel="WebSite">
+                                <mat-form-field class="col-md-6">
                                     <input matInput i18n-placeholder="WebSite|Text in business@@business.website" placeholder="WebSite" formControlName="WebSite" maxlength="150"
                                         minlength="4" [errorStateMatcher]="confirmValidParentMatcher">
                                     <mat-error *ngIf="fBusiness.WebSite.invalid && fBusiness.WebSite.touched">
@@ -154,26 +154,26 @@
                                 </mat-form-field>
                             </div>
                             <div class="row">
-                                <mat-form-field class="col-md-4" i18n-hintLabel="Facebook|text in business@@business.facebook" hintLabel="Facebook">
+                                <mat-form-field class="col-md-4">
                                     <input matInput i18n-placeholder="Facebook|text in business@@business.facebook" placeholder="Facebook" maxlength="150" minlength="4"
                                         formControlName="Facebook" [errorStateMatcher]="confirmValidParentMatcher">
                                     <mat-error *ngIf="fBusiness.Facebook.invalid && fBusiness.Facebook.touched">
                                         {{getErrorMessage('Facebook')}}</mat-error>
                                 </mat-form-field>
-                                <mat-form-field class="col-md-4" i18n-hintLabel="Twitter|text in business@business.twitter" hintLabel="Twitter">
+                                <mat-form-field class="col-md-4">
                                     <input matInput i18n-placeholder="Twitter|text in business@business.twitter" placeholder="Twitter" maxlength="150" minlength="4"
                                         formControlName="Twitter" [errorStateMatcher]="confirmValidParentMatcher">
                                     <mat-error *ngIf="fBusiness.Twitter.invalid && fBusiness.Twitter.touched">
                                         {{getErrorMessage('Twitter')}}</mat-error>
                                 </mat-form-field>
-                                <mat-form-field class="col-md-4" i18n-hintLabel="Instagram|text in business@business.instagram" hintLabel="Instagram">
+                                <mat-form-field class="col-md-4">
                                     <input matInput i18n-placeholder="Instagram|text in business@business.instagram" placeholder="Instagram" maxlength="150" minlength="4"
                                         formControlName="Instagram" [errorStateMatcher]="confirmValidParentMatcher">
                                     <mat-error *ngIf="fBusiness.Instagram.invalid && fBusiness.Instagram.touched">
                                         {{getErrorMessage('Instagram')}}</mat-error>
                                 </mat-form-field>
                             </div>
-                            <mat-form-field i18n-hintLabel="Short description for mobile app|text in business@@business.shorttext" hintLabel="Short description for mobile app">
+                            <mat-form-field>
                                 <input matInput i18n-placeholder="Short description for mobile app|text in business@@business.shorttext" placeholder="Short Description" maxlength="75" minlength="10"
                                     formControlName="ShortDescription" [errorStateMatcher]="confirmValidParentMatcher"
                                     required>
@@ -181,7 +181,7 @@
                                     *ngIf="fBusiness.ShortDescription.invalid && fBusiness.ShortDescription.touched">
                                     {{getErrorMessage('ShortDescription')}}</mat-error>
                             </mat-form-field>
-                            <mat-form-field i18n-hintLabel="Long description for mobile app|text in business@@business.longtext" hintLabel="Long description for mobile app">
+                            <mat-form-field>
                                 <input matInput i18n-placeholder="Long description for mobile app|text in business@@business.longtext" placeholder="Long Description" maxlength="255" minlength="10"
                                     formControlName="LongDescription" [errorStateMatcher]="confirmValidParentMatcher"
                                     required>
@@ -190,7 +190,7 @@
                                     {{getErrorMessage('LongDescription')}}</mat-error>
                             </mat-form-field>
                             <ng-container *ngIf="!fBusiness.TuCitaLink.value; else labelTuCita">
-                                <mat-form-field i18n-hintLabel="Tu Cita 24/7 Link|text in business@@business.tucitalink" hintLabel="Tu Cita 24/7 Link">
+                                <mat-form-field>
                                     <input matInput i18n-placeholder="Tu Cita 24/7 Link|text in business@@business.tucitalink" placeholder="Tu Cita 24/7 Link" maxlength="50" minlength="2"
                                         formControlName="TuCitaLink" [errorStateMatcher]="confirmValidParentMatcher"
                                         (focusout)="checkLinkAvailability($event)" required>
@@ -206,43 +206,43 @@
                                 </mat-form-field>
                             </ng-container>
                             <ng-template #labelTuCita>
-                                <div class="content-label col-md-6 form-field pl-0 pr-3 pb-3">
+                                <div class="content-label col-md-6 form-field pl-0 pr-3 pb-3 mb-3">
                                     <mat-label class="" i18n="Tu Cita 24/7 Link :|text in business@@business.labeltucitablink">
                                         Tu Cita 24/7 Link :
                                     </mat-label>
-                                    {{fBusiness.TuCitaLink.value}}
+                                    <a [attr.href]="'https://console.tucita247.com/en/'+fBusiness.TuCitaLink.value" target="_blank">{{'https://console.tucita247.com/en/'+fBusiness.TuCitaLink.value}}</a>
                                 </div>
                             </ng-template>
                             <div class="image-business mt-2 mb-2 row ml-0 mr-0">
                                 <div class="col-md-6 col-lg-6 col-xl-6 col-sm-12 pl-0">
-                                    <h5 i18n="Image for mobile App|text in business@@business.imagemobileapp">Image for mobile App</h5>
-                                    <form [formGroup]="imageForm" class="frm-Img" autocomplete="off" (ngSubmit)="onSubmitImage()">
-                                        <img *ngIf="fBusiness.Imagen.value && fileString == undefined" class="imgbusiness-pic" [src]="imgPath+fBusiness.Imagen.value">
-                                        <div *ngIf="fileString == undefined && !fBusiness.Imagen.value" class="fill-overlay" i18n="IMAGE MOBILE APP|text in business@@business.imagemobileappimg">IMAGE MOBILE APP</div>
-                                        <img *ngIf="fileString != undefined" [src]="fileString" class="imgbusiness-pic">
-                                        <input id="fileUpload" name="fileUpload" type="file" accept="image/*" style="display:none;" />
+                                    <form [formGroup]="imageForm" text-center autocomplete="off" (ngSubmit)="onSubmitImage()">
+                                        <h5 i18n="Image for mobile App|text in business@@business.imagemobileapp">Image for mobile App</h5>
+                                        <div class="sector">
+                                            <img *ngIf="fBusiness.Imagen.value && fileString == undefined" class="imgbusiness-pic" [src]="imgPath+fBusiness.Imagen.value">
+                                            <div *ngIf="fileString == undefined && !fBusiness.Imagen.value" class="fill-overlay" i18n="IMAGE MOBILE APP|text in business@@business.imagemobileappimg">IMAGE MOBILE APP</div>
+                                            <img *ngIf="fileString != undefined" [src]="fileString" class="imgbusiness-pic">
+                                            <div class="default-overlay">
+                                                <button type="button" mat-icon-button class="camera-avatar" (click)="onSearchImage()"><mat-icon>add_a_photo</mat-icon>
+                                                </button>
+                                                <input id="fileUpload" name="fileUpload" type="file" accept="image/*" style="display:none;" />
+                                            </div>
+                                        </div>
                                     </form>
-                                    <div class="row">
-                                        <button type="button" *ngIf="fileString == undefined" mat-icon-button class="upload-avatar" (click)="onSearchImage()" i18n="Choose File|text in business@@shared.chooseupload">Choose File <mat-icon>cloud_upload</mat-icon>
-                                        </button>
-                                        <button type="button" *ngIf="fileString != undefined" mat-icon-button class="upload-avatar" (click)="onSubmitImage()" i18n="Upload File|text in business@@shared.upload">Upload File <mat-icon>cloud_upload</mat-icon>
-                                        </button>
-                                    </div>
                                 </div>
                                 <div class="col-md-6 col-lg-6 col-xl-6 col-sm-12 pl-0">
-                                    <h5 i18n="Image for Tu Cita 24/7 web link|text in business@@business.imagefortucita">Image for Tu Cita 24/7 web link</h5>
-                                    <form [formGroup]="imageFormLink" class="frm-Img" autocomplete="off" (ngSubmit)="onSubmitImageLink()">
-                                        <img *ngIf="fBusiness.ImagenLink.value && fileStringLink == undefined" class="imgbusiness-pic" [src]="imgPath+fBusiness.ImagenLink.value">
-                                        <div *ngIf="fileStringLink == undefined && !fBusiness.ImagenLink.value" class="fill-overlay" i18n="IMAGE WEB LINK|block in business@@business.imageblock">IMAGE WEB LINK</div>
-                                        <img *ngIf="fileStringLink != undefined" [src]="fileStringLink" class="imgbusiness-pic">
-                                        <input id="fileUploadLink" name="fileUploadLink" type="file" accept="image/*" style="display:none;" />
+                                    <form [formGroup]="imageFormLink" text-center autocomplete="off" (ngSubmit)="onSubmitImageLink()">
+                                        <h5 i18n="Image for Tu Cita 24/7 web link|text in business@@business.imagefortucita">Image for Tu Cita 24/7 web link</h5>
+                                        <div class="sector">
+                                            <img *ngIf="fBusiness.ImagenLink.value && fileStringLink == undefined" class="imgbusiness-pic" [src]="imgPath+fBusiness.ImagenLink.value">
+                                            <div *ngIf="fileStringLink == undefined && !fBusiness.ImagenLink.value" class="fill-overlay" i18n="IMAGE WEB LINK|block in business@@business.imageblock">IMAGE WEB LINK</div>
+                                            <img *ngIf="fileStringLink != undefined" [src]="fileStringLink" class="imgbusiness-pic">
+                                            <div class="default-overlay">
+                                                <button type="button" class="camera-avatar" mat-icon-button (click)="onSearchImageLink()"><mat-icon>add_a_photo</mat-icon>
+                                                </button>
+                                                <input id="fileUploadLink" name="fileUploadLink" type="file" accept="image/*" style="display:none;" />
+                                            </div>
+                                        </div>
                                     </form>
-                                    <div class="row">
-                                        <button type="button" *ngIf="fileStringLink == undefined" class="upload-avatar" mat-icon-button (click)="onSearchImageLink()" i18n="Choose File|text in business@@shared.chooseupload">Choose File <mat-icon>cloud_upload</mat-icon>
-                                        </button>
-                                        <button type="button" *ngIf="fileStringLink != undefined" class="upload-avatar" mat-icon-button (click)="onSubmitImageLink()" i18n="Upload File|text in business@@shared.upload">Upload File <mat-icon>cloud_upload</mat-icon>
-                                        </button>
-                                    </div>
                                 </div>
                             </div>
                         </mat-tab>

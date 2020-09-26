@@ -7,14 +7,14 @@
     <mat-card class="col-sm col-md col-lg-7">
         <form [formGroup]="surveyForm" (ngSubmit)="onSubmit()" class="mt-4">
             <div class="form-field pl-3 pr-3">
-                <mat-form-field hintLabel="Name" i18n-hintLabel="Name@@shared.name">
+                <mat-form-field>
                     <input matInput #Name placeholder="Name" i18n-placeholder="Name@@shared.name" maxlength="100" minlength="3" formControlName="Name"
                         [errorStateMatcher]="confirmValidParentMatcher" required>
                     <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{getErrorMessage('Name')}}</mat-error>
                 </mat-form-field>
             </div>
             <div class="form-field pl-3 pr-3">
-                <mat-form-field hintLabel="Location" i18n-hintLabel="Location@@shared.location">
+                <mat-form-field>
                     <mat-select formControlName="LocationId">
                         <mat-option *ngFor="let res of locs$ | async" [value]="res.LocationId">
                             {{res.Name}}
@@ -25,7 +25,7 @@
                 </mat-form-field>
             </div>
             <div class="form-field pl-3 pr-3">
-                <mat-form-field hintLabel="Init survey date" i18n-hintLabel="Init survey date|text in survey@@surveys.initsurvey">
+                <mat-form-field>
                     <mat-label i18n="Choose a init date|text in surveys@@surveys.dateinit">Choose a init date</mat-label>
                     <input matInput formControlName="DateSurvey" [min]="minDate" [disabled]="f.DateSurvey.value<minDate"
                         [matDatepicker]="picker" required>
@@ -42,7 +42,7 @@
                 <ng-container formArrayName="Questions" *ngFor="let item of fQuestions.controls; let i=index">
                     <ng-container [formGroupName]="i">
                         <div class="form-field row pl-3 pr-3" *ngIf="item.get('Status').value == 1">
-                            <mat-form-field i18n-hintLabel="Question description|text in surveys@@surveys.questdescrip" hintLabel="Question description" class="col-md-10">
+                            <mat-form-field class="col-md-10">
                                 <input matInput i18n-placeholder="Question description|text in surveys@@surveys.questdescrip" placeholder="Question description" maxlength="100" minlength="3"
                                     formControlName="Description" [errorStateMatcher]="confirmValidParentMatcher"
                                     required>

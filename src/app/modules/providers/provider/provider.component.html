@@ -16,7 +16,7 @@
                 <mat-card class="col-sm col-md col-lg-7">
                     <form [formGroup]="providerForm" (ngSubmit)="onSubmit()" class="mt-4"><div class="form-field-check-slide ml-3 pr-3 pb-3" *ngIf="providerForm.value.ProviderId !== '' && providerForm.value.ProviderId !== null"><mat-slide-toggle class="slide-pos" color="primary" formControlName="Status">{{textStatus}}</mat-slide-toggle></div>
                         <div class="form-field pl-3 pr-3">
-                            <mat-form-field i18n-hintLabel="Name@@shared.name" hintLabel="Name">
+                            <mat-form-field>
                                 <input matInput #Name i18n-placeholder="Name@@shared.name" placeholder="Name"
                                     maxlength="100" minlength="3" formControlName="Name"
                                     [errorStateMatcher]="confirmValidParentMatcher" required>

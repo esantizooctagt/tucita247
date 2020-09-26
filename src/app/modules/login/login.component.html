@@ -7,7 +7,7 @@
         <div class="main-logo mb-5 mt-5"></div>
         <div class="login-form">
             <h3 class="sign-in pt-4 pl-4 pb-2" i18n="Sign In@@login.signin">Sign In</h3>
-            <div class="form-field mb-0 pl-4 pb-2 pr-4 pt-3">
+            <div class="form-field mb-0 pl-4 pb-2 pr-4">
                 <mat-form-field>
                     <mat-label i18n="Email@@shared.Email">Email</mat-label>
                     <input matInput i18n-placeholder="Email@@shared.Email" placeholder="Email" formControlName="email"
@@ -15,7 +15,7 @@
                     <mat-error *ngIf="f.email.invalid">{{getErrorMessage('Email')}}</mat-error>
                 </mat-form-field>
             </div>
-            <div class="form-field mb-0 pl-4 pb-2 pr-4 pt-3">
+            <div class="form-field mb-0 pl-4 pb-2 pr-4">
                 <mat-form-field>
                     <mat-label i18n="Password@@shared.Password">Password</mat-label>
                     <input type="password" matInput i18n-placeholder="Password@@shared.Password" placeholder="Password" formControlName="password"

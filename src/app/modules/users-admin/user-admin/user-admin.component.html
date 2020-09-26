@@ -14,7 +14,7 @@
                 <mat-card class="col-sm col-md col-lg-7">
                     <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="mt-4"><div class="form-field-check-slide ml-3 pr-3 pb-3" *ngIf="userForm.value.UserId !== '' && userForm.value.UserId !== null"><mat-slide-toggle class="slide-pos" color="primary" formControlName="Status">{{textStatus}}</mat-slide-toggle></div>
                         <div class="form-field pl-3 pr-3">
-                            <mat-form-field i18n-hintLabel="Email@@shared.Email" hintLabel="Email format">
+                            <mat-form-field>
                                 <input matInput #Email i18n-placeholder="Email@@shared.Email" placeholder="Email"
                                     maxlength="200" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
                                     formControlName="Email" [errorStateMatcher]="confirmValidParentMatcher"
@@ -30,8 +30,7 @@
                             </mat-form-field>
                         </div>
                         <div class="form-field pl-3 pr-3">
-                            <mat-form-field hintLabel="Min 5 characters"
-                                i18n-hintLabel="Min 5 characters|text in users@@users.minchars">
+                            <mat-form-field>
                                 <input matInput #First_Name i18n-placeholder="First Name|text in users@@users.firstname"
                                     placeholder="First Name" maxlength="100" minlength="3" formControlName="First_Name"
                                     [errorStateMatcher]="confirmValidParentMatcher" required>
@@ -41,8 +40,7 @@
                             </mat-form-field>
                         </div>
                         <div class="form-field pl-3 pr-3">
-                            <mat-form-field hintLabel="Min 5 characters"
-                                i18n-hintLabel="Min 5 characters|text in users@@users.minchars">
+                            <mat-form-field>
                                 <input matInput #Last_Name i18n-placeholder="Last Name|text in users@@users.lastname"
                                     placeholder="Last Name" maxlength="100" minlength="3" formControlName="Last_Name"
                                     [errorStateMatcher]="confirmValidParentMatcher" required>
@@ -60,9 +58,7 @@
                             </mat-form-field>
                         </div>
                         <div class="form-field pl-3 pr-3">
-                            <mat-form-field hintLabel="Min 8 characters"
-                                i18n-hintLabel="Min 8 characters|text in users@@users.mninchars2"
-                                *ngIf="f.UserId.value == ''">
+                            <mat-form-field *ngIf="f.UserId.value == ''">
                                 <input matInput #Password i18n-placeholder="Password@@shared.Password"
                                     placeholder="Password" maxlength="20" minlength="8" formControlName="Password"
                                     [errorStateMatcher]="confirmValidParentMatcher" [type]="hide ? 'password' : 'text'" required>

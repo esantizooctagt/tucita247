@@ -12,7 +12,7 @@
                     <div class="row ml-4 mb-2 mr-2">
                         <div class="col-md-4 ml-0 mb-2 mr-0 p-0">
                             <h5 class="m-0" i18n="Location@@shared.location">Location</h5>
-                            <mat-form-field hintLabel="Location" i18n-hintLabel="Location@@shared.location">
+                            <mat-form-field>
                                 <mat-select name="locations" (selectionChange)="onLocationChange($event)">
                                     <mat-option *ngFor="let item of locations$ | async" [value]="item.LocationId">
                                         {{item.Name}}
@@ -22,7 +22,7 @@
                         </div>
                         <div class="col-md-4 ml-3 mb-2 mr-0 p-0">
                             <h5 class="m-0" i18n="Service Provider|text in reports@@reports.serviceprov">Service Provider</h5>
-                            <mat-form-field hintLabel="Service Provider" i18n-hintLabel="Service Provider|text in reports@@reports.serviceprov">
+                            <mat-form-field>
                                 <mat-select name="providers" [(ngModel)]="providerId">
                                     <mat-option *ngFor="let item of providers$ | async" [value]="item.ProviderId">
                                         {{item.Name}}

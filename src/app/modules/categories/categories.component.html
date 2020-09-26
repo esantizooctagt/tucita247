@@ -9,7 +9,7 @@
             <mat-card *ngIf="(category$ | async) || displayForm">
                 <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
                     <div class="form-field pl-3 pr-3">
-                        <mat-form-field hintLabel="Min 3 characters">
+                        <mat-form-field>
                             <input matInput #Description placeholder="Description" minlength="3" maxlength="70" formControlName="Description"
                                 [errorStateMatcher]="confirmValidParentMatcher" required>
                             <mat-error *ngIf="f.Description.invalid && f.Description.touched">{{getErrorMessage('Description')}}</mat-error>

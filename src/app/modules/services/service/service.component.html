@@ -14,7 +14,7 @@
                 <mat-card class="col-sm col-md col-lg-7">
                     <form [formGroup]="serviceForm" (ngSubmit)="onSubmit()" class="mt-4"><div class="form-field-check-slide ml-3 pr-3 pb-3" *ngIf="serviceForm.value.ServiceId !== '' && serviceForm.value.ServiceId !== null"><mat-slide-toggle class="slide-pos" color="primary" formControlName="Status">{{textStatus}}</mat-slide-toggle></div>
                         <div class="form-field pl-3 pr-3">
-                            <mat-form-field hintLabel="Name" i18n-hintLabel="Name@@shared.name">
+                            <mat-form-field>
                                 <input matInput #Name i18n-placeholder="Name@@shared.name" placeholder="Name"
                                     maxlength="100" minlength="3" formControlName="Name"
                                     [errorStateMatcher]="confirmValidParentMatcher" required>
@@ -23,8 +23,7 @@
                             </mat-form-field>
                         </div>
                         <div class="form-field pl-3 pr-3">
-                            <mat-form-field hintLabel="Service duration"
-                                i18n-hintLabel="Service duration|text in services@@services.textduration">
+                            <mat-form-field>
                                 <input matInput #Name
                                     i18n-placeholder="Service duration|text in services@@services.textduration"
                                     placeholder="Service duration" max="4" min="1" minlength="1"
@@ -36,8 +35,7 @@
                             </mat-form-field>
                         </div>
                         <div class="form-field pl-3 pr-3">
-                            <mat-form-field hintLabel="Customer per Bucket"
-                                i18n-hintLabel="Customer per Bucket|text in services@@services.customerbucket">
+                            <mat-form-field>
                                 <input matInput #Name
                                     i18n-placeholder="Customer per Bucket|text in services@@services.customerbucket"
                                     placeholder="Customer per Bucket" max="9999" min="1"
@@ -48,8 +46,7 @@
                             </mat-form-field>
                         </div>
                         <div class="form-field pl-3 pr-3">
-                            <mat-form-field hintLabel="Customer per Booking"
-                                i18n-hintLabel="Customer per Booking|text in services@@services.customerbooking">
+                            <mat-form-field>
                                 <input matInput #Name
                                     i18n-placeholder="Customer per Booking|text in services@@services.customerbooking"
                                     placeholder="Customer per Booking" max="9999" min="1"
