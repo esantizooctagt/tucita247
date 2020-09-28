@@ -12,7 +12,7 @@
                     <mat-label i18n="Email@@shared.Email">Email</mat-label>
                     <input matInput i18n-placeholder="Email@@shared.Email" placeholder="Email" formControlName="email"
                         [errorStateMatcher]="confirmValidParentMatcher" required>
-                    <mat-error *ngIf="f.email.invalid">{{getErrorMessage('Email')}}</mat-error>
+                    <mat-error *ngIf="f.email.invalid">{{ 'Error: ' + getErrorMessage('Email')}}</mat-error>
                 </mat-form-field>
             </div>
             <div class="form-field mb-0 pl-4 pb-2 pr-4">
@@ -24,7 +24,7 @@
                         [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                         <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                     </button>
-                    <mat-error *ngIf="f.password.invalid">{{getErrorMessage('Password')}}</mat-error>
+                    <mat-error *ngIf="f.password.invalid">{{ 'Error: ' + getErrorMessage('Password')}}</mat-error>
                 </mat-form-field>
             </div>
         </div>

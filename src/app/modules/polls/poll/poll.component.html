@@ -17,7 +17,7 @@
                                 <input matInput #Name i18n-placeholder="Name@@shared.name" placeholder="Name"
                                     maxlength="100" minlength="3" formControlName="Name"
                                     [errorStateMatcher]="confirmValidParentMatcher" required>
-                                <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{getErrorMessage('Name')}}
+                                <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{ 'Error: ' + getErrorMessage('Name')}}
                                 </mat-error>
                             </mat-form-field>
                         </div>
@@ -30,7 +30,7 @@
                                     </mat-option>
                                 </mat-select>
                                 <mat-error *ngIf="f.LocationId.invalid && f.LocationId.touched">
-                                    {{getErrorMessage('LocationId')}}
+                                    {{ 'Error: ' + getErrorMessage('LocationId')}}
                                 </mat-error>
                             </mat-form-field>
                         </div>
@@ -44,7 +44,7 @@
                                 </mat-datepicker-toggle>
                                 <mat-datepicker #initPicker></mat-datepicker>
                                 <mat-error *ngIf="f.DatePoll.invalid && f.DatePoll.touched">
-                                    {{getErrorMessage('DatePoll')}}
+                                    {{ 'Error: ' + getErrorMessage('DatePoll')}}
                                 </mat-error>
                             </mat-form-field>
                         </div>
@@ -58,7 +58,7 @@
                                 </mat-datepicker-toggle>
                                 <mat-datepicker #finPicker></mat-datepicker>
                                 <mat-error *ngIf="f.DateFinPoll.invalid && f.DateFinPoll.touched">
-                                    {{getErrorMessage('DateFinPoll')}}
+                                    {{ 'Error: ' + getErrorMessage('DateFinPoll')}}
                                 </mat-error>
                             </mat-form-field>
                         </div>

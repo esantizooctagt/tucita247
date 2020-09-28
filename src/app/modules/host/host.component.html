@@ -295,14 +295,14 @@
                                 <div class="form-field pl-3 pr-3">
                                     <mat-form-field>
                                         <input matInput #Phone placeholder="+1 (555) 555-1234" appPhoneMask maxlength="17" formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher">
-                                        <mat-error *ngIf="f.Phone.invalid && f.Phone.touched">{{getErrorMessage('Phone')}}</mat-error>
+                                        <mat-error *ngIf="f.Phone.invalid && f.Phone.touched">{{ 'Error: ' + getErrorMessage('Phone')}}</mat-error>
                                     </mat-form-field>
                                 </div>
                                 <div class="form-field pl-3 pr-3">
                                     <mat-form-field>
                                         <input matInput #Name i18n-placeholder="Name|text in citas@@host.name" placeholder="Name" maxlength="100" minlength="3" formControlName="Name"
                                             [errorStateMatcher]="confirmValidParentMatcher" required>
-                                        <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{getErrorMessage('Name')}}</mat-error>
+                                        <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{ 'Error: ' + getErrorMessage('Name')}}</mat-error>
                                     </mat-form-field>
                                 </div>
                                 <div class="form-field pl-3 pr-3">
@@ -312,21 +312,21 @@
                                                 {{item.Name}}
                                             </mat-option>
                                         </mat-select>
-                                        <mat-error *ngIf="f.ServiceId.invalid && f.ServiceId.touched">{{getErrorMessage('Service')}}</mat-error>
+                                        <mat-error *ngIf="f.ServiceId.invalid && f.ServiceId.touched">{{ 'Error: ' + getErrorMessage('Service')}}</mat-error>
                                     </mat-form-field>
                                 </div>
                                 <div class="form-field pl-3 pr-3">
                                     <mat-form-field>
                                         <input matInput #Email i18n-placeholder="Email@@shared.Email" placeholder="Email" maxlength="200" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" formControlName="Email"
                                             [errorStateMatcher]="confirmValidParentMatcher">
-                                        <mat-error *ngIf="f.Email.invalid && f.Email.touched">{{getErrorMessage('Email')}}</mat-error>
+                                        <mat-error *ngIf="f.Email.invalid && f.Email.touched">{{ 'Error: ' + getErrorMessage('Email')}}</mat-error>
                                     </mat-form-field>
                                 </div>
                                 <div class="form-field pl-3 pr-3">
                                     <mat-form-field>
                                         <input matInput #Guests i18n-placeholder="No of People|text in citas@@host.noofpeople" placeholder="No of People" maxlength="2" min="1" max="20" formControlName="Guests"
                                             [errorStateMatcher]="confirmValidParentMatcher" required>
-                                        <mat-error *ngIf="f.Guests.invalid && f.Guests.touched">{{getErrorMessage('Guests')}}</mat-error>
+                                        <mat-error *ngIf="f.Guests.invalid && f.Guests.touched">{{ 'Error: ' + getErrorMessage('Guests')}}</mat-error>
                                     </mat-form-field>
                                 </div>
                                 <div class="form-field pl-3 pr-3">

@@ -18,7 +18,7 @@
                                 <input matInput #Name i18n-placeholder="Name@@shared.name" placeholder="Name"
                                     maxlength="100" minlength="3" formControlName="Name"
                                     [errorStateMatcher]="confirmValidParentMatcher" required>
-                                <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{getErrorMessage('Name')}}
+                                <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{ 'Error: ' + getErrorMessage('Name')}}
                                 </mat-error>
                             </mat-form-field>
                         </div>
@@ -31,7 +31,7 @@
                                     required>
                                 <span matSuffix>hr</span>
                                 <mat-error *ngIf="f.TimeService.invalid && f.TimeService.touched">
-                                    {{getErrorMessage('TimeService')}}</mat-error>
+                                    {{ 'Error: ' + getErrorMessage('TimeService')}}</mat-error>
                             </mat-form-field>
                         </div>
                         <div class="form-field pl-3 pr-3">
@@ -42,7 +42,7 @@
                                     formControlName="CustomerPerTime" [errorStateMatcher]="confirmValidParentMatcher"
                                     required>
                                 <mat-error *ngIf="f.CustomerPerTime.invalid && f.CustomerPerTime.touched">
-                                    {{getErrorMessage('CustomerPerTime')}}</mat-error>
+                                    {{ 'Error: ' + getErrorMessage('CustomerPerTime')}}</mat-error>
                             </mat-form-field>
                         </div>
                         <div class="form-field pl-3 pr-3">
@@ -53,9 +53,9 @@
                                     formControlName="CustomerPerBooking" [errorStateMatcher]="confirmValidParentMatcher"
                                     required>
                                 <mat-error *ngIf="f.CustomerPerBooking.invalid && f.CustomerPerBooking.touched">
-                                    {{getErrorMessage('CustomerPerBooking')}}</mat-error>
+                                    {{ 'Error: ' + getErrorMessage('CustomerPerBooking')}}</mat-error>
                             </mat-form-field>
-                            <mat-error *ngIf="serviceForm.errors?.greaterthan">{{getErrorMessage('GreaterThan')}}
+                            <mat-error *ngIf="serviceForm.errors?.greaterthan">{{ 'Error: ' + getErrorMessage('GreaterThan')}}
                             </mat-error>
                         </div>
                         <div class="form-field pl-3 pr-3">

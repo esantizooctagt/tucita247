@@ -16,13 +16,13 @@
                                 <input matInput i18n="Business Name|Business name placeholder@@business.busname" placeholder="Business Name" maxlength="500" minlength="3"
                                     formControlName="Name" [errorStateMatcher]="confirmValidParentMatcher" required>
                                 <mat-error *ngIf="fBusiness.Name.invalid && fBusiness.Name.touched">
-                                    {{getErrorMessage('Name')}}</mat-error>
+                                    {{ 'Error: ' + getErrorMessage('Name')}}</mat-error>
                             </mat-form-field>
                             <mat-form-field>
                                 <input matInput i18n-placeholder="Address|Address Business@@business.address" placeholder="Address" formControlName="Address" maxlength="500"
                                     minlength="3" [errorStateMatcher]="confirmValidParentMatcher" required>
                                 <mat-error *ngIf="fBusiness.Address.invalid && fBusiness.Address.touched">
-                                    {{getErrorMessage('Address')}}</mat-error>
+                                    {{ 'Error: ' + getErrorMessage('Address')}}</mat-error>
                             </mat-form-field>
                             <div class="row">
                                 <mat-form-field class="col-md-4">
@@ -36,25 +36,25 @@
                                             {{country.n}}
                                         </mat-option>
                                     </mat-autocomplete>
-                                    <mat-error *ngIf="fBusiness.Country.invalid && fBusiness.Country.touched">{{getErrorMessage('Country')}}</mat-error>
+                                    <mat-error *ngIf="fBusiness.Country.invalid && fBusiness.Country.touched">{{ 'Error: ' + getErrorMessage('Country')}}</mat-error>
                                 </mat-form-field>
                                 <mat-form-field class="col-md-4">
                                     <input matInput i18n-placeholder="City|City in business@@business.city" placeholder="City" formControlName="City" maxlength="100"
                                         minlength="2" [errorStateMatcher]="confirmValidParentMatcher" required>
                                     <mat-error *ngIf="fBusiness.City.invalid && fBusiness.City.touched">
-                                        {{getErrorMessage('City')}}</mat-error>
+                                        {{ 'Error: ' + getErrorMessage('City')}}</mat-error>
                                 </mat-form-field>
                                 <mat-form-field class="col-md-2">
                                     <input #zipcode (change)="setMarker(zipcode.value)" matInput i18n-placeholder="Zip Code|Zip code in business@business.zipcode" placeholder="Zip Code" formControlName="ZipCode" maxlength="10"
                                         minlength="3" [errorStateMatcher]="confirmValidParentMatcher">
                                     <mat-error *ngIf="fBusiness.ZipCode.invalid && fBusiness.ZipCode.touched">
-                                        {{getErrorMessage('ZipCode')}}</mat-error>
+                                        {{ 'Error: ' + getErrorMessage('ZipCode')}}</mat-error>
                                 </mat-form-field>
                                 <mat-form-field class="col-md">
                                     <input matInput appPhoneMask i18n-placeholder="Phone|Phone in business@@business.phone" placeholder="Phone" formControlName="Phone"
                                         maxlength="15" minlength="3" [errorStateMatcher]="confirmValidParentMatcher">
                                     <mat-error *ngIf="fBusiness.Phone.invalid && fBusiness.Phone.touched">
-                                        {{getErrorMessage('Phone')}}</mat-error>
+                                        {{ 'Error: ' + getErrorMessage('Phone')}}</mat-error>
                                 </mat-form-field>
                             </div>
                             <div class="row">
@@ -135,7 +135,7 @@
                                             pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" formControlName="Email"
                                             [errorStateMatcher]="confirmValidParentMatcher" required>
                                         <mat-error *ngIf="fBusiness.Email.invalid && fBusiness.Email.touched">
-                                            {{getErrorMessage('Email')}}</mat-error>
+                                            {{ 'Error: ' + getErrorMessage('Email')}}</mat-error>
                                     </mat-form-field>
                                 </ng-container>
                                 <ng-template #labelEmail>
@@ -150,7 +150,7 @@
                                     <input matInput i18n-placeholder="WebSite|Text in business@@business.website" placeholder="WebSite" formControlName="WebSite" maxlength="150"
                                         minlength="4" [errorStateMatcher]="confirmValidParentMatcher">
                                     <mat-error *ngIf="fBusiness.WebSite.invalid && fBusiness.WebSite.touched">
-                                        {{getErrorMessage('WebSite')}}</mat-error>
+                                        {{ 'Error: ' + getErrorMessage('WebSite')}}</mat-error>
                                 </mat-form-field>
                             </div>
                             <div class="row">
@@ -158,19 +158,19 @@
                                     <input matInput i18n-placeholder="Facebook|text in business@@business.facebook" placeholder="Facebook" maxlength="150" minlength="4"
                                         formControlName="Facebook" [errorStateMatcher]="confirmValidParentMatcher">
                                     <mat-error *ngIf="fBusiness.Facebook.invalid && fBusiness.Facebook.touched">
-                                        {{getErrorMessage('Facebook')}}</mat-error>
+                                        {{ 'Error: ' + getErrorMessage('Facebook')}}</mat-error>
                                 </mat-form-field>
                                 <mat-form-field class="col-md-4">
                                     <input matInput i18n-placeholder="Twitter|text in business@business.twitter" placeholder="Twitter" maxlength="150" minlength="4"
                                         formControlName="Twitter" [errorStateMatcher]="confirmValidParentMatcher">
                                     <mat-error *ngIf="fBusiness.Twitter.invalid && fBusiness.Twitter.touched">
-                                        {{getErrorMessage('Twitter')}}</mat-error>
+                                        {{ 'Error: ' + getErrorMessage('Twitter')}}</mat-error>
                                 </mat-form-field>
                                 <mat-form-field class="col-md-4">
                                     <input matInput i18n-placeholder="Instagram|text in business@business.instagram" placeholder="Instagram" maxlength="150" minlength="4"
                                         formControlName="Instagram" [errorStateMatcher]="confirmValidParentMatcher">
                                     <mat-error *ngIf="fBusiness.Instagram.invalid && fBusiness.Instagram.touched">
-                                        {{getErrorMessage('Instagram')}}</mat-error>
+                                        {{ 'Error: ' + getErrorMessage('Instagram')}}</mat-error>
                                 </mat-form-field>
                             </div>
                             <mat-form-field>
@@ -179,7 +179,7 @@
                                     required>
                                 <mat-error
                                     *ngIf="fBusiness.ShortDescription.invalid && fBusiness.ShortDescription.touched">
-                                    {{getErrorMessage('ShortDescription')}}</mat-error>
+                                    {{ 'Error: ' + getErrorMessage('ShortDescription')}}</mat-error>
                             </mat-form-field>
                             <mat-form-field>
                                 <input matInput i18n-placeholder="Long description for mobile app|text in business@@business.longtext" placeholder="Long Description" maxlength="255" minlength="10"
@@ -187,7 +187,7 @@
                                     required>
                                 <mat-error
                                     *ngIf="fBusiness.LongDescription.invalid && fBusiness.LongDescription.touched">
-                                    {{getErrorMessage('LongDescription')}}</mat-error>
+                                    {{ 'Error: ' + getErrorMessage('LongDescription')}}</mat-error>
                             </mat-form-field>
                             <ng-container *ngIf="!fBusiness.TuCitaLink.value; else labelTuCita">
                                 <mat-form-field>
@@ -202,7 +202,7 @@
                                             {{result.Available ? 'check' : 'close' }}</mat-icon>
                                     </ng-container>
                                     <mat-error *ngIf="fBusiness.TuCitaLink.invalid && fBusiness.TuCitaLink.touched">
-                                        {{getErrorMessage('TuCitaLink')}}</mat-error>
+                                        {{ 'Error: ' + getErrorMessage('TuCitaLink')}}</mat-error>
                                 </mat-form-field>
                             </ng-container>
                             <ng-template #labelTuCita>

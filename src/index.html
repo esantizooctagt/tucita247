@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <script>
-    window.addEventListener('storage', (event) => {
+    storageEvent = function(e) {
       if(!event) { event = window.event; }
       if(!event.newValue) return;
       if(event.key === 'REQUESTING_SHARED_CREDENTIALS') {
@@ -23,16 +23,22 @@
           window.sessionStorage.setItem(key, data[key]);
         }
       }
-      if(event.key === 'CREDENTIALS_FLUSH'){
+      if(event.key === 'CREDENTIALS_FLUSH' && window.sessionStorage.length){
+        console.log("remove tokens");
         window.sessionStorage.removeItem('TC247_USS');
         window.sessionStorage.removeItem('TC247_TKN');
         window.sessionStorage.removeItem('TC247_ACT');
         window.sessionStorage.removeItem('TC247_REF');
         window.sessionStorage.removeItem('TC247_ADM');
+        document.location.reload(true);
       }
-    });
+    }
 
-    if (!sessionStorage.length){
+    //Add listener to event
+    window.addEventListener('storage', storageEvent);
+
+    if (!window.sessionStorage.length){
+      console.log("requesting shared cred");
       window.localStorage.setItem('REQUESTING_SHARED_CREDENTIALS', 'tknTucita');
       window.localStorage.removeItem('REQUESTING_SHARED_CREDENTIALS', 'tknTucita');
     }   

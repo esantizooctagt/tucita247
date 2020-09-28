@@ -25,7 +25,7 @@
                                         [ngClass]="{'icon-green':result.Available, 'icon-red':!result.Available}">
                                         {{result.Available ? 'check' : 'close' }}</mat-icon>
                                 </ng-container>
-                                <mat-error *ngIf="f.Email.invalid && f.Email.touched">{{getErrorMessage('Email')}}
+                                <mat-error *ngIf="f.Email.invalid && f.Email.touched">{{ 'Error: ' + getErrorMessage('Email')}}
                                 </mat-error>
                             </mat-form-field>
                         </div>
@@ -35,7 +35,7 @@
                                     placeholder="First Name" maxlength="100" minlength="3" formControlName="First_Name"
                                     [errorStateMatcher]="confirmValidParentMatcher" required>
                                 <mat-error *ngIf="f.First_Name.invalid && f.First_Name.touched">
-                                    {{getErrorMessage('First_Name')}}
+                                    {{ 'Error: ' + getErrorMessage('First_Name')}}
                                 </mat-error>
                             </mat-form-field>
                         </div>
@@ -45,7 +45,7 @@
                                     placeholder="Last Name" maxlength="100" minlength="3" formControlName="Last_Name"
                                     [errorStateMatcher]="confirmValidParentMatcher" required>
                                 <mat-error *ngIf="f.Last_Name.invalid && f.Last_Name.touched">
-                                    {{getErrorMessage('Last_Name')}}
+                                    {{ 'Error: ' + getErrorMessage('Last_Name')}}
                                 </mat-error>
                             </mat-form-field>
                         </div>
@@ -53,7 +53,7 @@
                             <mat-form-field>
                                 <input matInput #Phone placeholder="+1 (555) 555-1234" appPhoneMask maxlength="17"
                                     formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher" required>
-                                <mat-error *ngIf="f.Phone.invalid && f.Phone.touched">{{getErrorMessage('Phone')}}
+                                <mat-error *ngIf="f.Phone.invalid && f.Phone.touched">{{ 'Error: ' + getErrorMessage('Phone')}}
                                 </mat-error>
                             </mat-form-field>
                         </div>
@@ -90,7 +90,7 @@
                                         {{rol.Name}}
                                     </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="f.RoleId.invalid && f.RoleId.touched">{{getErrorMessage('RoleId')}}
+                                <mat-error *ngIf="f.RoleId.invalid && f.RoleId.touched">{{ 'Error: ' + getErrorMessage('RoleId')}}
                                 </mat-error>
                             </mat-form-field>
                         </div>

@@ -2,6 +2,15 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template" target-language="es">
     <body>
+      <trans-unit id="forgot.legend" datatype="html">
+        <source>We will send you an email with a link to reset your password</source>
+        <target state="translated">Le enviaremos un correo electrónico con un enlace para restablecer su contraseña</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/forgotpass/forgotpass.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+        <note priority="1" from="description">We will send you an email with a link to reset your password</note>
+      </trans-unit>
       <trans-unit id="shared.shopmessage">
         <source>You need to buy a license</source>
         <target state="translated">Necesita comprar una licencia</target>
@@ -4308,6 +4317,10 @@
       <trans-unit id="host.locopen">
         <source>Your location is open</source>
         <target state="translated">Localidad abierta</target>
+      </trans-unit>
+      <trans-unit id="shared.sentEmail">
+        <source>Email sent succesfully</source>
+        <target state="translated">Correo electrónico enviado con éxito</target>
       </trans-unit>
     </body>
   </file>

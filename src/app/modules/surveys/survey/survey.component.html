@@ -10,7 +10,7 @@
                 <mat-form-field>
                     <input matInput #Name placeholder="Name" i18n-placeholder="Name@@shared.name" maxlength="100" minlength="3" formControlName="Name"
                         [errorStateMatcher]="confirmValidParentMatcher" required>
-                    <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{getErrorMessage('Name')}}</mat-error>
+                    <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{ 'Error: ' + getErrorMessage('Name')}}</mat-error>
                 </mat-form-field>
             </div>
             <div class="form-field pl-3 pr-3">
@@ -20,7 +20,7 @@
                             {{res.Name}}
                         </mat-option>
                     </mat-select>
-                    <mat-error *ngIf="f.LocationId.invalid && f.LocationId.touched">{{getErrorMessage('LocationId')}}
+                    <mat-error *ngIf="f.LocationId.invalid && f.LocationId.touched">{{ 'Error: ' + getErrorMessage('LocationId')}}
                     </mat-error>
                 </mat-form-field>
             </div>
@@ -32,7 +32,7 @@
                     <mat-datepicker-toggle matSuffix [for]="picker" [disabled]="f.DateSurvey.value<minDate">
                     </mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
-                    <mat-error *ngIf="f.DateSurvey.invalid && f.DateSurvey.touched">{{getErrorMessage('DateSurvey')}}
+                    <mat-error *ngIf="f.DateSurvey.invalid && f.DateSurvey.touched">{{ 'Error: ' + getErrorMessage('DateSurvey')}}
                     </mat-error>
                 </mat-form-field>
             </div>
@@ -47,7 +47,7 @@
                                     formControlName="Description" [errorStateMatcher]="confirmValidParentMatcher"
                                     required>
                                 <mat-error *ngIf="item.get('Description').invalid && item.get('Description').touched">
-                                    {{getErrorMessage('QDescription', i)}}</mat-error>
+                                    {{ 'Error: ' + getErrorMessage('QDescription', i)}}</mat-error>
                             </mat-form-field>
                             <button mat-icon-button type="button"
                                 [ngClass]="{'icon-active': minDate<=f.DateSurvey.value, 'icon-inactive': minDate>f.DateSurvey.value}"

@@ -63,21 +63,21 @@ export class ForgotpassComponent implements OnInit {
     };
     this.user$ = this.usersService.forgotPassword(email).pipe(
       tap((data:any) => {
-        if (data != null){
+        if (data.Code == 200){
           this.loading = false;
-          this.error = data.Message;
+          this.error = $localize`:@@shared.sentEmail:`;
           this.forgotForm.reset({Email:''});
         } else {
           this.loading = false;
-          this.error = data.Message;
+          this.error = $localize`:@@shared.wrong:`;
           this.forgotForm.reset({Email:''});
         }
       }),
       catchError(err => {
-        this.error = err.Message;
+        this.error = $localize`:@@shared.wrong:`;
         this.loading = false;
         this.forgotForm.reset({Email:''});
-        return throwError(err || err.message);
+        return throwError(err || $localize`:@@shared.wrong:`);
       })
     );
   }

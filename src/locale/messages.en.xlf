@@ -2,6 +2,15 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template" target-language="en">
     <body>
+      <trans-unit id="forgot.legend" datatype="html">
+        <source>We will send you an email with a link to reset your password</source>
+        <target state="translated">We will send you an email with a link to reset your password</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/forgotpass/forgotpass.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+        <note priority="1" from="description">We will send you an email with a link to reset your password</note>
+      </trans-unit>
       <trans-unit id="shared.shopmessage">
         <source>You need to buy a license</source>
         <target state="translated">You need to buy a license</target>
@@ -3827,7 +3836,7 @@
       </trans-unit>
       <trans-unit id="shared.wrong">
         <source>Something goes wrong, try again</source>
-        <target state="translated">Ops, something went wrong - please try again</target>
+        <target state="translated">Oops, something went wrong - please try again</target>
       </trans-unit>
       <trans-unit id="businessdays.remove">
         <source>Day remove successfully</source>
@@ -4308,6 +4317,10 @@
       <trans-unit id="host.locopen">
         <source>Your location is open</source>
         <target state="translated">Your location is opened</target>
+      </trans-unit>
+      <trans-unit id="shared.sentEmail">
+        <source>Email sent succesfully</source>
+        <target state="translated">Email sent succesfully</target>
       </trans-unit>
     </body>
   </file>

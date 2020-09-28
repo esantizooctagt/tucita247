@@ -25,7 +25,7 @@
                                 <input matInput i18n-placeholder="Name@@shared.name" placeholder="Name"
                                     formControlName="Name" maxlength="500" minlength="3"
                                     [errorStateMatcher]="confirmValidParentMatcher" required>
-                                <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{getErrorMessage('Name')}}
+                                <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{ 'Error: ' + getErrorMessage('Name')}}
                                 </mat-error>
                             </mat-form-field>
                         </div>
@@ -34,7 +34,7 @@
                                 <input matInput i18n-placeholder="Address|text in locations@@locations.address"
                                     placeholder="Address" formControlName="Address" maxlength="500" minlength="3"
                                     [errorStateMatcher]="confirmValidParentMatcher" required>
-                                <mat-error *ngIf="f.Address.invalid && f.Address.touched">{{getErrorMessage('Address')}}
+                                <mat-error *ngIf="f.Address.invalid && f.Address.touched">{{ 'Error: ' + getErrorMessage('Address')}}
                                 </mat-error>
                             </mat-form-field>
                         </div>
@@ -49,7 +49,7 @@
                                             {{ city.Name }}
                                         </mat-option>
                                     </mat-select>
-                                    <mat-error *ngIf="f.City.invalid && f.City.touched">{{getErrorMessage('City')}}
+                                    <mat-error *ngIf="f.City.invalid && f.City.touched">{{ 'Error: ' + getErrorMessage('City')}}
                                     </mat-error>
                                 </mat-form-field>
                             </div>
@@ -62,7 +62,7 @@
                                         </mat-option>
                                     </mat-select>
                                     <mat-error *ngIf="f.Sector.invalid && f.Sector.touched">
-                                        {{getErrorMessage('Sector')}}</mat-error>
+                                        {{ 'Error: ' + getErrorMessage('Sector')}}</mat-error>
                                 </mat-form-field>
                             </div>
                             <div class="form-field col-md-4">
@@ -70,7 +70,7 @@
                                     <input #zipcode matInput (change)="setMarker(zipcode.value)" i18n-placeholder="Zip Code|Zip code in business@business.zipcode" placeholder="Zip Code" formControlName="ZipCode" maxlength="10"
                                         minlength="3" [errorStateMatcher]="confirmValidParentMatcher">
                                     <mat-error *ngIf="f.ZipCode.invalid && f.ZipCode.touched">
-                                        {{getErrorMessage('ZipCode')}}</mat-error>
+                                        {{ 'Error: ' + getErrorMessage('ZipCode')}}</mat-error>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -81,7 +81,7 @@
                                     placeholder="Max Concurrent Customers" formControlName="MaxConcurrentCustomer"
                                     [errorStateMatcher]="confirmValidParentMatcher" required>
                                 <mat-error *ngIf="f.MaxConcurrentCustomer.invalid && f.MaxConcurrentCustomer.touched">
-                                    {{getErrorMessage('MaxConcurrentCustomer')}}</mat-error>
+                                    {{ 'Error: ' + getErrorMessage('MaxConcurrentCustomer')}}</mat-error>
                             </mat-form-field>
                         </div>
                         <div class="row pl-3 pr-3">
@@ -109,7 +109,7 @@
                                     </mat-option>
                                 </mat-select>
                                 <mat-error *ngIf="f.ParentLocation.invalid && f.ParentLocation.touched">
-                                    {{getErrorMessage('ParentLocation')}}</mat-error>
+                                    {{ 'Error: ' + getErrorMessage('ParentLocation')}}</mat-error>
                             </mat-form-field>
                         </div>
                         <div class="col-md-12 mt-3 mb-3">
