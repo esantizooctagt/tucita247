@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+	<style>
+		tspan { white-space:pre }
+		.shp0 { fill: none;stroke: #fff;stroke-linecap:round } 
+		.shp1 { fill: none;stroke: #fff;stroke-linecap:round;stroke-width: 7 } 
+		.shp2 { fill: none;stroke: #fff;stroke-width: 2 } 
+	</style>
+	<path id="Shape 4" class="shp0" d="M160 161L160 176L160 190L160 212L160 216L177 216L200 216" />
+	<path id="Shape 4" class="shp1" d="M174 170L174 212" />
+	<path id="Shape 4" class="shp0" d="M312 121" />
+	<path id="Shape 4" class="shp1" d="M184 188L184 212" />
+	<path id="Shape 4" class="shp1" d="M195 178L195 212" />
+	<path id="Shape 4" class="shp0" d="M122 202L122 183" />
+	<path id="Shape 4" class="shp0" d="M103 84L199 84" />
+	<path id="Shape 4 copy" class="shp0" d="M103 113L199 113" />
+	<path id="Shape 4 copy 4" class="shp0" d="M103 128L199 128" />
+	<path id="Shape 4 copy 3" class="shp0" d="M103 99L199 99" />
+	<path id="Shape 4" class="shp0" d="M111 188L132 216" />
+	<path id="Shape 4" class="shp0" d="" />
+	<path id="Shape 4" class="shp0" d="M122 202L135 189L122 202Z" />
+	<path id="Shape 4 copy 2" class="shp0" d="M103 142L199 142" />
+	<path id="Shape 4" class="shp0" d="M122 219C112.05 219 104 210.95 104 201C104 191.05 112.05 183 122 183C131.95 183 140 191.05 140 201C140 210.95 131.95 219 122 219Z" />
+	<path id="Shape 4" class="shp0" d="M96 187L109.5 167.8L121.5 177.4L132 163" />
+	<path id="Shape 1" class="shp2" d="M68 43L201 43L232 43L232 244L68 244L68 43Z" />
+	<path id="Shape 3" class="shp2" d="M201 43L201 12L161 12L36 12L36 45L36 89L36 210L68 210" />
+</svg>

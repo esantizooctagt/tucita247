@@ -5,14 +5,17 @@
         [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
         [mode]="(isHandset$ | async) ? 'over' : 'side'"
         [opened]="(isHandset$ | async) === false">
-      <mat-toolbar class="main-logo">
-      </mat-toolbar>
-      <mat-nav-list color="primary">
+        <div class="loc-logo">
+          <mat-toolbar class="main-logo p-0">
+          </mat-toolbar>    
+        </div>
+      <mat-nav-list>
         <a class="list-item-business" mat-list-item pt-2 mb-2>{{businessName}}</a>
         <mat-divider></mat-divider>
         <mat-accordion multi="true" [displayMode]="displayMode" *ngIf="superAccess == 1">
           <mat-expansion-panel class="no-shadow" *ngIf="superAdmin">
-            <mat-expansion-panel-header fxLayout="row" [expandedHeight]="expandHeight" [collapsedHeight]="collapseHeight">
+            <mat-expansion-panel-header class="specific-class" fxLayout="row" [expandedHeight]="expandHeight" [collapsedHeight]="collapseHeight">
+              <mat-icon svgIcon="admin" class="icon-option"></mat-icon>
               <mat-panel-title>
                 Administrator
               </mat-panel-title>
@@ -27,16 +30,54 @@
             </mat-nav-list>
           </mat-expansion-panel>
         </mat-accordion>
-        <a *ngIf="isAdmin" class="list-item" mat-list-item [routerLink]="['/welcome']" routerLinkActive="menu-active" i18n="Welcome@@main.welcome">Welcome</a>
-        <ng-container class="" *ngFor="let item of apps$ | async">
-          <a class="list-item" *ngIf="item.Active == '1'" mat-list-item [routerLink]="['/'+item.Route]" routerLinkActive="menu-active">{{ item.Name }}</a>
+        <a *ngIf="isAdmin" class="list-item-welcome" mat-list-item [routerLink]="['/welcome']" routerLinkActive="menu-active" i18n="Welcome@@main.welcome">Welcome</a>
+        <ng-container class="" *ngIf="apps$ | async">
+          <mat-accordion multi="true" [displayMode]="displayMode">
+            <mat-expansion-panel class="no-shadow">
+              <mat-expansion-panel-header class="specific-class" fxLayout="row" [expandedHeight]="expandHeight" [collapsedHeight]="collapseHeight">
+                <mat-icon svgIcon="reporting" class="icon-option"></mat-icon>
+                <mat-panel-title i18n="Rerporting@@main.reporting">
+                  Reporting
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-nav-list class="accordion-menu ml-0" dense>
+              <ng-container class="" *ngFor="let item of apps$ | async">
+                <mat-list-item class="submenu-item" *ngIf="item.ApplicationId == 'APP01' || item.ApplicationId == 'APP02'">
+                  <a [routerLink]="['/'+item.Route]" routerLinkActive="submenu-active" class="value-submenu-item">{{ item.Name }}</a>
+                </mat-list-item>
+                <!-- <a class="list-item" *ngIf="item.ApplicationId == 'APP01' || item.ApplicationId == 'APP02'" mat-list-item [routerLink]="['/'+item.Route]" routerLinkActive="menu-active">{{ item.Name }}</a> -->
+              </ng-container>
+              </mat-nav-list>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </ng-container>
+        <ng-container class="" *ngIf="apps$ | async">
+          <mat-accordion multi="true" [displayMode]="displayMode">
+            <mat-expansion-panel class="no-shadow">
+              <mat-expansion-panel-header class="specific-class" fxLayout="row" [expandedHeight]="expandHeight" [collapsedHeight]="collapseHeight">
+                <!-- <mat-icon svgIcon="hours" class="icon-option"></mat-icon> -->
+                <mat-panel-title i18n="Business Operation@@main.businessopesetting">
+                  Business Operation
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-nav-list class="accordion-menu ml-0" dense>
+              <ng-container class="" *ngFor="let item of apps$ | async">
+                <mat-list-item class="submenu-item" *ngIf="item.ApplicationId != 'APP01' && item.ApplicationId != 'APP02'">
+                  <a [routerLink]="['/'+item.Route]" routerLinkActive="submenu-active" class="value-submenu-item">{{ item.Name }}</a>
+                </mat-list-item>
+                <!-- <a class="list-item" *ngIf="item.ApplicationId == 'APP01' || item.ApplicationId == 'APP02'" mat-list-item [routerLink]="['/'+item.Route]" routerLinkActive="menu-active">{{ item.Name }}</a> -->
+              </ng-container>
+              </mat-nav-list>
+            </mat-expansion-panel>
+          </mat-accordion>
         </ng-container>
         <div *ngIf="isAdmin">
           <mat-divider></mat-divider>
           <!-- <a mat-list-item class="item-list">{{ 'SETTINGS'}}</a> -->
           <mat-accordion multi="true" [displayMode]="displayMode">
             <mat-expansion-panel class="no-shadow">
-              <mat-expansion-panel-header fxLayout="row" [expandedHeight]="expandHeight" [collapsedHeight]="collapseHeight">
+              <mat-expansion-panel-header class="specific-class" fxLayout="row" [expandedHeight]="expandHeight" [collapsedHeight]="collapseHeight">
+                <mat-icon svgIcon="hours" class="icon-option"></mat-icon>
                 <mat-panel-title i18n="Time Settings@@main.timesettings">
                   Time Settings
                 </mat-panel-title>
@@ -63,13 +104,50 @@
               </mat-nav-list>
             </mat-expansion-panel>
           </mat-accordion>
-          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/company']" routerLinkActive="menu-active" i18n="Company@@main.company">Company</a>
-          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/locations']" routerLinkActive="menu-active" i18n="Locations@@main.location">Locations</a>
-          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/providers']" routerLinkActive="menu-active" i18n="Service Providers@@main.provider">Service Providers</a>
-          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/services']" routerLinkActive="menu-active" i18n="Services@@main.services">Services</a>
-          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/users']" routerLinkActive="menu-active" i18n="Users@@main.users">Users</a>
-          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/userloc']" routerLinkActive="menu-active" i18n="User Locations@@main.userlocation">User Locations</a>
-          <a mat-list-item class="list-item-2 pl-3" [routerLink]="['/roles']" routerLinkActive="menu-active" i18n="Roles@@main.roles">Roles</a>
+          <mat-accordion multi="true" [displayMode]="displayMode">
+            <mat-expansion-panel class="no-shadow">
+              <mat-expansion-panel-header class="specific-class" fxLayout="row" [expandedHeight]="expandHeight" [collapsedHeight]="collapseHeight">
+                <mat-icon svgIcon="company" class="icon-option"></mat-icon>
+                <mat-panel-title i18n="Business Settings@@main.businessseting">
+                  Business Settings
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-nav-list class="accordion-menu ml-0" dense>
+                <mat-list-item class="submenu-item">
+                  <a [routerLink]="['/company']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Company@@main.company">Company</a>
+                </mat-list-item>
+                <mat-list-item class="submenu-item">
+                  <a [routerLink]="['/locations']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Locations@@main.location">Locations</a>
+                </mat-list-item>
+                <mat-list-item class="submenu-item">
+                  <a [routerLink]="['/providers']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Service Providers@@main.provider">Service Providers</a>
+                </mat-list-item>
+                <mat-list-item class="submenu-item">
+                  <a [routerLink]="['/services']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Services@@main.services">Services</a>
+                </mat-list-item>
+              </mat-nav-list>
+            </mat-expansion-panel>
+          </mat-accordion>
+          <mat-accordion multi="true" [displayMode]="displayMode">
+            <mat-expansion-panel class="no-shadow">
+              <mat-expansion-panel-header class="specific-class" fxLayout="row" [expandedHeight]="expandHeight" [collapsedHeight]="collapseHeight">
+                <mat-panel-title i18n="User Management@@main.usermanagement">
+                  User Management
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-nav-list class="accordion-menu ml-0" dense>
+                <mat-list-item class="submenu-item">
+                  <a [routerLink]="['/users']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Users@@main.users">Users</a>
+                </mat-list-item>
+                <mat-list-item class="submenu-item">
+                  <a [routerLink]="['/userloc']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="User Locations@@main.userlocation">User Locations</a>
+                </mat-list-item>
+                <mat-list-item class="submenu-item">
+                  <a [routerLink]="['/roles']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Roles@@main.roles">Roles</a>
+                </mat-list-item>
+              </mat-nav-list>
+            </mat-expansion-panel>
+          </mat-accordion>
         </div>
       </mat-nav-list>
     </mat-sidenav>
@@ -93,7 +171,7 @@
         <!-- <span></span> -->
         <span class="spacer"></span>
         <ng-container *ngIf="business$ | async"></ng-container>
-        <mat-form-field class="col-md-4 input-search" *ngIf="searchBar == 1">          
+        <mat-form-field class="col-md-4 input-search mt-3" *ngIf="searchBar == 1">          
           <input placeholder="Search business..." 
               matInput
               type="text"

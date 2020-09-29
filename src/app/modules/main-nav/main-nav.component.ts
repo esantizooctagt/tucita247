@@ -12,6 +12,8 @@ import { environment } from '@environments/environment';
 import { RolesService, UserService, BusinessService, AdminService } from '@app/services';
 import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-main-nav',
@@ -66,8 +68,14 @@ export class MainNavComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private businessService: BusinessService,
-    private adminService: AdminService
+    private adminService: AdminService,
+    private domSanitizer: DomSanitizer,
+    private matIconRegistry: MatIconRegistry
     ) {
+      this.matIconRegistry.addSvgIcon('hours',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/hours-mn.svg'));
+      this.matIconRegistry.addSvgIcon('company',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/company-mn.svg'));
+      this.matIconRegistry.addSvgIcon('reporting',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/report-mn.svg'));
+      this.matIconRegistry.addSvgIcon('admin',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/admin-mn.svg'));
   }
 
   openDialog(header: string, message: string, success: boolean, error: boolean, warn: boolean): void {
