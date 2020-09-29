@@ -76,6 +76,7 @@ export class MainNavComponent implements OnInit {
       this.matIconRegistry.addSvgIcon('company',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/company-mn.svg'));
       this.matIconRegistry.addSvgIcon('reporting',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/report-mn.svg'));
       this.matIconRegistry.addSvgIcon('admin',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/admin-mn.svg'));
+      this.matIconRegistry.addSvgIcon('user',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/user-mn.svg'));
   }
 
   openDialog(header: string, message: string, success: boolean, error: boolean, warn: boolean): void {

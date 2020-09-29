@@ -2,7 +2,7 @@
   height: 100%;
 }
 .sidenav {
-  width: 225px;
+  width: 240px;
   overflow-x: hidden;
   background-color: #232f3e;
 }
@@ -160,8 +160,7 @@
   left: 30px;
 }
 .icon-option{
-  position: relative;
-  left: -152px;
+  position: absolute;
 }
 .mat-expansion-panel{
   box-shadow: none !important;
