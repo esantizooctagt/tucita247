@@ -19,8 +19,8 @@ export class BusinessService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  getBusiness(businessId): Observable<Business> {
-    return this.http.get<Business>(this.apiURL + '/business/' + businessId)
+  getBusiness(businessId, language): Observable<Business> {
+    return this.http.get<Business>(this.apiURL + '/business/' + businessId + '/' + language)
                     .pipe(catchError(this.errorHandler));
   }
 

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { User, Role } from '@app/_models';
 import { FormBuilder, Validators } from '@angular/forms';
-import { UserService, RolesService } from "@app/services";
+import { UserService, RolesService, LocationService } from "@app/services";
 import { AuthService } from '@core/services';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MonitorService } from "@shared/monitor.service";
@@ -39,6 +39,10 @@ export class UserComponent implements OnInit {
   savingUser: boolean = false;
   userDataList: string="";
   textStatus: string ="";
+  displayRole: number = 1;
+
+  locs$: Observable<any[]>;
+  // locations = [];
 
   readonly passKey = environment.passKey;
   //variable to handle errors on inputs components
@@ -53,6 +57,7 @@ export class UserComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private data: MonitorService,
+    private locationService: LocationService,
     private dialog: MatDialog
   ) { }
   // (?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!#$%&?])[a-zA-Z0-9!#$%&?]{8,}
@@ -66,6 +71,7 @@ export class UserComponent implements OnInit {
     Avatar: [''],
     Phone: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(17)]],
     RoleId: ['', [Validators.required]],
+    LocationId: ['', [Validators.required]],
     Is_Admin: [{value: 0, disabled: true}],
     Status: [1]
   })
@@ -76,6 +82,19 @@ export class UserComponent implements OnInit {
 
     var spinnerRef = this.spinnerService.start($localize`:@@userloc.loadingusersingle:`);
     this.businessId = this.authService.businessId();
+
+    this.locs$ = this.locationService.getLocationsCode(this.businessId).pipe(
+      map((res: any) => {
+        if (res != null) {
+          // this.locations = res.locs;
+          return res.locs;
+        }
+      }),
+      catchError(err => {
+        this.spinnerService.stop(spinnerRef);
+        return throwError(err || err.message);
+      })
+    );
 
     this.roles$ = this.rolesService.getRoles(this.businessId + '/10/_/_').pipe(
       map((res: any) => {
@@ -145,6 +164,10 @@ export class UserComponent implements OnInit {
       return this.f.RoleId.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
         '';
     }
+    if (component === 'LocationId'){
+      return this.f.LocationId.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
+        '';
+    }
   }
 
   onValueChanges(): void {
@@ -171,12 +194,13 @@ export class UserComponent implements OnInit {
       }
       this.statTemp = 0;
       var spinnerRef = this.spinnerService.start($localize`:@@userloc.loadingusersingle:`);
-      this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', Is_Admin: 0, Status: 1});
+      this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', LocationId: 'None', Is_Admin: 0, Status: 1});
       this.user$ = this.usersService.getUser(this.userDataList, this.businessId).pipe(
         tap(user => {
           if (user.User_Id != undefined){
             this.userForm.controls.Email.disable();
             if (user.Is_Admin === 1){
+              this.displayRole = 0;
               this.userForm.controls['RoleId'].clearValidators();
             } else {
               this.userForm.controls['RoleId'].setValidators([Validators.required]);
@@ -191,6 +215,7 @@ export class UserComponent implements OnInit {
               Avatar: '',
               Phone: user.Phone,
               RoleId: (user.Is_Admin === 1 ? 'None' : user.Role_Id),
+              LocationId: user.Location_Id,
               Is_Admin: user.Is_Admin,
               Status: user.Status
             });
@@ -228,6 +253,7 @@ export class UserComponent implements OnInit {
           "Password": '', //this.userForm.value.Password,
           "Phone": this.userForm.value.Phone,
           "RoleId": this.userForm.value.RoleId,
+          "LocationId": this.userForm.value.LocationId,
           "Status": (this.statTemp === 3 ? 3 : this.userForm.value.Status)
         }
         this.userSave$ = this.usersService.updateUser(dataForm).pipe(
@@ -238,7 +264,7 @@ export class UserComponent implements OnInit {
             this.userForm.controls.Email.enable();
             this.userData = '';
             this.statTemp = 0;
-            this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', Is_Admin: 0, Status: 1});
+            this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', LocationId: 'None', Is_Admin: 0, Status: 1});
             this.data.changeData('users');
             this.openDialog($localize`:@@users.usertexts:`, $localize`:@@userloc.userupdated:`, true, false, false);
             this.router.navigate(['/users']);
@@ -264,7 +290,8 @@ export class UserComponent implements OnInit {
           "Last_Name": this.userForm.value.Last_Name,
           "Password": ctStr,
           "Phone": this.userForm.value.Phone,
-          "RoleId": this.userForm.value.RoleId
+          "RoleId": this.userForm.value.RoleId,
+          "LocationId": this.userForm.value.LocationId
         }
         this.userSave$ = this.usersService.postUser(dataForm).pipe(
           tap(res => { 
@@ -274,7 +301,7 @@ export class UserComponent implements OnInit {
             this.userForm.controls.Email.enable();
             this.userData = '';
             this.statTemp = 0;
-            this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', Is_Admin: 0, Status: 1});
+            this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', LocationId: 'None', Is_Admin: 0, Status: 1});
             this.data.changeData('users');
             this.openDialog($localize`:@@users.usertexts:`, $localize`:@@userloc.usercreated:`, true, false, false);
           }),

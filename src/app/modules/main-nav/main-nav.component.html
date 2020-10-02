@@ -22,15 +22,15 @@
             </mat-expansion-panel-header>
             <mat-nav-list class="accordion-menu ml-0" dense>
               <mat-list-item class="submenu-item">
-                <a [routerLink]="['/users-admin']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Users@@main.users">Users</a>
+                <a [routerLink]="['/users-admin']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Users@@main.users" (click)="(screenWidth < 500) ? drawer.toggle() : ''">Users</a>
               </mat-list-item>
               <mat-list-item class="submenu-item">
-                <a [routerLink]="['/roles-admin']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Roles@@main.roles">Roles</a>
+                <a [routerLink]="['/roles-admin']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Roles@@main.roles" (click)="(screenWidth < 500) ? drawer.toggle() : ''">Roles</a>
               </mat-list-item>
             </mat-nav-list>
           </mat-expansion-panel>
         </mat-accordion>
-        <a *ngIf="isAdmin" class="list-item-welcome" mat-list-item [routerLink]="['/welcome']" routerLinkActive="menu-active" i18n="Welcome@@main.welcome">Welcome</a>
+        <a *ngIf="isAdmin" class="list-item-welcome" mat-list-item [routerLink]="['/welcome']" routerLinkActive="menu-active" i18n="Welcome@@main.welcome" (click)="(screenWidth < 500) ? drawer.toggle() : ''">Welcome</a>
         <ng-container class="" *ngIf="apps$ | async">
           <mat-accordion multi="true" [displayMode]="displayMode">
             <mat-expansion-panel class="no-shadow">
@@ -43,7 +43,7 @@
               <mat-nav-list class="accordion-menu ml-0" dense>
               <ng-container class="" *ngFor="let item of apps$ | async">
                 <mat-list-item class="submenu-item" *ngIf="item.ApplicationId == 'APP01' || item.ApplicationId == 'APP02'">
-                  <a [routerLink]="['/'+item.Route]" routerLinkActive="submenu-active" class="value-submenu-item">{{ item.Name }}</a>
+                  <a [routerLink]="['/'+item.Route]" routerLinkActive="submenu-active" class="value-submenu-item" (click)="(screenWidth < 500) ? drawer.toggle() : ''">{{ item.Name }}</a>
                 </mat-list-item>
                 <!-- <a class="list-item" *ngIf="item.ApplicationId == 'APP01' || item.ApplicationId == 'APP02'" mat-list-item [routerLink]="['/'+item.Route]" routerLinkActive="menu-active">{{ item.Name }}</a> -->
               </ng-container>
@@ -63,7 +63,7 @@
               <mat-nav-list class="accordion-menu ml-0" dense>
               <ng-container class="" *ngFor="let item of apps$ | async">
                 <mat-list-item class="submenu-item" *ngIf="item.ApplicationId != 'APP01' && item.ApplicationId != 'APP02'">
-                  <a [routerLink]="['/'+item.Route]" routerLinkActive="submenu-active" class="value-submenu-item">{{ item.Name }}</a>
+                  <a [routerLink]="['/'+item.Route]" routerLinkActive="submenu-active" class="value-submenu-item" (click)="(screenWidth < 500) ? drawer.toggle() : ''">{{ item.Name }}</a>
                 </mat-list-item>
                 <!-- <a class="list-item" *ngIf="item.ApplicationId == 'APP01' || item.ApplicationId == 'APP02'" mat-list-item [routerLink]="['/'+item.Route]" routerLinkActive="menu-active">{{ item.Name }}</a> -->
               </ng-container>
@@ -84,22 +84,22 @@
               </mat-expansion-panel-header>
               <mat-nav-list class="accordion-menu ml-0" dense>
                 <mat-list-item class="submenu-item">
-                  <a [routerLink]="['/businessope']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Company hours@@main.companyh">Company hours</a>
+                  <a [routerLink]="['/businessope']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Company hours@@main.companyh" (click)="(screenWidth < 500) ? drawer.toggle() : ''">Company hours</a>
                 </mat-list-item>
                 <mat-list-item class="submenu-item">
-                  <a [routerLink]="['/businessdays']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Company days off@@main.companydays">Company days off</a>
+                  <a [routerLink]="['/businessdays']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Company days off@@main.companydays" (click)="(screenWidth < 500) ? drawer.toggle() : ''">Company days off</a>
                 </mat-list-item>
                 <mat-list-item class="submenu-item">
-                  <a [routerLink]="['/locationope/1']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Location hours@@main.locationh">Location hours</a>
+                  <a [routerLink]="['/locationope/1']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Location hours@@main.locationh" (click)="(screenWidth < 500) ? drawer.toggle() : ''">Location hours</a>
                 </mat-list-item>
                 <mat-list-item class="submenu-item">
-                  <a [routerLink]="['/locationdays/1']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Location days off@@main.locationdays">Location days off</a>
+                  <a [routerLink]="['/locationdays/1']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Location days off@@main.locationdays" (click)="(screenWidth < 500) ? drawer.toggle() : ''">Location days off</a>
                 </mat-list-item>
                 <mat-list-item class="submenu-item">
-                  <a [routerLink]="['/providerope/2']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Provider schedule@@main.providerh">Provider schedule</a>
+                  <a [routerLink]="['/providerope/2']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Provider schedule@@main.providerh" (click)="(screenWidth < 500) ? drawer.toggle() : ''">Provider schedule</a>
                 </mat-list-item>
                 <mat-list-item class="submenu-item">
-                  <a [routerLink]="['/providerdays/2']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Provider days off@@main.providerdays">Provider days off</a>
+                  <a [routerLink]="['/providerdays/2']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Provider days off@@main.providerdays" (click)="(screenWidth < 500) ? drawer.toggle() : ''">Provider days off</a>
                 </mat-list-item>
               </mat-nav-list>
             </mat-expansion-panel>
@@ -114,16 +114,16 @@
               </mat-expansion-panel-header>
               <mat-nav-list class="accordion-menu ml-0" dense>
                 <mat-list-item class="submenu-item">
-                  <a [routerLink]="['/company']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Company@@main.company">Company</a>
+                  <a [routerLink]="['/company']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Company@@main.company" (click)="(screenWidth < 500) ? drawer.toggle() : ''">Company</a>
                 </mat-list-item>
                 <mat-list-item class="submenu-item">
-                  <a [routerLink]="['/locations']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Locations@@main.location">Locations</a>
+                  <a [routerLink]="['/locations']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Locations@@main.location" (click)="(screenWidth < 500) ? drawer.toggle() : ''">Locations</a>
                 </mat-list-item>
                 <mat-list-item class="submenu-item">
-                  <a [routerLink]="['/providers']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Service Providers@@main.provider">Service Providers</a>
+                  <a [routerLink]="['/providers']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Service Providers@@main.provider" (click)="(screenWidth < 500) ? drawer.toggle() : ''">Service Providers</a>
                 </mat-list-item>
                 <mat-list-item class="submenu-item">
-                  <a [routerLink]="['/services']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Services@@main.services">Services</a>
+                  <a [routerLink]="['/services']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Services@@main.services" (click)="(screenWidth < 500) ? drawer.toggle() : ''">Services</a>
                 </mat-list-item>
               </mat-nav-list>
             </mat-expansion-panel>
@@ -138,13 +138,13 @@
               </mat-expansion-panel-header>
               <mat-nav-list class="accordion-menu ml-0" dense>
                 <mat-list-item class="submenu-item">
-                  <a [routerLink]="['/users']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Users@@main.users">Users</a>
+                  <a [routerLink]="['/users']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Users@@main.users" (click)="(screenWidth < 500) ? drawer.toggle() : ''">Users</a>
                 </mat-list-item>
                 <mat-list-item class="submenu-item">
-                  <a [routerLink]="['/userloc']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="User Locations@@main.userlocation">User Locations</a>
+                  <a [routerLink]="['/userloc']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="User Locations@@main.userlocation" (click)="(screenWidth < 500) ? drawer.toggle() : ''">User Locations</a>
                 </mat-list-item>
                 <mat-list-item class="submenu-item">
-                  <a [routerLink]="['/roles']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Roles@@main.roles">Roles</a>
+                  <a [routerLink]="['/roles']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Roles@@main.roles" (click)="(screenWidth < 500) ? drawer.toggle() : ''">Roles</a>
                 </mat-list-item>
               </mat-nav-list>
             </mat-expansion-panel>

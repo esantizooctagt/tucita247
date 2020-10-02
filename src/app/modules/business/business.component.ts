@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '@core/services';
 import { Country, Category } from '@app/_models';
 import { Observable, Subscription, throwError } from 'rxjs';
@@ -57,7 +57,8 @@ export class BusinessComponent implements OnInit {
   allCategories: Category[]=[];
   @ViewChild('categoryInput') categoryInput: ElementRef<HTMLInputElement>;
   @ViewChild('autoCategory') matAutocomplete: MatAutocomplete;
-
+  Categories = new FormControl();
+  
   lat: number = 18.3796538;
   lng: number = -66.1989426;
   latLoc: any[] = [];
@@ -121,6 +122,19 @@ export class BusinessComponent implements OnInit {
     // public geocodeService: GeocodeService,
     private mapLoader: MapsAPILoader
   ) {
+    this.categories$ = this.categoryService.getCategories(this.language).pipe(
+      map(res => {
+        this.allCategories = res;
+        this.filteredCategories$ = this.Categories.valueChanges.pipe(
+          startWith(null),
+          map((category: string | null) => category ? this._filterCategory(category)  : this.allCategories.slice()),
+          map(cats => {
+            return cats.sort((a, b) => (a.CategoryId < b.CategoryId ? -1 : 1))
+          })
+        );
+        return this.allCategories;
+      })
+    ); 
   }
 
   businessForm = this.fb.group({
@@ -140,7 +154,7 @@ export class BusinessComponent implements OnInit {
     LongDescription: ['', [Validators.required, Validators.maxLength(255), Validators.minLength(10)]],
     ShortDescription: ['', [Validators.required, Validators.maxLength(75), Validators.minLength(10)]],
     TuCitaLink: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(2)]],
-    CategoryId: ['', [Validators.required]],
+    Categories: ['', [Validators.required]],
     ParentBusiness: [''],
     Imagen: [''],
     ImagenLink:[''],
@@ -171,102 +185,73 @@ export class BusinessComponent implements OnInit {
 
     this.onValueChanges();
 
-    // this.categories$ = this.categoryService.getCategories(this.language).pipe(
-    //   map(res => {
-    //     this.allCategories = res;
-    //     this.filteredCategories$ = this.businessForm.get('CategoryId').valueChanges
-    //       .pipe(
-    //         startWith(null),
-    //         map((category: Category | null) => category ? this._filterCategory(category) : this.allCategories.slice())
-    //     );
-    //     return this.allCategories;
-    //   })
-    // ); 
-
     this.filteredCountries$ = this.businessForm.get('Country').valueChanges
       .pipe(
         startWith(''),
         map(country => typeof country === 'string' ? country : country.n),
         map(country => country ? this._filterCountry(country) : this.countries.slice())
       );
-    
-    this.filteredCategories$ = this.businessForm.get('CategoryId').valueChanges
-      .pipe(
-        startWith(null),
-        map((category: Category | null) => category ? this._filterCategory(category) : this.allCategories.slice()),
-        map(cats => {
-          return cats.sort((a, b) => (a.CategoryId < b.CategoryId ? -1 : 1))
-        })
-      );
-    
     let item = 0;
-    this.businessForm.reset({BusinessId: '', CategoryId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', Tags: '', Reasons: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen: '', ParentBusiness: 0, Status: 1});
-    this.business$ = this.categoryService.getCategories(this.language).pipe(
-      map((res: any) => {
-        this.allCategories = res;
-        }
-      ),
-      switchMap(_ => 
-        this.businessService.getBusiness(this.businessId).pipe(
-        tap((res: any) => {
-          if (res != null){
-            let countryValue : Country[];
-            if (res.Country != '' && res.Country != undefined){
-              countryValue = this.countries.filter(country => country.c.indexOf(res.Country) === 0);
-            }
-            var locMap = JSON.parse(res.Geolocation);
-            if ("LAT" in locMap) {
-              this.lat = locMap['LAT'];
-            } else {
-              this.lat = 0;
-            }
-            if ("LNG" in locMap){
-              this.lng = locMap['LNG'];
-            } else {
-              this.lng = 0;
-            }
-            this.countryCode = (countryValue != undefined ? countryValue[0].c : '');
-            if (res.TuCitaLink != ''){
-              this.existLink = true;
-            }
-            this.businessForm.setValue({
-              BusinessId: res.Business_Id,
-              Name: res.Name,
-              Country: (countryValue != undefined ? countryValue[0] : ''),
-              Address: res.Address,
-              City: res.City,
-              ZipCode: res.ZipCode,
-              Geolocation: res.Geolocation,
-              Phone: res.Phone,
-              WebSite: res.WebSite,
-              Facebook: res.Facebook,
-              Twitter: res.Twitter,
-              Instagram: res.Instagram,
-              Email: res.Email,
-              CategoryId: res.CategoryId,
-              LongDescription: res.LongDescription, 
-              ShortDescription: res.ShortDescription,
-              TuCitaLink: res.TuCitaLink,
-              Imagen: res.Imagen,
-              ImagenLink: res.ImagenLink,
-              ParentBusiness: res.ParentBusiness,
-              Tags: res.Tags,
-              Reasons: res.Reasons,
-              Status: res.Status
-            });
-            this.categories = this.allCategories.filter(x => x.CategoryId == res.CategoryId);
-            this.tags = (res.Tags != '' ? res.Tags.split(',') : []);
-            this.reasons = (res.Reaons != '' ? res.Reasons.split(',') : []);
-            this.spinnerService.stop(spinnerRef);
-          } else {
-            this.spinnerService.stop(spinnerRef);
-            this.businessForm.reset({BusinessId: '', CategoryId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', Reasons: '', ParentBusiness: 0, Status: 1});
+    this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', Tags: '', Reasons: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen: '', ParentBusiness: 0, Status: 1});
+    this.business$ = this.businessService.getBusiness(this.businessId, this.language).pipe(
+      tap((res: any) => {
+        if (res != null){
+          let countryValue : Country[];
+          if (res.Country != '' && res.Country != undefined){
+            countryValue = this.countries.filter(country => country.c.indexOf(res.Country) === 0);
           }
-        }),
-      )),
+          var locMap = JSON.parse(res.Geolocation);
+          if ("LAT" in locMap) {
+            this.lat = locMap['LAT'];
+          } else {
+            this.lat = 0;
+          }
+          if ("LNG" in locMap){
+            this.lng = locMap['LNG'];
+          } else {
+            this.lng = 0;
+          }
+          this.countryCode = (countryValue != undefined ? countryValue[0].c : '');
+          if (res.TuCitaLink != ''){
+            this.existLink = true;
+          }
+          this.businessForm.setValue({
+            BusinessId: res.Business_Id,
+            Name: res.Name,
+            Country: (countryValue != undefined ? countryValue[0] : ''),
+            Address: res.Address,
+            City: res.City,
+            ZipCode: res.ZipCode,
+            Geolocation: res.Geolocation,
+            Phone: res.Phone,
+            WebSite: res.WebSite,
+            Facebook: res.Facebook,
+            Twitter: res.Twitter,
+            Instagram: res.Instagram,
+            Email: res.Email,
+            Categories: res.Categories,
+            LongDescription: res.LongDescription, 
+            ShortDescription: res.ShortDescription,
+            TuCitaLink: res.TuCitaLink,
+            Imagen: res.Imagen,
+            ImagenLink: res.ImagenLink,
+            ParentBusiness: res.ParentBusiness,
+            Tags: res.Tags,
+            Reasons: res.Reasons,
+            Status: res.Status
+          });
+          this.categories = res.Categories;
+          this.tags = (res.Tags != '' ? res.Tags.split(',') : []);
+          this.reasons = (res.Reaons != '' ? res.Reasons.split(',') : []);
+          this.spinnerService.stop(spinnerRef);
+        } else {
+          this.spinnerService.stop(spinnerRef);
+          this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', Reasons: '', ParentBusiness: 0, Status: 1});
+        }
+      }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
-        this.businessForm.reset({BusinessId: '', CategoryId: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', Reasons: '', ParentBusiness: 0, Status: 1});
+        this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', Reasons: '', ParentBusiness: 0, Status: 1});
         this.openDialog('Error !', err.Message, false, true, false);
         return throwError(err || err.message);
       })
@@ -428,20 +413,22 @@ export class BusinessComponent implements OnInit {
     const index = this.categories.findIndex(res => res.Name ===category.Name); 
     if (index >= 0) {
       this.categories.splice(index, 1);
+      this.businessForm.get('Categories').setValue(this.categories);
     }
   }
 
   selectedCategory(event: MatAutocompleteSelectedEvent): void {
-    if (this.categories.length < 1) {
+    if (this.categories.length < 5) {
       this.categories.push({CategoryId: event.option.value, Name: event.option.viewValue});
       this.categoryInput.nativeElement.value = '';
-      this.businessForm.get('CategoryId').setValue(event.option.value);
+      this.Categories.setValue(null);
+      this.businessForm.get('Categories').setValue(this.categories);
     }
   }
 
-  private _filterCategory(value: Category): Category[] {
-    const filterValue = value[0].CategoryId;
-    return (filterValue != undefined ? this.allCategories.filter(category => category.CategoryId.indexOf(filterValue) === 0) : this.allCategories);
+  private _filterCategory(value: string): Category[] {
+    const filterValue = value.toLowerCase();
+    return this.allCategories.filter(category => category.Name.toLowerCase().indexOf(filterValue) === 0);
   }
 
   displayFn(country?: Country): string | undefined {
@@ -556,8 +543,8 @@ export class BusinessComponent implements OnInit {
         this.fBusiness.Email.hasError('pattern') ? $localize`:@@forgot.emailformat:` :
         '';
     }
-    if (component === 'CategoryId'){
-      return this.fBusiness.CategoryId.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
+    if (component === 'Categories'){
+      return this.fBusiness.Categories.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
         '';
     }
   }
@@ -616,7 +603,7 @@ export class BusinessComponent implements OnInit {
       "Email": this.businessForm.value.Email,
       "Tags": this.tags.toString(),
       "Reasons": this.reasons.toString(),
-      "CategoryId": this.businessForm.value.CategoryId.toString(),
+      "Categories": JSON.stringify(this.categories),
       "ParentBusiness": (this.businessForm.value.ParentBusiness ? 1 : 0)
     }
     var spinnerRef = this.spinnerService.start($localize`:@@business.saving:`);

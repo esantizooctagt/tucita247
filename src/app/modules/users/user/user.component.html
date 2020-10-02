@@ -82,6 +82,18 @@
                         </div>
                         <div class="form-field pl-3 pr-3">
                             <mat-form-field>
+                                <mat-label i18n="Location:|text in user@@users.location">Location:</mat-label>
+                                <mat-select #locations formControlName="LocationId" required>
+                                    <mat-option *ngFor="let location of locs$ | async" [value]="location.LocationId">
+                                        {{location.Name}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="f.LocationId.invalid && f.LocationId.touched">{{ 'Error: ' + getErrorMessage('LocationId')}}
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="form-field pl-3 pr-3" *ngIf="displayRole">
+                            <mat-form-field>
                                 <mat-label i18n="Role:|text in users@@users.role">Role:</mat-label>
                                 <mat-select #roles formControlName="RoleId" required>
                                     <mat-option i18n="None@@shared.none">None</mat-option>

@@ -8,6 +8,7 @@
                 <ng-container *ngIf="(businessSave$ | async) && savingBusiness"></ng-container>
                 <ng-container *ngIf="business$ | async"></ng-container>
                 <ng-container *ngIf="geoLoc$ | async"></ng-container>
+                <ng-container *ngIf="categories$ | async"></ng-container>
                 <form [formGroup]="businessForm">
                     <ng-template matStepLabel i18n="Business|Business Label@@business.businesslabel">Business</ng-template>
                     <mat-tab-group mat-align-tabs="start">
@@ -75,7 +76,7 @@
                             <div class="row pt-3">
                                 <mat-form-field class="col-md-6">
                                     <ng-container *ngIf="allCategories"></ng-container>
-                                    <mat-chip-list #chipCategoriesList formControlName="CategoryId">
+                                    <mat-chip-list #chipCategoriesList>
                                         <mat-chip *ngFor="let category of categories" 
                                             [selectable]="selectableCategory"
                                             [removable]="removableCategory" 
@@ -86,7 +87,7 @@
                                         <input placeholder="New category..." #categoryInput 
                                             [matAutocomplete]="autoCategory"
                                             [matChipInputFor]="chipCategoriesList"
-                                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+                                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [formControl]="Categories">
                                     </mat-chip-list>
                                     <mat-autocomplete 
                                         #autoCategory="matAutocomplete"

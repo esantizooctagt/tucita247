@@ -11,7 +11,7 @@ import { AuthService } from '@core/services';
 import { environment } from '@environments/environment';
 import { RolesService, UserService, BusinessService, AdminService } from '@app/services';
 import { FormControl } from '@angular/forms';
-import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -48,6 +48,7 @@ export class MainNavComponent implements OnInit {
   expandHeight = '42px';
   collapseHeight = '42px';
   displayMode = 'flat';
+  screenWidth: number;
   
   readonly imgPath = environment.bucket;
 
@@ -78,6 +79,12 @@ export class MainNavComponent implements OnInit {
       this.matIconRegistry.addSvgIcon('admin',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/admin-mn.svg'));
       this.matIconRegistry.addSvgIcon('user',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/user-mn.svg'));
       this.matIconRegistry.addSvgIcon('ope',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/ope-mn.svg'));
+
+      this.screenWidth = window.innerWidth;
+      window.onresize = () => {
+        // set screenWidth on screen size change
+        this.screenWidth = window.innerWidth;
+      };
   }
 
   openDialog(header: string, message: string, success: boolean, error: boolean, warn: boolean): void {

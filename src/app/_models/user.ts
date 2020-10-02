@@ -11,4 +11,5 @@ export class User {
     Is_Admin?: number;
     Role_Id?: string;
     Status?: number;
+    Location_Id?: string;
 }
