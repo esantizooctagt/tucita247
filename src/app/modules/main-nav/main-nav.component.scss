@@ -177,6 +177,7 @@ mat-accordion .mat-expansion-panel .mat-expansion-panel-body{
 }
 .submenu-item{
   padding: 0px !important;
+  height: 30px !important;
 }
 .submenu-item:hover{
   background: none;
@@ -211,7 +212,7 @@ mat-accordion .mat-expansion-panel .mat-expansion-panel-body{
   margin-left: 0px !important;
   color: #fff !important;
   font-weight: 400;
-  padding-left: 5px;
+  padding-left: 10px;
 }
 :host ::-webkit-scrollbar {
   width: 15px;
