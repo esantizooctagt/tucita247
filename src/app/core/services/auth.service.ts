@@ -99,6 +99,10 @@ export class AuthService {
     let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
     return user.Business_Id;
   }
+  businessAdm() {
+    let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
+    return user.Business_Adm;
+  }
   businessName(){
     let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
     return user.Business_Name;

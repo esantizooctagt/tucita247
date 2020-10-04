@@ -42,6 +42,7 @@ export class MainNavComponent implements OnInit {
   roleAdm: string = '';
   superAccess: number = 0;
   searchBar: number = 0;
+  businessAdm: string = '';
 
   opened = true;
   over = 'side';
@@ -105,6 +106,7 @@ export class MainNavComponent implements OnInit {
 
   ngOnInit(){
     this.businessId = this.authService.businessId();
+    this.businessAdm = this.authService.businessAdm();
     this.businessName = this.authService.businessName();
     this.roleId = this.authService.roleId();
     this.userId = this.authService.userId();
@@ -112,7 +114,7 @@ export class MainNavComponent implements OnInit {
     this.roleAdm = this.authService.roleAdm();
     
     if (this.roleAdm != ''){
-      this.access$ = this.adminService.getAccess(this.businessId, this.roleAdm).pipe(
+      this.access$ = this.adminService.getAccess(this.businessAdm, this.roleAdm).pipe(
         map((res: any) => {
           if (res.Code == 200){
             if (res.Access.find(e => e.AppId === 'APP01')) {
