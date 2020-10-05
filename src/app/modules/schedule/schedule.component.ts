@@ -311,10 +311,11 @@ export class ScheduleComponent implements OnInit {
     let result = this.getDayData(timeGrl, dayNum);
     let dayInfo = this.getDayInfo(dayNum);
     if (result == {}) { return; }
-    
     if (result.Available == 0) { return; }
+
+    let timeAppo = (result.Time.substring(6,8) == 'PM' ? (+result.Time.substring(0,2) == 12 ? result.Time.substring(0,2) : +result.Time.substring(0,2)+12) : result.Time.substring(0,2).padStart(2,'0'));
     var spinnerRef = this.spinnerService.start($localize`:@@sche.loadingsche:`);
-    this.validBusiness$ = this.businessService.getValidBusiness(this.businessId, this.locationId, this.providerId, (result.ServiceId == "" ? "_" : result.ServiceId), this.datepipe.transform(day, 'yyyy-MM-dd'), result.Time.replace(':','-').substring(0,5)).pipe(  //,  
+    this.validBusiness$ = this.businessService.getValidBusiness(this.businessId, this.locationId, this.providerId, (result.ServiceId == "" ? "_" : result.ServiceId), this.datepipe.transform(day, 'yyyy-MM-dd'), timeAppo + '-00').pipe(  //,  
       map((res: any) => {
         if (res.Code == 200){
           this.spinnerService.stop(spinnerRef);
