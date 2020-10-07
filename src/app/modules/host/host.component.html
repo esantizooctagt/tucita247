@@ -3,38 +3,62 @@
         <ng-container *ngIf="updAppointment$ | async"></ng-container>
         <ng-container *ngIf="openLoc$ | async"></ng-container>
         <ng-container *ngIf="closedLoc$ | async"></ng-container>
-        <div class="col-md-12">
-            <div class="row space-row mt-2 mb-2">
-                <div class="col-sm-5 p-0 m-auto">
-                    <!-- locationStatus == 0 ? 'Your location is closed' : (closedLoc == 1 ? 'You need to reopen your location' : 'Your location is open' -->
-                    <mat-slide-toggle color="primary" [checked]="locationStatus == 1" (change)="locationStatusChange()">{{textOpenLocation}}</mat-slide-toggle>
-                </div>
-                <div class="operation-buttons col-sm-7 p-0">
-                    <!-- <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 0" color="secondary" type="button" (click)="getWalkInsCheckOut()">Walk-Ins Check Out</button> -->
-                    <ng-container *ngIf="getWalkIns$ | async"></ng-container>
-                    <ng-container *ngIf="manualCheckOut$ | async"></ng-container>
-                    <div class="col-sm-6 text-loc">{{locName}}</div>
-                    <mat-select name="providers" class="col-sm-6 pr-3" [(value)]="providerId" (selectionChange)="onServiceChange($event)">
-                        <mat-option *ngFor="let item of Providers" [value]="item.ProviderId">
-                            {{item.Name}}
-                        </mat-option>
-                    </mat-select>
-                    <ng-container *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 1">
-                        <mat-label class="label-guests" i18n="Guests|text in citas@@host.guests">Guests</mat-label>
-                        <button mat-icon-button (click)="manualGuests=manualGuests+1">
-                            <mat-icon class="site-color">add</mat-icon>
-                        </button>
+        <div class="col-md-12 pt-2">
+            <mat-accordion>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title i18n="See details@@shared.seedetails">See details</mat-panel-title>
+                        <mat-panel-description>
+                             {{(textOpenLocation != '' &&  operationText != '' ? textOpenLocation + ' :  ' + operationText : '')}}
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <div class="row space-row mt-2 mb-2">
+                        <div class="col-sm-3 p-0 m-auto">
+                            <!-- locationStatus == 0 ? 'Your location is closed' : (closedLoc == 1 ? 'You need to reopen your location' : 'Your location is open' -->
+                            <mat-slide-toggle color="primary" [checked]="locationStatus == 1" (change)="locationStatusChange()">{{textOpenLocation}}</mat-slide-toggle>
+                        </div>
+                        <div class="operation-buttons col-sm-9 p-0">
+                            <!-- <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 0" color="secondary" type="button" (click)="getWalkInsCheckOut()">Walk-Ins Check Out</button> -->
+                            <ng-container *ngIf="getWalkIns$ | async"></ng-container>
+                            <ng-container *ngIf="manualCheckOut$ | async"></ng-container>
+                            <!-- <div class="col-sm-6 text-loc">{{locName}}</div> -->
+                            <mat-form-field appearance="fill" class="col-sm-5 pr-3">
+                                <mat-label>Select location</mat-label>
+                                <mat-select name="locations" [(value)]="locationId" (selectionChange)="onLocationChange($event)">
+                                    <mat-option *ngFor="let item of locations" [value]="item.LocationId">
+                                    {{item.Name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field appearance="fill" class="col-sm-6 pr-3">
+                                <mat-label>Select provider</mat-label>
+                                <mat-select name="providers" [(value)]="providerId" (selectionChange)="onServiceChange($event)">
+                                    <mat-option class="" value="0" i18n="all providers@@shared.allproviders">ALL PROVIDERS</mat-option>
+                                    <mat-option *ngFor="let item of Providers" [value]="item.ProviderId">
+                                    {{item.Name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+            <div class="mt-2 mb-1">
+                <ng-container *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 1">
+                    <mat-label class="label-guests" i18n="Guests|text in citas@@host.guests">Guests</mat-label>
+                    <button mat-icon-button (click)="manualGuests=manualGuests+1">
+                        <mat-icon class="site-color">add</mat-icon>
+                    </button>
+                    <input class="input-guests" matInput placeholder="Number of Guests" [(ngModel)]="manualGuests">
+                    <!-- <mat-form-field class="pt-3 num-guests" appearance="outline">
                         <input class="input-guests" matInput placeholder="Number of Guests" [(ngModel)]="manualGuests">
-                        <!-- <mat-form-field class="pt-3 num-guests" appearance="outline">
-                            <input class="input-guests" matInput placeholder="Number of Guests" [(ngModel)]="manualGuests">
-                        </mat-form-field> -->
-                        <button mat-icon-button (click)="(manualGuests > 1 ? manualGuests=manualGuests-1 : manualGuests)">
-                            <mat-icon class="site-color">remove</mat-icon>
-                        </button>
-                    </ng-container>
-                    <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 1" color="secondary" type="button" (click)="setManualCheckOut(manualGuests)" i18n="Check Out|text in citas@@host.checkout">Check Out</button>
-                    <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 0" color="secondary" type="button" (click)="checkOutQR()" i18n="Check Out|text in citas@@host.checkout">Check Out</button>
-                </div>
+                    </mat-form-field> -->
+                    <button mat-icon-button (click)="(manualGuests > 1 ? manualGuests=manualGuests-1 : manualGuests)">
+                        <mat-icon class="site-color">remove</mat-icon>
+                    </button>
+                </ng-container>
+                <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 1" color="secondary" type="button" (click)="setManualCheckOut(manualGuests)" i18n="Check Out|text in citas@@host.checkout">Check Out</button>
+                <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 0" color="secondary" type="button" (click)="checkOutQR()" i18n="Check Out|text in citas@@host.checkout">Check Out</button>
             </div>
             <div class="row space-row">
                 <ng-container *ngIf="quantityPeople$ | async"></ng-container>

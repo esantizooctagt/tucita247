@@ -67,6 +67,8 @@ import { UserlocComponent } from '@modules/userloc/userloc.component';
 import { SurveyComponent } from '@modules/surveys/survey/survey.component';
 import { SurveyListComponent } from '@modules/surveys/survey-list/survey-list.component';
 
+import { WebcamModule } from 'ngx-webcam';
+
 //Directives
 import { PhoneMaskDirective } from '@shared/phone-mask.directive';
 
@@ -153,6 +155,7 @@ import { RoleListAdminComponent } from '@modules/roles-admin/role-list-admin/rol
     MatTabsModule,
     InfiniteScrollModule,
     NgxChartsModule,
+    WebcamModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBdQ6vAlbIi3u_KdiMv8KILsjYExJLDUGU'
     })

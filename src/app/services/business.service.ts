@@ -24,8 +24,8 @@ export class BusinessService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  getBusinessOpeHours(businessId, locationId, providerId): Observable<any> {
-    return this.http.get<any>(this.apiURL + '/business/opehours/' + businessId + '/' + locationId + '/' + providerId)
+  getBusinessOpeHours(businessId, locationId): Observable<any> {
+    return this.http.get<any>(this.apiURL + '/business/opehours/' + businessId + '/' + locationId)
                     .pipe(catchError(this.errorHandler));
   }
 

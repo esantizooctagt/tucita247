@@ -93,6 +93,8 @@ export class HostComponent implements OnInit {
   textOpenLocation: string = '';
   locName: string = '';
 
+  locations: []=[];
+
   locationId: string = '';
   doorId: string = '';
   qrCode: string = '';
@@ -107,6 +109,8 @@ export class HostComponent implements OnInit {
   appoIdSche: string = '_';
 
   manualGuests: number =  1;
+
+  operationText: string = '';
 
   Providers: any[]=[];
   services: []=[];
@@ -193,17 +197,21 @@ export class HostComponent implements OnInit {
     this.getLocInfo$ = this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
       map((res: any) => {
         if (res.Locs != null){
-          this.locationId = res.Locs.LocationId;
-          this.doorId = res.Locs.Door;
-          this.manualCheckOut = res.Locs.ManualCheckOut;
-          this.totLocation = res.Locs.MaxCustomers;
-          this.Providers = res.Locs.Providers;
-          this.locName = res.Locs.Name;
-          if (this.Providers.length > 0){
-            this.locationStatus = res.Locs.Providers[0].Open;
-            this.closedLoc = res.Locs.Providers[0].Closed;
-            this.providerId = res.Locs.Providers[0].ProviderId;
+          if (res.Locs.length > 0){
+            this.locations = res.Locs;
+            this.locationId = res.Locs[0].LocationId;
+            this.doorId = res.Locs[0].Door;
+            this.manualCheckOut = res.Locs[0].ManualCheckOut;
+            this.totLocation = res.Locs[0].MaxCustomers;
+            this.Providers = res.Locs[0].Providers;
+            this.locName = res.Locs[0].Name;
+            this.locationStatus = res.Locs[0].Open;
+            this.closedLoc = res.Locs[0].Closed;
             this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+            if (this.Providers.length > 0){
+              this.operationText = this.locName + ' / ' + this.Providers[0].Name;
+              this.providerId = this.Providers[0].ProviderId;
+            }
           }
           return res;
         } else {
@@ -220,7 +228,7 @@ export class HostComponent implements OnInit {
           })
         )
       ),
-      switchMap(val => val = this.businessService.getBusinessOpeHours(this.businessId, this.locationId, this.providerId)),
+      switchMap(val => val = this.businessService.getBusinessOpeHours(this.businessId, this.locationId)),
       map((res: any) => {
         if (res.Code == 200) {
           this.bucketInterval = 1;//parseFloat(res.BucketInterval);
@@ -339,9 +347,13 @@ export class HostComponent implements OnInit {
     }, 3500000);
   }
 
+  onLocationChange(event){
+
+  }
+
   openLocation(){
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadingopeloc:`);
-    this.openLoc$ = this.locationService.updateOpenLocation(this.locationId, this.businessId, this.providerId).pipe(
+    this.openLoc$ = this.locationService.updateOpenLocation(this.locationId, this.businessId).pipe(
       map((res: any) => {
         if (res != null){
           if (res['Business'].OPEN == 1){
@@ -392,7 +404,7 @@ export class HostComponent implements OnInit {
 
   closedLocation(){
     var spinnerRef = this.spinnerService.start($localize`:@@host.closingloc:`);
-    this.closedLoc$ = this.locationService.updateClosedLocation(this.locationId, this.businessId, this.providerId).pipe(
+    this.closedLoc$ = this.locationService.updateClosedLocation(this.locationId, this.businessId).pipe(
       map((res: any) => {
         if (res != null){
           if (res['Business'].OPEN == 0){
@@ -1079,7 +1091,7 @@ export class HostComponent implements OnInit {
           this.appoIdSche = res['AppId'].toString();
           res['Appos'].forEach(item => {
             let hora = item['DateAppo'].substring(11,16).replace('-',':');
-            hora = (+hora.substring(0,2) > 12 ? (+hora.substring(0,2)-12).toString().padStart(2,'0') : hora.substring(0,2)) + ':' + hora.substring(3).toString() + (+hora.substring(0,2) > 12 ? ' PM' : ' AM');
+            hora = (+hora.substring(0,2) > 12 ? (+hora.substring(0,2)-12).toString().padStart(2,'0') : hora.substring(0,2)) + ':' + hora.substring(3).toString() + (+hora.substring(0,2) >= 12 ? ' PM' : ' AM');
             let data = {
               AppId: item['AppointmentId'],
               ClientId: item['ClientId'],
@@ -1123,7 +1135,7 @@ export class HostComponent implements OnInit {
     if (getHours.length > 0) {
       hourFin = getHours.replace(':','-');
     } else {
-      hourFin = this.currHour.toString() + '-00';
+      hourFin = this.currHour.toString().padStart(2,'0') + '-00';
     }
     let yearCurr = this.getYear();
     let monthCurr = this.getMonth();
@@ -1139,7 +1151,7 @@ export class HostComponent implements OnInit {
           this.appoIdWalk = res['AppId'].toString();
           res['Appos'].forEach(item => {
             let hora = item['DateAppo'].substring(11,16).replace('-',':');
-            hora = (+hora.substring(0,2) > 12 ? (+hora.substring(0,2)-12).toString().padStart(2,'0') : hora.substring(0,2)) + ':' + hora.substring(3).toString() + (+hora.substring(0,2) > 12 ? ' PM' : ' AM');
+            hora = (+hora.substring(0,2) > 12 ? (+hora.substring(0,2)-12).toString().padStart(2,'0') : hora.substring(0,2)) + ':' + hora.substring(3).toString() + (+hora.substring(0,2) >= 12 ? ' PM' : ' AM');
             let data = {
               AppId: item['AppointmentId'],
               ClientId: item['ClientId'],
@@ -1192,7 +1204,7 @@ export class HostComponent implements OnInit {
           this.appoIdPre = res['AppId'].toString();
           res['Appos'].forEach(item => {
             let hora = item['DateAppo'].substring(11,16).replace('-',':');
-            hora = (+hora.substring(0,2) > 12 ? (+hora.substring(0,2)-12).toString().padStart(2,'0') : hora.substring(0,2)) + ':' + hora.substring(3).toString() + (+hora.substring(0,2) > 12 ? ' PM' : ' AM');
+            hora = (+hora.substring(0,2) > 12 ? (+hora.substring(0,2)-12).toString().padStart(2,'0') : hora.substring(0,2)) + ':' + hora.substring(3).toString() + (+hora.substring(0,2) >= 12 ? ' PM' : ' AM');
             let data = {
               AppId: item['AppointmentId'],
               ClientId: item['ClientId'],
@@ -1235,10 +1247,11 @@ export class HostComponent implements OnInit {
   onServiceChange(event){
     let res = this.Providers.filter(val => val.ProviderId == event.value);
     if (res.length > 0){
-      this.locationStatus = res[0].Open;
-      this.closedLoc = res[0].Closed;
+      // this.locationStatus = res[0].Open;
+      // this.closedLoc = res[0].Closed;
       this.providerId = res[0].ProviderId;
-      this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+      this.operationText = this.locName + ' / ' + res[0].Name;
+      // this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
     }
     this.previous = [];
     this.schedule = [];

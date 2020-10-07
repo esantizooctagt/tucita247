@@ -121,11 +121,11 @@ export class QuickCheckinComponent implements OnInit {
           this.Providers = res.Locs.Providers;
           this.totLocation = res.Locs.MaxCustomers;
           this.locName = res.Locs.Name;
+          this.locationStatus = res.Locs.Providers[0].Open;
+          this.closedLoc = res.Locs.Providers[0].Closed;
+          this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
           if (this.Providers.length > 0){
-            this.locationStatus = res.Locs.Providers[0].Open;
-            this.closedLoc = res.Locs.Providers[0].Closed;
             this.providerId = res.Locs.Providers[0].ProviderId;
-            this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
           }
           this.spinnerService.stop(spinnerRef);
           return res;
@@ -152,7 +152,7 @@ export class QuickCheckinComponent implements OnInit {
           }
         })
       )),
-      switchMap(val => val = this.businessService.getBusinessOpeHours(this.businessId, this.locationId, this.providerId)),
+      switchMap(val => val = this.businessService.getBusinessOpeHours(this.businessId, this.locationId)),
       map((res: any) => {
         if (res.Code == 200) {
           this.bucketInterval = 1; //parseFloat(res.BucketInterval);
@@ -480,10 +480,10 @@ export class QuickCheckinComponent implements OnInit {
   onServiceChange(event){
     let res = this.Providers.filter(val => val.ProviderId == event.value);
     if (res.length > 0){
-      this.locationStatus = res[0].Open;
-      this.closedLoc = res[0].Closed;
+      // this.locationStatus = res[0].Open;
+      // this.closedLoc = res[0].Closed;
       this.providerId = res[0].ProviderId;
-      this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+      // this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
     }
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadinglocs:`);
     this.getLocInfo$ = this.businessService.getBusinessOpeHours(this.businessId, this.locationId, this.providerId).pipe(
@@ -545,7 +545,7 @@ export class QuickCheckinComponent implements OnInit {
 
   openLocation(){
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadingopeloc:`);
-    this.openLoc$ = this.locationService.updateOpenLocation(this.locationId, this.businessId, this.providerId).pipe(
+    this.openLoc$ = this.locationService.updateOpenLocation(this.locationId, this.businessId).pipe(
       map((res: any) => {
         if (res != null){
           if (res['Business'].OPEN == 1){
@@ -590,7 +590,7 @@ export class QuickCheckinComponent implements OnInit {
 
   closedLocation(){
     var spinnerRef = this.spinnerService.start($localize`:@@host.closingloc:`);
-    this.closedLoc$ = this.locationService.updateClosedLocation(this.locationId, this.businessId, this.providerId).pipe(
+    this.closedLoc$ = this.locationService.updateClosedLocation(this.locationId, this.businessId).pipe(
       map((res: any) => {
         if (res != null){
           if (res['Business'].OPEN == 0){
