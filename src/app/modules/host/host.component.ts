@@ -1262,7 +1262,7 @@ export class HostComponent implements OnInit {
     this.lastItemPre = '_';
     this.lastItemWalk = '_';
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadinglocationsdata:`);
-    this.getLocInfo$ = this.businessService.getBusinessOpeHours(this.businessId, this.locationId, this.providerId).pipe(
+    this.getLocInfo$ = this.businessService.getBusinessOpeHours(this.businessId, this.locationId).pipe(
       map((res: any) => {
         if (res.Code == 200) {
           this.bucketInterval = 1; //parseFloat(res.BucketInterval);

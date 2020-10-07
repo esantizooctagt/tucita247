@@ -486,7 +486,7 @@ export class QuickCheckinComponent implements OnInit {
       // this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
     }
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadinglocs:`);
-    this.getLocInfo$ = this.businessService.getBusinessOpeHours(this.businessId, this.locationId, this.providerId).pipe(
+    this.getLocInfo$ = this.businessService.getBusinessOpeHours(this.businessId, this.locationId).pipe(
       map((res: any) => {
         if (res.Code == 200) {
           this.bucketInterval = 1; // parseFloat(res.BucketInterval);
