@@ -2,13 +2,29 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template" target-language="en">
     <body>
-      <trans-unit id="shared.seedetails" datatype="html">
-        <source>See details</source>
-        <target state="translated">See details</target>
+      <trans-unit id="host.provider" datatype="html">
+        <source>Provider</source>
+        <target state="translated">Provider</target>
         <context-group purpose="host">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
-          <context context-type="linenumber">10</context>
+          <context context-type="linenumber">334</context>
         </context-group>
+      </trans-unit>
+      <trans-unit id="shared.allproviders" datatype="html">
+        <source>ALL PROVIDERS</source>
+        <target state="translated">ALL PROVIDERS</target>
+        <context-group purpose="host">
+          <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="shared.hidedetails">
+        <source>Hide details</source>
+        <target state="translated">Hide details</target>
+      </trans-unit>
+      <trans-unit id="shared.seedetails">
+        <source>See details</source>
+        <target state="translated">See details</target>
       </trans-unit>
       <trans-unit id="shared.allproviders" datatype="html">
         <source>ALL PROVIDERS</source>
@@ -74,6 +90,10 @@
           <context context-type="linenumber">11</context>
         </context-group>
         <note priority="1" from="description">We will send you an email with a link to reset your password</note>
+      </trans-unit>
+      <trans-unit id="host.allproviders">
+        <source>ALL PROVIDERS</source>
+        <target state="translated">ALL PROVIDERS</target>
       </trans-unit>
       <trans-unit id="shared.shopmessage">
         <source>You need to buy a license</source>

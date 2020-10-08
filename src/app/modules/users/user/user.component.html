@@ -84,6 +84,7 @@
                             <mat-form-field>
                                 <mat-label i18n="Location:|text in user@@users.location">Location:</mat-label>
                                 <mat-select #locations formControlName="LocationId" required>
+                                    <mat-option class="" value="0">N/A</mat-option>
                                     <mat-option *ngFor="let location of locs$ | async" [value]="location.LocationId">
                                         {{location.Name}}
                                     </mat-option>

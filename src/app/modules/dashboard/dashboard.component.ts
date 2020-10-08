@@ -96,10 +96,9 @@ export class DashboardComponent implements OnInit {
     if (this.isAdmin == 0){
       this.quantityPeople$ = this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
         map((res: any) => {
-          if (res.Locs != null){
-            this.locationId = res.Locs.LocationId;
-            this.doorId = res.Locs.Door;
-            this.services = res.Locs.Services;
+          if (res.Code == 200 && res.Locs.length > 0){
+            this.locationId = res.Locs[0].LocationId;
+            this.doorId = res.Locs[0].Door;
             return 0;
           }
         }),

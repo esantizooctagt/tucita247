@@ -1,11 +1,19 @@
 import { Component, ViewChild, ElementRef, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { AppointmentService } from '@app/services';
+import { SpinnerService } from '@app/shared/spinner.service';
+
 import jsQR, { QRCode } from 'jsqr';
+import { Observable } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 export interface DialogData {
   guests: number;
   title: string;
   tipo: number;
+  businessId: string;
+  locationId: string;
+  providerId: string;
 }
 
 @Component({
@@ -17,9 +25,13 @@ export class VideoDialogComponent implements OnInit {
   @ViewChild('video', {static: true}) videoElm: ElementRef;
   @ViewChild('canvas', {static: true}) canvasElm: ElementRef;
 
+  appoData$: Observable<any>;
   qrCode: string = '';
   checkInValues: any;
   videoStart = false;
+  Guests: number = 0;
+  a=new AudioContext();
+
   medias: MediaStreamConstraints = {
     audio: false,
     video: false,
@@ -27,11 +39,14 @@ export class VideoDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<VideoDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    private spinnerService: SpinnerService,
+    private appointmentService: AppointmentService
   ) { }
 
   ngOnInit(): void {
     this.startVideo();
+    this.Guests = this.data.guests;
   }
   
   toggleVideoMedia() {
@@ -70,19 +85,36 @@ export class VideoDialogComponent implements OnInit {
     const HEIGHT = this.videoElm.nativeElement.clientHeight;
     this.canvasElm.nativeElement.width  = WIDTH;
     this.canvasElm.nativeElement.height = HEIGHT;
-    // if (WIDTH > 0) {
-    const ctx = this.canvasElm.nativeElement.getContext('2d') as CanvasRenderingContext2D;
+    if (WIDTH > 0) {
+      const ctx = this.canvasElm.nativeElement.getContext('2d') as CanvasRenderingContext2D;
 
-    ctx.drawImage(this.videoElm.nativeElement, 0, 0, WIDTH, HEIGHT)
-    const imageData = ctx.getImageData(0, 0, WIDTH, HEIGHT)
-    const code = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: "dontInvert" })
+      ctx.drawImage(this.videoElm.nativeElement, 0, 0, WIDTH, HEIGHT)
+      const imageData = ctx.getImageData(0, 0, WIDTH, HEIGHT)
+      const code = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: "dontInvert" })
 
-    if (code) {
-        this.qrCode = code.data;
-    } else {
-        setTimeout(() => { this.checkImage(); }, 100)
+      if (code) {
+          this.qrCode = code.data;
+          this.beep(100, 520, 200);
+          if (this.data.tipo == 2){
+            // var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
+            this.appoData$ = this.appointmentService.getAppointmentData(this.data.businessId, this.data.locationId, this.data.providerId, this.qrCode).pipe(
+              map((res: any) => {
+                if (res.Code == 200) {
+                  this.Guests = res.Guests;
+                  // this.spinnerService.stop(spinnerRef);
+                }
+                return res.Appos;
+              }),
+              catchError(err => {
+                // this.spinnerService.stop(spinnerRef);
+                return err.Message;
+              })
+            );
+          }
+      } else {
+          setTimeout(() => { this.checkImage(); }, 100)
+      }
     }
-    // }
   }
 
   onOK(): void{
@@ -97,5 +129,39 @@ export class VideoDialogComponent implements OnInit {
     if (this.videoStart) { this.stopVideo(); }
     this.qrCode = '';
     this.dialogRef.close();
+  }
+
+  validQr(event){
+    if (event.toString().length == 6){
+      this.beep(100, 520, 200);
+      if (this.data.tipo == 2){
+        // var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
+        this.appoData$ = this.appointmentService.getAppointmentData(this.data.businessId, this.data.locationId, this.data.providerId, this.qrCode).pipe(
+          map((res: any) => {
+            if (res.Code == 200) {
+              this.Guests = res.Guests;
+              // this.spinnerService.stop(spinnerRef);
+            }
+            return res.Appos;
+          }),
+          catchError(err => {
+            // this.spinnerService.stop(spinnerRef);
+            return err.Message;
+          })
+        );
+      }
+    }
+  }
+
+  beep(vol, freq, duration){
+    let v=this.a.createOscillator();
+    let u=this.a.createGain();
+    v.connect(u)
+    v.frequency.value=freq
+    v.type="square"
+    u.connect(this.a.destination)
+    u.gain.value=vol*0.01
+    v.start(this.a.currentTime)
+    v.stop(this.a.currentTime+duration*0.001)
   }
 }

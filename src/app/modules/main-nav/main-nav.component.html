@@ -30,7 +30,7 @@
             </mat-nav-list>
           </mat-expansion-panel>
         </mat-accordion>
-        <a *ngIf="isAdmin" class="list-item-welcome" mat-list-item [routerLink]="['/welcome']" routerLinkActive="menu-active" i18n="Welcome@@main.welcome" (click)="(screenWidth < 500) ? drawer.toggle() : ''">Welcome</a>
+        <a *ngIf="isAdmin" class="list-item-welcome" mat-list-item [routerLink]="['/welcome']" routerLinkActive="menu-active" i18n="Welcome@@main.welcome" (click)="(screenWidth < 500) ? drawer.toggle() : ''"><mat-icon svgIcon="home" class="icon-option"></mat-icon>  Welcome</a>
         <ng-container class="" *ngIf="apps$ | async">
           <mat-accordion multi="true" [displayMode]="displayMode">
             <mat-expansion-panel class="no-shadow">

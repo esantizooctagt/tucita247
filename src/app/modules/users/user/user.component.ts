@@ -80,7 +80,7 @@ export class UserComponent implements OnInit {
     this.data.handleData('Add');
     this.userDataList = this.route.snapshot.paramMap.get('userId');
 
-    var spinnerRef = this.spinnerService.start($localize`:@@userloc.loadingusersingle:`);
+    // var spinnerRef = this.spinnerService.start($localize`:@@userloc.loadingusersingle:`);
     this.businessId = this.authService.businessId();
 
     this.locs$ = this.locationService.getLocationsCode(this.businessId).pipe(
@@ -91,7 +91,7 @@ export class UserComponent implements OnInit {
         }
       }),
       catchError(err => {
-        this.spinnerService.stop(spinnerRef);
+        // this.spinnerService.stop(spinnerRef);
         return throwError(err || err.message);
       })
     );
@@ -99,12 +99,12 @@ export class UserComponent implements OnInit {
     this.roles$ = this.rolesService.getRoles(this.businessId + '/10/_/_').pipe(
       map((res: any) => {
         if (res != null) {
-          this.spinnerService.stop(spinnerRef);
+          // this.spinnerService.stop(spinnerRef);
           return res.roles;
         }
       }),
       catchError(err => {
-        this.spinnerService.stop(spinnerRef);
+        // this.spinnerService.stop(spinnerRef);
         this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
         return throwError(err || err.Message);
       })
@@ -215,7 +215,7 @@ export class UserComponent implements OnInit {
               Avatar: '',
               Phone: user.Phone,
               RoleId: (user.Is_Admin === 1 ? 'None' : user.Role_Id),
-              LocationId: user.Location_Id,
+              LocationId: (user.Location_Id == '' ? '0' : user.Location_Id),
               Is_Admin: user.Is_Admin,
               Status: user.Status
             });
@@ -253,7 +253,7 @@ export class UserComponent implements OnInit {
           "Password": '', //this.userForm.value.Password,
           "Phone": this.userForm.value.Phone,
           "RoleId": this.userForm.value.RoleId,
-          "LocationId": this.userForm.value.LocationId,
+          "LocationId": (this.userForm.value.LocationId == '0' ? '' : this.userForm.value.LocationId),
           "Status": (this.statTemp === 3 ? 3 : this.userForm.value.Status)
         }
         this.userSave$ = this.usersService.updateUser(dataForm).pipe(
@@ -291,7 +291,7 @@ export class UserComponent implements OnInit {
           "Password": ctStr,
           "Phone": this.userForm.value.Phone,
           "RoleId": this.userForm.value.RoleId,
-          "LocationId": this.userForm.value.LocationId
+          "LocationId": (this.userForm.value.LocationId == '0' ? '' : this.userForm.value.LocationId)
         }
         this.userSave$ = this.usersService.postUser(dataForm).pipe(
           tap(res => { 

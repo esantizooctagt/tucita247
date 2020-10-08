@@ -93,7 +93,7 @@ export class HostComponent implements OnInit {
   textOpenLocation: string = '';
   locName: string = '';
 
-  locations: []=[];
+  locations: any[]=[];
 
   locationId: string = '';
   doorId: string = '';
@@ -115,7 +115,9 @@ export class HostComponent implements OnInit {
   Providers: any[]=[];
   services: []=[];
   providerId: string = '';
-
+  panelOpenState = false;
+  seeDetails: string = $localize`:@@shared.seedetails:`;
+  hideDetails: string = $localize`:@@shared.hidedetails:`;
   get f(){
     return this.clientForm.controls;
   }
@@ -209,8 +211,9 @@ export class HostComponent implements OnInit {
             this.closedLoc = res.Locs[0].Closed;
             this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
             if (this.Providers.length > 0){
-              this.operationText = this.locName + ' / ' + this.Providers[0].Name;
-              this.providerId = this.Providers[0].ProviderId;
+              this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
+              // this.providerId = this.Providers[0].ProviderId;
+              this.providerId = "0";
             }
           }
           return res;
@@ -221,13 +224,13 @@ export class HostComponent implements OnInit {
           return;
         }
       }),
-      switchMap(val => val = this.serviceService.getServicesProvider(this.businessId, this.providerId).pipe(
-          map((res: any) =>{
-            this.services = res.services.filter(x => x.Selected === 1);
-            return res;
-          })
-        )
-      ),
+      // switchMap(val => val = this.serviceService.getServicesProvider(this.businessId, this.providerId).pipe(
+      //     map((res: any) =>{
+      //       this.services = res.services.filter(x => x.Selected === 1);
+      //       return res;
+      //     })
+      //   )
+      // ),
       switchMap(val => val = this.businessService.getBusinessOpeHours(this.businessId, this.locationId)),
       map((res: any) => {
         if (res.Code == 200) {
@@ -347,10 +350,6 @@ export class HostComponent implements OnInit {
     }, 3500000);
   }
 
-  onLocationChange(event){
-
-  }
-
   openLocation(){
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadingopeloc:`);
     this.openLoc$ = this.locationService.updateOpenLocation(this.locationId, this.businessId).pipe(
@@ -454,7 +453,7 @@ export class HostComponent implements OnInit {
     const dialogRef = this.dialog.open(VideoDialogComponent, {
       width: '450px',
       height: '595px',
-      data: {guests: 0, title: $localize`:@@host.checkoutpop:`, tipo: 2}
+      data: {guests: 0, title: $localize`:@@host.checkoutpop:`, tipo: 2, businessId: this.businessId, locationId: this.locationId, providerId: this.providerId}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -612,7 +611,7 @@ export class HostComponent implements OnInit {
     let formData = {
       BusinessId: this.businessId,
       LocationId: this.locationId,
-      ProviderId: this.providerId,
+      ProviderId: (this.providerId != '0' ? this.providerId : this.clientForm.value.ProviderId),
       ServiceId: this.clientForm.value.ServiceId,
       Door: this.doorId,
       Phone: (phoneNumber == '' ?  '00000000000' : (phoneNumber.length <= 10 ? '1' + phoneNumber : phoneNumber)),
@@ -684,6 +683,10 @@ export class HostComponent implements OnInit {
       return this.f.ServiceId.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
             '';
     }
+    if (component === 'ProviderId'){
+      return this.f.ProviderId.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
+            '';
+    }
     if (component === 'Phone'){
       return this.f.Phone.hasError('minlength') ? $localize`:@@shared.minimun: ${val6}` :
         this.f.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: ${val14}` :
@@ -706,7 +709,9 @@ export class HostComponent implements OnInit {
     let formData = {
       Status: 5,
       DateAppo: appo.DateFull,
-      Reason: reasonId
+      Reason: reasonId,
+      Guests: appo.Guests,
+      CustomerId: appo.ClientId
     }
     this.updAppointment$ = this.appointmentService.updateAppointment(appo.AppId, formData).pipe(
       map((res: any) => {
@@ -777,7 +782,7 @@ export class HostComponent implements OnInit {
       Guests: guests,
       BusinessId: this.businessId,
       LocationId: this.locationId,
-      ProviderId: this.providerId
+      ProviderId: appo.ProviderId
     }
     this.checkIn$ = this.appointmentService.updateAppointmentCheckIn(appo.AppId, formData).pipe(
       map((res: any) => {
@@ -1040,6 +1045,7 @@ export class HostComponent implements OnInit {
             let data = {
               AppId: item['AppointmentId'],
               ClientId: item['ClientId'],
+              ProviderId: item['ProviderId'],
               Name: item['Name'].toLowerCase(),
               OnBehalf: item['OnBehalf'],
               Guests: item['Guests'],
@@ -1095,6 +1101,7 @@ export class HostComponent implements OnInit {
             let data = {
               AppId: item['AppointmentId'],
               ClientId: item['ClientId'],
+              ProviderId: item['ProviderId'],
               Name: item['Name'].toLowerCase(),
               OnBehalf: item['OnBehalf'],
               Guests: item['Guests'],
@@ -1155,6 +1162,7 @@ export class HostComponent implements OnInit {
             let data = {
               AppId: item['AppointmentId'],
               ClientId: item['ClientId'],
+              ProviderId: item['ProviderId'],
               Name: item['Name'].toLowerCase(),
               OnBehalf: item['OnBehalf'],
               Guests: item['Guests'],
@@ -1208,6 +1216,7 @@ export class HostComponent implements OnInit {
             let data = {
               AppId: item['AppointmentId'],
               ClientId: item['ClientId'],
+              ProviderId: item['ProviderId'],
               Name: item['Name'].toLowerCase(),
               OnBehalf: item['OnBehalf'],
               Guests: item['Guests'],
@@ -1244,6 +1253,94 @@ export class HostComponent implements OnInit {
     }
   }
 
+  onLocationChange(event){
+    let data = this.locations.filter(val => val.LocationId == event.value);
+
+    this.previous = [];
+    this.schedule = [];
+    this.walkIns = [];
+    this.preCheckIn = [];
+    this.showPrevious = false;
+    this.lastItem = '_';
+    this.lastItemPre = '_';
+    this.lastItemWalk = '_';
+
+    if (data.length > 0){
+      this.locName = data[0].Name;
+      if (data[0].Providers.length > 0){
+        this.Providers = data[0].Providers;
+        if (this.Providers.length > 0){
+          // this.providerId = this.Providers[0].ProviderId;
+          // this.operationText = this.locName + ' / ' + this.Providers[0].Name;
+          this.providerId = "0";
+          this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`;
+        }
+        var spinnerRef = this.spinnerService.start($localize`:@@host.loadinglocationsdata:`);
+        this.getLocInfo$ = this.businessService.getBusinessOpeHours(this.businessId, this.locationId).pipe(
+          map((res: any) => {
+            if (res.Code == 200) {
+              this.bucketInterval = 1; //parseFloat(res.BucketInterval);
+              this.currHour = parseFloat(res.CurrHour);
+              let hours = res.Hours;
+              this.buckets = [];
+              for (var i=0; i<=hours.length-1; i++){
+                let horaIni = parseFloat(hours[i].HoraIni);
+                let horaFin = parseFloat(hours[i].HoraFin);
+                if (i ==0){
+                  this.firstHour = horaIni;
+                }
+                for (var x=horaIni; x<=horaFin; x+=this.bucketInterval){
+                  let hora = '';
+                  if (x % 1 != 0){
+                    hora = (x - (x%1)).toString().padStart(2,'0') + ':30';
+                  } else {
+                    hora = x.toString().padStart(2, '0') + ':00';
+                  }
+                  this.buckets.push({ TimeFormat: hora, Time: x });
+                  if (x == this.currHour) {
+                    if (x-this.bucketInterval>= horaIni){
+                      this.prevHour = this.currHour-this.bucketInterval;
+                    }
+                  }
+                }
+              }
+              this.spinnerService.stop(spinnerRef);
+            } else {
+              this.spinnerService.stop(spinnerRef);
+              return;
+            }
+          }),
+          switchMap(val => this.serviceService.getServicesProvider(this.businessId, this.providerId).pipe(
+            map((res: any) =>{
+              this.services = res.services.filter(x => x.Selected === 1);
+              return res;
+            })
+          )),
+          switchMap((value: any) => {
+            value = this.locationService.getLocationQuantity(this.businessId, this.locationId);
+            return value;
+          }),
+          map((res: any) => {
+            this.qtyPeople = res.Quantity;
+            this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+          }),
+          map(_ => {
+            if (this.locationId != '' && this.locationStatus == 1 && this.closedLoc == 0){
+              this.getAppointmentsSche();
+              this.getAppointmentsWalk();
+              this.getAppointmentsPre();
+            }
+          }),
+          catchError(err => {
+            this.spinnerService.stop(spinnerRef);
+            this.onError = err.Message;
+            return '0';
+          })
+        );
+      }
+    }
+  }
+
   onServiceChange(event){
     let res = this.Providers.filter(val => val.ProviderId == event.value);
     if (res.length > 0){
@@ -1252,6 +1349,9 @@ export class HostComponent implements OnInit {
       this.providerId = res[0].ProviderId;
       this.operationText = this.locName + ' / ' + res[0].Name;
       // this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+    } else {
+      this.providerId = "0";
+      this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`;
     }
     this.previous = [];
     this.schedule = [];
@@ -1319,6 +1419,21 @@ export class HostComponent implements OnInit {
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
+        this.onError = err.Message;
+        return '0';
+      })
+    );
+  }
+
+  onProvChange(event){
+    console.log(event.value);
+    this.getLocInfo$ = this.serviceService.getServicesProvider(this.businessId, event.value).pipe(
+      map((res: any) =>{
+        console.log(res);
+        this.services = res.services.filter(x => x.Selected === 1);
+        return res;
+      }),
+      catchError(err => {
         this.onError = err.Message;
         return '0';
       })

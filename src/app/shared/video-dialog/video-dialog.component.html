@@ -1,4 +1,5 @@
 <div>
+    <ng-container *ngIf="appoData$ | async"></ng-container>
     <div class="card" class="col-md-12 pl-2 pr-2 pt-0 main-title">
         {{data.title}}
         <mat-card class="card-video">
@@ -7,9 +8,9 @@
                     <!-- <webcam width="370" height="300" class="w-100 pb-3" id="video" #video></webcam> -->
                     <video class="w-100 pb-3" id="video" #video autoplay playsinline></video>
                 </div>
-                <!-- <div style="display:none"> -->
+                <div style="display:none">
                     <canvas class="w-100 pb-3" id="canvas" #canvas></canvas>
-                <!-- </div> -->
+                </div>
             </div>
         </mat-card>
         <div class="pt-3">
@@ -27,20 +28,26 @@
             </ng-container>
         </div>
     </div>
-    <mat-form-field class="pt-3">
-        <mat-label i18n="Cita Code|text in checkin/checkout@@video.citacode">Cita Code</mat-label>
-        <input matInput placeholder="QR Code" [(ngModel)]="qrCode">
-    </mat-form-field>
-    <mat-label class="label-guests" i18n="Guests|text in guests@@video.guests">Guests</mat-label>
-    <button mat-icon-button (click)="data.guests=data.guests+1">
-        <mat-icon class="site-color">add</mat-icon>
-    </button>
-    <mat-form-field class="num-guests">
-        <input matInput [(ngModel)]="data.guests">
-    </mat-form-field>
-    <button mat-icon-button (click)="(data.guests > 1 ? data.guests=data.guests-1 : data.guests)">
-        <mat-icon class="site-color">remove</mat-icon>
-    </button>
+    <div class="row">
+        <div class="pt-3 col-md-5">
+            <mat-form-field>
+                <mat-label i18n="Cita Code|text in checkin/checkout@@video.citacode">Cita Code</mat-label>
+                <input matInput placeholder="QR Code" [(ngModel)]="qrCode" (ngModelChange)="validQr($event)" maxlength="6">
+            </mat-form-field>
+        </div>
+        <div class="pt-3 col-md-7 text-right">
+            <mat-label class="label-guests" i18n="Guests|text in guests@@video.guests">Guests</mat-label>
+            <button mat-icon-button (click)="data.guests=data.guests+1">
+                <mat-icon class="site-color">add</mat-icon>
+            </button>
+            <mat-form-field class="num-guests">
+                <input matInput [(ngModel)]="Guests">
+            </mat-form-field>
+            <button mat-icon-button (click)="(data.guests > 1 ? data.guests=data.guests-1 : data.guests)">
+                <mat-icon class="site-color">remove</mat-icon>
+            </button>
+        </div>
+    </div>
     <div>
         <button mat-flat-button class="mr-3 btn-cancel" (click)="onNoClick()" i18n="Cancel@@shared.cancel">Cancel</button>
         <button mat-flat-button color="primary" class="btn-ok" (click)="onOK()" cdkFocusInitial i18n="Ok@@shared.ok">Ok</button>

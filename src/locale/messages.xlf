@@ -2,12 +2,25 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
-      <trans-unit id="shared.seedetails" datatype="html">
-        <source>See details</source>
+      <trans-unit id="host.provider" datatype="html">
+        <source>Provider</source>
         <context-group purpose="host">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
-          <context context-type="linenumber">10</context>
+          <context context-type="linenumber">334</context>
         </context-group>
+      </trans-unit>
+      <trans-unit id="shared.allproviders" datatype="html">
+        <source>ALL PROVIDERS</source>
+        <context-group purpose="host">
+          <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="shared.hidedetails">
+        <source>Hide details</source>
+      </trans-unit>
+      <trans-unit id="shared.seedetails">
+        <source>See details</source>
       </trans-unit>
       <trans-unit id="shared.allproviders" datatype="html">
         <source>ALL PROVIDERS</source>
@@ -3889,6 +3902,9 @@
       </trans-unit>
       <trans-unit id="shared.sentEmail">
         <source>Email sent succesfully</source>
+      </trans-unit>
+      <trans-unit id="host.allproviders">
+        <source>ALL PROVIDERS</source>
       </trans-unit>
     </body>
   </file>

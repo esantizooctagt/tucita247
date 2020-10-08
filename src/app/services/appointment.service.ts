@@ -13,6 +13,11 @@ export class AppointmentService {
   readonly apiRepoUrl = environment.apiRepoUrl;
   constructor(private http: HttpClient) { }
 
+  getAppointmentData(businessId, locationId, providerId, qrCode): Observable<Appointment[]> {
+    return this.http.get<Appointment[]>(this.apiURL + '/appointment/data/' + businessId + '/' + locationId + '/' + providerId + '/' + qrCode)
+                    .pipe(catchError(this.errorHandler));
+  }
+
   getAppointments(businessId, locationId, providerId, dateAppoIni, dateAppoFin, status, type, lastItem, appId): Observable<Appointment[]> {
       return this.http.get<Appointment[]>(this.apiURL + '/appointments/' + businessId + '/' + locationId + '/' + providerId + '/' + dateAppoIni + '/' + dateAppoFin + '/' + status + '/' + type + '/' + lastItem + '/' + appId)
                       .pipe(catchError(this.errorHandler));

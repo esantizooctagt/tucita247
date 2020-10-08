@@ -121,7 +121,7 @@ export class UserlocComponent implements OnInit {
           UserId: res.UserId,
           Name: res.First_Name + ' ' + res.Last_Name,
           Email: res.Email,
-          LocationId: res.LocationId,
+          LocationId: (res.LocationId == '' ? '0' : res.LocationId),
           Door: res.Door,
           Actions: ''
         })
@@ -138,16 +138,18 @@ export class UserlocComponent implements OnInit {
     item.at(i).patchValue({
       Door: ''
     });
-    this.door[i] = this.locations.filter(x => x.LocationId == event.value)[0].Door;
+    if (event.value != '0'){
+      this.door[i] = this.locations.filter(x => x.LocationId == event.value)[0].Door;
+    }
   }
 
   changeData(i: number, element: any) {
-    if (element.value.Door == "") { return; }
+    // if (element.value.Door == "") { return; }
     if (element.value.LocationId == "") { return; }
 
     let formData = {
       UserId: element.value.UserId,
-      LocationId: element.value.LocationId,
+      LocationId: (element.value.LocationId == '0' ? '' : element.value.LocationId),
       Door: element.value.Door
     }
     this.saveUser$ = this.userService.updateUsersLocs(this.businessId, formData).pipe(

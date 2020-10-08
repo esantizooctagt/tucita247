@@ -5,9 +5,9 @@
         <ng-container *ngIf="closedLoc$ | async"></ng-container>
         <div class="col-md-12 pt-2">
             <mat-accordion>
-                <mat-expansion-panel>
+                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
                     <mat-expansion-panel-header>
-                        <mat-panel-title i18n="See details@@shared.seedetails">See details</mat-panel-title>
+                        <mat-panel-title>{{panelOpenState ? hideDetails : seeDetails}}</mat-panel-title>
                         <mat-panel-description>
                              {{(textOpenLocation != '' &&  operationText != '' ? textOpenLocation + ' :  ' + operationText : '')}}
                         </mat-panel-description>
@@ -169,8 +169,8 @@
                                         <mat-form-field>
                                             <mat-label i18n="Cancel reasons|text in citas@@host.cancelreasons">Cancel reasons</mat-label>
                                             <mat-select [(value)]="selectedPrev[i]">
-                                                <mat-option *ngFor="let reason of reasons" [value]="reason.ReasonId">
-                                                    {{reason.Description}}
+                                                <mat-option *ngFor="let reason of reasons" [value]="reason">
+                                                    {{reason}}
                                                 </mat-option>
                                             </mat-select>
                                         </mat-form-field>
@@ -261,8 +261,8 @@
                                     <mat-form-field>
                                         <mat-label i18n="Cancel reasons|text in citas@@host.cancelreasons">Cancel reasons</mat-label>
                                         <mat-select [(value)]="selectedSche[i]">
-                                            <mat-option *ngFor="let reason of reasons" [value]="reason.ReasonId">
-                                                {{reason.Description}}
+                                            <mat-option *ngFor="let reason of reasons" [value]="reason">
+                                                {{reason}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -318,7 +318,7 @@
                             <form [formGroup]="clientForm" (ngSubmit)="addAppointment()">
                                 <div class="form-field pl-3 pr-3">
                                     <mat-form-field>
-                                        <input matInput #Phone placeholder="+1 (555) 555-1234" appPhoneMask maxlength="17" formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher">
+                                        <input matInput #Phone placeholder="+1 (XXX) XXX-XXXX" appPhoneMask maxlength="17" formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher">
                                         <mat-error *ngIf="f.Phone.invalid && f.Phone.touched">{{ 'Error: ' + getErrorMessage('Phone')}}</mat-error>
                                     </mat-form-field>
                                 </div>
@@ -329,9 +329,19 @@
                                         <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{ 'Error: ' + getErrorMessage('Name')}}</mat-error>
                                     </mat-form-field>
                                 </div>
+                                <div class="form-field pl-3 pr-3" *ngIf="providerId == '0'">
+                                    <mat-form-field>
+                                        <mat-select i18n-placeholder="Provider|text in citas@@host.provider" placeholder="Provider" name="providers" formControlName="ProviderId" (selectionChange)="onProvChange($event)" required>
+                                            <mat-option *ngFor="let item of Providers" [value]="item.ProviderId">
+                                                {{item.Name}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error *ngIf="f.ProviderId.invalid && f.ProviderId.touched">{{ 'Error: ' + getErrorMessage('Provider')}}</mat-error>
+                                    </mat-form-field>
+                                </div>
                                 <div class="form-field pl-3 pr-3">
                                     <mat-form-field>
-                                        <mat-select i18n-placeholder="Service|text in citas@@host.service" placeholder="Service" name="services" formControlName="ServiceId">
+                                        <mat-select i18n-placeholder="Service|text in citas@@host.service" placeholder="Service" name="services" formControlName="ServiceId" required>
                                             <mat-option *ngFor="let item of services" [value]="item.ServiceId">
                                                 {{item.Name}}
                                             </mat-option>
@@ -444,8 +454,8 @@
                                     <mat-form-field>
                                         <mat-label i18n="Cancel reasons|text in citas@@host.cancelreasons">Cancel reasons</mat-label>
                                         <mat-select [(value)]="selectedWalk[i]">
-                                            <mat-option *ngFor="let reason of reasons" [value]="reason.ReasonId">
-                                                {{reason.Description}}
+                                            <mat-option *ngFor="let reason of reasons" [value]="reason">
+                                                {{reason}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -556,8 +566,8 @@
                                     <mat-form-field>
                                         <mat-label i18n="Cancel reasons|text in citas@@host.cancelreasons">Cancel reasons</mat-label>
                                         <mat-select [(value)]="selectedCheck[i]">
-                                            <mat-option *ngFor="let reason of reasons" [value]="reason.ReasonId">
-                                                {{reason.Description}}
+                                            <mat-option *ngFor="let reason of reasons" [value]="reason">
+                                                {{reason}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
