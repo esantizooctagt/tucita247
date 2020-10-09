@@ -195,6 +195,11 @@ export class HostComponent implements OnInit {
     this.businessId = this.authService.businessId();
     this.userId = this.authService.userId();
 
+    // setInterval(() => { 
+    //   this.appointmentService.getSNS();
+    // }, 20000);
+    
+
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadinglocs:`);
     this.getLocInfo$ = this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
       map((res: any) => {
@@ -1267,6 +1272,14 @@ export class HostComponent implements OnInit {
 
     if (data.length > 0){
       this.locName = data[0].Name;
+      this.doorId = data[0].Door;
+      this.manualCheckOut = data[0].ManualCheckOut;
+      this.totLocation = data[0].MaxCustomers;
+      this.Providers = data[0].Providers;
+      this.locName = data[0].Name;
+      this.locationStatus = data[0].Open;
+      this.closedLoc = data[0].Closed;
+      this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
       if (data[0].Providers.length > 0){
         this.Providers = data[0].Providers;
         if (this.Providers.length > 0){
@@ -1426,10 +1439,8 @@ export class HostComponent implements OnInit {
   }
 
   onProvChange(event){
-    console.log(event.value);
     this.getLocInfo$ = this.serviceService.getServicesProvider(this.businessId, event.value).pipe(
       map((res: any) =>{
-        console.log(res);
         this.services = res.services.filter(x => x.Selected === 1);
         return res;
       }),

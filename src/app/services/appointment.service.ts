@@ -4,6 +4,7 @@ import { environment } from '@environments/environment';
 import { catchError } from 'rxjs/operators';
 import { throwError, Observable } from 'rxjs';
 import { Appointment } from '@app/_models';
+// import * as AWS from 'aws-sdk';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,72 @@ import { Appointment } from '@app/_models';
 export class AppointmentService {
   readonly apiURL = environment.apiUrl;
   readonly apiRepoUrl = environment.apiRepoUrl;
-  constructor(private http: HttpClient) { }
+
+  // private queueURL = "https://sqs.us-east-1.amazonaws.com/821843840552/tucitaMessages";
+  // private params = {
+  //   AttributeNames: [
+  //       "SentTimestamp"
+  //   ],
+  //   MaxNumberOfMessages: 10,
+  //   MessageAttributeNames: [
+  //       "All"
+  //   ],
+  //   QueueUrl: this.queueURL,
+  //   VisibilityTimeout: 20,
+  //   // WaitTimeSeconds: 0
+  //   WaitTimeSeconds: 20
+  // };
+  
+  constructor(private http: HttpClient) {}
+
+  // getSNS(){
+  //   let credentials = new AWS.Credentials('AKIA36WNVZYUO7RETZNU', 'UULTJd5LP9LxI2+sQNKrXbSygNsKEa5dl0Wde2Ao', null);
+  //   // let sqs = new AWS.SQS({apiVersion: '2012-11-05'});
+
+  //   AWS.config.credentials = credentials;
+  //   AWS.config.update({region: 'us-east-1'});
+
+  //   // sqs.receiveMessage(this.params, function(err, data) {
+  //   //    if (err) {
+  //   //      console.log("Receive Error", err);
+  //   //    } else if (data.Messages) {
+  //   //      console.log(data.Messages[0].Body);
+  //   //     //  var deleteParams = {
+  //   //     //    QueueUrl: queueURL,
+  //   //     //    ReceiptHandle: data.Messages[0].ReceiptHandle
+  //   //     //  };
+  //   //     //  sqs.deleteMessage(deleteParams, function(err, data) {
+  //   //     //    if (err) {
+  //   //     //      console.log("Delete Error", err);
+  //   //     //    } else {
+  //   //     //      console.log("Message Deleted", data);
+  //   //     //    }
+  //   //     //  });
+  //   //    }
+  //   //  });
+
+  //   let params = {
+  //       Protocol: 'LAMBDA', 
+  //       TopicArn: 'arn:aws:sns:us-east-1:821843840552:tucitaTopic',
+  //       Endpoint: 'arn:aws:lambda:us-east-1:821843840552:function:PublishCitas'
+  //   };
+
+  //   var subscribePromise = new AWS.SNS({apiVersion: '2010-03-31'}).subscribe(params).promise();
+  //   // console.log(subscribePromise);
+  //   subscribePromise
+  //   .then(
+  //     function(data) {
+  //       console.log(data.$response.httpResponse.statusCode);
+  //       var string = String.fromCharCode.apply(null, data.$response.httpResponse.body);
+  //       console.log(data);
+  //       // console.log(string);
+  //       console.log("Subscription ARN is " + data.SubscriptionArn);
+  //     })
+  //   .catch(
+  //     function(err) {
+  //       console.error(err, err.stack);
+  //     });
+  // }
 
   getAppointmentData(businessId, locationId, providerId, qrCode): Observable<Appointment[]> {
     return this.http.get<Appointment[]>(this.apiURL + '/appointment/data/' + businessId + '/' + locationId + '/' + providerId + '/' + qrCode)

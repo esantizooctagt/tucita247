@@ -356,6 +356,9 @@ mat-icon.mat-icon.notranslate.material-icons.mat-icon-no-color {
 mat-menu{
     overflow: auto;
 }
+.title-text:hover{
+    color: #000 !important;
+}
 @media (max-width: 1024px){
     .title-qeue{
         font-size: 20px;

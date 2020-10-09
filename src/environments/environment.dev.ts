@@ -1,5 +1,7 @@
 export const environment = {
     production: false,
+    // AWS_ACCESS_KEY_ID:'AKIAVOQLL35UZYYLSROL',
+    // AWS_SECRET_ACCESS_KEY:'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',
     apiUrl: 'https://dev-api.tucita247.com',
     apiAdminUrl: 'https://dev-apiadmin.tucita247.com',
     apiRepoUrl: 'https://dev-apirep.tucita247.com',

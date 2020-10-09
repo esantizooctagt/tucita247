@@ -203,7 +203,10 @@ mat-accordion .mat-expansion-panel .mat-expansion-panel-body{
 :host ::ng-deep .mat-expansion-panel .mat-expansion-panel-header{
   background: none !important;
 }
-:host ::ng-deep .mat-expansion-panel .mat-expansion-panel-header-title:hover{
+// :host ::ng-deep .mat-expansion-panel .mat-expansion-panel-header-title:hover{
+//   color: #fff !important;
+// }
+.title-text:hover{
   color: #fff !important;
 }
 .submenu-active{
