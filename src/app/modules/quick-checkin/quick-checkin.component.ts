@@ -54,6 +54,12 @@ export class QuickCheckinComponent implements OnInit {
 
   Providers: any[] = [];
   services: []=[];
+  locations: any[]=[];
+
+  operationText: string = '';
+  panelOpenState = false;
+  seeDetails: string = $localize`:@@shared.seedetails:`;
+  hideDetails: string = $localize`:@@shared.hidedetails:`;
 
   get f(){
     return this.clientForm.controls;
@@ -83,6 +89,7 @@ export class QuickCheckinComponent implements OnInit {
     Gender: [''],
     Preference: [''],
     Disability: [''],
+    ProviderId:[''],
     Guests: ['1', [Validators.required, Validators.max(99), Validators.min(1)]]
   })
 
@@ -116,18 +123,36 @@ export class QuickCheckinComponent implements OnInit {
     this.Locs$ = this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
       map((res: any) => {
         if (res.Locs != null){
-          this.locationId = res.Locs.LocationId;
-          this.doorId = res.Locs.Door;
-          this.Providers = res.Locs.Providers;
-          this.totLocation = res.Locs.MaxCustomers;
-          this.locName = res.Locs.Name;
-          this.locationStatus = res.Locs.Providers[0].Open;
-          this.closedLoc = res.Locs.Providers[0].Closed;
-          this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
-          if (this.Providers.length > 0){
-            this.providerId = res.Locs.Providers[0].ProviderId;
+          if (res.Locs.length > 0){
+            this.locations = res.Locs;
+            this.locationId = res.Locs[0].LocationId;
+            this.doorId = res.Locs[0].Door;
+            // this.manualCheckOut = res.Locs[0].ManualCheckOut;
+            this.totLocation = res.Locs[0].MaxCustomers;
+            this.Providers = res.Locs[0].Providers;
+            this.locName = res.Locs[0].Name;
+            this.locationStatus = res.Locs[0].Open;
+            this.closedLoc = res.Locs[0].Closed;
+            this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+            if (this.Providers.length > 0){
+              this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
+              // this.providerId = this.Providers[0].ProviderId;
+              this.providerId = "0";
+            }
+
+            // this.locationId = res.Locs.LocationId;
+            // this.doorId = res.Locs.Door;
+            // this.Providers = res.Locs.Providers;
+            // this.totLocation = res.Locs.MaxCustomers;
+            // this.locName = res.Locs.Name;
+            // this.locationStatus = res.Locs.Providers[0].Open;
+            // this.closedLoc = res.Locs.Providers[0].Closed;
+            // this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+            // if (this.Providers.length > 0){
+            //   this.providerId = res.Locs.Providers[0].ProviderId;
+            //}
+            this.spinnerService.stop(spinnerRef);
           }
-          this.spinnerService.stop(spinnerRef);
           return res;
         } else {
           this.spinnerService.stop(spinnerRef);
@@ -136,13 +161,13 @@ export class QuickCheckinComponent implements OnInit {
           return;
         }
       }),
-      switchMap(val => val = this.serviceService.getServicesProvider(this.businessId, this.providerId).pipe(
-        map((res: any) =>{
-          this.services = res.services.filter(x => x.Selected === 1);
-          return res;
-        })
-        )
-      ),
+      // switchMap(val => val = this.serviceService.getServicesProvider(this.businessId, this.providerId).pipe(
+      //   map((res: any) =>{
+      //     this.services = res.services.filter(x => x.Selected === 1);
+      //     return res;
+      //   })
+      //   )
+      // ),
       switchMap(v => this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
         map((res: any) => {
           if (res != null){
@@ -354,6 +379,10 @@ export class QuickCheckinComponent implements OnInit {
       return this.f.ServiceId.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
             '';
     }
+    if (component === 'ProviderId'){
+      return this.f.ProviderId.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
+            '';
+    }
     if (component === 'Phone'){
       return this.f.Phone.hasError('minlength') ? $localize`:@@shared.minimun: ${val6}` :
         this.f.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: ${val14}` :
@@ -369,7 +398,7 @@ export class QuickCheckinComponent implements OnInit {
   }
 
   onCancelAddAppointment(){
-    this.clientForm.reset({Phone:'', Name:'', ServiceId:'', Email:'', DOB:'', Gender:'', Preference:'', Disability:'', Guests: 1});
+    this.clientForm.reset({Phone:'', Name:'', ServiceId:'', Email:'', DOB:'', Gender:'', Preference:'', Disability:'', ProviderId:'', Guests: 1});
     this.showCard = false;
   }
 
@@ -393,7 +422,7 @@ export class QuickCheckinComponent implements OnInit {
     let formData = {
       BusinessId: this.businessId,
       LocationId: this.locationId,
-      ProviderId: this.providerId,
+      ProviderId: (this.providerId != '0' ? this.providerId : this.clientForm.value.ProviderId),
       ServiceId: this.clientForm.value.ServiceId,
       Door: this.doorId,
       Phone: (phoneNumber == '' ?  '00000000000' : (phoneNumber.length <= 10 ? '1' + phoneNumber : phoneNumber)),
@@ -413,7 +442,7 @@ export class QuickCheckinComponent implements OnInit {
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
       map((res: any) => {
         this.spinnerService.stop(spinnerRef);
-        this.clientForm.reset({Phone:'', Name:'', ServiceId:'', Email:'', DOB:'', Gender:'', Preference:'', Disability:'', Guests: 1});
+        this.clientForm.reset({Phone:'', Name:'', ServiceId:'', Email:'', DOB:'', Gender:'', Preference:'', Disability:'', ProviderId:'', Guests: 1});
         this.showCard = false;
         this.openSnackBar($localize`:@@lite.walkinadded:`,$localize`:@@host.checkintitle:`);
         return res.Code;
@@ -477,6 +506,86 @@ export class QuickCheckinComponent implements OnInit {
     }
   }
 
+  onLocationChange(event){
+    let data = this.locations.filter(val => val.LocationId == event.value);
+
+    if (data.length > 0){
+      this.locName = data[0].Name;
+      this.doorId = data[0].Door;
+      // this.manualCheckOut = data[0].ManualCheckOut;
+      this.totLocation = data[0].MaxCustomers;
+      this.Providers = data[0].Providers;
+      this.locName = data[0].Name;
+      this.locationStatus = data[0].Open;
+      this.closedLoc = data[0].Closed;
+      this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+      if (data[0].Providers.length > 0){
+        this.Providers = data[0].Providers;
+        if (this.Providers.length > 0){
+          // this.providerId = this.Providers[0].ProviderId;
+          // this.operationText = this.locName + ' / ' + this.Providers[0].Name;
+          this.providerId = "0";
+          this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`;
+        }
+        var spinnerRef = this.spinnerService.start($localize`:@@host.loadinglocationsdata:`);
+        this.getLocInfo$ = this.businessService.getBusinessOpeHours(this.businessId, this.locationId).pipe(
+          map((res: any) => {
+            if (res.Code == 200) {
+              this.bucketInterval = 1; //parseFloat(res.BucketInterval);
+              this.currHour = parseFloat(res.CurrHour);
+              let hours = res.Hours;
+              this.buckets = [];
+              for (var i=0; i<=hours.length-1; i++){
+                let horaIni = parseFloat(hours[i].HoraIni);
+                let horaFin = parseFloat(hours[i].HoraFin);
+                if (i ==0){
+                  this.firstHour = horaIni;
+                }
+                for (var x=horaIni; x<=horaFin; x+=this.bucketInterval){
+                  let hora = '';
+                  if (x % 1 != 0){
+                    hora = (x - (x%1)).toString().padStart(2,'0') + ':30';
+                  } else {
+                    hora = x.toString().padStart(2, '0') + ':00';
+                  }
+                  this.buckets.push({ TimeFormat: hora, Time: x });
+                  if (x == this.currHour) {
+                    if (x-this.bucketInterval>= horaIni){
+                      this.prevHour = this.currHour-this.bucketInterval;
+                    }
+                  }
+                }
+              }
+              this.spinnerService.stop(spinnerRef);
+            } else {
+              this.spinnerService.stop(spinnerRef);
+              return;
+            }
+          }),
+          switchMap(val => this.serviceService.getServicesProvider(this.businessId, this.providerId).pipe(
+            map((res: any) =>{
+              this.services = res.services.filter(x => x.Selected === 1);
+              return res;
+            })
+          )),
+          switchMap((value: any) => {
+            value = this.locationService.getLocationQuantity(this.businessId, this.locationId);
+            return value;
+          }),
+          map((res: any) => {
+            this.qtyPeople = res.Quantity;
+            this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+          }),
+          catchError(err => {
+            this.spinnerService.stop(spinnerRef);
+            this.onError = err.Message;
+            return '0';
+          })
+        );
+      }
+    }
+  }
+
   onServiceChange(event){
     let res = this.Providers.filter(val => val.ProviderId == event.value);
     if (res.length > 0){
@@ -537,6 +646,19 @@ export class QuickCheckinComponent implements OnInit {
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
+        this.onError = err.Message;
+        return '0';
+      })
+    );
+  }
+
+  onProvChange(event){
+    this.getLocInfo$ = this.serviceService.getServicesProvider(this.businessId, event.value).pipe(
+      map((res: any) =>{
+        this.services = res.services.filter(x => x.Selected === 1);
+        return res;
+      }),
+      catchError(err => {
         this.onError = err.Message;
         return '0';
       })

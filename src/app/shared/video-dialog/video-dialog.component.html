@@ -3,30 +3,18 @@
     <div class="card" class="col-md-12 pl-2 pr-2 pt-0 main-title">
         {{data.title}}
         <mat-card class="card-video">
-            <div class="row">
-                <div class="pb-3">
-                    <!-- <webcam width="370" height="300" class="w-100 pb-3" id="video" #video></webcam> -->
-                    <video class="w-100 pb-3" id="video" #video autoplay playsinline></video>
-                </div>
-                <div style="display:none">
-                    <canvas class="w-100 pb-3" id="canvas" #canvas></canvas>
-                </div>
+            <div class="webcam">
+                <zxing-scanner class="display-webcam" #scanner 
+                    (start)="enabledCamera" 
+                    [device]="currentDevice"
+                    (scanSuccess)="handleQrCodeResult($event)">
+                </zxing-scanner>
             </div>
         </mat-card>
-        <div class="pt-3">
-            <ng-container *ngIf="!videoStart">
-                <button mat-fab class="mat-elevation-z1" (click)="toggleVideoMedia()" [disabled]="videoStart"
-                    color="secondary" aria-label="videocam icon-button">
-                    <mat-icon>videocam</mat-icon>
-                </button>
-            </ng-container>
-            <ng-container *ngIf="videoStart">
-                <button mat-fab (click)="toggleVideoMedia()" [disabled]="!videoStart" color="warn"
-                    aria-label="videocam icon-button">
-                    <mat-icon>videocam_off</mat-icon>
-                </button>
-            </ng-container>
-        </div>
+        <select (change)="onDeviceSelectChange($event.target.value)" class="mt-2">
+            <option value="" [selected]="!currentDevice">No Device</option>
+            <option *ngFor="let device of availableDevices" [value]="device.deviceId" [selected]="currentDevice && device.deviceId === currentDevice.deviceId">{{ device.label }}</option>
+        </select>
     </div>
     <div class="row">
         <div class="pt-3 col-md-5">

@@ -1,4 +1,4 @@
-<div class="container-fluid host-container">
+<div class="container-fluid host-container d-none d-md-block d-lg-block d-xl-block">
     <div class="row">
         <ng-container *ngIf="updAppointment$ | async"></ng-container>
         <ng-container *ngIf="openLoc$ | async"></ng-container>
@@ -610,4 +610,7 @@
             </div>
         </div>
     </div>
+</div>
+<div class="container-fluid h-100 main-background host-container d-block d-sm-block d-md-none d-lg-none d-xl-none">
+    <h5 i18n="Screen Res@@shared.screenresolution">You need a better resolution to see this screen</h5>
 </div>

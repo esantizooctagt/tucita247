@@ -38,6 +38,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Ng5SliderModule } from 'ng5-slider';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'; 
 
@@ -66,8 +67,6 @@ import { PollListComponent } from '@modules/polls/poll-list/poll-list.component'
 import { UserlocComponent } from '@modules/userloc/userloc.component';
 import { SurveyComponent } from '@modules/surveys/survey/survey.component';
 import { SurveyListComponent } from '@modules/surveys/survey-list/survey-list.component';
-
-import { WebcamModule } from 'ngx-webcam';
 
 //Directives
 import { PhoneMaskDirective } from '@shared/phone-mask.directive';
@@ -155,7 +154,7 @@ import { RoleListAdminComponent } from '@modules/roles-admin/role-list-admin/rol
     MatTabsModule,
     InfiniteScrollModule,
     NgxChartsModule,
-    WebcamModule,
+    ZXingScannerModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBdQ6vAlbIi3u_KdiMv8KILsjYExJLDUGU'
     })

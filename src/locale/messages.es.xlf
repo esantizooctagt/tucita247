@@ -2,6 +2,18 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template" target-language="es">
     <body>
+      <trans-unit id="shared.screenresolution" datatype="html">
+        <source>Screen Res</source>
+        <target state="translated">Necesita una resolucion mayor para ver esta pantalla</target>
+        <context-group purpose="schedule">
+          <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
+          <context context-type="linenumber">275</context>
+        </context-group>
+        <context-group purpose="host">
+          <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
+          <context context-type="linenumber">615</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="host.provider" datatype="html">
         <source>Provider</source>
         <target state="translated">Proveedor</target>

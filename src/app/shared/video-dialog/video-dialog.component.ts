@@ -1,9 +1,9 @@
-import { Component, ViewChild, ElementRef, OnInit, Inject } from '@angular/core';
+import { Component, ViewChild, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AppointmentService } from '@app/services';
 import { SpinnerService } from '@app/shared/spinner.service';
+import { ZXingScannerComponent, ZXingScannerModule } from '@zxing/ngx-scanner';
 
-import jsQR, { QRCode } from 'jsqr';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
@@ -22,15 +22,20 @@ export interface DialogData {
   styleUrls: ['./video-dialog.component.scss']
 })
 export class VideoDialogComponent implements OnInit {
-  @ViewChild('video', {static: true}) videoElm: ElementRef;
-  @ViewChild('canvas', {static: true}) canvasElm: ElementRef;
+  @ViewChild('scanner', { static: true }) scanner: ZXingScannerComponent;
+
+  enabledCamera: boolean = true;
+  hasCameras = false;
+  hasPermission: boolean;
+  availableDevices: MediaDeviceInfo[];
+  selectedDevice: MediaDeviceInfo;
+  currentDevice: MediaDeviceInfo = null;
 
   appoData$: Observable<any>;
   qrCode: string = '';
   checkInValues: any;
-  videoStart = false;
-  Guests: number = 0;
-  a=new AudioContext();
+  Guests: number = 1;
+  sound=new AudioContext();
 
   medias: MediaStreamConstraints = {
     audio: false,
@@ -45,76 +50,61 @@ export class VideoDialogComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.startVideo();
-    this.Guests = this.data.guests;
+    this.Guests = (this.data.guests == 0 ? 1 : this.data.guests);
+  }
+
+  ngAfterViewInit(): void{
+    this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
+      this.hasCameras = true;
+      this.currentDevice = devices[0];
+      this.availableDevices = devices;
+
+      // selects the devices's back camera by default
+      for (const device of devices) {
+        if (/back|rear|environment/gi.test(device.label)) {
+          this.currentDevice = device;
+          break;
+        }
+      }
+    });
+
+    this.scanner.camerasNotFound.subscribe((devices: MediaDeviceInfo[]) => {
+      console.error('An error has occurred when trying to enumerate your video-stream-enabled devices.');
+    });
+
+    this.scanner.permissionResponse.subscribe((answer: boolean) => {
+      this.hasPermission = answer;
+    });
   }
   
-  toggleVideoMedia() {
-    if (this.videoStart) {
-      this.stopVideo();
-    } else {
-      this.startVideo()
-    }
-  }
-
-  startVideo() {
-    this.medias.video = true;
-    navigator.mediaDevices.getUserMedia(this.medias).then(
-      (localStream: MediaStream) => {
-        this.videoElm.nativeElement.srcObject = localStream;
-        this.videoStart = true;
-        this.checkImage();
-      }
-    ).catch(
-      error => {
-        console.error(error);
-        this.videoStart = false;
-      }
-    );
-  }
-
-  stopVideo() {
-    this.medias.video = false;
-    this.videoElm.nativeElement.srcObject.getVideoTracks()[0].enabled = false;
-    this.videoElm.nativeElement.srcObject.getVideoTracks()[0].stop();
-    this.videoStart = false;
-  }
-
-  checkImage() {
-    const WIDTH = this.videoElm.nativeElement.clientWidth;
-    const HEIGHT = this.videoElm.nativeElement.clientHeight;
-    this.canvasElm.nativeElement.width  = WIDTH;
-    this.canvasElm.nativeElement.height = HEIGHT;
-    if (WIDTH > 0) {
-      const ctx = this.canvasElm.nativeElement.getContext('2d') as CanvasRenderingContext2D;
-
-      ctx.drawImage(this.videoElm.nativeElement, 0, 0, WIDTH, HEIGHT)
-      const imageData = ctx.getImageData(0, 0, WIDTH, HEIGHT)
-      const code = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: "dontInvert" })
-
-      if (code) {
-          this.qrCode = code.data;
-          this.beep(100, 520, 200);
-          if (this.data.tipo == 2){
-            // var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
-            this.appoData$ = this.appointmentService.getAppointmentData(this.data.businessId, this.data.locationId, this.data.providerId, this.qrCode).pipe(
-              map((res: any) => {
-                if (res.Code == 200) {
-                  this.Guests = res.Guests;
-                  // this.spinnerService.stop(spinnerRef);
-                }
-                return res.Appos;
-              }),
-              catchError(err => {
-                // this.spinnerService.stop(spinnerRef);
-                return err.Message;
-              })
-            );
+  handleQrCodeResult(resultString: string) {
+    this.qrCode = resultString;
+    this.beep(100, 520, 200);
+    navigator.vibrate(1000);
+    if (this.data.tipo == 2){
+      // var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
+      this.appoData$ = this.appointmentService.getAppointmentData(this.data.businessId, this.data.locationId, this.data.providerId, this.qrCode).pipe(
+        map((res: any) => {
+          if (res.Code == 200) {
+            this.Guests = res.Guests;
+            // this.spinnerService.stop(spinnerRef);
           }
-      } else {
-          setTimeout(() => { this.checkImage(); }, 100)
-      }
+          return res.Appos;
+        }),
+        catchError(err => {
+          // this.spinnerService.stop(spinnerRef);
+          return err.Message;
+        })
+      );
     }
+  }
+
+  onDeviceSelectChange(selectedValue: string) {
+    let value = this.availableDevices.filter(val => val.deviceId == selectedValue);
+
+    this.scanner.reset();
+    this.currentDevice = <MediaDeviceInfo>value[0];
+    this.scanner.restart();
   }
 
   onOK(): void{
@@ -126,7 +116,7 @@ export class VideoDialogComponent implements OnInit {
   }
 
   onNoClick(): void {
-    if (this.videoStart) { this.stopVideo(); }
+    this.enabledCamera = false;
     this.qrCode = '';
     this.dialogRef.close();
   }
@@ -134,6 +124,7 @@ export class VideoDialogComponent implements OnInit {
   validQr(event){
     if (event.toString().length == 6){
       this.beep(100, 520, 200);
+      navigator.vibrate(1000);
       if (this.data.tipo == 2){
         // var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
         this.appoData$ = this.appointmentService.getAppointmentData(this.data.businessId, this.data.locationId, this.data.providerId, this.qrCode).pipe(
@@ -154,14 +145,14 @@ export class VideoDialogComponent implements OnInit {
   }
 
   beep(vol, freq, duration){
-    let v=this.a.createOscillator();
-    let u=this.a.createGain();
+    let v=this.sound.createOscillator();
+    let u=this.sound.createGain();
     v.connect(u)
     v.frequency.value=freq
     v.type="square"
-    u.connect(this.a.destination)
+    u.connect(this.sound.destination)
     u.gain.value=vol*0.01
-    v.start(this.a.currentTime)
-    v.stop(this.a.currentTime+duration*0.001)
+    v.start(this.sound.currentTime)
+    v.stop(this.sound.currentTime+duration*0.001)
   }
 }

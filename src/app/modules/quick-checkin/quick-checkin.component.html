@@ -4,16 +4,54 @@
 <ng-container *ngIf="closedLoc$ | async"></ng-container>
 <ng-container *ngIf="getLocInfo$ | async"></ng-container>
 <div class="col-md-12">
+    <mat-accordion>
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+            <mat-expansion-panel-header>
+                <mat-panel-title class="title-text">{{panelOpenState ? hideDetails : seeDetails}}</mat-panel-title>
+                <mat-panel-description>
+                     {{(textOpenLocation != '' &&  operationText != '' ? textOpenLocation + ' :  ' + operationText : '')}}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="row space-row mt-2 mb-2">
+                <div class="col-sm-3 p-0 m-auto">
+                    <!-- locationStatus == 0 ? 'Your location is closed' : (closedLoc == 1 ? 'You need to reopen your location' : 'Your location is open' -->
+                    <mat-slide-toggle color="primary" [checked]="locationStatus == 1" (change)="locationStatusChange()">{{textOpenLocation}}</mat-slide-toggle>
+                </div>
+                <div class="operation-buttons col-sm-9 p-0">
+                    <!-- <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 0" color="secondary" type="button" (click)="getWalkInsCheckOut()">Walk-Ins Check Out</button> -->
+                    <!-- <ng-container *ngIf="getWalkIns$ | async"></ng-container> -->
+                    <!-- <ng-container *ngIf="manualCheckOut$ | async"></ng-container> -->
+                    <!-- <div class="col-sm-6 text-loc">{{locName}}</div> -->
+                    <mat-form-field appearance="fill" class="col-sm-5 pr-3">
+                        <mat-label>Select location</mat-label>
+                        <mat-select name="locations" [(value)]="locationId" (selectionChange)="onLocationChange($event)">
+                            <mat-option *ngFor="let item of locations" [value]="item.LocationId">
+                            {{item.Name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" class="col-sm-6 pr-3">
+                        <mat-label>Select provider</mat-label>
+                        <mat-select name="providers" [(value)]="providerId" (selectionChange)="onServiceChange($event)">
+                            <mat-option class="" value="0" i18n="all providers@@shared.allproviders">ALL PROVIDERS</mat-option>
+                            <mat-option *ngFor="let item of Providers" [value]="item.ProviderId">
+                            {{item.Name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        </mat-expansion-panel>
+    </mat-accordion>
     <div class="qr-space">
-        <div class="p-0 pt-2 m-auto">
-            <!-- {{(locationStatus == 0 ? 'Your location is closed' : (closedLoc == 1 ? 'You need to reopen your location' : 'Your location is open'))}} -->
+        <!-- <div class="p-0 pt-2 m-auto">
             <mat-slide-toggle color="primary" [checked]="locationStatus == 1" (change)="locationStatusChange()">{{textOpenLocation}}</mat-slide-toggle>
         </div>
         <div class="col-sm p-0">{{locName}}</div><mat-select name="providers" class="pt-2 pr-3" [(value)]="providerId" (selectionChange)="onServiceChange($event)">
             <mat-option *ngFor="let item of Providers" [value]="item.ProviderId">
                 {{item.Name}}
             </mat-option>
-        </mat-select>
+        </mat-select> -->
         <div class="row space-row">
             <div *ngIf="locationStatus == 1 && closedLoc == 0" class="col-md-2" [ngClass]="{
                 'qty-people-white': perLocation < 80,
@@ -45,6 +83,16 @@
                         <input matInput #Name i18n-placeholder="Name@@shared.name" placeholder="Name" maxlength="100" minlength="3" formControlName="Name"
                             [errorStateMatcher]="confirmValidParentMatcher" required>
                         <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{ 'Error: ' + getErrorMessage('Name')}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="form-field pl-3 pr-3" *ngIf="providerId == '0'">
+                    <mat-form-field>
+                        <mat-select i18n-placeholder="Provider|text in citas@@host.provider" placeholder="Provider" name="providers" formControlName="ProviderId" (selectionChange)="onProvChange($event)" required>
+                            <mat-option *ngFor="let item of Providers" [value]="item.ProviderId">
+                                {{item.Name}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="f.ProviderId.invalid && f.ProviderId.touched">{{ 'Error: ' + getErrorMessage('Provider')}}</mat-error>
                     </mat-form-field>
                 </div>
                 <div class="form-field pl-3 pr-3">

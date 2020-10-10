@@ -195,11 +195,6 @@ export class HostComponent implements OnInit {
     this.businessId = this.authService.businessId();
     this.userId = this.authService.userId();
 
-    // setInterval(() => { 
-    //   this.appointmentService.getSNS();
-    // }, 20000);
-    
-
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadinglocs:`);
     this.getLocInfo$ = this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
       map((res: any) => {
