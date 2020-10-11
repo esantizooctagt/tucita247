@@ -497,7 +497,9 @@ export class HostComponent implements OnInit {
   checkOutQR(){
     const dialogRef = this.dialog.open(VideoDialogComponent, {
       width: '450px',
-      height: '595px',
+      minWidth: '30vw',
+      maxWidth: '60vw',
+      maxHeight: '100vh',
       data: {guests: 0, title: $localize`:@@host.checkoutpop:`, tipo: 2, businessId: this.businessId, locationId: this.locationId, providerId: this.providerId}
     });
 
@@ -801,7 +803,9 @@ export class HostComponent implements OnInit {
     if (appo.Type == 1) {
       const dialogRef = this.dialog.open(VideoDialogComponent, {
         width: '450px',
-        height: '675px',
+        minWidth: '30vw',
+        maxWidth: '60vw',
+        maxHeight: '100vh',
         data: {guests: appo.Guests, title: $localize`:@@host.checkintitle:`, tipo: 1 }
       });
 
