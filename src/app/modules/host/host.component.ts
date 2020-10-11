@@ -384,9 +384,30 @@ export class HostComponent implements OnInit {
       switchMap(x => this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
         map((res: any) => {
           if (res.Locs != null){
-            this.Providers = res.Locs.Providers;
+            // this.Providers = res.Locs.Providers;
+            // return res;
+            if (res.Locs.length > 0){
+              this.locations = res.Locs;
+              this.locationId = res.Locs[0].LocationId;
+              this.doorId = res.Locs[0].Door;
+              this.manualCheckOut = res.Locs[0].ManualCheckOut;
+              this.totLocation = res.Locs[0].MaxCustomers;
+              this.Providers = res.Locs[0].Providers;
+              this.locName = res.Locs[0].Name;
+              this.locationStatus = res.Locs[0].Open;
+              this.closedLoc = res.Locs[0].Closed;
+              this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+              if (this.Providers.length > 0){
+                this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
+                // this.providerId = this.Providers[0].ProviderId;
+                this.providerId = "0";
+              }
+            }
             return res;
           } else {
+            this.spinnerService.stop(spinnerRef);
+            this.openDialog($localize`:@@shared.error:`, $localize`:@@host.missloc:`, false, true, false);
+            this.router.navigate(['/']);
             return;
           }
         })
@@ -420,9 +441,33 @@ export class HostComponent implements OnInit {
       switchMap(x => this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
         map((res: any) => {
           if (res.Locs != null){
-            this.Providers = res.Locs.Providers;
+            // this.Providers = res.Locs.Providers;
+          //   return res;
+          // } else {
+          //   return;
+          // }
+            if (res.Locs.length > 0){
+              this.locations = res.Locs;
+              this.locationId = res.Locs[0].LocationId;
+              this.doorId = res.Locs[0].Door;
+              this.manualCheckOut = res.Locs[0].ManualCheckOut;
+              this.totLocation = res.Locs[0].MaxCustomers;
+              this.Providers = res.Locs[0].Providers;
+              this.locName = res.Locs[0].Name;
+              this.locationStatus = res.Locs[0].Open;
+              this.closedLoc = res.Locs[0].Closed;
+              this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+              if (this.Providers.length > 0){
+                this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
+                // this.providerId = this.Providers[0].ProviderId;
+                this.providerId = "0";
+              }
+            }
             return res;
           } else {
+            this.spinnerService.stop(spinnerRef);
+            this.openDialog($localize`:@@shared.error:`, $localize`:@@host.missloc:`, false, true, false);
+            this.router.navigate(['/']);
             return;
           }
         })
