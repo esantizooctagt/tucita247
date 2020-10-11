@@ -1,7 +1,8 @@
-<div>
+<h3 mat-dialog-title class="main-title">{{data.title}}</h3>
+<div mat-dialog-content>
     <ng-container *ngIf="appoData$ | async"></ng-container>
-    <div class="card" class="col-md-12 pl-2 pr-2 pt-0 main-title">
-        {{data.title}}
+    <!-- <div class="card" class="col-md-12 pl-2 pr-2 pt-0 main-title">
+        {{data.title}} -->
         <mat-card class="card-video">
             <div class="webcam">
                 <zxing-scanner class="display-webcam" #scanner 
@@ -15,7 +16,7 @@
             <option value="" [selected]="!currentDevice">No Device</option>
             <option *ngFor="let device of availableDevices" [value]="device.deviceId" [selected]="currentDevice && device.deviceId === currentDevice.deviceId">{{ device.label }}</option>
         </select>
-    </div>
+    <!-- </div> -->
     <div class="row">
         <div class="pt-3 col-md-5">
             <mat-form-field>
@@ -36,8 +37,8 @@
             </button>
         </div>
     </div>
-    <div>
-        <button mat-flat-button class="mr-3 btn-cancel" (click)="onNoClick()" i18n="Cancel@@shared.cancel">Cancel</button>
-        <button mat-flat-button color="primary" class="btn-ok" (click)="onOK()" cdkFocusInitial i18n="Ok@@shared.ok">Ok</button>
-    </div>
+</div>
+<div mat-dialog-actions>
+    <button mat-flat-button class="mr-3 btn-cancel" (click)="onNoClick()" i18n="Cancel@@shared.cancel">Cancel</button>
+    <button mat-flat-button color="primary" class="btn-ok" (click)="onOK()" cdkFocusInitial i18n="Ok@@shared.ok">Ok</button>
 </div>
