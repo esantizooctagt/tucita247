@@ -5,8 +5,8 @@
 <ng-container *ngIf="getLocInfo$ | async"></ng-container>
 <div class="col-md-12">
     <mat-accordion>
-        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-            <mat-expansion-panel-header>
+        <mat-expansion-panel class="mt-2" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+            <mat-expansion-panel-header class="header-panel">
                 <mat-panel-title class="title-text">{{panelOpenState ? hideDetails : seeDetails}}</mat-panel-title>
                 <mat-panel-description>
                      {{(textOpenLocation != '' &&  operationText != '' ? textOpenLocation + ' :  ' + operationText : '')}}

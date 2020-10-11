@@ -110,7 +110,7 @@ export class VideoDialogComponent implements OnInit {
   onOK(): void{
     let checkInValues ={
       qrCode : this.qrCode,
-      Guests : (this.data.guests.toString() == '' ? 0 : +this.data.guests)
+      Guests : +this.Guests
     }
     this.dialogRef.close(checkInValues);
   }

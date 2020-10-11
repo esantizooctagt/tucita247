@@ -19,13 +19,13 @@
         </div>
         <div class="pt-0 pb-0 col-md-7 col-12">
             <mat-label class="label-guests" i18n="Guests|text in guests@@video.guests">Guests</mat-label>
-            <button mat-icon-button (click)="data.guests=data.guests+1">
+            <button mat-icon-button (click)="Guests=Guests+1">
                 <mat-icon class="site-color">add</mat-icon>
             </button>
             <mat-form-field class="num-guests pb-0">
                 <input matInput [(ngModel)]="Guests">
             </mat-form-field>
-            <button mat-icon-button (click)="(data.guests > 1 ? data.guests=data.guests-1 : data.guests)">
+            <button mat-icon-button (click)="(Guests > 1 ? Guests=Guests-1 : Guests)">
                 <mat-icon class="site-color">remove</mat-icon>
             </button>
         </div>

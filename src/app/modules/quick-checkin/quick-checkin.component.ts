@@ -230,7 +230,7 @@ export class QuickCheckinComponent implements OnInit {
     dialogRef.minWidth = '320px';
     dialogRef.maxWidth = '450px';
     dialogRef.height = '575px';
-    dialogRef.data = {guests: 0, title: $localize`:@@host.checkoutpop:`, tipo: 2};
+    dialogRef.data = {guests: 0, title: $localize`:@@host.checkoutpop:`, tipo: 2, businessId: this.businessId, locationId: this.locationId, providerId: this.providerId};
     const qrDialog = this.dialog.open(VideoDialogComponent, dialogRef);
     qrDialog.afterClosed().subscribe(result => {
       if (result != undefined) {
@@ -320,14 +320,14 @@ export class QuickCheckinComponent implements OnInit {
     dialogRef.data = {guests: 0, title: $localize`:@@host.checkintitle:`, tipo: 3 };
     const qrDialog = this.dialog.open(VideoDialogComponent, dialogRef);
     qrDialog.afterClosed().subscribe(result => {
-    if (result != undefined) {
-      this.qrCode = result.qrCode;
-      let guestsAppo = result.Guests;
-      if (this.qrCode != '' && guestsAppo > 0){
-        this.checkInAppointment(this.qrCode, guestsAppo);
+      if (result != undefined) {
+        this.qrCode = result.qrCode;
+        let guestsAppo = result.Guests;
+        if (this.qrCode != '' && guestsAppo > 0){
+          this.checkInAppointment(this.qrCode, guestsAppo);
+        }
       }
-    }
-  });
+    });
   }
 
   checkInAppointment(qrCode: string, guests: number){
