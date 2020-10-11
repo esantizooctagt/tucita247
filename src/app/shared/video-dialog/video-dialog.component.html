@@ -1,35 +1,28 @@
-<h3 mat-dialog-title class="main-title">{{data.title}}</h3>
+<h1 mat-dialog-title class="main-title">{{data.title}}</h1>
 <div mat-dialog-content>
     <ng-container *ngIf="appoData$ | async"></ng-container>
-    <!-- <div class="card" class="col-md-12 pl-2 pr-2 pt-0 main-title">
-        {{data.title}} -->
-        <mat-card class="card-video">
-            <div class="webcam">
-                <zxing-scanner class="display-webcam" #scanner 
-                    (start)="enabledCamera" 
-                    [device]="currentDevice"
-                    (scanSuccess)="handleQrCodeResult($event)">
-                </zxing-scanner>
-            </div>
-        </mat-card>
-        <select (change)="onDeviceSelectChange($event.target.value)" class="mt-2">
-            <option value="" [selected]="!currentDevice">No Device</option>
-            <option *ngFor="let device of availableDevices" [value]="device.deviceId" [selected]="currentDevice && device.deviceId === currentDevice.deviceId">{{ device.label }}</option>
-        </select>
-    <!-- </div> -->
+    <zxing-scanner class="display-webcam" #scanner 
+        (start)="enabledCamera" 
+        [device]="currentDevice"
+        (scanSuccess)="handleQrCodeResult($event)">
+    </zxing-scanner>
+    <select (change)="onDeviceSelectChange($event.target.value)" class="mt-2">
+        <option value="" [selected]="!currentDevice">No Device</option>
+        <option *ngFor="let device of availableDevices" [value]="device.deviceId" [selected]="currentDevice && device.deviceId === currentDevice.deviceId">{{ device.label }}</option>
+    </select>
     <div class="row">
-        <div class="pt-3 col-md-5">
-            <mat-form-field>
+        <div class="pt-0 pb-0 col-md-5 col-12">
+            <mat-form-field class="pb-0">
                 <mat-label i18n="Cita Code|text in checkin/checkout@@video.citacode">Cita Code</mat-label>
                 <input matInput placeholder="QR Code" [(ngModel)]="qrCode" (ngModelChange)="validQr($event)" maxlength="6">
             </mat-form-field>
         </div>
-        <div class="pt-3 col-md-7 text-right">
+        <div class="pt-0 pb-0 col-md-7 col-12">
             <mat-label class="label-guests" i18n="Guests|text in guests@@video.guests">Guests</mat-label>
             <button mat-icon-button (click)="data.guests=data.guests+1">
                 <mat-icon class="site-color">add</mat-icon>
             </button>
-            <mat-form-field class="num-guests">
+            <mat-form-field class="num-guests pb-0">
                 <input matInput [(ngModel)]="Guests">
             </mat-form-field>
             <button mat-icon-button (click)="(data.guests > 1 ? data.guests=data.guests-1 : data.guests)">

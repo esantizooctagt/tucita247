@@ -220,13 +220,19 @@ export class QuickCheckinComponent implements OnInit {
   }
 
   checkOutQR(){
-    const dialogRef = this.dialog.open(VideoDialogComponent, {
-      width: '450px',
-      height: '660px',
-      data: {guests: 0, title: $localize`:@@host.checkoutpop:`, tipo: 2}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
+    // const dialogRef = this.dialog.open(VideoDialogComponent, {
+    //   width: '450px',
+    //   height: '660px',
+    //   data: {guests: 0, title: $localize`:@@host.checkoutpop:`, tipo: 2}
+    // });
+    const dialogRef = new MatDialogConfig();
+    dialogRef.width ='450px';
+    dialogRef.minWidth = '320px';
+    dialogRef.maxWidth = '450px';
+    dialogRef.height = '575px';
+    dialogRef.data = {guests: 0, title: $localize`:@@host.checkoutpop:`, tipo: 2};
+    const qrDialog = this.dialog.open(VideoDialogComponent, dialogRef);
+    qrDialog.afterClosed().subscribe(result => {
       if (result != undefined) {
         let qtyGuests = result.Guests;
         this.qrCode = result.qrCode;
@@ -301,21 +307,27 @@ export class QuickCheckinComponent implements OnInit {
 
   onCheckInApp(){
     //READ QR CODE AND CHECK-IN PROCESS
-    const dialogRef = this.dialog.open(VideoDialogComponent, {
-      width: '450px',
-      height: '660px',
-      data: {guests: 0, title: $localize`:@@host.checkintitle:`, tipo: 3 }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result != undefined) {
-        this.qrCode = result.qrCode;
-        let guestsAppo = result.Guests;
-        if (this.qrCode != '' && guestsAppo > 0){
-          this.checkInAppointment(this.qrCode, guestsAppo);
-        }
+    // const dialogRef = this.dialog.open(VideoDialogComponent, {
+    //   width: '450px',
+    //   height: '660px',
+    //   data: {guests: 0, title: $localize`:@@host.checkintitle:`, tipo: 3 }
+    // });
+    const dialogRef = new MatDialogConfig();
+    dialogRef.width ='450px';
+    dialogRef.minWidth = '320px';
+    dialogRef.maxWidth = '450px';
+    dialogRef.height = '575px';
+    dialogRef.data = {guests: 0, title: $localize`:@@host.checkintitle:`, tipo: 3 };
+    const qrDialog = this.dialog.open(VideoDialogComponent, dialogRef);
+    qrDialog.afterClosed().subscribe(result => {
+    if (result != undefined) {
+      this.qrCode = result.qrCode;
+      let guestsAppo = result.Guests;
+      if (this.qrCode != '' && guestsAppo > 0){
+        this.checkInAppointment(this.qrCode, guestsAppo);
       }
-    });
+    }
+  });
   }
 
   checkInAppointment(qrCode: string, guests: number){
@@ -711,47 +723,68 @@ export class QuickCheckinComponent implements OnInit {
   }
 
   closedLocation(){
-    var spinnerRef = this.spinnerService.start($localize`:@@host.closingloc:`);
-    this.closedLoc$ = this.locationService.updateClosedLocation(this.locationId, this.businessId).pipe(
-      map((res: any) => {
-        if (res != null){
-          if (res['Business'].OPEN == 0){
-            this.locationStatus = 0;
-            this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
-            this.spinnerService.stop(spinnerRef);
-          }
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      header: $localize`:@@host.closedlocheader:`, 
+      message: $localize`:@@host.closedloc:`, 
+      success: false, 
+      error: false, 
+      warn: false,
+      ask: true
+    };
+    dialogConfig.width ='280px';
+    dialogConfig.minWidth = '280px';
+    dialogConfig.maxWidth = '280px';
+
+    const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(result => {
+      if(result != undefined){
+        if (result){ 
+          var spinnerRef = this.spinnerService.start($localize`:@@host.closingloc:`);
+          this.closedLoc$ = this.locationService.updateClosedLocation(this.locationId, this.businessId, (result == true ? 1 : 0)).pipe(
+            map((res: any) => {
+              if (res != null){
+                if (res['Business'].OPEN == 0){
+                  this.locationStatus = 0;
+                  this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+                  this.spinnerService.stop(spinnerRef);
+                }
+              }
+            }),
+            switchMap(x => this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
+              map((res: any) => {
+                if (res.Locs != null){
+                  this.Providers = res.Locs.Providers;
+                  return res;
+                } else {
+                  return;
+                }
+              })
+            )),
+            mergeMap(v => 
+              //ACTUALIZA NUMERO DE PERSONAS
+              this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
+                map((res: any) => {
+                  if (res != null){
+                    this.qtyPeople = res.Quantity;
+                    this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+                    return res.Quantity.toString();
+                  }
+                })
+              )
+            ),
+            catchError(err => {
+              this.spinnerService.stop(spinnerRef);
+              this.locationStatus = 1;
+              this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+              this.onError = err.Message;
+              return this.onError;
+            })
+          );
         }
-      }),
-      switchMap(x => this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
-        map((res: any) => {
-          if (res.Locs != null){
-            this.Providers = res.Locs.Providers;
-            return res;
-          } else {
-            return;
-          }
-        })
-      )),
-      mergeMap(v => 
-        //ACTUALIZA NUMERO DE PERSONAS
-        this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
-          map((res: any) => {
-            if (res != null){
-              this.qtyPeople = res.Quantity;
-              this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
-              return res.Quantity.toString();
-            }
-          })
-        )
-      ),
-      catchError(err => {
-        this.spinnerService.stop(spinnerRef);
-        this.locationStatus = 1;
-        this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
-        this.onError = err.Message;
-        return this.onError;
-      })
-    );
+      }
+    });
   }
 
   getTime(): string{
