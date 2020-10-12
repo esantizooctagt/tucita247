@@ -43,7 +43,7 @@ export class QuickCheckinComponent implements OnInit {
 
   tipo: number =0;
   Guests: number = 1;
-  sound=new AudioContext();
+  // sound=new AudioContext();
 
   qrCode: string = '';
   businessId: string  = '';
