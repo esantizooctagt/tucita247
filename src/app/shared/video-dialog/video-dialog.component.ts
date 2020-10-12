@@ -53,20 +53,18 @@ export class VideoDialogComponent implements OnInit {
     this.Guests = (this.data.guests == 0 ? 1 : this.data.guests);
   }
 
-  ngAfterViewInit(): void{
-    this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
-      this.hasCameras = true;
-      this.currentDevice = devices[0];
-      this.availableDevices = devices;
+  displayCameras(event){
+    this.hasCameras = true;
+    this.currentDevice = event[0];
+    this.availableDevices = event;
 
-      // selects the devices's back camera by default
-      for (const device of devices) {
-        if (/back|rear|environment/gi.test(device.label)) {
-          this.currentDevice = device;
-          break;
-        }
+    // selects the devices's back camera by default
+    for (const device of event) {
+      if (/back|rear|environment/gi.test(device.label)) {
+        this.currentDevice = device;
+        break;
       }
-    });
+    }
 
     this.scanner.camerasNotFound.subscribe((devices: MediaDeviceInfo[]) => {
       console.error('An error has occurred when trying to enumerate your video-stream-enabled devices.');

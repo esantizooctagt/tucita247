@@ -3917,6 +3917,12 @@
       <trans-unit id="host.allproviders">
         <source>ALL PROVIDERS</source>
       </trans-unit>
+      <trans-unit id="host.closedloc">
+        <source>Do you want to close your location and cancel all pending appointments?</source>
+      </trans-unit>
+      <trans-unit id="host.closedlocheader">
+        <source>Close Location</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

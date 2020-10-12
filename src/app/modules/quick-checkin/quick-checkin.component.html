@@ -170,11 +170,6 @@
             (click)="checkOutQR()" [disabled]="!locationId" i18n="Check Out|text in citas lite@@lite.checkout">Check Out</button>
         <ng-container *ngIf="manualCheckOut$ | async"></ng-container>
     </div>
-    <zxing-scanner class="display-webcam" #scanner 
-    (start)="enabledCamera" 
-    (camerasFound)="displayCameras($event)"
-    [device]="currentDevice"></zxing-scanner>
-    <p *ngIf="hasPermission">No tiene permisos</p>
     <!-- <div class="qr-space">
         <button mat-stroked-button class="action-buttons col-md-12 mt-0 mb-2" color="secondary" type="button"
             (click)="getWalkInsCheckOut()">Walk-Ins Check Out</button>

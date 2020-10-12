@@ -4418,6 +4418,14 @@
         <source>Email sent succesfully</source>
         <target state="translated">Correo electrónico enviado con éxito</target>
       </trans-unit>
+      <trans-unit id="host.closedloc">
+        <source>Do you want to close your location and cancel all pending appointments?</source>
+        <target state="translated">Desea cerrar la localizacion y cancelar todas las citas pendientes?</target>
+      </trans-unit>
+      <trans-unit id="host.closedlocheader">
+        <source>Close Location</source>
+        <target state="translated">Cerrar localizacion</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
