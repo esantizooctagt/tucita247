@@ -441,72 +441,72 @@ export class HostComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
       if(result != undefined){
-        if (result){ 
-          var spinnerRef = this.spinnerService.start($localize`:@@host.closingloc:`);
-          this.closedLoc$ = this.locationService.updateClosedLocation(this.locationId, this.businessId, (result == true ? 1 : 0)).pipe(
-            map((res: any) => {
-              if (res != null){
-                if (res['Business'].OPEN == 0){
-                  this.locationStatus = 0;
-                  this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
-                  this.spinnerService.stop(spinnerRef);
-                  this.previous = [];
-                  this.schedule = [];
-                  this.walkIns = [];
-                  this.preCheckIn = [];
-                }
+        // if (result){ 
+        var spinnerRef = this.spinnerService.start($localize`:@@host.closingloc:`);
+        this.closedLoc$ = this.locationService.updateClosedLocation(this.locationId, this.businessId, (result == true ? 1 : 0)).pipe(
+          map((res: any) => {
+            if (res != null){
+              if (res['Business'].OPEN == 0){
+                this.locationStatus = 0;
+                this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+                this.spinnerService.stop(spinnerRef);
+                this.previous = [];
+                this.schedule = [];
+                this.walkIns = [];
+                this.preCheckIn = [];
               }
-            }),
-            switchMap(x => this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
-              map((res: any) => {
-                if (res.Locs != null){
-                  if (res.Locs.length > 0){
-                    this.locations = res.Locs;
-                    this.locationId = res.Locs[0].LocationId;
-                    this.doorId = res.Locs[0].Door;
-                    this.manualCheckOut = res.Locs[0].ManualCheckOut;
-                    this.totLocation = res.Locs[0].MaxCustomers;
-                    this.Providers = res.Locs[0].Providers;
-                    this.locName = res.Locs[0].Name;
-                    this.locationStatus = res.Locs[0].Open;
-                    this.closedLoc = res.Locs[0].Closed;
-                    this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
-                    if (this.Providers.length > 0){
-                      this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
-                      // this.providerId = this.Providers[0].ProviderId;
-                      this.providerId = "0";
-                    }
+            }
+          }),
+          switchMap(x => this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
+            map((res: any) => {
+              if (res.Locs != null){
+                if (res.Locs.length > 0){
+                  this.locations = res.Locs;
+                  this.locationId = res.Locs[0].LocationId;
+                  this.doorId = res.Locs[0].Door;
+                  this.manualCheckOut = res.Locs[0].ManualCheckOut;
+                  this.totLocation = res.Locs[0].MaxCustomers;
+                  this.Providers = res.Locs[0].Providers;
+                  this.locName = res.Locs[0].Name;
+                  this.locationStatus = res.Locs[0].Open;
+                  this.closedLoc = res.Locs[0].Closed;
+                  this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+                  if (this.Providers.length > 0){
+                    this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
+                    // this.providerId = this.Providers[0].ProviderId;
+                    this.providerId = "0";
                   }
-                  return res;
-                } else {
-                  this.spinnerService.stop(spinnerRef);
-                  this.openDialog($localize`:@@shared.error:`, $localize`:@@host.missloc:`, false, true, false);
-                  this.router.navigate(['/']);
-                  return;
+                }
+                return res;
+              } else {
+                this.spinnerService.stop(spinnerRef);
+                this.openDialog($localize`:@@shared.error:`, $localize`:@@host.missloc:`, false, true, false);
+                this.router.navigate(['/']);
+                return;
+              }
+            })
+          )),
+          mergeMap(v => 
+            //ACTUALIZA NUMERO DE PERSONAS
+            this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
+              map((res: any) => {
+                if (res != null){
+                  this.qtyPeople = res.Quantity;
+                  this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+                  return res.Quantity.toString();
                 }
               })
-            )),
-            mergeMap(v => 
-              //ACTUALIZA NUMERO DE PERSONAS
-              this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
-                map((res: any) => {
-                  if (res != null){
-                    this.qtyPeople = res.Quantity;
-                    this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
-                    return res.Quantity.toString();
-                  }
-                })
-              )
-            ),
-            catchError(err => {
-              this.spinnerService.stop(spinnerRef);
-              this.locationStatus = 1;
-              this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
-              this.onError = err.Message;
-              return this.onError;
-            })
-          );
-        }
+            )
+          ),
+          catchError(err => {
+            this.spinnerService.stop(spinnerRef);
+            this.locationStatus = 1;
+            this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+            this.onError = err.Message;
+            return this.onError;
+          })
+        );
+        // }
       }
     });
   }
