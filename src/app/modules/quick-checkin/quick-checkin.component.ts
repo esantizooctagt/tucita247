@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { DirDialogComponent } from '@app/shared/dir-dialog/dir-dialog.component';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ConfirmValidParentMatcher } from '@app/validators';
+import { ZXingScannerComponent, ZXingScannerModule } from '@zxing/ngx-scanner';
 
 @Component({
   selector: 'app-quick-checkin',
@@ -20,6 +21,24 @@ import { ConfirmValidParentMatcher } from '@app/validators';
   styleUrls: ['./quick-checkin.component.scss']
 })
 export class QuickCheckinComponent implements OnInit {
+  @ViewChild('scanner', { static: true }) scanner: ZXingScannerComponent;
+
+  enabledCamera: boolean = true;
+  hasCameras = false;
+  hasPermission: boolean;
+  availableDevices: MediaDeviceInfo[];
+  selectedDevice: MediaDeviceInfo;
+  currentDevice: MediaDeviceInfo = null;
+
+  medias: MediaStreamConstraints = {
+    audio: false,
+    video: false,
+  };
+
+  tipo: number =0;
+  Guests: number = 1;
+  sound=new AudioContext();
+
   qrCode: string = '';
   businessId: string  = '';
   locationId: string = '';
@@ -43,6 +62,7 @@ export class QuickCheckinComponent implements OnInit {
 
   showCard: boolean =false;
 
+  appoData$: Observable<any>;
   Locs$: Observable<any>;
   getWalkIns$: Observable<any[]>;
   check$: Observable<any>;
@@ -116,6 +136,28 @@ export class QuickCheckinComponent implements OnInit {
     this.dialog.open(DialogComponent, dialogConfig);
   }
   
+  displayCameras(event){
+    this.hasCameras = true;
+    this.currentDevice = event[0];
+    this.availableDevices = event;
+
+    // selects the devices's back camera by default
+    for (const device of event) {
+      if (/back|rear|environment/gi.test(device.label)) {
+        this.currentDevice = device;
+        break;
+      }
+    }
+  }
+
+  onDeviceSelectChange(selectedValue: string) {
+    let value = this.availableDevices.filter(val => val.deviceId == selectedValue);
+
+    this.scanner.reset();
+    this.currentDevice = <MediaDeviceInfo>value[0];
+    this.scanner.restart();
+  }
+
   ngOnInit(): void {
     this.businessId = this.authService.businessId();
     this.userId = this.authService.userId();
@@ -136,22 +178,9 @@ export class QuickCheckinComponent implements OnInit {
             this.closedLoc = res.Locs[0].Closed;
             this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
             if (this.Providers.length > 0){
-              this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
-              // this.providerId = this.Providers[0].ProviderId;
+              this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; 
               this.providerId = "0";
             }
-
-            // this.locationId = res.Locs.LocationId;
-            // this.doorId = res.Locs.Door;
-            // this.Providers = res.Locs.Providers;
-            // this.totLocation = res.Locs.MaxCustomers;
-            // this.locName = res.Locs.Name;
-            // this.locationStatus = res.Locs.Providers[0].Open;
-            // this.closedLoc = res.Locs.Providers[0].Closed;
-            // this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
-            // if (this.Providers.length > 0){
-            //   this.providerId = res.Locs.Providers[0].ProviderId;
-            //}
             this.spinnerService.stop(spinnerRef);
           }
           return res;
@@ -218,6 +247,63 @@ export class QuickCheckinComponent implements OnInit {
         return '0';
       })
     );
+  }
+
+  handleQrCodeResult(resultString: string) {
+    this.qrCode = resultString;
+    this.beep(100, 520, 200);
+    navigator.vibrate(1000);
+    if (this.tipo == 2){
+      // var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
+      this.appoData$ = this.appointmentService.getAppointmentData(this.businessId, this.locationId, this.providerId, this.qrCode).pipe(
+        map((res: any) => {
+          if (res.Code == 200) {
+            this.Guests = res.Guests;
+            // this.spinnerService.stop(spinnerRef);
+          }
+          return res.Appos;
+        }),
+        catchError(err => {
+          // this.spinnerService.stop(spinnerRef);
+          return err.Message;
+        })
+      );
+    }
+  }
+
+  validQr(event){
+    if (event.toString().length == 6){
+      this.beep(100, 520, 200);
+      navigator.vibrate(1000);
+      if (this.tipo == 2){
+        // var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
+        this.appoData$ = this.appointmentService.getAppointmentData(this.businessId, this.locationId, this.providerId, this.qrCode).pipe(
+          map((res: any) => {
+            if (res.Code == 200) {
+              this.Guests = res.Guests;
+              // this.spinnerService.stop(spinnerRef);
+            }
+            return res.Appos;
+          }),
+          catchError(err => {
+            // this.spinnerService.stop(spinnerRef);
+            return err.Message;
+          })
+        );
+      }
+    }
+  }
+
+  beep(vol, freq, duration){
+    let v=this.sound.createOscillator();
+    let u=this.sound.createGain();
+    v.connect(u)
+    v.frequency.value=freq
+    v.type="square"
+    u.connect(this.sound.destination)
+    u.gain.value=vol*0.01
+    v.start(this.sound.currentTime)
+    v.stop(this.sound.currentTime+duration*0.001)
   }
 
   checkOutQR(){
