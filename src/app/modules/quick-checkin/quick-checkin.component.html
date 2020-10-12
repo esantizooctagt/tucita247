@@ -174,9 +174,9 @@
         <zxing-scanner class="display-webcam" #scanner 
             (start)="enabledCamera" 
             (camerasFound)="displayCameras($event)"
-            [device]="currentDevice"
-            (scanSuccess)="handleQrCodeResult($event)">
+            [device]="currentDevice">
         </zxing-scanner>
+        <!-- (scanSuccess)="handleQrCodeResult($event)" -->
     </div>
     <select (change)="onDeviceSelectChange($event.target.value)" class="mt-2">
         <option value="" [selected]="!currentDevice">No Device</option>
