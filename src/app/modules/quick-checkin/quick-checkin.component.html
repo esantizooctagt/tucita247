@@ -170,45 +170,6 @@
             (click)="checkOutQR()" [disabled]="!locationId" i18n="Check Out|text in citas lite@@lite.checkout">Check Out</button>
         <ng-container *ngIf="manualCheckOut$ | async"></ng-container>
     </div>
-    <zxing-scanner class="display-webcam" #scanner 
-        (start)="enabledCamera" 
-        (camerasFound)="displayCameras($event)"
-        [device]="currentDevice">
-    </zxing-scanner>
-    <!-- <div class="qr-space">
-        <zxing-scanner class="display-webcam" #scanner 
-            (start)="enabledCamera" 
-            (camerasFound)="displayCameras($event)"
-            [device]="currentDevice">
-        </zxing-scanner>
-        (scanSuccess)="handleQrCodeResult($event)"
-    </div> -->
-
-    <!-- <select (change)="onDeviceSelectChange($event.target.value)" class="mt-2">
-        <option value="" [selected]="!currentDevice">No Device</option>
-        <option *ngFor="let device of availableDevices" [value]="device.deviceId" [selected]="currentDevice && device.deviceId === currentDevice.deviceId">{{ device.label }}</option>
-    </select>
-    <div class="row qr-space">
-        <div class="pt-0 pb-0 col-md-12 col-12">
-            <mat-form-field class="pb-0">
-                <mat-label i18n="Cita Code|text in checkin/checkout@@video.citacode">Cita Code</mat-label>
-                <input matInput placeholder="QR Code" [(ngModel)]="qrCode" (ngModelChange)="validQr($event)" maxlength="6">
-            </mat-form-field>
-        </div>
-        <div class="pt-0 pb-0 col-md-12 col-12">
-            <mat-label class="label-guests" i18n="Guests|text in guests@@video.guests">Guests</mat-label>
-            <button mat-icon-button (click)="Guests=Guests+1">
-                <mat-icon class="site-color">add</mat-icon>
-            </button>
-            <mat-form-field class="num-guests pb-0 col-md-4 col-4 text-center">
-                <input matInput [(ngModel)]="Guests">
-            </mat-form-field>
-            <button mat-icon-button (click)="(Guests > 1 ? Guests=Guests-1 : Guests)">
-                <mat-icon class="site-color">remove</mat-icon>
-            </button>
-        </div>
-    </div>
-     -->
     <!-- <div class="qr-space">
         <button mat-stroked-button class="action-buttons col-md-12 mt-0 mb-2" color="secondary" type="button"
             (click)="getWalkInsCheckOut()">Walk-Ins Check Out</button>

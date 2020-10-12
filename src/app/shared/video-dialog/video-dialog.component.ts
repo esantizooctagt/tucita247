@@ -35,7 +35,8 @@ export class VideoDialogComponent implements OnInit {
   qrCode: string = '';
   checkInValues: any;
   Guests: number = 1;
-  // sound=new AudioContext();
+  sound = window.AudioContext // Default
+      || (window as any).webkitAudioContext;// Safari and old versions of Chrome
 
   medias: MediaStreamConstraints = {
     audio: false,
@@ -47,7 +48,9 @@ export class VideoDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private spinnerService: SpinnerService,
     private appointmentService: AppointmentService
-  ) { }
+  ) {
+    this.sound = new AudioContext();
+   }
 
   ngOnInit(): void {
     this.Guests = (this.data.guests == 0 ? 1 : this.data.guests);
@@ -77,7 +80,7 @@ export class VideoDialogComponent implements OnInit {
   
   handleQrCodeResult(resultString: string) {
     this.qrCode = resultString;
-    // this.beep(100, 520, 200);
+    this.beep(100, 520, 200);
     navigator.vibrate(1000);
     if (this.data.tipo == 2){
       // var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
@@ -121,7 +124,7 @@ export class VideoDialogComponent implements OnInit {
 
   validQr(event){
     if (event.toString().length == 6){
-      // this.beep(100, 520, 200);
+      this.beep(100, 520, 200);
       navigator.vibrate(1000);
       if (this.data.tipo == 2){
         // var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
@@ -142,15 +145,15 @@ export class VideoDialogComponent implements OnInit {
     }
   }
 
-  // beep(vol, freq, duration){
-  //   let v=this.sound.createOscillator();
-  //   let u=this.sound.createGain();
-  //   v.connect(u)
-  //   v.frequency.value=freq
-  //   v.type="square"
-  //   u.connect(this.sound.destination)
-  //   u.gain.value=vol*0.01
-  //   v.start(this.sound.currentTime)
-  //   v.stop(this.sound.currentTime+duration*0.001)
-  // }
+  beep(vol, freq, duration){
+    let v=this.sound.createOscillator();
+    let u=this.sound.createGain();
+    v.connect(u)
+    v.frequency.value=freq
+    v.type="square"
+    u.connect(this.sound.destination)
+    u.gain.value=vol*0.01
+    v.start(this.sound.currentTime)
+    v.stop(this.sound.currentTime+duration*0.001)
+  }
 }

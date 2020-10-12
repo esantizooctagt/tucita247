@@ -21,30 +21,6 @@ import { ZXingScannerComponent, ZXingScannerModule } from '@zxing/ngx-scanner';
   styleUrls: ['./quick-checkin.component.scss']
 })
 export class QuickCheckinComponent implements OnInit {
-  @ViewChild('scanner', { static: true }) scanner: ZXingScannerComponent;
-
-  enabledCamera: boolean = true;
-  hasCameras = false;
-  hasPermission: boolean;
-  availableDevices: MediaDeviceInfo[];
-  currentDevice: MediaDeviceInfo=null;
-
-  // enabledCamera: boolean = true;
-  // hasCameras = false;
-  // hasPermission: boolean;
-  // availableDevices: MediaDeviceInfo[];
-  // selectedDevice: MediaDeviceInfo;
-  // currentDevice: MediaDeviceInfo = null;
-
-  // medias: MediaStreamConstraints = {
-  //   audio: false,
-  //   video: false,
-  // };
-
-  tipo: number =0;
-  Guests: number = 1;
-  // sound=new AudioContext();
-
   qrCode: string = '';
   businessId: string  = '';
   locationId: string = '';
@@ -141,28 +117,6 @@ export class QuickCheckinComponent implements OnInit {
     dialogConfig.maxWidth = '280px';
     this.dialog.open(DialogComponent, dialogConfig);
   }
-  
-  displayCameras(event){
-    this.hasCameras = true;
-    this.currentDevice = event[0];
-    this.availableDevices = event;
-
-    // selects the devices's back camera by default
-    for (const device of event) {
-      if (/back|rear|environment/gi.test(device.label)) {
-        this.currentDevice = device;
-        break;
-      }
-    }
-  }
-
-  onDeviceSelectChange(selectedValue: string) {
-    let value = this.availableDevices.filter(val => val.deviceId == selectedValue);
-
-    this.scanner.reset();
-    this.currentDevice = <MediaDeviceInfo>value[0];
-    this.scanner.restart();
-  }
 
   ngOnInit(): void {
     this.businessId = this.authService.businessId();
@@ -254,63 +208,6 @@ export class QuickCheckinComponent implements OnInit {
       })
     );
   }
-
-  handleQrCodeResult(resultString: string) {
-    this.qrCode = resultString;
-    // this.beep(100, 520, 200);
-    navigator.vibrate(1000);
-    if (this.tipo == 2){
-      // var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
-      this.appoData$ = this.appointmentService.getAppointmentData(this.businessId, this.locationId, this.providerId, this.qrCode).pipe(
-        map((res: any) => {
-          if (res.Code == 200) {
-            this.Guests = res.Guests;
-            // this.spinnerService.stop(spinnerRef);
-          }
-          return res.Appos;
-        }),
-        catchError(err => {
-          // this.spinnerService.stop(spinnerRef);
-          return err.Message;
-        })
-      );
-    }
-  }
-
-  validQr(event){
-    if (event.toString().length == 6){
-      // this.beep(100, 520, 200);
-      navigator.vibrate(1000);
-      if (this.tipo == 2){
-        // var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
-        this.appoData$ = this.appointmentService.getAppointmentData(this.businessId, this.locationId, this.providerId, this.qrCode).pipe(
-          map((res: any) => {
-            if (res.Code == 200) {
-              this.Guests = res.Guests;
-              // this.spinnerService.stop(spinnerRef);
-            }
-            return res.Appos;
-          }),
-          catchError(err => {
-            // this.spinnerService.stop(spinnerRef);
-            return err.Message;
-          })
-        );
-      }
-    }
-  }
-
-  // beep(vol, freq, duration){
-  //   let v=this.sound.createOscillator();
-  //   let u=this.sound.createGain();
-  //   v.connect(u)
-  //   v.frequency.value=freq
-  //   v.type="square"
-  //   u.connect(this.sound.destination)
-  //   u.gain.value=vol*0.01
-  //   v.start(this.sound.currentTime)
-  //   v.stop(this.sound.currentTime+duration*0.001)
-  // }
 
   checkOutQR(){
     const dialogRef = new MatDialogConfig();
@@ -821,50 +718,49 @@ export class QuickCheckinComponent implements OnInit {
 
     const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
       if(result != undefined){
-        if (result){ 
-          var spinnerRef = this.spinnerService.start($localize`:@@host.closingloc:`);
-          this.closedLoc$ = this.locationService.updateClosedLocation(this.locationId, this.businessId, (result == true ? 1 : 0)).pipe(
-            map((res: any) => {
-              if (res != null){
-                if (res['Business'].OPEN == 0){
-                  this.locationStatus = 0;
-                  this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
-                  this.spinnerService.stop(spinnerRef);
-                }
+        var spinnerRef = this.spinnerService.start($localize`:@@host.closingloc:`);
+        this.closedLoc$ = this.locationService.updateClosedLocation(this.locationId, this.businessId, (result == true ? 1 : 0)).pipe(
+          map((res: any) => {
+            if (res != null){
+              if (res['Business'].OPEN == 0){
+                this.locationStatus = 0;
+                this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+                this.spinnerService.stop(spinnerRef);
               }
-            }),
-            switchMap(x => this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
+            }
+          }),
+          switchMap(x => this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
+            map((res: any) => {
+              if (res.Locs != null){
+                this.Providers = res.Locs.Providers;
+                return res;
+              } else {
+                return;
+              }
+            })
+          )),
+          mergeMap(v => 
+            //ACTUALIZA NUMERO DE PERSONAS
+            this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
               map((res: any) => {
-                if (res.Locs != null){
-                  this.Providers = res.Locs.Providers;
-                  return res;
-                } else {
-                  return;
+                if (res != null){
+                  this.qtyPeople = res.Quantity;
+                  this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+                  return res.Quantity.toString();
                 }
               })
-            )),
-            mergeMap(v => 
-              //ACTUALIZA NUMERO DE PERSONAS
-              this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
-                map((res: any) => {
-                  if (res != null){
-                    this.qtyPeople = res.Quantity;
-                    this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
-                    return res.Quantity.toString();
-                  }
-                })
-              )
-            ),
-            catchError(err => {
-              this.spinnerService.stop(spinnerRef);
-              this.locationStatus = 1;
-              this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
-              this.onError = err.Message;
-              return this.onError;
-            })
-          );
-        }
+            )
+          ),
+          catchError(err => {
+            this.spinnerService.stop(spinnerRef);
+            this.locationStatus = 1;
+            this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+            this.onError = err.Message;
+            return this.onError;
+          })
+        );
       }
     });
   }

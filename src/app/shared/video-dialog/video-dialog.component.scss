@@ -39,6 +39,10 @@
     max-height: 290px;
     min-height: 245px;
 }
+::ng-deep video {
+    max-height: 290px !important;
+    min-height: 245px;
+}
 button.mat-flat-button
 {
     &.cdk-program-focused 
