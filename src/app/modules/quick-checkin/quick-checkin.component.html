@@ -170,15 +170,21 @@
             (click)="checkOutQR()" [disabled]="!locationId" i18n="Check Out|text in citas lite@@lite.checkout">Check Out</button>
         <ng-container *ngIf="manualCheckOut$ | async"></ng-container>
     </div>
-    <div class="qr-space">
+    <zxing-scanner class="display-webcam" #scanner 
+        (start)="enabledCamera" 
+        (camerasFound)="displayCameras($event)"
+        [device]="currentDevice">
+    </zxing-scanner>
+    <!-- <div class="qr-space">
         <zxing-scanner class="display-webcam" #scanner 
             (start)="enabledCamera" 
             (camerasFound)="displayCameras($event)"
             [device]="currentDevice">
         </zxing-scanner>
-        <!-- (scanSuccess)="handleQrCodeResult($event)" -->
-    </div>
-    <select (change)="onDeviceSelectChange($event.target.value)" class="mt-2">
+        (scanSuccess)="handleQrCodeResult($event)"
+    </div> -->
+
+    <!-- <select (change)="onDeviceSelectChange($event.target.value)" class="mt-2">
         <option value="" [selected]="!currentDevice">No Device</option>
         <option *ngFor="let device of availableDevices" [value]="device.deviceId" [selected]="currentDevice && device.deviceId === currentDevice.deviceId">{{ device.label }}</option>
     </select>
@@ -202,6 +208,7 @@
             </button>
         </div>
     </div>
+     -->
     <!-- <div class="qr-space">
         <button mat-stroked-button class="action-buttons col-md-12 mt-0 mb-2" color="secondary" type="button"
             (click)="getWalkInsCheckOut()">Walk-Ins Check Out</button>

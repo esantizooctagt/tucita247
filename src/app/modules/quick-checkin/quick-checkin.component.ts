@@ -27,8 +27,14 @@ export class QuickCheckinComponent implements OnInit {
   hasCameras = false;
   hasPermission: boolean;
   availableDevices: MediaDeviceInfo[];
-  selectedDevice: MediaDeviceInfo;
-  currentDevice: MediaDeviceInfo = null;
+  currentDevice: MediaDeviceInfo=null;
+
+  // enabledCamera: boolean = true;
+  // hasCameras = false;
+  // hasPermission: boolean;
+  // availableDevices: MediaDeviceInfo[];
+  // selectedDevice: MediaDeviceInfo;
+  // currentDevice: MediaDeviceInfo = null;
 
   medias: MediaStreamConstraints = {
     audio: false,
