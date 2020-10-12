@@ -36,10 +36,10 @@ export class QuickCheckinComponent implements OnInit {
   // selectedDevice: MediaDeviceInfo;
   // currentDevice: MediaDeviceInfo = null;
 
-  medias: MediaStreamConstraints = {
-    audio: false,
-    video: false,
-  };
+  // medias: MediaStreamConstraints = {
+  //   audio: false,
+  //   video: false,
+  // };
 
   tipo: number =0;
   Guests: number = 1;
@@ -257,7 +257,7 @@ export class QuickCheckinComponent implements OnInit {
 
   handleQrCodeResult(resultString: string) {
     this.qrCode = resultString;
-    this.beep(100, 520, 200);
+    // this.beep(100, 520, 200);
     navigator.vibrate(1000);
     if (this.tipo == 2){
       // var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
@@ -279,7 +279,7 @@ export class QuickCheckinComponent implements OnInit {
 
   validQr(event){
     if (event.toString().length == 6){
-      this.beep(100, 520, 200);
+      // this.beep(100, 520, 200);
       navigator.vibrate(1000);
       if (this.tipo == 2){
         // var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
@@ -300,17 +300,17 @@ export class QuickCheckinComponent implements OnInit {
     }
   }
 
-  beep(vol, freq, duration){
-    let v=this.sound.createOscillator();
-    let u=this.sound.createGain();
-    v.connect(u)
-    v.frequency.value=freq
-    v.type="square"
-    u.connect(this.sound.destination)
-    u.gain.value=vol*0.01
-    v.start(this.sound.currentTime)
-    v.stop(this.sound.currentTime+duration*0.001)
-  }
+  // beep(vol, freq, duration){
+  //   let v=this.sound.createOscillator();
+  //   let u=this.sound.createGain();
+  //   v.connect(u)
+  //   v.frequency.value=freq
+  //   v.type="square"
+  //   u.connect(this.sound.destination)
+  //   u.gain.value=vol*0.01
+  //   v.start(this.sound.currentTime)
+  //   v.stop(this.sound.currentTime+duration*0.001)
+  // }
 
   checkOutQR(){
     const dialogRef = new MatDialogConfig();
