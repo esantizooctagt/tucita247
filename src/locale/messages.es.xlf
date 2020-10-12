@@ -2505,12 +2505,60 @@
       </trans-unit>
       <trans-unit id="welcome.secondarymessage" datatype="html">
         <source>Setup your preference</source>
-        <target state="translated">Siga los siguientes pasos para configurar su preferencias</target>
+        <target state="translated">¡Es muy fácil configurar sus prefencias! Solo siga los siguientes pasos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
         <note priority="1" from="description">Setup your preference</note>
+      </trans-unit>
+      <trans-unit id="welcome.shortextbusiness" datatype="html">
+        <source>Short Text Business</source>
+        <target state="translated">Sube imágenes y modifique la información de su negocio</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="welcome.shorttextopening" datatype="html">
+        <source>Short Text Opening hours</source>
+        <target state="translated">Modifique el horario de apertura</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="welcome.shorttextdaysoff" datatype="html">
+        <source>Short Text Days off</source>
+        <target state="translated">Marque los días libres</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="welcome.shorttextlocation" datatype="html">
+        <source>Short Text Location</source>
+        <target state="translated">Añada y modifique sus localidades</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="welcome.shorttextprovider" datatype="html">
+        <source>Short Text Provider</source>
+        <target state="translated">Personas o áreas que ofrecen servicios en su negocio</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="welcome.shorttextservice" datatype="html">
+        <source>Short Text Service</source>
+        <target state="translated">Servicios que ofrece su negocio</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
+          <context context-type="linenumber">47</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="welcome.setupcompany" datatype="html">
         <source>Setup your company</source>
