@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocationService, BusinessService, ServService } from '@app/services';
@@ -14,12 +14,17 @@ import { DirDialogComponent } from '@app/shared/dir-dialog/dir-dialog.component'
 import { FormBuilder, Validators } from '@angular/forms';
 import { ConfirmValidParentMatcher } from '@app/validators';
 
+import { ZXingScannerComponent, ZXingScannerModule } from '@zxing/ngx-scanner';
+
 @Component({
   selector: 'app-quick-checkin',
   templateUrl: './quick-checkin.component.html',
   styleUrls: ['./quick-checkin.component.scss']
 })
 export class QuickCheckinComponent implements OnInit {
+  @ViewChild('scanner', {static: true}) scanner: ZXingScannerComponent;
+
+
   qrCode: string = '';
   businessId: string  = '';
   locationId: string = '';
@@ -58,6 +63,13 @@ export class QuickCheckinComponent implements OnInit {
 
   operationText: string = '';
   panelOpenState = false;
+
+  
+  enabledCamera: boolean = true;
+  hasCameras = false;
+  hasPermission: boolean;
+  currentDevice: MediaDeviceInfo=null;
+  
   seeDetails: string = $localize`:@@shared.seedetails:`;
   hideDetails: string = $localize`:@@shared.hidedetails:`;
 
@@ -115,6 +127,37 @@ export class QuickCheckinComponent implements OnInit {
     this.dialog.open(DialogComponent, dialogConfig);
   }
 
+  displayCameras(event){
+    console.log("prev displaycamera");
+    console.log(event);
+    // this.scanner.camerasFound.subscribe((devices: MediaDeviceInfo[]) => {
+      this.hasCameras = true;
+      this.currentDevice = event[0];
+      // this.availableDevices = devices;
+
+      // selects the devices's back camera by default
+      for (const device of event) {
+        if (/back|rear|environment/gi.test(device.label)) {
+          this.currentDevice = device;
+          break;
+        }
+      }
+    // });
+
+    this.scanner.camerasNotFound.subscribe((devices: MediaDeviceInfo[]) => {
+      console.error('An error has occurred when trying to enumerate your video-stream-enabled devices.');
+    });
+
+    this.scanner.permissionResponse.subscribe((answer: boolean) => {
+      console.log(answer);
+      console.log("paso por aca");
+      this.hasPermission = answer;
+    });
+  }
+  ngAfterViewInit(): void{
+    
+  }
+  
   ngOnInit(): void {
     this.businessId = this.authService.businessId();
     this.userId = this.authService.userId();

@@ -43,6 +43,11 @@
 .header-panel{
     height: 100px;
 }
+.display-webcam{
+    width: 100%;
+    max-height: 290px;
+    min-height: 245px;
+}
 ::ng-deep .yellow-bar .mat-progress-bar-fill::after {
     background-color: yellow!important;
     border-radius: 15px;
