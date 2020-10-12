@@ -229,7 +229,7 @@ export class QuickCheckinComponent implements OnInit {
     dialogRef.width ='450px';
     dialogRef.minWidth = '320px';
     dialogRef.maxWidth = '450px';
-    // dialogRef.height = '575px';
+    dialogRef.height = '575px';
     dialogRef.data = {guests: 0, title: $localize`:@@host.checkoutpop:`, tipo: 2, businessId: this.businessId, locationId: this.locationId, providerId: this.providerId};
     const qrDialog = this.dialog.open(VideoDialogComponent, dialogRef);
     qrDialog.afterClosed().subscribe(result => {
@@ -316,7 +316,7 @@ export class QuickCheckinComponent implements OnInit {
     dialogRef.width ='450px';
     dialogRef.minWidth = '320px';
     dialogRef.maxWidth = '450px';
-    // dialogRef.height = '575px';
+    dialogRef.height = '575px';
     dialogRef.data = {guests: 0, title: $localize`:@@host.checkintitle:`, tipo: 3 };
     const qrDialog = this.dialog.open(VideoDialogComponent, dialogRef);
     qrDialog.afterClosed().subscribe(result => {
