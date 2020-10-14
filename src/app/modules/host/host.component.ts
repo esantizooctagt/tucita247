@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { LocationService, ReasonsService, BusinessService, AppointmentService, ServService, MessagesService, WebSocketService } from '@app/services';
+import { LocationService, ReasonsService, BusinessService, AppointmentService, ServService, WebSocketService } from '@app/services';
 import { AuthService } from '@app/core/services';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { map, catchError, switchMap, mergeMap, tap } from 'rxjs/operators';
@@ -20,8 +20,8 @@ import { DirDialogComponent } from '@app/shared/dir-dialog/dir-dialog.component'
 @Component({
   selector: 'app-host',
   templateUrl: './host.component.html',
-  styleUrls: ['./host.component.scss'],
-  providers: [WebSocketService, MessagesService]
+  styleUrls: ['./host.component.scss']
+  // providers: [WebSocketService, MessagesService]
 })
 export class HostComponent implements OnInit {
   locations$: Observable<Location[]>;
@@ -141,7 +141,9 @@ export class HostComponent implements OnInit {
     private dialog: MatDialog,
     private matIconRegistry: MatIconRegistry,
     private router: Router,
-    private messageService: MessagesService
+    private webSocketService: WebSocketService
+    // private messageService: MessagesService,
+    
   ) {
     this.matIconRegistry.addSvgIcon('cancel',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/cancel.svg'));
     this.matIconRegistry.addSvgIcon('clock',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/clock.svg'));
@@ -154,8 +156,11 @@ export class HostComponent implements OnInit {
     this.matIconRegistry.addSvgIcon('mas',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/mas.svg'));
     this.matIconRegistry.addSvgIcon('menos',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/menos.svg'));
 
-    this.liveData$ = this.messageService.messages.pipe(
+    this.webSocketService.connect();
+
+    this.liveData$ = this.webSocketService.messages$.pipe(
       map((res: any) => {
+        console.log(res);
         this.syncData(res);
       })
     );
@@ -262,10 +267,6 @@ export class HostComponent implements OnInit {
       }
     }
   }
-  // sendMsg() {
-  //   console.log("new message from client to websocket: ", {BusinessId:"12345", Datos: "asba"});
-  //   this.messageService.messages.next({"action":"sendMessage","msg":"{'BusinessId':'12345','AppointmentId':'34fg45fg','Cancel':'1'}"});
-  // }
 
   ngOnInit(): void {
     this.businessId = this.authService.businessId();

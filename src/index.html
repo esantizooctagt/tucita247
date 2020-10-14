@@ -24,7 +24,6 @@
         }
       }
       if(event.key === 'CREDENTIALS_FLUSH' && window.sessionStorage.length){
-        console.log("remove tokens");
         window.sessionStorage.removeItem('TC247_USS');
         window.sessionStorage.removeItem('TC247_TKN');
         window.sessionStorage.removeItem('TC247_ACT');
@@ -38,7 +37,6 @@
     window.addEventListener('storage', storageEvent);
 
     if (!window.sessionStorage.length){
-      console.log("requesting shared cred");
       window.localStorage.setItem('REQUESTING_SHARED_CREDENTIALS', 'tknTucita');
       window.localStorage.removeItem('REQUESTING_SHARED_CREDENTIALS', 'tknTucita');
     }   

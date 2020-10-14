@@ -15,16 +15,16 @@ export class MessagesService {
   private businessId: string='';
 
   constructor(
-    wsService: WebSocketService,
+    // wsService: WebSocketService,
     private authService: AuthService
   ) {
     this.businessId = this.authService.businessId();
-    this.messages = <Subject<any>>wsService.connect(CHAT_URL+(this.businessId != '' ? '?businessId=' + this.businessId : '')).map(
-      (response: MessageEvent): any => {
-        let data = JSON.parse(response.data);
-        return data; 
-      }
-    );
+    // this.messages = <Subject<any>>wsService.connect(CHAT_URL+(this.businessId != '' ? '?businessId=' + this.businessId : '')).map(
+    //   (response: MessageEvent): any => {
+    //     let data = JSON.parse(response.data);
+    //     return data; 
+    //   }
+    // );
   }
   
 }

@@ -1,39 +1,49 @@
 import { Injectable } from '@angular/core';
-import * as Rx from "rxjs/Rx";
+import { EMPTY, Subject } from 'rxjs';
+import { catchError, switchAll, tap } from 'rxjs/operators';
+// import * as Rx from "rxjs/Rx";
+import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
+import { environment } from '@environments/environment';
+import { AuthService } from '@app/core/services';
+
+export const WS_ENDPOINT = environment.wsEndPoint;
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebSocketService {
-  constructor() { }
+  businessId: string = '';
+  constructor(private authService: AuthService) {
+    this.businessId = this.authService.businessId();
+  }
 
-  private subject: Rx.Subject<MessageEvent>;
-
-  public connect(url): Rx.Subject<MessageEvent> {
-    if (!this.subject) {
-      this.subject = this.create(url);
-      console.log("Successfully connected: " + url);
+  private socket$: WebSocketSubject<any>;
+  private messagesSubject$ = new Subject();
+  public messages$ = this.messagesSubject$.pipe(switchAll(), catchError(e => { throw e }));
+ 
+  public connect(): void {
+    if (!this.socket$ || this.socket$.closed) {
+      this.socket$ = this.getNewWebSocket();
+      const messages = this.socket$.pipe(
+        tap({
+          error: error => console.log(error),
+        }), catchError(_ => EMPTY));
+        console.log(messages);
+      this.messagesSubject$.next(messages);
     }
-    return this.subject;
+  }
+ 
+  private getNewWebSocket() {
+    return webSocket(WS_ENDPOINT+(this.businessId != '' ? '?businessId=' + this.businessId : ''));
   }
 
-  private create(url): Rx.Subject<MessageEvent> {
-    let ws = new WebSocket(url);
-
-    let observable = Rx.Observable.create((obs: Rx.Observer<MessageEvent>) => {
-      ws.onmessage = obs.next.bind(obs);
-      ws.onerror = obs.error.bind(obs);
-      ws.onclose = obs.complete.bind(obs);
-      return ws.close.bind(ws);
-    });
-    let observer = {
-      next: (data: Object) => {
-        if (ws.readyState === WebSocket.OPEN) {
-          ws.send(JSON.stringify(data));
-        }
-      }
-    };
-    return Rx.Subject.create(observer, observable);
+  sendMessage(msg: any) {
+    console.log("send message ");
+    console.log(msg);
+    this.socket$.next(msg);
   }
-  
+
+  close() {
+    this.socket$.complete(); 
+  }
 }

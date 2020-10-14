@@ -6,7 +6,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ServService, MessagesService, WebSocketService, AppointmentService } from '@app/services';
+import { ServService, WebSocketService, AppointmentService } from '@app/services';
 
 export interface DialogData {   
   businessId: string;
@@ -22,12 +22,10 @@ export interface DialogData {
 @Component({
   selector: 'app-appo-dialog',
   templateUrl: './appo-dialog.component.html',
-  styleUrls: ['./appo-dialog.component.scss'],
-  providers: [WebSocketService, MessagesService]
+  styleUrls: ['./appo-dialog.component.scss']
 })
 export class AppoDialogComponent implements OnInit {
   newAppointment$: Observable<any>;
-  // liveData$: Observable<any>;
   services$: Observable<any[]>;
   doors: string[];
   serviceId: string = '';
@@ -53,9 +51,11 @@ export class AppoDialogComponent implements OnInit {
     private serviceService: ServService,
     private appointmentService: AppointmentService,
     private fb: FormBuilder,
-    private messageService: MessagesService,
+    // private messageService: MessagesService,
+    private webSocketService: WebSocketService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {
+    this.webSocketService.connect();
     // this.liveData$ = this.messageService.messages.pipe(
     //   map((res: any) => {
     //     console.log("Response from websocket: " + JSON.stringify(res));
@@ -159,7 +159,8 @@ export class AppoDialogComponent implements OnInit {
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
       map((res: any) => {
         if (currdate == this.data.appoDate){
-          this.messageService.messages.next({"action":"sendMessage","msg":JSON.stringify(res.Appointment)});
+          console.log(res.Appointment);
+          this.webSocketService.sendMessage({"action":"sendMessage","msg":JSON.stringify(res.Appointment)});
         }
         this.spinnerService.stop(spinnerRef);
         this.openSnackBar($localize`:@@appos.created:`, $localize`:@@appos.schedule:`);

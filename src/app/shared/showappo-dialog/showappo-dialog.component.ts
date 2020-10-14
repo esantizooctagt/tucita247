@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Reason } from '@app/_models';
-import { BusinessService, ReasonsService, AppointmentService, MessagesService, WebSocketService } from '@app/services';
+import { BusinessService, ReasonsService, AppointmentService, WebSocketService } from '@app/services';
 import { AuthService } from '@app/core/services';
 import { catchError, map } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -22,11 +22,9 @@ export interface DialogData {
 @Component({
   selector: 'app-showappo-dialog',
   templateUrl: './showappo-dialog.component.html',
-  styleUrls: ['./showappo-dialog.component.scss'],
-  providers: [WebSocketService, MessagesService]
+  styleUrls: ['./showappo-dialog.component.scss']
 })
 export class ShowappoDialogComponent implements OnInit {
-  // liveData$: Observable<any>;
   comments$: Observable<any>;
   opeHours$: Observable<any>;
   getLocInfo$: Observable<any>;
@@ -34,6 +32,7 @@ export class ShowappoDialogComponent implements OnInit {
   messages$: Observable<any>;
   updAppointment$: Observable<any>;
   appointmentsSche$: Observable<any[]>;
+  liveData$: Observable<any>;
 
   showMessageSche=[];
   showDetailsSche=[];
@@ -62,7 +61,8 @@ export class ShowappoDialogComponent implements OnInit {
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private authService: AuthService,
-    private messageService: MessagesService,
+    // private messageService: MessagesService,
+    // private webSocketService: WebSocketService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) { 
     this.matIconRegistry.addSvgIcon('cancel',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/cancel.svg'));
@@ -75,6 +75,14 @@ export class ShowappoDialogComponent implements OnInit {
     this.matIconRegistry.addSvgIcon('sms',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/sms.svg'));
     this.matIconRegistry.addSvgIcon('mas',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/mas.svg'));
     this.matIconRegistry.addSvgIcon('menos',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/menos.svg'));
+
+    // this.webSocketService.connect();
+
+    // this.liveData$ = this.webSocketService.messages$.pipe(
+    //   map((res: any) => {
+    //     this.syncData(res);
+    //   })
+    // );
   }
 
   openSnackBar(message: string, action: string) {
@@ -173,7 +181,7 @@ export class ShowappoDialogComponent implements OnInit {
               AppId: appo.AppId,
               Tipo: 'CANCEL'
             }
-            this.messageService.messages.next({"action":"sendMessage","msg":JSON.stringify(formData)});
+            // this.webSocketService.sendMessage({"action":"sendMessage","msg":JSON.stringify(formData)});
           }
           this.cancelAppo = 1;
           var data = this.schedule.findIndex(e => e.AppId === appo.AppId);
@@ -240,7 +248,7 @@ export class ShowappoDialogComponent implements OnInit {
               User: 'H',
               Tipo: 'MESS'
             }
-            this.messageService.messages.next({"action":"sendMessage","msg": JSON.stringify(formData)});
+            // this.webSocketService.sendMessage({"action":"sendMessage","msg": JSON.stringify(formData)});
             this.openSnackBar($localize`:@@host.messagessend:`,$localize`:@@host.messages:`);
           } else {
             this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@shared.error:`);
