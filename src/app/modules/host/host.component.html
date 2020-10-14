@@ -150,7 +150,7 @@
                                         </button>
                                     </div>
                                     <div class="card-actions-center col-sm-3 p-0">
-                                        <button mat-icon-button color="secondary" (click)="showMessagePrev[i] = !showMessagePrev[i]; onShowMessage(item, i, 'previous');">
+                                        <button mat-icon-button color="secondary" (click)="onShowMessage(item, i, 'previous');">
                                             <mat-icon [matBadgeHidden]="item.Unread != 'H'" matBadgeSize="small" matBadge="*" matBadgePosition="after" matBadgeColor="warn" matBadgeOverlap="true" svgIcon="sms"></mat-icon>
                                         </button>
                                     </div>
@@ -242,7 +242,7 @@
                                     </button>
                                 </div>
                                 <div class="card-actions-center col-sm-3 p-0">
-                                    <button mat-icon-button color="secondary" (click)="showMessageSche[i] = !showMessageSche[i]; onShowMessage(item, i, 'schedule');">
+                                    <button mat-icon-button color="secondary" (click)="onShowMessage(item, i, 'schedule');">
                                         <mat-icon [matBadgeHidden]="item.Unread != 'H'" matBadgeSize="small" matBadge="*" matBadgePosition="after" matBadgeColor="warn" matBadgeOverlap="true" svgIcon="sms"></mat-icon>
                                     </button>
                                 </div>
@@ -435,7 +435,7 @@
                                     </button>
                                 </div>
                                 <div class="card-actions-center col-sm-3 p-0">
-                                    <button mat-icon-button color="secondary" (click)="showMessageWalk[i] = !showMessageWalk[i]; onShowMessage(item, i, 'walkin');">
+                                    <button mat-icon-button color="secondary" (click)="onShowMessage(item, i, 'walkin');">
                                     <mat-icon [matBadgeHidden]="item.Unread != 'H'" matBadgeSize="small" matBadge="*" matBadgePosition="after" matBadgeColor="warn" matBadgeOverlap="true" svgIcon="sms"></mat-icon>
                                     </button>
                                 </div>
@@ -547,7 +547,7 @@
                                     </button>
                                 </div>
                                 <div class="card-actions-center col-sm-3 p-0">
-                                    <button mat-icon-button color="secondary" (click)="showMessageCheck[i] = !showMessageCheck[i]; onShowMessage(item, i, 'checkin');">
+                                    <button mat-icon-button color="secondary" (click)="onShowMessage(item, i, 'checkin');">
                                     <mat-icon [matBadgeHidden]="item.Unread != 'H'" matBadgeSize="small" matBadge="*" matBadgePosition="after" matBadgeColor="warn" matBadgeOverlap="true" svgIcon="sms"></mat-icon>
                                     </button>
                                 </div>

@@ -1017,6 +1017,22 @@ export class HostComponent implements OnInit {
     if (appo.Unread == 'H') {
       appo.Unread = '0';
     }
+    if (type == 'schedule'){
+      this.getCommentsSche[i] = "";
+      this.showMessageSche[i] = !this.showMessageSche[i];
+    }
+    if (type == 'walkin'){
+      this.getCommentsWalk[i] = "";
+      this.showMessageWalk[i] = !this.showMessageWalk[i]; 
+    }
+    if (type == 'checkin'){
+      this.getCommentsCheck[i] = "";
+      this.showMessageCheck[i] = !this.showMessageCheck[i]; 
+    }
+    if (type == 'previous'){
+      this.getCommentsPrev[i] = "";
+      this.showMessagePrev[i] = !this.showMessagePrev[i]; 
+    }
     this.comments$ = this.appointmentService.getMessages(appo.AppId, 'H').pipe(
       map((res: any) => {
         if (res != null){

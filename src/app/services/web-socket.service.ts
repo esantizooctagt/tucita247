@@ -25,7 +25,7 @@ export class WebSocketService {
     if (!this.socket$ || this.socket$.closed) {
       this.socket$ = this.getNewWebSocket();
       this.socket$.subscribe(
-        msg => console.log('message received: ' + msg), // Called whenever there is a message from the server.
+        msg => this.messagesSubject$.next(msg), // Called whenever there is a message from the server.
         err => cfg.reconnect ? this.reconnect : o => o, // Called if at any point WebSocket API signals some kind of error.
         () => cfg.reconnect ? this.reconnect : o => o // Called when connection is closed (for whatever reason).
       );
