@@ -43,7 +43,7 @@ export class WebSocketService {
   private reconnect(observable: Observable<any>): Observable<any> {
     return observable.pipe(
       retryWhen(errors => errors.pipe(
-        tap(val => console.log('[Data Service] Try to reconnect', val)), 
+        tap(val => console.log('Try to reconnect', val)), 
       delayWhen(_ => timer(RECONNECT_INTERVAL))
       ))
     ); 
@@ -56,12 +56,12 @@ export class WebSocketService {
       url: WS_ENDPOINT+(this.businessId != '' ? '?businessId=' + this.businessId : ''),
       openObserver: {
         next: () => {
-          console.log('[DataService]: connection ok');
+          console.log('connection ok');
         }
       },
       closeObserver: {
         next: () => {
-          console.log('[DataService]: connection closed');
+          console.log('connection closed');
           this.socket$ = undefined;
           this.connect({ reconnect: true });
         }
@@ -70,8 +70,6 @@ export class WebSocketService {
   }
 
   sendMessage(msg: any) {
-    console.log("send message");
-    console.log(msg);
     this.socket$.next(msg);
   }
 
