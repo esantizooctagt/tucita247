@@ -22,7 +22,6 @@ import { DirDialogComponent } from '@app/shared/dir-dialog/dir-dialog.component'
   templateUrl: './host.component.html',
   styleUrls: ['./host.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
-  // providers: [WebSocketService, MessagesService]
 })
 export class HostComponent implements OnInit {
   locations$: Observable<Location[]>;
@@ -44,7 +43,6 @@ export class HostComponent implements OnInit {
   openLoc$: Observable<any>;
   closedLoc$: Observable<any>;
   manualCheckOut$: Observable<any>;
-  liveData$: Observable<any>;
 
   showMessageSche=[];
   showMessageWalk=[];
@@ -127,6 +125,18 @@ export class HostComponent implements OnInit {
 
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
+  liveData$ = this.webSocketService.messages$.pipe(
+    map((res: any) => {
+      console.log(res);
+      this.syncData(res);
+    }),
+    catchError(error => { throw error }),
+    tap({
+      error: error => console.log('[Live Table component] Error:', error),
+      complete: () => console.log('[Live Table component] Connection Closed')
+    })
+  );
+
   // readonly PUSH_URL = 'wss://1wn0vx0tva.execute-api.us-east-1.amazonaws.com/prod?businessId=12345';
   constructor(
     private domSanitizer: DomSanitizer,
@@ -142,7 +152,7 @@ export class HostComponent implements OnInit {
     private dialog: MatDialog,
     private matIconRegistry: MatIconRegistry,
     private router: Router,
-    private webSocketService: WebSocketService    
+    private webSocketService: WebSocketService  
   ) {
     this.matIconRegistry.addSvgIcon('cancel',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/cancel.svg'));
     this.matIconRegistry.addSvgIcon('clock',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/clock.svg'));
@@ -154,20 +164,6 @@ export class HostComponent implements OnInit {
     this.matIconRegistry.addSvgIcon('sms',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/sms.svg'));
     this.matIconRegistry.addSvgIcon('mas',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/mas.svg'));
     this.matIconRegistry.addSvgIcon('menos',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/menos.svg'));
-
-    this.webSocketService.connect();
-
-    this.liveData$ = this.webSocketService.messages$.pipe(
-      map((res: any) => {
-        console.log(res);
-        this.syncData(res);
-      }),
-      catchError(error => { throw error }),
-      tap({
-        error: error => console.log('[Live Table component] Error:', error),
-        complete: () => console.log('[Live Table component] Connection Closed')
-      })
-    );
   }
 
   clientForm = this.fb.group({
@@ -270,6 +266,10 @@ export class HostComponent implements OnInit {
         this.previous.splice(verifprevious, 1);
       }
     }
+  }
+
+  ngAfterViewInit(){
+    this.webSocketService.connect();
   }
 
   ngOnInit(): void {

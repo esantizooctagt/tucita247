@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Observable } from 'rxjs';
-import { LocationService, ServService, BusinessService, AppointmentService } from '@app/services';
-import { map, catchError, switchMap } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
+import { LocationService, ServService, BusinessService, AppointmentService, WebSocketService } from '@app/services';
+import { map, catchError, tap } from 'rxjs/operators';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { AuthService } from '@app/core/services';
 import { AppoDialogComponent } from '@app/shared/appo-dialog/appo-dialog.component';
@@ -55,8 +55,21 @@ export class ScheduleComponent implements OnInit {
   providerId: string = '';
   resServices: any[]=[];
 
+  subsMessages: Subscription;
+
   displayYesNo: boolean = false;
   
+  liveData$ = this.webSocketService.messages$.pipe(
+    map((res: any) => {
+      console.log(res);
+    }),
+    catchError(error => { throw error }),
+    tap({
+      error: error => console.log('[Live Table component] Error:', error),
+      complete: () => console.log('[Live Table component] Connection Closed')
+    })
+  );
+
   constructor(
     private authService: AuthService,
     private domSanitizer: DomSanitizer,
@@ -68,7 +81,8 @@ export class ScheduleComponent implements OnInit {
     private appointmentService: AppointmentService,
     public dialog: MatDialog,
     private _snackBar: MatSnackBar,
-    public datepipe: DatePipe
+    public datepipe: DatePipe,
+    private webSocketService: WebSocketService
   ) {
     this.matIconRegistry.addSvgIcon('new',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/newAppo.svg'));
     this.matIconRegistry.addSvgIcon('cancel02',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/cancelAppos.svg'));
@@ -98,6 +112,10 @@ export class ScheduleComponent implements OnInit {
     this._snackBar.open(message, action, {
       duration: 2000,
     });
+  }
+
+  ngAfterViewInit(){
+    this.webSocketService.connect();
   }
 
   ngOnInit(): void {
@@ -325,6 +343,9 @@ export class ScheduleComponent implements OnInit {
           });
           dialogRef.afterClosed().subscribe(result => {
             if (result != undefined){
+              if (result.data != ''){
+                this.webSocketService.sendMessage({"action":"sendMessage", "msg": result.data});
+              }
               this.loadHours();
             }
           });
@@ -440,6 +461,10 @@ export class ScheduleComponent implements OnInit {
       data: {businessId: this.businessId, locationId: this.locationId, providerId: this.providerId, service: nameService, appoTime: timeGrl, appoDate: this.datepipe.transform(day, 'yyyy-MM-dd')}
     });
 
+    const subsMessages = dialogRef.componentInstance.onSyncMessages.subscribe((data) => {
+      this.webSocketService.sendMessage({"action":"sendMessage", "msg": data});
+    });
+
     dialogRef.afterClosed().subscribe(result => {
       if (result != undefined) {
         if (result.cancelAppo ==1){
@@ -447,6 +472,12 @@ export class ScheduleComponent implements OnInit {
         }
       }
     });
+  }
+
+  ngOnDestroy() {
+    if (this.subsMessages){
+      this.subsMessages.unsubscribe();
+    }
   }
 
   enableHour(timeGrl: string, day: any, timeNom: string, dayNum: number){

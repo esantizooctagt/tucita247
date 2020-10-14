@@ -1,12 +1,12 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { SpinnerService } from '../spinner.service';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ServService, WebSocketService, AppointmentService } from '@app/services';
+import { ServService, AppointmentService } from '@app/services';
 
 export interface DialogData {   
   businessId: string;
@@ -22,7 +22,8 @@ export interface DialogData {
 @Component({
   selector: 'app-appo-dialog',
   templateUrl: './appo-dialog.component.html',
-  styleUrls: ['./appo-dialog.component.scss']
+  styleUrls: ['./appo-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppoDialogComponent implements OnInit {
   newAppointment$: Observable<any>;
@@ -44,7 +45,7 @@ export class AppoDialogComponent implements OnInit {
   }
 
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
-  
+
   constructor(
     public dialogRef: MatDialogRef<AppoDialogComponent>,
     private spinnerService: SpinnerService,
@@ -52,11 +53,8 @@ export class AppoDialogComponent implements OnInit {
     private serviceService: ServService,
     private appointmentService: AppointmentService,
     private fb: FormBuilder,
-    private webSocketService: WebSocketService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
-  ) {
-    this.webSocketService.connect();
-   }
+  ) {}
 
   clientForm = this.fb.group({
     Phone: ['',[Validators.maxLength(17)]],
@@ -109,6 +107,7 @@ export class AppoDialogComponent implements OnInit {
   }
 
   onNoClick(){
+    // this.webSocketService.close();
     this.dialogRef.close();
   }
 
@@ -153,13 +152,14 @@ export class AppoDialogComponent implements OnInit {
     var spinnerRef = this.spinnerService.start($localize`:@@host.addingappo:`);
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
       map((res: any) => {
+        let enviar = '';
         if (currdate == this.data.appoDate){
-          console.log(res.Appointment);
-          this.webSocketService.sendMessage({"action":"sendMessage","msg":JSON.stringify(res.Appointment)});
+          enviar = JSON.stringify(res.Appointment);
         }
-        this.spinnerService.stop(spinnerRef);
         this.openSnackBar($localize`:@@appos.created:`, $localize`:@@appos.schedule:`);
-        this.dialogRef.close({newAppo: 'OK'});
+
+        this.dialogRef.close({newAppo: 'OK', data: enviar}); 
+        this.spinnerService.stop(spinnerRef);
         return res.Code;
       }),
       catchError(err => {
