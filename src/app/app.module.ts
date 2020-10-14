@@ -82,8 +82,6 @@ import { LocationListComponent } from '@modules/locations/location-list/location
 import { UserListAdminComponent } from '@modules/users-admin/user-list-admin/user-list-admin.component';
 import { RoleListAdminComponent } from '@modules/roles-admin/role-list-admin/role-list-admin.component';
 
-// apiKey: 'AIzaSyCyKdLcjPnI3n5Eb2VmMJk-sgan83LEsCM'
-
 @NgModule({
   declarations: [
     AppComponent,

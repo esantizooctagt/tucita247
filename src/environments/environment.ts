@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  wsEndPoint: 'wss://1wn0vx0tva.execute-api.us-east-1.amazonaws.com/prod',
   apiUrl: 'https://api.tucita247.com', //'https://bxc56s4102.execute-api.us-east-1.amazonaws.com',
   apiAdminUrl: 'https://apiadmin.tucita247.com',
   apiRepoUrl: 'https://apirep.tucita247.com',

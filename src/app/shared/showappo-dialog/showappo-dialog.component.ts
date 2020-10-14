@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Reason } from '@app/_models';
-import { BusinessService, ReasonsService, AppointmentService } from '@app/services';
+import { BusinessService, ReasonsService, AppointmentService, MessagesService, WebSocketService } from '@app/services';
 import { AuthService } from '@app/core/services';
 import { catchError, map } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -22,9 +22,11 @@ export interface DialogData {
 @Component({
   selector: 'app-showappo-dialog',
   templateUrl: './showappo-dialog.component.html',
-  styleUrls: ['./showappo-dialog.component.scss']
+  styleUrls: ['./showappo-dialog.component.scss'],
+  providers: [WebSocketService, MessagesService]
 })
 export class ShowappoDialogComponent implements OnInit {
+  // liveData$: Observable<any>;
   comments$: Observable<any>;
   opeHours$: Observable<any>;
   getLocInfo$: Observable<any>;
@@ -60,6 +62,7 @@ export class ShowappoDialogComponent implements OnInit {
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private authService: AuthService,
+    private messageService: MessagesService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) { 
     this.matIconRegistry.addSvgIcon('cancel',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/cancel.svg'));
@@ -145,6 +148,11 @@ export class ShowappoDialogComponent implements OnInit {
   }
 
   onCancelApp(appo: any, reasonId: string, index: number){
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    var currdate = yyyy+'-'+mm+'-'+dd;
     //CANCELAR APPOINTMENT
     if (reasonId == undefined){
       this.openSnackBar($localize`:@@host.selectreason:`,$localize`:@@host.cancelappodyn:`);
@@ -158,6 +166,15 @@ export class ShowappoDialogComponent implements OnInit {
     this.updAppointment$ = this.appointmentService.updateAppointment(appo.AppId, formData).pipe(
       map((res: any) => {
         if (res.Code == 200){
+          if (currdate == appo.DateFull.substring(0,10)){
+            let formData = {
+              BusinessId: this.businessId,
+              LocationId: this.locationId,
+              AppId: appo.AppId,
+              Tipo: 'CANCEL'
+            }
+            this.messageService.messages.next({"action":"sendMessage","msg":JSON.stringify(formData)});
+          }
           this.cancelAppo = 1;
           var data = this.schedule.findIndex(e => e.AppId === appo.AppId);
           this.schedule.splice(data, 1);
@@ -216,6 +233,14 @@ export class ShowappoDialogComponent implements OnInit {
             if (qeue == 'schedule'){
               this.showMessageSche[i] = false;
             }
+            let formData = {
+              BusinessId: this.businessId,
+              LocationId: this.locationId,
+              AppId: appointmentId,
+              User: 'H',
+              Tipo: 'MESS'
+            }
+            this.messageService.messages.next({"action":"sendMessage","msg": JSON.stringify(formData)});
             this.openSnackBar($localize`:@@host.messagessend:`,$localize`:@@host.messages:`);
           } else {
             this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@shared.error:`);

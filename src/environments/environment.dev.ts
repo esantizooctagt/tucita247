@@ -1,5 +1,6 @@
 export const environment = {
     production: false,
+    wsEndPoint: 'wss://1wn0vx0tva.execute-api.us-east-1.amazonaws.com/prod',
     apiUrl: 'https://dev-api.tucita247.com',
     apiAdminUrl: 'https://dev-apiadmin.tucita247.com',
     apiRepoUrl: 'https://dev-apirep.tucita247.com',

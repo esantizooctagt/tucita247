@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
-import { LocationService, ServService, BusinessService } from '@app/services';
+import { LocationService, ServService, BusinessService, AppointmentService } from '@app/services';
 import { map, catchError, switchMap } from 'rxjs/operators';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { AuthService } from '@app/core/services';
@@ -11,7 +11,6 @@ import { ShowappoDialogComponent } from '@app/shared/showappo-dialog/showappo-di
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
-import { AppointmentService } from '@app/services/appointment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({

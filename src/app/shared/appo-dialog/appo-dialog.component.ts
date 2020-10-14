@@ -2,12 +2,11 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { SpinnerService } from '../spinner.service';
 import { catchError, map } from 'rxjs/operators';
-import { AppointmentService } from '@app/services/appointment.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ServService } from '@app/services';
+import { ServService, MessagesService, WebSocketService, AppointmentService } from '@app/services';
 
 export interface DialogData {   
   businessId: string;
@@ -23,10 +22,12 @@ export interface DialogData {
 @Component({
   selector: 'app-appo-dialog',
   templateUrl: './appo-dialog.component.html',
-  styleUrls: ['./appo-dialog.component.scss']
+  styleUrls: ['./appo-dialog.component.scss'],
+  providers: [WebSocketService, MessagesService]
 })
 export class AppoDialogComponent implements OnInit {
   newAppointment$: Observable<any>;
+  // liveData$: Observable<any>;
   services$: Observable<any[]>;
   doors: string[];
   serviceId: string = '';
@@ -52,8 +53,15 @@ export class AppoDialogComponent implements OnInit {
     private serviceService: ServService,
     private appointmentService: AppointmentService,
     private fb: FormBuilder,
+    private messageService: MessagesService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
-  ) { }
+  ) {
+    // this.liveData$ = this.messageService.messages.pipe(
+    //   map((res: any) => {
+    //     console.log("Response from websocket: " + JSON.stringify(res));
+    //   })
+    // );
+   }
 
   clientForm = this.fb.group({
     Phone: ['',[Validators.maxLength(17)]],
@@ -110,6 +118,12 @@ export class AppoDialogComponent implements OnInit {
   }
 
   addNewAppo(){
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    var currdate = yyyy+'-'+mm+'-'+dd;
+
     let dobClient: Date = this.clientForm.value.DOB;
     let dob: string = '';
     if (dobClient.toString() == '') {
@@ -144,6 +158,9 @@ export class AppoDialogComponent implements OnInit {
     var spinnerRef = this.spinnerService.start($localize`:@@host.addingappo:`);
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
       map((res: any) => {
+        if (currdate == this.data.appoDate){
+          this.messageService.messages.next({"action":"sendMessage","msg":JSON.stringify(res.Appointment)});
+        }
         this.spinnerService.stop(spinnerRef);
         this.openSnackBar($localize`:@@appos.created:`, $localize`:@@appos.schedule:`);
         this.dialogRef.close({newAppo: 'OK'});
@@ -224,7 +241,6 @@ export class AppoDialogComponent implements OnInit {
 
   addGuests(){
     if (this.clientForm.value.ServiceId == '') {return;}
-    console.log(this.clientForm.value.ServiceId);
     let data = this.services.filter(x => x.ServiceId == this.clientForm.value.ServiceId);
     let allowCustomer: number = data[0]['CustomerPerBooking'];
     this.varGuests = (this.varGuests+1 > allowCustomer ? this.varGuests : this.varGuests+1);

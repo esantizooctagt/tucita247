@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { LocationService, ReasonsService, BusinessService, AppointmentService, ServService } from '@app/services';
+import { LocationService, ReasonsService, BusinessService, AppointmentService, ServService, MessagesService, WebSocketService } from '@app/services';
 import { AuthService } from '@app/core/services';
 import { SpinnerService } from '@app/shared/spinner.service';
-import { map, catchError, switchMap, mergeMap } from 'rxjs/operators';
+import { map, catchError, switchMap, mergeMap, tap } from 'rxjs/operators';
 import { Appointment, Reason } from '@app/_models';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ConfirmValidParentMatcher } from '@app/validators';
@@ -20,7 +20,8 @@ import { DirDialogComponent } from '@app/shared/dir-dialog/dir-dialog.component'
 @Component({
   selector: 'app-host',
   templateUrl: './host.component.html',
-  styleUrls: ['./host.component.scss']
+  styleUrls: ['./host.component.scss'],
+  providers: [WebSocketService, MessagesService]
 })
 export class HostComponent implements OnInit {
   locations$: Observable<Location[]>;
@@ -42,6 +43,7 @@ export class HostComponent implements OnInit {
   openLoc$: Observable<any>;
   closedLoc$: Observable<any>;
   manualCheckOut$: Observable<any>;
+  liveData$: Observable<any>;
 
   showMessageSche=[];
   showMessageWalk=[];
@@ -124,6 +126,7 @@ export class HostComponent implements OnInit {
 
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
+  // readonly PUSH_URL = 'wss://1wn0vx0tva.execute-api.us-east-1.amazonaws.com/prod?businessId=12345';
   constructor(
     private domSanitizer: DomSanitizer,
     private spinnerService: SpinnerService,
@@ -137,7 +140,8 @@ export class HostComponent implements OnInit {
     private fb: FormBuilder,
     private dialog: MatDialog,
     private matIconRegistry: MatIconRegistry,
-    private router: Router
+    private router: Router,
+    private messageService: MessagesService
   ) {
     this.matIconRegistry.addSvgIcon('cancel',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/cancel.svg'));
     this.matIconRegistry.addSvgIcon('clock',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/clock.svg'));
@@ -149,6 +153,12 @@ export class HostComponent implements OnInit {
     this.matIconRegistry.addSvgIcon('sms',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/sms.svg'));
     this.matIconRegistry.addSvgIcon('mas',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/mas.svg'));
     this.matIconRegistry.addSvgIcon('menos',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/menos.svg'));
+
+    this.liveData$ = this.messageService.messages.pipe(
+      map((res: any) => {
+        this.syncData(res);
+      })
+    );
   }
 
   clientForm = this.fb.group({
@@ -190,6 +200,72 @@ export class HostComponent implements OnInit {
     dialogConfig.maxWidth = '280px';
     this.dialog.open(DialogComponent, dialogConfig);
   }
+
+  syncData(msg: any){
+    //NEW APPOINTMENT
+    if (msg['Tipo'] == 'APPO'){
+      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.closedLoc == 0 && this.locationStatus == 1){
+        if (this.schedule.filter(x => x.AppId ==  msg['AppId']).length == 0){
+          let hora = msg['DateAppo'];
+          let data = {
+            AppId: msg['AppId'],
+            ClientId: msg['ClientId'],
+            ProviderId: msg['ProviderId'],
+            Name: msg['Name'].toLowerCase(),
+            OnBehalf: msg['OnBehalf'],
+            Guests: msg['Guests'],
+            Door: msg['Door'],
+            Disability: msg['Disability'],
+            Phone: msg['Phone'],
+            DateFull: msg['DateFull'],
+            Type: msg['Type'],
+            DateAppo: hora,
+            Unread: 0
+          }
+          this.schedule.push(data);
+        }
+      }  
+    }
+    if (msg['Tipo'] == 'MESS'){
+      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.closedLoc == 0 && this.locationStatus == 1){
+        let resScheMess = this.schedule.findIndex(x => x.AppId === msg['AppId']);
+        if (resScheMess >= 0){
+          this.schedule[resScheMess].Unread = "H";
+        }
+        let resWalkInsMess = this.walkIns.findIndex(x => x.AppId === msg['AppId']);
+        if (resWalkInsMess >= 0){
+          this.walkIns[resWalkInsMess].Unread = "H";
+        }
+        let resPreviousMess = this.previous.findIndex(x => x.AppId === msg['AppId']);
+        if (resPreviousMess >= 0){
+          this.previous[resPreviousMess].Unread = "H";
+        }
+        let resPreCheckInMess = this.preCheckIn.findIndex(x => x.AppId === msg['AppId']);
+        if (resPreCheckInMess >= 0){
+          this.preCheckIn[resPreCheckInMess].Unread = "H";
+        }
+      }
+    }
+    if (msg['Tipo'] == 'CANCEL'){
+      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.closedLoc == 0 && this.locationStatus == 1){
+        var verifSche = this.schedule.findIndex(x => x.AppId === msg['AppId']);
+        this.schedule.splice(verifSche, 1);
+
+        var verifWalkIns = this.walkIns.findIndex(x => x.AppId === msg['AppId']);
+        this.walkIns.splice(verifWalkIns, 1);
+
+        var verifpreCheck = this.preCheckIn.findIndex(x => x.AppId === msg['AppId']);
+        this.preCheckIn.splice(verifpreCheck, 1);
+
+        var verifprevious = this.previous.findIndex(x => x.AppId === msg['AppId']);
+        this.previous.splice(verifprevious, 1);
+      }
+    }
+  }
+  // sendMsg() {
+  //   console.log("new message from client to websocket: ", {BusinessId:"12345", Datos: "asba"});
+  //   this.messageService.messages.next({"action":"sendMessage","msg":"{'BusinessId':'12345','AppointmentId':'34fg45fg','Cancel':'1'}"});
+  // }
 
   ngOnInit(): void {
     this.businessId = this.authService.businessId();
@@ -1333,7 +1409,6 @@ export class HostComponent implements OnInit {
 
   onLocationChange(event){
     let data = this.locations.filter(val => val.LocationId == event.value);
-
     this.previous = [];
     this.schedule = [];
     this.walkIns = [];
