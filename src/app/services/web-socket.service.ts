@@ -1,49 +1,82 @@
 import { Injectable } from '@angular/core';
-import { EMPTY, Subject } from 'rxjs';
-import { catchError, switchAll, tap } from 'rxjs/operators';
-// import * as Rx from "rxjs/Rx";
+import { EMPTY, Observable, Subject, throwError, timer } from 'rxjs';
+import { catchError, delayWhen, retryWhen, switchAll, tap } from 'rxjs/operators';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { environment } from '@environments/environment';
 import { AuthService } from '@app/core/services';
 
 export const WS_ENDPOINT = environment.wsEndPoint;
+export const RECONNECT_INTERVAL = 2000;
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebSocketService {
-  businessId: string = '';
-  constructor(private authService: AuthService) {
-    this.businessId = this.authService.businessId();
-  }
-
+  private businessId: string = '';
   private socket$: WebSocketSubject<any>;
   private messagesSubject$ = new Subject();
   public messages$ = this.messagesSubject$.pipe(switchAll(), catchError(e => { throw e }));
  
-  public connect(): void {
+  constructor(private authService: AuthService) {
+    this.businessId = this.authService.businessId();
+  }
+
+  public connect(cfg: { reconnect: boolean } = { reconnect: false }): void {
     if (!this.socket$ || this.socket$.closed) {
       this.socket$ = this.getNewWebSocket();
-      const messages = this.socket$.pipe(
-        tap({
-          error: error => console.log(error),
-        }), catchError(_ => EMPTY));
-        console.log(messages);
-      this.messagesSubject$.next(messages);
+      this.socket$.subscribe(
+        msg => console.log('message received: ' + msg), // Called whenever there is a message from the server.
+        err => cfg.reconnect ? this.reconnect : o => o, // Called if at any point WebSocket API signals some kind of error.
+        () => cfg.reconnect ? this.reconnect : o => o // Called when connection is closed (for whatever reason).
+      );
+      // const messages = this.socket$.pipe(
+      //   cfg.reconnect ? this.reconnect : o => o,
+      //   tap({
+      //     error: error => console.log(error),
+      //   }), 
+      //   catchError(_ => EMPTY)
+      // );
+      // this.messagesSubject$.next(messages);
     }
   }
  
+  private reconnect(observable: Observable<any>): Observable<any> {
+    return observable.pipe(
+      retryWhen(errors => errors.pipe(
+        tap(val => console.log('[Data Service] Try to reconnect', val)), 
+      delayWhen(_ => timer(RECONNECT_INTERVAL))
+      ))
+    ); 
+  }
+
   private getNewWebSocket() {
-    return webSocket(WS_ENDPOINT+(this.businessId != '' ? '?businessId=' + this.businessId : ''));
+    // webSocket('wss://1wn0vx0tva.execute-api.us-east-1.amazonaws.com/prod?businessId=12345');
+    // console.log(WS_ENDPOINT+(this.businessId != '' ? '?businessId=' + this.businessId : ''));
+    return webSocket({
+      url: WS_ENDPOINT+(this.businessId != '' ? '?businessId=' + this.businessId : ''),
+      openObserver: {
+        next: () => {
+          console.log('[DataService]: connection ok');
+        }
+      },
+      closeObserver: {
+        next: () => {
+          console.log('[DataService]: connection closed');
+          this.socket$ = undefined;
+          this.connect({ reconnect: true });
+        }
+      },
+    });
   }
 
   sendMessage(msg: any) {
-    console.log("send message ");
+    console.log("send message");
     console.log(msg);
     this.socket$.next(msg);
   }
 
   close() {
-    this.socket$.complete(); 
+    this.socket$.complete();
+    this.socket$ = undefined;
   }
 }

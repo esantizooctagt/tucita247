@@ -27,6 +27,7 @@ export interface DialogData {
 export class AppoDialogComponent implements OnInit {
   newAppointment$: Observable<any>;
   services$: Observable<any[]>;
+
   doors: string[];
   serviceId: string = '';
   businessId: string = '';
@@ -51,16 +52,10 @@ export class AppoDialogComponent implements OnInit {
     private serviceService: ServService,
     private appointmentService: AppointmentService,
     private fb: FormBuilder,
-    // private messageService: MessagesService,
     private webSocketService: WebSocketService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {
     this.webSocketService.connect();
-    // this.liveData$ = this.messageService.messages.pipe(
-    //   map((res: any) => {
-    //     console.log("Response from websocket: " + JSON.stringify(res));
-    //   })
-    // );
    }
 
   clientForm = this.fb.group({

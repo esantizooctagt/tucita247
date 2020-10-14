@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -20,7 +20,8 @@ import { DirDialogComponent } from '@app/shared/dir-dialog/dir-dialog.component'
 @Component({
   selector: 'app-host',
   templateUrl: './host.component.html',
-  styleUrls: ['./host.component.scss']
+  styleUrls: ['./host.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
   // providers: [WebSocketService, MessagesService]
 })
 export class HostComponent implements OnInit {
@@ -141,9 +142,7 @@ export class HostComponent implements OnInit {
     private dialog: MatDialog,
     private matIconRegistry: MatIconRegistry,
     private router: Router,
-    private webSocketService: WebSocketService
-    // private messageService: MessagesService,
-    
+    private webSocketService: WebSocketService    
   ) {
     this.matIconRegistry.addSvgIcon('cancel',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/cancel.svg'));
     this.matIconRegistry.addSvgIcon('clock',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/clock.svg'));
@@ -162,6 +161,11 @@ export class HostComponent implements OnInit {
       map((res: any) => {
         console.log(res);
         this.syncData(res);
+      }),
+      catchError(error => { throw error }),
+      tap({
+        error: error => console.log('[Live Table component] Error:', error),
+        complete: () => console.log('[Live Table component] Connection Closed')
       })
     );
   }
