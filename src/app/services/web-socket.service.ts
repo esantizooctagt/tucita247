@@ -6,7 +6,7 @@ import { environment } from '@environments/environment';
 import { AuthService } from '@app/core/services';
 
 export const WS_ENDPOINT = environment.wsEndPoint;
-export const RECONNECT_INTERVAL = 2000;
+export const RECONNECT_INTERVAL = 3000;
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +24,7 @@ export class WebSocketService {
   public connect(cfg: { reconnect: boolean } = { reconnect: false }): void {
     if (!this.socket$ || this.socket$.closed) {
       this.socket$ = this.getNewWebSocket();
+      console.log("connect after validate");
       const messages = this.socket$.pipe(cfg.reconnect ? this.reconnect : o => o,
         tap({
           error: error => console.log(error),

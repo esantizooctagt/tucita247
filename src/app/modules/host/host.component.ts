@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { LocationService, ReasonsService, BusinessService, AppointmentService, ServService, WebSocketService } from '@app/services';
+import { LocationService, ReasonsService, BusinessService, AppointmentService, ServService } from '@app/services';
 import { AuthService } from '@app/core/services';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { map, catchError, switchMap, mergeMap, tap } from 'rxjs/operators';
@@ -16,6 +16,7 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { DirDialogComponent } from '@app/shared/dir-dialog/dir-dialog.component';
+import { MonitorService } from '@app/shared/monitor.service';
 
 @Component({
   selector: 'app-host',
@@ -125,17 +126,22 @@ export class HostComponent implements OnInit {
 
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
-  liveData$ = this.webSocketService.messages$.pipe(
-    map((res: any) => {
-      console.log(res);
-      this.syncData(res);
-    }),
-    catchError(error => { throw error }),
-    tap({
-      error: error => console.log('[Live Table component] Error:', error),
-      complete: () => console.log('[Live Table component] Connection Closed')
+  liveData$ = this.monitorService.syncMessage.pipe(
+    map((message: any) => {
+      this.syncData(message);
     })
   );
+  // liveData$ = this.webSocketService.messages$.pipe(
+  //   map((res: any) => {
+  //     console.log(res);
+  //     this.syncData(res);
+  //   }),
+  //   catchError(error => { throw error }),
+  //   tap({
+  //     error: error => console.log('[Live Table component] Error:', error),
+  //     complete: () => console.log('[Live Table component] Connection Closed')
+  //   })
+  // );
 
   // readonly PUSH_URL = 'wss://1wn0vx0tva.execute-api.us-east-1.amazonaws.com/prod?businessId=12345';
   constructor(
@@ -152,7 +158,7 @@ export class HostComponent implements OnInit {
     private dialog: MatDialog,
     private matIconRegistry: MatIconRegistry,
     private router: Router,
-    private webSocketService: WebSocketService  
+    private monitorService: MonitorService
   ) {
     this.matIconRegistry.addSvgIcon('cancel',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/cancel.svg'));
     this.matIconRegistry.addSvgIcon('clock',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/clock.svg'));
@@ -208,6 +214,8 @@ export class HostComponent implements OnInit {
 
   syncData(msg: any){
     //NEW APPOINTMENT
+    if (msg == null) {return;}
+    console.log(msg);
     if (msg['Tipo'] == 'APPO'){
       if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.closedLoc == 0 && this.locationStatus == 1){
         if (this.schedule.filter(x => x.AppId ==  msg['AppId']).length == 0){
@@ -227,7 +235,16 @@ export class HostComponent implements OnInit {
             DateAppo: hora,
             Unread: 0
           }
-          this.schedule.push(data);
+          if (msg['Type'] == '1'){
+            var verifSche = this.schedule.findIndex(x => x.AppId === msg['AppId']);
+            if (verifSche >= 0){return;}
+            this.schedule.push(data);
+          }
+          if (msg['Type'] == '2'){
+            var verifWalk = this.walkIns.findIndex(x => x.AppId === msg['AppId']);
+            if (verifWalk >= 0){return;}
+            this.walkIns.push(data);
+          }
         }
       }  
     }
@@ -254,22 +271,22 @@ export class HostComponent implements OnInit {
     if (msg['Tipo'] == 'CANCEL'){
       if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.closedLoc == 0 && this.locationStatus == 1){
         var verifSche = this.schedule.findIndex(x => x.AppId === msg['AppId']);
-        this.schedule.splice(verifSche, 1);
+        if (verifSche >= 0){this.schedule.splice(verifSche, 1);}
 
         var verifWalkIns = this.walkIns.findIndex(x => x.AppId === msg['AppId']);
-        this.walkIns.splice(verifWalkIns, 1);
+        if (verifWalkIns >= 0){this.walkIns.splice(verifWalkIns, 1);}
 
         var verifpreCheck = this.preCheckIn.findIndex(x => x.AppId === msg['AppId']);
-        this.preCheckIn.splice(verifpreCheck, 1);
+        if (verifpreCheck >= 0){this.preCheckIn.splice(verifpreCheck, 1);}
 
         var verifprevious = this.previous.findIndex(x => x.AppId === msg['AppId']);
-        this.previous.splice(verifprevious, 1);
+        if (verifprevious >= 0){this.previous.splice(verifprevious, 1);}
       }
     }
   }
 
   ngAfterViewInit(){
-    this.webSocketService.connect();
+    // this.webSocketService.connect();
   }
 
   ngOnInit(): void {
@@ -504,9 +521,9 @@ export class HostComponent implements OnInit {
   }
 
   closedLocation(){
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.autoFocus = false;
-    dialogConfig.data = {
+    const dialogConfigClosed = new MatDialogConfig();
+    dialogConfigClosed.autoFocus = false;
+    dialogConfigClosed.data = {
       header: $localize`:@@host.closedlocheader:`, 
       message: $localize`:@@host.closedloc:`, 
       success: false, 
@@ -514,23 +531,25 @@ export class HostComponent implements OnInit {
       warn: false,
       ask: true
     };
-    dialogConfig.width ='280px';
-    dialogConfig.minWidth = '280px';
-    dialogConfig.maxWidth = '280px';
+    dialogConfigClosed.width ='280px';
+    dialogConfigClosed.minWidth = '280px';
+    dialogConfigClosed.maxWidth = '280px';
 
-    const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-      if(result != undefined){
-        // if (result){ 
-        var spinnerRef = this.spinnerService.start($localize`:@@host.closingloc:`);
-        this.closedLoc$ = this.locationService.updateClosedLocation(this.locationId, this.businessId, (result == true ? 1 : 0)).pipe(
+    const dialogRefClosed = this.dialog.open(DialogComponent, dialogConfigClosed);
+    let valueSel;
+    this.closedLoc$ = dialogRefClosed.afterClosed().pipe(
+      map(result => {
+        valueSel = result;
+        return result;
+      }),
+      switchMap(x => this.locationService.updateClosedLocation(this.locationId, this.businessId, (valueSel == true ? 1 : 0)).pipe(
           map((res: any) => {
+            // var spinnerRef = this.spinnerService.start($localize`:@@host.closingloc:`);
             if (res != null){
               if (res['Business'].OPEN == 0){
                 this.locationStatus = 0;
                 this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
-                this.spinnerService.stop(spinnerRef);
+                // this.spinnerService.stop(spinnerRef);
                 this.previous = [];
                 this.schedule = [];
                 this.walkIns = [];
@@ -554,13 +573,13 @@ export class HostComponent implements OnInit {
                   this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
                   if (this.Providers.length > 0){
                     this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
-                    // this.providerId = this.Providers[0].ProviderId;
+                    this.providerId = this.Providers[0].ProviderId;
                     this.providerId = "0";
                   }
                 }
                 return res;
               } else {
-                this.spinnerService.stop(spinnerRef);
+                // this.spinnerService.stop(spinnerRef);
                 this.openDialog($localize`:@@shared.error:`, $localize`:@@host.missloc:`, false, true, false);
                 this.router.navigate(['/']);
                 return;
@@ -578,18 +597,10 @@ export class HostComponent implements OnInit {
                 }
               })
             )
-          ),
-          catchError(err => {
-            this.spinnerService.stop(spinnerRef);
-            this.locationStatus = 1;
-            this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
-            this.onError = err.Message;
-            return this.onError;
-          })
-        );
-        // }
-      }
-    });
+          )
+        )
+      )  
+    );
   }
 
   checkOutQR(){
@@ -627,7 +638,9 @@ export class HostComponent implements OnInit {
       qrCode: qrCode,
       BusinessId: this.businessId,
       LocationId: this.locationId,
-      ProviderId: this.providerId
+      ProviderId: this.providerId,
+      BusinessName: this.authService.businessName(),
+      Language: this.authService.language()
     }
     this.checkIn$ = this.appointmentService.updateAppointmentCheckOut(formData).pipe(
       map((res: any) => {
@@ -764,6 +777,8 @@ export class HostComponent implements OnInit {
       LocationId: this.locationId,
       ProviderId: (this.providerId != '0' ? this.providerId : this.clientForm.value.ProviderId),
       ServiceId: this.clientForm.value.ServiceId,
+      BusinessName: this.authService.businessName(),
+      Language: this.authService.language(),
       Door: this.doorId,
       Phone: (phoneNumber == '' ?  '00000000000' : (phoneNumber.length <= 10 ? '1' + phoneNumber : phoneNumber)),
       Name: this.clientForm.value.Name,
@@ -862,7 +877,9 @@ export class HostComponent implements OnInit {
       DateAppo: appo.DateFull,
       Reason: reasonId,
       Guests: appo.Guests,
-      CustomerId: appo.ClientId
+      CustomerId: appo.ClientId,
+      BusinessName: this.authService.businessName(),
+      Language: this.authService.language()
     }
     this.updAppointment$ = this.appointmentService.updateAppointment(appo.AppId, formData).pipe(
       map((res: any) => {
@@ -941,7 +958,9 @@ export class HostComponent implements OnInit {
       Guests: guests,
       BusinessId: this.businessId,
       LocationId: this.locationId,
-      ProviderId: appo.ProviderId
+      ProviderId: appo.ProviderId,
+      BusinessName: this.authService.businessName(),
+      Language: this.authService.language()
     }
     this.checkIn$ = this.appointmentService.updateAppointmentCheckIn(appo.AppId, formData).pipe(
       map((res: any) => {
@@ -1066,7 +1085,9 @@ export class HostComponent implements OnInit {
     let formData = {
       Status: 2,
       DateAppo: appo.DateFull,
-      CustomerId: appo.ClientId
+      CustomerId: appo.ClientId,
+      BusinessName: this.authService.businessName(),
+      Language: this.authService.language()
     }
     this.updAppointment$ = this.appointmentService.updateAppointment(appo.AppId, formData).pipe(
       map((res: any) => {
@@ -1421,6 +1442,7 @@ export class HostComponent implements OnInit {
   }
 
   locationStatusChange(){
+    console.log(this.locationStatus);
     if (this.locationStatus == 1){
       this.closedLocation();
     } else {
@@ -1655,7 +1677,9 @@ export class HostComponent implements OnInit {
       let container = event.previousContainer.id;
       let formData = {
         Status: 2,
-        DateAppo: appo['DateFull']
+        DateAppo: appo['DateFull'],
+        BusinessName: this.authService.businessName(),
+        Language: this.authService.language()
       }
 
       transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, this.preCheckIn.length);

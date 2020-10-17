@@ -261,7 +261,9 @@ export class QuickCheckinComponent implements OnInit {
       qrCode: qrCode,
       BusinessId: this.businessId,
       LocationId: this.locationId,
-      ProviderId: this.providerId
+      ProviderId: this.providerId,
+      BusinessName: this.authService.businessName(),
+      Language: this.authService.language(),
     }
     this.check$ = this.appointmentService.updateAppointmentCheckOut(formData).pipe(
       map((res: any) => {
@@ -316,7 +318,9 @@ export class QuickCheckinComponent implements OnInit {
       Guests: guests,
       BusinessId: this.businessId,
       LocationId: this.locationId,
-      ProviderId: this.providerId
+      ProviderId: this.providerId,
+      BusinessName: this.authService.businessName(),
+      Language: this.authService.language(),
     }
     this.check$ = this.appointmentService.updateAppointmentCheckInQR(qrCode, formData).pipe(
       map((res: any) => {
@@ -413,6 +417,8 @@ export class QuickCheckinComponent implements OnInit {
     let formData = {
       BusinessId: this.businessId,
       LocationId: this.locationId,
+      BusinessName: this.authService.businessName(),
+      Language: this.authService.language(),
       ProviderId: (this.providerId != '0' ? this.providerId : this.clientForm.value.ProviderId),
       ServiceId: this.clientForm.value.ServiceId,
       Door: this.doorId,

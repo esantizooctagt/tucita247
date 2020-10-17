@@ -86,6 +86,26 @@
   font-family: Montserrat;
   font-weight: 500;
 }
+.mat-welcome{
+  padding-left: 28px !important;
+  padding-top: 5px !important;
+  color: #aab7b8;
+  cursor: pointer;
+  line-height: 1.5;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  font-family: Montserrat;
+}
+.mat-welcome:hover{
+  padding-left: 28px !important;
+  padding-top: 5px !important;
+  color: #fff;
+  cursor: pointer;
+  line-height: 1.5;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  font-family: Montserrat;
+}
 .list-item-business{
   font-weight: 600;
   cursor: none;
@@ -131,6 +151,15 @@
   font-weight: 500;
   text-transform: capitalize;
   // background-color: #e3e7ef;
+}
+.menu-active-welcome{
+  color: #fff;
+  text-transform: capitalize;
+  cursor: pointer;
+  line-height: 1.5;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  font-family: Montserrat;
 }
 .main-logo{
   height: 64px;

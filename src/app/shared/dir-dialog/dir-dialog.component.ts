@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { SpinnerService } from '../spinner.service';
 import { map, catchError } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '@app/core/services';
 
 export interface DialogInfo {
   walkIns: [];
@@ -61,6 +62,7 @@ export class DirDialogComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private spinnerService: SpinnerService,
     private dialogRef: MatDialogRef<DirDialogComponent>,
+    private authService: AuthService,
     @Inject(MAT_DIALOG_DATA) public data: DialogInfo
   ) { }
 
@@ -106,7 +108,9 @@ export class DirDialogComponent implements OnInit {
       let formData = {
         BusinessId: this.businessId,
         LocationId: this.locationId,
-        Appos: appId
+        Appos: appId,
+        BusinessName: this.authService.businessName(),
+        Language: this.authService.language()
       }
       var spinnerRef = this.spinnerService.start($localize`:@@dirdialog.walkins:`);
       this.getLocInfo$ = this.appointmentService.updateAppointmentWalkInsCheckOut(formData).pipe(

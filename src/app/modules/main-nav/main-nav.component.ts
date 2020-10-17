@@ -2,18 +2,19 @@ import { Component, OnInit, LOCALE_ID, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable, throwError } from 'rxjs';
-import { map, shareReplay, catchError, startWith } from 'rxjs/operators';
+import { map, shareReplay, catchError, startWith, tap } from 'rxjs/operators';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
 
 import { User, Access } from '@app/_models';
 import { AuthService } from '@core/services';
 import { environment } from '@environments/environment';
-import { RolesService, UserService, BusinessService, AdminService } from '@app/services';
+import { RolesService, UserService, BusinessService, AdminService, WebSocketService } from '@app/services';
 import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { MonitorService } from '@app/shared/monitor.service';
 
 @Component({
   selector: 'app-main-nav',
@@ -60,6 +61,17 @@ export class MainNavComponent implements OnInit {
       map(result => result.matches),
       shareReplay()
     );
+  
+  liveData$ = this.webSocketService.messages$.pipe(
+    map((res: any) => {
+      this.monitorService.syncData(res);
+    }),
+    catchError(error => { throw error }),
+    tap({
+      error: error => console.log('[Live Table component] Error:', error),
+      complete: () => console.log('[Live Table component] Connection Closed')
+    })
+  );
 
   constructor(
     @Inject(LOCALE_ID) protected localeId: string,
@@ -72,7 +84,9 @@ export class MainNavComponent implements OnInit {
     private businessService: BusinessService,
     private adminService: AdminService,
     private domSanitizer: DomSanitizer,
-    private matIconRegistry: MatIconRegistry
+    private matIconRegistry: MatIconRegistry,
+    private webSocketService: WebSocketService,
+    private monitorService: MonitorService
     ) {
       this.matIconRegistry.addSvgIcon('hours',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/hours-mn.svg'));
       this.matIconRegistry.addSvgIcon('company',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/company-mn.svg'));
@@ -103,6 +117,10 @@ export class MainNavComponent implements OnInit {
     dialogConfig.minWidth = '280px';
     dialogConfig.maxWidth = '280px';
     this.dialog.open(DialogComponent, dialogConfig);
+  }
+
+  ngAfterViewInit(){
+    this.webSocketService.connect();
   }
 
   ngOnInit(){

@@ -2,6 +2,13 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="shared.close" datatype="html">
+        <source>Close</source>
+        <context-group purpose="learn-dialog">
+          <context context-type="sourcefile">src/app/shared/learn-dialog/learn-dialog.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="shared.screenresolution" datatype="html">
         <source>Screen Res</source>
         <context-group purpose="schedule">
@@ -61,7 +68,7 @@
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="businessopesetting" datatype="html">
+      <trans-unit id="main.businessopesetting" datatype="html">
         <source>Business Operation</source>
         <context-group purpose="main-nav">
           <context context-type="sourcefile">src/app/modules/main-nav/main-nav.component.html</context>
@@ -3964,6 +3971,9 @@
       </trans-unit>
       <trans-unit id="host.closedlocheader">
         <source>Close Location</source>
+      </trans-unit>
+      <trans-unit id="host.savingpoll">
+        <source>Saving poll</source>
       </trans-unit>
     </body>
   </file>

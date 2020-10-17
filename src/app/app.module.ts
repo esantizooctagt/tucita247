@@ -81,6 +81,7 @@ import { ServiceListComponent } from '@modules/services/service-list/service-lis
 import { LocationListComponent } from '@modules/locations/location-list/location-list.component';
 import { UserListAdminComponent } from '@modules/users-admin/user-list-admin/user-list-admin.component';
 import { RoleListAdminComponent } from '@modules/roles-admin/role-list-admin/role-list-admin.component';
+import { LearnDialogComponent } from './shared/learn-dialog/learn-dialog.component';
 
 @NgModule({
   declarations: [
@@ -108,7 +109,8 @@ import { RoleListAdminComponent } from '@modules/roles-admin/role-list-admin/rol
     ServcolorPipe,
     ShopdialogComponent,
     UserListAdminComponent,
-    RoleListAdminComponent
+    RoleListAdminComponent,
+    LearnDialogComponent
   ],
   imports: [
     BrowserModule,

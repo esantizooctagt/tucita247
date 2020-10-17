@@ -2,6 +2,14 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template" target-language="es">
     <body>
+      <trans-unit id="shared.close" datatype="html">
+        <source>Close</source>
+        <target state="translated">Cerrar</target>
+        <context-group purpose="learn-dialog">
+          <context context-type="sourcefile">src/app/shared/learn-dialog/learn-dialog.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="shared.screenresolution" datatype="html">
         <source>Screen Res</source>
         <target state="translated">Necesita una resolucion mayor para ver esta pantalla</target>
@@ -70,7 +78,7 @@
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="businessopesetting" datatype="html">
+      <trans-unit id="main.businessopesetting" datatype="html">
         <source>Business Operation</source>
         <target state="translated">Operar Negocio</target>
         <context-group purpose="main-nav">
@@ -466,7 +474,7 @@
       </trans-unit>
       <trans-unit id="main.providerh" datatype="html">
         <source>Provider schedule</source>
-        <target state="translated">Agenda del proveedor de servicio</target>
+        <target state="translated">Horario del proveedor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/main-nav/main-nav.component.html</context>
           <context context-type="linenumber">40</context>
@@ -529,7 +537,7 @@
       </trans-unit>
       <trans-unit id="main.userlocation" datatype="html">
         <source>User Locations</source>
-        <target state="translated">Localidades de Usuarios</target>
+        <target state="translated">Localidad de Usuarios</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/main-nav/main-nav.component.html</context>
           <context context-type="linenumber">53</context>
@@ -4473,6 +4481,10 @@
       <trans-unit id="host.closedlocheader">
         <source>Close Location</source>
         <target state="translated">Cerrar localizacion</target>
+      </trans-unit>
+      <trans-unit id="host.savingpoll">
+        <source>Saving poll</source>
+        <target state="translated">Guardando encuesta</target>
       </trans-unit>
     </body>
   </file>

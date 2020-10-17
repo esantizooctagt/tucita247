@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ServService, AppointmentService } from '@app/services';
+import { AuthService } from '@app/core/services';
 
 export interface DialogData {   
   businessId: string;
@@ -52,6 +53,7 @@ export class AppoDialogComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private serviceService: ServService,
     private appointmentService: AppointmentService,
+    private authService: AuthService,
     private fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {}
@@ -134,6 +136,8 @@ export class AppoDialogComponent implements OnInit {
       BusinessId: this.data.businessId,
       LocationId: this.data.locationId,
       ProviderId: this.data.providerId,
+      BusinessName: this.authService.businessName(),
+      Language: this.authService.language(),
       ServiceId: this.clientForm.value.ServiceId,
       AppoDate: this.data.appoDate,
       AppoHour: dateAppo+'-'+this.data.appoTime.substring(3,5),
@@ -153,9 +157,9 @@ export class AppoDialogComponent implements OnInit {
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
       map((res: any) => {
         let enviar = '';
-        if (currdate == this.data.appoDate){
-          enviar = JSON.stringify(res.Appointment);
-        }
+        // if (currdate == this.data.appoDate){
+        //   enviar = JSON.stringify(res.Appointment);
+        // }
         this.openSnackBar($localize`:@@appos.created:`, $localize`:@@appos.schedule:`);
 
         this.dialogRef.close({newAppo: 'OK', data: enviar}); 

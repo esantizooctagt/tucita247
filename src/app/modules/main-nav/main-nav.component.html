@@ -1,5 +1,6 @@
 <ng-container *ngIf="resetToken$ | async"></ng-container>
 <ng-container *ngIf="access$ | async"></ng-container>
+<ng-container *ngIf="liveData$ | async"></ng-container>
 <mat-sidenav-container class="sidenav-container" autosize>
     <mat-sidenav #drawer class="sidenav" fixedInViewport
         [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
@@ -9,7 +10,7 @@
           <mat-toolbar class="main-logo p-0">
           </mat-toolbar>    
         </div>
-      <mat-nav-list>
+      <mat-list>
         <a class="list-item-business" mat-list-item pt-2 mb-2>{{businessName}}</a>
         <mat-divider></mat-divider>
         <mat-accordion multi="true" [displayMode]="displayMode" *ngIf="superAccess == 1">
@@ -30,7 +31,11 @@
             </mat-nav-list>
           </mat-expansion-panel>
         </mat-accordion>
-        <a *ngIf="isAdmin" class="list-item-welcome" mat-list-item [routerLink]="['/welcome']" routerLinkActive="menu-active" i18n="Welcome@@main.welcome" (click)="(screenWidth < 500) ? drawer.toggle() : ''"><mat-icon svgIcon="home" class="icon-option"></mat-icon>  Welcome</a>
+        <!-- class="list-item-welcome" mat-list-item -->
+        <mat-list-item *ngIf="isAdmin">
+          <mat-icon svgIcon="home" class="icon-option"></mat-icon>
+          <div class="mat-welcome" mat-line [routerLink]="['/welcome']" routerLinkActive="menu-active-welcome" i18n="Welcome@@main.welcome" (click)="(screenWidth < 500) ? drawer.toggle() : ''">Welcome</div>
+        </mat-list-item>
         <ng-container class="" *ngIf="apps$ | async">
           <mat-accordion multi="true" [displayMode]="displayMode">
             <mat-expansion-panel class="no-shadow">
@@ -150,7 +155,7 @@
             </mat-expansion-panel>
           </mat-accordion>
         </div>
-      </mat-nav-list>
+      </mat-list>
     </mat-sidenav>
     <mat-sidenav-content>
       <mat-toolbar class="mat-toolbar-main">

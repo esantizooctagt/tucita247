@@ -1,6 +1,5 @@
 <div class="container-fluid h-100 main-background host-container d-none d-md-block d-lg-block d-xl-block">
     <ng-container *ngIf="operationHours$ | async"></ng-container>
-    <ng-container *ngIf="liveData$ | async"></ng-container>
     <div class="row mt-2 mb-2">
         <mat-form-field class="col-md-4 selection-line">
             <mat-select name="locations" [(value)]="locationData" (selectionChange)="onSelectLocation($event)">

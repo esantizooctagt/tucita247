@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable, Subscription } from 'rxjs';
-import { LocationService, ServService, BusinessService, AppointmentService, WebSocketService } from '@app/services';
-import { map, catchError, tap } from 'rxjs/operators';
+import { LocationService, ServService, BusinessService, AppointmentService } from '@app/services';
+import { map, catchError } from 'rxjs/operators';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { AuthService } from '@app/core/services';
 import { AppoDialogComponent } from '@app/shared/appo-dialog/appo-dialog.component';
@@ -58,17 +58,6 @@ export class ScheduleComponent implements OnInit {
   subsMessages: Subscription;
 
   displayYesNo: boolean = false;
-  
-  liveData$ = this.webSocketService.messages$.pipe(
-    map((res: any) => {
-      console.log(res);
-    }),
-    catchError(error => { throw error }),
-    tap({
-      error: error => console.log('[Live Table component] Error:', error),
-      complete: () => console.log('[Live Table component] Connection Closed')
-    })
-  );
 
   constructor(
     private authService: AuthService,
@@ -81,8 +70,7 @@ export class ScheduleComponent implements OnInit {
     private appointmentService: AppointmentService,
     public dialog: MatDialog,
     private _snackBar: MatSnackBar,
-    public datepipe: DatePipe,
-    private webSocketService: WebSocketService
+    public datepipe: DatePipe
   ) {
     this.matIconRegistry.addSvgIcon('new',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/newAppo.svg'));
     this.matIconRegistry.addSvgIcon('cancel02',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/cancelAppos.svg'));
@@ -112,10 +100,6 @@ export class ScheduleComponent implements OnInit {
     this._snackBar.open(message, action, {
       duration: 2000,
     });
-  }
-
-  ngAfterViewInit(){
-    this.webSocketService.connect();
   }
 
   ngOnInit(): void {
@@ -343,9 +327,6 @@ export class ScheduleComponent implements OnInit {
           });
           dialogRef.afterClosed().subscribe(result => {
             if (result != undefined){
-              if (result.data != ''){
-                this.webSocketService.sendMessage({"action":"sendMessage", "msg": result.data});
-              }
               this.loadHours();
             }
           });
@@ -459,10 +440,6 @@ export class ScheduleComponent implements OnInit {
       width: '450px',
       height: '700px',
       data: {businessId: this.businessId, locationId: this.locationId, providerId: this.providerId, service: nameService, appoTime: timeGrl, appoDate: this.datepipe.transform(day, 'yyyy-MM-dd')}
-    });
-
-    const subsMessages = dialogRef.componentInstance.onSyncMessages.subscribe((data) => {
-      this.webSocketService.sendMessage({"action":"sendMessage", "msg": data});
     });
 
     dialogRef.afterClosed().subscribe(result => {
