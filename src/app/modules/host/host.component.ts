@@ -1019,28 +1019,32 @@ export class HostComponent implements OnInit {
       map((res: any) => {
         if (res.Code == 200){
           if (origin == 'checkin'){
-            var data = this.preCheckIn.findIndex(e => e.AppId === appo.AppId);
-            this.preCheckIn.splice(data, 1);
             this.showCancelOptionsCheck[index] = false;
-            this.selectedCheck[index] = undefined; 
+            this.selectedCheck[index] = undefined;
+
+            var data = this.preCheckIn.findIndex(e => e.AppId === appo.AppId);
+            if (data >= 0 ){this.preCheckIn.splice(data, 1);}
           }
           if (origin == 'walkin'){
-            var data = this.walkIns.findIndex(e => e.AppId === appo.AppId);
-            this.walkIns.splice(data, 1);
             this.showCancelOptionsWalk[index] = false;
             this.selectedWalk[index] = undefined; 
+
+            var data = this.walkIns.findIndex(e => e.AppId === appo.AppId);
+            if (data >= 0 ){this.walkIns.splice(data, 1);}
           }
           if (origin == 'schedule'){
-            var data = this.schedule.findIndex(e => e.AppId === appo.AppId);
-            this.schedule.splice(data, 1);
             this.showCancelOptionsSche[index] = false;
             this.selectedSche[index] = undefined; 
+
+            var data = this.schedule.findIndex(e => e.AppId === appo.AppId);
+            if (data >= 0 ){this.schedule.splice(data, 1);}
           }
           if (origin == 'previous'){
-            var data = this.previous.findIndex(e => e.AppId === appo.AppId);
-            this.previous.splice(data, 1);
             this.showCancelOptionsPrev[index] = false;
             this.selectedPrev[index] = undefined; 
+            
+            var data = this.previous.findIndex(e => e.AppId === appo.AppId);
+            if (data >= 0 ){this.previous.splice(data, 1);}
           }
           this.openSnackBar($localize`:@@host.cancelsuccess:`, $localize`:@@shared.cancel:`);
         }
