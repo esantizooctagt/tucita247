@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+	<style>
+		tspan { white-space:pre }
+		.shp100 { fill: #cdcdcd;stroke: #ff5b00;stroke-width: 3 } 
+		.shp101 { fill: #ffff00;stroke: #ff5b00;stroke-width: 3 } 
+		.shp102 { fill: none;stroke: #ff5b00;stroke-width: 3 } 
+		.shp103 { fill: #ff7a00;stroke-width: 3 } 
+	</style>
+	<path id="Shape 4" class="shp100" d="M99 176L99 213L99 234L171 234L171 186L171 175L171 175" />
+	<path id="Shape 2" class="shp101" d="M134 183C86.44 183 48 144.56 48 97C48 49.44 86.44 11 134 11C181.56 11 220 49.44 220 97C220 144.56 181.56 183 134 183Z" />
+	<path id="Shape 4" class="shp102" d="M105 135L124 124L129 144L139 114L147 137L164 129" />
+	<path id="Shape 4" class="shp102" d="M145 200L167 116" />
+	<path id="Shape 4" class="shp102" d="M122 200L100 117" />
+	<path id="Shape 4" class="shp102" d="M99 200L171 200" />
+	<path id="Shape 4" class="shp102" d="M99 217L171 217" />
+	<path id="Shape 4" class="shp100" d="M99 235L121 252L132 252L147 252L149 252L171 235" />
+	<path id="Shape 1" class="shp103" d="" />
+	<path id="Shape 3" class="shp102" d="M83 143C83 143 40.76 81.43 104 37" />
+</svg>

@@ -58,6 +58,7 @@
                         <mat-icon class="site-color">remove</mat-icon>
                     </button>
                 </ng-container>
+                <ng-container *ngIf="checkOutQR$ | async"></ng-container>
                 <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 1" color="secondary" type="button" (click)="setManualCheckOut(manualGuests)" i18n="Check Out|text in citas@@host.checkout">Check Out</button>
                 <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 0" color="secondary" type="button" (click)="checkOutQR()" i18n="Check Out|text in citas@@host.checkout">Check Out</button>
             </div>

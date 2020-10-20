@@ -3975,6 +3975,9 @@
       <trans-unit id="host.savingpoll">
         <source>Saving poll</source>
       </trans-unit>
+      <trans-unit id="shared.locationclosed">
+        <source>This location is closed</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

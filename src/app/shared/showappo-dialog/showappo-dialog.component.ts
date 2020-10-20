@@ -168,15 +168,6 @@ export class ShowappoDialogComponent implements OnInit {
     this.updAppointment$ = this.appointmentService.updateAppointment(appo.AppId, formData).pipe(
       map((res: any) => {
         if (res.Code == 200){
-          // if (currdate == appo.DateFull.substring(0,10)){
-          //   let formData = {
-          //     BusinessId: this.businessId,
-          //     LocationId: this.locationId,
-          //     AppId: appo.AppId,
-          //     Tipo: 'CANCEL'
-          //   }
-          //   this.onSyncMessages.emit(JSON.stringify(formData));
-          // }
           this.cancelAppo = 1;
           var data = this.schedule.findIndex(e => e.AppId === appo.AppId);
           this.schedule.splice(data, 1);
@@ -235,14 +226,6 @@ export class ShowappoDialogComponent implements OnInit {
             if (qeue == 'schedule'){
               this.showMessageSche[i] = false;
             }
-            // let formData = {
-            //   BusinessId: this.businessId,
-            //   LocationId: this.locationId,
-            //   AppId: appointmentId,
-            //   User: 'H',
-            //   Tipo: 'MESS'
-            // }
-            // this.onSyncMessages.emit(JSON.stringify(formData));
             this.openSnackBar($localize`:@@host.messagessend:`,$localize`:@@host.messages:`);
           } else {
             this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@shared.error:`);

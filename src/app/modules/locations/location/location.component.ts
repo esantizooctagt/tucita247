@@ -8,14 +8,14 @@ import { LocationService, BusinessService } from '@app/services';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { map, catchError, switchMap, tap } from 'rxjs/operators';
+import { map, catchError, switchMap } from 'rxjs/operators';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MonitorService } from '@app/shared/monitor.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { link } from 'fs';
 import { ShopdialogComponent } from '@app/shared/shopdialog/shopdialog.component';
 import { MapsAPILoader } from '@agm/core';
+import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
 
 @Component({
   selector: 'app-location',
@@ -72,6 +72,7 @@ export class LocationComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
+    private learnmore: MatDialog,
     private authService: AuthService,
     private _snackBar: MatSnackBar,
     private locationService: LocationService,
@@ -114,6 +115,15 @@ export class LocationComponent implements OnInit {
     dialogConfig.minWidth = '280px';
     dialogConfig.maxWidth = '280px';
     this.dialog.open(DialogComponent, dialogConfig);
+  }
+
+  openLearnMore(message: string): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      message: message
+    };
+    this.learnmore.open(LearnDialogComponent, dialogConfig);
   }
 
   openShopDialog(header: string, message: string, business: string, email: string): void {
@@ -450,6 +460,10 @@ export class LocationComponent implements OnInit {
           console.log('Error - ', results, ' & Status - ', status);
       }
     });
+  }
+
+  learnMore(message: string){
+    this.openLearnMore(message);
   }
 
 }

@@ -36,6 +36,7 @@ export class HostComponent implements OnInit {
   updAppointment$: Observable<any>;
   getMessages$: Observable<any[]>;
   quantityPeople$: Observable<any>;
+  checkOutQR$: Observable<any>;
   checkIn$: Observable<any>;
   comments$: Observable<any>;
   opeHours$: Observable<any>;
@@ -281,6 +282,144 @@ export class HostComponent implements OnInit {
 
         var verifprevious = this.previous.findIndex(x => x.AppId === msg['AppId']);
         if (verifprevious >= 0){this.previous.splice(verifprevious, 1);}
+      }
+    }
+    if (msg['Tipo'] == 'MOVE'){
+      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.closedLoc == 0 && this.locationStatus == 1){
+        if (msg['To'] == 'PRECHECK'){
+          let yearCurr = this.getYear();
+          let monthCurr = this.getMonth();
+          let dayCurr = this.getDay();
+          let hourCurr = this.getActTime();
+          let timeCheck = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourCurr.replace(':','-');
+
+          var verifSche = this.schedule.findIndex(x => x.AppId === msg['AppId']);
+          if (verifSche >= 0){
+            var dataSche = this.schedule[verifSche];
+            this.schedule.splice(verifSche, 1);
+            let data = {
+              AppId: dataSche['AppId'],
+              ClientId: dataSche['ClientId'],
+              ProviderId: dataSche['ProviderId'],
+              Name: dataSche['Name'].toLowerCase(),
+              OnBehalf: dataSche['OnBehalf'],
+              Guests: dataSche['Guests'],
+              Door: dataSche['Door'],
+              Disability: dataSche['Disability'],
+              Phone: dataSche['Phone'],
+              DateFull: dataSche['DateAppo'],
+              DateAppo: dataSche['DateAppo'],
+              Type: dataSche['Type'],
+              Unread: dataSche['Unread'],
+              CheckInTime: timeCheck,
+              ElapsedTime: "0"
+            }
+            this.preCheckIn.push(data);
+          }
+
+          var verifWalkIns = this.walkIns.findIndex(x => x.AppId === msg['AppId']);
+          if (verifWalkIns >= 0){
+            var dataWalk = this.walkIns[verifWalkIns];
+            this.walkIns.splice(verifWalkIns, 1);
+            let data = {
+              AppId: dataWalk['AppId'],
+              ClientId: dataWalk['ClientId'],
+              ProviderId: dataWalk['ProviderId'],
+              Name: dataWalk['Name'].toLowerCase(),
+              OnBehalf: dataWalk['OnBehalf'],
+              Guests: dataWalk['Guests'],
+              Door: dataWalk['Door'],
+              Disability: dataWalk['Disability'],
+              Phone: dataWalk['Phone'],
+              DateFull: dataWalk['DateAppo'],
+              DateAppo: dataWalk['DateAppo'],
+              Type: dataWalk['Type'],
+              Unread: dataWalk['Unread'],
+              CheckInTime: timeCheck,
+              ElapsedTime: "0"
+            }
+            this.preCheckIn.push(data);
+          }
+          
+          var verifprevious = this.previous.findIndex(x => x.AppId === msg['AppId']);
+          if (verifprevious >= 0){
+            var dataPrev = this.previous[verifprevious];
+            this.previous.splice(verifprevious, 1);
+            let data = {
+              AppId: dataPrev['AppId'],
+              ClientId: dataPrev['ClientId'],
+              ProviderId: dataPrev['ProviderId'],
+              Name: dataPrev['Name'].toLowerCase(),
+              OnBehalf: dataPrev['OnBehalf'],
+              Guests: dataPrev['Guests'],
+              Door: dataPrev['Door'],
+              Disability: dataPrev['Disability'],
+              Phone: dataPrev['Phone'],
+              DateFull: dataPrev['DateAppo'],
+              DateAppo: dataPrev['DateAppo'],
+              Type: dataPrev['Type'],
+              Unread: dataPrev['Unread'],
+              CheckInTime: timeCheck,
+              ElapsedTime: "0"
+            }
+            this.preCheckIn.push(data);
+          }
+        }
+
+        if (msg['To'] == 'CHECKIN'){
+          var verifSche = this.schedule.findIndex(x => x.AppId === msg['AppId']);
+          if (verifSche >= 0){
+            this.schedule.splice(verifSche, 1);
+          }
+
+          var verifpreCheck = this.preCheckIn.findIndex(x => x.AppId === msg['AppId']);
+          if (verifpreCheck >= 0){
+            this.preCheckIn.splice(verifpreCheck, 1);
+          }
+
+          this.qtyPeople = +this.qtyPeople+msg['Guests'];
+          this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+        }
+      }
+    }
+    if (msg['Tipo'] == 'CLOSED'){
+      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId){
+        this.locationStatus = 0;
+        this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+        this.previous = [];
+        this.schedule = [];
+        this.walkIns = [];
+        this.preCheckIn = [];
+        this.closedLoc$ = this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
+          map((res: any) => {
+            if (res.Locs != null){
+              if (res.Locs.length > 0){
+                this.locations = res.Locs;
+                this.locationId = res.Locs[0].LocationId;
+                this.doorId = res.Locs[0].Door;
+                this.manualCheckOut = res.Locs[0].ManualCheckOut;
+                this.totLocation = res.Locs[0].MaxCustomers;
+                this.Providers = res.Locs[0].Providers;
+                this.locName = res.Locs[0].Name;
+                this.locationStatus = res.Locs[0].Open;
+                this.closedLoc = res.Locs[0].Closed;
+                this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+                if (this.Providers.length > 0){
+                  this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
+                  this.providerId = this.Providers[0].ProviderId;
+                  this.providerId = "0";
+                }
+              }
+              return res;
+            } else {
+              // this.spinnerService.stop(spinnerRef);
+              this.openDialog($localize`:@@shared.error:`, $localize`:@@host.missloc:`, false, true, false);
+              this.router.navigate(['/']);
+              return;
+            }
+          })
+        );
+        this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.locationclosed:`, false, true, false);
       }
     }
   }
@@ -604,13 +743,6 @@ export class HostComponent implements OnInit {
   }
 
   checkOutQR(){
-    // const dialogRef = this.dialog.open(VideoDialogComponent, {
-    //   width: '450px',
-    //   minWidth: '30vw',
-    //   maxWidth: '60vw',
-    //   maxHeight: '100vh',
-    //   data: {guests: 0, title: $localize`:@@host.checkoutpop:`, tipo: 2, businessId: this.businessId, locationId: this.locationId, providerId: this.providerId}
-    // });
     const dialogRef = new MatDialogConfig();
     dialogRef.width ='450px';
     dialogRef.minWidth = '320px';
@@ -618,18 +750,20 @@ export class HostComponent implements OnInit {
     dialogRef.height = '575px';
     dialogRef.data = {guests: 0, title: $localize`:@@host.checkoutpop:`, tipo: 2, businessId: this.businessId, locationId: this.locationId, providerId: this.providerId};
     const qrDialog = this.dialog.open(VideoDialogComponent, dialogRef);
-    qrDialog.afterClosed().subscribe(result => {
-      if (result != undefined) {
-        let qtyGuests = result.Guests;
-        this.qrCode = result.qrCode;
-        if (this.qrCode != ''){
-          this.checkOutAppointment(this.qrCode);
+    this.checkOutQR$ = qrDialog.afterClosed().pipe(
+      map((result: any) => {
+        if (result != undefined) {
+          let qtyGuests = result.Guests;
+          this.qrCode = result.qrCode;
+          if (this.qrCode != ''){
+            this.checkOutAppointment(this.qrCode);
+          }
+          if (qtyGuests > 0 && this.qrCode == ''){
+            this.setManualCheckOut(qtyGuests);
+          }
         }
-        if (qtyGuests > 0 && this.qrCode == ''){
-          this.setManualCheckOut(qtyGuests);
-        }
-      }
-    });
+      })
+    );
   }
 
   checkOutAppointment(qrCode: string){
@@ -722,10 +856,10 @@ export class HostComponent implements OnInit {
           dialogConfig.height = '600px';
           this.dialog.open(DirDialogComponent, dialogConfig);
 
-          this.dialog.afterAllClosed.subscribe(
-            () =>{
+          this.quantityPeople$ = this.dialog.afterAllClosed.pipe(
+            map((res:any) => {
               //ACTUALIZA NUMERO DE PERSONAS
-              this.quantityPeople$ = this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
+              this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
                 map((res: any) => {
                   if (res != null){
                     this.qtyPeople = res.Quantity;
@@ -738,7 +872,7 @@ export class HostComponent implements OnInit {
                   return '0';
                 })
               )
-            }
+            })
           );
           return res.Appos;
         }
@@ -922,13 +1056,6 @@ export class HostComponent implements OnInit {
   onCheckInApp(appo: any){
     //READ QR CODE AND CHECK-IN PROCESS
     if (appo.Type == 1) {
-      // const dialogRef = this.dialog.open(VideoDialogComponent, {
-      //   // width: '450px',
-      //   // minWidth: '30vw',
-      //   // maxWidth: '60vw',
-      //   // maxHeight: '100vh',
-      //   data: {guests: appo.Guests, title: $localize`:@@host.checkintitle:`, tipo: 1 }
-      // });
       const dialogRef = new MatDialogConfig();
       dialogRef.width ='450px';
       dialogRef.minWidth = '320px';
@@ -936,15 +1063,63 @@ export class HostComponent implements OnInit {
       dialogRef.height = '575px';
       dialogRef.data = {guests: appo.Guests, title: $localize`:@@host.checkintitle:`, tipo: 1 };
       const qrDialog = this.dialog.open(VideoDialogComponent, dialogRef);
-      qrDialog.afterClosed().subscribe(result => {
-        if (result != undefined) {
-          this.qrCode = result.qrCode;
-          let guestsAppo = result.Guests;
-          if (this.qrCode != '' && guestsAppo > 0){
-            this.checkInAppointment(this.qrCode, appo, guestsAppo);
+      let formData;
+      this.checkIn$ = qrDialog.afterClosed().pipe(
+        map((result: any) => {
+          if (result != undefined) {
+            this.qrCode = result.qrCode;
+            let guestsAppo = result.Guests;
+            if (this.qrCode != '' && guestsAppo > 0){
+              formData = {
+                Status: 3,
+                DateAppo: appo.DateFull,
+                qrCode: this.qrCode,
+                Guests: guestsAppo,
+                BusinessId: this.businessId,
+                LocationId: this.locationId,
+                ProviderId: appo.ProviderId,
+                BusinessName: this.authService.businessName(),
+                Language: this.authService.language()
+              }
+            }
           }
-        }
-      });
+        }),
+        mergeMap(x => 
+          this.appointmentService.updateAppointmentCheckIn(appo.AppId, formData).pipe(
+            map((res: any) => {
+              if (res.Code == 200){
+                var data = this.preCheckIn.findIndex(e => e.AppId === appo.AppId);
+                if (data >= 0){
+                  this.preCheckIn.splice(data, 1);
+                }
+                
+                this.openSnackBar($localize`:@@host.checkinsuccess:`,$localize`:@@host.checkintitle:`);
+              }
+            }),
+            mergeMap(v => 
+              //ACTUALIZA NUMERO DE PERSONAS
+              this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
+                map((res: any) => {
+                  if (res != null){
+                    this.qtyPeople = res.Quantity;
+                    this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+                    return res.Quantity.toString();
+                  }
+                })
+              )
+            ),
+            catchError(err => {
+              if (err.Status == 404){
+                this.openSnackBar($localize`:@@host.invalidqrcode:`,$localize`:@@host.checkintitle:`);
+                return err.Message;
+              }
+              this.onError = err.Message;
+              this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@host.checkintitle:`);
+              return this.onError;
+            })
+          )
+        )
+      );
     } else {
       this.checkInAppointment('VALID', appo, appo.Guests);
     }
@@ -966,7 +1141,9 @@ export class HostComponent implements OnInit {
       map((res: any) => {
         if (res.Code == 200){
           var data = this.preCheckIn.findIndex(e => e.AppId === appo.AppId);
-          this.preCheckIn.splice(data, 1);
+          if (data >= 0){
+            this.preCheckIn.splice(data, 1);
+          }
           
           this.openSnackBar($localize`:@@host.checkinsuccess:`,$localize`:@@host.checkintitle:`);
         }
@@ -1095,19 +1272,28 @@ export class HostComponent implements OnInit {
           let appoObj = res.Appo;
           if (tipo == 0){
             var data = this.previous.findIndex(e => e.AppId === appo.AppId);
-            this.previous.splice(data, 1);
+            if (data >= 0){
+              this.previous.splice(data, 1);
+            }
           }
           if (tipo == 1) { 
             var data = this.schedule.findIndex(e => e.AppId === appo.AppId);
-            this.schedule.splice(data, 1);
+            if (data >= 0){
+              this.schedule.splice(data, 1);
+            }
           }
           if (tipo == 2) {
             var data = this.walkIns.findIndex(e => e.AppId === appo.AppId);
-            this.walkIns.splice(data, 1);
+            if (data >= 0){
+              this.walkIns.splice(data, 1);
+            }
           }
           appo.CheckInTime = appoObj['TIMECHEK'];
           appo.ElapsedTime = "0";
-          this.preCheckIn.push(appo);
+          var dataPre = this.preCheckIn.findIndex(e => e.AppId === appo.AppId);
+          if (dataPre < 0){
+            this.preCheckIn.push(appo);
+          }
           this.openSnackBar($localize`:@@host.readytocheckin:`,$localize`:@@host.textreadytocheckin:`);
         }
       }),
@@ -1442,7 +1628,6 @@ export class HostComponent implements OnInit {
   }
 
   locationStatusChange(){
-    console.log(this.locationStatus);
     if (this.locationStatus == 1){
       this.closedLocation();
     } else {

@@ -4486,6 +4486,10 @@
         <source>Saving poll</source>
         <target state="translated">Saving poll</target>
       </trans-unit>
+      <trans-unit id="shared.locationclosed">
+        <source>This location is closed</source>
+        <target state="translated">This location is closed</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

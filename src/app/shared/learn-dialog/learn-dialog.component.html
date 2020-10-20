@@ -1,6 +1,7 @@
 <div mat-dialog-content>
-    <p class="pt-3">{{message}}</p>
+    <mat-icon class="light-img" svgIcon="light"></mat-icon>
+    <p class="learn-message pt-3">{{message}}</p>
 </div>
-<div mat-dialog-actions>
-    <button mat-button color="accent" [mat-dialog-close]="accepted" i18n="Close@@shared.close">Close</button>
+<div mat-dialog-actions align="end">
+    <button mat-button color="primary" mat-dialog-close i18n="Close@@shared.close">Close</button>
 </div>
