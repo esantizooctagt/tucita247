@@ -4508,7 +4508,7 @@
 "No se siguieron los protocolos de seguridad" o "La localización tuvo que cerrar temporalmente".</target>
       </trans-unit>
       <trans-unit id="learnMore.LMCON05">
-        <source>LMCON05/source>
+        <source>LMCON05</source>
         <target state="translated">Descripción corta de su negocio. Máximo de 75 caracteres. Esta información se publicará en Tu Cita 24/7 App.</target>
       </trans-unit>
       <trans-unit id="learnMore.LMCON06">
