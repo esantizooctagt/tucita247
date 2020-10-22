@@ -12,12 +12,21 @@
             <ng-container *ngIf="roleSave$ | async"></ng-container>
             <div class="row p-0 m-0">
                 <mat-card class="col-sm col-md col-lg-7">
-                    <form [formGroup]="roleForm" (ngSubmit)="onSubmit()" class="mt-4"><div class="form-field-check-slide ml-3 pr-3 pb-3" *ngIf="roleForm.value.RoleId !== '' && roleForm.value.RoleId !== null"><mat-slide-toggle class="slide-pos" color="primary" formControlName="Status">{{textStatus}}</mat-slide-toggle></div>
+                    <form [formGroup]="roleForm" (ngSubmit)="onSubmit()" class="mt-4">
+                        <div class="form-field-check-slide ml-3 pr-3 pb-3" *ngIf="roleForm.value.RoleId !== '' && roleForm.value.RoleId !== null">
+                            <mat-slide-toggle class="slide-pos" color="primary" formControlName="Status">{{textStatus}}</mat-slide-toggle>
+                            <button type="button" mat-icon-button color="primary" class="learn-btn" (click)="learnMore(32)">
+                                <mat-icon>help</mat-icon>
+                            </button>
+                        </div>
                         <div class="form-field pl-3 pr-3">
                             <mat-form-field>
                                 <input matInput #Name i18n-placeholder="Name@@shared.name" placeholder="Name"
                                     maxlength="50" minlength="3" formControlName="Name"
                                     [errorStateMatcher]="confirmValidParentMatcher" required>
+                                <button type="button" mat-icon-button matSuffix color="primary" class="learn" (click)="learnMore(33)">
+                                    <mat-icon>help</mat-icon>
+                                </button>
                                 <mat-hint align="end">{{Name.value?.length || 0}}/50</mat-hint>
                                 <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{ 'Error: ' + getErrorMessage('Name')}}
                                 </mat-error>
@@ -25,6 +34,10 @@
                         </div>
                         <div class="form-field pl-3 pr-3">
                             <mat-list #lstApps>
+                                <h5 class="display-learn" i18n="Level Access:|text in roles@@roles.levelaccess">Level Access</h5>
+                                <button type="button" mat-icon-button color="primary" (click)="learnMore(34)">
+                                    <mat-icon>help</mat-icon>
+                                </button>
                                 <mat-list-item class="disp-role" formArrayName="Access"
                                     *ngFor="let item of fAccess.controls; let i = index;">
                                     <div [formGroupName]="i">

@@ -49,13 +49,15 @@
                 <div class="row mb-0 mt-2">
                     <div class="card-actions-center col-sm-4 p-0">
                         <button mat-icon-button color="secondary"
-                            (click)="showCancelOptionsSche[i] = !showCancelOptionsSche[i]">
+                            (click)="showCancelOptionsSche[i] = !showCancelOptionsSche[i]"
+                            i18n-matTooltip="Cancel this booking|Cancel this booking tooltip@@learnMore.LMCON36" matTooltip="Cancel this booking">
                             <mat-icon svgIcon="cancel"></mat-icon>
                         </button>
                     </div>
                     <div class="card-actions-center col-sm-4 p-0">
                         <button mat-icon-button color="secondary"
-                            (click)="showMessageSche[i] = !showMessageSche[i]; onShowMessage(item, i, 'schedule');">
+                            (click)="showMessageSche[i] = !showMessageSche[i]; onShowMessage(item, i, 'schedule');" 
+                            i18n-matTooltip="Messages|Messages tooltip@@learnMore.LMCON37" matTooltip="Messages">
                             <mat-icon [matBadgeHidden]="item.Unread != 'H'" matBadgeSize="small" matBadge="*"
                                 matBadgePosition="after" matBadgeColor="warn" matBadgeOverlap="true" svgIcon="sms">
                             </mat-icon>

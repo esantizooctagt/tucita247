@@ -1,5 +1,8 @@
-<div class="pl-0 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
-    <h3 i18n="SERVICES|services title@@services.title">SERVICES</h3>
+<div class="pl-0 pt-1 pb-2 row mt-1 mb-1 header-route">
+    <h3 class="pl-3" i18n="SERVICES|services title@@services.title">SERVICES</h3>
+    <button class="help-btn" mat-icon-button color="primary" (click)="learnMore(21)">
+        <mat-icon>help</mat-icon>
+    </button>
 </div>
 <ng-container *ngIf="deleteService$ | async"></ng-container>
 <ng-container *ngIf="services$ | async"></ng-container>

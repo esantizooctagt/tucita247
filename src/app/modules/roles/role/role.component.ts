@@ -12,6 +12,7 @@ import { tap, catchError, map } from 'rxjs/operators';
 import { MatSelectionList } from '@angular/material/list';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
 
 @Component({
   selector: 'app-role',
@@ -53,6 +54,7 @@ export class RoleComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private spinnerService: SpinnerService,
+    private learnmore: MatDialog,
     private dialog: MatDialog
   ) { }
 
@@ -75,6 +77,15 @@ export class RoleComponent implements OnInit {
       Level_Access: ['0', [Validators.required]]
     });
     return access;
+  }
+
+  openLearnMore(message: string): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      message: message
+    };
+    this.learnmore.open(LearnDialogComponent, dialogConfig);
   }
 
   openDialog(header: string, message: string, success: boolean, error: boolean, warn: boolean): void {
@@ -262,4 +273,27 @@ export class RoleComponent implements OnInit {
     this.subsRoles.unsubscribe();
   }
 
+  learnMore(textNumber: number){
+    let message = '';
+    switch(textNumber) { 
+      case 32: { 
+        message = $localize`:@@learnMore.LMCON32:`;
+        break; 
+      } 
+      case 33: { 
+        message = $localize`:@@learnMore.LMCON33:`;
+        break; 
+      }
+      case 34: { 
+        message = $localize`:@@learnMore.LMCON34:`; 
+        break; 
+      }
+      default: { 
+        message = ''; 
+        break; 
+      } 
+    } 
+    this.openLearnMore(message);
+  }
+  
 }

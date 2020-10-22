@@ -13,6 +13,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatTable } from '@angular/material/table';
 import { FormArray, FormGroup, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
 
 @Component({
   selector: 'app-user-list',
@@ -64,6 +65,7 @@ export class UserListComponent implements OnInit {
     private data: MonitorService,
     private spinnerService: SpinnerService,
     private dialog: MatDialog,
+    private learnmore: MatDialog,
     private userService: UserService,
     private matIconRegistry: MatIconRegistry,
     private router: Router
@@ -87,6 +89,15 @@ export class UserListComponent implements OnInit {
     dialogConfig.maxWidth = '280px';
 
     this.dialog.open(DialogComponent, dialogConfig);
+  }
+
+  openLearnMore(message: string): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      message: message
+    };
+    this.learnmore.open(LearnDialogComponent, dialogConfig);
   }
 
   ngOnInit(): void {
@@ -223,6 +234,21 @@ export class UserListComponent implements OnInit {
 
   trackRow(index: number, item: User) {
     return item.User_Id;
+  }
+
+  learnMore(textNumber: number){
+    let message = '';
+    switch(textNumber) { 
+      case 29: { 
+        message = $localize`:@@learnMore.LMCON29:`;
+        break; 
+      }
+      default: { 
+        message = ''; 
+        break; 
+      } 
+    } 
+    this.openLearnMore(message);
   }
 
 }

@@ -462,7 +462,34 @@ export class LocationComponent implements OnInit {
     });
   }
 
-  learnMore(message: string){
+  learnMore(textNumber: number){
+    let message = '';
+    switch(textNumber) { 
+      case 13: { 
+        message = $localize`:@@learnMore.LMCON13:`;
+        break; 
+      } 
+      case 14: { 
+        message = $localize`:@@learnMore.LMCON14:`;
+        break; 
+      }
+      case 15: { 
+        message = $localize`:@@learnMore.LMCON15:`; 
+        break; 
+      }
+      case 16: { 
+        message = $localize`:@@learnMore.LMCON16:`;
+        break; 
+      }
+      case 17: { 
+        message = $localize`:@@learnMore.LMCON17:`; 
+        break; 
+      }
+      default: { 
+        message = ''; 
+        break; 
+      } 
+    } 
     this.openLearnMore(message);
   }
 

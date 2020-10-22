@@ -12,6 +12,7 @@ import { map, catchError, switchMap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ShopdialogComponent } from '@app/shared/shopdialog/shopdialog.component';
+import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
 
 @Component({
   selector: 'app-provider',
@@ -45,6 +46,7 @@ export class ProviderComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
+    private learnmore: MatDialog,
     private data: MonitorService,
     private businessService: BusinessService,
     private locationService: LocationService
@@ -82,6 +84,15 @@ export class ProviderComponent implements OnInit {
     dialogConfig.maxWidth = '280px';
 
     this.dialog.open(DialogComponent, dialogConfig);
+  }
+
+  openLearnMore(message: string): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      message: message
+    };
+    this.learnmore.open(LearnDialogComponent, dialogConfig);
   }
 
   openShopDialog(header: string, message: string, business: string, email: string): void {
@@ -278,4 +289,24 @@ export class ProviderComponent implements OnInit {
       })
     );
   }
+
+  learnMore(textNumber: number){
+    let message = '';
+    switch(textNumber) {
+      case 19: { 
+        message = $localize`:@@learnMore.LMCON19:`;
+        break; 
+      }
+      case 20: { 
+        message = $localize`:@@learnMore.LMCON20:`; 
+        break; 
+      }
+      default: { 
+        message = ''; 
+        break; 
+      } 
+    } 
+    this.openLearnMore(message);
+  }
+
 }

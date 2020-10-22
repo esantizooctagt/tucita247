@@ -12,6 +12,7 @@ import { map, catchError } from 'rxjs/operators';
 import { GreaterThanValidator } from '@app/validators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ShopdialogComponent } from '@app/shared/shopdialog/shopdialog.component';
+import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
 
 @Component({
   selector: 'app-service',
@@ -44,6 +45,7 @@ export class ServiceComponent implements OnInit {
     private router: Router,
     private serviceService: ServService,
     private dialog: MatDialog,
+    private learnmore: MatDialog,
     private businessService: BusinessService,
     private data: MonitorService
   ) { }
@@ -92,6 +94,15 @@ export class ServiceComponent implements OnInit {
     dialogConfig.minWidth = '280px';
     dialogConfig.maxWidth = '280px';
     this.dialog.open(ShopdialogComponent, dialogConfig);
+  }
+
+  openLearnMore(message: string): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      message: message
+    };
+    this.learnmore.open(LearnDialogComponent, dialogConfig);
   }
   
   ngOnInit(): void {
@@ -239,4 +250,30 @@ export class ServiceComponent implements OnInit {
     );
   }
 
+  learnMore(textNumber: number){
+    let message = '';
+    switch(textNumber) { 
+      case 22: { 
+        message = $localize`:@@learnMore.LMCON22:`;
+        break; 
+      } 
+      case 23: { 
+        message = $localize`:@@learnMore.LMCON23:`;
+        break; 
+      }
+      case 24: { 
+        message = $localize`:@@learnMore.LMCON24:`; 
+        break; 
+      }
+      case 25: { 
+        message = $localize`:@@learnMore.LMCON25:`;
+        break; 
+      }
+      default: { 
+        message = ''; 
+        break; 
+      } 
+    } 
+    this.openLearnMore(message);
+  }
 }

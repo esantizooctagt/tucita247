@@ -13,16 +13,16 @@
                 </mat-panel-description>
             </mat-expansion-panel-header>
             <div class="row space-row mt-2 mb-2">
-                <div class="col-sm-3 p-0 m-auto">
-                    <!-- locationStatus == 0 ? 'Your location is closed' : (closedLoc == 1 ? 'You need to reopen your location' : 'Your location is open' -->
-                    <mat-slide-toggle color="primary" [checked]="locationStatus == 1" (change)="locationStatusChange()">{{textOpenLocation}}</mat-slide-toggle>
+                <div class="col-sm-3 col-md-6 p-0 m-auto">
+                    <div class="row">
+                        <button mat-icon-button color="primary" class="col-md-1 learn-btn" (click)="learnMore(26)">
+                            <mat-icon>help</mat-icon>
+                        </button>
+                        <mat-slide-toggle class="col-md-9" color="primary" [checked]="locationStatus == 1" (change)="locationStatusChange()">{{textOpenLocation}}</mat-slide-toggle>
+                    </div>
                 </div>
-                <div class="operation-buttons col-sm-9 p-0">
-                    <!-- <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && closedLoc == 0 && manualCheckOut == 0" color="secondary" type="button" (click)="getWalkInsCheckOut()">Walk-Ins Check Out</button> -->
-                    <!-- <ng-container *ngIf="getWalkIns$ | async"></ng-container> -->
-                    <!-- <ng-container *ngIf="manualCheckOut$ | async"></ng-container> -->
-                    <!-- <div class="col-sm-6 text-loc">{{locName}}</div> -->
-                    <mat-form-field appearance="fill" class="col-sm-5 pr-3">
+                <div class="operation-buttons col-sm-9 col-md-6 p-0">
+                    <mat-form-field appearance="fill" class="pr-3">
                         <mat-label>Select location</mat-label>
                         <mat-select name="locations" [(value)]="locationId" (selectionChange)="onLocationChange($event)">
                             <mat-option *ngFor="let item of locations" [value]="item.LocationId">
@@ -30,7 +30,7 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <mat-form-field appearance="fill" class="col-sm-6 pr-3">
+                    <mat-form-field appearance="fill" class="pr-3">
                         <mat-label>Select provider</mat-label>
                         <mat-select name="providers" [(value)]="providerId" (selectionChange)="onServiceChange($event)">
                             <mat-option class="" value="0" i18n="all providers@@shared.allproviders">ALL PROVIDERS</mat-option>

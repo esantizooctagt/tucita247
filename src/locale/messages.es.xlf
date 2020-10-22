@@ -4490,6 +4490,217 @@
         <source>This location is closed</source>
         <target state="translated">Localidad cerrada</target>
       </trans-unit>
+      <trans-unit id="learnMore.LMCON01">
+        <source>LMCON01</source>
+        <target state="translated">¿Su negocio es un centro comercial o un edificio de oficinas? Debe marcar esta casilla solo si su negocio es un centro comercial o un edificio de oficinas, que tiene un horario separado y un sistema de citas que aplica a los negocios que se encuentran dentro del suyo. </target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON02">
+        <source>LMCON02</source>
+        <target state="translated">Escoja hasta cinco categorías que mejor describan su negocio. Esto ayuda a clientes encontrarlo si están buscando negocios  o servicios como el suyo.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON03">
+        <source>LMCON03</source>
+        <target state="translated">Las palabras claves son aquellas que los clientes pueden utilizar para encontrar servicios o productos que ofrece su empresa. Puede agregar todas las palabras claves para ayudar a sus clientes a encontrarlo. Piense en los servicios que brinda y en las cosas que hacen que su negocio sea único. Recomendamos crear palabras claves en ambos idiomas, español e inglés, para que su negocio pueda ser encontrado por más clientes. </target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON04">
+        <source>LMCON04</source>
+        <target state="translated">Puede agregar posibles razones para cancelar una cita. Algunos ejemplos son: "El cliente no se presentó" o 
+"No se siguieron los protocolos de seguridad" o "La localización tuvo que cerrar temporalmente".</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON05">
+        <source>LMCON05/source>
+        <target state="translated">Descripción corta de su negocio. Máximo de 75 caracteres. Esta información se publicará en Tu Cita 24/7 App.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON06">
+        <source>LMCON06</source>
+        <target state="translated">Descripción completa de su negocio. Hasta 250 caracteres. Esta información se mostrará en el enlace Tu Cita 24/7. Vea el enlace a continuación en esta página.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON07">
+        <source>LMCON07</source>
+        <target state="translated">El Enlace Tu Cita 24/7 es una página web creada específicamente para su negocio. Dirige a los clientes directamente a su negocio.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON08">
+        <source>LMCON08</source>
+        <target state="translated">Esta es la imágen de su negocio que se publicará en la App de Tu Cita 24/7.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON09">
+        <source>LMCON09</source>
+        <target state="translated">Esta es la imágen de su negocio que se publicará en el Enlace Tu Cita 24/7.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON10">
+        <source>LMCON10</source>
+        <target state="translated">Estos son los días y horas durante los cuales su negocio está abierto para clientes o visitantes. Puede definir hasta dos intervalos de tiempo para cada día. Tu Cita 24/7 permitirá que los clientes reserven citas en este horario de apertura.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON11">
+        <source>LMCON11</source>
+        <target state="translated">Puede hacer click para seleccionar las fechas durante las cuales su negocio estará cerrado para clientes o visitantes. Tu Cita 24/7 no permitirá que los clientes reserven citas en su negocio durante esas fechas.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON12">
+        <source>LMCON12</source>
+        <target state="translated">Puede agregar ubicaciones adicionales a su negocio principal, donde sus clientes pueden visitarlo. Estas se mostrarán en la App y Enlace Tu Cita 24/7.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON13">
+        <source>LMCON13</source>
+        <target state="translated">¿Cuál es el número total máximo de personas que pueden ingresar a esta localidad al mismo tiempo? ¿Cuál es la ocupación máxima en esta ubicación? Esta información lo ayudará a cumplir con parámetros de seguridad para sus clientes y personal. Tu Cita 24/7 limitará el número de citas para cumplir con la ocupación máxima que ingrese aquí.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON14">
+        <source>LMCON14</source>
+        <target state="translated">Puedes definir todas las entradas o puertas que tiene esta ubicación, que quieres que usen tus clientes cuando visiten tu negocio. Si solo hay una entrada, puede dejar el valor predeterminado "Principal", y el sistema reservará todas las citas para la entrada principal. Si esta ubicación tiene entradas adicionales, puede identificarlas con diferentes nombres. Por ejemplo: "Puerta primer piso", "Puerta segundo piso", "Área oeste".</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON15">
+        <source>LMCON15</source>
+        <target state="translated">¿Esta localidad se encuentra dentro de un centro comercial o edificio de oficinas? Debe buscar en el menú desplegable y seleccionar el negocio matriz solo si su negocio es parte de un centro comercial o edificio de oficinas, que tiene un horario y sistema de citas independiente a su negocio. De lo contrario, o si no encuentra el negocio matriz en el menu, use el valor predeterminado "N/A".</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON16">
+        <source>LMCON16</source>
+        <target state="translated">Usted puede hacer check-out a las personas que estén saiendo de esta localidad. Esto ayuda a mantener un registro de cuantas personas están dentro de esta localidad en todo momento. 
+Hay dos formas de hacer check-out: 1. Check-out automático, utilizando el módulo Las Citas, en donde se escanea el código QR de la cita del cliente.  2. Check-out manual, utilizando el módulo Las Citas Lite, en donde srive de contador manual (tipo clicker) y va contando las personas que salen del local, sin escanear el código QR.  
+Para utilizar el check-out manual, debe habilitar este botón.  Para utilizar el check-out automático, este botón debe estar desactivado.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON17">
+        <source>LMCON17</source>
+        <target state="translated">Cuando enciende el botón "Activo", significa que esta localidad está operando y puede aceptar citas. Si la localidad está cerrada temporeramente, debe desactivar el botón "Activo".</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON18">
+        <source>LMCON18</source>
+        <target state="translated">Personas o áreas que ofrecen servicios en su negocio. Los clientes podrán reservar citas con estos proveedores. Debe especificar qué servicios brindan y su horario.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON19">
+        <source>LMCON19</source>
+        <target state="translated">Cuando enciende el botón "Activo", significa que este proveedor está operando y puede aceptar citas. Si el proveedor está cerrado temporeramente, debe desactivar el botón "Activo".</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON20">
+        <source>LMCON20</source>
+        <target state="translated">Debe asignar uno o más servicios que este proveedor proporciona en su negocio.  Los clientes podrán reservar citas para estos servicios, con los proveedores asignados.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON21">
+        <source>LMCON21</source>
+        <target state="translated">Puede agregar los servicios ofrece su negocio a sus clientes. Una vez cree los servicios, los podrá asignar a los proveedores de servicios que los ofrecen.  Sus clientes podrán ver y escoger los servicios que su negocio ofrece, y reservar citas para adquirirlos. Recomendamos crear sevicios en ambos idiomas, español e inglés; por ejemplo: "Consultoría / Consultancy".</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON22">
+        <source>LMCON22</source>
+        <target state="translated">¿Cuánto tiempo toma en promedio dar este servicio?</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON23">
+        <source>LMCON23</source>
+        <target state="translated">¿Cuántos clientes puede atender concurrentemente brindando este servicio?</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON24">
+        <source>LMCON24</source>
+        <target state="translated">¿Cuántas personas va a permitir en cada cita?</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON25">
+        <source>LMCON25</source>
+        <target state="translated">Cuando enciende el botón "Activo", significa que su negocio está proporcionando este servicio y puede asignarse a uno o más de sus proveedores de servicios. Tu Cita 24/7 aceptará citas para este servicio. Si no está brindando este servicio temporalmente, debe desactivar el botón "Activo".</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON26">
+        <source>LMCON26</source>
+        <target state="translated">Localidad abierta significa que esta localidad está disponible para recibir visitantes. En este módulo de Las Citas Lite, usted puede abrir o cerrar localidades y seleccionar los proveedores de servicio.  Usted también puede registrar la entrada (check-in) a clientes que no tienen cita previa (walk-in), check-in a clientes con cita de Tu Cita 24/7 y registrar la salida (check-out) a todos sus clientes.
+Para hacer check-in a un walk-in, solo presione el botón de Walk-in, en ingrese los datos solicitados.  Campos con el símbolo * son obligatorios para continuar.
+Para hacer check-in a un cliente con cita, usted puede escanear el código QR, o escribir el número de Código de Cita.
+Para hacer check-out a un cliente que está saliendo de la localidad, usted puede escanear el código QR, escribir el número de Código de Cita, o usar el contador manual (tipo clicker) y usar el símbolo de +  para añadir personas a la salida.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON27">
+        <source>LMCON27</source>
+        <target state="translated">Localidad abierta significa que esta localidad está disponible para recibir visitantes. Este módulo de Las Citas tiene todas las funciones de Las Citas Lite, y en adición ofrece un manejo de cola virtual, con detalles de las citas que incluyen comunicación con sus clientes. Puede ver todas las citas. Cuando el negocio esté listo para recibir a ese cliente, puede moverlo a "Listos para check in" y esto enviará un mensaje al cliente. 
+En Las Citas, usted puede abrir o cerrar localidades y seleccionar los proveedores de servicio.  Usted también puede registrar la entrada (check-in) a clientes que no tienen cita previa (walk-in), check-in a clientes con cita de Tu Cita 24/7 y registrar la salida (check-out) a todos sus clientes.  
+Para hacer check-in a un walk-in, solo presione el botón de Walk-in+, en ingrese los datos solicitados.  Campos con el símbolo * son obligatorios para continuar.
+Para hacer check-in a un cliente con cita, usted puede escanear el código QR, o escribir el número de Código de Cita.
+Para hacer check-out a un cliente que está saliendo de la localidad, usted puede escanear el código QR, escribir el número de Código de Cita, o usar el contador manual (tipo clicker) y usar el símbolo de +  para añadir personas a la salida.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON28">
+        <source>LMCON28</source>
+        <target state="translated">En este módulo de Encuestas, puede crear una pregunta que sus clientes recibirán y podrán responder después de visitar su negocio. Es una forma sencilla de recopilar información sobre la satisfacción del cliente. La encuesta debe ser una pregunta cerrada que pueda responderse con los emojis Feliz, Neutral, o No Feliz, que se muestran en este módulo. Algunos ejemplos de preguntas que puede formular son: "¿Está satisfecho con nuestro servicio hoy?" O "¿Recomendaría su servicio a sus amigos?"
+Cuando se escoge la opción de Check-Out Manual, el sistema no enviará encuestas a esa localidad.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON29">
+        <source>LMCON29</source>
+        <target state="translated">Los usuarios son los empleados de su organización, quienes tendrán acceso a la información y realizarán acciones en Tu Cita 24/7. Para crear un nuevo usuario, haga click en +Añadir e ingrese la información solicitada. Para agregar un usuario, primero debe haber creado el rol del usuario en el módulo Roles, que define el acceso que tendrán los diferentes tipos de usuarios a Tu Cita 24/7. También puede asignar o limitar el acceso del usuario a una o más de sus localidades.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON30">
+        <source>LMCON30</source>
+        <target state="translated">Los Usuarios pueden estar asignados a una o más localidades.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON31">
+        <source>LMCON31</source>
+        <target state="translated">En el módulo de Roles, usted puede crear y definir los accesos que asignará a Usuarios.  Puede asignar acceso completo, acceso a editar, o acceso a leer a las diferentes áreas y funciones de Tu Cita 24/7.   Usted debe crear primero los Roles, y luego crear los Usuarios a quien le asignará esos roles.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON32">
+        <source>LMCON32</source>
+        <target state="translated">Cuando enciende el botón "Activo", significa que este Rol está activo y se puede asignar a sus Usuarios. Si temporalmente no desea asignar este Rol a ninguno de sus Usuarios, debe desactivar el botón "Activo".</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON33">
+        <source>LMCON33</source>
+        <target state="translated">Debe asignar un nombre a cada Rol que facilite su identificación. Por ejemplo, "Greeter" o "Saludador" podría ser el nombre del rol de las personas que manejan la entrada al negocio, y se encargan del check-in y check-out.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON34">
+        <source>LMCON34</source>
+        <target state="translated">Hay tres niveles de acceso que puedes asignar a cada Rol para los diferentes módulos y funcines de Tu Cita 24/7.  Acceso completo es administrador de la cuenta, puede crear y editar información y puede crear usuarios y asignar roles de acceso.  Acceso a editar permite crear y editar información, pero no puede crear nuevos usuarios ni asignar roles de acceso. Acceso a lectura solo permite leer, no puede crear ni editar.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON35">
+        <source>LMCON35</source>
+        <target state="translated">En este módulo Calendario, puede crear y editar citas para clientes, escogiendo la fecha, la hora, el servicio y el proveedor de servicios.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON36" datatype="html">
+        <source>LMCON36</source>
+        <target state="translated">Cancelar esta cita</target>
+        <context-group purpose="showappo-dialog">
+          <context context-type="sourcefile">src/app/shared/showappo-dialog/showappo-dialog.component.html</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON37" datatype="html">
+        <source>LMCON37</source>
+        <target state="translated">Mensajes</target>
+        <context-group purpose="showappo-dialog">
+          <context context-type="sourcefile">src/app/shared/showappo-dialog/showappo-dialog.component.html</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON38" datatype="html">
+        <source>LMCON38</source>
+        <target state="translated">Información adicional</target>
+        <context-group purpose="schedule">
+          <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
+          <context context-type="linenumber">250</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON39" datatype="html">
+        <source>LMCON39</source>
+        <target state="translated">Añadir cita</target>
+        <context-group purpose="schedule">
+          <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
+          <context context-type="linenumber">244</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON40" datatype="html">
+        <source>LMCON40</source>
+        <target state="translated">Inhabilitar intervalo de tiempo</target>
+        <context-group purpose="schedule">
+          <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
+          <context context-type="linenumber">247</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON41" datatype="html">
+        <source>LMCON41</source>
+        <target state="translated">Citas disponibles</target>
+        <context-group purpose="schedule">
+          <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
+          <context context-type="linenumber">253</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON42">
+        <source>LMCON42</source>
+        <target state="translated">Listo para check-in</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON43" datatype="html">
+        <source>LMCON43</source>
+        <target state="translated">Check-in</target>
+        <context-group purpose="host">
+          <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
+          <context context-type="linenumber">588</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

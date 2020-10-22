@@ -14,6 +14,7 @@ import { DirDialogComponent } from '@app/shared/dir-dialog/dir-dialog.component'
 import { FormBuilder, Validators } from '@angular/forms';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { ZXingScannerComponent, ZXingScannerModule } from '@zxing/ngx-scanner';
+import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
 
 @Component({
   selector: 'app-quick-checkin',
@@ -80,6 +81,7 @@ export class QuickCheckinComponent implements OnInit {
     private serviceService: ServService,
     private fb: FormBuilder,
     private dialog: MatDialog,
+    private learnmore: MatDialog,
     private router: Router
   ) { }
 
@@ -116,6 +118,15 @@ export class QuickCheckinComponent implements OnInit {
     dialogConfig.minWidth = '280px';
     dialogConfig.maxWidth = '280px';
     this.dialog.open(DialogComponent, dialogConfig);
+  }
+
+  openLearnMore(message: string): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      message: message
+    };
+    this.learnmore.open(LearnDialogComponent, dialogConfig);
   }
 
   ngOnInit(): void {
@@ -839,4 +850,18 @@ export class QuickCheckinComponent implements OnInit {
     return actual.padStart(2,'0');
   }
 
+  learnMore(textNumber: number){
+    let message = '';
+    switch(textNumber) { 
+      case 26: { 
+        message = $localize`:@@learnMore.LMCON26:`;
+        break; 
+      }
+      default: { 
+        message = ''; 
+        break; 
+      } 
+    } 
+    this.openLearnMore(message);
+  }
 }

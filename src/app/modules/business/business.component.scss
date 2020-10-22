@@ -47,6 +47,12 @@
   z-index: 100;
   left: 0px;
 }
+.learn{
+  font-size: 24px !important;
+}
+.display-learn{
+  display: inline;
+}
 .sector:hover button{
   display: block;
 }
@@ -76,6 +82,9 @@
   text-align:left;
   top:20px;
   font-family: Montserrat;
+}
+.content-center{
+  text-align: center;
 }
 .mat-icon-button:hover .mat-button-focus-overlay {
   opacity: 1 !important;

@@ -5,6 +5,9 @@ mat-card{
     box-shadow: -3px 1px 4px rgba(0, 0, 0, 0.25) !important;
     border-radius: 0px; //10px;
 }
+::ng-deep .mat-tooltip {
+    background-color: #ff4f00;
+}
 :host ::ng-deep mat-dialog-container{
     overflow:  hidden !important;
 }

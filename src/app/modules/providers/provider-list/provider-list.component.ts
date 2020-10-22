@@ -13,6 +13,7 @@ import { map, catchError, tap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { ProviderService } from '@app/services';
 import { Router } from '@angular/router';
+import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
 
 @Component({
   selector: 'app-provider-list',
@@ -64,6 +65,7 @@ export class ProviderListComponent implements OnInit {
     private data: MonitorService,
     private spinnerService: SpinnerService,
     private dialog: MatDialog,
+    private learnmore: MatDialog,
     private providerService: ProviderService,
     private matIconRegistry: MatIconRegistry,
     private router: Router
@@ -87,6 +89,15 @@ export class ProviderListComponent implements OnInit {
     dialogConfig.maxWidth = '280px';
 
     this.dialog.open(DialogComponent, dialogConfig);
+  }
+
+  openLearnMore(message: string): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      message: message
+    };
+    this.learnmore.open(LearnDialogComponent, dialogConfig);
   }
 
   ngOnInit(): void {
@@ -223,6 +234,21 @@ export class ProviderListComponent implements OnInit {
 
   trackRow(index: number, item: any) {
     return item.ProviderId;
+  }
+
+  learnMore(textNumber: number){
+    let message = '';
+    switch(textNumber) { 
+      case 18: { 
+        message = $localize`:@@learnMore.LMCON18:`;
+        break; 
+      }
+      default: { 
+        message = ''; 
+        break; 
+      } 
+    } 
+    this.openLearnMore(message);
   }
 
 }

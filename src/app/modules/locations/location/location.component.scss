@@ -7,11 +7,15 @@ mat-select{
 mat-option{
     font-family: Montserrat;
 }
-mat-icon{
-    font-size: 45px;
-}
 agm-map{
     height: 300px;
+}
+.learn{
+    font-size: 24px !important;
+}
+.learn-btn{
+    position: relative;
+    top: -3px;
 }
 .form-field-check-slide{
     text-align: right;

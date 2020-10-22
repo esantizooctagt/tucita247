@@ -13,6 +13,7 @@ import { throwError, Observable } from 'rxjs';
 import { PollsService } from '@app/services';
 import { MatTable } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
 
 @Component({
   selector: 'app-poll-list',
@@ -63,6 +64,7 @@ export class PollListComponent implements OnInit {
     private data: MonitorService,
     private spinnerService: SpinnerService,
     private dialog: MatDialog,
+    private learnmore: MatDialog,
     private pollService: PollsService,
     private matIconRegistry: MatIconRegistry,
     private router: Router
@@ -86,6 +88,15 @@ export class PollListComponent implements OnInit {
     dialogConfig.maxWidth = '280px';
 
     this.dialog.open(DialogComponent, dialogConfig);
+  }
+
+  openLearnMore(message: string): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      message: message
+    };
+    this.learnmore.open(LearnDialogComponent, dialogConfig);
   }
 
   ngOnInit(): void {
@@ -222,6 +233,21 @@ export class PollListComponent implements OnInit {
 
   trackRow(index: number, item: Poll) {
     return item.PollId;
+  }
+
+  learnMore(textNumber: number){
+    let message = '';
+    switch(textNumber) { 
+      case 28: { 
+        message = $localize`:@@learnMore.LMCON28:`;
+        break; 
+      }
+      default: { 
+        message = ''; 
+        break; 
+      } 
+    } 
+    this.openLearnMore(message);
   }
 
 }

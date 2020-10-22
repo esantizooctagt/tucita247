@@ -1,8 +1,11 @@
 <div class="container-fluid h-100 main-background">
     <div class="row p-0">
         <div class="list-form col-md-12 pl-4 m-0">
-            <div class="pl-0 pr-0 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
-                <h3 i18n="USERS LOCATIONS|title user locations@@userloc.title">USERS LOCATIONS</h3>
+            <div class="pl-0 pr-0 pt-1 pb-2 row mt-1 mb-1 header-route">
+                <h3 class="pl-3" i18n="USERS LOCATIONS|title user locations@@userloc.title">USERS LOCATIONS</h3>
+                <button class="help-btn" mat-icon-button color="primary" (click)="learnMore(30)">
+                    <mat-icon>help</mat-icon>
+                </button>
             </div>
             <ng-container *ngIf="saveUser$ | async"></ng-container>
             <ng-container *ngIf="users$ | async"></ng-container>

@@ -13,6 +13,7 @@ import { map, catchError, tap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { ServService } from '@app/services';
 import { Router } from '@angular/router';
+import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
 
 @Component({
   selector: 'app-service-list',
@@ -63,12 +64,22 @@ export class ServiceListComponent implements OnInit {
     private data: MonitorService,
     private spinnerService: SpinnerService,
     private dialog: MatDialog,
+    private learnmore: MatDialog,
     private serviceService: ServService,
     private matIconRegistry: MatIconRegistry,
     private router: Router
   ) { 
     this.matIconRegistry.addSvgIcon('edit',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/edit.svg'));
     this.matIconRegistry.addSvgIcon('delete',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/delete.svg'));
+  }
+
+  openLearnMore(message: string): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      message: message
+    };
+    this.learnmore.open(LearnDialogComponent, dialogConfig);
   }
 
   openDialog(header: string, message: string, success: boolean, error: boolean, warn: boolean): void {
@@ -221,6 +232,21 @@ export class ServiceListComponent implements OnInit {
 
   trackRow(index: number, item: any) {
     return item.ServiceId;
+  }
+
+  learnMore(textNumber: number){
+    let message = '';
+    switch(textNumber) { 
+      case 21: { 
+        message = $localize`:@@learnMore.LMCON21:`;
+        break; 
+      }
+      default: { 
+        message = ''; 
+        break; 
+      } 
+    } 
+    this.openLearnMore(message);
   }
 
 }

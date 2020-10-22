@@ -8,6 +8,8 @@ import { SpinnerService } from '@app/shared/spinner.service';
 import { MatTable } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { User } from '@app/_models';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
 
 @Component({
   selector: 'app-userloc',
@@ -54,6 +56,7 @@ export class UserlocComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private _snackBar: MatSnackBar,
+    private learnmore: MatDialog,
     private userService: UserService,
     private locationService: LocationService,
     private spinnerService: SpinnerService,
@@ -64,6 +67,15 @@ export class UserlocComponent implements OnInit {
     this._snackBar.open(message, action, {
       duration: 2000,
     });
+  }
+
+  openLearnMore(message: string): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      message: message
+    };
+    this.learnmore.open(LearnDialogComponent, dialogConfig);
   }
 
   ngOnInit(): void {
@@ -203,4 +215,20 @@ export class UserlocComponent implements OnInit {
   trackRow(index: number, item: any) {
     return item.UserId;
   }
+
+  learnMore(textNumber: number){
+    let message = '';
+    switch(textNumber) { 
+      case 30: { 
+        message = $localize`:@@learnMore.LMCON30:`;
+        break; 
+      }
+      default: { 
+        message = ''; 
+        break; 
+      } 
+    } 
+    this.openLearnMore(message);
+  }
+
 }

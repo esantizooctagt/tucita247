@@ -12,7 +12,13 @@
             <ng-container *ngIf="saveService$ | async"></ng-container>
             <div class="row p-0 m-0">
                 <mat-card class="col-sm col-md col-lg-7">
-                    <form [formGroup]="serviceForm" (ngSubmit)="onSubmit()" class="mt-4"><div class="form-field-check-slide ml-3 pr-3 pb-3" *ngIf="serviceForm.value.ServiceId !== '' && serviceForm.value.ServiceId !== null"><mat-slide-toggle class="slide-pos" color="primary" formControlName="Status">{{textStatus}}</mat-slide-toggle></div>
+                    <form [formGroup]="serviceForm" (ngSubmit)="onSubmit()" class="mt-4">
+                        <div class="form-field-check-slide ml-3 pr-3 pb-3" *ngIf="serviceForm.value.ServiceId !== '' && serviceForm.value.ServiceId !== null">
+                            <mat-slide-toggle class="slide-pos" color="primary" formControlName="Status">{{textStatus}}</mat-slide-toggle>
+                            <button type="button" mat-icon-button color="primary" class="learn-btn" (click)="learnMore(25)">
+                                <mat-icon>help</mat-icon>
+                            </button>
+                        </div>
                         <div class="form-field pl-3 pr-3">
                             <mat-form-field>
                                 <input matInput #Name i18n-placeholder="Name@@shared.name" placeholder="Name"
@@ -30,6 +36,9 @@
                                     formControlName="TimeService" [errorStateMatcher]="confirmValidParentMatcher"
                                     required>
                                 <span matSuffix>hr</span>
+                                <button type="button" mat-icon-button matSuffix color="primary" class="learn" (click)="learnMore(22)">
+                                    <mat-icon>help</mat-icon>
+                                </button>
                                 <mat-error *ngIf="f.TimeService.invalid && f.TimeService.touched">
                                     {{ 'Error: ' + getErrorMessage('TimeService')}}</mat-error>
                             </mat-form-field>
@@ -41,6 +50,9 @@
                                     placeholder="Customer per Bucket" max="9999" min="1"
                                     formControlName="CustomerPerTime" [errorStateMatcher]="confirmValidParentMatcher"
                                     required>
+                                <button type="button" mat-icon-button matSuffix color="primary" class="learn" (click)="learnMore(23)">
+                                    <mat-icon>help</mat-icon>
+                                </button>
                                 <mat-error *ngIf="f.CustomerPerTime.invalid && f.CustomerPerTime.touched">
                                     {{ 'Error: ' + getErrorMessage('CustomerPerTime')}}</mat-error>
                             </mat-form-field>
@@ -52,6 +64,9 @@
                                     placeholder="Customer per Booking" max="9999" min="1"
                                     formControlName="CustomerPerBooking" [errorStateMatcher]="confirmValidParentMatcher"
                                     required>
+                                <button type="button" mat-icon-button matSuffix color="primary" class="learn" (click)="learnMore(24)">
+                                    <mat-icon>help</mat-icon>
+                                </button>
                                 <mat-error *ngIf="f.CustomerPerBooking.invalid && f.CustomerPerBooking.touched">
                                     {{ 'Error: ' + getErrorMessage('CustomerPerBooking')}}</mat-error>
                             </mat-form-field>

@@ -16,6 +16,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MapsAPILoader } from '@agm/core';
+import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
 
 @Component({
   selector: 'app-business',
@@ -112,6 +113,7 @@ export class BusinessComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
+    private learnmore: MatDialog,
     private authService: AuthService,
     private _snackBar: MatSnackBar,
     private businessService: BusinessService,
@@ -170,6 +172,15 @@ export class BusinessComponent implements OnInit {
   imageFormLink = this.fb.group({
     Imagen_Link: [null, Validators.required]
   })
+
+  openLearnMore(message: string): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      message: message
+    };
+    this.learnmore.open(LearnDialogComponent, dialogConfig);
+  }
 
   ngOnInit() {
     this.mapLoader.load().then(() => {
@@ -723,4 +734,52 @@ export class BusinessComponent implements OnInit {
       }
     });
   }
+
+  learnMore(textNumber: number){
+    let message = '';
+    switch(textNumber) { 
+      case 1: { 
+        message = $localize`:@@learnMore.LMCON01:`;
+        break; 
+      } 
+      case 2: { 
+        message = $localize`:@@learnMore.LMCON02:`;
+        break; 
+      }
+      case 3: { 
+        message = $localize`:@@learnMore.LMCON03:`; 
+        break; 
+      }
+      case 4: { 
+        message = $localize`:@@learnMore.LMCON04:`;
+        break; 
+      }
+      case 5: { 
+        message = $localize`:@@learnMore.LMCON05:`; 
+        break; 
+      }
+      case 6: { 
+        message = $localize`:@@learnMore.LMCON06:`;
+        break; 
+      }
+      case 7: { 
+        message = $localize`:@@learnMore.LMCON07:`;
+        break; 
+      }
+      case 8: { 
+        message = $localize`:@@learnMore.LMCON08:`;
+        break; 
+      }
+      case 9: { 
+        message = $localize`:@@learnMore.LMCON09:`;
+        break; 
+      }
+      default: { 
+        message = ''; 
+        break; 
+      } 
+    } 
+    this.openLearnMore(message);
+  }
+
 }

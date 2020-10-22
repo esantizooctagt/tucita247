@@ -11,6 +11,7 @@ import { catchError, tap, map } from 'rxjs/operators';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
+import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
 
 @Component({
   selector: 'app-business-ope',
@@ -67,6 +68,7 @@ export class BusinessOpeComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private dialog: MatDialog,
+    private learnmore: MatDialog,
     private _snackBar: MatSnackBar,
     private authService: AuthService,
     private businessService: BusinessService,
@@ -98,6 +100,15 @@ export class BusinessOpeComponent implements OnInit {
     Sun02: new FormControl([8, 17]),
     SunEnabled: [0]
   });
+
+  openLearnMore(message: string): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      message: message
+    };
+    this.learnmore.open(LearnDialogComponent, dialogConfig);
+  }
 
   ngOnInit(): void {
     var spinnerRef = this.spinnerService.start($localize`:@@business-ope.loadopeninghours:`);
@@ -1405,5 +1416,24 @@ export class BusinessOpeComponent implements OnInit {
         return err;
       })
     );
+  }
+
+  learnMore(textNumber: number){
+    let message = '';
+    switch(textNumber) { 
+      case 10: { 
+        message = $localize`:@@learnMore.LMCON10:`;
+        break; 
+      }
+      case 11: { 
+        message = $localize`:@@learnMore.LMCON11:`;
+        break; 
+      } 
+      default: { 
+        message = ''; 
+        break; 
+      } 
+    } 
+    this.openLearnMore(message);
   }
 }

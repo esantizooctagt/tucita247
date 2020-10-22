@@ -14,7 +14,7 @@
                     <mat-tab-group mat-align-tabs="start">
                         <mat-tab label="Address Info">
                             <mat-form-field class="pt-3">
-                                <input matInput i18n="Business Name|Business name placeholder@@business.busname" placeholder="Business Name" maxlength="500" minlength="3"
+                                <input matInput i18n-placeholder="Business Name|Business name placeholder@@business.busname" placeholder="Business Name" maxlength="500" minlength="3"
                                     formControlName="Name" [errorStateMatcher]="confirmValidParentMatcher" required>
                                 <mat-error *ngIf="fBusiness.Name.invalid && fBusiness.Name.touched">
                                     {{ 'Error: ' + getErrorMessage('Name')}}</mat-error>
@@ -88,6 +88,9 @@
                                             [matAutocomplete]="autoCategory"
                                             [matChipInputFor]="chipCategoriesList"
                                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [formControl]="Categories">
+                                        <button type="button" mat-icon-button color="primary" matSuffix (click)="learnMore(2)">
+                                            <mat-icon>help</mat-icon>
+                                        </button>
                                     </mat-chip-list>
                                     <mat-autocomplete 
                                         #autoCategory="matAutocomplete"
@@ -110,6 +113,9 @@
                                         <input placeholder="New Reason..." [matChipInputFor]="chipReasons"
                                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                                             [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addReason($event)">
+                                        <button type="button" mat-icon-button color="primary" matSuffix (click)="learnMore(4)">
+                                            <mat-icon>help</mat-icon>
+                                        </button>
                                     </mat-chip-list>
                                 </mat-form-field>
                             </div>
@@ -126,6 +132,9 @@
                                         <input placeholder="New Tag..." [matChipInputFor]="chipTags"
                                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                                             [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addTag($event)">
+                                        <button type="button" mat-icon-button color="primary" matSuffix (click)="learnMore(3)">
+                                            <mat-icon>help</mat-icon>
+                                        </button>
                                     </mat-chip-list>
                                 </mat-form-field>
                             </div>
@@ -178,6 +187,9 @@
                                 <input matInput i18n-placeholder="Short description for mobile app|text in business@@business.shorttext" placeholder="Short Description" maxlength="75" minlength="10"
                                     formControlName="ShortDescription" [errorStateMatcher]="confirmValidParentMatcher"
                                     required>
+                                <button type="button" mat-icon-button color="primary" class="learn" matSuffix (click)="learnMore(5)">
+                                    <mat-icon>help</mat-icon>
+                                </button>
                                 <mat-error
                                     *ngIf="fBusiness.ShortDescription.invalid && fBusiness.ShortDescription.touched">
                                     {{ 'Error: ' + getErrorMessage('ShortDescription')}}</mat-error>
@@ -186,6 +198,9 @@
                                 <input matInput i18n-placeholder="Long description for mobile app|text in business@@business.longtext" placeholder="Long Description" maxlength="255" minlength="10"
                                     formControlName="LongDescription" [errorStateMatcher]="confirmValidParentMatcher"
                                     required>
+                                <button type="button" mat-icon-button color="primary" class="learn" matSuffix (click)="learnMore(6)">
+                                    <mat-icon>help</mat-icon>
+                                </button>
                                 <mat-error
                                     *ngIf="fBusiness.LongDescription.invalid && fBusiness.LongDescription.touched">
                                     {{ 'Error: ' + getErrorMessage('LongDescription')}}</mat-error>
@@ -195,6 +210,9 @@
                                     <input matInput i18n-placeholder="Tu Cita 24/7 Link|text in business@@business.tucitalink" placeholder="Tu Cita 24/7 Link" maxlength="50" minlength="2"
                                         formControlName="TuCitaLink" [errorStateMatcher]="confirmValidParentMatcher"
                                         (focusout)="checkLinkAvailability($event)" required>
+                                    <button type="button" mat-icon-button color="primary" *ngIf="!loadingBusiness" matSuffix (click)="learnMore(7)">
+                                        <mat-icon>help</mat-icon>
+                                    </button>
                                     <mat-spinner matSuffix *ngIf="loadingBusiness" diameter="18" color="primary">
                                     </mat-spinner>
                                     <ng-container matSuffix *ngIf="availability$ | async as result">
@@ -215,9 +233,12 @@
                                 </div>
                             </ng-template>
                             <div class="image-business mt-2 mb-2 row ml-0 mr-0">
-                                <div class="col-md-6 col-lg-6 col-xl-6 col-sm-12 pl-0">
+                                <div class="col-md-6 col-lg-6 col-xl-6 col-sm-12 pl-0 content-center">
                                     <form [formGroup]="imageForm" text-center autocomplete="off" (ngSubmit)="onSubmitImage()">
-                                        <h5 i18n="Image for mobile App|text in business@@business.imagemobileapp">Image for mobile App</h5>
+                                        <h5 class="display-learn" i18n="Image for mobile App|text in business@@business.imagemobileapp">Image for mobile App</h5>
+                                        <button type="button" mat-icon-button color="primary" (click)="learnMore(8)">
+                                            <mat-icon>help</mat-icon>
+                                        </button>
                                         <div class="sector">
                                             <img *ngIf="fBusiness.Imagen.value && fileString == undefined" class="imgbusiness-pic" [src]="imgPath+fBusiness.Imagen.value">
                                             <div *ngIf="fileString == undefined && !fBusiness.Imagen.value" class="fill-overlay" i18n="IMAGE MOBILE APP|text in business@@business.imagemobileappimg">IMAGE MOBILE APP</div>
@@ -230,9 +251,12 @@
                                         </div>
                                     </form>
                                 </div>
-                                <div class="col-md-6 col-lg-6 col-xl-6 col-sm-12 pl-0">
+                                <div class="col-md-6 col-lg-6 col-xl-6 col-sm-12 pl-0 content-center">
                                     <form [formGroup]="imageFormLink" text-center autocomplete="off" (ngSubmit)="onSubmitImageLink()">
-                                        <h5 i18n="Image for Tu Cita 24/7 web link|text in business@@business.imagefortucita">Image for Tu Cita 24/7 web link</h5>
+                                        <h5 class="display-learn" i18n="Image for Tu Cita 24/7 web link|text in business@@business.imagefortucita">Image for Tu Cita 24/7 web link</h5>
+                                        <button type="button" mat-icon-button color="primary" (click)="learnMore(9)">
+                                            <mat-icon>help</mat-icon>
+                                        </button>
                                         <div class="sector">
                                             <img *ngIf="fBusiness.ImagenLink.value && fileStringLink == undefined" class="imgbusiness-pic" [src]="imgPath+fBusiness.ImagenLink.value">
                                             <div *ngIf="fileStringLink == undefined && !fBusiness.ImagenLink.value" class="fill-overlay" i18n="IMAGE WEB LINK|block in business@@business.imageblock">IMAGE WEB LINK</div>

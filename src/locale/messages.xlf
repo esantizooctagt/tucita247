@@ -3978,6 +3978,163 @@
       <trans-unit id="shared.locationclosed">
         <source>This location is closed</source>
       </trans-unit>
+      <trans-unit id="learnMore.LMCON01">
+        <source>LMCON01</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON02">
+        <source>LMCON02</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON03">
+        <source>LMCON03</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON04">
+        <source>LMCON04</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON05">
+        <source>LMCON05/source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON06">
+        <source>LMCON06</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON07">
+        <source>LMCON07</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON08">
+        <source>LMCON08</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON09">
+        <source>LMCON09</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON10">
+        <source>LMCON10</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON11">
+        <source>LMCON11</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON12">
+        <source>LMCON12</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON13">
+        <source>LMCON13</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON14">
+        <source>LMCON14</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON15">
+        <source>LMCON15</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON16">
+        <source>LMCON16</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON17">
+        <source>LMCON17</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON18">
+        <source>LMCON18</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON19">
+        <source>LMCON19</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON20">
+        <source>LMCON20</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON21">
+        <source>LMCON21</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON22">
+        <source>LMCON22</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON23">
+        <source>LMCON23</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON24">
+        <source>LMCON24</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON25">
+        <source>LMCON25</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON26">
+        <source>LMCON26</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON27">
+        <source>LMCON27</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON28">
+        <source>LMCON28</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON29">
+        <source>LMCON29</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON30">
+        <source>LMCON30</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON31">
+        <source>LMCON31</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON32">
+        <source>LMCON32</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON33">
+        <source>LMCON33</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON34">
+        <source>LMCON34</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON35">
+        <source>LMCON35</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON36" datatype="html">
+        <source>LMCON36</source>
+        <context-group purpose="showappo-dialog">
+          <context context-type="sourcefile">src/app/shared/showappo-dialog/showappo-dialog.component.html</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON37" datatype="html">
+        <source>LMCON37</source>
+        <context-group purpose="showappo-dialog">
+          <context context-type="sourcefile">src/app/shared/showappo-dialog/showappo-dialog.component.html</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON38" datatype="html">
+        <source>LMCON38</source>
+        <context-group purpose="schedule">
+          <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
+          <context context-type="linenumber">250</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON39" datatype="html">
+        <source>LMCON39</source>
+        <context-group purpose="schedule">
+          <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
+          <context context-type="linenumber">244</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON40" datatype="html">
+        <source>LMCON40</source>
+        <context-group purpose="schedule">
+          <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
+          <context context-type="linenumber">247</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON41" datatype="html">
+        <source>LMCON41</source>
+        <context-group purpose="schedule">
+          <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
+          <context context-type="linenumber">253</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON42">
+        <source>LMCON42</source>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON43" datatype="html">
+        <source>LMCON43</source>
+        <context-group purpose="host">
+          <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
+          <context context-type="linenumber">588</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

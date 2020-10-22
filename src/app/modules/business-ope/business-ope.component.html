@@ -47,6 +47,9 @@
             <ng-container *ngIf="opeHoursSave$ | async"></ng-container>
             <form [formGroup]="businessForm">
                 <mat-label class="" i18n="Operation Hours|text in operation hours@@businessope.operationhours">Operation Hours</mat-label>
+                <button mat-icon-button color="primary" (click)="learnMore(10)">
+                    <mat-icon>help</mat-icon>
+                </button>
                 <div class="row pb-2">
                     <mat-checkbox formControlName="MonEnabled" class="col-xl-1 pl-4 mt-4"
                         (change)="onChangeDisabled(0, $event)" i18n="Mon|text in operation hours@@businessope.daymon">Mon</mat-checkbox>

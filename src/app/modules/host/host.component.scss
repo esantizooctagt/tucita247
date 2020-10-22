@@ -353,11 +353,21 @@ mat-icon.mat-icon.notranslate.material-icons.mat-icon-no-color {
     padding-left: 15px;
     padding-right: 15px;
 }
+.learn{
+    font-size: 24px !important;
+}
+.learn-btn{
+    position: relative;
+    top: -5px;
+}
 mat-menu{
     overflow: auto;
 }
 .title-text:hover{
     color: #000 !important;
+}
+::ng-deep .mat-tooltip {
+    background-color: #ff4f00;
 }
 @media (max-width: 1024px){
     .title-qeue{

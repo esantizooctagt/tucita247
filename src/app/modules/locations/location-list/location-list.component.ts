@@ -12,6 +12,7 @@ import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { map, catchError } from 'rxjs/operators';
 import { LocationService } from '@app/services';
 import { Router } from '@angular/router';
+import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
 
 @Component({
   selector: 'app-location-list',
@@ -61,12 +62,22 @@ export class LocationListComponent implements OnInit {
     private data: MonitorService,
     private spinnerService: SpinnerService,
     private dialog: MatDialog,
+    private learnmore: MatDialog,
     private locationService: LocationService,
     private matIconRegistry: MatIconRegistry,
     private router: Router
   ) { 
     this.matIconRegistry.addSvgIcon('edit',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/edit.svg'));
     this.matIconRegistry.addSvgIcon('delete',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/delete.svg'));
+  }
+
+  openLearnMore(message: string): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      message: message
+    };
+    this.learnmore.open(LearnDialogComponent, dialogConfig);
   }
 
   openDialog(header: string, message: string, success: boolean, error: boolean, warn: boolean): void {
@@ -177,6 +188,21 @@ export class LocationListComponent implements OnInit {
 
   trackRow(index: number, item: any) {
     return item.LocationId;
+  }
+
+  learnMore(textNumber: number){
+    let message = '';
+    switch(textNumber) { 
+      case 12: { 
+        message = $localize`:@@learnMore.LMCON12:`;
+        break; 
+      }
+      default: { 
+        message = ''; 
+        break; 
+      } 
+    } 
+    this.openLearnMore(message);
   }
 
 }

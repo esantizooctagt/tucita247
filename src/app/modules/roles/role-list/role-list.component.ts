@@ -13,6 +13,7 @@ import { FormArray, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
 
 @Component({
   selector: 'app-role-list',
@@ -62,6 +63,7 @@ export class RoleListComponent implements OnInit {
     private data: MonitorService,
     private spinnerService: SpinnerService,
     private dialog: MatDialog,
+    private learnmore: MatDialog,
     private rolesService: RolesService,
     private matIconRegistry: MatIconRegistry,
     private router: Router
@@ -69,6 +71,15 @@ export class RoleListComponent implements OnInit {
     this.matIconRegistry.addSvgIcon('edit',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/edit.svg'));
     this.matIconRegistry.addSvgIcon('delete',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/delete.svg'));
    }
+
+  openLearnMore(message: string): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      message: message
+    };
+    this.learnmore.open(LearnDialogComponent, dialogConfig);
+  }
 
   openDialog(header: string, message: string, success: boolean, error: boolean, warn: boolean): void {
     const dialogConfig = new MatDialogConfig();
@@ -219,6 +230,21 @@ export class RoleListComponent implements OnInit {
 
   trackRow(index: number, item: Role) {
     return item.Role_Id;
+  }
+
+  learnMore(textNumber: number){
+    let message = '';
+    switch(textNumber) { 
+      case 31: { 
+        message = $localize`:@@learnMore.LMCON31:`;
+        break; 
+      }
+      default: { 
+        message = ''; 
+        break; 
+      } 
+    } 
+    this.openLearnMore(message);
   }
 
 }

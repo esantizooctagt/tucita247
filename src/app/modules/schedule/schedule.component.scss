@@ -82,6 +82,9 @@
     border-radius: 90%;
     margin-right: 5px;
 }
+::ng-deep .mat-tooltip {
+    background-color: #ff4f00;
+}
 :host ::ng-deep .mat-list.list-horizontal {
     padding: 0;
     .mat-list-item {

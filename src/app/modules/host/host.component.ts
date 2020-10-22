@@ -17,6 +17,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { DirDialogComponent } from '@app/shared/dir-dialog/dir-dialog.component';
 import { MonitorService } from '@app/shared/monitor.service';
+import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
 
 @Component({
   selector: 'app-host',
@@ -157,6 +158,7 @@ export class HostComponent implements OnInit {
     private serviceService: ServService,
     private fb: FormBuilder,
     private dialog: MatDialog,
+    private learnmore: MatDialog,
     private matIconRegistry: MatIconRegistry,
     private router: Router,
     private monitorService: MonitorService
@@ -211,6 +213,15 @@ export class HostComponent implements OnInit {
     dialogConfig.minWidth = '280px';
     dialogConfig.maxWidth = '280px';
     this.dialog.open(DialogComponent, dialogConfig);
+  }
+
+  openLearnMore(message: string): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      message: message
+    };
+    this.learnmore.open(LearnDialogComponent, dialogConfig);
   }
 
   syncData(msg: any){
@@ -383,7 +394,7 @@ export class HostComponent implements OnInit {
       }
     }
     if (msg['Tipo'] == 'CLOSED'){
-      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId){
+      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 1){
         this.locationStatus = 0;
         this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
         this.previous = [];
@@ -1910,5 +1921,20 @@ export class HostComponent implements OnInit {
 
   onScrollPre(){
     this.getAppointmentsPre();
+  }
+
+  learnMore(textNumber: number){
+    let message = '';
+    switch(textNumber) { 
+      case 26: { 
+        message = $localize`:@@learnMore.LMCON26:`;
+        break; 
+      }
+      default: { 
+        message = ''; 
+        break; 
+      } 
+    } 
+    this.openLearnMore(message);
   }
 }

@@ -4490,6 +4490,216 @@
         <source>This location is closed</source>
         <target state="translated">This location is closed</target>
       </trans-unit>
+      <trans-unit id="learnMore.LMCON01">
+        <source>LMCON01</source>
+        <target state="translated">Is your business a shopping center or office building? You should check this box only if  your business is a shopping center or office building, which has separate opening hours and booking system, which apply to business within yours.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON02">
+        <source>LMCON02</source>
+        <target state="translated">Choose up to five categories that best describe your business. This helps clients find you when looking for businesses or services like yours.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON03">
+        <source>LMCON03</source>
+        <target state="translated">Tags are keywords that clients can use to find services or products that your business provides. You can add all the tags that can help your clients find you. Think about services you provide and things that make your business unique. We recommend creating tags in both languages, Spanish and English, so that your business can be found by more customers.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON04">
+        <source>LMCON04</source>
+        <target state="translated">You can add possible reasons to cancel a booking. Some examples are: "Client did not show up" or  "Safety protocols not followed", or "Location had to close temporarily".</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON05">
+        <source>LMCON05</source>
+        <target state="translated">Brief description of your business. Up to 75 characters. This information will be published at Tu Cita 24/7 App.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON06">
+        <source>LMCON06</source>
+        <target state="translated">Full description of your business. Up to 250 characters. This information will be published at Tu Cita 24/7 link.  See link below in this page.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON07">
+        <source>LMCON07</source>
+        <target state="translated">Tu Cita 24/7 Link is a webpage created just for you. It directs your clients directly to your business.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON08">
+        <source>LMCON08</source>
+        <target state="translated">This is the image of your business that will be published in Tu Cita 24/7 App.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON09">
+        <source>LMCON09</source>
+        <target state="translated">This is the image of your business that will be published in Tu Cita 24/7 Link.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON10">
+        <source>LMCON10</source>
+        <target state="translated">These are the days and hours during which your business is opened for customers or visitors. You can define up to two intervals of time for each day. Tu Cita 24/7 will allow cleints to book appointments at this opening hours.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON11">
+        <source>LMCON11</source>
+        <target state="translated">You can click to select the dates during which your business is closed for customers or visitors.  Tu Cita 24/7 will not allow clients to book appointments for you during those dates.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON12">
+        <source>LMCON12</source>
+        <target state="translated">You can add additional locations to your main business, where your clients can visit you. These will show on Tu Cita 24/ 7 App and Link.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON13">
+        <source>LMCON13</source>
+        <target state="translated">What is the maximum total number of people that can enter this location at the same time? What is the maxiumum occupancy at this location? This information will help you comply with safety guidelines for your clients and staff. Tu Cita 24/7 will limit the number of bookings to comply with the maximum occupancy you enter here.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON14">
+        <source>LMCON14</source>
+        <target state="translated">You can define all the entrances or doors this location has, which you want your clients to use when visiting your business. If there is only one entrance, you can leave the default value "Main", and the system will book all the appointments to the Main entrance. If this location has additional entrances, you can identify them with different names. For example: "First floor door", "Second Floor door", "West Side Area". </target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON15">
+        <source>LMCON15</source>
+        <target state="translated">Is this location in a shopping center or office building? You should look in the drop down menu and select the parent location only if your business is part of a shopping center or office building, which has a separate schedule and appointment system from your business.  If not, or if you can't find the parent location in the menu, just leave the deafult value "N/A".</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON16">
+        <source>LMCON16</source>
+        <target state="translated">You can check out people who are leaving this location. This helps to keep track of how many people are inside this location at all times.
+There are two ways to check-out: 1. Automatic check-out, using the Las Citas module, where the client's QR code is scanned. 2. Manual check-out, using Las Citas Lite module, which works like a manual counter (clicker type) and counts the people leaving the premises, without scanning the QR code.
+To use manual check-out, you must enable this button. To use automatic check-out, this button must be off.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON17">
+        <source>LMCON17</source>
+        <target state="translated">When you turn on the  "Enabled" button, it means this location is operating and can accept bookings.  If the location is temporarily closed, you should turn off the "Enabled" button.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON18">
+        <source>LMCON18</source>
+        <target state="translated">People or areas that offer services in your business. Clients will be able to book appointments with these providers. You should specify which services they provide and their time schedule.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON19">
+        <source>LMCON19</source>
+        <target state="translated">When you turn on the  "Enabled" button, it means this provider is operating and can accept bookings.  If the provider is temporarily closed, you should turn off the "Enabled" button.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON20">
+        <source>LMCON20</source>
+        <target state="translated">You must assign one or more services that this provider gives in your business. Clients will be able to book appointments for these services, with the assigned providers.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON21">
+        <source>LMCON21</source>
+        <target state="translated">You can add the services your business offers to your customers. Once you create the services, you can assign them to the service providers that offer them. Your customers will be able to see and choose the services that you offer, and book appointments to purchase them. We recommend creating services in both languages, Spanish and English; for example: "Consultoría / Consultancy".</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON22">
+        <source>LMCON22</source>
+        <target state="translated">How long does it take on average to provide this service?</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON23">
+        <source>LMCON23</source>
+        <target state="translated">How many clients can you attend concurrently providing this service?</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON24">
+        <source>LMCON24</source>
+        <target state="translated">How many people will you allow at each booking?</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON25">
+        <source>LMCON25</source>
+        <target state="translated">When you turn on the  "Enabled" button, it means your business is providing this service and it can be assigned to one or more of your service providers.  Tu Cita 24/7 will accept bookings for this service.  If you are temporarily not providing this service, you should turn off the "Enabled" button.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON26">
+        <source>LMCON26</source>
+        <target state="translated">Open location means that this location is available to receive visitors. In this module of Las Citas Lite, you can open or close locations and select service providers. You can also check-in clients who don't have a previous appointment (walk -in), check-in clients with a Tu Cita 24/7 booking and check-out all clients.
+To check-in a walk-in customer, just press the Walk-in button, enter the requested data. Fields with the * symbol are required to continue.
+To check-in a customer with a booking, you can scan the QR code, or write the Cita Code number.
+To check-out customers leaving the premises, you can either scan the QR code, write the Cita Code number, or use the manual counter (clicker type) and use the + symbol to add people to the check out.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON27">
+        <source>LMCON27</source>
+        <target state="translated">Open location means that this location is available to receive visitors. Las Citas module has all the features of Las Citas Lite, but also offers a virtual queue management, with details of the bookings including communication with your customers. You can see all the bookings. When the business is ready to receive a customer, you can move it to " Ready to check-in" and this will send a message to the customer.
+In Las Citas, you can open or close locations and select service providers. You can also check-in clients who don't have a previous appointment (walk -in), check-in clients with a Tu Cita 24/7 booking and check-out all clients.
+To check-in a walk-in customer, just press the Walk-in+ button, enter the requested data. Fields with the * symbol are required to continue.
+To check-in a customer with a booking, you can scan the QR code, or write the Cita Code number.
+To check-out customers leaving the premises, you can either scan the QR code, write the Cita Code number, or use the manual counter (clicker type) and use the + symbol to add people to the check out.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON28">
+        <source>LMCON28</source>
+        <target state="translated">In this Polls module, you can create a question that your clients will receive and can answer afer visiting your business. It is an easy way to collect customer satisfaction feedback. The poll should be a closed-ended question that can be answered with the Happy, Neutral or Not Happy emojis, shown in this module. Some examples of questions you can ask are:  "Are you happy with our service today?", or "Would you recommend your service to your friends?"
+When using Manual Check-Out, the system will not send polls to that location.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON29">
+        <source>LMCON29</source>
+        <target state="translated">Users are the employees in your organization, who will have access to information and perform actions in Tu Cita 24/7.  To create a new user, click +Add and enter the information requested. To add an user, you should have created first the user's role in the Role module, which defines the access different types of users will have to Tu Cita 24/7. You can also assign or limit the user's access to one or more of your locations.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON30">
+        <source>LMCON30</source>
+        <target state="translated">Users can be assigned to one or more locations.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON31">
+        <source>LMCON31</source>
+        <target state="translated">In the Roles module, you can create and define the accesses that you will assign to Users. You can assign full access, edit access, or read access to the different areas and functions of Tu Cita 24/7.  You should first create Roles, and then create Users and assign them the appropriate role.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON32">
+        <source>LMCON32</source>
+        <target state="translated">When you turn on the  "Enabled" button, it means this Role is activate and can be assigned to your Users.   If you temporarily don't want to assign this Role to any of your Users, you should turn off the "Enabled" button.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON33">
+        <source>LMCON33</source>
+        <target state="translated">You should assign a name to each Role that makes it easy to identify. For example, "Greeter" could be the name of the role of the people that manage the business entrance, in charge of check-in and check-out.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON34">
+        <source>LMCON34</source>
+        <target state="translated">There are three levels of access you can assign to each Role for different modules and functions of Tu Cita 24/7.  Full Access is an account administrator, can create and edit information, and can create users and assign access roles. Edit Access allows the user to create and edit information, but cannot create new users or assign access roles. Read access only allows reading, cannot create or edit. </target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON35">
+        <source>LMCON35</source>
+        <target state="translated">In this Calendar module, you can create and edit bookings for clients, based on date, time, service and service provider.</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON36" datatype="html">
+        <source>LMCON36</source>
+        <target state="translated">Cancel this booking</target>
+        <context-group purpose="showappo-dialog">
+          <context context-type="sourcefile">src/app/shared/showappo-dialog/showappo-dialog.component.html</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON37" datatype="html">
+        <source>LMCON37</source>
+        <target state="translated">Messages</target>
+        <context-group purpose="showappo-dialog">
+          <context context-type="sourcefile">src/app/shared/showappo-dialog/showappo-dialog.component.html</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON38" datatype="html">
+        <source>LMCON38</source>
+        <target state="translated">Additional info</target>
+        <context-group purpose="schedule">
+          <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
+          <context context-type="linenumber">250</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON39" datatype="html">
+        <source>LMCON39</source>
+        <target state="translated">Add booking</target>
+        <context-group purpose="schedule">
+          <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
+          <context context-type="linenumber">244</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON40" datatype="html">
+        <source>LMCON40</source>
+        <target state="translated">Disable this timeslot</target>
+        <context-group purpose="schedule">
+          <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
+          <context context-type="linenumber">247</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON41" datatype="html">
+        <source>LMCON41</source>
+        <target state="translated">Available bookings</target>
+        <context-group purpose="schedule">
+          <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
+          <context context-type="linenumber">253</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON42">
+        <source>LMCON42</source>
+        <target state="translated">Ready to check-in</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON43" datatype="html">
+        <source>LMCON43</source>
+        <target state="translated">Check-in</target>
+        <context-group purpose="host">
+          <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
+          <context context-type="linenumber">588</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

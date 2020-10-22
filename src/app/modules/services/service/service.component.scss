@@ -7,8 +7,12 @@ mat-select{
 mat-option{
     font-family: Montserrat;
 }
-mat-icon{
-    font-size: 45px;
+.learn{
+    font-size: 24px !important;
+}
+.learn-btn{
+    position: relative;
+    top: -3px;
 }
 .list-form{
     background: #fff;
