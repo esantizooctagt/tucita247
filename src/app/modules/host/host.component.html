@@ -337,7 +337,7 @@
                                 </div>
                                 <div class="form-field pl-3 pr-3">
                                     <mat-form-field>
-                                        <mat-select i18n-placeholder="Service|text in citas@@host.service" placeholder="Service" name="services" formControlName="ServiceId" required>
+                                        <mat-select i18n-placeholder="Service|text in citas@@host.service" placeholder="Service" name="services" formControlName="ServiceId" (selectionChange)="validateService($event)" required>
                                             <mat-option *ngFor="let item of services" [value]="item.ServiceId">
                                                 {{item.Name}}
                                             </mat-option>
@@ -354,7 +354,7 @@
                                 </div>
                                 <div class="form-field pl-3 pr-3">
                                     <mat-form-field>
-                                        <input matInput #Guests i18n-placeholder="No of People|text in citas@@host.noofpeople" placeholder="No of People" maxlength="2" min="1" max="20" formControlName="Guests"
+                                        <input matInput #Guests i18n-placeholder="No of People|text in citas@@host.noofpeople" placeholder="No of People" min="1" [max]="maxGuests" formControlName="Guests"
                                             [errorStateMatcher]="confirmValidParentMatcher" required>
                                         <mat-error *ngIf="f.Guests.invalid && f.Guests.touched">{{ 'Error: ' + getErrorMessage('Guests')}}</mat-error>
                                     </mat-form-field>

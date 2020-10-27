@@ -4824,6 +4824,10 @@ When using Manual Check-Out, the system will not send polls to that location.</t
           <context context-type="linenumber">588</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="shared.invalidDateTime">
+        <source>Invalid date and time for this service</source>
+        <target state="translated">Invalid date and time for this service</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

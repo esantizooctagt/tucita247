@@ -37,6 +37,7 @@ export class AppoDialogComponent implements OnInit {
   providerId: string = '';
   newTime: string = '';
   varGuests: number = 1;
+  maxGuests: number = 1;
   dayInfo: any[]=[];
 
   services: any[]=[];
@@ -109,7 +110,6 @@ export class AppoDialogComponent implements OnInit {
   }
 
   onNoClick(){
-    // this.webSocketService.close();
     this.dialogRef.close();
   }
 
@@ -157,9 +157,6 @@ export class AppoDialogComponent implements OnInit {
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
       map((res: any) => {
         let enviar = '';
-        // if (currdate == this.data.appoDate){
-        //   enviar = JSON.stringify(res.Appointment);
-        // }
         this.openSnackBar($localize`:@@appos.created:`, $localize`:@@appos.schedule:`);
 
         this.dialogRef.close({newAppo: 'OK', data: enviar}); 
@@ -168,7 +165,11 @@ export class AppoDialogComponent implements OnInit {
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
-        this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@appos.schedule:`);
+        if (err.Status == 404){
+          this.openSnackBar($localize`:@@shared.invalidDateTime:`, $localize`:@@appos.schedule:`);
+        } else {
+          this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@appos.schedule:`);
+        }
         this.dialogRef.close({newAppo: 'OK'});
         return err;
       })
@@ -217,6 +218,7 @@ export class AppoDialogComponent implements OnInit {
   validateService(event){
     let res = this.services.filter(x => x.ServiceId == event.value);
     let validTime: number = 0;
+    if (res.length > 0) { this.maxGuests = res[0].CustomerPerBooking; }
     let dateAppo = (this.data.appoTime.substring(6,8) == 'PM' ? (+this.data.appoTime.substring(0,2) == 12 ? this.data.appoTime.substring(0,2) : +this.data.appoTime.substring(0,2)+12) : this.data.appoTime.substring(0,2));
     for (var _i = 0; _i < 1; _i++) {
       let data = this.dayInfo.filter(x => (x.Time.substring(6,8) == 'PM' ? (+x.Time.substring(0,2) == 12 ? +x.Time.substring(0,2) : +x.Time.substring(0,2)+12) : +x.Time.substring(0,2)) == +dateAppo+_i);

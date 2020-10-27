@@ -7,7 +7,7 @@ import { AuthService } from '@app/core/services';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { map, catchError, switchMap, mergeMap, tap } from 'rxjs/operators';
 import { Appointment, Reason } from '@app/_models';
-import { FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
@@ -97,21 +97,19 @@ export class HostComponent implements OnInit {
   locationStatus: number = 0;
   textOpenLocation: string = '';
   locName: string = '';
+  maxGuests: number = 1;
 
   locations: any[]=[];
-
   locationId: string = '';
   doorId: string = '';
   qrCode: string = '';
 
   onError: string = '';
-
   manualGuests: number =  1;
-
   operationText: string = '';
 
   Providers: any[]=[];
-  services: []=[];
+  services: any[]=[];
   providerId: string = '';
   panelOpenState = false;
   seeDetails: string = $localize`:@@shared.seedetails:`;
@@ -178,7 +176,7 @@ export class HostComponent implements OnInit {
     Gender: [''],
     Preference: ['1'],
     Disability: [''],
-    Guests: ['1', [Validators.required, Validators.max(99), Validators.min(1)]],
+    Guests: ['1', [Validators.required, (control: AbstractControl) => Validators.max(this.maxGuests)(control), Validators.min(1)]],
     ProviderId: ['']
   })
 
@@ -810,6 +808,11 @@ export class HostComponent implements OnInit {
     );
   }
 
+  validateService(event){
+    let res = this.services.filter(x => x.ServiceId == event.value);
+    if (res.length > 0) { this.maxGuests = res[0].CustomerPerBooking; }
+  }
+
   checkOutQR(){
     const dialogRef = new MatDialogConfig();
     dialogRef.width ='450px';
@@ -1012,7 +1015,11 @@ export class HostComponent implements OnInit {
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
         this.onError = err.Message;
-        this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.wrong:`, false, true, false);
+        if (err.Status == 404){
+          this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.invalidDateTime:`, false, true, false);
+        } else {
+          this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.wrong:`, false, true, false);
+        }
         return this.onError;
       })
     );
@@ -1039,6 +1046,8 @@ export class HostComponent implements OnInit {
     const val14 = '14';
     const val99 = '99';
     const val100 = '100';
+    const maxVal = this.maxGuests;
+
     if (component === 'Email'){
       return this.f.Email.hasError('required') ? $localize`:@@shared.entervalue:` :
         this.f.Email.hasError('maxlength') ? $localize`:@@shared.maximun: ${val200}` :
@@ -1068,7 +1077,7 @@ export class HostComponent implements OnInit {
       return this.f.Guests.hasError('required') ? $localize`:@@shared.entervalue:` :
       this.f.Guests.hasError('maxlength') ? $localize`:@@shared.maximun: ${val2}` :
         this.f.Guests.hasError('min') ? $localize`:@@shared.minvalue: ${val1}` :
-          this.f.Guests.hasError('max') ? $localize`:@@shared.maxvalue: ${val99}` :
+          this.f.Guests.hasError('max') ? $localize`:@@shared.maxvalue: ${maxVal}` :
             '';
     }
   }

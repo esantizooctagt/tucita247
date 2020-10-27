@@ -122,7 +122,7 @@ export class RoleListComponent implements OnInit {
       this._currentSearchValue = changes.filterValue.currentValue;
       this._currentPage = [];
       this._page = 1;
-      this._currentPage.push({page: this._page, pollId: ''});
+      this._currentPage.push({page: this._page, roleId: ''});
       this.loadRoles(
         this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].roleId
       );

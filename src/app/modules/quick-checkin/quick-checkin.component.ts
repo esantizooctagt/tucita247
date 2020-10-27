@@ -11,7 +11,7 @@ import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { VideoDialogComponent } from '@app/shared/video-dialog/video-dialog.component';
 import { Router } from '@angular/router';
 import { DirDialogComponent } from '@app/shared/dir-dialog/dir-dialog.component';
-import { FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { ZXingScannerComponent, ZXingScannerModule } from '@zxing/ngx-scanner';
 import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
@@ -42,6 +42,7 @@ export class QuickCheckinComponent implements OnInit {
   textOpenLocation: string = '';
   locName: string = '';
   buckets=[];
+  maxGuests: number = 1;
 
   showCard: boolean =false;
 
@@ -59,7 +60,7 @@ export class QuickCheckinComponent implements OnInit {
   checkIn$: Observable<any>;
 
   Providers: any[] = [];
-  services: []=[];
+  services: any[]=[];
   locations: any[]=[];
 
   operationText: string = '';
@@ -105,7 +106,7 @@ export class QuickCheckinComponent implements OnInit {
     Preference: ['1'],
     Disability: [''],
     ProviderId:[''],
-    Guests: ['1', [Validators.required, Validators.max(99), Validators.min(1)]]
+    Guests: ['1', [Validators.required, (control: AbstractControl) => Validators.max(this.maxGuests)(control), Validators.min(1)]]
   })
 
   openSnackBar(message: string, action: string) {
@@ -483,6 +484,11 @@ export class QuickCheckinComponent implements OnInit {
     );
   }
 
+  validateService(event){
+    let res = this.services.filter(x => x.ServiceId == event.value);
+    if (res.length > 0) { this.maxGuests = res[0].CustomerPerBooking; }
+  }
+
   getErrorMessage(component: string){
     const val200 = '200';
     const val3 = '3';
@@ -492,6 +498,7 @@ export class QuickCheckinComponent implements OnInit {
     const val2 = '2';
     const val1 = '1';
     const val99 = '99';
+    const maxVal = this.maxGuests;
     if (component === 'Email'){
       return this.f.Email.hasError('required') ? $localize`:@@login.error:` :
         this.f.Email.hasError('maxlength') ? $localize`:@@shared.maximun: ${val200}` :
@@ -521,7 +528,7 @@ export class QuickCheckinComponent implements OnInit {
       return this.f.Guests.hasError('required') ? $localize`:@@shared.entervalue:` :
       this.f.Guests.hasError('maxlength') ? $localize`:@@shared.maximun: ${val2}` :
         this.f.Guests.hasError('min') ? $localize`:@@shared.minvalue: ${val1}` :
-          this.f.Guests.hasError('max') ? $localize`:@@shared.maxvalue: ${val99}` :
+          this.f.Guests.hasError('max') ? $localize`:@@shared.maxvalue: ${maxVal}` :
             '';
     }
   }
@@ -589,7 +596,11 @@ export class QuickCheckinComponent implements OnInit {
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
         this.onError = err.Message;
-        this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@host.checkintitle:`);
+        if (err.Status == 404){
+          this.openSnackBar($localize`:@@shared.invalidDateTime:`, $localize`:@@host.checkintitle:`);
+        } else {
+          this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@host.checkintitle:`);
+        }
         return this.onError;
       })
     );

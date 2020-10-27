@@ -4825,6 +4825,10 @@ Cuando se escoge la opción de Check-Out Manual, el sistema no enviará encuesta
           <context context-type="linenumber">588</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="shared.invalidDateTime">
+        <source>Invalid date and time for this service</source>
+        <target state="translated">Fecha y hora invalida para el servicio seleccionado</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
