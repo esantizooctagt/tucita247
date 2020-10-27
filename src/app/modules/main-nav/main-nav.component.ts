@@ -51,6 +51,9 @@ export class MainNavComponent implements OnInit {
   collapseHeight = '42px';
   displayMode = 'flat';
   screenWidth: number;
+
+  displayReporting: boolean = false;
+  displayOperation: boolean = false;
   
   readonly imgPath = environment.bucket;
 
@@ -154,7 +157,7 @@ export class MainNavComponent implements OnInit {
     if (this.authService.language() != ''){
       this.language = this.authService.language() == "EN" ? "assets/images/icon/EN.svg" : "assets/images/icon/ES.svg";
     }
-    this.languageInit = this.authService.language() == "EN" ? "EN" : this.authService.language();
+    this.languageInit = this.authService.language();
     if (this.authService.avatar() != '') {
       this.avatar = this.imgPath + this.authService.avatar();
     }
@@ -222,6 +225,15 @@ export class MainNavComponent implements OnInit {
 
   loadAccess(){
     this.apps$ = this.roleService.getApplications((this.roleId != '' ? this.roleId : 1), this.businessId, this.languageInit).pipe(
+      map((res: any) => {
+        if (res.ApplicationId == 'APP01' || res.ApplicationId == 'APP02'){
+          this.displayReporting = true;
+        }
+        if (res.ApplicationId != 'APP01' && res.ApplicationId != 'APP02'){
+          this.displayOperation = true;
+        }
+        return res;
+      }),
       map(res => res.sort(function (a, b) {
         if (a.OrderApp > b.OrderApp) {
           return 1;

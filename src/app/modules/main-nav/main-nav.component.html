@@ -37,7 +37,7 @@
           <div class="mat-welcome" mat-line [routerLink]="['/welcome']" routerLinkActive="menu-active-welcome" i18n="Welcome@@main.welcome" (click)="(screenWidth < 500) ? drawer.toggle() : ''">Welcome</div>
         </mat-list-item>
         <ng-container class="" *ngIf="apps$ | async">
-          <mat-accordion multi="true" [displayMode]="displayMode">
+          <mat-accordion multi="true" [displayMode]="displayMode" *ngIf="displayReporting">
             <mat-expansion-panel class="no-shadow">
               <mat-expansion-panel-header class="specific-class" fxLayout="row" [expandedHeight]="expandHeight" [collapsedHeight]="collapseHeight">
                 <mat-icon svgIcon="reporting" class="icon-option"></mat-icon>
@@ -57,7 +57,7 @@
           </mat-accordion>
         </ng-container>
         <ng-container class="" *ngIf="apps$ | async">
-          <mat-accordion multi="true" [displayMode]="displayMode">
+          <mat-accordion multi="true" [displayMode]="displayMode" *ngIf="displayOperation">
             <mat-expansion-panel class="no-shadow">
               <mat-expansion-panel-header class="specific-class" fxLayout="row" [expandedHeight]="expandHeight" [collapsedHeight]="collapseHeight">
                 <mat-icon svgIcon="ope" class="icon-option"></mat-icon>
