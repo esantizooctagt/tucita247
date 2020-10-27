@@ -154,7 +154,7 @@ export class MainNavComponent implements OnInit {
     if (this.authService.language() != ''){
       this.language = this.authService.language() == "EN" ? "assets/images/icon/EN.svg" : "assets/images/icon/ES.svg";
     }
-    this.languageInit = this.authService.language() == "" ? "EN" : this.authService.language();
+    this.languageInit = this.authService.language() == "EN" ? "EN" : this.authService.language();
     if (this.authService.avatar() != '') {
       this.avatar = this.imgPath + this.authService.avatar();
     }
