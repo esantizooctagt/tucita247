@@ -11,6 +11,12 @@
     font-family: Montserrat;
     font-weight: 600;
 }
+.calendar-title{
+    text-align: center;
+    font-size: 20px;
+    font-family: Montserrat;
+    font-weight: 800;
+}
 .hour-available{
     color: green;
     text-align: center;
@@ -81,6 +87,10 @@
     border: 2px solid #e5e3e2;
     border-radius: 90%;
     margin-right: 5px;
+}
+.help-btn{
+    position: relative;
+    top: -3px;
 }
 ::ng-deep .mat-tooltip {
     background-color: #ff4f00;

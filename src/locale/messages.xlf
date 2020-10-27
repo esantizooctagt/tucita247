@@ -2,6 +2,125 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="schedule.calendar" datatype="html">
+        <source>Calender</source>
+        <context-group purpose="schedule">
+          <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="role.name" datatype="html">
+        <source>Name</source>
+        <context-group purpose="role">
+          <context context-type="sourcefile">src/app/modules/roles/role/role.component.html</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="poll.name" datatype="html">
+        <source>Name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/polls/poll/poll.component.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.averagetime" datatype="html">
+        <source>Average Time</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/dashboard/dashboard.component.html</context>
+          <context context-type="linenumber">93</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="service.color" datatype="html">
+        <source>Color Info</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/services/service/service.component.html</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="location.map" datatype="html">
+        <source>Zoom</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/locations/location/location.component.html</context>
+          <context context-type="linenumber">132</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="location.name" datatype="html">
+        <source>Name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/locations/location/location.component.html</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="businessdays.help" datatype="html">
+        <source>Just click on a date:</source>
+        <context-group purpose="business-days">
+          <context context-type="sourcefile">src/app/modules/business-days/business-days.component.html</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="businessope.daysoff" datatype="html">
+        <source>Days off</source>
+        <context-group purpose="business-days">
+          <context context-type="sourcefile">src/app/modules/business-days/business-days.component.html</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="business.newreason" datatype="html">
+        <source>New Reason</source>
+        <context-group purpose="business">
+          <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
+          <context context-type="linenumber">113</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="business.newtag" datatype="html">
+        <source>New tag</source>
+        <context-group purpose="business">
+          <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
+          <context context-type="linenumber">132</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="business.newcat" datatype="html">
+        <source>New category</source>
+        <context-group purpose="business">
+          <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
+          <context context-type="linenumber">87</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="business.additionaldata" datatype="html">
+        <source>Additional Data</source>
+        <context-group purpose="business">
+          <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
+          <context context-type="linenumber">75</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="business.busname" datatype="html">
+        <source>Business Name</source>
+        <context-group purpose="business">
+          <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="business.addressInfo" datatype="html">
+        <source>Address Info</source>
+        <context-group purpose="business">
+          <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="host.reset" datatype="html">
+        <source>Reset</source>
+        <context-group purpose="host">
+          <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="userloc.na" datatype="html">
+        <source>N/A</source>
+        <context-group purpose="userloc">
+          <context context-type="sourcefile">src/app/modules/userloc/userloc.component.html</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="shared.close" datatype="html">
         <source>Close</source>
         <context-group purpose="learn-dialog">

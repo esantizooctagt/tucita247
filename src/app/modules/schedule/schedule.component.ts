@@ -12,6 +12,7 @@ import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
 
 @Component({
   selector: 'app-schedule',
@@ -69,6 +70,7 @@ export class ScheduleComponent implements OnInit {
     private serviceService: ServService,
     private appointmentService: AppointmentService,
     public dialog: MatDialog,
+    private learnmore: MatDialog,
     private _snackBar: MatSnackBar,
     public datepipe: DatePipe
   ) {
@@ -100,6 +102,15 @@ export class ScheduleComponent implements OnInit {
     this._snackBar.open(message, action, {
       duration: 2000,
     });
+  }
+
+  openLearnMore(message: string): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      message: message
+    };
+    this.learnmore.open(LearnDialogComponent, dialogConfig);
   }
 
   ngOnInit(): void {
@@ -519,4 +530,18 @@ export class ScheduleComponent implements OnInit {
     return actual.padStart(2,'0');
   }
 
+  learnMore(textNumber: number){
+    let message = '';
+    switch(textNumber) { 
+      case 35: { 
+        message = $localize`:@@learnMore.LMCON35:`;
+        break; 
+      }
+      default: { 
+        message = ''; 
+        break; 
+      } 
+    } 
+    this.openLearnMore(message);
+  }
 }

@@ -1,7 +1,15 @@
 <div class="container-fluid h-100 main-background host-container d-none d-md-block d-lg-block d-xl-block">
     <ng-container *ngIf="operationHours$ | async"></ng-container>
+    <!-- <div class="row mt-2 mb-2 ml-2 mr-2"> -->
+    <div class="col-sm col-md col-lg pt-2 pb-2 calendar-title">CALENDAR
+        <!-- <h3 class="pl-3" i18n="Calendar|text in schedule@@schedule.calendar"></h3> -->
+        <button class="help-btn" mat-icon-button color="primary" (click)="learnMore(35)">
+            <mat-icon>help</mat-icon>
+        </button>
+    </div>
+    <!-- </div> -->
     <div class="row mt-2 mb-2">
-        <mat-form-field class="col-md-4 selection-line">
+        <mat-form-field class="col-md-4 pb-0 selection-line">
             <mat-select name="locations" [(value)]="locationData" (selectionChange)="onSelectLocation($event)">
                 <mat-optgroup *ngFor="let item of locationData$ | async">
                     {{item.Name}}

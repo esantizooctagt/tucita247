@@ -40,6 +40,8 @@ export class UserComponent implements OnInit {
   userDataList: string="";
   textStatus: string ="";
   displayRole: number = 1;
+  emailValue: string ='';
+  userIdValue: string = '';
 
   locs$: Observable<any[]>;
   // locations = [];
@@ -219,6 +221,8 @@ export class UserComponent implements OnInit {
               Is_Admin: user.Is_Admin,
               Status: user.Status
             });
+            this.userIdValue = user.User_Id;
+            this.emailValue = user.Email;
             this.textStatus = (user.Status == 0 ? $localize`:@@shared.disabled:` : $localize`:@@shared.enabled:`);
           } else {
             this.invalid = 1;
@@ -304,6 +308,7 @@ export class UserComponent implements OnInit {
             this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', LocationId: 'None', Is_Admin: 0, Status: 1});
             this.data.changeData('users');
             this.openDialog($localize`:@@users.usertexts:`, $localize`:@@userloc.usercreated:`, true, false, false);
+            this.router.navigate(['/users']);
           }),
           catchError(err => {
             this.spinnerService.stop(spinnerRef);
@@ -340,19 +345,18 @@ export class UserComponent implements OnInit {
   }
 
   onSendCode(){
-    let userId = this.userForm.value.UserId;
-    let email = this.userData;
+    let userId = this.userIdValue;
+    let email = this.emailValue;
     if (email == '' && userId == '') {
       return;
     }
     
     var spinnerRef = this.spinnerService.start($localize`:@@users.sendingcode:`);
     let dataForm =  {
-      "Email": email,
+      "UserId": userId,
       "BusinessId": this.businessId,
       "Password": ""
     }
-    // userName, '0', 
     this.userAct$ = this.usersService.putVerifCode('0', dataForm).pipe(
       tap((res: any) => { 
         this.spinnerService.stop(spinnerRef);

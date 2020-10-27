@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocationService, BusinessService, ServService } from '@app/services';
 import { AuthService } from '@app/core/services';
@@ -15,6 +15,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { ZXingScannerComponent, ZXingScannerModule } from '@zxing/ngx-scanner';
 import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
+import { MonitorService } from '@app/shared/monitor.service';
 
 @Component({
   selector: 'app-quick-checkin',
@@ -35,7 +36,6 @@ export class QuickCheckinComponent implements OnInit {
   currHour: number = 0;
   prevHour: number = 0;
   firstHour: number = 0;
-  closedLoc: number = 0;
   qtyPeople: number = 0;
   perLocation: number = 0;
   totLocation: number = 0;
@@ -54,6 +54,9 @@ export class QuickCheckinComponent implements OnInit {
   getLocInfo$: Observable<any>;
   openLoc$: Observable<any>;
   closedLoc$: Observable<any>;
+  resetLoc$: Observable<any>;
+  checkOutQR$: Observable<any>;
+  checkIn$: Observable<any>;
 
   Providers: any[] = [];
   services: []=[];
@@ -71,6 +74,12 @@ export class QuickCheckinComponent implements OnInit {
 
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
+  liveData$ = this.monitorService.syncMessage.pipe(
+    map((message: any) => {
+      this.syncData(message);
+    })
+  );
+
   constructor(
     private spinnerService: SpinnerService,
     private _snackBar: MatSnackBar,
@@ -82,7 +91,8 @@ export class QuickCheckinComponent implements OnInit {
     private fb: FormBuilder,
     private dialog: MatDialog,
     private learnmore: MatDialog,
-    private router: Router
+    private router: Router,
+    private monitorService: MonitorService
   ) { }
 
   clientForm = this.fb.group({
@@ -92,7 +102,7 @@ export class QuickCheckinComponent implements OnInit {
     Email: ['', [Validators.maxLength(200), Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
     DOB: [''],
     Gender: [''],
-    Preference: [''],
+    Preference: ['1'],
     Disability: [''],
     ProviderId:[''],
     Guests: ['1', [Validators.required, Validators.max(99), Validators.min(1)]]
@@ -129,6 +139,115 @@ export class QuickCheckinComponent implements OnInit {
     this.learnmore.open(LearnDialogComponent, dialogConfig);
   }
 
+  syncData(msg: any){
+    //NEW APPOINTMENT
+    if (msg == null) {return;}
+    console.log(msg);
+    if (msg['Tipo'] == 'MOVE'){
+      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 1){
+        if (msg['To'] == 'CHECKIN'){
+          this.qtyPeople = +this.qtyPeople+msg['Guests'];
+          this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+        }
+      }
+    }
+    if (msg['Tipo'] == 'CLOSED'){
+      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 1){
+        this.locationStatus = 0;
+        this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
+        this.closedLoc$ = this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
+          map((res: any) => {
+            if (res.Locs != null){
+              if (res.Locs.length > 0){
+                this.locations = res.Locs;
+                let indexLoc = this.locations.findIndex(x=>x.LocationId == this.locationId);
+                if (indexLoc < 0) { indexLoc = 0; }
+                this.locationId = res.Locs[indexLoc].LocationId;
+                this.doorId = res.Locs[indexLoc].Door;
+                this.totLocation = res.Locs[indexLoc].MaxCustomers;
+                this.Providers = res.Locs[indexLoc].Providers;
+                this.locName = res.Locs[indexLoc].Name;
+                this.locationStatus = res.Locs[indexLoc].Open;
+                this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
+                if (this.Providers.length > 0){
+                  this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
+                  this.providerId = this.Providers[0].ProviderId;
+                  this.providerId = "0";
+                }
+              }
+              return res;
+            } else {
+              // this.spinnerService.stop(spinnerRef);
+              this.openDialog($localize`:@@shared.error:`, $localize`:@@host.missloc:`, false, true, false);
+              this.router.navigate(['/']);
+              return;
+            }
+          })
+        );
+        this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.locationclosed:`, false, true, false);
+      }
+    }
+    if (msg['Tipo'] == 'RESET'){
+      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 1){
+        this.qtyPeople = 0;
+        this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+      }
+    }
+    if (msg['Tipo'] == 'OPEN'){
+      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 0){
+        this.locationStatus = 1;
+        this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
+
+        var spinnerRef = this.spinnerService.start($localize`:@@host.loadingopeloc:`);
+        this.openLoc$ = this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
+          map((res: any) => {
+            if (res != null){
+              this.qtyPeople = res.Quantity;
+              this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+              return res.Quantity.toString();
+            }
+          }),
+          switchMap(x => this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
+            map((res: any) => {
+              if (res.Locs != null){
+                if (res.Locs.length > 0){
+                  this.locations = res.Locs;
+                  let indexLoc = this.locations.findIndex(x=> x.LocationId == this.locationId);
+                  if (indexLoc < 0) { indexLoc = 0;}
+                  this.locationId = res.Locs[indexLoc].LocationId;
+                  this.doorId = res.Locs[indexLoc].Door;
+                  this.totLocation = res.Locs[indexLoc].MaxCustomers;
+                  this.Providers = res.Locs[indexLoc].Providers;
+                  this.locName = res.Locs[indexLoc].Name;
+                  this.locationStatus = res.Locs[indexLoc].Open;
+                  this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
+                  if (this.Providers.length > 0){
+                    this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
+                    this.providerId = "0";
+                  }
+                }
+                this.spinnerService.stop(spinnerRef);
+                return res;
+              } else {
+                this.spinnerService.stop(spinnerRef);
+                this.openDialog($localize`:@@shared.error:`, $localize`:@@host.missloc:`, false, true, false);
+                this.router.navigate(['/']);
+                return;
+              }
+            })
+          )),
+          catchError(err => {
+            this.spinnerService.stop(spinnerRef);
+            this.locationStatus = 0;
+            this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
+            this.onError = err.Message;
+            return this.onError;
+          })
+        );
+      }
+    }
+  }
+
   ngOnInit(): void {
     this.businessId = this.authService.businessId();
     this.userId = this.authService.userId();
@@ -146,8 +265,7 @@ export class QuickCheckinComponent implements OnInit {
             this.Providers = res.Locs[0].Providers;
             this.locName = res.Locs[0].Name;
             this.locationStatus = res.Locs[0].Open;
-            this.closedLoc = res.Locs[0].Closed;
-            this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+            this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
             if (this.Providers.length > 0){
               this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; 
               this.providerId = "0";
@@ -162,13 +280,6 @@ export class QuickCheckinComponent implements OnInit {
           return;
         }
       }),
-      // switchMap(val => val = this.serviceService.getServicesProvider(this.businessId, this.providerId).pipe(
-      //   map((res: any) =>{
-      //     this.services = res.services.filter(x => x.Selected === 1);
-      //     return res;
-      //   })
-      //   )
-      // ),
       switchMap(v => this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
         map((res: any) => {
           if (res != null){
@@ -228,18 +339,24 @@ export class QuickCheckinComponent implements OnInit {
     dialogRef.height = '575px';
     dialogRef.data = {guests: 0, title: $localize`:@@host.checkoutpop:`, tipo: 2, businessId: this.businessId, locationId: this.locationId, providerId: this.providerId};
     const qrDialog = this.dialog.open(VideoDialogComponent, dialogRef);
-    qrDialog.afterClosed().subscribe(result => {
-      if (result != undefined) {
-        let qtyGuests = result.Guests;
-        this.qrCode = result.qrCode;
-        if  (this.qrCode != ''){
-          this.checkOutAppointment(this.qrCode);
-        } 
-        if (qtyGuests > 0 && this.qrCode == '') {
-          this.setManualCheckOut(qtyGuests);
+    this.checkOutQR$ = qrDialog.afterClosed().pipe(
+      map((result: any) => {
+        if (result != undefined) {
+          let qtyGuests = result.Guests;
+          this.qrCode = result.qrCode;
+          if  (this.qrCode != ''){
+            this.checkOutAppointment(this.qrCode);
+          } 
+          if (qtyGuests > 0 && this.qrCode == '') {
+            this.setManualCheckOut(qtyGuests);
+          }
         }
-      }
-    });
+        return result;
+      }),
+      catchError(err => {
+        return err;
+      })
+    );
   }
 
   setManualCheckOut(qtyOut){
@@ -311,15 +428,21 @@ export class QuickCheckinComponent implements OnInit {
     dialogRef.height = '575px';
     dialogRef.data = {guests: 0, title: $localize`:@@host.checkintitle:`, tipo: 3 };
     const qrDialog = this.dialog.open(VideoDialogComponent, dialogRef);
-    qrDialog.afterClosed().subscribe(result => {
-      if (result != undefined) {
-        this.qrCode = result.qrCode;
-        let guestsAppo = result.Guests;
-        if (this.qrCode != '' && guestsAppo > 0){
-          this.checkInAppointment(this.qrCode, guestsAppo);
+    this.checkIn$ = qrDialog.afterClosed().pipe(
+      map((result: any) => {
+        if (result != undefined) {
+          this.qrCode = result.qrCode;
+          let guestsAppo = result.Guests;
+          if (this.qrCode != '' && guestsAppo > 0){
+            this.checkInAppointment(this.qrCode, guestsAppo);
+          }
         }
-      }
-    });
+        return result;
+      }),
+      catchError(err =>{
+        return err;
+      })
+    );
   }
 
   checkInAppointment(qrCode: string, guests: number){
@@ -404,7 +527,7 @@ export class QuickCheckinComponent implements OnInit {
   }
 
   onCancelAddAppointment(){
-    this.clientForm.reset({Phone:'', Name:'', ServiceId:'', Email:'', DOB:'', Gender:'', Preference:'', Disability:'', ProviderId:'', Guests: 1});
+    this.clientForm.reset({Phone:'', Name:'', ServiceId:'', Email:'', DOB:'', Gender:'', Preference:'1', Disability:'', ProviderId:'', Guests: 1});
     this.showCard = false;
   }
 
@@ -450,7 +573,7 @@ export class QuickCheckinComponent implements OnInit {
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
       map((res: any) => {
         this.spinnerService.stop(spinnerRef);
-        this.clientForm.reset({Phone:'', Name:'', ServiceId:'', Email:'', DOB:'', Gender:'', Preference:'', Disability:'', ProviderId:'', Guests: 1});
+        this.clientForm.reset({Phone:'', Name:'', ServiceId:'', Email:'', DOB:'', Gender:'', Preference:'1', Disability:'', ProviderId:'', Guests: 1});
         this.showCard = false;
         this.openSnackBar($localize`:@@lite.walkinadded:`,$localize`:@@host.checkintitle:`);
         return res.Code;
@@ -525,8 +648,7 @@ export class QuickCheckinComponent implements OnInit {
       this.Providers = data[0].Providers;
       this.locName = data[0].Name;
       this.locationStatus = data[0].Open;
-      this.closedLoc = data[0].Closed;
-      this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+      this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
       if (data[0].Providers.length > 0){
         this.Providers = data[0].Providers;
         if (this.Providers.length > 0){
@@ -597,10 +719,7 @@ export class QuickCheckinComponent implements OnInit {
   onServiceChange(event){
     let res = this.Providers.filter(val => val.ProviderId == event.value);
     if (res.length > 0){
-      // this.locationStatus = res[0].Open;
-      // this.closedLoc = res[0].Closed;
       this.providerId = res[0].ProviderId;
-      // this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
     }
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadinglocs:`);
     this.getLocInfo$ = this.businessService.getBusinessOpeHours(this.businessId, this.locationId).pipe(
@@ -673,6 +792,22 @@ export class QuickCheckinComponent implements OnInit {
     );
   }
 
+  resetLocation(){
+    var spinnerRef = this.spinnerService.start($localize`:@@host.loadinglocs:`);
+    this.resetLoc$ = this.locationService.updateClosedLocation(this.locationId, this.businessId, 0).pipe(
+      map((res: any) => {
+        if (res.Code == 200){
+          this.qtyPeople = 0;
+        }
+        this.spinnerService.stop(spinnerRef);
+      }),
+      catchError(err =>{
+        this.spinnerService.stop(spinnerRef);
+        return err;
+      })
+    );
+  }
+
   openLocation(){
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadingopeloc:`);
     this.openLoc$ = this.locationService.updateOpenLocation(this.locationId, this.businessId).pipe(
@@ -680,8 +815,7 @@ export class QuickCheckinComponent implements OnInit {
         if (res != null){
           if (res['Business'].OPEN == 1){
             this.locationStatus = 1;
-            this.closedLoc = 0;
-            this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+            this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
             this.spinnerService.stop(spinnerRef);
           }
         }
@@ -711,7 +845,7 @@ export class QuickCheckinComponent implements OnInit {
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
         this.locationStatus = 0;
-        this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+        this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
         this.onError = err.Message;
         return this.onError;
       })
@@ -734,26 +868,48 @@ export class QuickCheckinComponent implements OnInit {
     dialogConfig.maxWidth = '280px';
 
     const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-      if(result != undefined){
-        var spinnerRef = this.spinnerService.start($localize`:@@host.closingloc:`);
-        this.closedLoc$ = this.locationService.updateClosedLocation(this.locationId, this.businessId, (result == true ? 1 : 0)).pipe(
+    let valueSel;
+    this.closedLoc$ = dialogRef.afterClosed().pipe(
+      map(result => {
+        if (!result) {
+          throw 'exit process';
+        }
+        return result;
+      }),
+      switchMap(x => this.locationService.updateClosedLocation(this.locationId, this.businessId, 1).pipe(
           map((res: any) => {
             if (res != null){
               if (res['Business'].OPEN == 0){
                 this.locationStatus = 0;
-                this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
-                this.spinnerService.stop(spinnerRef);
+                this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
               }
             }
           }),
           switchMap(x => this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
             map((res: any) => {
               if (res.Locs != null){
-                this.Providers = res.Locs.Providers;
+                if (res.Locs.length > 0){
+                  this.locations = res.Locs;
+                  let indexLoc = this.locations.findIndex(x=>x.LocationId == this.locationId);
+                  if (indexLoc < 0) { indexLoc = 0;}
+                  this.locationId = res.Locs[indexLoc].LocationId;
+                  this.doorId = res.Locs[indexLoc].Door;
+                  this.totLocation = res.Locs[indexLoc].MaxCustomers;
+                  this.Providers = res.Locs[indexLoc].Providers;
+                  this.locName = res.Locs[indexLoc].Name;
+                  this.locationStatus = res.Locs[indexLoc].Open;
+                  this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
+                  if (this.Providers.length > 0){
+                    this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
+                    this.providerId = this.Providers[0].ProviderId;
+                    this.providerId = "0";
+                  }
+                }
                 return res;
               } else {
+                // this.spinnerService.stop(spinnerRef);
+                this.openDialog($localize`:@@shared.error:`, $localize`:@@host.missloc:`, false, true, false);
+                this.router.navigate(['/']);
                 return;
               }
             })
@@ -763,23 +919,22 @@ export class QuickCheckinComponent implements OnInit {
             this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
               map((res: any) => {
                 if (res != null){
-                  this.qtyPeople = res.Quantity;
+                  this.qtyPeople = +res.Quantity;
                   this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
                   return res.Quantity.toString();
                 }
               })
             )
-          ),
-          catchError(err => {
-            this.spinnerService.stop(spinnerRef);
-            this.locationStatus = 1;
-            this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
-            this.onError = err.Message;
-            return this.onError;
-          })
-        );
-      }
-    });
+          )
+        )
+      ),
+      catchError(err => {
+        this.locationStatus = 1;
+        this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
+        console.log(err);
+        return of(err);
+      })
+    );
   }
 
   getTime(): string{

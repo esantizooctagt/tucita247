@@ -8,6 +8,8 @@ import { Observable } from 'rxjs';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
+import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-business-days',
@@ -56,14 +58,23 @@ export class BusinessDaysComponent implements OnInit {
     private route: ActivatedRoute,
     private _snackBar: MatSnackBar,
     private businessService: BusinessService,
-    private spinnerService: SpinnerService
-    
+    private spinnerService: SpinnerService,
+    private learnmore: MatDialog
   ) { }
 
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 2000,
     });
+  }
+
+  openLearnMore(message: string): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      message: message
+    };
+    this.learnmore.open(LearnDialogComponent, dialogConfig);
   }
 
   ngOnInit(): void {
@@ -343,6 +354,21 @@ export class BusinessDaysComponent implements OnInit {
         return err;
       })
     );
+  }
+
+  learnMore(textNumber: number){
+    let message = '';
+    switch(textNumber) { 
+      case 11: { 
+        message = $localize`:@@learnMore.LMCON11:`;
+        break; 
+      }
+      default: { 
+        message = ''; 
+        break; 
+      } 
+    } 
+    this.openLearnMore(message);
   }
 
 }

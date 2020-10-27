@@ -39,6 +39,19 @@
     max-height: 290px;
     min-height: 245px;
 }
+.blink-qr{
+    background-color: #ff4f00;
+    color: #fff;
+    animation: blink 1s linear infinite;
+}
+.standard-qr{
+    background-color: #fff;
+}
+@keyframes blink{
+    0%{opacity: 0;}
+    50%{opacity: .5;}
+    100%{opacity: 1;}
+}
 ::ng-deep video {
     max-height: 290px !important;
     min-height: 245px;

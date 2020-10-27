@@ -12,7 +12,7 @@
                 <form [formGroup]="businessForm">
                     <ng-template matStepLabel i18n="Business|Business Label@@business.businesslabel">Business</ng-template>
                     <mat-tab-group mat-align-tabs="start">
-                        <mat-tab label="Address Info">
+                        <mat-tab label="Address Info" i18n-label="Address Info@@business.addressInfo">
                             <mat-form-field class="pt-3">
                                 <input matInput i18n-placeholder="Business Name|Business name placeholder@@business.busname" placeholder="Business Name" maxlength="500" minlength="3"
                                     formControlName="Name" [errorStateMatcher]="confirmValidParentMatcher" required>
@@ -65,6 +65,9 @@
                             </div> -->
                             <div class="row">
                                 <div class="col-md mt-3 mb-3">
+                                    <div i18n="Map info|text in location@@location.map">
+                                        Zoom
+                                    </div>
                                     <agm-map [latitude]="lat" [zoom]="zoom" [longitude]="lng">
                                         <agm-marker [latitude]="lat" [longitude]="lng" [markerDraggable]="true"
                                             (dragEnd)="markerDragEnd($event)"></agm-marker>
@@ -72,7 +75,7 @@
                                 </div>
                             </div>
                         </mat-tab>
-                        <mat-tab label="Additional Data">
+                        <mat-tab label="Additional Data" i18n-label="Additional Data@@business.additionaldata">
                             <div class="row pt-3">
                                 <mat-form-field class="col-md-6">
                                     <ng-container *ngIf="allCategories"></ng-container>
@@ -84,7 +87,7 @@
                                             {{ category.Name }}
                                             <mat-icon matChipRemove *ngIf="removableCategory">cancel</mat-icon>
                                         </mat-chip>
-                                        <input placeholder="New category..." #categoryInput 
+                                        <input i18n-placeholder="New category@@business.newcat" placeholder="New category" #categoryInput 
                                             [matAutocomplete]="autoCategory"
                                             [matChipInputFor]="chipCategoriesList"
                                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [formControl]="Categories">
@@ -110,7 +113,7 @@
                                                 <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                                             </mat-chip>
                                         </ng-container>
-                                        <input placeholder="New Reason..." [matChipInputFor]="chipReasons"
+                                        <input i18n-placeholder="New Reason@@business.newreason" placeholder="New Reason..." [matChipInputFor]="chipReasons"
                                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                                             [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addReason($event)">
                                         <button type="button" mat-icon-button color="primary" matSuffix (click)="learnMore(4)">
@@ -129,7 +132,7 @@
                                                 <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                                             </mat-chip>
                                         </ng-container>
-                                        <input placeholder="New Tag..." [matChipInputFor]="chipTags"
+                                        <input i18n-placeholder="New Tag@@business.newtag" placeholder="New Tag" [matChipInputFor]="chipTags"
                                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                                             [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addTag($event)">
                                         <button type="button" mat-icon-button color="primary" matSuffix (click)="learnMore(3)">

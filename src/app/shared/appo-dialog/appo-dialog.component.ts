@@ -65,7 +65,7 @@ export class AppoDialogComponent implements OnInit {
     DOB: [''],
     Gender: [''],
     Door: [''],
-    Preference: [''],
+    Preference: ['1'],
     ServiceId: ['',[Validators.required]],
     Disability: [''],
     Guests: ['1', [Validators.required, Validators.max(99), Validators.min(1)]]

@@ -34,7 +34,7 @@
                         <mat-cell *matCellDef="let element; let i = index" class="col-md-2"
                             [formGroup]="element">
                             <mat-select formControlName="LocationId" (selectionChange)="changeLocation($event, i)">
-                                <mat-option class="" value="0">N/A</mat-option>
+                                <mat-option class="" value="0" i18n="NA@@userloc.na">N/A</mat-option>
                                 <mat-option *ngFor="let res of locations" [value]="res.LocationId">
                                     {{res.Name}}
                                 </mat-option>

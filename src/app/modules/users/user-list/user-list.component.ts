@@ -36,7 +36,7 @@ export class UserListComponent implements OnInit {
 
   displayYesNo: boolean = false;
 
-  displayedColumns = ['Name', 'Email', 'Actions'];
+  displayedColumns = ['Name', 'Email', 'Status', 'Actions'];
   businessId: string = '';
   changeData: string;
 
@@ -54,7 +54,8 @@ export class UserListComponent implements OnInit {
     return this.fb.group({
       UserId: [''],
       Name: [''],
-      Email: ['']
+      Email: [''],
+      Status: ['']
     });
   }
 
@@ -162,7 +163,8 @@ export class UserListComponent implements OnInit {
       formArray.push(this.fb.group({
           UserId: res.User_Id,
           Name: res.First_Name + ' ' + res.Last_Name,
-          Email: res.Email
+          Email: res.Email,
+          Status: res.Status
         })
       );
       this.pollTable.renderRows();

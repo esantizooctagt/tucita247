@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Observable } from 'rxjs';
+import { interval, Observable, of } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocationService, ReasonsService, BusinessService, AppointmentService, ServService } from '@app/services';
 import { AuthService } from '@app/core/services';
@@ -46,6 +46,8 @@ export class HostComponent implements OnInit {
   openLoc$: Observable<any>;
   closedLoc$: Observable<any>;
   manualCheckOut$: Observable<any>;
+  newTime$: Observable<any>;
+  resetLoc$: Observable<any>;
 
   showMessageSche=[];
   showMessageWalk=[];
@@ -82,7 +84,7 @@ export class HostComponent implements OnInit {
   firstHour: number = 0;
   bucketInterval: number = 0;
   manualCheckOut: number = 0;
-  qtyPeople: string = '';
+  qtyPeople: number = 0;
   perLocation: number = 0;
   totLocation: number = 0;
   reasons: Reason[]=[];
@@ -93,7 +95,6 @@ export class HostComponent implements OnInit {
   showDoorInfo: boolean = false;
   showApp: boolean = false;
   locationStatus: number = 0;
-  closedLoc: number = 0;
   textOpenLocation: string = '';
   locName: string = '';
 
@@ -104,13 +105,6 @@ export class HostComponent implements OnInit {
   qrCode: string = '';
 
   onError: string = '';
-
-  lastItemWalk: string = '_';
-  lastItemPre: string = '_';
-  lastItem: string = '_';
-  appoIdWalk: string = '_';
-  appoIdPre: string = '_';
-  appoIdSche: string = '_';
 
   manualGuests: number =  1;
 
@@ -182,7 +176,7 @@ export class HostComponent implements OnInit {
     Email: ['', [Validators.maxLength(200), Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
     DOB: [''],
     Gender: [''],
-    Preference: [''],
+    Preference: ['1'],
     Disability: [''],
     Guests: ['1', [Validators.required, Validators.max(99), Validators.min(1)]],
     ProviderId: ['']
@@ -229,7 +223,7 @@ export class HostComponent implements OnInit {
     if (msg == null) {return;}
     console.log(msg);
     if (msg['Tipo'] == 'APPO'){
-      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.closedLoc == 0 && this.locationStatus == 1){
+      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 1){
         if (this.schedule.filter(x => x.AppId ==  msg['AppId']).length == 0){
           let hora = msg['DateAppo'];
           let data = {
@@ -261,7 +255,7 @@ export class HostComponent implements OnInit {
       }  
     }
     if (msg['Tipo'] == 'MESS'){
-      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.closedLoc == 0 && this.locationStatus == 1){
+      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 1){
         let resScheMess = this.schedule.findIndex(x => x.AppId === msg['AppId']);
         if (resScheMess >= 0){
           this.schedule[resScheMess].Unread = "H";
@@ -281,7 +275,7 @@ export class HostComponent implements OnInit {
       }
     }
     if (msg['Tipo'] == 'CANCEL'){
-      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.closedLoc == 0 && this.locationStatus == 1){
+      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 1){
         var verifSche = this.schedule.findIndex(x => x.AppId === msg['AppId']);
         if (verifSche >= 0){this.schedule.splice(verifSche, 1);}
 
@@ -296,14 +290,8 @@ export class HostComponent implements OnInit {
       }
     }
     if (msg['Tipo'] == 'MOVE'){
-      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.closedLoc == 0 && this.locationStatus == 1){
+      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 1){
         if (msg['To'] == 'PRECHECK'){
-          let yearCurr = this.getYear();
-          let monthCurr = this.getMonth();
-          let dayCurr = this.getDay();
-          let hourCurr = this.getActTime();
-          let timeCheck = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourCurr.replace(':','-');
-
           var verifSche = this.schedule.findIndex(x => x.AppId === msg['AppId']);
           if (verifSche >= 0){
             var dataSche = this.schedule[verifSche];
@@ -322,7 +310,7 @@ export class HostComponent implements OnInit {
               DateAppo: dataSche['DateAppo'],
               Type: dataSche['Type'],
               Unread: dataSche['Unread'],
-              CheckInTime: timeCheck,
+              CheckInTime: msg['Time'],
               ElapsedTime: "0"
             }
             this.preCheckIn.push(data);
@@ -346,7 +334,7 @@ export class HostComponent implements OnInit {
               DateAppo: dataWalk['DateAppo'],
               Type: dataWalk['Type'],
               Unread: dataWalk['Unread'],
-              CheckInTime: timeCheck,
+              CheckInTime: msg['Time'],
               ElapsedTime: "0"
             }
             this.preCheckIn.push(data);
@@ -370,13 +358,12 @@ export class HostComponent implements OnInit {
               DateAppo: dataPrev['DateAppo'],
               Type: dataPrev['Type'],
               Unread: dataPrev['Unread'],
-              CheckInTime: timeCheck,
+              CheckInTime: msg['Time'],
               ElapsedTime: "0"
             }
             this.preCheckIn.push(data);
           }
         }
-
         if (msg['To'] == 'CHECKIN'){
           var verifSche = this.schedule.findIndex(x => x.AppId === msg['AppId']);
           if (verifSche >= 0){
@@ -396,7 +383,7 @@ export class HostComponent implements OnInit {
     if (msg['Tipo'] == 'CLOSED'){
       if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 1){
         this.locationStatus = 0;
-        this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+        this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
         this.previous = [];
         this.schedule = [];
         this.walkIns = [];
@@ -406,15 +393,16 @@ export class HostComponent implements OnInit {
             if (res.Locs != null){
               if (res.Locs.length > 0){
                 this.locations = res.Locs;
-                this.locationId = res.Locs[0].LocationId;
-                this.doorId = res.Locs[0].Door;
-                this.manualCheckOut = res.Locs[0].ManualCheckOut;
-                this.totLocation = res.Locs[0].MaxCustomers;
-                this.Providers = res.Locs[0].Providers;
-                this.locName = res.Locs[0].Name;
-                this.locationStatus = res.Locs[0].Open;
-                this.closedLoc = res.Locs[0].Closed;
-                this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+                let indexLoc = this.locations.findIndex(x=>x.LocationId == this.locationId);
+                if (indexLoc < 0) { indexLoc = 0; }
+                this.locationId = res.Locs[indexLoc].LocationId;
+                this.doorId = res.Locs[indexLoc].Door;
+                this.manualCheckOut = res.Locs[indexLoc].ManualCheckOut;
+                this.totLocation = res.Locs[indexLoc].MaxCustomers;
+                this.Providers = res.Locs[indexLoc].Providers;
+                this.locName = res.Locs[indexLoc].Name;
+                this.locationStatus = res.Locs[indexLoc].Open;
+                this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
                 if (this.Providers.length > 0){
                   this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
                   this.providerId = this.Providers[0].ProviderId;
@@ -431,6 +419,72 @@ export class HostComponent implements OnInit {
           })
         );
         this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.locationclosed:`, false, true, false);
+      }
+    }
+    if (msg['Tipo'] == 'RESET'){
+      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 1){
+        this.qtyPeople = 0;
+        this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+      }
+    }
+    if (msg['Tipo'] == 'OPEN'){
+      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 0){
+        this.locationStatus = 1;
+        this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
+        this.getAppointmentsSche();
+        this.getAppointmentsWalk();
+        this.getAppointmentsPre();
+
+        var spinnerRef = this.spinnerService.start($localize`:@@host.loadingopeloc:`);
+        this.openLoc$ = this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
+          map((res: any) => {
+            if (res != null){
+              this.qtyPeople = res.Quantity;
+              this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+              return res.Quantity.toString();
+            }
+          }),
+          switchMap(x => this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
+            map((res: any) => {
+              if (res.Locs != null){
+                // this.Providers = res.Locs.Providers;
+                // return res;
+                if (res.Locs.length > 0){
+                  this.locations = res.Locs;
+                  let indexLoc = this.locations.findIndex(x=> x.LocationId == this.locationId);
+                  if (indexLoc < 0) { indexLoc = 0;}
+                  this.locationId = res.Locs[indexLoc].LocationId;
+                  this.doorId = res.Locs[indexLoc].Door;
+                  this.manualCheckOut = res.Locs[indexLoc].ManualCheckOut;
+                  this.totLocation = res.Locs[indexLoc].MaxCustomers;
+                  this.Providers = res.Locs[indexLoc].Providers;
+                  this.locName = res.Locs[indexLoc].Name;
+                  this.locationStatus = res.Locs[indexLoc].Open;
+                  this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
+                  if (this.Providers.length > 0){
+                    this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
+                    // this.providerId = this.Providers[0].ProviderId;
+                    this.providerId = "0";
+                  }
+                }
+                this.spinnerService.stop(spinnerRef);
+                return res;
+              } else {
+                this.spinnerService.stop(spinnerRef);
+                this.openDialog($localize`:@@shared.error:`, $localize`:@@host.missloc:`, false, true, false);
+                this.router.navigate(['/']);
+                return;
+              }
+            })
+          )),
+          catchError(err => {
+            this.spinnerService.stop(spinnerRef);
+            this.locationStatus = 0;
+            this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
+            this.onError = err.Message;
+            return this.onError;
+          })
+        );
       }
     }
   }
@@ -455,9 +509,8 @@ export class HostComponent implements OnInit {
             this.totLocation = res.Locs[0].MaxCustomers;
             this.Providers = res.Locs[0].Providers;
             this.locName = res.Locs[0].Name;
-            this.locationStatus = res.Locs[0].Open;
-            this.closedLoc = res.Locs[0].Closed;
-            this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+            this.locationStatus = res.Locs[0].Open;  //0 CLOSED, 1 OPEN
+            this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
             if (this.Providers.length > 0){
               this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
               // this.providerId = this.Providers[0].ProviderId;
@@ -472,13 +525,6 @@ export class HostComponent implements OnInit {
           return;
         }
       }),
-      // switchMap(val => val = this.serviceService.getServicesProvider(this.businessId, this.providerId).pipe(
-      //     map((res: any) =>{
-      //       this.services = res.services.filter(x => x.Selected === 1);
-      //       return res;
-      //     })
-      //   )
-      // ),
       switchMap(val => val = this.businessService.getBusinessOpeHours(this.businessId, this.locationId)),
       map((res: any) => {
         if (res.Code == 200) {
@@ -522,7 +568,7 @@ export class HostComponent implements OnInit {
         this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
       }),
       map(_ => {
-        if (this.locationId != '' && this.locationStatus == 1 && this.closedLoc == 0){
+        if (this.locationId != '' && this.locationStatus == 1){
           this.getAppointmentsSche();
           this.getAppointmentsWalk();
           this.getAppointmentsPre();
@@ -550,33 +596,34 @@ export class HostComponent implements OnInit {
       })
     );
 
-    setInterval(() => {
-      this.preCheckIn.forEach(res => {
-        let options = {
-          timeZone: 'America/Puerto_Rico',
-          hour: 'numeric',
-          minute: 'numeric',
-          second: 'numeric',
-          hour12: false,
-        },
-        formatter = new Intl.DateTimeFormat([], options);
-        var actual = formatter.format(new Date());
-        var d = new Date();
-        d.setHours(+res.CheckInTime.substring(11,13));
-        d.setMinutes(+res.CheckInTime.substring(14,16));
-        
-        var a = new Date();
-        a.setHours(+actual.substring(0,2));
-        a.setMinutes(+actual.substring(3,5));
-        
-        var diff = (+a - +d); 
-        var diffHrs = Math.floor((diff % 86400000) / 3600000); // hours
-        var diffMins = Math.round(((diff % 86400000) % 3600000) / 60000); // minutes
-        var diff = (diffHrs*60)+diffMins;
-        res.ElapsedTime = diff.toString();
-      });
-
-    }, 60000);
+    this.newTime$ = interval(60000).pipe(
+      map(() => {
+        this.preCheckIn.forEach(res => {
+          let options = {
+            timeZone: 'America/Puerto_Rico',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            hour12: false,
+          },
+          formatter = new Intl.DateTimeFormat([], options);
+          var actual = formatter.format(new Date());
+          var d = new Date();
+          d.setHours(+res.CheckInTime.substring(11,13));
+          d.setMinutes(+res.CheckInTime.substring(14,16));
+          
+          var a = new Date();
+          a.setHours(+actual.substring(0,2));
+          a.setMinutes(+actual.substring(3,5));
+          
+          var diff = (+a - +d); 
+          var diffHrs = Math.floor((diff % 86400000) / 3600000); // hours
+          var diffMins = Math.round(((diff % 86400000) % 3600000) / 60000); // minutes
+          var diff = (diffHrs*60)+diffMins;
+          res.ElapsedTime = diff.toString();
+        })
+      })
+    );
 
     setInterval(() => {
       for (var i=0; i<=this.buckets.length-1; i++){
@@ -588,14 +635,6 @@ export class HostComponent implements OnInit {
         }
       }
     }, 1200000);
-  
-    setInterval(() => {
-      if (this.locationId != '' && this.locationStatus == 1 && this.closedLoc == 0){
-        this.getAppointmentsSche();
-        this.getAppointmentsWalk();
-        this.getAppointmentsPre();
-      }
-    }, 3500000);
   }
 
   openLocation(){
@@ -605,11 +644,7 @@ export class HostComponent implements OnInit {
         if (res != null){
           if (res['Business'].OPEN == 1){
             this.locationStatus = 1;
-            this.closedLoc = 0;
-            this.lastItem = "_";
-            this.lastItemPre = "_";
-            this.lastItemWalk = "_";
-            this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+            this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
             this.spinnerService.stop(spinnerRef);
             this.getAppointmentsSche();
             this.getAppointmentsWalk();
@@ -632,19 +667,18 @@ export class HostComponent implements OnInit {
       switchMap(x => this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
         map((res: any) => {
           if (res.Locs != null){
-            // this.Providers = res.Locs.Providers;
-            // return res;
             if (res.Locs.length > 0){
               this.locations = res.Locs;
-              this.locationId = res.Locs[0].LocationId;
-              this.doorId = res.Locs[0].Door;
-              this.manualCheckOut = res.Locs[0].ManualCheckOut;
-              this.totLocation = res.Locs[0].MaxCustomers;
-              this.Providers = res.Locs[0].Providers;
-              this.locName = res.Locs[0].Name;
-              this.locationStatus = res.Locs[0].Open;
-              this.closedLoc = res.Locs[0].Closed;
-              this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+              let indexLoc = this.locations.findIndex(x=> x.LocationId == this.locationId);
+              if (indexLoc < 0) { indexLoc = 0;}
+              this.locationId = res.Locs[indexLoc].LocationId;
+              this.doorId = res.Locs[indexLoc].Door;
+              this.manualCheckOut = res.Locs[indexLoc].ManualCheckOut;
+              this.totLocation = res.Locs[indexLoc].MaxCustomers;
+              this.Providers = res.Locs[indexLoc].Providers;
+              this.locName = res.Locs[indexLoc].Name;
+              this.locationStatus = res.Locs[indexLoc].Open;
+              this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
               if (this.Providers.length > 0){
                 this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
                 // this.providerId = this.Providers[0].ProviderId;
@@ -663,9 +697,25 @@ export class HostComponent implements OnInit {
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
         this.locationStatus = 0;
-        this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+        this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
         this.onError = err.Message;
         return this.onError;
+      })
+    );
+  }
+
+  resetLocation(){
+    var spinnerRef = this.spinnerService.start($localize`:@@host.loadinglocs:`);
+    this.resetLoc$ = this.locationService.updateClosedLocation(this.locationId, this.businessId, 0).pipe(
+      map((res: any) => {
+        if (res.Code == 200){
+          this.qtyPeople = 0;
+        }
+        this.spinnerService.stop(spinnerRef);
+      }),
+      catchError(err =>{
+        this.spinnerService.stop(spinnerRef);
+        return err;
       })
     );
   }
@@ -689,17 +739,17 @@ export class HostComponent implements OnInit {
     let valueSel;
     this.closedLoc$ = dialogRefClosed.afterClosed().pipe(
       map(result => {
-        valueSel = result;
+        if (!result) {
+          throw 'exit process';
+        }
         return result;
       }),
-      switchMap(x => this.locationService.updateClosedLocation(this.locationId, this.businessId, (valueSel == true ? 1 : 0)).pipe(
+      switchMap(x => this.locationService.updateClosedLocation(this.locationId, this.businessId, 1).pipe(
           map((res: any) => {
-            // var spinnerRef = this.spinnerService.start($localize`:@@host.closingloc:`);
             if (res != null){
               if (res['Business'].OPEN == 0){
                 this.locationStatus = 0;
-                this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
-                // this.spinnerService.stop(spinnerRef);
+                this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
                 this.previous = [];
                 this.schedule = [];
                 this.walkIns = [];
@@ -712,15 +762,16 @@ export class HostComponent implements OnInit {
               if (res.Locs != null){
                 if (res.Locs.length > 0){
                   this.locations = res.Locs;
-                  this.locationId = res.Locs[0].LocationId;
-                  this.doorId = res.Locs[0].Door;
-                  this.manualCheckOut = res.Locs[0].ManualCheckOut;
-                  this.totLocation = res.Locs[0].MaxCustomers;
-                  this.Providers = res.Locs[0].Providers;
-                  this.locName = res.Locs[0].Name;
-                  this.locationStatus = res.Locs[0].Open;
-                  this.closedLoc = res.Locs[0].Closed;
-                  this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+                  let indexLoc = this.locations.findIndex(x=>x.LocationId == this.locationId);
+                  if (indexLoc < 0) { indexLoc = 0;}
+                  this.locationId = res.Locs[indexLoc].LocationId;
+                  this.doorId = res.Locs[indexLoc].Door;
+                  this.manualCheckOut = res.Locs[indexLoc].ManualCheckOut;
+                  this.totLocation = res.Locs[indexLoc].MaxCustomers;
+                  this.Providers = res.Locs[indexLoc].Providers;
+                  this.locName = res.Locs[indexLoc].Name;
+                  this.locationStatus = res.Locs[indexLoc].Open;
+                  this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
                   if (this.Providers.length > 0){
                     this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
                     this.providerId = this.Providers[0].ProviderId;
@@ -741,7 +792,7 @@ export class HostComponent implements OnInit {
             this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
               map((res: any) => {
                 if (res != null){
-                  this.qtyPeople = res.Quantity;
+                  this.qtyPeople = +res.Quantity;
                   this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
                   return res.Quantity.toString();
                 }
@@ -749,7 +800,13 @@ export class HostComponent implements OnInit {
             )
           )
         )
-      )  
+      ),
+      catchError(err => {
+        this.locationStatus = 1;
+        this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
+        console.log(err);
+        return of(err);
+      })
     );
   }
 
@@ -798,7 +855,7 @@ export class HostComponent implements OnInit {
         this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
           map((res: any) => {
             if (res != null){
-              this.qtyPeople = res.Quantity;
+              this.qtyPeople = +res.Quantity;
               this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
               return res.Quantity.toString();
             }
@@ -873,7 +930,7 @@ export class HostComponent implements OnInit {
               this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
                 map((res: any) => {
                   if (res != null){
-                    this.qtyPeople = res.Quantity;
+                    this.qtyPeople = +res.Quantity;
                     this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
                     return res.Quantity.toString();
                   }
@@ -902,6 +959,7 @@ export class HostComponent implements OnInit {
       this.openSnackBar($localize`:@@host.invalidTime:`, $localize`:@@shared.error:`);
       return;
     }
+    if (!this.clientForm.valid) {return;}
     //AGREGAR WALK IN Y APPOINTMENT
     let dobClient: Date = this.clientForm.value.DOB;
     let dob: string = '';
@@ -941,10 +999,13 @@ export class HostComponent implements OnInit {
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
       map((res: any) => {
         if (res.Code == 200){
-          this.walkIns.push(res.Appointment);
+          let walkIndex = this.walkIns.findIndex(x=>x.AppId == res.Appointment.AppId);
+          if (walkIndex < 0){
+            this.walkIns.push(res.Appointment);
+          }
         }
         this.spinnerService.stop(spinnerRef);
-        this.clientForm.reset({Phone:'', Name:'', Email:'', DOB:'', Gender:'', Preference:'', Disability:'', ProviderId: '', ServiceId:'', Guests: 1});
+        this.clientForm.reset({Phone:'', Name:'', Email:'', DOB:'', Gender:'', Preference:1, Disability:'', ProviderId: '', ServiceId:'', Guests: 1});
         this.showApp = false;
         return res.Code;
       }),
@@ -960,12 +1021,12 @@ export class HostComponent implements OnInit {
   showAppointment(){
     this.showApp = !this.showApp;
     if (this.showApp){
-      this.clientForm.reset({Phone:'', Name:'', Email:'', DOB:'', Gender:'', Preference:'', Disability:'', ProviderId:'', ServiceId:'', Guests: 1});
+      this.clientForm.reset({Phone:'', Name:'', Email:'', DOB:'', Gender:'', Preference:1, Disability:'', ProviderId:'', ServiceId:'', Guests: 1});
     }
   }
 
   onCancelAddAppointment(){
-    this.clientForm.reset({Phone:'', Name:'', Email:'', DOB:'', Gender:'', Preference:'', Disability:'', ProviderId:'', ServiceId:'', Guests: 1});
+    this.clientForm.reset({Phone:'', Name:'', Email:'', DOB:'', Gender:'', Preference:1, Disability:'', ProviderId:'', ServiceId:'', Guests: 1});
     this.showApp = false;
   }
 
@@ -1096,8 +1157,13 @@ export class HostComponent implements OnInit {
                 BusinessName: this.authService.businessName(),
                 Language: this.authService.language()
               }
+            } else {
+              throw 'exit process';
             }
+          } else {
+            throw 'exit process';
           }
+          return result;
         }),
         mergeMap(x => 
           this.appointmentService.updateAppointmentCheckIn(appo.AppId, formData).pipe(
@@ -1116,7 +1182,7 @@ export class HostComponent implements OnInit {
               this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
                 map((res: any) => {
                   if (res != null){
-                    this.qtyPeople = res.Quantity;
+                    this.qtyPeople = +res.Quantity;
                     this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
                     return res.Quantity.toString();
                   }
@@ -1133,7 +1199,9 @@ export class HostComponent implements OnInit {
               return this.onError;
             })
           )
-        )
+        ), catchError(err => {
+          return err;
+        })
       );
     } else {
       this.checkInAppointment('VALID', appo, appo.Guests);
@@ -1168,7 +1236,7 @@ export class HostComponent implements OnInit {
         this.locationService.getLocationQuantity(this.businessId, this.locationId).pipe(
           map((res: any) => {
             if (res != null){
-              this.qtyPeople = res.Quantity;
+              this.qtyPeople = +res.Quantity;
               this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
               return res.Quantity.toString();
             }
@@ -1487,11 +1555,9 @@ export class HostComponent implements OnInit {
     let dateAppoFinStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourFin;
 
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
-    this.appointmentsSche$ = this.appointmentService.getAppointments(this.businessId, this.locationId, this.providerId, dateAppoStr, dateAppoFinStr, 1, 1, this.lastItem, this.appoIdSche).pipe(
+    this.appointmentsSche$ = this.appointmentService.getAppointments(this.businessId, this.locationId, this.providerId, dateAppoStr, dateAppoFinStr, 1, 1).pipe(
       map((res: any) => {
         if (res != null) {
-          this.lastItem = res['lastItem'].toString().replace('1#DT#','');
-          this.appoIdSche = res['AppId'].toString();
           res['Appos'].forEach(item => {
             let hora = item['DateAppo'].substring(11,16).replace('-',':');
             hora = (+hora.substring(0,2) > 12 ? (+hora.substring(0,2)-12).toString().padStart(2,'0') : hora.substring(0,2)) + ':' + hora.substring(3).toString() + (+hora.substring(0,2) >= 12 ? ' PM' : ' AM');
@@ -1548,11 +1614,9 @@ export class HostComponent implements OnInit {
     let dateAppoFinStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourFin;
 
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
-    this.appointmentsWalk$ = this.appointmentService.getAppointments(this.businessId, this.locationId, this.providerId, dateAppoStr, dateAppoFinStr, 1, 2, this.lastItemWalk, this.appoIdWalk).pipe(
+    this.appointmentsWalk$ = this.appointmentService.getAppointments(this.businessId, this.locationId, this.providerId, dateAppoStr, dateAppoFinStr, 1, 2).pipe(
       map((res: any) => {
         if (res != null) {
-          this.lastItemWalk = res['lastItem'].toString().replace('1#DT#','');
-          this.appoIdWalk = res['AppId'].toString();
           res['Appos'].forEach(item => {
             let hora = item['DateAppo'].substring(11,16).replace('-',':');
             hora = (+hora.substring(0,2) > 12 ? (+hora.substring(0,2)-12).toString().padStart(2,'0') : hora.substring(0,2)) + ':' + hora.substring(3).toString() + (+hora.substring(0,2) >= 12 ? ' PM' : ' AM');
@@ -1601,12 +1665,11 @@ export class HostComponent implements OnInit {
     let dayCurr = this.getDay();
     let dateAppoStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourIni;
     let dateAppoFinStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourFin;
+
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
-    this.appointmentsPre$ = this.appointmentService.getAppointments(this.businessId, this.locationId, this.providerId, dateAppoStr, dateAppoFinStr, 2, '_', this.lastItemPre, this.appoIdPre).pipe(
+    this.appointmentsPre$ = this.appointmentService.getAppointments(this.businessId, this.locationId, this.providerId, dateAppoStr, dateAppoFinStr, 2, '_').pipe(
       map((res: any) => {
         if (res != null) {
-          this.lastItemPre = res['lastItem'].toString().replace('2#DT#','');
-          this.appoIdPre = res['AppId'].toString();
           res['Appos'].forEach(item => {
             let hora = item['DateAppo'].substring(11,16).replace('-',':');
             hora = (+hora.substring(0,2) > 12 ? (+hora.substring(0,2)-12).toString().padStart(2,'0') : hora.substring(0,2)) + ':' + hora.substring(3).toString() + (+hora.substring(0,2) >= 12 ? ' PM' : ' AM');
@@ -1642,8 +1705,8 @@ export class HostComponent implements OnInit {
     );
   }
 
-  locationStatusChange(){
-    if (this.locationStatus == 1){
+  locationStatusChange(event){
+    if (event.checked == false){
       this.closedLocation();
     } else {
       this.openLocation();
@@ -1657,9 +1720,6 @@ export class HostComponent implements OnInit {
     this.walkIns = [];
     this.preCheckIn = [];
     this.showPrevious = false;
-    this.lastItem = '_';
-    this.lastItemPre = '_';
-    this.lastItemWalk = '_';
 
     if (data.length > 0){
       this.locName = data[0].Name;
@@ -1669,8 +1729,7 @@ export class HostComponent implements OnInit {
       this.Providers = data[0].Providers;
       this.locName = data[0].Name;
       this.locationStatus = data[0].Open;
-      this.closedLoc = data[0].Closed;
-      this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
+      this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
       if (data[0].Providers.length > 0){
         this.Providers = data[0].Providers;
         if (this.Providers.length > 0){
@@ -1725,11 +1784,11 @@ export class HostComponent implements OnInit {
             return value;
           }),
           map((res: any) => {
-            this.qtyPeople = res.Quantity;
+            this.qtyPeople = +res.Quantity;
             this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
           }),
           map(_ => {
-            if (this.locationId != '' && this.locationStatus == 1 && this.closedLoc == 0){
+            if (this.locationId != '' && this.locationStatus == 1){
               this.getAppointmentsSche();
               this.getAppointmentsWalk();
               this.getAppointmentsPre();
@@ -1748,11 +1807,8 @@ export class HostComponent implements OnInit {
   onServiceChange(event){
     let res = this.Providers.filter(val => val.ProviderId == event.value);
     if (res.length > 0){
-      // this.locationStatus = res[0].Open;
-      // this.closedLoc = res[0].Closed;
       this.providerId = res[0].ProviderId;
       this.operationText = this.locName + ' / ' + res[0].Name;
-      // this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : (this.closedLoc == 1 ? $localize`:@@host.loccopenandclosed:` : $localize`:@@host.locopen:`));
     } else {
       this.providerId = "0";
       this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`;
@@ -1762,9 +1818,6 @@ export class HostComponent implements OnInit {
     this.walkIns = [];
     this.preCheckIn = [];
     this.showPrevious = false;
-    this.lastItem = '_';
-    this.lastItemPre = '_';
-    this.lastItemWalk = '_';
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadinglocationsdata:`);
     this.getLocInfo$ = this.businessService.getBusinessOpeHours(this.businessId, this.locationId).pipe(
       map((res: any) => {
@@ -1811,11 +1864,11 @@ export class HostComponent implements OnInit {
         return value;
       }),
       map((res: any) => {
-        this.qtyPeople = res.Quantity;
+        this.qtyPeople = +res.Quantity;
         this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
       }),
       map(_ => {
-        if (this.locationId != '' && this.locationStatus == 1 && this.closedLoc == 0){
+        if (this.locationId != '' && this.locationStatus == 1){
           this.getAppointmentsSche();
           this.getAppointmentsWalk();
           this.getAppointmentsPre();
@@ -1873,29 +1926,33 @@ export class HostComponent implements OnInit {
 
   drop(event: CdkDragDrop<string[]>) {
     if (event.previousContainer != event.container) {
-      let appo = event.previousContainer.data[event.previousIndex];
+      let appo = JSON.parse(JSON.stringify(event.previousContainer.data[event.previousIndex]));
       let container = event.previousContainer.id;
       let formData = {
         Status: 2,
-        DateAppo: appo['DateFull'],
+        DateAppo: appo.DateFull,
+        CustomerId: appo.ClientId,
         BusinessName: this.authService.businessName(),
         Language: this.authService.language()
       }
-
       transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, this.preCheckIn.length);
-      this.updAppointment$ = this.appointmentService.updateAppointment(appo['AppId'], formData).pipe(
+      this.updAppointment$ = this.appointmentService.updateAppointment(appo.AppId, formData).pipe(
         map((res: any) => {
           if (res.Code == 200){
             let appoObj = res.Appo;
-            let appoGet = this.preCheckIn[this.preCheckIn.length-1];
-            appoGet.CheckInTime = appoObj['TIMECHEK'];
-            appoGet.ElapsedTime = "0";
+            var dataPre = this.preCheckIn.findIndex(e => e.AppId === appo.AppId);
+            if (dataPre >= 0){
+              let newData = this.preCheckIn[dataPre];
+              newData.CheckInTime = appoObj['TIMECHEK'];
+              newData.ElapsedTime = "0";
+            }
+
             this.openSnackBar($localize`:@@host.readytocheckin:`,$localize`:@@host.textreadytocheckin:`);
           }
         }),
         catchError(err => {
-          var data = this.preCheckIn.findIndex(e => e.AppId === appo['AppId']);
-          this.preCheckIn.splice(data, 1);
+          var data = this.preCheckIn.findIndex(e => e.AppId === appo.AppId);
+          if (data >= 0){ this.preCheckIn.splice(data, 1); }
 
           if (container == "cdk-drop-list-0"){ 
             this.schedule.push(JSON.parse(appo));

@@ -32,7 +32,7 @@
                         </div>
                         <div class="form-field pl-3 pr-3">
                             <mat-form-field>
-                                <input matInput i18n-placeholder="Name@@shared.name" placeholder="Name"
+                                <input matInput i18n-placeholder="Name@@location.name" placeholder="Name"
                                     formControlName="Name" maxlength="500" minlength="3"
                                     [errorStateMatcher]="confirmValidParentMatcher" required>
                                 <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{ 'Error: ' + getErrorMessage('Name')}}
@@ -129,6 +129,9 @@
                             </mat-form-field> -->
                         </div>
                         <div class="col-md-12 mt-3 mb-3">
+                            <div i18n="Map info|text in location@@location.map">
+                                Zoom
+                            </div>
                             <agm-map [latitude]="lat" [zoom]="zoom" [longitude]="lng">
                                 <agm-marker [latitude]="lat" [longitude]="lng" [markerDraggable]="true"
                                     (dragEnd)="markerDragEndLoc($event)">

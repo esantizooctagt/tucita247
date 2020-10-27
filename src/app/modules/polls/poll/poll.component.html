@@ -14,7 +14,7 @@
                     <form [formGroup]="pollForm" (ngSubmit)="onSubmit()" class="mt-4">
                         <div class="form-field pl-3 pr-3">
                             <mat-form-field>
-                                <input matInput #Name i18n-placeholder="Name@@shared.name" placeholder="Name"
+                                <input matInput #Name i18n-placeholder="Name@@poll.name" placeholder="Name"
                                     maxlength="100" minlength="3" formControlName="Name"
                                     [errorStateMatcher]="confirmValidParentMatcher" required>
                                 <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{ 'Error: ' + getErrorMessage('Name')}}

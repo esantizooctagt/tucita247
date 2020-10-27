@@ -3,7 +3,11 @@
 <ng-container *ngIf="openLoc$ | async"></ng-container>
 <ng-container *ngIf="closedLoc$ | async"></ng-container>
 <ng-container *ngIf="getLocInfo$ | async"></ng-container>
-<div class="col-md-12">
+<ng-container *ngIf="liveData$ | async"></ng-container>
+<ng-container *ngIf="resetLoc$ | async"></ng-container>
+<ng-container *ngIf="checkOutQR$ | async"></ng-container>
+<ng-container *ngIf="checkIn$ | async"></ng-container>
+<div class="col-md-12 pt-2">
     <mat-accordion>
         <mat-expansion-panel class="mt-2" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
             <mat-expansion-panel-header class="header-panel">
@@ -18,7 +22,10 @@
                         <button mat-icon-button color="primary" class="col-md-1 learn-btn" (click)="learnMore(26)">
                             <mat-icon>help</mat-icon>
                         </button>
-                        <mat-slide-toggle class="col-md-9" color="primary" [checked]="locationStatus == 1" (change)="locationStatusChange()">{{textOpenLocation}}</mat-slide-toggle>
+                        <mat-slide-toggle class="col-md-9" color="primary" [(ngModel)]="locationStatus" (change)="locationStatusChange()">{{textOpenLocation}}</mat-slide-toggle>
+                    </div>
+                    <div class="row">
+                        <button mat-stroked-button class="action-buttons" color="secondary" type="button" (click)="resetLocation()" i18n="Reset|text in citas@@host.reset">Reset Location</button>
                     </div>
                 </div>
                 <div class="operation-buttons col-sm-9 col-md-6 p-0">
@@ -44,20 +51,12 @@
         </mat-expansion-panel>
     </mat-accordion>
     <div class="qr-space">
-        <!-- <div class="p-0 pt-2 m-auto">
-            <mat-slide-toggle color="primary" [checked]="locationStatus == 1" (change)="locationStatusChange()">{{textOpenLocation}}</mat-slide-toggle>
-        </div>
-        <div class="col-sm p-0">{{locName}}</div><mat-select name="providers" class="pt-2 pr-3" [(value)]="providerId" (selectionChange)="onServiceChange($event)">
-            <mat-option *ngFor="let item of Providers" [value]="item.ProviderId">
-                {{item.Name}}
-            </mat-option>
-        </mat-select> -->
         <div class="row space-row">
-            <div *ngIf="locationStatus == 1 && closedLoc == 0" class="col-md-2" [ngClass]="{
+            <div *ngIf="locationStatus == 1" class="col-md-2" [ngClass]="{
                 'qty-people-white': perLocation < 80,
                 'qty-people-black': perLocation < 95,
                 'qty-people-white-02': perLocation >= 95}">{{qtyPeople}}</div>
-            <mat-progress-bar *ngIf="locationStatus == 1 && closedLoc == 0" [ngClass]="{
+            <mat-progress-bar *ngIf="locationStatus == 1" [ngClass]="{
                 'green-bar': perLocation < 80,
                 'yellow-bar': perLocation < 95,
                 'red-bar': perLocation >= 95
@@ -65,7 +64,7 @@
         </div>
     </div>
 </div>
-<div class="col-md-12" *ngIf="locationStatus == 1 && closedLoc == 0">
+<div class="col-md-12" *ngIf="locationStatus == 1">
     <div class="qr-space">
         <button mat-stroked-button class="action-buttons col-md-12 mt-2 mb-2" color="secondary" type="button"
             (click)="showCard = !showCard" i18n="Walk-Ins Check In|text in citas lite@@lite..walkins">Walk-Ins Check In</button>
@@ -146,7 +145,7 @@
                 <div class="form-field pl-3 pr-3">
                     <label i18n="Preference|text in citas@@host.preference">Preference</label>
                     <mat-radio-group aria-label="Select an option" formControlName="Preference" class="client_gender mt-0">
-                        <mat-radio-button matLine value="1" i18n="SMS|text in citas@@host.sms">SMS</mat-radio-button>
+                        <mat-radio-button matLine [checked]="true" value="1" i18n="SMS|text in citas@@host.sms">SMS</mat-radio-button>
                         <mat-radio-button matLine value="2" i18n="Email@@shared.Email">Email</mat-radio-button>
                         <mat-radio-button matLine value="3" i18n="Push Notification|text in citas@@host.pushnot">Push Notification</mat-radio-button>
                     </mat-radio-group>

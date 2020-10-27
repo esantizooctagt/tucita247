@@ -2,6 +2,142 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template" target-language="en">
     <body>
+      <trans-unit id="schedule.calendar" datatype="html">
+        <source>Calender</source>
+        <target state="translated">Calendar</target>
+        <context-group purpose="schedule">
+          <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="role.name" datatype="html">
+        <source>Name</source>
+        <target state="translated">Name of the role</target>
+        <context-group purpose="role">
+          <context context-type="sourcefile">src/app/modules/roles/role/role.component.html</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="poll.name" datatype="html">
+        <source>Name</source>
+        <target state="translated">Poll question</target>
+        <context-group purpose="poll">
+          <context context-type="sourcefile">src/app/modules/polls/poll/poll.component.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.averagetime" datatype="html">
+        <source>Average Time</source>
+        <target state="translated">Average Time</target>
+        <context-group purpose="dashboard">
+          <context context-type="sourcefile">src/app/modules/dashboard/dashboard.component.html</context>
+          <context context-type="linenumber">93</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="service.color" datatype="html">
+        <source>Color Info</source>
+        <target state="translated">Choose a color to identify the service</target>
+        <context-group purpose="service">
+          <context context-type="sourcefile">src/app/modules/services/service/service.component.html</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="location.map" datatype="html">
+        <source>Zoom</source>
+        <target state="translated">Zoom in on the map and place the marker at the exact location where your business is located.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/locations/location/location.component.html</context>
+          <context context-type="linenumber">132</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="location.name" datatype="html">
+        <source>Name</source>
+        <target state="translated">Location Name</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/locations/location/location.component.html</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="businessdays.help" datatype="html">
+        <source>Just click on a date:</source>
+        <target state="translated">Just click on a date to set the business days off</target>
+        <context-group purpose="business-days">
+          <context context-type="sourcefile">src/app/modules/business-days/business-days.component.html</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="businessope.daysoff" datatype="html">
+        <source>Days off</source>
+        <target state="translated">Days off</target>
+        <context-group purpose="business-days">
+          <context context-type="sourcefile">src/app/modules/business-days/business-days.component.html</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="business.newreason" datatype="html">
+        <source>New Reason</source>
+        <target state="translated">Reasons for cancellation</target>
+        <context-group purpose="business">
+          <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
+          <context context-type="linenumber">113</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="business.newtag" datatype="html">
+        <source>New tag</source>
+        <target state="translated">Tags</target>
+        <context-group purpose="business">
+          <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
+          <context context-type="linenumber">132</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="business.newcat" datatype="html">
+        <source>New category</source>
+        <target state="translated">Business category</target>
+        <context-group purpose="business">
+          <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
+          <context context-type="linenumber">87</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="business.additionaldata" datatype="html">
+        <source>Additional Data</source>
+        <target state="translated">Additional Data</target>
+        <context-group purpose="business">
+          <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
+          <context context-type="linenumber">75</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="business.busname" datatype="html">
+        <source>Business Name</source>
+        <target state="translated">Business Name</target>
+        <context-group purpose="business">
+          <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="business.addressInfo" datatype="html">
+        <source>Address Info</source>
+        <target state="translated">Address</target>
+        <context-group purpose="business">
+          <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="host.reset" datatype="html">
+        <source>Reset</source>
+        <target state="translated">Reset Location</target>
+        <context-group purpose="host">
+          <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="userloc.na" datatype="html">
+        <source>N/A</source>
+        <target state="translated">ALL</target>
+        <context-group purpose="userloc">
+          <context context-type="sourcefile">src/app/modules/userloc/userloc.component.html</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="shared.close" datatype="html">
         <source>Close</source>
         <target state="translated">Close</target>
@@ -12,7 +148,7 @@
       </trans-unit>
       <trans-unit id="shared.screenresolution" datatype="html">
         <source>Screen Res</source>
-        <target state="translated">You need a higher resolution to see this screen</target>
+        <target state="translated">This module is only available for tablet or PC</target>
         <context-group purpose="schedule">
           <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
           <context context-type="linenumber">275</context>
@@ -424,12 +560,8 @@
         <note priority="1" from="description">Welcome</note>
       </trans-unit>
       <trans-unit id="main.timesettings" datatype="html">
-        <source>
-                  Time Settings
-                </source>
-        <target state="translated">
-                  Time settings
-                </target>
+        <source>Time Settings</source>
+        <target state="translated">Time settings</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/main-nav/main-nav.component.html</context>
           <context context-type="linenumber">22</context>
@@ -1110,7 +1242,7 @@
       </trans-unit>
       <trans-unit id="reports.periodtime" datatype="html">
         <source>Period of time</source>
-        <target state="translated">Time period</target>
+        <target state="translated">Start Date - End Date</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/reports/reports.component.html</context>
           <context context-type="linenumber">37</context>
@@ -1573,7 +1705,7 @@
       </trans-unit>
       <trans-unit id="business.address" datatype="html">
         <source>Address</source>
-        <target state="translated">Address</target>
+        <target state="translated">Physical address</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">21</context>
@@ -1803,12 +1935,8 @@
         <note priority="1" from="meaning">Tu Cita 24/7 Link</note>
       </trans-unit>
       <trans-unit id="business.labeltucitablink" datatype="html">
-        <source>
-                                        Tu Cita 24/7 Link :
-                                    </source>
-        <target state="translated">
-                                        Tu Cita 24/7 link :
-                                    </target>
+        <source>Tu Cita 24/7 Link :</source>
+        <target state="translated">Tu Cita 24/7 link :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">209</context>
@@ -1818,7 +1946,7 @@
       </trans-unit>
       <trans-unit id="business.imagemobileapp" datatype="html">
         <source>Image for mobile App</source>
-        <target state="translated">Mobile App image</target>
+        <target state="translated">Tu Cita 24/7 mobile App image</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">217</context>
@@ -1828,7 +1956,7 @@
       </trans-unit>
       <trans-unit id="business.imagemobileappimg" datatype="html">
         <source>IMAGE MOBILE APP</source>
-        <target state="translated">MOBILE APP IMAGE</target>
+        <target state="translated">Tu Cita 24/7 mobile App image</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">225</context>
@@ -1838,7 +1966,7 @@
       </trans-unit>
       <trans-unit id="business.imagefortucita" datatype="html">
         <source>Image for Tu Cita 24/7 web link</source>
-        <target state="translated">Image for Tu Cita 24/7 web link</target>
+        <target state="translated">Tu Cita 24/7 link image</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">239</context>
@@ -1848,7 +1976,7 @@
       </trans-unit>
       <trans-unit id="business.imageblock" datatype="html">
         <source>IMAGE WEB LINK</source>
-        <target state="translated">IMAGE WEB LINK</target>
+        <target state="translated">Tu Cita 24/7 link image</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">247</context>
@@ -2486,7 +2614,7 @@
       </trans-unit>
       <trans-unit id="host.pushnot" datatype="html">
         <source>Push Notification</source>
-        <target state="translated">Push notification</target>
+        <target state="translated">App Notifications</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">361</context>
@@ -2670,7 +2798,7 @@
       </trans-unit>
       <trans-unit id="welcome.setupservices" datatype="html">
         <source>Setup your services</source>
-        <target state="translated">6. services</target>
+        <target state="translated">6. Services</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
           <context context-type="linenumber">47</context>
@@ -3095,12 +3223,8 @@
         <note priority="1" from="meaning">No bookings for this time</note>
       </trans-unit>
       <trans-unit id="sche.time" datatype="html">
-        <source>
-                    Time
-                </source>
-        <target state="translated">
-                    Time
-                </target>
+        <source>Time</source>
+        <target state="translated">Time</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
           <context context-type="linenumber">33</context>
@@ -3496,7 +3620,7 @@
       </trans-unit>
       <trans-unit id="polls.chooseinitdate" datatype="html">
         <source>Choose a Initial date</source>
-        <target state="translated">Choose starting date</target>
+        <target state="translated">Poll start date</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/polls/poll/poll.component.html</context>
           <context context-type="linenumber">29</context>
@@ -3506,7 +3630,7 @@
       </trans-unit>
       <trans-unit id="polls.initdate" datatype="html">
         <source>Initial poll date</source>
-        <target state="translated">Poll starting date</target>
+        <target state="translated">Poll start date</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/polls/poll/poll.component.html</context>
           <context context-type="linenumber">28</context>
@@ -3726,7 +3850,7 @@
       </trans-unit>
       <trans-unit id="locations.address" datatype="html">
         <source>Address</source>
-        <target state="translated">Address</target>
+        <target state="translated">Physical address</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/locations/location/location.component.html</context>
           <context context-type="linenumber">19</context>
@@ -4296,7 +4420,7 @@
       </trans-unit>
       <trans-unit id="sche.deletetext">
         <source>Are you sure to delete this Citas?</source>
-        <target state="translated">Are you sure you want to delete this booking?</target>
+        <target state="translated">Are you sure you want to disable this timeslot and cancel all appointments in this period?</target>
       </trans-unit>
       <trans-unit id="sche.deletingcitas">
         <source>Deleting Citas...</source>

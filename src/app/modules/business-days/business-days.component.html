@@ -8,6 +8,17 @@
           </nav>
     </div>
     <ng-container *ngIf="updateParentDaysOff$ | async"></ng-container>
+    <div class="row mt-3 mb-0 mr-5 ml-5 pl-3">
+        <mat-label class="pl-3" i18n="Days off|text in days off@@businessope.daysoff">Days Off</mat-label>
+        <button class="help-btn" mat-icon-button color="primary" (click)="learnMore(11)">
+            <mat-icon>help</mat-icon>
+        </button>
+    </div>
+    <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="locationId == '_'">
+        <div class="col-md-6 col-lg-6" i18n="Configure your year schedule here. Just click on a date to set the days off.|text business days@@businessdays.maintext">
+            Configure your year schedule here. Just click on a date to set the days off.
+        </div>
+    </div>
     <div class="row mt-3 mb-3 mr-5 ml-5 pl-3" *ngIf="locationId != '_' && providerId == '_'">
         <div class="col-md-6 col-lg-6" i18n="Configure your year schedule here. Just click on a date to set the days off.|text business days@@businessdays.maintext">
             Configure your year schedule here. Just click on a date to set the days off.
@@ -41,6 +52,9 @@
             </mat-select>
         </div>
     </div>
+    <!-- <div class="row mt-1 mb-3 ml-5">
+        <div class="col-md-6 col-lg-6" i18n="Just click on a date:|text in days off@@businessdays.help">Just click on a date to set the business days off</div>
+    </div> -->
     <div class="row justify-content-md-center mt-3 mb-3">
         <div class="col-md-3 col-lg-3">
             <button mat-icon-button class="ml-3 nav-buttons" type="button" (click)="prevYear()">
