@@ -18,11 +18,6 @@ export class PollsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    let isAdmin = this.authService.isAdmin();
-    let roleId = this.authService.roleId();
-    if (roleId != '' && isAdmin != 1){
-      this.router.navigate(['/']);
-    }
     this.monitorService.handleData('Search');
     this.monitorService.handleMessage.subscribe(res => this.changeData = res);
   }
