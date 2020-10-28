@@ -39,6 +39,7 @@ export class QuickCheckinComponent implements OnInit {
   qtyPeople: number = 0;
   perLocation: number = 0;
   totLocation: number = 0;
+  checkInModule: number = 0;
   textOpenLocation: string = '';
   locName: string = '';
   buckets=[];
@@ -147,8 +148,11 @@ export class QuickCheckinComponent implements OnInit {
     if (msg['Tipo'] == 'MOVE'){
       if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 1){
         if (msg['To'] == 'CHECKIN'){
-          this.qtyPeople = +this.qtyPeople+msg['Guests'];
-          this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+          if (this.checkInModule == 0){
+            this.qtyPeople = +this.qtyPeople+msg['Guests'];
+            this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+          }
+          this.checkInModule = 0;
         }
       }
     }
@@ -457,6 +461,7 @@ export class QuickCheckinComponent implements OnInit {
       BusinessName: this.authService.businessName(),
       Language: this.authService.language(),
     }
+    this.checkInModule = 1;
     this.check$ = this.appointmentService.updateAppointmentCheckInQR(qrCode, formData).pipe(
       map((res: any) => {
         if (res.Code == 200){
@@ -473,6 +478,7 @@ export class QuickCheckinComponent implements OnInit {
         })
       )),
       catchError(err => {
+        this.checkInModule = 0;
         if (err.Status == 404){
           this.openSnackBar($localize`:@@host.invalidqrcode:`,$localize`:@@host.checkintitle:`);
           return err.Message;

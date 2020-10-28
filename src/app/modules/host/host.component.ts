@@ -95,6 +95,7 @@ export class HostComponent implements OnInit {
   showDoorInfo: boolean = false;
   showApp: boolean = false;
   locationStatus: number = 0;
+  checkInModule: number = 0;
   textOpenLocation: string = '';
   locName: string = '';
   maxGuests: number = 1;
@@ -372,9 +373,11 @@ export class HostComponent implements OnInit {
           if (verifpreCheck >= 0){
             this.preCheckIn.splice(verifpreCheck, 1);
           }
-
-          this.qtyPeople = +this.qtyPeople+msg['Guests'];
-          this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+          if (this.checkInModule == 0){
+            this.qtyPeople = +this.qtyPeople+msg['Guests'];
+            this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+          }
+          this.checkInModule = 0;
         }
       }
     }
@@ -1166,6 +1169,7 @@ export class HostComponent implements OnInit {
                 BusinessName: this.authService.businessName(),
                 Language: this.authService.language()
               }
+              this.checkInModule = 1;
             } else {
               throw 'exit process';
             }
@@ -1199,6 +1203,7 @@ export class HostComponent implements OnInit {
               )
             ),
             catchError(err => {
+              this.checkInModule = 0;
               if (err.Status == 404){
                 this.openSnackBar($localize`:@@host.invalidqrcode:`,$localize`:@@host.checkintitle:`);
                 return err.Message;
@@ -1209,6 +1214,7 @@ export class HostComponent implements OnInit {
             })
           )
         ), catchError(err => {
+          this.checkInModule = 0;
           return err;
         })
       );
