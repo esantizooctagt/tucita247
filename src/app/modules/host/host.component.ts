@@ -1247,6 +1247,7 @@ export class HostComponent implements OnInit {
       BusinessName: this.authService.businessName(),
       Language: this.authService.language()
     }
+    this.checkInModule = 1;
     this.checkIn$ = this.appointmentService.updateAppointmentCheckIn(appo.AppId, formData).pipe(
       map((res: any) => {
         if (res.Code == 200){
@@ -1271,6 +1272,7 @@ export class HostComponent implements OnInit {
         )
       ),
       catchError(err => {
+        this.checkInModule = 0;
         if (err.Status == 404){
           this.openSnackBar($localize`:@@host.invalidqrcode:`,$localize`:@@host.checkintitle:`);
           return err.Message;
