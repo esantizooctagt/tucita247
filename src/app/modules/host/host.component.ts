@@ -96,6 +96,7 @@ export class HostComponent implements OnInit {
   showApp: boolean = false;
   locationStatus: number = 0;
   checkInModule: number = 0;
+  checkOutModule: number = 0;
   textOpenLocation: string = '';
   locName: string = '';
   maxGuests: number = 1;
@@ -378,6 +379,13 @@ export class HostComponent implements OnInit {
             this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
           }
           this.checkInModule = 0;
+        }
+        if (msg['To'] == 'CHECKOUT'){
+          if (this.checkOutModule == 0){
+            this.qtyPeople = +this.qtyPeople-msg['Guests'];
+            this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+          }
+          this.checkOutModule = 0;
         }
       }
     }
@@ -850,6 +858,7 @@ export class HostComponent implements OnInit {
       BusinessName: this.authService.businessName(),
       Language: this.authService.language()
     }
+    this.checkOutModule = 1;
     this.checkIn$ = this.appointmentService.updateAppointmentCheckOut(formData).pipe(
       map((res: any) => {
         if (res.Code == 200){
@@ -869,6 +878,7 @@ export class HostComponent implements OnInit {
         )
       ),
       catchError(err => {
+        this.checkOutModule = 0;
         if (err.Status == 404){
           this.openSnackBar(err.Message, $localize`:@@host.checkoutpop:`);
           return err.Message;
@@ -881,6 +891,7 @@ export class HostComponent implements OnInit {
   }
 
   setManualCheckOut(qtyOut: number){
+    this.checkOutModule = 1;
     this.manualCheckOut$ = this.appointmentService.updateManualCheckOut(this.businessId, this.locationId, this.providerId, qtyOut).pipe(
       map((res: any) => {
         if (res.Code == 200){
@@ -900,6 +911,7 @@ export class HostComponent implements OnInit {
         )
       ),
       catchError(err => {
+        this.checkOutModule = 0;
         this.onError = err.Message;
         this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@host.checkoutpop:`);
         return this.onError;

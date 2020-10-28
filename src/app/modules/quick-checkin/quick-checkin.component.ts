@@ -40,6 +40,7 @@ export class QuickCheckinComponent implements OnInit {
   perLocation: number = 0;
   totLocation: number = 0;
   checkInModule: number = 0;
+  checkOutModule: number = 0;
   textOpenLocation: string = '';
   locName: string = '';
   buckets=[];
@@ -154,6 +155,13 @@ export class QuickCheckinComponent implements OnInit {
           }
           this.checkInModule = 0;
         }
+      }
+      if (msg['To'] == 'CHECKOUT'){
+        if (this.checkOutModule == 0){
+          this.qtyPeople = +this.qtyPeople-msg['Guests'];
+          this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
+        }
+        this.checkOutModule = 0;
       }
     }
     if (msg['Tipo'] == 'CLOSED'){
@@ -365,6 +373,7 @@ export class QuickCheckinComponent implements OnInit {
   }
 
   setManualCheckOut(qtyOut){
+    this.checkOutModule = 1;
     this.manualCheckOut$ = this.appointmentService.updateManualCheckOut(this.businessId, this.locationId, this.providerId, qtyOut).pipe(
       map((res: any) => {
         if (res.Code == 200){
@@ -381,6 +390,7 @@ export class QuickCheckinComponent implements OnInit {
         })
       )),
       catchError(err => {
+        this.checkOutModule = 0;
         this.onError = err.Message;
         this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@host.checkoutpop:`);
         return this.onError;
@@ -398,6 +408,7 @@ export class QuickCheckinComponent implements OnInit {
       BusinessName: this.authService.businessName(),
       Language: this.authService.language(),
     }
+    this.checkOutModule = 1;
     this.check$ = this.appointmentService.updateAppointmentCheckOut(formData).pipe(
       map((res: any) => {
         if (res.Code == 200){
@@ -414,6 +425,7 @@ export class QuickCheckinComponent implements OnInit {
         })
       )),
       catchError(err => {
+        this.checkOutModule = 0;
         if (err.Status == 404){
           this.openSnackBar($localize`:@@host.invalidqrcode:`,$localize`:@@host.checkoutpop:`);
           return err.Message;
