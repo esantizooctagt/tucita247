@@ -4829,6 +4829,10 @@ Cuando se escoge la opción de Check-Out Manual, el sistema no enviará encuesta
         <source>Invalid date and time for this service</source>
         <target state="translated">Fecha y hora invalida para el servicio seleccionado</target>
       </trans-unit>
+      <trans-unit id="shared.closingLoc">
+        <source>Closing Location</source>
+        <target state="translated">Cerrando localidad</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

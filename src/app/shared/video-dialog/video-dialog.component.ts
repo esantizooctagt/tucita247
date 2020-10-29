@@ -5,7 +5,7 @@ import { SpinnerService } from '@app/shared/spinner.service';
 import { ZXingScannerComponent, ZXingScannerModule } from '@zxing/ngx-scanner';
 
 import { Observable } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, timeout } from 'rxjs/operators';
 
 export interface DialogData {
   guests: number;
@@ -35,6 +35,7 @@ export class VideoDialogComponent implements OnInit {
   qrCode: string = '';
   checkInValues: any;
   Guests: number = 1;
+  activeBlink: number = 0;
 
   constructor(
     public dialogRef: MatDialogRef<VideoDialogComponent>,
@@ -122,8 +123,14 @@ export class VideoDialogComponent implements OnInit {
 
   validQr(event){
     if (event.toString().length == 6){
-      // this.beep();
-      navigator.vibrate(1000);
+
+      this.activeBlink = 1;
+      let component = this;
+      setTimeout(() => {
+        component.activeBlink = 0;
+        this.activeBlink = 0;
+      },2000);
+
       if (this.data.tipo == 2){
         // var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
         this.appoData$ = this.appointmentService.getAppointmentData(this.data.businessId, this.data.locationId, this.data.providerId, this.qrCode).pipe(
@@ -140,6 +147,8 @@ export class VideoDialogComponent implements OnInit {
           })
         );
       }
+    } else {
+      this.activeBlink = 0;
     }
   }
 }

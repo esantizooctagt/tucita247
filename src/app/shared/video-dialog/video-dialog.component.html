@@ -16,8 +16,8 @@
             <mat-form-field class="pb-0">
                 <mat-label i18n="Cita Code|text in checkin/checkout@@video.citacode">Cita Code</mat-label>
                 <input matInput placeholder="QR Code" [(ngModel)]="qrCode" 
-                    [ngClass]="{'blink-qr': qrCode.length == 6,
-                    'standard-qr': qrCode.length < 6}"
+                    [ngClass]="{'blink-qr': activeBlink == 1,
+                    'standard-qr': activeBlink == 0}"
                     (ngModelChange)="validQr($event)" maxlength="6">
             </mat-form-field>
         </div>

@@ -746,11 +746,13 @@ export class HostComponent implements OnInit {
 
     const dialogRefClosed = this.dialog.open(DialogComponent, dialogConfigClosed);
     let valueSel;
+    var spinnerRef: any;
     this.closedLoc$ = dialogRefClosed.afterClosed().pipe(
       map(result => {
         if (!result) {
           throw 'exit process';
         }
+        spinnerRef = this.spinnerService.start($localize`:@@shared.closingLoc:`);
         return result;
       }),
       switchMap(x => this.locationService.updateClosedLocation(this.locationId, this.businessId, 1).pipe(
@@ -787,11 +789,13 @@ export class HostComponent implements OnInit {
                     this.providerId = "0";
                   }
                 }
+                this.spinnerService.stop(spinnerRef);
                 return res;
               } else {
                 // this.spinnerService.stop(spinnerRef);
                 this.openDialog($localize`:@@shared.error:`, $localize`:@@host.missloc:`, false, true, false);
                 this.router.navigate(['/']);
+                this.spinnerService.stop(spinnerRef);
                 return;
               }
             })
@@ -811,6 +815,7 @@ export class HostComponent implements OnInit {
         )
       ),
       catchError(err => {
+        if (spinnerRef != undefined) { this.spinnerService.stop(spinnerRef); }
         this.locationStatus = 1;
         this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
         console.log(err);

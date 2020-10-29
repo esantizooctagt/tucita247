@@ -4828,6 +4828,10 @@ When using Manual Check-Out, the system will not send polls to that location.</t
         <source>Invalid date and time for this service</source>
         <target state="translated">Invalid date and time for this service</target>
       </trans-unit>
+      <trans-unit id="shared.closingLoc">
+        <source>Closing Location</source>
+        <target state="translated">Closing location</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

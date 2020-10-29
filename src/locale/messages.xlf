@@ -4257,6 +4257,9 @@
       <trans-unit id="shared.invalidDateTime">
         <source>Invalid date and time for this service</source>
       </trans-unit>
+      <trans-unit id="shared.closingLoc">
+        <source>Closing Location</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>
