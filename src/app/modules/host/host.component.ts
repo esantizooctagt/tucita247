@@ -715,7 +715,7 @@ export class HostComponent implements OnInit {
 
   resetLocation(){
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadinglocs:`);
-    this.resetLoc$ = this.locationService.updateClosedLocation(this.locationId, this.businessId, 0).pipe(
+    this.resetLoc$ = this.locationService.updateClosedLocation(this.locationId, this.businessId, 0, this.authService.businessLanguage()).pipe(
       map((res: any) => {
         if (res.Code == 200){
           this.qtyPeople = 0;
@@ -755,7 +755,7 @@ export class HostComponent implements OnInit {
         spinnerRef = this.spinnerService.start($localize`:@@shared.closingLoc:`);
         return result;
       }),
-      switchMap(x => this.locationService.updateClosedLocation(this.locationId, this.businessId, 1).pipe(
+      switchMap(x => this.locationService.updateClosedLocation(this.locationId, this.businessId, 1, this.authService.businessLanguage()).pipe(
           map((res: any) => {
             if (res != null){
               if (res['Business'].OPEN == 0){
@@ -861,7 +861,7 @@ export class HostComponent implements OnInit {
       LocationId: this.locationId,
       ProviderId: this.providerId,
       BusinessName: this.authService.businessName(),
-      Language: this.authService.language()
+      Language: this.authService.businessLanguage()
     }
     this.checkOutModule = 1;
     this.checkIn$ = this.appointmentService.updateAppointmentCheckOut(formData).pipe(
@@ -1114,7 +1114,7 @@ export class HostComponent implements OnInit {
       Guests: appo.Guests,
       CustomerId: appo.ClientId,
       BusinessName: this.authService.businessName(),
-      Language: this.authService.language()
+      Language: this.authService.businessLanguage()
     }
     this.updAppointment$ = this.appointmentService.updateAppointment(appo.AppId, formData).pipe(
       map((res: any) => {
@@ -1184,7 +1184,7 @@ export class HostComponent implements OnInit {
                 LocationId: this.locationId,
                 ProviderId: appo.ProviderId,
                 BusinessName: this.authService.businessName(),
-                Language: this.authService.language()
+                Language: this.authService.businessLanguage()
               }
               this.checkInModule = 1;
             } else {
@@ -1250,7 +1250,7 @@ export class HostComponent implements OnInit {
       LocationId: this.locationId,
       ProviderId: appo.ProviderId,
       BusinessName: this.authService.businessName(),
-      Language: this.authService.language()
+      Language: this.authService.businessLanguage()
     }
     this.checkInModule = 1;
     this.checkIn$ = this.appointmentService.updateAppointmentCheckIn(appo.AppId, formData).pipe(
@@ -1292,7 +1292,8 @@ export class HostComponent implements OnInit {
   onMessageApp(appointmentId: string, value: string, i: number, qeue: string){
     //GET MESSAGES APPOINTMENT
     let formData = {
-      Message: value
+      Message: value,
+      BusinessName: this.authService.businessName()
     }
     this.messages$ = this.appointmentService.putMessage(appointmentId, '1', formData).pipe(
       map((res:any) => {
@@ -1381,7 +1382,7 @@ export class HostComponent implements OnInit {
       DateAppo: appo.DateFull,
       CustomerId: appo.ClientId,
       BusinessName: this.authService.businessName(),
-      Language: this.authService.language()
+      Language: this.authService.businessLanguage()
     }
     this.updAppointment$ = this.appointmentService.updateAppointment(appo.AppId, formData).pipe(
       map((res: any) => {
@@ -1967,7 +1968,7 @@ export class HostComponent implements OnInit {
         DateAppo: appo.DateFull,
         CustomerId: appo.ClientId,
         BusinessName: this.authService.businessName(),
-        Language: this.authService.language()
+        Language: this.authService.businessLanguage()
       }
       transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, this.preCheckIn.length);
       this.updAppointment$ = this.appointmentService.updateAppointment(appo.AppId, formData).pipe(

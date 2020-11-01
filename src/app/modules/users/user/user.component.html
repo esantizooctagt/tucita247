@@ -96,7 +96,6 @@
                             <mat-form-field>
                                 <mat-label i18n="Role:|text in users@@users.role">Role:</mat-label>
                                 <mat-select #roles formControlName="RoleId" required>
-                                    <mat-option i18n="None@@shared.none">None</mat-option>
                                     <mat-option *ngFor="let rol of roles$ | async" [value]="rol.Role_Id">
                                         {{rol.Name}}
                                     </mat-option>

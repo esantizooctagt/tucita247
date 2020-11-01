@@ -137,18 +137,17 @@ export class AuthService {
     return user.Avatar;
   }
   language() {
-    // let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
     let lang;
-    // if (user.Language == ""){
     if (window.location.href.indexOf("/es/") > -1){
       lang = "ES";
     } else {
       lang = "EN";
     }
-    // } else {
-    //   lang = user.Language;
-    // }
     return lang;
+  }
+  businessLanguage(){
+    let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
+    return user.Business_Language;
   }
   get userAvatar() {
     if (sessionStorage.getItem('TC247_USS') != null) {

@@ -399,7 +399,7 @@ export class ScheduleComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if(result != undefined){
         var spinnerRef = this.spinnerService.start($localize`:@@sche.deletingcitas:`);
-        this.cancelAppos$ = this.appointmentService.putCancelAppos(this.businessId, this.locationId, this.providerId, this.datepipe.transform(day, 'yyyy-MM-dd') + '-' + timeGrl.replace(':','-')).pipe(
+        this.cancelAppos$ = this.appointmentService.putCancelAppos(this.businessId, this.locationId, this.providerId, this.datepipe.transform(day, 'yyyy-MM-dd') + '-' + timeGrl.replace(':','-'), this.authService.businessLanguage()).pipe(
           map((res: any) => {
             if (res != null) {
               if (res.Code == 200){

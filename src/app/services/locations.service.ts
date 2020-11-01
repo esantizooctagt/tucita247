@@ -42,8 +42,8 @@ export class LocationService {
                     .pipe(catchError(this.errorHandler))
   }
 
-  updateClosedLocation(locationId, businessId, closed){
-    return this.http.put(this.apiURL + '/location/closed/' + locationId + '/' + businessId + '/' + closed, '')
+  updateClosedLocation(locationId, businessId, closed, language){
+    return this.http.put(this.apiURL + '/location/closed/' + locationId + '/' + businessId + '/' + closed + '/' + language, '')
                     .pipe(catchError(this.errorHandler))
   }
   

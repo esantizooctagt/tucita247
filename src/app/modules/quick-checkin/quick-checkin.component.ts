@@ -406,7 +406,7 @@ export class QuickCheckinComponent implements OnInit {
       LocationId: this.locationId,
       ProviderId: this.providerId,
       BusinessName: this.authService.businessName(),
-      Language: this.authService.language(),
+      Language: this.authService.businessLanguage()
     }
     this.checkOutModule = 1;
     this.check$ = this.appointmentService.updateAppointmentCheckOut(formData).pipe(
@@ -471,7 +471,7 @@ export class QuickCheckinComponent implements OnInit {
       LocationId: this.locationId,
       ProviderId: this.providerId,
       BusinessName: this.authService.businessName(),
-      Language: this.authService.language(),
+      Language: this.authService.businessLanguage()
     }
     this.checkInModule = 1;
     this.check$ = this.appointmentService.updateAppointmentCheckInQR(qrCode, formData).pipe(
@@ -823,7 +823,7 @@ export class QuickCheckinComponent implements OnInit {
 
   resetLocation(){
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadinglocs:`);
-    this.resetLoc$ = this.locationService.updateClosedLocation(this.locationId, this.businessId, 0).pipe(
+    this.resetLoc$ = this.locationService.updateClosedLocation(this.locationId, this.businessId, 0, this.authService.businessLanguage()).pipe(
       map((res: any) => {
         if (res.Code == 200){
           this.qtyPeople = 0;
@@ -907,7 +907,7 @@ export class QuickCheckinComponent implements OnInit {
         spinnerRef = this.spinnerService.start($localize`:@@shared.closingLoc:`);
         return result;
       }),
-      switchMap(x => this.locationService.updateClosedLocation(this.locationId, this.businessId, 1).pipe(
+      switchMap(x => this.locationService.updateClosedLocation(this.locationId, this.businessId, 1, this.authService.businessLanguage()).pipe(
           map((res: any) => {
             if (res != null){
               if (res['Business'].OPEN == 0){

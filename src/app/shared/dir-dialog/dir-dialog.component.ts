@@ -110,7 +110,7 @@ export class DirDialogComponent implements OnInit {
         LocationId: this.locationId,
         Appos: appId,
         BusinessName: this.authService.businessName(),
-        Language: this.authService.language()
+        Language: this.authService.businessLanguage()
       }
       var spinnerRef = this.spinnerService.start($localize`:@@dirdialog.walkins:`);
       this.getLocInfo$ = this.appointmentService.updateAppointmentWalkInsCheckOut(formData).pipe(

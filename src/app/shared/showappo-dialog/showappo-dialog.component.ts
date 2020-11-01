@@ -163,7 +163,7 @@ export class ShowappoDialogComponent implements OnInit {
       Reason: reasonId,
       Guests: appo.Guests,
       BusinessName: this.authService.businessName(),
-      Language: this.authService.language()
+      Language: this.authService.businessLanguage()
     }
     this.updAppointment$ = this.appointmentService.updateAppointment(appo.AppId, formData).pipe(
       map((res: any) => {
@@ -217,7 +217,8 @@ export class ShowappoDialogComponent implements OnInit {
   onMessageApp(appointmentId: string, value: string, i: number, qeue: string){
     //GET MESSAGES APPOINTMENT
     let formData = {
-      Message: value
+      Message: value,
+      BusinessName: this.authService.businessName()
     }
     this.messages$ = this.appointmentService.putMessage(appointmentId, '1', formData).pipe(
       map((res:any) => {

@@ -84,8 +84,8 @@ export class AppointmentService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  putCancelAppos(businessId, locationId, providerId, appoDate) {
-    return this.http.put(this.apiURL + '/appointment/' + businessId + '/' + locationId + '/' + providerId + '/' + appoDate, '')
+  putCancelAppos(businessId, locationId, providerId, appoDate, busLanguage) {
+    return this.http.put(this.apiURL + '/appointment/' + businessId + '/' + locationId + '/' + providerId + '/' + appoDate + '/' + busLanguage, '')
                     .pipe(catchError(this.errorHandler));
   }
 
