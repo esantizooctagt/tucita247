@@ -594,6 +594,20 @@ export class QuickCheckinComponent implements OnInit {
     let dayCurr = this.getDay();
     let dateAppo = yearCurr + '-' + monthCurr + '-' + dayCurr;
     let timeAppo = this.getTime();
+
+    let provName = '';
+    let servName = '';
+    let provId = (this.providerId != '0' ? this.providerId : this.clientForm.value.ProviderId);
+    let prov = this.Providers.filter(x=>x.ProviderId == provId);
+    if (prov.length > 0){
+      provName = prov[0].Name;
+    }
+
+    let serv = this.services.filter(x=>x.ServiceId == this.clientForm.value.ServiceId);
+    if (serv.length > 0){
+      servName = serv[0].Name;
+    }
+
     let formData = {
       BusinessId: this.businessId,
       LocationId: this.locationId,
@@ -613,6 +627,10 @@ export class QuickCheckinComponent implements OnInit {
       Status: 3,
       AppoDate: dateAppo,
       AppoHour: timeAppo,
+      CountProv: this.Providers.length-1,
+      CountServ: this.services.length,
+      ProvName: provName,
+      ServName: servName,
       Type: 2
     }
     var spinnerRef = this.spinnerService.start($localize`:@@lite.addingbook:`);

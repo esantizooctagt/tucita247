@@ -129,6 +129,11 @@ export class AppoDialogComponent implements OnInit {
       let day = dobClient.getDate().toString().padStart(2, '0');
       dob = dobClient.getUTCFullYear().toString() + '-' + month + '-' + day;
     }
+    let servName = '';
+    let serv = this.services.filter(x=>x.ServiceId == this.clientForm.value.ServiceId);
+    if (serv.length > 0){
+      servName = serv[0].Name;
+    }
     //NEW FULL APPOINTMENT
     let phoneNumber = this.clientForm.value.Phone.replace( /\D+/g, '');
     let dateAppo = (this.data.appoTime.substring(6,8) == 'PM' ? (+this.data.appoTime.substring(0,2) == 12 ? this.data.appoTime.substring(0,2) : +this.data.appoTime.substring(0,2)+12) : this.data.appoTime.substring(0,2).padStart(2,'0'));
@@ -151,6 +156,10 @@ export class AppoDialogComponent implements OnInit {
       Disability: (this.clientForm.value.Disability == null ? '': this.clientForm.value.Disability),
       Guests: this.clientForm.value.Guests,
       Status: 1,
+      CountProv: 0,
+      CountServ: this.services.length,
+      ProvName: '',
+      ServName: servName,
       Type: 1
     }
     var spinnerRef = this.spinnerService.start($localize`:@@host.addingappo:`);
