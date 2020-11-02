@@ -26,6 +26,9 @@
                     </div>
                     <div class="row">
                         <button mat-stroked-button class="action-buttons" color="secondary" type="button" (click)="resetLocation()" i18n="Reset|text in citas@@host.reset">Reset Location</button>
+                        <button type="button" mat-icon-button color="primary" class="learn-btn-0" (click)="learnMore(44)">
+                            <mat-icon>help</mat-icon>
+                        </button>
                     </div>
                 </div>
                 <div class="operation-buttons col-sm-9 col-md-6 p-0">
@@ -112,11 +115,19 @@
                     </mat-form-field>
                 </div>
                 <div class="form-field pl-3 pr-3">
-                    <mat-form-field>
+                    <!-- <mat-form-field>
                         <input matInput #Guests i18n-placeholder="Number of Guests|text in citas lite@@lite.numberguests" placeholder="Number of Guests" min="1" [max]="maxGuests" formControlName="Guests"
                             [errorStateMatcher]="confirmValidParentMatcher" required>
                         <mat-error *ngIf="f.Guests.invalid && f.Guests.touched">{{ 'Error: ' + getErrorMessage('Guests')}}</mat-error>
-                    </mat-form-field>
+                    </mat-form-field> -->
+                    <mat-label class="label-custom" i18n="No of People|text in citas@@host.noofpeople">No of People</mat-label>
+                    <button type="button" mat-icon-button (click)="addGuests()">
+                        <mat-icon class="site-color">add</mat-icon>
+                    </button>
+                    <input class="input-guests" matInput #Guests i18n-placeholder="No of People|text in citas@@host.noofpeople" placeholder="No of People" min="1" [max]="maxGuests" formControlName="Guests">
+                    <button type="button" mat-icon-button (click)="remGuests()">
+                        <mat-icon class="site-color">remove</mat-icon>
+                    </button>
                 </div>
                 <div class="form-field pl-3 pr-3">
                     <mat-form-field>

@@ -32,7 +32,7 @@ export class UserlocComponent implements OnInit {
   door = [];
   locations = [];
 
-  displayedColumns = ['Name', 'Email', 'Location', 'Door', 'Actions'];
+  displayedColumns = ['Name', 'Email', 'Location', 'Door'];
 
   get fUsers() {
     return this.usersForm.get('users') as FormArray;
@@ -123,7 +123,8 @@ export class UserlocComponent implements OnInit {
     var spinnerRef = this.spinnerService.start($localize`:@@userloc.loadinguser:`);
     let i: number = 0;
     usrs.forEach((res: any) => {
-      if (res.LocationId != "") {
+      console.log(res.LocationId);
+      if (res.LocationId != "" && res.LocationId != "0") {
         this.door[i] = this.locations.filter(x => x.LocationId == res.LocationId)[0].Door;
       } else {
         this.door[i] = [];
@@ -145,7 +146,7 @@ export class UserlocComponent implements OnInit {
     return formArray;
   }
 
-  changeLocation(event: any, i: number) {
+  changeLocation(event: any, i: number, element: any) {
     const item = this.usersForm.controls.users as FormArray;
     item.at(i).patchValue({
       Door: ''
@@ -153,6 +154,46 @@ export class UserlocComponent implements OnInit {
     if (event.value != '0'){
       this.door[i] = this.locations.filter(x => x.LocationId == event.value)[0].Door;
     }
+
+    if (event.value == "") { return; }
+    let formData = {
+      UserId: element.value.UserId,
+      LocationId: event.value,
+      Door: element.value.Door
+    }
+    this.saveUser$ = this.userService.updateUsersLocs(this.businessId, formData).pipe(
+      map((res: any) => {
+        if (res != null) {
+          this.openSnackBar($localize`:@@userloc.userupdated:`, $localize`:@@userloc.subtitle:`);
+          return res.locs;
+        }
+      }),
+      catchError(err => {
+        this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@userloc.subtitle:`);
+        return throwError(err || err.message);
+      })
+    );
+  }
+
+  changeDoor(event: any, i: number, element: any) {
+    if (event.value == "") { return; }
+    let formData = {
+      UserId: element.value.UserId,
+      LocationId: element.value.LocationId,
+      Door: event.value
+    }
+    this.saveUser$ = this.userService.updateUsersLocs(this.businessId, formData).pipe(
+      map((res: any) => {
+        if (res != null) {
+          this.openSnackBar($localize`:@@userloc.userupdated:`, $localize`:@@userloc.subtitle:`);
+          return res.locs;
+        }
+      }),
+      catchError(err => {
+        this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@userloc.subtitle:`);
+        return throwError(err || err.message);
+      })
+    );
   }
 
   changeData(i: number, element: any) {

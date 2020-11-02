@@ -8,14 +8,14 @@
         <div class="main-logo mb-5 mt-5"></div>
         <div class="login-form">
             <h3 class="sign-in pt-3 pl-4 pb-2" i18n="Activate Account@@verification.activateacct">Activate Account</h3>
-            <div class="form-field mb-0 pl-4 pb-2 pr-4" *ngIf="code != 0">
+            <div class="form-field mb-0 pl-4 pb-2 pr-4" *ngIf="code != ''">
                 <mat-form-field>
                     <mat-label i18n="Code@@verification.Code">Code</mat-label>
                     <input matInput formControlName="userCode" i18n-placeholder="Activation Code@@verification.activationcode" placeholder="Activation Code" max="999999" min="000001"
                         maxlength="6" minlength="6" required>
                 </mat-form-field>
             </div>
-            <ng-container formGroupName="Passwords" *ngIf="code != 0">
+            <ng-container formGroupName="Passwords" *ngIf="code != ''">
                 <div class="form-field mb-0 pl-4 pb-2 pr-4">
                     <mat-form-field hintLabel="Min 8 characters" i18n-hintLabel="Min 8 characters@@verification.minchar">
                         <mat-label i18n="Password@@shared.NewPassword">New Password</mat-label>
@@ -54,7 +54,7 @@
                     </mat-form-field>
                 </div>
             </ng-container>
-            <ng-container formGroupName="Passwords" *ngIf="code == 0">
+            <ng-container formGroupName="Passwords" *ngIf="code == ''">
                 <div class="form-field mb-0 pl-4 pb-2 pr-4">
                     <mat-form-field>
                         <mat-label i18n="Temporary Password@@verification.temporarypass">Temporary Password</mat-label>

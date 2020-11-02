@@ -24,7 +24,7 @@ export class VerificationComponent implements OnInit {
   hide = true;
   hideconf = true;
   userId: string = '';
-  code: number = 0;
+  code: string = '';
   passTemp: string = '';
   userAct$: Observable<any>;
 
@@ -58,12 +58,12 @@ export class VerificationComponent implements OnInit {
   ngOnInit(): void {
     console.log("same path");
     this.userId = this.route.snapshot.paramMap.get('userId');
-    this.code = +this.route.snapshot.paramMap.get('code');
+    this.code = this.route.snapshot.paramMap.get('code');
     this.passTemp = this.route.snapshot.paramMap.get('password');
     if (this.passTemp != undefined && this.passTemp != ''){
       this.verifForm.get('Passwords.temppassword').patchValue(this.passTemp);
     }
-    if (this.code != undefined && this.code > 0){
+    if (this.code != undefined && this.code != ''){
       this.verifForm.get('userCode').patchValue(this.code);
     }
   }
@@ -95,17 +95,17 @@ export class VerificationComponent implements OnInit {
   }
 
   onSubmit(){
-    if (this.code != 0){
+    if (this.code != ''){
       if (this.code != this.verifForm.value.userCode) {
         this.error = $localize`:@@verification.invalidcode:`;
         return;
       } 
-      if (this.code != 0 && this.verifForm.get('Passwords.password').value == ''){
+      if (this.code != '' && this.verifForm.get('Passwords.password').value == ''){
         this.error = $localize`:@@verification.enterpassword:`;
         return;
       }
       let dataForm;
-      if (this.code != 0){
+      if (this.code != ''){
         // if (this.verifForm.invalid) { return; }
         var CryptoJS = require("crypto-js");
         var data = this.verifForm.get('Passwords.password').value;

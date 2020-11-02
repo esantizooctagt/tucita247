@@ -235,6 +235,9 @@
                                         Tu Cita 24/7 Link :
                                     </mat-label>
                                     <a [attr.href]="'https://console.tucita247.com/en/'+fBusiness.TuCitaLink.value" target="_blank">{{'https://console.tucita247.com/en/'+fBusiness.TuCitaLink.value}}</a>
+                                    <button type="button" mat-icon-button color="primary" *ngIf="!loadingBusiness" matSuffix (click)="learnMore(7)">
+                                        <mat-icon>help</mat-icon>
+                                    </button>
                                 </div>
                             </ng-template>
                             <div class="image-business mt-2 mb-2 row ml-0 mr-0">

@@ -2129,14 +2129,14 @@
         <note priority="1" from="description">Ok</note>
       </trans-unit>
       <trans-unit id="dirdialog.texto" datatype="html">
-        <source>Select walk-ins to check out</source>
-        <target state="translated">Select walk-ins to check-out</target>
+        <source>Select walk-in to check out</source>
+        <target state="translated">Select walk-in to check-out</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/dir-dialog/dir-dialog.component.html</context>
           <context context-type="linenumber">1</context>
         </context-group>
         <note priority="1" from="description">text in directory</note>
-        <note priority="1" from="meaning">Select walk-ins to check out</note>
+        <note priority="1" from="meaning">Select walk-in to check out</note>
       </trans-unit>
       <trans-unit id="dirdialog.directory" datatype="html">
         <source>Check Out</source>
@@ -2187,14 +2187,14 @@
         <note priority="1" from="meaning">Citas</note>
       </trans-unit>
       <trans-unit id="host.walk-ins" datatype="html">
-        <source>Walk-Ins</source>
-        <target state="translated">Walk-ins</target>
+        <source>Walk-In</source>
+        <target state="translated">Walk-in</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">62</context>
         </context-group>
         <note priority="1" from="description">text in citas</note>
-        <note priority="1" from="meaning">Walk-Ins</note>
+        <note priority="1" from="meaning">Walk-In</note>
       </trans-unit>
       <trans-unit id="host.readycheckin" datatype="html">
         <source>
@@ -3026,12 +3026,26 @@
         <note priority="1" from="description">text in operation hours</note>
         <note priority="1" from="meaning">Sun</note>
       </trans-unit>
+      <trans-unit id="businessdays.maintextbus" datatype="html">
+        <source>
+            Configure your year schedule here. Just click on a date to set the days off.
+        </source>
+        <target state="translated">
+            Just click on a date to set the business days off
+        </target>
+        <context-group purpose="business-days">
+          <context context-type="sourcefile">src/app/modules/business-days/business-days.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+        <note priority="1" from="description">text business days</note>
+        <note priority="1" from="meaning">Configure your year schedule here. Just click on a date to set the days off.</note>
+      </trans-unit>
       <trans-unit id="businessdays.maintext" datatype="html">
         <source>
             Configure your year schedule here. Just click on a date to set the days off.
         </source>
         <target state="translated">
-            Just click on a date to set the business days off.
+            Just click on a date to set the locations days off
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-days/business-days.component.html</context>
@@ -3045,7 +3059,7 @@
             Configure your year schedule here. Just click on a date to set the days off.
         </source>
         <target state="translated">
-            Just click on a date to set the locations days off.
+            Just click on a date to set the service provider days off
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-days/business-days.component.html</context>
@@ -3303,14 +3317,14 @@
         <note priority="1" from="meaning">Sun</note>
       </trans-unit>
       <trans-unit id="lite..walkins" datatype="html">
-        <source>Walk-Ins Check In</source>
-        <target state="translated">Walk-ins check-in</target>
+        <source>Walk-In Check In</source>
+        <target state="translated">Walk-in check-in</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/quick-checkin/quick-checkin.component.html</context>
           <context context-type="linenumber">33</context>
         </context-group>
         <note priority="1" from="description">text in citas lite</note>
-        <note priority="1" from="meaning">Walk-Ins Check In</note>
+        <note priority="1" from="meaning">Walk-In Check In</note>
       </trans-unit>
       <trans-unit id="lite.phonenumber" datatype="html">
         <source>Phone number</source>
@@ -4147,8 +4161,8 @@
         <target state="translated">Booking successfully checked-out</target>
       </trans-unit>
       <trans-unit id="host.loadingwalkins">
-        <source>Loading Walk-Ins...</source>
-        <target state="translated">Loading walk-ins...</target>
+        <source>Loading Walk-In...</source>
+        <target state="translated">Loading walk-in...</target>
       </trans-unit>
       <trans-unit id="host.addingappo">
         <source>Adding Appointment...</source>
@@ -4363,8 +4377,8 @@
         <target state="translated">Walk-in successfully added</target>
       </trans-unit>
       <trans-unit id="lite.loadingwalkins">
-        <source>Loading Walk-Ins...</source>
-        <target state="translated">Loading walk-ins...</target>
+        <source>Loading Walk-In...</source>
+        <target state="translated">Loading walk-in...</target>
       </trans-unit>
       <trans-unit id="lite.loadingdata">
         <source>Loading Data...</source>
@@ -4475,8 +4489,8 @@
         <target state="translated">Check-out successful</target>
       </trans-unit>
       <trans-unit id="dirdialog.walkins">
-        <source>Check Out Walk-Ins...</source>
-        <target state="translated">Check-out walk-ins...</target>
+        <source>Check Out Walk-In...</source>
+        <target state="translated">Check-out walk-in..</target>
       </trans-unit>
       <trans-unit id="surveys.survey">
         <source>Survey</source>
@@ -4822,6 +4836,22 @@ When using Manual Check-Out, the system will not send polls to that location.</t
         <context-group purpose="host">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">588</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON44" datatype="html">
+        <source>LMCON44</source>
+        <target>Resetting the location will reduce the current total of people within the location to zero.</target>
+        <context-group purpose="host">
+          <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sche.calendar" datatype="html">
+        <source>CALENDAR</source>
+        <target state="translated">CALENDAR</target>
+        <context-group purpose="schedule">
+          <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
+          <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
       <trans-unit id="shared.invalidDateTime">

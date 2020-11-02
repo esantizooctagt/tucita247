@@ -360,8 +360,16 @@ mat-icon.mat-icon.notranslate.material-icons.mat-icon-no-color {
     position: relative;
     top: -5px;
 }
+.learn-btn-0{
+    position: relative;
+    top: 0px;
+}
 mat-menu{
     overflow: auto;
+}
+.label-custom{
+    color: #ff4f00;
+    font-family: 'Montserrat';
 }
 .title-text:hover{
     color: #000 !important;

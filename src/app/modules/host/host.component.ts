@@ -97,6 +97,7 @@ export class HostComponent implements OnInit {
   locationStatus: number = 0;
   checkInModule: number = 0;
   checkOutModule: number = 0;
+  numGuests: number = 1;
   textOpenLocation: string = '';
   locName: string = '';
   maxGuests: number = 1;
@@ -827,6 +828,26 @@ export class HostComponent implements OnInit {
   validateService(event){
     let res = this.services.filter(x => x.ServiceId == event.value);
     if (res.length > 0) { this.maxGuests = res[0].CustomerPerBooking; }
+    this.numGuests =  1;
+    this.clientForm.patchValue({'Guests': this.numGuests});
+  }
+
+  addGuests(){
+    if (this.numGuests < this.maxGuests) {
+      this.numGuests = this.numGuests+1;
+    } else {
+      this.numGuests = this.numGuests;
+    }
+    this.clientForm.patchValue({'Guests': this.numGuests});
+  }
+
+  remGuests(){
+    if (this.numGuests > 1) {
+      this.numGuests=this.numGuests-1;
+     } else {
+      this.numGuests = this.numGuests;
+     }
+     this.clientForm.patchValue({'Guests': this.numGuests});
   }
 
   checkOutQR(){
@@ -998,13 +1019,25 @@ export class HostComponent implements OnInit {
     let monthCurr = this.getMonth();
     let dayCurr = this.getDay();
     let dateAppo = yearCurr + '-' + monthCurr + '-' + dayCurr;
+    let provName = '';
+    let servName = '';
+    let prov = this.Providers.filter(x=>x.ProviderId == this.providerId);
+    if (prov.length > 0){
+      provName = prov[0].Name;
+    }
+
+    let serv = this.services.filter(x=>x.ServiceId == this.clientForm.value.ServiceId);
+    if (serv.length > 0){
+      servName = serv[0].Name;
+    }
+    
     let formData = {
       BusinessId: this.businessId,
       LocationId: this.locationId,
       ProviderId: (this.providerId != '0' ? this.providerId : this.clientForm.value.ProviderId),
       ServiceId: this.clientForm.value.ServiceId,
       BusinessName: this.authService.businessName(),
-      Language: this.authService.language(),
+      Language: this.authService.businessLanguage(),
       Door: this.doorId,
       Phone: (phoneNumber == '' ?  '00000000000' : (phoneNumber.length <= 10 ? '1' + phoneNumber : phoneNumber)),
       Name: this.clientForm.value.Name,
@@ -1016,6 +1049,10 @@ export class HostComponent implements OnInit {
       Guests: this.clientForm.value.Guests,
       AppoDate: dateAppo,
       AppoHour: timeAppo,
+      CountProv: this.Providers.length-1,
+      CountServ: this.services.length,
+      ProvName: provName,
+      ServName: servName,
       Type: 2
     }
     var spinnerRef = this.spinnerService.start($localize`:@@host.addingappo:`);
@@ -2020,6 +2057,14 @@ export class HostComponent implements OnInit {
     switch(textNumber) { 
       case 26: { 
         message = $localize`:@@learnMore.LMCON26:`;
+        break; 
+      }
+      case 27: { 
+        message = $localize`:@@learnMore.LMCON27:`;
+        break; 
+      }
+      case 44: { 
+        message = $localize`:@@learnMore.LMCON44:`;
         break; 
       }
       default: { 

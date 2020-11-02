@@ -124,7 +124,7 @@
       </trans-unit>
       <trans-unit id="host.reset" datatype="html">
         <source>Reset</source>
-        <target state="translated">Resetar Localidad</target>
+        <target state="translated">Reset Localidad</target>
         <context-group purpose="host">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">25</context>
@@ -2129,14 +2129,14 @@
         <note priority="1" from="description">Ok</note>
       </trans-unit>
       <trans-unit id="dirdialog.texto" datatype="html">
-        <source>Select walk-ins to check out</source>
-        <target state="translated">Seleccionar walk-ins para check out</target>
+        <source>Select walk-in to check out</source>
+        <target state="translated">Seleccionar walk-in para check out</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/dir-dialog/dir-dialog.component.html</context>
           <context context-type="linenumber">1</context>
         </context-group>
         <note priority="1" from="description">text in directory</note>
-        <note priority="1" from="meaning">Select walk-ins to check out</note>
+        <note priority="1" from="meaning">Select walk-in to check out</note>
       </trans-unit>
       <trans-unit id="dirdialog.directory" datatype="html">
         <source>Check Out</source>
@@ -2187,14 +2187,14 @@
         <note priority="1" from="meaning">Citas</note>
       </trans-unit>
       <trans-unit id="host.walk-ins" datatype="html">
-        <source>Walk-Ins</source>
-        <target state="translated">Walk-ins</target>
+        <source>Walk-In</source>
+        <target state="translated">Walk-in</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">62</context>
         </context-group>
         <note priority="1" from="description">text in citas</note>
-        <note priority="1" from="meaning">Walk-Ins</note>
+        <note priority="1" from="meaning">Walk-In</note>
       </trans-unit>
       <trans-unit id="host.readycheckin" datatype="html">
         <source>
@@ -3026,12 +3026,26 @@
         <note priority="1" from="description">text in operation hours</note>
         <note priority="1" from="meaning">Sun</note>
       </trans-unit>
+      <trans-unit id="businessdays.maintextbus" datatype="html">
+        <source>
+            Configure your year schedule here. Just click on a date to set the days off.
+        </source>
+        <target state="translated">
+            Sólo haga click en la fecha para establecer los días libres del negocio
+        </target>
+        <context-group purpose="business-days">
+          <context context-type="sourcefile">src/app/modules/business-days/business-days.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+        <note priority="1" from="description">text business days</note>
+        <note priority="1" from="meaning">Configure your year schedule here. Just click on a date to set the days off.</note>
+      </trans-unit>
       <trans-unit id="businessdays.maintext" datatype="html">
         <source>
             Configure your year schedule here. Just click on a date to set the days off.
         </source>
         <target state="translated">
-            Sólo haga click en el día para establecer los días libres.
+            Sólo haga click en la fecha para establecer los días libres de la localidad
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-days/business-days.component.html</context>
@@ -3045,7 +3059,7 @@
             Configure your year schedule here. Just click on a date to set the days off.
         </source>
         <target state="translated">
-            Sólo haga click en el día para establecer los días libres.
+            Sólo haga click en la fecha para establecer los días libres del proveedor de servicio
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/business-days/business-days.component.html</context>
@@ -3224,7 +3238,7 @@
       </trans-unit>
       <trans-unit id="sche.time" datatype="html">
         <source>Time</source>
-        <target state="needs-l10n">Hour</target>
+        <target state="needs-l10n">Hora</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
           <context context-type="linenumber">33</context>
@@ -3303,14 +3317,14 @@
         <note priority="1" from="meaning">Sun</note>
       </trans-unit>
       <trans-unit id="lite..walkins" datatype="html">
-        <source>Walk-Ins Check In</source>
-        <target state="translated">Walk-Ins check-in</target>
+        <source>Walk-In Check In</source>
+        <target state="translated">Walk-In check-in</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/quick-checkin/quick-checkin.component.html</context>
           <context context-type="linenumber">33</context>
         </context-group>
         <note priority="1" from="description">text in citas lite</note>
-        <note priority="1" from="meaning">Walk-Ins Check In</note>
+        <note priority="1" from="meaning">Walk-In Check In</note>
       </trans-unit>
       <trans-unit id="lite.phonenumber" datatype="html">
         <source>Phone number</source>
@@ -4147,8 +4161,8 @@
         <target state="translated">Check-out de Cita exitoso</target>
       </trans-unit>
       <trans-unit id="host.loadingwalkins">
-        <source>Loading Walk-Ins...</source>
-        <target state="translated">Cargando walk-ins...</target>
+        <source>Loading Walk-In...</source>
+        <target state="translated">Cargando walk-in...</target>
       </trans-unit>
       <trans-unit id="host.addingappo">
         <source>Adding Appointment...</source>
@@ -4363,8 +4377,8 @@
         <target state="translated">Walk-in añadido exitosamente</target>
       </trans-unit>
       <trans-unit id="lite.loadingwalkins">
-        <source>Loading Walk-Ins...</source>
-        <target state="translated">Cargando walk-ins...</target>
+        <source>Loading Walk-In...</source>
+        <target state="translated">Cargando walk-in...</target>
       </trans-unit>
       <trans-unit id="lite.loadingdata">
         <source>Loading Data...</source>
@@ -4475,8 +4489,8 @@
         <target state="translated">Check-out exitoso</target>
       </trans-unit>
       <trans-unit id="dirdialog.walkins">
-        <source>Check Out Walk-Ins...</source>
-        <target state="translated">Check-out walk-ins...</target>
+        <source>Check Out Walk-In...</source>
+        <target state="translated">Check-out walk-in...</target>
       </trans-unit>
       <trans-unit id="surveys.survey">
         <source>Survey</source>
@@ -4699,7 +4713,7 @@ Para utilizar el check-out manual, debe habilitar este botón.  Para utilizar el
       </trans-unit>
       <trans-unit id="learnMore.LMCON21">
         <source>LMCON21</source>
-        <target state="translated">Puede agregar los servicios ofrece su negocio a sus clientes. Una vez cree los servicios, los podrá asignar a los proveedores de servicios que los ofrecen.  Sus clientes podrán ver y escoger los servicios que su negocio ofrece, y reservar citas para adquirirlos. Recomendamos crear sevicios en ambos idiomas, español e inglés; por ejemplo: "Consultoría / Consultancy".</target>
+        <target state="translated">Puede agregar los servicios que ofrece su negocio a sus clientes. Una vez cree los servicios, los podrá asignar a los proveedores de servicios que los ofrecen.  Sus clientes podrán ver y escoger los servicios que su negocio ofrece, y reservar citas para adquirirlos. Recomendamos crear sevicios en ambos idiomas, español e inglés; por ejemplo: "Consultoría / Consultancy".</target>
       </trans-unit>
       <trans-unit id="learnMore.LMCON22">
         <source>LMCON22</source>
@@ -4720,7 +4734,7 @@ Para utilizar el check-out manual, debe habilitar este botón.  Para utilizar el
       <trans-unit id="learnMore.LMCON26">
         <source>LMCON26</source>
         <target state="translated">Localidad abierta significa que esta localidad está disponible para recibir visitantes. En este módulo de Las Citas Lite, usted puede abrir o cerrar localidades y seleccionar los proveedores de servicio.  Usted también puede registrar la entrada (check-in) a clientes que no tienen cita previa (walk-in), check-in a clientes con cita de Tu Cita 24/7 y registrar la salida (check-out) a todos sus clientes.
-Para hacer check-in a un walk-in, solo presione el botón de Walk-in, en ingrese los datos solicitados.  Campos con el símbolo * son obligatorios para continuar.
+Para hacer check-in a un walk-in, solo presione el botón de Walk-in, e ingrese los datos solicitados.  Campos con el símbolo * son obligatorios para continuar.
 Para hacer check-in a un cliente con cita, usted puede escanear el código QR, o escribir el número de Código de Cita.
 Para hacer check-out a un cliente que está saliendo de la localidad, usted puede escanear el código QR, escribir el número de Código de Cita, o usar el contador manual (tipo clicker) y usar el símbolo de +  para añadir personas a la salida.</target>
       </trans-unit>
@@ -4734,7 +4748,7 @@ Para hacer check-out a un cliente que está saliendo de la localidad, usted pued
       </trans-unit>
       <trans-unit id="learnMore.LMCON28">
         <source>LMCON28</source>
-        <target state="translated">En este módulo de Encuestas, puede crear una pregunta que sus clientes recibirán y podrán responder después de visitar su negocio. Es una forma sencilla de recopilar información sobre la satisfacción del cliente. La encuesta debe ser una pregunta cerrada que pueda responderse con los emojis Feliz, Neutral, o No Feliz, que se muestran en este módulo. Algunos ejemplos de preguntas que puede formular son: "¿Está satisfecho con nuestro servicio hoy?" O "¿Recomendaría su servicio a sus amigos?"
+        <target state="translated">En este módulo de Encuestas, puede crear una pregunta que sus clientes recibirán y podrán responder después de visitar su negocio. Es una forma sencilla de recopilar información sobre la satisfacción del cliente. La encuesta debe ser una pregunta cerrada que pueda responderse con los emojis Feliz, Neutral, o No Feliz, que se muestran en este módulo. Algunos ejemplos de preguntas que puede formular son: "¿Está satisfecho con nuestro servicio hoy?" O "¿Recomendaría nuestro servicio a sus amigos?"
 Cuando se escoge la opción de Check-Out Manual, el sistema no enviará encuestas a esa localidad.</target>
       </trans-unit>
       <trans-unit id="learnMore.LMCON29">
@@ -4759,7 +4773,7 @@ Cuando se escoge la opción de Check-Out Manual, el sistema no enviará encuesta
       </trans-unit>
       <trans-unit id="learnMore.LMCON34">
         <source>LMCON34</source>
-        <target state="translated">Hay tres niveles de acceso que puedes asignar a cada Rol para los diferentes módulos y funcines de Tu Cita 24/7.  Acceso completo es administrador de la cuenta, puede crear y editar información y puede crear usuarios y asignar roles de acceso.  Acceso a editar permite crear y editar información, pero no puede crear nuevos usuarios ni asignar roles de acceso. Acceso a lectura solo permite leer, no puede crear ni editar.</target>
+        <target state="translated">Hay tres niveles de acceso que puedes asignar a cada Rol para los diferentes módulos y funciones de Tu Cita 24/7.  Acceso completo es administrador de la cuenta, puede crear y editar información y puede crear usuarios y asignar roles de acceso.  Acceso a editar permite crear y editar información, pero no puede crear nuevos usuarios ni asignar roles de acceso. Acceso a lectura solo permite leer, no puede crear ni editar.</target>
       </trans-unit>
       <trans-unit id="learnMore.LMCON35">
         <source>LMCON35</source>
@@ -4823,6 +4837,22 @@ Cuando se escoge la opción de Check-Out Manual, el sistema no enviará encuesta
         <context-group purpose="host">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">588</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON44" datatype="html">
+        <source>LMCON44</source>
+        <target>Restablecer o "reset" la localidad reducirá el total actual de personas dentro de la localidad a cero.</target>
+        <context-group purpose="host">
+          <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sche.calendar" datatype="html">
+        <source>CALENDAR</source>
+        <target state="translated">CALENDARIO</target>
+        <context-group purpose="schedule">
+          <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
+          <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
       <trans-unit id="shared.invalidDateTime">

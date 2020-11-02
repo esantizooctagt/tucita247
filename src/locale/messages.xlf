@@ -2716,6 +2716,17 @@
         <note priority="1" from="description">text in operation hours</note>
         <note priority="1" from="meaning">Sun</note>
       </trans-unit>
+      <trans-unit id="businessdays.maintextbus" datatype="html">
+        <source>
+            Configure your year schedule here. Just click on a date to set the days off.
+        </source>
+        <context-group purpose="business-days">
+          <context context-type="sourcefile">src/app/modules/business-days/business-days.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+        <note priority="1" from="description">text business days</note>
+        <note priority="1" from="meaning">Configure your year schedule here. Just click on a date to set the days off.</note>
+      </trans-unit>
       <trans-unit id="businessdays.maintext" datatype="html">
         <source>
             Configure your year schedule here. Just click on a date to set the days off.
@@ -4252,6 +4263,20 @@
         <context-group purpose="host">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">588</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON44" datatype="html">
+        <source>LMCON44</source>
+        <context-group purpose="host">
+          <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="sche.calendar" datatype="html">
+        <source>CALENDAR</source>
+        <context-group purpose="schedule">
+          <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
+          <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
       <trans-unit id="shared.invalidDateTime">

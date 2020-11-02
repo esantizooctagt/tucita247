@@ -33,7 +33,7 @@
                         <ng-container *ngIf="locs$ | async"></ng-container>
                         <mat-cell *matCellDef="let element; let i = index" class="col-md-2"
                             [formGroup]="element">
-                            <mat-select formControlName="LocationId" (selectionChange)="changeLocation($event, i)">
+                            <mat-select formControlName="LocationId" (selectionChange)="changeLocation($event, i, element)">
                                 <mat-option class="" value="0" i18n="NA@@userloc.na">N/A</mat-option>
                                 <mat-option *ngFor="let res of locations" [value]="res.LocationId">
                                     {{res.Name}}
@@ -46,7 +46,7 @@
                         <mat-header-cell *matHeaderCellDef class="col-md-2" i18n="Door|text in user locations@@userloc.door"> Door </mat-header-cell>
                         <mat-cell *matCellDef="let element; let i = index" class="col-md-2"
                             [formGroup]="element">
-                            <mat-select formControlName="Door">
+                            <mat-select formControlName="Door" (selectionChange)="changeDoor($event, i, element)">
                                 <mat-option *ngFor="let res of door[i]" [value]="res">
                                     {{res}}
                                 </mat-option>
@@ -54,14 +54,6 @@
                         </mat-cell>
                     </ng-container>
 
-                    <ng-container matColumnDef="Actions">
-                        <mat-header-cell *matHeaderCellDef class="col-md-1" i18n="Actions@@shared.actions"> Actions </mat-header-cell>
-                        <mat-cell *matCellDef="let element; let i = index" class="col-md-1">
-                            <button mat-icon-button (click)="changeData(i, element)">
-                                <mat-icon>check_circle_outline</mat-icon>
-                            </button>
-                        </mat-cell>
-                    </ng-container>
                     <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
                     <mat-row *matRowDef="let row; columns: displayedColumns; let i=index"></mat-row>
                 </mat-table>

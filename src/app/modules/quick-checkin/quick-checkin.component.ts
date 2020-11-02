@@ -41,6 +41,7 @@ export class QuickCheckinComponent implements OnInit {
   totLocation: number = 0;
   checkInModule: number = 0;
   checkOutModule: number = 0;
+  numGuests: number = 1;
   textOpenLocation: string = '';
   locName: string = '';
   buckets=[];
@@ -505,6 +506,26 @@ export class QuickCheckinComponent implements OnInit {
   validateService(event){
     let res = this.services.filter(x => x.ServiceId == event.value);
     if (res.length > 0) { this.maxGuests = res[0].CustomerPerBooking; }
+    this.numGuests =  1;
+    this.clientForm.patchValue({'Guests': this.numGuests});
+  }
+
+  addGuests(){
+    if (this.numGuests < this.maxGuests) {
+      this.numGuests = this.numGuests+1;
+    } else {
+      this.numGuests = this.numGuests;
+    }
+    this.clientForm.patchValue({'Guests': this.numGuests});
+  }
+
+  remGuests(){
+    if (this.numGuests > 1) {
+      this.numGuests=this.numGuests-1;
+     } else {
+      this.numGuests = this.numGuests;
+     }
+     this.clientForm.patchValue({'Guests': this.numGuests});
   }
 
   getErrorMessage(component: string){
@@ -1044,6 +1065,10 @@ export class QuickCheckinComponent implements OnInit {
     switch(textNumber) { 
       case 26: { 
         message = $localize`:@@learnMore.LMCON26:`;
+        break; 
+      }
+      case 44: { 
+        message = $localize`:@@learnMore.LMCON44:`;
         break; 
       }
       default: { 
