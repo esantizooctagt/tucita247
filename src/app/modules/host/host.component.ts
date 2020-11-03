@@ -229,7 +229,7 @@ export class HostComponent implements OnInit {
           let hora = msg['DateAppo'];
           let data = {
             AppId: msg['AppId'],
-            ClientId: msg['ClientId'],
+            ClientId: msg['CustomerId'],
             ProviderId: msg['ProviderId'],
             Name: msg['Name'].toLowerCase(),
             OnBehalf: msg['OnBehalf'],
