@@ -256,7 +256,7 @@ export class HostComponent implements OnInit {
       }  
     }
     if (msg['Tipo'] == 'MESS'){
-      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 1){
+      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 1 && msg['User'] == 'H'){
         let resScheMess = this.schedule.findIndex(x => x.AppId === msg['AppId']);
         if (resScheMess >= 0){
           this.schedule[resScheMess].Unread = "H";
