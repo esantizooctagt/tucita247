@@ -68,9 +68,21 @@
     </div>
 </div>
 <div class="col-md-12" *ngIf="locationStatus == 1">
-    <div class="qr-space">
-        <button mat-stroked-button class="action-buttons col-md-12 mt-2 mb-2" color="secondary" type="button"
-            (click)="showCard = !showCard" i18n="Walk-Ins Check In|text in citas lite@@lite..walkins">Walk-Ins Check In</button>
+    <div class="row phone-row">
+        <div class="col-md-6 col-6 qr-space">
+            <div matRipple class="checkinwi ripple-container p-2 mt-2 mb-2" (click)="showCard = !showCard"></div>
+            <mat-label class="col-md-12 label-lite" i18n="Walk-Ins Check In|text in citas lite@@lite..walkins">Walk-Ins Check In</mat-label>
+            <!-- <button mat-stroked-button class="action-buttons col-md-12 mt-2 mb-2" color="secondary" type="button"
+                (click)="showCard = !showCard" i18n="Walk-Ins Check In|text in citas lite@@lite..walkins">Walk-Ins Check In</button> -->
+        </div>
+        <div class="col-md-6 col-6 qr-space">
+            <div matRipple class="checkin ripple-container p-2 mt-2 mb-2" (click)="onCheckInApp()"></div>
+            <mat-label class="col-md-12 label-lite" i18n="Check In|text in citas lite@@lite.checkin">Check In</mat-label>
+            <!-- <button mat-stroked-button class="action-buttons col-md-12" color="secondary" type="button"
+                 [disabled]="!locationId" i18n="Check In|text in citas lite@@lite.checkin">Check In</button> -->
+        </div>
+    </div>
+    <div class="row space-row">
         <ng-container *ngIf="newAppointment$ | async"></ng-container>
         <mat-card *ngIf="showCard" class="card-Appointment mt-2 mb-2">
             <form [formGroup]="clientForm" (ngSubmit)="addAppointment()">
@@ -169,16 +181,15 @@
             </form>
         </mat-card>
     </div>
-    <div class="qr-space">
-        <div class="qr-logo"></div>
-        <button mat-stroked-button class="action-buttons col-md-12" color="secondary" type="button"
-            (click)="onCheckInApp()" [disabled]="!locationId" i18n="Check In|text in citas lite@@lite.checkin">Check In</button>
-    </div>
-    <div class="qr-space">
-        <div class="qr-logo"></div>
-        <button mat-stroked-button class="action-buttons col-md-12" color="secondary" type="button"
-            (click)="checkOutQR()" [disabled]="!locationId" i18n="Check Out|text in citas lite@@lite.checkout">Check Out</button>
-        <ng-container *ngIf="manualCheckOut$ | async"></ng-container>
+    <div class="row phone-row">
+        <div class="qr-space">
+            <!-- (click)="checkOutQR()" -->
+            <div matRipple class="checkout ripple-container p-2 mt-2"></div>
+            <mat-label class="col-md-12 label-lite" i18n="Check Out|text in citas lite@@lite.checkout">Check Out</mat-label>
+            <!-- <button mat-stroked-button class="action-buttons col-md-12" color="secondary" type="button"
+                 [disabled]="!locationId" i18n="Check Out|text in citas lite@@lite.checkout">Check Out</button> -->
+            <ng-container *ngIf="manualCheckOut$ | async"></ng-container>
+        </div>
     </div>
     <!-- <div class="qr-space">
         <button mat-stroked-button class="action-buttons col-md-12 mt-0 mb-2" color="secondary" type="button"

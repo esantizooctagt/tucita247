@@ -1,14 +1,58 @@
-.qr-logo{
-    height: 230px;
-    background: url('../../../assets/images/qr-code.png');
-    width: 220px;
+.checkin{
+    height: 170px;
+    background: url('../../../assets/images/checkin.svg');
+    width: 170px;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
     margin: 0 auto;
 }
+.checkout{
+    height: 170px;
+    background: url('../../../assets/images/checkout.svg');
+    width: 170px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin: 0 auto;
+}
+.checkinwi{
+    height: 170px;
+    background: url('../../../assets/images/checkinwi.svg');
+    width: 170px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin: 0 auto;
+}
+.label-lite{
+    color: #f44f00;
+    font-weight: 500;
+    font-size: 18px;
+    margin: 0 auto;
+    display: table;
+    text-align: center;
+}
+.card-Appointment{
+    width: 340px;
+}
+.ripple-container {
+    border-radius: 25px;
+    cursor: pointer;
+  
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+.phone-row{
+    width: 340px;
+}
 .qr-space{
-    width: 300px;
+    width: 340px;
 }
 .client_gender{
     display: flex;

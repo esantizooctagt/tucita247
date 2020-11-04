@@ -34,6 +34,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatRippleModule } from '@angular/material/core';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Ng5SliderModule } from 'ng5-slider';
@@ -151,6 +152,7 @@ import { LearnDialogComponent } from './shared/learn-dialog/learn-dialog.compone
     MatBadgeModule,
     MatProgressBarModule,
     MatButtonToggleModule,
+    MatRippleModule,
     MatTabsModule,
     InfiniteScrollModule,
     NgxChartsModule,

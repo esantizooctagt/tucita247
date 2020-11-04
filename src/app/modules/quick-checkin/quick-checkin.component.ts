@@ -16,6 +16,8 @@ import { ConfirmValidParentMatcher } from '@app/validators';
 import { ZXingScannerComponent, ZXingScannerModule } from '@zxing/ngx-scanner';
 import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
 import { MonitorService } from '@app/shared/monitor.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { MatIconRegistry } from '@angular/material/icon';
 
 @Component({
   selector: 'app-quick-checkin',
@@ -96,8 +98,14 @@ export class QuickCheckinComponent implements OnInit {
     private dialog: MatDialog,
     private learnmore: MatDialog,
     private router: Router,
-    private monitorService: MonitorService
-  ) { }
+    private monitorService: MonitorService,
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer
+  ) {
+    this.matIconRegistry.addSvgIcon('checkin',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/checkin.svg'));
+    this.matIconRegistry.addSvgIcon('checkinwi',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/checkinwi.svg'));
+    this.matIconRegistry.addSvgIcon('checkout',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/checkout.svg'));
+   }
 
   clientForm = this.fb.group({
     Phone: ['',[Validators.maxLength(17)]],
