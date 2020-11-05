@@ -1019,24 +1019,13 @@ export class HostComponent implements OnInit {
     let monthCurr = this.getMonth();
     let dayCurr = this.getDay();
     let dateAppo = yearCurr + '-' + monthCurr + '-' + dayCurr;
-    let provName = '';
-    let servName = '';
-    let prov = this.Providers.filter(x=>x.ProviderId == this.providerId);
-    if (prov.length > 0){
-      provName = prov[0].Name;
-    }
-
-    let serv = this.services.filter(x=>x.ServiceId == this.clientForm.value.ServiceId);
-    if (serv.length > 0){
-      servName = serv[0].Name;
-    }
     
     let formData = {
       BusinessId: this.businessId,
       LocationId: this.locationId,
       ProviderId: (this.providerId != '0' ? this.providerId : this.clientForm.value.ProviderId),
       ServiceId: this.clientForm.value.ServiceId,
-      BusinessName: this.authService.businessName(),
+      BusinessName: (this.authService.businessName().length > 27 ? this.authService.businessName().substring(0,27)+'...' : this.authService.businessName()),
       Language: this.authService.businessLanguage(),
       Door: this.doorId,
       Phone: (phoneNumber == '' ?  '00000000000' : (phoneNumber.length <= 10 ? '1' + phoneNumber : phoneNumber)),
@@ -1049,10 +1038,6 @@ export class HostComponent implements OnInit {
       Guests: this.clientForm.value.Guests,
       AppoDate: dateAppo,
       AppoHour: timeAppo,
-      CountProv: this.Providers.length-1,
-      CountServ: this.services.length,
-      ProvName: provName,
-      ServName: servName,
       Type: 2
     }
     var spinnerRef = this.spinnerService.start($localize`:@@host.addingappo:`);
