@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { interval, Observable, of } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { LocationService, ReasonsService, BusinessService, AppointmentService, ServService } from '@app/services';
+import { LocationService, ReasonsService, BusinessService, AppointmentService, ServService, AdminService } from '@app/services';
 import { AuthService } from '@app/core/services';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { map, catchError, switchMap, mergeMap, tap } from 'rxjs/operators';
@@ -48,6 +48,7 @@ export class HostComponent implements OnInit {
   manualCheckOut$: Observable<any>;
   newTime$: Observable<any>;
   resetLoc$: Observable<any>;
+  cancelAppo$: Observable<any>;
 
   showMessageSche=[];
   showMessageWalk=[];
@@ -155,6 +156,7 @@ export class HostComponent implements OnInit {
     private dialog: MatDialog,
     private learnmore: MatDialog,
     private matIconRegistry: MatIconRegistry,
+    private adminService: AdminService,
     private router: Router,
     private monitorService: MonitorService
   ) {
@@ -183,10 +185,10 @@ export class HostComponent implements OnInit {
     ProviderId: ['']
   })
 
-  schedule = [];
-  walkIns = [];
-  preCheckIn =[]
-  previous=[];
+  schedule =[];
+  walkIns =[];
+  preCheckIn =[];
+  previous =[];
 
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
@@ -231,6 +233,7 @@ export class HostComponent implements OnInit {
             AppId: msg['AppId'],
             ClientId: msg['CustomerId'],
             ProviderId: msg['ProviderId'],
+            BufferTime: msg['BufferTime'],
             Name: msg['Name'].toLowerCase(),
             OnBehalf: msg['OnBehalf'],
             Guests: msg['Guests'],
@@ -259,18 +262,30 @@ export class HostComponent implements OnInit {
       if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 1 && msg['User'] == 'H'){
         let resScheMess = this.schedule.findIndex(x => x.AppId === msg['AppId']);
         if (resScheMess >= 0){
+          if (this.showMessageSche[resScheMess]){
+            this.getCommentsSche[resScheMess].push(msg['Message']);
+          }
           this.schedule[resScheMess].Unread = "H";
         }
         let resWalkInsMess = this.walkIns.findIndex(x => x.AppId === msg['AppId']);
         if (resWalkInsMess >= 0){
+          if (this.showMessageWalk[resWalkInsMess]){
+            this.getCommentsWalk[resWalkInsMess].push(msg['Message']);
+          }
           this.walkIns[resWalkInsMess].Unread = "H";
         }
         let resPreviousMess = this.previous.findIndex(x => x.AppId === msg['AppId']);
         if (resPreviousMess >= 0){
+          if (this.showMessagePrev[resPreviousMess]){
+            this.getCommentsPrev[resPreviousMess].push(msg['Message']);
+          }
           this.previous[resPreviousMess].Unread = "H";
         }
         let resPreCheckInMess = this.preCheckIn.findIndex(x => x.AppId === msg['AppId']);
         if (resPreCheckInMess >= 0){
+          if (this.showMessageCheck[resPreCheckInMess]){
+            this.getCommentsCheck[resPreCheckInMess].push(msg['Message']);
+          }
           this.preCheckIn[resPreCheckInMess].Unread = "H";
         }
       }
@@ -631,6 +646,29 @@ export class HostComponent implements OnInit {
           var diffMins = Math.round(((diff % 86400000) % 3600000) / 60000); // minutes
           var diff = (diffHrs*60)+diffMins;
           res.ElapsedTime = diff.toString();
+          console.log(res.BufferTime);
+          if (+diff >= res.BufferTime){
+            //CANCEL APPO
+            this.cancelAppo$ = this.adminService.putNoShow(res.AppId).pipe(
+              map((res: any) => {
+                if (res.Code == 200){
+                  let val = this.preCheckIn.findIndex(x=>x.AppId == res.AppId);
+                  if (val >= 0){
+                    this.showCancelOptionsCheck[val] = false;
+                    this.selectedCheck[val] = undefined;
+                  }
+                  var data = this.preCheckIn.findIndex(e => e.AppId === res.AppId);
+                  if (data >= 0 ){this.preCheckIn.splice(data, 1);}
+                  this.openSnackBar($localize`:@@host.cancelsuccess:`, $localize`:@@shared.cancel:`);
+                }
+              }),
+              catchError(err => {
+                this.onError = err.Message;
+                this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@shared.cancel:`);
+                return this.onError;
+              })
+            );
+          }
         })
       })
     );
@@ -998,7 +1036,7 @@ export class HostComponent implements OnInit {
   }
 
   addAppointment(){
-    let timeAppo = this.getTime();
+    let timeAppo = this.getTimeAppo();
     if (timeAppo == ""){
       this.openSnackBar($localize`:@@host.invalidTime:`, $localize`:@@shared.error:`);
       return;
@@ -1445,6 +1483,31 @@ export class HostComponent implements OnInit {
     );
   }
 
+  getTimeAppo(): string{
+    let options = {
+      timeZone: 'America/Puerto_Rico',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: false,
+    },
+    formatter = new Intl.DateTimeFormat([], options);
+    var actual = formatter.format(new Date());
+    var actualTime = '';
+    var a = new Date();
+    var hour: number = +actual.substring(0,2);
+    var min: number = 0;
+    var actTime: number = 0;
+    actTime = hour;
+    for (var i=0; i<= this.buckets.length-1; i++){
+      if (this.buckets[i].Time == actTime){
+        actualTime = this.buckets[i].TimeFormat;
+        break;
+      }
+    }
+    return actualTime;
+  }
+
   getTime(): string{
     let options = {
       timeZone: 'America/Puerto_Rico',
@@ -1568,6 +1631,7 @@ export class HostComponent implements OnInit {
               AppId: item['AppointmentId'],
               ClientId: item['ClientId'],
               ProviderId: item['ProviderId'],
+              BufferTime: item['BufferTime'],
               Name: item['Name'].toLowerCase(),
               OnBehalf: item['OnBehalf'],
               Guests: item['Guests'],
@@ -1622,6 +1686,7 @@ export class HostComponent implements OnInit {
               AppId: item['AppointmentId'],
               ClientId: item['ClientId'],
               ProviderId: item['ProviderId'],
+              BufferTime: item['BufferTime'],
               Name: item['Name'].toLowerCase(),
               OnBehalf: item['OnBehalf'],
               Guests: item['Guests'],
@@ -1681,6 +1746,7 @@ export class HostComponent implements OnInit {
               AppId: item['AppointmentId'],
               ClientId: item['ClientId'],
               ProviderId: item['ProviderId'],
+              BufferTime: item['BufferTime'],
               Name: item['Name'].toLowerCase(),
               OnBehalf: item['OnBehalf'],
               Guests: item['Guests'],
@@ -1734,6 +1800,7 @@ export class HostComponent implements OnInit {
               AppId: item['AppointmentId'],
               ClientId: item['ClientId'],
               ProviderId: item['ProviderId'],
+              BufferTime: item['BufferTime'],
               Name: item['Name'].toLowerCase(),
               OnBehalf: item['OnBehalf'],
               Guests: item['Guests'],

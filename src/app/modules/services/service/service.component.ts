@@ -60,6 +60,7 @@ export class ServiceComponent implements OnInit {
     TimeService: ['', [Validators.required, Validators.max(4), Validators.min(1)]],
     CustomerPerTime: ['', [Validators.required, Validators.max(9999), Validators.min(1)]],
     CustomerPerBooking: ['', [Validators.required, Validators.max(9999), Validators.min(1)]],
+    BufferTime: ['', [Validators.required, Validators.max(50), Validators.min(1)]],
     Color: ['', [Validators.required]],
     Status: [true]
   }, { validator: GreaterThanValidator });
@@ -136,7 +137,7 @@ export class ServiceComponent implements OnInit {
   onDisplay(){
     if (this.serviceDataList != undefined && this.serviceDataList != "0"){
       var spinnerRef = this.spinnerService.start($localize`:@@services.loadingserv:`);
-      this.serviceForm.reset({ ServiceId: '', Name: '', TimeService: '', CustomerPerTime: '', CustomerPerBooking: '', Color: '', Status: true});
+      this.serviceForm.reset({ ServiceId: '', Name: '', TimeService: '', BufferTime: '', CustomerPerTime: '', CustomerPerBooking: '', Color: '', Status: true});
       this.service$ = this.serviceService.getService(this.businessId, this.serviceDataList).pipe(
         map(res => {
           if (res != ''){
@@ -146,6 +147,7 @@ export class ServiceComponent implements OnInit {
               TimeService: res.TimeService,
               CustomerPerBooking: res.CustomerPerBooking,
               CustomerPerTime: res.CustomerPerTime,
+              BufferTime: res.BufferTime,
               Color: res.Color,
               Status: (res.Status == 1 ? true : false)
             });
@@ -170,6 +172,7 @@ export class ServiceComponent implements OnInit {
     const val100 = '100';
     const val1 = '1';
     const val4 = '4';
+    const val50 = '50';
     const val9999 = '9999';
     if (component === 'Name'){
       return this.f.Name.hasError('required') ? $localize`:@@shared.entervalue:` :
@@ -181,6 +184,12 @@ export class ServiceComponent implements OnInit {
       return this.f.TimeService.hasError('required') ? $localize`:@@shared.entervalue:` :
         this.f.TimeService.hasError('min') ? $localize`:@@shared.minvalue: ${val1}` :
           this.f.TimeService.hasError('max') ? $localize`:@@shared.maxvalue: ${val4}` :
+          '';
+    }
+    if (component === 'BufferTime'){
+      return this.f.BufferTime.hasError('required') ? $localize`:@@shared.entervalue:` :
+        this.f.BufferTime.hasError('min') ? $localize`:@@shared.minvalue: ${val1}` :
+          this.f.BufferTime.hasError('max') ? $localize`:@@shared.maxvalue: ${val50}` :
           '';
     }
     if (component === 'CustomerPerTime'){
@@ -217,6 +226,7 @@ export class ServiceComponent implements OnInit {
       ServiceId: this.serviceForm.value.ServiceId,
       BusinessId: this.businessId,
       TimeService: this.serviceForm.value.TimeService,
+      BufferTime: this.serviceForm.value.BufferTime,
       Name: this.serviceForm.value.Name,
       CustomerPerTime: this.serviceForm.value.CustomerPerTime,
       CustomerPerBooking: this.serviceForm.value.CustomerPerBooking,

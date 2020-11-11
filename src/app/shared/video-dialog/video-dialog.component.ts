@@ -72,6 +72,16 @@ export class VideoDialogComponent implements OnInit {
   
   handleQrCodeResult(resultString: string) {
     this.qrCode = resultString;
+    if (this.qrCode.length == 6){
+      this.activeBlink = 1;
+      let component = this;
+      setTimeout(() => {
+        component.activeBlink = 0;
+        this.activeBlink = 0;
+      },3000);
+    } else{
+      this.activeBlink = 0;
+    }
     if (this.data.tipo == 2){
       // var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
       this.appoData$ = this.appointmentService.getAppointmentData(this.data.businessId, this.data.locationId, this.data.providerId, this.qrCode).pipe(

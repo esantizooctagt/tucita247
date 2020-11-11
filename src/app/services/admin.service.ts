@@ -73,6 +73,11 @@ export class AdminService {
                       .pipe(catchError(this.errorHandler));
     }
   
+    putNoShow(appId: string){
+      return this.http.put(this.apiURL + '/appointments/cancel/precheckin/'+appId, '')
+                      .pipe(catchError(this.errorHandler));
+    }
+
     errorHandler(error) {
       return throwError(error || 'Server Error');
     }
