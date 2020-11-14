@@ -511,7 +511,8 @@
                                 <div *ngIf="!showDetailsCheck[i]" class="card-user col-md-9 pl-0 pr-0">{{item.Name}}</div>
                                 <div *ngIf="showDetailsCheck[i]" class="card-user-disp col-md-9 pl-0 pr-0">{{item.Name}}</div>
                                 <div class="col-md pr-0 pl-0">
-                                    <mat-icon class="elapsed-clock" *ngIf="item.ElapsedTime != ''" svgIcon="clock"></mat-icon>
+                                    <button mat-icon-button class="elapsed-clock" color="secondary" *ngIf="item.ElapsedTime != '' && item.Pause == '0'" (click)="onPause(item, '1')"><mat-icon svgIcon="clock"></mat-icon></button>
+                                    <button mat-icon-button class="elapsed-clock" color="secondary" *ngIf="item.ElapsedTime != '' && item.Pause == '1'" (click)="onPause(item, '0')"><mat-icon svgIcon="pause"></mat-icon></button>
                                     <div class="elapsed-time">
                                         {{item.ElapsedTime}}
                                     </div>

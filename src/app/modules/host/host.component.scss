@@ -311,7 +311,7 @@ mat-icon.mat-icon.notranslate.material-icons.mat-icon-no-color {
     color: #FF4F00;
     text-align: right;
     position: relative;
-    top: -15px;
+    top: 16px;
 }
 .elapsed-tag{
     font-family: Montserrat;
@@ -321,14 +321,11 @@ mat-icon.mat-icon.notranslate.material-icons.mat-icon-no-color {
     line-height: 1px;
     text-align: right;
     color: #FF4F00;
-    top: 0px;
-    left: 19px;
+    top: 31px;
+    position: relative;
 }
 .elapsed-clock{
-    position: relative;
-    height: 18px;
-    width: 18px;
-    left: 20px;
+    position: absolute;
 }
 .checkin-list{
     font-family: Montserrat;

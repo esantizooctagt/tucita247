@@ -170,6 +170,7 @@ export class HostComponent implements OnInit {
   ) {
     this.matIconRegistry.addSvgIcon('cancel',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/cancel.svg'));
     this.matIconRegistry.addSvgIcon('clock',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/clock.svg'));
+    this.matIconRegistry.addSvgIcon('pause',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/pause.svg'));
     this.matIconRegistry.addSvgIcon('expand',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/expand.svg'));
     this.matIconRegistry.addSvgIcon('handicap',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/handicap.svg'));
     this.matIconRegistry.addSvgIcon('older',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/older.svg'));
@@ -335,7 +336,9 @@ export class HostComponent implements OnInit {
               Type: dataSche['Type'],
               Unread: dataSche['Unread'],
               CheckInTime: msg['Time'],
-              ElapsedTime: "0"
+              BufferTime: msg['BufferTime'],
+              ElapsedTime: "0",
+              Pause: "0"
             }
             this.preCheckIn.push(data);
           }
@@ -359,7 +362,9 @@ export class HostComponent implements OnInit {
               Type: dataWalk['Type'],
               Unread: dataWalk['Unread'],
               CheckInTime: msg['Time'],
-              ElapsedTime: "0"
+              BufferTime: msg['BufferTime'],
+              ElapsedTime: "0",
+              Pause: "0"
             }
             this.preCheckIn.push(data);
           }
@@ -383,7 +388,9 @@ export class HostComponent implements OnInit {
               Type: dataPrev['Type'],
               Unread: dataPrev['Unread'],
               CheckInTime: msg['Time'],
-              ElapsedTime: "0"
+              BufferTime: msg['BufferTime'],
+              ElapsedTime: "0",
+              Pause: "0"
             }
             this.preCheckIn.push(data);
           }
@@ -654,8 +661,7 @@ export class HostComponent implements OnInit {
           var diffMins = Math.round(((diff % 86400000) % 3600000) / 60000); // minutes
           var diff = (diffHrs*60)+diffMins;
           res.ElapsedTime = diff.toString();
-          console.log(res.BufferTime);
-          if (+diff >= res.BufferTime){
+          if (+diff >= res.BufferTime && res.Pause == '0'){
             //CANCEL APPO
             this.cancelAppo$ = this.adminService.putNoShow(res.AppId).pipe(
               map((res: any) => {
@@ -1229,6 +1235,7 @@ export class HostComponent implements OnInit {
   onCheckInApp(appo: any){
     //READ QR CODE AND CHECK-IN PROCESS
     if (appo.Type == 1) {
+      appo.Pause = '1';
       const dialogRef = new MatDialogConfig();
       dialogRef.width ='450px';
       dialogRef.minWidth = '320px';
@@ -1259,6 +1266,7 @@ export class HostComponent implements OnInit {
               throw 'exit process';
             }
           } else {
+            appo.Pause = '0';
             throw 'exit process';
           }
           return result;
@@ -1476,6 +1484,7 @@ export class HostComponent implements OnInit {
           }
           appo.CheckInTime = appoObj['TIMECHEK'];
           appo.ElapsedTime = "0";
+          appo.Pause = "0";
           var dataPre = this.preCheckIn.findIndex(e => e.AppId === appo.AppId);
           if (dataPre < 0){
             this.preCheckIn.push(appo);
@@ -1821,7 +1830,8 @@ export class HostComponent implements OnInit {
               // Purpose: item['Purpose'],
               Unread: item['Unread'],
               CheckInTime: item['CheckInTime'],
-              ElapsedTime: this.calculateTime(item['CheckInTime'])
+              ElapsedTime: this.calculateTime(item['CheckInTime']),
+              Pause: '0'
             }
             this.preCheckIn.push(data);
           });
@@ -2077,6 +2087,7 @@ export class HostComponent implements OnInit {
               let newData = this.preCheckIn[dataPre];
               newData.CheckInTime = appoObj['TIMECHEK'];
               newData.ElapsedTime = "0";
+              newData.Pause = "0";
             }
 
             this.openSnackBar($localize`:@@host.readytocheckin:`,$localize`:@@host.textreadytocheckin:`);
@@ -2098,6 +2109,10 @@ export class HostComponent implements OnInit {
         })
       );
     }
+  }
+
+  onPause(appo: any, pause: string){
+    appo.Pause = pause;
   }
 
   onScrollSche(){
