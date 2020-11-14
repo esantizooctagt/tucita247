@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { interval, Observable, of } from 'rxjs';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LocationService, ReasonsService, BusinessService, AppointmentService, ServService, AdminService } from '@app/services';
 import { AuthService } from '@app/core/services';
 import { SpinnerService } from '@app/shared/spinner.service';
-import { map, catchError, switchMap, mergeMap, tap } from 'rxjs/operators';
+import { map, catchError, switchMap, mergeMap, tap, shareReplay } from 'rxjs/operators';
 import { Appointment, Reason } from '@app/_models';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { ConfirmValidParentMatcher } from '@app/validators';
@@ -124,6 +125,12 @@ export class HostComponent implements OnInit {
 
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
+    .pipe(
+      map(result => result.matches),
+      shareReplay()
+    );
+
   liveData$ = this.monitorService.syncMessage.pipe(
     map((message: any) => {
       this.syncData(message);
@@ -143,6 +150,7 @@ export class HostComponent implements OnInit {
 
   // readonly PUSH_URL = 'wss://1wn0vx0tva.execute-api.us-east-1.amazonaws.com/prod?businessId=12345';
   constructor(
+    private breakpointObserver: BreakpointObserver,
     private domSanitizer: DomSanitizer,
     private spinnerService: SpinnerService,
     private _snackBar: MatSnackBar,
@@ -1359,18 +1367,18 @@ export class HostComponent implements OnInit {
       map((res:any) => {
         if (res != null){
           if (res.Code == 200){
-            if (qeue == 'schedule'){
-              this.showMessageSche[i] = false;
-            }
-            if (qeue == 'walkin'){
-              this.showMessageWalk[i] = false;
-            }
-            if (qeue == 'checkin'){
-              this.showMessageCheck[i] = false;
-            }
-            if (qeue == 'previous'){
-              this.showMessagePrev[i] = false;
-            }
+            // if (qeue == 'schedule'){
+            //   this.showMessageSche[i] = false;
+            // }
+            // if (qeue == 'walkin'){
+            //   this.showMessageWalk[i] = false;
+            // }
+            // if (qeue == 'checkin'){
+            //   this.showMessageCheck[i] = false;
+            // }
+            // if (qeue == 'previous'){
+            //   this.showMessagePrev[i] = false;
+            // }
             this.openSnackBar($localize`:@@host.messagessend:`,$localize`:@@host.messages:`);
           } else {
             this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@host.messages:`);
