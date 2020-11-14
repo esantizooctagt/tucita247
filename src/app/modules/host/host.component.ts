@@ -1263,6 +1263,7 @@ export class HostComponent implements OnInit {
               }
               this.checkInModule = 1;
             } else {
+              appo.Pause = '1';
               throw 'exit process';
             }
           } else {
