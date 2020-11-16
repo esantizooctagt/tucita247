@@ -8,7 +8,7 @@
         <div class="main-logo mb-5 mt-5"></div>
         <div class="login-form">
             <h3 class="sign-in pt-3 pl-4 pb-2" i18n="Activate Account@@verification.activateacct">Activate Account</h3>
-            <div class="form-field mb-0 pl-4 pb-2 pr-4" *ngIf="code != ''">
+            <div class="form-field mb-0 pl-4 pb-2 pr-4" *ngIf="code != '' && code != '0'">
                 <mat-form-field>
                     <mat-label i18n="Code@@verification.Code">Code</mat-label>
                     <input matInput formControlName="userCode" i18n-placeholder="Activation Code@@verification.activationcode" placeholder="Activation Code" max="999999" min="000001"

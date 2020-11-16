@@ -95,7 +95,7 @@ export class VerificationComponent implements OnInit {
   }
 
   onSubmit(){
-    if (this.code != ''){
+    if (this.code != '' && this.code != '0'){
       if (this.code != this.verifForm.value.userCode) {
         this.error = $localize`:@@verification.invalidcode:`;
         return;
