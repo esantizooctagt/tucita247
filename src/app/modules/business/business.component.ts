@@ -146,7 +146,7 @@ export class BusinessComponent implements OnInit {
     Address: ['', [Validators.required, Validators.maxLength(500), Validators.minLength(3)]],
     City: ['', [Validators.maxLength(100), Validators.minLength(2)]],
     ZipCode: ['', [Validators.maxLength(10), Validators.minLength(3)]],
-    Geolocation: ['', [Validators.maxLength(50), Validators.minLength(5)]],
+    Geolocation: ['', [Validators.maxLength(100), Validators.minLength(5)]],
     Phone: ['', [Validators.maxLength(15), Validators.minLength(3)]],
     WebSite: ['', [Validators.maxLength(150), Validators.minLength(4)]],
     Facebook: ['', [Validators.maxLength(150), Validators.minLength(4)]],
@@ -268,6 +268,17 @@ export class BusinessComponent implements OnInit {
       })
     );
   }
+
+  public findInvalidControls() {
+    const invalid = [];
+    const controls = this.businessForm.controls;
+    for (const name in controls) {
+        if (controls[name].invalid) {
+            invalid.push(name);
+        }
+    }
+    return invalid;
+}
 
   checkLinkAvailability(data) { 
     this.linkValidated = false;
