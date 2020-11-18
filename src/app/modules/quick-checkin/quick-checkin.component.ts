@@ -383,7 +383,7 @@ export class QuickCheckinComponent implements OnInit {
 
   setManualCheckOut(qtyOut){
     this.checkOutModule = 1;
-    this.manualCheckOut$ = this.appointmentService.updateManualCheckOut(this.businessId, this.locationId, this.providerId, qtyOut).pipe(
+    this.manualCheckOut$ = this.appointmentService.updateManualCheckOut(this.businessId, this.locationId, qtyOut).pipe(
       map((res: any) => {
         if (res.Code == 200){
           this.openSnackBar($localize`:@@lite.checkoutsuccess:`, $localize`:@@host.checkoutpop:`);
