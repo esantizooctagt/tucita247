@@ -189,10 +189,10 @@
                                 </div>
                                 <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showMessagePrev[i]">
                                     <div class="col-sm-10 pl-0 pr-0">
-                                        <textarea class="card-text" #messageText matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
+                                        <textarea class="card-text" #messageTextPrev matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
                                     </div>
                                     <div class="button-send col-md pr-0 pl-0">
-                                        <button mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageText.value ,i, 'previous')">
+                                        <button mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageTextPrev.value ,i, 'previous')">
                                             <mat-icon class="send_icon">send</mat-icon>
                                         </button>
                                     </div>
@@ -281,10 +281,10 @@
                             </div>
                             <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showMessageSche[i]">
                                 <div class="col-sm-10 pl-0 pr-0">
-                                    <textarea class="card-text" #messageText matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
+                                    <textarea class="card-text" #messageTextSche matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
                                 </div>
                                 <div class="button-send col-md pr-0 pl-0">
-                                    <button mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageText.value ,i, 'schedule')">
+                                    <button mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageTextSche.value ,i, 'schedule')">
                                         <mat-icon class="send_icon">send</mat-icon>
                                     </button>
                                 </div>
@@ -471,10 +471,10 @@
                             </div>
                             <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showMessageWalk[i]">
                                 <div class="col-sm-10 pl-0 pr-0">
-                                    <textarea class="card-text" #messageText matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
+                                    <textarea class="card-text" #messageTextWalk matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
                                 </div>
                                 <div class="button-send col-md pr-0 pl-0">
-                                    <button mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageText.value ,i, 'walkin')">
+                                    <button mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageTextWalk.value ,i, 'walkin')">
                                         <mat-icon class="send_icon">send</mat-icon>
                                     </button>
                                 </div>
@@ -579,10 +579,10 @@
                             </div>
                             <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showMessageCheck[i]">
                                 <div class="col-sm-10 pl-0 pr-0">
-                                    <textarea class="card-text" #messageText matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
+                                    <textarea class="card-text" #messageTextCheckIn matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
                                 </div>
                                 <div class="button-send col-md pr-0 pl-0">
-                                    <button mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageText.value ,i, 'checkin')">
+                                    <button mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageTextCheckIn.value ,i, 'checkin')">
                                         <mat-icon class="send_icon">send</mat-icon>
                                     </button>
                                 </div>

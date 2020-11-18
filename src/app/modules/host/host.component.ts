@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { interval, Observable, of } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -27,6 +27,11 @@ import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.comp
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HostComponent implements OnInit {
+  @ViewChild('messageTextCheckIn') messCheckIn: ElementRef<HTMLTextAreaElement>;
+  @ViewChild('messageTextPrev') messPrev: ElementRef<HTMLTextAreaElement>;
+  @ViewChild('messageTextSche') messSche: ElementRef<HTMLTextAreaElement>;
+  @ViewChild('messageTextWalk') messWalk: ElementRef<HTMLTextAreaElement>;
+  
   locations$: Observable<Location[]>;
   appointmentsSche$: Observable<Appointment[]>;
   appointmentsWalk$: Observable<Appointment[]>;
@@ -1367,6 +1372,17 @@ export class HostComponent implements OnInit {
   }
 
   onMessageApp(appointmentId: string, value: string, i: number, qeue: string){
+    let options = {
+      timeZone: 'America/Puerto_Rico',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+  },
+  formatter = new Intl.DateTimeFormat([], options);
+  var actual = formatter.format(new Date());
+
     //GET MESSAGES APPOINTMENT
     let formData = {
       Message: value,
@@ -1376,18 +1392,26 @@ export class HostComponent implements OnInit {
       map((res:any) => {
         if (res != null){
           if (res.Code == 200){
-            // if (qeue == 'schedule'){
-            //   this.showMessageSche[i] = false;
-            // }
-            // if (qeue == 'walkin'){
-            //   this.showMessageWalk[i] = false;
-            // }
-            // if (qeue == 'checkin'){
-            //   this.showMessageCheck[i] = false;
-            // }
-            // if (qeue == 'previous'){
-            //   this.showMessagePrev[i] = false;
-            // }
+            if (qeue == 'schedule'){
+              // this.showMessageSche[i] = false;
+              this.messSche.nativeElement.value = '';
+              this.getCommentsSche[i].push({'H': value, 'T': actual});
+            }
+            if (qeue == 'walkin'){
+              // this.showMessageWalk[i] = false;
+              this.messWalk.nativeElement.value = '';
+              this.getCommentsWalk[i].push({'H': value, 'T': actual});
+            }
+            if (qeue == 'checkin'){
+              // this.showMessageCheck[i] = false;
+              this.messCheckIn.nativeElement.value = '';
+              this.getCommentsCheck[i].push({'H': value, 'T': actual});
+            }
+            if (qeue == 'previous'){
+              // this.showMessagePrev[i] = false;
+              this.messPrev.nativeElement.value = '';
+              this.getCommentsPrev[i].push({'H': value, 'T': actual});
+            }
             this.openSnackBar($localize`:@@host.messagessend:`,$localize`:@@host.messages:`);
           } else {
             this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@host.messages:`);
