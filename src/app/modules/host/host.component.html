@@ -111,13 +111,13 @@
                     [cdkDropListData]="schedule" class="col-md drop-qeue">
                     <ng-container *ngIf="appointmentsSche$ | async"></ng-container>
                     <div class="col-md plan">
-                        <mat-card class="mt-2 card-pending" *ngIf="prevHour >= 0 && locationStatus == 1">
+                        <!-- <mat-card class="mt-2 card-pending" *ngIf="prevHour >= 0 && locationStatus == 1">
                             <mat-card-content>
                                 <div class="card-previous" (click)="showPrevious = !showPrevious; getPreviousAppos(prevHour)">
                                     <mat-icon *ngIf="showPrevious" svgIcon="menos"></mat-icon>
                                     <mat-icon *ngIf="!showPrevious" svgIcon="mas" i18n=" Pending Citas from previous periods|text in citas@@host.pendingcitas"></mat-icon> Pending Citas from previous periods</div>
                             </mat-card-content>
-                        </mat-card>
+                        </mat-card> -->
                         <ng-container *ngIf="appointmentsPrevious$ | async"></ng-container>
                         <ng-container class="" *ngIf="showPrevious">
                             <mat-card class="mt-2 appCard" *ngFor="let item of previous;let i=index" cdkDrag>

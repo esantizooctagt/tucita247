@@ -249,8 +249,8 @@ export class HostComponent implements OnInit {
         },
         formatter = new Intl.DateTimeFormat([], options);
         var actualTime = formatter.format(new Date());
-        actualTime = actualTime.replace(':','-');
-        let appoTime = msg['DateAppo'].substring(11).replace(':','-');
+        let actTime = +actualTime.replace(':','-').substring(0,2);
+        let appoTime = +msg['DateFull'].substring(11).replace(':','-').substring(0,2);
         let hora = msg['DateAppo'];
         let data = {
           AppId: msg['AppId'],
@@ -269,17 +269,19 @@ export class HostComponent implements OnInit {
           Unread: 0
         }
         if (this.schedule.filter(x => x.AppId ==  msg['AppId']).length == 0){
-          if (appoTime <= actualTime){
+          if (appoTime <= actTime){
             var verifSche = this.schedule.findIndex(x => x.AppId === msg['AppId']);
             if (verifSche >= 0){return;}
             this.schedule.push(data);
+            this.schedule.sort((a, b) => (a.DateFull > b.DateFull) ? 1 : -1);
           }
         }
         if (this.walkIns.filter(x => x.AppId ==  msg['AppId']).length == 0){
-          if (appoTime > actualTime){
+          if (appoTime > actTime){
             var verifWalk = this.walkIns.findIndex(x => x.AppId === msg['AppId']);
             if (verifWalk >= 0){return;}
             this.walkIns.push(data);
+            this.walkIns.sort((a, b) => (a.DateFull > b.DateFull) ? 1 : -1);
           }
         }
       }  
@@ -1754,9 +1756,7 @@ export class HostComponent implements OnInit {
               Unread: item['Unread']
             }
             this.schedule.push(data);
-            this.schedule.sort(function(a, b){
-              return a.DateFull - b.DateFull;
-            });
+            this.schedule.sort((a, b) => (a.DateFull > b.DateFull) ? 1 : -1);
           });
           this.spinnerService.stop(spinnerRef);
         }
@@ -1817,9 +1817,7 @@ export class HostComponent implements OnInit {
               Unread: item['Unread']
             }
             this.walkIns.push(data);
-            this.walkIns.sort(function(a, b){
-              return a.DateFull - b.DateFull;
-            });
+            this.walkIns.sort((a, b) => (a.DateFull > b.DateFull) ? 1 : -1);
           });
           this.spinnerService.stop(spinnerRef);
         }
