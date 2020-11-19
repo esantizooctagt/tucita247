@@ -241,30 +241,42 @@ export class HostComponent implements OnInit {
     console.log(msg);
     if (msg['Tipo'] == 'APPO'){
       if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 1){
+        let options = {
+          timeZone: 'America/Puerto_Rico',
+          hour: 'numeric',
+          minute: 'numeric',
+          hour12: false,
+        },
+        formatter = new Intl.DateTimeFormat([], options);
+        var actualTime = formatter.format(new Date());
+        actualTime = actualTime.replace(':','-');
+        let appoTime = msg['DateAppo'].substring(11).replace(':','-');
+        let hora = msg['DateAppo'];
+        let data = {
+          AppId: msg['AppId'],
+          ClientId: msg['CustomerId'],
+          ProviderId: msg['ProviderId'],
+          BufferTime: msg['BufferTime'],
+          Name: msg['Name'].toLowerCase(),
+          OnBehalf: msg['OnBehalf'],
+          Guests: msg['Guests'],
+          Door: msg['Door'],
+          Disability: msg['Disability'],
+          Phone: msg['Phone'],
+          DateFull: msg['DateFull'],
+          Type: msg['Type'],
+          DateAppo: hora,
+          Unread: 0
+        }
         if (this.schedule.filter(x => x.AppId ==  msg['AppId']).length == 0){
-          let hora = msg['DateAppo'];
-          let data = {
-            AppId: msg['AppId'],
-            ClientId: msg['CustomerId'],
-            ProviderId: msg['ProviderId'],
-            BufferTime: msg['BufferTime'],
-            Name: msg['Name'].toLowerCase(),
-            OnBehalf: msg['OnBehalf'],
-            Guests: msg['Guests'],
-            Door: msg['Door'],
-            Disability: msg['Disability'],
-            Phone: msg['Phone'],
-            DateFull: msg['DateFull'],
-            Type: msg['Type'],
-            DateAppo: hora,
-            Unread: 0
-          }
-          if (msg['Type'] == '1'){
+          if (appoTime <= actualTime){
             var verifSche = this.schedule.findIndex(x => x.AppId === msg['AppId']);
             if (verifSche >= 0){return;}
             this.schedule.push(data);
           }
-          if (msg['Type'] == '2'){
+        }
+        if (this.walkIns.filter(x => x.AppId ==  msg['AppId']).length == 0){
+          if (appoTime > actualTime){
             var verifWalk = this.walkIns.findIndex(x => x.AppId === msg['AppId']);
             if (verifWalk >= 0){return;}
             this.walkIns.push(data);
@@ -1718,7 +1730,7 @@ export class HostComponent implements OnInit {
     let dateAppoFinStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourFin;
 
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
-    this.appointmentsSche$ = this.appointmentService.getAppointments(this.businessId, this.locationId, this.providerId, dateAppoStr, dateAppoFinStr, 1, 1).pipe(
+    this.appointmentsSche$ = this.appointmentService.getAppointments(this.businessId, this.locationId, this.providerId, 1, 1).pipe(
       map((res: any) => {
         if (res != null) {
           res['Appos'].forEach(item => {
@@ -1742,6 +1754,9 @@ export class HostComponent implements OnInit {
               Unread: item['Unread']
             }
             this.schedule.push(data);
+            this.schedule.sort(function(a, b){
+              return a.DateFull - b.DateFull;
+            });
           });
           this.spinnerService.stop(spinnerRef);
         }
@@ -1778,7 +1793,7 @@ export class HostComponent implements OnInit {
     let dateAppoFinStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourFin;
 
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
-    this.appointmentsWalk$ = this.appointmentService.getAppointments(this.businessId, this.locationId, this.providerId, dateAppoStr, dateAppoFinStr, 1, 2).pipe(
+    this.appointmentsWalk$ = this.appointmentService.getAppointments(this.businessId, this.locationId, this.providerId, 1, 2).pipe(
       map((res: any) => {
         if (res != null) {
           res['Appos'].forEach(item => {
@@ -1802,6 +1817,9 @@ export class HostComponent implements OnInit {
               Unread: item['Unread']
             }
             this.walkIns.push(data);
+            this.walkIns.sort(function(a, b){
+              return a.DateFull - b.DateFull;
+            });
           });
           this.spinnerService.stop(spinnerRef);
         }
@@ -1832,7 +1850,7 @@ export class HostComponent implements OnInit {
     let dateAppoFinStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourFin;
 
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
-    this.appointmentsPre$ = this.appointmentService.getAppointments(this.businessId, this.locationId, this.providerId, dateAppoStr, dateAppoFinStr, 2, '_').pipe(
+    this.appointmentsPre$ = this.appointmentService.getAppointments(this.businessId, this.locationId, this.providerId, 2, '_').pipe(
       map((res: any) => {
         if (res != null) {
           res['Appos'].forEach(item => {

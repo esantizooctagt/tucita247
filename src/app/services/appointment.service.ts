@@ -19,8 +19,8 @@ export class AppointmentService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  getAppointments(businessId, locationId, providerId, dateAppoIni, dateAppoFin, status, type): Observable<Appointment[]> {
-      return this.http.get<Appointment[]>(this.apiURL + '/appointments/' + businessId + '/' + locationId + '/' + providerId + '/' + dateAppoIni + '/' + dateAppoFin + '/' + status + '/' + type)
+  getAppointments(businessId, locationId, providerId, status, type): Observable<Appointment[]> {
+      return this.http.get<Appointment[]>(this.apiURL + '/appointments/' + businessId + '/' + locationId + '/' + providerId + '/' + status + '/' + type)
                       .pipe(catchError(this.errorHandler));
   }
 
