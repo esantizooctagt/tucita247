@@ -1448,20 +1448,21 @@ export class HostComponent implements OnInit {
     }
     if (type == 'schedule'){
       this.getCommentsSche[i] = "";
-      this.showMessageSche[i] = !this.showMessageSche[i];
+      // this.showMessageSche[i] = !this.showMessageSche[i];
     }
     if (type == 'walkin'){
       this.getCommentsWalk[i] = "";
-      this.showMessageWalk[i] = !this.showMessageWalk[i]; 
+      // this.showMessageWalk[i] = !this.showMessageWalk[i]; 
     }
     if (type == 'checkin'){
       this.getCommentsCheck[i] = "";
-      this.showMessageCheck[i] = !this.showMessageCheck[i]; 
+      // this.showMessageCheck[i] = !this.showMessageCheck[i]; 
     }
     if (type == 'previous'){
       this.getCommentsPrev[i] = "";
-      this.showMessagePrev[i] = !this.showMessagePrev[i]; 
+      // this.showMessagePrev[i] = !this.showMessagePrev[i]; 
     }
+    appo.OpenMess = (appo.OpenMess == 0 ? 1 : 0);
     this.comments$ = this.appointmentService.getMessages(appo.AppId, 'H').pipe(
       map((res: any) => {
         if (res != null){
@@ -1488,6 +1489,10 @@ export class HostComponent implements OnInit {
         return this.onError;
       })
     );
+  }
+
+  onShowCancel(appo: any){
+    appo.OpenCanc = (appo.OpenCanc == 0 ? 1 : 0);
   }
 
   onReadyCheckIn(appo: any, tipo: number){
@@ -1730,7 +1735,7 @@ export class HostComponent implements OnInit {
     let dayCurr = this.getDay();
     let dateAppoStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourIni;
     let dateAppoFinStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourFin;
-
+    this.schedule = [];
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
     this.appointmentsSche$ = this.appointmentService.getAppointments(this.businessId, this.locationId, this.providerId, 1, 1).pipe(
       map((res: any) => {
@@ -1751,8 +1756,9 @@ export class HostComponent implements OnInit {
               Phone: item['Phone'],
               DateFull: item['DateAppo'],
               Type: item['Type'],
-              // Purpose: item['Purpose'],
               DateAppo: hora,
+              OpenMess: 0,
+              OpenCanc: 0,
               Unread: item['Unread']
             }
             this.schedule.push(data);
@@ -1791,7 +1797,7 @@ export class HostComponent implements OnInit {
     let dayCurr = this.getDay();
     let dateAppoStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourIni;
     let dateAppoFinStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourFin;
-
+    this.walkIns = [];
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
     this.appointmentsWalk$ = this.appointmentService.getAppointments(this.businessId, this.locationId, this.providerId, 1, 2).pipe(
       map((res: any) => {
@@ -1813,7 +1819,8 @@ export class HostComponent implements OnInit {
               DateFull: item['DateAppo'],
               DateAppo: hora,
               Type: item['Type'],
-              // Purpose: item['Purpose'],
+              OpenMess: 0,
+              OpenCanc: 0,
               Unread: item['Unread']
             }
             this.walkIns.push(data);
@@ -1846,7 +1853,7 @@ export class HostComponent implements OnInit {
     let dayCurr = this.getDay();
     let dateAppoStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourIni;
     let dateAppoFinStr = yearCurr + '-' + monthCurr + '-' + dayCurr + '-' + hourFin;
-
+    this.preCheckIn = [];
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
     this.appointmentsPre$ = this.appointmentService.getAppointments(this.businessId, this.locationId, this.providerId, 2, '_').pipe(
       map((res: any) => {
@@ -1868,7 +1875,8 @@ export class HostComponent implements OnInit {
               DateFull: item['DateAppo'],
               DateAppo: hora,
               Type: item['Type'],
-              // Purpose: item['Purpose'],
+              OpenMess: 0,
+              OpenCanc: 0,
               Unread: item['Unread'],
               CheckInTime: item['CheckInTime'],
               ElapsedTime: this.calculateTime(item['CheckInTime']),

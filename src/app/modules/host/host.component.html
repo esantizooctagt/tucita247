@@ -150,7 +150,7 @@
                                 </ng-container>
                                 <div class="row mb-0 mt-2">
                                     <div class="card-actions-center col-sm-3 p-0">
-                                        <button mat-icon-button color="secondary" (click)="showCancelOptionsPrev[i] = !showCancelOptionsPrev[i]" i18n-matTooltip="Cancel this booking|Cancel this booking tooltip@@learnMore.LMCON36" matTooltip="Cancel this booking">
+                                        <button mat-icon-button color="secondary" (click)="onShowCancel(item)" i18n-matTooltip="Cancel this booking|Cancel this booking tooltip@@learnMore.LMCON36" matTooltip="Cancel this booking">
                                             <mat-icon svgIcon="cancel"></mat-icon>
                                         </button>
                                     </div>
@@ -170,7 +170,8 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showCancelOptionsPrev[i]">
+                                <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenCanc">
+                                    <!-- *ngIf="showCancelOptionsPrev[i]" -->
                                     <div class="col-md-12 pl-0 pr-0">
                                         <mat-form-field>
                                             <mat-label i18n="Cancel reasons|text in citas@@host.cancelreasons">Cancel reasons</mat-label>
@@ -187,7 +188,8 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showMessagePrev[i]">
+                                <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenMess">
+                                <!-- *ngIf="showMessagePrev[i]"> -->
                                     <div class="col-sm-10 pl-0 pr-0">
                                         <textarea class="card-text" #messageTextPrev matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
                                     </div>
@@ -242,7 +244,7 @@
                             </ng-container>
                             <div class="row mb-0 mt-2">
                                 <div class="card-actions-center col-sm-3 p-0">
-                                    <button mat-icon-button color="secondary" (click)="showCancelOptionsSche[i] = !showCancelOptionsSche[i]" i18n-matTooltip="Cancel this booking|Cancel this booking tooltip@@learnMore.LMCON36" matTooltip="Cancel this booking">
+                                    <button mat-icon-button color="secondary" (click)="onShowCancel(item)" i18n-matTooltip="Cancel this booking|Cancel this booking tooltip@@learnMore.LMCON36" matTooltip="Cancel this booking">
                                         <mat-icon svgIcon="cancel"></mat-icon>
                                     </button>
                                 </div>
@@ -262,7 +264,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showCancelOptionsSche[i]">
+                            <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenCanc">
                                 <div class="col-md-12 pl-0 pr-0">
                                     <mat-form-field>
                                         <mat-label i18n="Cancel reasons|text in citas@@host.cancelreasons">Cancel reasons</mat-label>
@@ -279,7 +281,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showMessageSche[i]">
+                            <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenMess">
                                 <div class="col-sm-10 pl-0 pr-0">
                                     <textarea class="card-text" #messageTextSche matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
                                 </div>
@@ -432,7 +434,7 @@
                             </ng-container>
                             <div class="row mb-0 mt-2">
                                 <div class="card-actions-center col-sm-3 p-0">
-                                    <button mat-icon-button color="secondary" (click)="showCancelOptionsWalk[i] = !showCancelOptionsWalk[i]" i18n-matTooltip="Cancel this booking|Cancel this booking tooltip@@learnMore.LMCON36" matTooltip="Cancel this booking">
+                                    <button mat-icon-button color="secondary" (click)="onShowCancel(item)" i18n-matTooltip="Cancel this booking|Cancel this booking tooltip@@learnMore.LMCON36" matTooltip="Cancel this booking">
                                         <mat-icon svgIcon="cancel"></mat-icon>
                                     </button>
                                 </div>
@@ -452,7 +454,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showCancelOptionsWalk[i]">
+                            <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenCanc">
                                 <div class="col-md-12 pl-0 pr-0">
                                     <mat-form-field>
                                         <mat-label i18n="Cancel reasons|text in citas@@host.cancelreasons">Cancel reasons</mat-label>
@@ -469,7 +471,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="showMessageWalk[i]">
+                            <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenMess">
                                 <div class="col-sm-10 pl-0 pr-0">
                                     <textarea class="card-text" #messageTextWalk matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
                                 </div>
