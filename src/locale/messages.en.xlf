@@ -4674,7 +4674,7 @@
       </trans-unit>
       <trans-unit id="learnMore.LMCON10">
         <source>LMCON10</source>
-        <target state="translated">These are the days and hours during which your business is opened for customers or visitors. You can define up to two intervals of time for each day. Tu Cita 24/7 will allow cleints to book appointments at this opening hours.</target>
+        <target state="translated">These are the days and hours during which your business is opened for customers or visitors. You can define up to two intervals of time for each day. Tu Cita 24/7 will allow clients to book appointments at this opening hours.</target>
       </trans-unit>
       <trans-unit id="learnMore.LMCON11">
         <source>LMCON11</source>
@@ -4755,7 +4755,7 @@ To check-out customers leaving the premises, you can either scan the QR code, wr
       </trans-unit>
       <trans-unit id="learnMore.LMCON28">
         <source>LMCON28</source>
-        <target state="translated">In this Polls module, you can create a question that your clients will receive and can answer afer visiting your business. It is an easy way to collect customer satisfaction feedback. The poll should be a closed-ended question that can be answered with the Happy, Neutral or Not Happy emojis, shown in this module. Some examples of questions you can ask are:  "Are you happy with our service today?", or "Would you recommend your service to your friends?"
+        <target state="translated">In this Polls module, you can create a question that your clients will receive and can answer after visiting your business. It is an easy way to collect customer satisfaction feedback. The poll should be a closed-ended question that can be answered with the Happy, Neutral or Not Happy emojis, shown in this module. Some examples of questions you can ask are:  "Are you happy with our service today?", or "Would you recommend your service to your friends?"
 When using Manual Check-Out, the system will not send polls to that location.</target>
       </trans-unit>
       <trans-unit id="learnMore.LMCON29">
@@ -4869,6 +4869,10 @@ When using Manual Check-Out, the system will not send polls to that location.</t
       <trans-unit id="shared.closingLoc">
         <source>Closing Location</source>
         <target state="translated">Closing location</target>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON45">
+        <source>LMCON45</source>
+        <target state="translated">The grace period for late arrival is the time that clients will be allowed to be late for their appointment due to unforeseen delays. After this period, the appointment will be automatically cancelled, and the client will be notified. For example, you can assign a grace period of 15 minutes to your clients, before the appointment is cancelled.</target>
       </trans-unit>
     </body>
   </file>

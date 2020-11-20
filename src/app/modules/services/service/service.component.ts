@@ -279,6 +279,10 @@ export class ServiceComponent implements OnInit {
         message = $localize`:@@learnMore.LMCON25:`;
         break; 
       }
+      case 45: { 
+        message = $localize`:@@learnMore.LMCON45:`;
+        break; 
+      }
       default: { 
         message = ''; 
         break; 
