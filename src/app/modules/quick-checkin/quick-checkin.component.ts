@@ -102,9 +102,9 @@ export class QuickCheckinComponent implements OnInit {
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer
   ) {
-    this.matIconRegistry.addSvgIcon('checkin',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/checkin.svg'));
-    this.matIconRegistry.addSvgIcon('checkinwi',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/checkinwi.svg'));
-    this.matIconRegistry.addSvgIcon('checkout',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/checkout.svg'));
+    this.matIconRegistry.addSvgIcon('addAppo',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/addApo.svg'));
+    this.matIconRegistry.addSvgIcon('numCitas',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/numCitas.svg'));
+    this.matIconRegistry.addSvgIcon('remAppo',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/remAppo.svg'));
    }
 
   clientForm = this.fb.group({

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
+	<style>
+		tspan { white-space:pre }
+		.shp0 { fill: #eae8e8 } 
+		.shp1 { fill: #ff5b00 } 
+	</style>
+	<path id="Shape 4" class="shp0" d="M300 481C176.68 481 77 400.32 77 300.5C77 200.68 176.68 120 300 120C423.32 120 523 200.68 523 300.5C523 400.32 423.32 481 300 481Z" />
+	<path id="Shape 3 copy 2" class="shp1" d="M208 280L393 280C401.29 280 408 286.7 408 295L408 304C408 312.29 401.29 319 393 319L208 319C199.7 319 193 312.29 193 304L193 295C193 286.7 199.7 280 208 280Z" />
+</svg>

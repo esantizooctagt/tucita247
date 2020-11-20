@@ -1,6 +1,6 @@
 .checkin{
     height: 170px;
-    background: url('../../../assets/images/checkin.svg');
+    background: url('../../../assets/images/addAppo.svg');
     width: 170px;
     background-repeat: no-repeat;
     background-position: center;
@@ -9,7 +9,7 @@
 }
 .checkout{
     height: 170px;
-    background: url('../../../assets/images/checkout.svg');
+    background: url('../../../assets/images/remAppo.svg');
     width: 170px;
     background-repeat: no-repeat;
     background-position: center;
@@ -18,7 +18,7 @@
 }
 .checkinwi{
     height: 170px;
-    background: url('../../../assets/images/checkinwi.svg');
+    background: url('../../../assets/images/numCitas.svg');
     width: 170px;
     background-repeat: no-repeat;
     background-position: center;
@@ -28,10 +28,11 @@
 .label-lite{
     color: #f44f00;
     font-weight: 500;
-    font-size: 18px;
-    margin: 0 auto;
+    font-size: 48px;
     display: table;
     text-align: center;
+    position: relative;
+    top: -105px;
 }
 .card-Appointment{
     width: 340px;

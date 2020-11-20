@@ -19,6 +19,7 @@ import { Router } from '@angular/router';
 import { DirDialogComponent } from '@app/shared/dir-dialog/dir-dialog.component';
 import { MonitorService } from '@app/shared/monitor.service';
 import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
+import { MediaMatcher } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-host',
@@ -55,6 +56,8 @@ export class HostComponent implements OnInit {
   newTime$: Observable<any>;
   resetLoc$: Observable<any>;
   cancelAppo$: Observable<any>;
+  newCurrTime$: Observable<any>;
+  runQeues$: Observable<any>;
 
   showMessageSche=[];
   showMessageWalk=[];
@@ -117,6 +120,7 @@ export class HostComponent implements OnInit {
   onError: string = '';
   manualGuests: number =  1;
   operationText: string = '';
+  screenDisp: boolean=false;
 
   Providers: any[]=[];
   services: any[]=[];
@@ -124,6 +128,8 @@ export class HostComponent implements OnInit {
   panelOpenState = false;
   seeDetails: string = $localize`:@@shared.seedetails:`;
   hideDetails: string = $localize`:@@shared.hidedetails:`;
+  matcher: MediaQueryList;
+
   get f(){
     return this.clientForm.controls;
   }
@@ -132,7 +138,10 @@ export class HostComponent implements OnInit {
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
-      map(result => result.matches),
+      map(result => { 
+        this.screenDisp = result.matches; 
+        console.log(result.matches);
+        return result.matches;}),
       shareReplay()
     );
 
@@ -171,7 +180,8 @@ export class HostComponent implements OnInit {
     private matIconRegistry: MatIconRegistry,
     private adminService: AdminService,
     private router: Router,
-    private monitorService: MonitorService
+    private monitorService: MonitorService,
+    public mediaMatcher: MediaMatcher
   ) {
     this.matIconRegistry.addSvgIcon('cancel',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/cancel.svg'));
     this.matIconRegistry.addSvgIcon('clock',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/clock.svg'));
@@ -552,7 +562,16 @@ export class HostComponent implements OnInit {
     // this.webSocketService.connect();
   }
 
+  screenSize(event){
+    console.log("screen Size");
+    console.log(event);
+  }
+
   ngOnInit(): void {
+    this.matcher = this.mediaMatcher.matchMedia(Breakpoints.Handset);
+    this.matcher.addListener(this.screenSize);
+
+    if (this.matcher.matches) {return;}
     this.businessId = this.authService.businessId();
     this.userId = this.authService.userId();
 
@@ -706,16 +725,25 @@ export class HostComponent implements OnInit {
       })
     );
 
-    setInterval(() => {
-      for (var i=0; i<=this.buckets.length-1; i++){
-        if (this.buckets[i].Time == this.currHour){
-          this.currHour = this.buckets[i].Time;
-          if (i-1 >= 0){
-            this.prevHour = this.buckets[i-1].Time;
+    this.newCurrTime$ = interval(1200000).pipe(
+      map(() => {
+        for (var i=0; i<=this.buckets.length-1; i++){
+          if (this.buckets[i].Time == this.currHour){
+            this.currHour = this.buckets[i].Time;
+            if (i-1 >= 0){
+              this.prevHour = this.buckets[i-1].Time;
+            }
           }
         }
-      }
-    }, 1200000);
+      })
+    );
+
+    this.runQeues$ = interval(1800000).pipe(
+      map(() => {
+        this.getAppointmentsSche();
+        this.getAppointmentsWalk();
+      })
+    );
   }
 
   openLocation(){
