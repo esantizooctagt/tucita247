@@ -1143,9 +1143,9 @@ export class HostComponent implements OnInit {
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
       map((res: any) => {
         if (res.Code == 200){
-          let walkIndex = this.walkIns.findIndex(x=>x.AppId == res.Appointment.AppId);
-          if (walkIndex < 0){
-            this.walkIns.push(res.Appointment);
+          let scheduleIndex = this.schedule.findIndex(x=>x.AppId == res.Appointment.AppId);
+          if (scheduleIndex < 0){
+            this.schedule.push(res.Appointment);
           }
         }
         this.spinnerService.stop(spinnerRef);
