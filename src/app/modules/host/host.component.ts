@@ -140,7 +140,6 @@ export class HostComponent implements OnInit {
     .pipe(
       map(result => { 
         this.screenDisp = result.matches; 
-        console.log(result.matches);
         return result.matches;}),
       shareReplay()
     );
@@ -564,7 +563,6 @@ export class HostComponent implements OnInit {
 
   screenSize(event){
     console.log("screen Size");
-    console.log(event);
   }
 
   ngOnInit(): void {
