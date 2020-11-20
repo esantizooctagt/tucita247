@@ -1756,7 +1756,7 @@ export class HostComponent implements OnInit {
               Unread: item['Unread']
             }
             this.schedule.push(data);
-            this.schedule.sort((a, b) => (a.DateFull > b.DateFull) ? 1 : -1);
+            this.schedule.sort((a, b) => (a.DateFull < b.DateFull) ? 1 : -1);
           });
           this.spinnerService.stop(spinnerRef);
         }
