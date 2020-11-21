@@ -164,7 +164,6 @@ export class HostComponent implements OnInit {
   //     complete: () => console.log('[Live Table component] Connection Closed')
   //   })
   // );
-
   // readonly PUSH_URL = 'wss://1wn0vx0tva.execute-api.us-east-1.amazonaws.com/prod?businessId=12345';
   wakeLockEnabled = true;
   noSleep = new NoSleep();
@@ -582,9 +581,9 @@ export class HostComponent implements OnInit {
   }
 
   disableNoSleep() {
-      this.noSleep.disable();
-      this.wakeLockEnabled = false;
-      console.log("disabled");
+    this.noSleep.disable();
+    this.wakeLockEnabled = false;
+    console.log("disabled");
   }
 
   ngOnInit(): void {
