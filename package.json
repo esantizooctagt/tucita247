@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --localize",
-    "build": "ng build --prod --localize",
+    "build": "ng build --prod--build-optimizer=false --localize",
     "build-dev": "ng build --configuration=dev --localize",
     "test": "ng test",
     "lint": "ng lint",
