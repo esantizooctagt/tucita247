@@ -20,7 +20,7 @@ import { DirDialogComponent } from '@app/shared/dir-dialog/dir-dialog.component'
 import { MonitorService } from '@app/shared/monitor.service';
 import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
 import { MediaMatcher } from '@angular/cdk/layout';
-// import NoSleep from 'nosleep.js';
+import NoSleep from 'nosleep.js';
 
 @Component({
   selector: 'app-host',
@@ -165,8 +165,8 @@ export class HostComponent implements OnInit {
   //   })
   // );
   // readonly PUSH_URL = 'wss://1wn0vx0tva.execute-api.us-east-1.amazonaws.com/prod?businessId=12345';
-  // wakeLockEnabled = true;
-  // noSleep = new NoSleep();
+  wakeLockEnabled = true;
+  noSleep = new NoSleep();
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -199,8 +199,8 @@ export class HostComponent implements OnInit {
     this.matIconRegistry.addSvgIcon('sms',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/sms.svg'));
     this.matIconRegistry.addSvgIcon('mas',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/mas.svg'));
     this.matIconRegistry.addSvgIcon('menos',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/menos.svg'));
-    // this.noSleep.enable();
-    // console.log("enabled 00");
+    this.noSleep.enable();
+    console.log("enabled 00");
   }
 
   clientForm = this.fb.group({
@@ -574,20 +574,20 @@ export class HostComponent implements OnInit {
     console.log("screen Size");
   }
 
-  // enableNoSleep() {
-  //   this.noSleep.enable();
-  //   this.wakeLockEnabled = true;
-  //   console.log("enabled");
-  // }
+  enableNoSleep() {
+    this.noSleep.enable();
+    this.wakeLockEnabled = true;
+    console.log("enabled");
+  }
 
-  // disableNoSleep() {
-  //   this.noSleep.disable();
-  //   this.wakeLockEnabled = false;
-  //   console.log("disabled");
-  // }
+  disableNoSleep() {
+    this.noSleep.disable();
+    this.wakeLockEnabled = false;
+    console.log("disabled");
+  }
 
   ngOnInit(): void {
-    // this.enableNoSleep();
+    this.enableNoSleep();
     this.matcher = this.mediaMatcher.matchMedia(Breakpoints.Handset);
     this.matcher.addListener(this.screenSize);
 
