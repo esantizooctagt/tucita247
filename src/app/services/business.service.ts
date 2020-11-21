@@ -68,8 +68,8 @@ export class BusinessService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  updateOpeningHours(businessId, locationId, providerId, dataForm){
-    return this.http.put(this.apiURL + '/business/openinghours/' + businessId + '/' + locationId + '/' + providerId, dataForm)
+  updateOpeningHours(businessId, locationId, providerId, parentData, dataForm){
+    return this.http.put(this.apiURL + '/business/openinghours/' + businessId + '/' + locationId + '/' + providerId + '/' + parentData, dataForm)
                     .pipe(catchError(this.errorHandler));
   }
 

@@ -34,6 +34,11 @@ export class AppointmentService {
                     .pipe(catchError(this.errorHandler));
   }
 
+  getAvailability(businessId, locationId, providerId, serviceId): Observable<Appointment[]> {
+    return this.http.get<Appointment[]>(this.apiURL + '/appointments/availability/' + businessId + '/' + locationId + '/' + providerId + '/' + serviceId)
+                    .pipe(catchError(this.errorHandler));
+  }
+
   getApposAverage(locationId, providerId, initDate): Observable<any[]>{
     return this.http.get<any[]>(this.apiURL + '/appointments/average/' + locationId + '/' + providerId + '/' + initDate)
                     .pipe(catchError(this.errorHandler));

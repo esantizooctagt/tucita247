@@ -20,6 +20,7 @@ import { DirDialogComponent } from '@app/shared/dir-dialog/dir-dialog.component'
 import { MonitorService } from '@app/shared/monitor.service';
 import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
 import { MediaMatcher } from '@angular/cdk/layout';
+import NoSleep from 'nosleep.js';
 
 @Component({
   selector: 'app-host',
@@ -58,6 +59,8 @@ export class HostComponent implements OnInit {
   cancelAppo$: Observable<any>;
   newCurrTime$: Observable<any>;
   runQeues$: Observable<any>;
+  sleep$: Observable<any>;
+  hours$: Observable<any>;
 
   showMessageSche=[];
   showMessageWalk=[];
@@ -99,6 +102,7 @@ export class HostComponent implements OnInit {
   totLocation: number = 0;
   reasons: Reason[]=[];
 
+  hours: any[]=[];
   doors: string[]=[];
   businessId: string = '';
   userId: string = '';
@@ -162,6 +166,9 @@ export class HostComponent implements OnInit {
   // );
 
   // readonly PUSH_URL = 'wss://1wn0vx0tva.execute-api.us-east-1.amazonaws.com/prod?businessId=12345';
+  wakeLockEnabled = true;
+  noSleep = new NoSleep();
+
   constructor(
     private breakpointObserver: BreakpointObserver,
     private domSanitizer: DomSanitizer,
@@ -193,12 +200,15 @@ export class HostComponent implements OnInit {
     this.matIconRegistry.addSvgIcon('sms',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/sms.svg'));
     this.matIconRegistry.addSvgIcon('mas',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/mas.svg'));
     this.matIconRegistry.addSvgIcon('menos',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/menos.svg'));
+    this.noSleep.enable();
+    console.log("enabled 00");
   }
 
   clientForm = this.fb.group({
     Phone: ['',[Validators.maxLength(17)]],
     Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     ServiceId: ['', [Validators.required]],
+    Hour: ['', [Validators.required]],
     Email: ['', [Validators.maxLength(200), Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
     DOB: [''],
     Gender: [''],
@@ -282,7 +292,7 @@ export class HostComponent implements OnInit {
             var verifSche = this.schedule.findIndex(x => x.AppId === msg['AppId']);
             if (verifSche >= 0){return;}
             this.schedule.push(data);
-            this.schedule.sort((a, b) => (a.DateFull > b.DateFull) ? 1 : -1);
+            this.schedule.sort((a, b) => (a.DateFull > b.DateFull) ? -1 : 1);
           }
         }
         if (this.walkIns.filter(x => x.AppId ==  msg['AppId']).length == 0){
@@ -565,7 +575,20 @@ export class HostComponent implements OnInit {
     console.log("screen Size");
   }
 
+  enableNoSleep() {
+    this.noSleep.enable();
+    this.wakeLockEnabled = true;
+    console.log("enabled");
+  }
+
+  disableNoSleep() {
+      this.noSleep.disable();
+      this.wakeLockEnabled = false;
+      console.log("disabled");
+  }
+
   ngOnInit(): void {
+    this.enableNoSleep();
     this.matcher = this.mediaMatcher.matchMedia(Breakpoints.Handset);
     this.matcher.addListener(this.screenSize);
 
@@ -742,6 +765,18 @@ export class HostComponent implements OnInit {
         this.getAppointmentsWalk();
       })
     );
+
+    // var now = new Date().getTime();
+    // this.sleep$ = interval(1000).pipe(
+    //   map(() => {
+    //     console.log(now);
+    //     console.log(new Date().getTime());
+    //     if ((new Date().getTime() - now) > 1000) {
+    //       console.log("wake up sleep")
+    //     }
+    //     now = new Date().getTime();
+    //   })
+    // );
   }
 
   openLocation(){
@@ -927,6 +962,21 @@ export class HostComponent implements OnInit {
     if (res.length > 0) { this.maxGuests = res[0].CustomerPerBooking; }
     this.numGuests =  1;
     this.clientForm.patchValue({'Guests': this.numGuests});
+
+    this.hours$ = this.appointmentService.getAvailability(this.businessId, this.locationId, this.clientForm.value.ProviderId, event.value).pipe(
+      map((res: any) => {
+        if (res.Code == 200){
+          // this.hours = res.Hours;
+          return res.Hours;
+          // this.openSnackBar($localize`:@@host.checkoutsuccess:`, $localize`:@@host.checkoutpop:`);
+        }
+      }),
+      catchError(err => {
+        this.onError = err.Message;
+        this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@host.checkoutpop:`);
+        return this.onError;
+      })
+    );
   }
 
   addGuests(){
@@ -1095,11 +1145,11 @@ export class HostComponent implements OnInit {
   }
 
   addAppointment(){
-    let timeAppo = this.getTimeAppo();
-    if (timeAppo == ""){
-      this.openSnackBar($localize`:@@host.invalidTime:`, $localize`:@@shared.error:`);
-      return;
-    }
+    // let timeAppo = this.getTimeAppo();
+    // if (timeAppo == ""){
+    //   this.openSnackBar($localize`:@@host.invalidTime:`, $localize`:@@shared.error:`);
+    //   return;
+    // }
     if (!this.clientForm.valid) {return;}
     //AGREGAR WALK IN Y APPOINTMENT
     let dobClient: Date = this.clientForm.value.DOB;
@@ -1116,7 +1166,7 @@ export class HostComponent implements OnInit {
     let monthCurr = this.getMonth();
     let dayCurr = this.getDay();
     let dateAppo = yearCurr + '-' + monthCurr + '-' + dayCurr;
-    
+    let pNumber = (phoneNumber == '' ?  '00000000000' : (phoneNumber.length <= 10 ? '1' + phoneNumber : phoneNumber));
     let formData = {
       BusinessId: this.businessId,
       LocationId: this.locationId,
@@ -1134,16 +1184,38 @@ export class HostComponent implements OnInit {
       Disability: (this.clientForm.value.Disability == null ? '': this.clientForm.value.Disability),
       Guests: this.clientForm.value.Guests,
       AppoDate: dateAppo,
-      AppoHour: timeAppo,
-      Type: 2
+      AppoHour: (this.clientForm.value.Hour).toString().padStart(2,'0')+':00',
+      Type: (pNumber == '00000000000' ? 2 : 1)
     }
+
+    let options = {
+      timeZone: 'America/Puerto_Rico',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: false,
+    },
+    formatter = new Intl.DateTimeFormat([], options);
+    var actualTime = formatter.format(new Date());
+    let actTime = +actualTime.replace(':','-').substring(0,2);
+
     var spinnerRef = this.spinnerService.start($localize`:@@host.addingappo:`);
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
       map((res: any) => {
         if (res.Code == 200){
-          let scheduleIndex = this.schedule.findIndex(x=>x.AppId == res.Appointment.AppId);
-          if (scheduleIndex < 0){
-            this.schedule.push(res.Appointment);
+          let appoTime = +(res.Appointment.DateFull).substring(11).replace(':','-').substring(0,2);
+          if (appoTime <= actTime){
+            let scheduleIndex = this.schedule.findIndex(x=>x.AppId == res.Appointment.AppId);
+            if (scheduleIndex < 0){
+              this.schedule.push(res.Appointment);
+              this.schedule.sort((a, b) => (a.DateFull > b.DateFull) ? -1 : 1);
+            }
+          }
+          if (appoTime > actTime){
+            let upComingIndex = this.walkIns.findIndex(x=>x.AppId == res.Appointment.AppId);
+            if (upComingIndex < 0){
+              this.walkIns.push(res.Appointment);
+              this.walkIns.sort((a, b) => (a.DateFull > b.DateFull) ? 1 : -1);
+            }
           }
         }
         this.spinnerService.stop(spinnerRef);
@@ -1205,6 +1277,10 @@ export class HostComponent implements OnInit {
     }
     if (component === 'ProviderId'){
       return this.f.ProviderId.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
+            '';
+    }
+    if (component === 'Hour'){
+      return this.f.Hour.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
             '';
     }
     if (component === 'Phone'){
@@ -1419,10 +1495,29 @@ export class HostComponent implements OnInit {
       hour: 'numeric',
       minute: 'numeric',
       hour12: true,
-  },
-  formatter = new Intl.DateTimeFormat([], options);
-  var actual = formatter.format(new Date());
-
+    },
+    formatter = new Intl.DateTimeFormat([], options);
+    var actual = formatter.format(new Date());
+    if (qeue == 'schedule'){
+      // this.showMessageSche[i] = false;
+      this.messSche.nativeElement.value = '';
+      this.getCommentsSche[i].push({'H': value, 'T': actual});
+    }
+    if (qeue == 'walkin'){
+      // this.showMessageWalk[i] = false;
+      this.messWalk.nativeElement.value = '';
+      this.getCommentsWalk[i].push({'H': value, 'T': actual});
+    }
+    if (qeue == 'checkin'){
+      // this.showMessageCheck[i] = false;
+      this.messCheckIn.nativeElement.value = '';
+      this.getCommentsCheck[i].push({'H': value, 'T': actual});
+    }
+    if (qeue == 'previous'){
+      // this.showMessagePrev[i] = false;
+      this.messPrev.nativeElement.value = '';
+      this.getCommentsPrev[i].push({'H': value, 'T': actual});
+    }
     //GET MESSAGES APPOINTMENT
     let formData = {
       Message: value,
@@ -1432,26 +1527,6 @@ export class HostComponent implements OnInit {
       map((res:any) => {
         if (res != null){
           if (res.Code == 200){
-            if (qeue == 'schedule'){
-              // this.showMessageSche[i] = false;
-              this.messSche.nativeElement.value = '';
-              this.getCommentsSche[i].push({'H': value, 'T': actual});
-            }
-            if (qeue == 'walkin'){
-              // this.showMessageWalk[i] = false;
-              this.messWalk.nativeElement.value = '';
-              this.getCommentsWalk[i].push({'H': value, 'T': actual});
-            }
-            if (qeue == 'checkin'){
-              // this.showMessageCheck[i] = false;
-              this.messCheckIn.nativeElement.value = '';
-              this.getCommentsCheck[i].push({'H': value, 'T': actual});
-            }
-            if (qeue == 'previous'){
-              // this.showMessagePrev[i] = false;
-              this.messPrev.nativeElement.value = '';
-              this.getCommentsPrev[i].push({'H': value, 'T': actual});
-            }
             this.openSnackBar($localize`:@@host.messagessend:`,$localize`:@@host.messages:`);
           } else {
             this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@host.messages:`);
@@ -1488,6 +1563,7 @@ export class HostComponent implements OnInit {
       this.getCommentsPrev[i] = "";
       // this.showMessagePrev[i] = !this.showMessagePrev[i]; 
     }
+    // console.log(appo.OpenMess);
     appo.OpenMess = (appo.OpenMess == 0 ? 1 : 0);
     this.comments$ = this.appointmentService.getMessages(appo.AppId, 'H').pipe(
       map((res: any) => {
@@ -1788,7 +1864,7 @@ export class HostComponent implements OnInit {
               Unread: item['Unread']
             }
             this.schedule.push(data);
-            this.schedule.sort((a, b) => (a.DateFull < b.DateFull) ? 1 : -1);
+            this.schedule.sort((a, b) => (a.DateFull > b.DateFull) ? -1 : 1);
           });
           this.spinnerService.stop(spinnerRef);
         }
@@ -2100,6 +2176,7 @@ export class HostComponent implements OnInit {
   }
 
   onProvChange(event){
+    this.hours = [];
     this.getLocInfo$ = this.serviceService.getServicesProvider(this.businessId, event.value).pipe(
       map((res: any) =>{
         this.services = res.services.filter(x => x.Selected === 1);

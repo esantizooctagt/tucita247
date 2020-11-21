@@ -111,7 +111,6 @@ export class BusinessOpeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    var spinnerRef = this.spinnerService.start($localize`:@@business-ope.loadopeninghours:`);
     this.businessId = this.authService.businessId();
     this.locationId = this.route.snapshot.paramMap.get('locations') == null ? "_" : "1";
     
@@ -156,7 +155,11 @@ export class BusinessOpeComponent implements OnInit {
     this.newInterval[6] = "0";
 
     this.onValueChanges();
+    this.loadOpeHours();
+  }
 
+  loadOpeHours(){
+    var spinnerRef = this.spinnerService.start($localize`:@@business-ope.loadopeninghours:`);
     this.business$ = this.businessService.getOpeningHours(this.businessId, this.locationId, this.providerId).pipe(
       tap((res: any) => {
         if (res.Code == 200){
@@ -738,11 +741,12 @@ export class BusinessOpeComponent implements OnInit {
       "OpeHours": JSON.stringify(opeHours)
     }
     var spinnerRef = this.spinnerService.start($localize`:@@business.saving:`);
-    this.opeHoursSave$ = this.businessService.updateOpeningHours(this.businessId, this.locationId, this.providerId, dataForm).pipe(
+    this.opeHoursSave$ = this.businessService.updateOpeningHours(this.businessId, this.locationId, this.providerId, this.locationParentHours, dataForm).pipe(
       tap((res: any) => { 
         if (res.Code == 200){
           this.spinnerService.stop(spinnerRef);
           this.openSnackBar($localize`:@@business-ope.openinghoursupdate:`,$localize`:@@business-ope.openinghours:`);
+          this.loadOpeHours();
         } else {
           this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@business-ope.openinghours:`);
         }
