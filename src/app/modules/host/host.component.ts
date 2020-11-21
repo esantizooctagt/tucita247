@@ -59,7 +59,7 @@ export class HostComponent implements OnInit {
   cancelAppo$: Observable<any>;
   newCurrTime$: Observable<any>;
   runQeues$: Observable<any>;
-  sleep$: Observable<any>;
+  // sleep$: Observable<any>;
   hours$: Observable<any>;
 
   showMessageSche=[];
