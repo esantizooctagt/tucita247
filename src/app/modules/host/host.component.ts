@@ -315,28 +315,28 @@ export class HostComponent implements OnInit {
       if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 1 && msg['User'] == 'H'){
         let resScheMess = this.schedule.findIndex(x => x.AppId === msg['AppId']);
         if (resScheMess >= 0){
-          if (this.showMessageSche[resScheMess]){
+          if (this.schedule[resScheMess].OpenMess == 1){
             this.getCommentsSche[resScheMess].push(msg['Message']);
           }
           this.schedule[resScheMess].Unread = "H";
         }
         let resWalkInsMess = this.walkIns.findIndex(x => x.AppId === msg['AppId']);
         if (resWalkInsMess >= 0){
-          if (this.showMessageWalk[resWalkInsMess]){
+          if (this.walkIns[resWalkInsMess].OpenMess == 1){
             this.getCommentsWalk[resWalkInsMess].push(msg['Message']);
           }
           this.walkIns[resWalkInsMess].Unread = "H";
         }
         let resPreviousMess = this.previous.findIndex(x => x.AppId === msg['AppId']);
         if (resPreviousMess >= 0){
-          if (this.showMessagePrev[resPreviousMess]){
+          if (this.previous[resPreviousMess].OpenMess == 1){
             this.getCommentsPrev[resPreviousMess].push(msg['Message']);
           }
           this.previous[resPreviousMess].Unread = "H";
         }
         let resPreCheckInMess = this.preCheckIn.findIndex(x => x.AppId === msg['AppId']);
         if (resPreCheckInMess >= 0){
-          if (this.showMessageCheck[resPreCheckInMess]){
+          if (this.preCheckIn[resPreCheckInMess].OpenMess == 1){
             this.getCommentsCheck[resPreCheckInMess].push(msg['Message']);
           }
           this.preCheckIn[resPreCheckInMess].Unread = "H";
