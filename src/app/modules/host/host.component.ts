@@ -20,7 +20,6 @@ import { DirDialogComponent } from '@app/shared/dir-dialog/dir-dialog.component'
 import { MonitorService } from '@app/shared/monitor.service';
 import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
 import { MediaMatcher } from '@angular/cdk/layout';
-import NoSleep from 'nosleep.js';
 
 @Component({
   selector: 'app-host',
@@ -59,7 +58,6 @@ export class HostComponent implements OnInit {
   cancelAppo$: Observable<any>;
   newCurrTime$: Observable<any>;
   runQeues$: Observable<any>;
-  // sleep$: Observable<any>;
   hours$: Observable<any>;
 
   showMessageSche=[];
@@ -133,6 +131,7 @@ export class HostComponent implements OnInit {
   seeDetails: string = $localize`:@@shared.seedetails:`;
   hideDetails: string = $localize`:@@shared.hidedetails:`;
   matcher: MediaQueryList;
+  lastTime = new Date().getTime();
 
   get f(){
     return this.clientForm.controls;
@@ -153,6 +152,16 @@ export class HostComponent implements OnInit {
       this.syncData(message);
     })
   );
+
+  sleep$ = interval(1000).pipe(
+    map(() => {
+      if ((new Date().getTime() - this.lastTime) > 4000) {
+        console.log("reload on location");
+        this.onLocationChange(this.locationId);
+      }
+      this.lastTime = new Date().getTime();
+    })
+  );
   // liveData$ = this.webSocketService.messages$.pipe(
   //   map((res: any) => {
   //     console.log(res);
@@ -165,9 +174,6 @@ export class HostComponent implements OnInit {
   //   })
   // );
   // readonly PUSH_URL = 'wss://1wn0vx0tva.execute-api.us-east-1.amazonaws.com/prod?businessId=12345';
-  wakeLockEnabled = true;
-  noSleep = new NoSleep();
-
   constructor(
     private breakpointObserver: BreakpointObserver,
     private domSanitizer: DomSanitizer,
@@ -199,8 +205,6 @@ export class HostComponent implements OnInit {
     this.matIconRegistry.addSvgIcon('sms',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/sms.svg'));
     this.matIconRegistry.addSvgIcon('mas',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/mas.svg'));
     this.matIconRegistry.addSvgIcon('menos',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/menos.svg'));
-    this.noSleep.enable();
-    console.log("enabled 00");
   }
 
   clientForm = this.fb.group({
@@ -574,20 +578,7 @@ export class HostComponent implements OnInit {
     console.log("screen Size");
   }
 
-  enableNoSleep() {
-    this.noSleep.enable();
-    this.wakeLockEnabled = true;
-    console.log("enabled");
-  }
-
-  disableNoSleep() {
-    this.noSleep.disable();
-    this.wakeLockEnabled = false;
-    console.log("disabled");
-  }
-
   ngOnInit(): void {
-    this.enableNoSleep();
     this.matcher = this.mediaMatcher.matchMedia(Breakpoints.Handset);
     this.matcher.addListener(this.screenSize);
 
@@ -764,18 +755,6 @@ export class HostComponent implements OnInit {
         this.getAppointmentsWalk();
       })
     );
-
-    // var now = new Date().getTime();
-    // this.sleep$ = interval(1000).pipe(
-    //   map(() => {
-    //     console.log(now);
-    //     console.log(new Date().getTime());
-    //     if ((new Date().getTime() - now) > 1000) {
-    //       console.log("wake up sleep")
-    //     }
-    //     now = new Date().getTime();
-    //   })
-    // );
   }
 
   openLocation(){
@@ -2006,7 +1985,7 @@ export class HostComponent implements OnInit {
   }
 
   onLocationChange(event){
-    let data = this.locations.filter(val => val.LocationId == event.value);
+    let data = this.locations.filter(val => val.LocationId == event);
     this.previous = [];
     this.schedule = [];
     this.walkIns = [];
