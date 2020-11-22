@@ -132,6 +132,7 @@ export class HostComponent implements OnInit {
   hideDetails: string = $localize`:@@shared.hidedetails:`;
   matcher: MediaQueryList;
   lastTime = new Date().getTime();
+  timerActive: boolean = false;
 
   get f(){
     return this.clientForm.controls;
@@ -157,6 +158,7 @@ export class HostComponent implements OnInit {
     map(() => {
       if ((new Date().getTime() - this.lastTime) > 4000) {
         console.log("reload on location");
+        this.timerActive = true;
         if (!this.matcher.matches) {
           this.onLocationChange(this.locationId);
         }
@@ -585,6 +587,7 @@ export class HostComponent implements OnInit {
     this.matcher.addListener(this.screenSize);
 
     if (this.matcher.matches) {return;}
+    if (this.timerActive) { this.timerActive = false; return; }
     this.businessId = this.authService.businessId();
     this.userId = this.authService.userId();
 
