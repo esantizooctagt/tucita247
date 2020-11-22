@@ -157,7 +157,9 @@ export class HostComponent implements OnInit {
     map(() => {
       if ((new Date().getTime() - this.lastTime) > 4000) {
         console.log("reload on location");
-        this.onLocationChange(this.locationId);
+        if (!this.matcher.matches) {
+          this.onLocationChange(this.locationId);
+        }
       }
       this.lastTime = new Date().getTime();
     })

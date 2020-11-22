@@ -46,8 +46,8 @@ export class BusinessOpeComponent implements OnInit {
   providerId: string = '_';
   providerVal: string = '';
 
-  providerParentHours: number = 1;
-  locationParentHours: number = 1;
+  providerParentHours: boolean=false;
+  locationParentHours: boolean = false;
 
   locationData: any;
   serviceData: any;
@@ -194,7 +194,7 @@ export class BusinessOpeComponent implements OnInit {
           if (this.locationId != "_" && this.providerId == "_"){
             this.locationData = res.Data;
             this.locationId = res.Data[0].LocationId;
-            this.locationParentHours = res.Data[0].ParentHours;
+            this.locationParentHours = (res.Data[0].ParentHours == 1 ? true : false);
             var opeHour = JSON.parse(res.Data[0].OperationHours);
             this.businessForm.setValue({
               BusinessId: this.businessId,
@@ -227,7 +227,7 @@ export class BusinessOpeComponent implements OnInit {
             this.providerVal = res.Data[0].LocationId + '#' + res.Data[0].Services[0].ProviderId;
             this.locationId = res.Data[0].LocationId;
             this.providerId = res.Data[0].Services[0].ProviderId;
-            this.providerParentHours = res.Data[0].Services[0].ParentHours;
+            this.providerParentHours = (res.Data[0].Services[0].ParentHours == 1 ? true : false);
             var opeHour = JSON.parse(res.Data[0].Services[0].OperationHours);
             this.businessForm.setValue({
               BusinessId: this.businessId,
@@ -741,7 +741,13 @@ export class BusinessOpeComponent implements OnInit {
       "OpeHours": JSON.stringify(opeHours)
     }
     var spinnerRef = this.spinnerService.start($localize`:@@business.saving:`);
-    this.opeHoursSave$ = this.businessService.updateOpeningHours(this.businessId, this.locationId, this.providerId, this.locationParentHours, dataForm).pipe(
+    let valParent;
+    if (this.providerId == '_'){
+      valParent = (this.locationParentHours == true ? 1 : 0);
+    } else {
+      valParent = (this.providerParentHours == true ? 1 : 0);
+    }
+    this.opeHoursSave$ = this.businessService.updateOpeningHours(this.businessId, this.locationId, this.providerId, valParent, dataForm).pipe(
       tap((res: any) => { 
         if (res.Code == 200){
           this.spinnerService.stop(spinnerRef);
@@ -791,7 +797,7 @@ export class BusinessOpeComponent implements OnInit {
 
     let loc = this.locationData.filter(x => x.LocationId == event.value);
     var opeHour = JSON.parse(loc[0].OperationHours);
-    this.locationParentHours = loc[0].ParentHours;
+    this.locationParentHours = (loc[0].ParentHours == 1 ? true : false);
     this.businessForm.setValue({
       BusinessId: this.businessId,
       OperationHours: loc[0].OperationHours,
@@ -1407,19 +1413,32 @@ export class BusinessOpeComponent implements OnInit {
   }
 
   updateData(event, tipo){
-    this.updateParentHours$ = this.businessService.updateBusinessParms(this.businessId, this.locationId, this.providerId, (event.checked == true ? 1 : 0), tipo).pipe(
-      map((res: any) => {
-        if (res.Code == 200){
-          this.providerParentHours = (event.checked == true ? 1 : 0);
-          this.openSnackBar($localize`:@@business-ope.updatedata:`,$localize`:@@business-ope.openinghours:`);
-        }
-      }),
-      catchError(err => {
-        this.providerParentHours = (!event.checked == true ? 1 : 0);
-        this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@business-ope.openinghours:`);
-        return err;
-      })
-    );
+    if (tipo == 1){
+      if (event.checked){
+        this.locationParentHours = true;
+      } else {
+        this.locationParentHours = false;
+      }
+    } else {
+      if (event.checked){
+        this.providerParentHours = true;
+      } else {
+        this.providerParentHours = false;
+      }
+    }
+    // this.updateParentHours$ = this.businessService.updateBusinessParms(this.businessId, this.locationId, this.providerId, (event.checked == true ? 1 : 0), tipo).pipe(
+    //   map((res: any) => {
+    //     if (res.Code == 200){
+    //       this.providerParentHours = (event.checked == true ? 1 : 0);
+    //       this.openSnackBar($localize`:@@business-ope.updatedata:`,$localize`:@@business-ope.openinghours:`);
+    //     }
+    //   }),
+    //   catchError(err => {
+    //     this.providerParentHours = (!event.checked == true ? 1 : 0);
+    //     this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@business-ope.openinghours:`);
+    //     return err;
+    //   })
+    // );
   }
 
   learnMore(textNumber: number){
