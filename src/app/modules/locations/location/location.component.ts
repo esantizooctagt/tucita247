@@ -95,7 +95,7 @@ export class LocationComponent implements OnInit {
     Address: ['', [Validators.required, Validators.maxLength(500), Validators.minLength(3)]],
     Geolocation: ['{0.00,0.00}', [Validators.maxLength(50), Validators.minLength(5)]],
     ParentLocation: ['0'],
-    MaxConcurrentCustomer: ['', [Validators.required, Validators.min(1)]],
+    MaxConcurrentCustomer: ['1', [Validators.required, Validators.min(1)]],
     ManualCheckOut: [false],
     Doors: ['', [Validators.required]],
     Status: [true]
@@ -224,7 +224,7 @@ export class LocationComponent implements OnInit {
   onDisplay() {
     if (this.locationDataList != undefined && this.locationDataList != "0") {
       var spinnerRef = this.spinnerService.start($localize`:@@locations.loadlocation:`);
-      this.locationForm.reset({ LocationId: '', BusinessId: '', Name: '', City: '', Sector: '', ZipCode: '', Address: '', Geolocation : '{0.00,0.00}', ParentLocation : '0', MaxConcurrentCustomer: '', ManualCheckOut: false, Doors: '', Status: true});
+      this.locationForm.reset({ LocationId: '', BusinessId: '', Name: '', City: '', Sector: '', ZipCode: '', Address: '', Geolocation : '{0.00,0.00}', ParentLocation : '0', MaxConcurrentCustomer: '1', ManualCheckOut: false, Doors: '', Status: true});
       this.location$ = this.locationService.getLocation(this.businessId, this.locationDataList, this.countryCode, this.language).pipe(
         map((res: any) => {
           if (res.Code == 200) {
