@@ -293,20 +293,20 @@ export class HostComponent implements OnInit {
           DateAppo: hora,
           Unread: 0
         }
-        if (this.schedule.filter(x => x.AppId ==  msg['AppId']).length == 0){
-          if (appoTime <= actTime){
-            var verifSche = this.schedule.findIndex(x => x.AppId === msg['AppId']);
-            if (verifSche >= 0){return;}
-            this.schedule.push(data);
-            this.schedule.sort((a, b) => (a.DateFull > b.DateFull) ? -1 : 1);
-          }
-        }
         if (this.walkIns.filter(x => x.AppId ==  msg['AppId']).length == 0){
-          if (appoTime > actTime){
+          if (appoTime >= actTime){
             var verifWalk = this.walkIns.findIndex(x => x.AppId === msg['AppId']);
             if (verifWalk >= 0){return;}
             this.walkIns.push(data);
-            this.walkIns.sort((a, b) => (a.DateFull > b.DateFull) ? 1 : -1);
+            this.walkIns.sort(function(a, b) { 
+              if (a.DateFull == b.DateFull){
+                if (a.Disability == b.Disability){
+                  return b.DateTrans > a.DateTrans ? -1 : 1
+               }
+               return b.Disability - a.Disability;
+              }
+              return a.DateFull > b.DateFull ? 1 : -1;
+            });
           }
         }
       }  
@@ -1185,18 +1185,19 @@ export class HostComponent implements OnInit {
       map((res: any) => {
         if (res.Code == 200){
           let appoTime = +(res.Appointment.DateFull).substring(11).replace(':','-').substring(0,2);
-          if (appoTime <= actTime){
-            let scheduleIndex = this.schedule.findIndex(x=>x.AppId == res.Appointment.AppId);
-            if (scheduleIndex < 0){
-              this.schedule.push(res.Appointment);
-              this.schedule.sort((a, b) => (a.DateFull > b.DateFull) ? -1 : 1);
-            }
-          }
-          if (appoTime > actTime){
+          if (appoTime >= actTime){
             let upComingIndex = this.walkIns.findIndex(x=>x.AppId == res.Appointment.AppId);
             if (upComingIndex < 0){
               this.walkIns.push(res.Appointment);
-              this.walkIns.sort((a, b) => (a.DateFull > b.DateFull) ? 1 : -1);
+              this.walkIns.sort(function(a, b) { 
+                if (a.DateFull == b.DateFull){
+                  if (a.Disability == b.Disability){
+                    return b.DateTrans > a.DateTrans ? -1 : 1
+                 }
+                 return b.Disability - a.Disability;
+                }
+                return a.DateFull > b.DateFull ? 1 : -1;
+              });
             }
           }
         }
@@ -1843,10 +1844,19 @@ export class HostComponent implements OnInit {
               DateAppo: hora,
               OpenMess: 0,
               OpenCanc: 0,
-              Unread: item['Unread']
+              Unread: item['Unread'],
+              DateTrans: item['DateTrans']
             }
             this.schedule.push(data);
-            this.schedule.sort((a, b) => (a.DateFull > b.DateFull) ? -1 : 1);
+            this.schedule.sort(function(a, b) { 
+              if (a.DateFull == b.DateFull){
+                if (a.Disability == b.Disability){
+                  return b.DateTrans > a.DateTrans ? -1 : 1
+               }
+               return b.Disability - a.Disability;
+              }
+              return a.DateFull > b.DateFull ? -1 : 1;
+            });
           });
           this.spinnerService.stop(spinnerRef);
         }
@@ -1905,10 +1915,19 @@ export class HostComponent implements OnInit {
               Type: item['Type'],
               OpenMess: 0,
               OpenCanc: 0,
-              Unread: item['Unread']
+              Unread: item['Unread'],
+              DateTrans: item['DateTrans']
             }
             this.walkIns.push(data);
-            this.walkIns.sort((a, b) => (a.DateFull > b.DateFull) ? 1 : -1);
+            this.walkIns.sort(function(a, b) { 
+              if (a.DateFull == b.DateFull){
+                if (a.Disability == b.Disability){
+                  return b.DateTrans > a.DateTrans ? -1 : 1
+               }
+               return b.Disability - a.Disability;
+              }
+              return a.DateFull > b.DateFull ? 1 : -1;
+            });
           });
           this.spinnerService.stop(spinnerRef);
         }
