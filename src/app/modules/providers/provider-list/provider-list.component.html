@@ -10,9 +10,16 @@
     <mat-table [dataSource]="fProviders.controls" formArrayName="Providers" [trackBy]="trackRow"
         class="pl-0 pr-0 pt-1 pb-2 col-md-12 mt-1 mb-1 mat-elevation-z8">
         <ng-container matColumnDef="Name">
-            <mat-header-cell *matHeaderCellDef class="col-md-11" i18n="Name@@shared.name"> Name </mat-header-cell>
-            <mat-cell *matCellDef="let element;let i=index" class="col-md-11">
+            <mat-header-cell *matHeaderCellDef class="col-md-5" i18n="Name@@shared.name"> Name </mat-header-cell>
+            <mat-cell *matCellDef="let element;let i=index" class="col-md-5">
                 {{element.value.Name}}
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="Location">
+            <mat-header-cell *matHeaderCellDef class="col-md-6" i18n="Name@@shared.location"> Location </mat-header-cell>
+            <mat-cell *matCellDef="let element;let i=index" class="col-md-6">
+                {{element.value.Location}}
             </mat-cell>
         </ng-container>
 

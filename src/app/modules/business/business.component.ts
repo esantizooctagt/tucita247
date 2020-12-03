@@ -124,6 +124,7 @@ export class BusinessComponent implements OnInit {
     // public geocodeService: GeocodeService,
     private mapLoader: MapsAPILoader
   ) {
+    this.language = this.authService.language();
     this.categories$ = this.categoryService.getCategories(this.language).pipe(
       map(res => {
         this.allCategories = res;

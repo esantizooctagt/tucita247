@@ -2,6 +2,22 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template" target-language="en">
     <body>
+      <trans-unit id="host.servicetext" datatype="html">
+        <source>Service</source>
+        <target state="translated">Service: </target>
+        <context-group purpose="host">
+          <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
+          <context context-type="linenumber">566</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="host.providertext" datatype="html">
+        <source>Provider</source>
+        <target state="translated">Provider: </target>
+        <context-group purpose="host">
+          <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
+          <context context-type="linenumber">563</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="services.buffertime" datatype="html">
         <source>Buffer Time</source>
         <target state="translated">Grace period</target>
@@ -2802,7 +2818,7 @@
       </trans-unit>
       <trans-unit id="welcome.setupservprovider" datatype="html">
         <source>Setup your Service Provider</source>
-        <target state="translated">5. Service providers</target>
+        <target state="translated">6. Service providers</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
           <context context-type="linenumber">40</context>
@@ -2822,7 +2838,7 @@
       </trans-unit>
       <trans-unit id="welcome.setupservices" datatype="html">
         <source>Setup your services</source>
-        <target state="translated">6. Services</target>
+        <target state="translated">5. Services</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/welcome/welcome.component.html</context>
           <context context-type="linenumber">47</context>

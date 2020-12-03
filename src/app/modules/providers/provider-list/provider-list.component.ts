@@ -36,7 +36,7 @@ export class ProviderListComponent implements OnInit {
 
   displayYesNo: boolean = false;
 
-  displayedColumns = ['Name', 'Actions'];
+  displayedColumns = ['Name', 'Location', 'Actions'];
   businessId: string = '';
   changeData: string;
   providerData: any;
@@ -54,6 +54,7 @@ export class ProviderListComponent implements OnInit {
       ProviderId: [''],
       Name: ['', [Validators.required, Validators.maxLength(100), Validators.minLength(3)]],
       LocationId: [''],
+      Location: [''],
       Status: []
     });
   }
@@ -163,6 +164,7 @@ export class ProviderListComponent implements OnInit {
           ProviderId: res.ProviderId,
           Name: res.Name,
           LocationId: res.LocationId,
+          Location: res.LocName,
           Status: res.Status
         })
       );

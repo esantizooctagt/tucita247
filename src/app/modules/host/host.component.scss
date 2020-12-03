@@ -105,8 +105,15 @@ button.mat-stroked-button
     border: dashed 1px #ff4f00;
 }
 .walkin{
-    min-height: 500px;
-    height: 100%;
+    min-height: 300px;
+    height: 60%;
+    width: 100%;
+    overflow: auto;
+    border: dashed 1px #ff4f00;
+}
+.waitlist{
+    min-height: 163px;
+    height: 34%;
     width: 100%;
     overflow: auto;
     border: dashed 1px #ff4f00;
