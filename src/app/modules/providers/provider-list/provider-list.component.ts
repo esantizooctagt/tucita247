@@ -164,7 +164,7 @@ export class ProviderListComponent implements OnInit {
           ProviderId: res.ProviderId,
           Name: res.Name,
           LocationId: res.LocationId,
-          Location: res.LocName,
+          Location: res.Location,
           Status: res.Status
         })
       );
