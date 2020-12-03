@@ -1613,7 +1613,7 @@ export class HostComponent implements OnInit {
     if (type == 'waitlist'){
       this.getCommentsWaitList[i] = "";
     }
-    // console.log(appo.OpenMess);
+    console.log(appo.OpenMess);
     appo.OpenMess = (appo.OpenMess == 0 ? 1 : 0);
     this.comments$ = this.appointmentService.getMessages(appo.AppId, 'H').pipe(
       map((res: any) => {
