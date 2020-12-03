@@ -1613,8 +1613,8 @@ export class HostComponent implements OnInit {
     if (type == 'waitlist'){
       this.getCommentsWaitList[i] = "";
     }
-    console.log(appo.OpenMess);
-    appo.OpenMess = (appo.OpenMess == 0 ? 1 : 0);
+    // console.log(appo.OpenMess);
+    appo.OpenMess = (appo.OpenMess == 0 || appo.OpenMess == undefined ? 1 : 0);
     this.comments$ = this.appointmentService.getMessages(appo.AppId, 'H').pipe(
       map((res: any) => {
         if (res != null){
@@ -1644,11 +1644,11 @@ export class HostComponent implements OnInit {
   }
 
   onShowCancel(appo: any){
-    appo.OpenCanc = (appo.OpenCanc == 0 ? 1 : 0);
+    appo.OpenCanc = (appo.OpenCanc == 0 || appo.OpenCanc == undefined ? 1 : 0);
   }
 
   onShowDetail(appo: any){
-    appo.OpenItem = (appo.OpenItem == 0 ? 1 : 0);
+    appo.OpenItem = (appo.OpenItem == 0 || appo.OpenItem == undefined ? 1 : 0);
   }
 
   onReadyCheckIn(appo: any, tipo: number){
