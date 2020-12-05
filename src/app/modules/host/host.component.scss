@@ -93,33 +93,49 @@ button.mat-stroked-button
     }
 }
 .drop-qeue{
-    height: calc(100vh - 228px); //209.33
+    height: calc(100vh - 285.33px); //209.33
     padding-right: 2px;
     padding-left: 1px;
 }
 .plan{
-    min-height: 500px;
+    min-height: 300px;
     height: 100%;
     width: 100%;
     overflow: auto;
     border: dashed 1px #ff4f00;
 }
 .walkin{
-    min-height: 300px;
-    height: 60%;
+    // min-height: 300px;
+    height: 100%;
     width: 100%;
     overflow: auto;
     border: dashed 1px #ff4f00;
 }
+.parent{
+    position: relative;
+}
+.partial-qeue{
+    padding-right: 2px;
+    padding-left: 1px;
+    height: 30%;
+    bottom: 0;
+    position: absolute;
+}
+.upc-partial-qeue{
+    padding-right: 2px;
+    padding-left: 1px;
+    height: 70%;
+    position: absolute;
+}
 .waitlist{
-    min-height: 163px;
-    height: 34%;
+    // min-height: 163px;
+    height: calc(100% - 37.33px);
     width: 100%;
     overflow: auto;
     border: dashed 1px #ff4f00;
 }
 .precheck{
-    min-height: 500px;
+    min-height: 300px;
     height: 100%;
     width: 100%;
     overflow: auto;
@@ -377,6 +393,32 @@ mat-menu{
 }
 .title-text:hover{
     color: #000 !important;
+}
+.cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+            0 8px 10px 1px rgba(0, 0, 0, 0.14),
+            0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+    opacity: 0;
+}
+.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+.appCard:last-child {
+    border: none;
+}
+.drop-qeue.cdk-drop-list-dragging .appCard:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+.upc-partial-qeue.cdk-drop-list-dragging .appCard:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+.partial-qeue.cdk-drop-list-dragging .appCard:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 ::ng-deep .mat-tooltip {
     background-color: #ff4f00;

@@ -2257,36 +2257,26 @@ export class HostComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    if (event.previousContainer != event.container) {
+    if (event.previousContainer.id == "cdk-drop-list-3" && event.container != event.previousContainer){
       let appo = JSON.parse(JSON.stringify(event.previousContainer.data[event.previousIndex]));
       let container = event.previousContainer.id;
-      let formData = {
-        Status: 2,
-        DateAppo: appo.DateFull,
-        CustomerId: appo.ClientId,
-        BusinessName: this.authService.businessName(),
-        Language: this.authService.businessLanguage()
-      }
-      transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, this.preCheckIn.length);
-      this.updAppointment$ = this.appointmentService.updateAppointment(appo.AppId, formData).pipe(
+      // transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, this.preCheckIn.length);
+      this.cancelAppo$ = this.adminService.putNoShow(appo.AppId).pipe(
         map((res: any) => {
           if (res.Code == 200){
-            let appoObj = res.Appo;
-            var dataPre = this.preCheckIn.findIndex(e => e.AppId === appo.AppId);
-            if (dataPre >= 0){
-              let newData = this.preCheckIn[dataPre];
-              newData.CheckInTime = appoObj['TIMECHEK'];
-              newData.ElapsedTime = "0";
-              newData.Pause = "0";
+            let val = this.preCheckIn.findIndex(x=>x.AppId == res.AppId);
+            if (val >= 0){
+              // this.showCancelOptionsCheck[val] = false;
+              this.selectedCheck[val] = undefined;
             }
-
-            this.openSnackBar($localize`:@@host.readytocheckin:`,$localize`:@@host.textreadytocheckin:`);
+            var data = this.preCheckIn.findIndex(e => e.AppId === res.AppId);
+            if (data >= 0 ){this.preCheckIn.splice(data, 1);}
+            this.openSnackBar($localize`:@@host.cancelsuccess:`, $localize`:@@shared.cancel:`);
           }
         }),
         catchError(err => {
           var data = this.preCheckIn.findIndex(e => e.AppId === appo.AppId);
           if (data >= 0){ this.preCheckIn.splice(data, 1); }
-
           if (container == "cdk-drop-list-0"){ 
             this.schedule.push(JSON.parse(appo));
           } 
@@ -2296,12 +2286,58 @@ export class HostComponent implements OnInit {
           if (container == "cdk-drop-list-2"){ 
             this.waitlist.push(JSON.parse(appo));
           }
-
           this.onError = err.Message;
-          this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@host.texttransfer:`);
+          this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@shared.cancel:`);
           return this.onError;
         })
       );
+    } else {
+      if (event.previousContainer != event.container) {
+        let appo = JSON.parse(JSON.stringify(event.previousContainer.data[event.previousIndex]));
+        let container = event.previousContainer.id;
+        let formData = {
+          Status: 2,
+          DateAppo: appo.DateFull,
+          CustomerId: appo.ClientId,
+          BusinessName: this.authService.businessName(),
+          Language: this.authService.businessLanguage()
+        }
+        transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, this.preCheckIn.length);
+        this.updAppointment$ = this.appointmentService.updateAppointment(appo.AppId, formData).pipe(
+          map((res: any) => {
+            if (res.Code == 200){
+              let appoObj = res.Appo;
+              var dataPre = this.preCheckIn.findIndex(e => e.AppId === appo.AppId);
+              if (dataPre >= 0){
+                let newData = this.preCheckIn[dataPre];
+                newData.CheckInTime = appoObj['TIMECHEK'];
+                newData.ElapsedTime = "0";
+                newData.Pause = "0";
+              }
+
+              this.openSnackBar($localize`:@@host.readytocheckin:`,$localize`:@@host.textreadytocheckin:`);
+            }
+          }),
+          catchError(err => {
+            var data = this.preCheckIn.findIndex(e => e.AppId === appo.AppId);
+            if (data >= 0){ this.preCheckIn.splice(data, 1); }
+
+            if (container == "cdk-drop-list-0"){ 
+              this.schedule.push(JSON.parse(appo));
+            } 
+            if (container == "cdk-drop-list-1"){ 
+              this.walkIns.push(JSON.parse(appo));
+            }
+            if (container == "cdk-drop-list-2"){ 
+              this.waitlist.push(JSON.parse(appo));
+            }
+
+            this.onError = err.Message;
+            this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@host.texttransfer:`);
+            return this.onError;
+          })
+        );
+      }
     }
   }
 
