@@ -239,7 +239,7 @@ export class HostComponent implements OnInit {
         },
         formatter = new Intl.DateTimeFormat([], options);
         var actualTime = formatter.format(new Date());
-        let actTime = +actualTime.replace(':','-').substring(0,2);
+        let actTime = (+actualTime.replace(':','-').substring(0,2) == 24 ? 0 :+actualTime.replace(':','-').substring(0,2));
         let appoTime = +msg['DateFull'].substring(11).replace(':','-').substring(0,2);
         let hora = msg['DateAppo'];
         let data = {
@@ -265,7 +265,7 @@ export class HostComponent implements OnInit {
           QrCode: msg['QRCode'],
           DateTrans: msg['DateTrans']
         }
-        if (msg['Type'] == 1){
+        if (msg['Type'] == "1"){
           if (this.walkIns.filter(x => x.AppId ==  msg['AppId']).length == 0){
             if (appoTime >= actTime){
               var verifWalk = this.walkIns.findIndex(x => x.AppId === msg['AppId']);
@@ -283,6 +283,7 @@ export class HostComponent implements OnInit {
             }
           }
         } else {
+          console.log("eingreso 02");
           if (this.waitlist.filter(x => x.AppId ==  msg['AppId']).length == 0){
             var verifWaitList = this.waitlist.findIndex(x => x.AppId === msg['AppId']);
             if (verifWaitList >= 0){return;}
