@@ -4906,6 +4906,10 @@ When using Manual Check-Out, the system will not send polls to that location.</t
         <source>LMCON45</source>
         <target state="translated">The grace period for late arrival is the time that clients will be allowed to be late for their appointment due to unforeseen delays. After this period, the appointment will be automatically cancelled, and the client will be notified. For example, you can assign a grace period of 15 minutes to your clients, before the appointment is cancelled.</target>
       </trans-unit>
+      <trans-unit id="providers.serviceItems">
+        <source>Serice items</source>
+        <target state="translated">You must select at least one service.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
-import { Validators, FormBuilder, FormArray } from '@angular/forms';
+import { Validators, FormBuilder, FormArray, FormGroup } from '@angular/forms';
 import { AuthService } from '@app/core/services';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { MonitorService } from '@app/shared/monitor.service';
@@ -33,6 +33,7 @@ export class ProviderComponent implements OnInit {
   invalid: number = 0;
   free: number = 0;
   email: string = '';
+  errorServices: string = '';
 
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
@@ -56,12 +57,29 @@ export class ProviderComponent implements OnInit {
     return this.providerForm.controls;
   }
 
+  get g(): FormArray {
+    return this.providerForm.get('Services') as FormArray;
+  }
+
   providerForm = this.fb.group({
     ProviderId: [''],
     Name: ['', [Validators.required, Validators.maxLength(100), Validators.minLength(3)]],
     LocationId: ['', [Validators.required]],
+    Services: this.fb.array([this.createService()]),
     Status: [true]
   });
+
+  createService(): FormGroup {
+    const access = this.fb.group({
+      ServiceId: [''],
+      Name: [''],
+      BufferTime: [''],
+      CustomerPerBooking: [''],
+      TimeService: [''],
+      Selected: ['0']
+    });
+    return access;
+  }
 
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
@@ -139,6 +157,7 @@ export class ProviderComponent implements OnInit {
     this.services$ = this.serviceService.getServicesProvider(this.businessId, '_').pipe(
       map((res: any) =>{
         this.services = res.services;
+        this.providerForm.setControl('Services', this.setExistingServices(res.services));
         return res.services;
       }),
       catchError(err => {
@@ -162,6 +181,22 @@ export class ProviderComponent implements OnInit {
     this.onDisplay();
   }
 
+  setExistingServices(servs: any[]){
+    const formArray = new FormArray([]);
+    servs.forEach(service => {
+      formArray.push(
+        this.fb.group({
+          ServiceId: service.ServiceId,
+          Name: service.Name,
+          BufferTime: service.BufferTime,
+          CustomerPerBooking: service.CustomerPerBooking,
+          TimeService: service.TimeService,
+          Selected: service.Selected
+        }));
+    })
+    return formArray;
+  }
+
   onDisplay(){
     if (this.providerDataList != undefined && this.providerDataList != "0"){
       let provId = '';
@@ -172,7 +207,7 @@ export class ProviderComponent implements OnInit {
           if (res.Code == 200){
             let provider = res.Data;
             if (provider.ProviderId != undefined){
-              this.providerForm.setValue({
+              this.providerForm.patchValue({
                 ProviderId: provider.ProviderId,
                 Name: provider.Name,
                 LocationId: provider.LocationId,
@@ -191,6 +226,7 @@ export class ProviderComponent implements OnInit {
         switchMap(_ => this.serviceService.getServicesProvider(this.businessId, provId).pipe(
           map((res: any) =>{
             this.services = res.services;
+            this.providerForm.patchValue({Services: this.services});
             return res.services;
           })
         )),
@@ -225,23 +261,31 @@ export class ProviderComponent implements OnInit {
   onSubmit(){
     if (this.providerForm.invalid) { return; }
 
+    this.errorServices = '';
+    let numberRecords = this.providerForm.value.Services.filter((s: any)=> s.Selected > 0);
+    if (numberRecords[0] == undefined) {
+      this.errorServices = $localize`:@@providers.serviceItems:`
+      return;
+    }
+
     let dataForm = {
       ProviderId: this.providerForm.value.ProviderId,
       BusinessId: this.businessId,
       LocationId: this.providerForm.value.LocationId,
       Name: this.providerForm.value.Name,
-      Status: this.providerForm.value.Status == true ? 1 : 0
+      Status: this.providerForm.value.Status == true ? 1 : 0,
+      Services: this.providerForm.value.Services
     }
-
+    // this.servProvider$ = this.serviceService.putServiceProvider(this.businessId, this.providerForm.value.ProviderId, servId, activo)
     var spinnerRef = this.spinnerService.start($localize`:@@providers.savingprovider:`);
-    let provId = '';
+    // let provId = '';
     this.saveProvider$ =  this.providerService.postProviders(dataForm).pipe(
       map((res:any) => {
         if (res != null){
           if (res.Code == 200){
             this.spinnerService.stop(spinnerRef);
-            this.providerForm.patchValue({ProviderId: res.ProviderId});
-            provId = res.ProviderId;
+            // this.providerForm.patchValue({ProviderId: res.ProviderId});
+            // provId = res.ProviderId;
             this.openDialog($localize`:@@providers.servprovider:`, $localize`:@@providers.savingserviprov:`, true, false, false);
           } else {
             this.spinnerService.stop(spinnerRef);
@@ -253,12 +297,12 @@ export class ProviderComponent implements OnInit {
           this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.wrong:`, false, true, false);
         }
       }),
-      switchMap(_ => this.serviceService.getServicesProvider(this.businessId, provId).pipe(
-        map((res: any) =>{
-          this.services = res.services;
-          return res.services;
-        })
-      )),
+      // switchMap(_ => this.serviceService.getServicesProvider(this.businessId, provId).pipe(
+      //   map((res: any) =>{
+      //     this.services = res.services;
+      //     return res.services;
+      //   })
+      // )),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
         this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
@@ -267,27 +311,13 @@ export class ProviderComponent implements OnInit {
     );
   }
 
-  onSelectService(event){
-    let servId = event.option.value;
-    let activo = (event.option.selected == true ? 1 : 0);
-    
-    if (servId == '') {return;}
-    
-    this.servProvider$ = this.serviceService.putServiceProvider(this.businessId, this.providerForm.value.ProviderId, servId, activo).pipe(
-      map((res: any) => {
-        if (res.Code == 200){
-          if (activo == 1){
-            this.openSnackBar($localize`:@@providers.servadded:`,$localize`:@@providers.servprovider:`);
-          } else {
-            this.openSnackBar($localize`:@@providers.servremove:`,$localize`:@@providers.servprovider:`);
-          }
-        }
-      }),
-      catchError(err => {
-        this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@providers.servprovider:`);
-        return err;
-      })
-    );
+  onSelectService(serviceId, selected, index){
+    let servs =  this.providerForm.get('Services') as FormArray;
+    let item = servs.at(index);
+    if (item.value.ServiceId == serviceId){
+      item.patchValue({Selected: (selected == 0 ? 1 : 0)});
+    }
+    return;
   }
 
   learnMore(textNumber: number){

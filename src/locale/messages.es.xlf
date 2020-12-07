@@ -4907,6 +4907,10 @@ Cuando se escoge la opción de Check-Out Manual, el sistema no enviará encuesta
         <source>LMCON45</source>
         <target state="translated">El periodo de gracia por llegada tardía es el tiempo que se le permitirá a los clientes llegar tardíamente a la cita, por retrasos imprevistos. Luego de este periodo, la cita será cancelada automáticamente y se le notificará al cliente. Por ejemplo, usted puede asignar un periodo de gracia de 15 minutos a sus clientes, antes de que la cita sea cancelada.</target>
       </trans-unit>
+      <trans-unit id="providers.serviceItems">
+        <source>Serice items</source>
+        <target state="translated">Debe seleccionar al menos un servicio.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

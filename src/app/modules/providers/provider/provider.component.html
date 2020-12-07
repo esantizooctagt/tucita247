@@ -42,16 +42,17 @@
                                 </mat-error>
                             </mat-form-field>
                         </div>
-                        <div class="form-field pl-3 pr-3" *ngIf="f.ProviderId.value !=''">
+                        <div class="form-field pl-3 pr-3">
                             <h5 class="display-learn" i18n="Select services|text in providers@@providers.selectservice">Select services</h5>
                             <button type="button" mat-icon-button color="primary" (click)="learnMore(20)">
                                 <mat-icon>help</mat-icon>
                             </button>
-                            <mat-selection-list #serv (selectionChange)="onSelectService($event)">
-                                <mat-list-option *ngFor="let item of services"
-                                    [selected]="(item.Selected == 1 ? true : false)" [value]="item.ServiceId">
-                                    {{item.Name}}
-                                    <p matLine class="time-service"> {{item.TimeService + ' hr'}} </p>
+                            <mat-error *ngIf="errorServices!=''">{{'Error: ' + errorServices}}</mat-error>
+                            <mat-selection-list #serv>
+                                <mat-list-option *ngFor="let item of g.controls; let i = index;" 
+                                    [selected]="(item.value.Selected == 1 ? true : false)" [value]="item.value.ServiceId" (click)="onSelectService(item.value.ServiceId, item.value.Selected, i)">
+                                    {{item.value.Name}}
+                                    <p matLine class="time-service"> {{item.value.TimeService + ' hr'}} </p>
                                 </mat-list-option>
                             </mat-selection-list>
                         </div>

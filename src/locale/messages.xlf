@@ -4323,6 +4323,9 @@
       <trans-unit id="learnMore.LMCON45">
         <source>LMCON45</source>
       </trans-unit>
+      <trans-unit id="providers.serviceItems">
+        <source>Serice items</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>
