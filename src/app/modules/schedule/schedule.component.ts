@@ -43,6 +43,7 @@ export class ScheduleComponent implements OnInit {
 
   businessId: string = '';
   doors: string = '';
+  TimeZone: string = '';
 
   locationData$: Observable<any[]>;
   cancelAppos$: Observable<any>;
@@ -114,24 +115,24 @@ export class ScheduleComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let yearCurr = this.getYear();
-    let monthCurr = this.getMonth();
-    let dayCurr = this.getDay();
+    // let yearCurr = this.getYear();
+    // let monthCurr = this.getMonth();
+    // let dayCurr = this.getDay();
 
-    this.today = new Date(+yearCurr, +monthCurr-1, +dayCurr);
-    var startDay = 1;
-    var d = this.today.getDay();
-    this.weekStart = new Date(this.today.valueOf() - (d<=0 ? 7-startDay:d-startDay)*86400000);
-    this.weekEnd = new Date(this.weekStart.valueOf() + 6*86400000);
-    this.currTime = this.getActTime();
+    // this.today = new Date(+yearCurr, +monthCurr-1, +dayCurr);
+    // var startDay = 1;
+    // var d = this.today.getDay();
+    // this.weekStart = new Date(this.today.valueOf() - (d<=0 ? 7-startDay:d-startDay)*86400000);
+    // this.weekEnd = new Date(this.weekStart.valueOf() + 6*86400000);
+    // this.currTime = this.getActTime();
 
-    this.monday = this.weekStart;
-    this.tuesday = this.addDays(this.weekStart, 1);
-    this.wednesday = this.addDays(this.weekStart, 2);
-    this.thursday = this.addDays(this.weekStart, 3);
-    this.friday = this.addDays(this.weekStart, 4);
-    this.saturday = this.addDays(this.weekStart, 5);
-    this.sunday = this.addDays(this.weekStart, 6);
+    // this.monday = this.weekStart;
+    // this.tuesday = this.addDays(this.weekStart, 1);
+    // this.wednesday = this.addDays(this.weekStart, 2);
+    // this.thursday = this.addDays(this.weekStart, 3);
+    // this.friday = this.addDays(this.weekStart, 4);
+    // this.saturday = this.addDays(this.weekStart, 5);
+    // this.sunday = this.addDays(this.weekStart, 6);
 
     this.businessId = this.authService.businessId();
     var spinnerRef = this.spinnerService.start($localize`:@@sche.loadingsche:`);
@@ -156,7 +157,28 @@ export class ScheduleComponent implements OnInit {
             }
             this.locationId = res.Locs[0].LocationId;
             this.doors = res.Locs[0].Doors;
+            this.TimeZone = res.Locs[0].TimeZone;
             this.locations = res.Locs;
+
+            let yearCurr = this.getYear();
+            let monthCurr = this.getMonth();
+            let dayCurr = this.getDay();
+
+            this.today = new Date(+yearCurr, +monthCurr-1, +dayCurr);
+            var startDay = 1;
+            var d = this.today.getDay();
+
+            this.weekStart = new Date(this.today.valueOf() - (d<=0 ? 7-startDay:d-startDay)*86400000);
+            this.weekEnd = new Date(this.weekStart.valueOf() + 6*86400000);
+            this.currTime = this.getActTime();
+
+            this.monday = this.weekStart;
+            this.tuesday = this.addDays(this.weekStart, 1);
+            this.wednesday = this.addDays(this.weekStart, 2);
+            this.thursday = this.addDays(this.weekStart, 3);
+            this.friday = this.addDays(this.weekStart, 4);
+            this.saturday = this.addDays(this.weekStart, 5);
+            this.sunday = this.addDays(this.weekStart, 6);
             this.loadHours();
           }
           this.spinnerService.stop(spinnerRef);
@@ -372,6 +394,27 @@ export class ScheduleComponent implements OnInit {
 
     let search = this.locations.filter(x => x.LocationId == this.locationId);
     this.doors = search[0].Doors;
+    this.TimeZone = search[0].TimeZone;
+
+    // let yearCurr = this.getYear();
+    // let monthCurr = this.getMonth();
+    // let dayCurr = this.getDay();
+
+    // this.today = new Date(+yearCurr, +monthCurr-1, +dayCurr);
+    // var startDay = 1;
+    // var d = this.today.getDay();
+
+    // this.weekStart = new Date(this.today.valueOf() - (d<=0 ? 7-startDay:d-startDay)*86400000);
+    // this.weekEnd = new Date(this.weekStart.valueOf() + 6*86400000);
+    this.currTime = this.getActTime();
+
+    this.monday = this.weekStart;
+    this.tuesday = this.addDays(this.weekStart, 1);
+    this.wednesday = this.addDays(this.weekStart, 2);
+    this.thursday = this.addDays(this.weekStart, 3);
+    this.friday = this.addDays(this.weekStart, 4);
+    this.saturday = this.addDays(this.weekStart, 5);
+    this.sunday = this.addDays(this.weekStart, 6);
     this.loadHours();
   }
 
@@ -486,7 +529,7 @@ export class ScheduleComponent implements OnInit {
 
   getActTime(): string{
     let options = {
-      timeZone: 'America/Puerto_Rico',
+      timeZone: this.TimeZone,
       hour: 'numeric',
       minute: 'numeric',
       second: 'numeric',
@@ -502,7 +545,7 @@ export class ScheduleComponent implements OnInit {
 
   getYear(): string{
     let options = {
-      timeZone: 'America/Puerto_Rico',
+      timeZone: this.TimeZone,
       year: 'numeric'
     },
     formatter = new Intl.DateTimeFormat([], options);
@@ -512,7 +555,7 @@ export class ScheduleComponent implements OnInit {
 
   getMonth(): string{
     let options = {
-      timeZone: 'America/Puerto_Rico',
+      timeZone: this.TimeZone,
       month: 'numeric'
     },
     formatter = new Intl.DateTimeFormat([], options);
@@ -522,7 +565,7 @@ export class ScheduleComponent implements OnInit {
 
   getDay(): string{
     let options = {
-      timeZone: 'America/Puerto_Rico',
+      timeZone: this.TimeZone,
       day: 'numeric'
     },
     formatter = new Intl.DateTimeFormat([], options);

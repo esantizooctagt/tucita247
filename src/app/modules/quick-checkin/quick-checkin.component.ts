@@ -48,7 +48,7 @@ export class QuickCheckinComponent implements OnInit {
   locName: string = '';
   buckets=[];
   maxGuests: number = 1;
-
+  TimeZone: string = '';
   showCard: boolean =false;
 
   appoData$: Observable<any>;
@@ -190,6 +190,7 @@ export class QuickCheckinComponent implements OnInit {
                 this.Providers = res.Locs[indexLoc].Providers;
                 this.locName = res.Locs[indexLoc].Name;
                 this.locationStatus = res.Locs[indexLoc].Open;
+                this.TimeZone = res.Locs[indexLoc].TimeZone;
                 this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
                 if (this.Providers.length > 0){
                   this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
@@ -242,6 +243,7 @@ export class QuickCheckinComponent implements OnInit {
                   this.Providers = res.Locs[indexLoc].Providers;
                   this.locName = res.Locs[indexLoc].Name;
                   this.locationStatus = res.Locs[indexLoc].Open;
+                  this.TimeZone = res.Locs[indexLoc].TimeZone;
                   this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
                   if (this.Providers.length > 0){
                     this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
@@ -287,6 +289,7 @@ export class QuickCheckinComponent implements OnInit {
             this.Providers = res.Locs[0].Providers;
             this.locName = res.Locs[0].Name;
             this.locationStatus = res.Locs[0].Open;
+            this.TimeZone = res.Locs[0].TimeZone;
             this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
             if (this.Providers.length > 0){
               this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; 
@@ -707,6 +710,7 @@ export class QuickCheckinComponent implements OnInit {
       this.Providers = data[0].Providers;
       this.locName = data[0].Name;
       this.locationStatus = data[0].Open;
+      this.TimeZone = data[0].TimeZone;
       this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
       if (data[0].Providers.length > 0){
         this.Providers = data[0].Providers;
@@ -959,6 +963,7 @@ export class QuickCheckinComponent implements OnInit {
                   this.Providers = res.Locs[indexLoc].Providers;
                   this.locName = res.Locs[indexLoc].Name;
                   this.locationStatus = res.Locs[indexLoc].Open;
+                  this.TimeZone = res.Locs[indexLoc].TimeZone;
                   this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
                   if (this.Providers.length > 0){
                     this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
@@ -1003,7 +1008,7 @@ export class QuickCheckinComponent implements OnInit {
 
   getTime(): string{
     let options = {
-      timeZone: 'America/Puerto_Rico',
+      timeZone: this.TimeZone,
       hour: 'numeric',
       minute: 'numeric',
       second: 'numeric',
@@ -1041,7 +1046,7 @@ export class QuickCheckinComponent implements OnInit {
 
   getYear(): string{
     let options = {
-      timeZone: 'America/Puerto_Rico',
+      timeZone: this.TimeZone,
       year: 'numeric'
     },
     formatter = new Intl.DateTimeFormat([], options);
@@ -1051,7 +1056,7 @@ export class QuickCheckinComponent implements OnInit {
 
   getMonth(): string{
     let options = {
-      timeZone: 'America/Puerto_Rico',
+      timeZone: this.TimeZone,
       month: 'numeric'
     },
     formatter = new Intl.DateTimeFormat([], options);
@@ -1061,7 +1066,7 @@ export class QuickCheckinComponent implements OnInit {
 
   getDay(): string{
     let options = {
-      timeZone: 'America/Puerto_Rico',
+      timeZone: this.TimeZone,
       day: 'numeric'
     },
     formatter = new Intl.DateTimeFormat([], options);

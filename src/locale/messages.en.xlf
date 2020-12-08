@@ -4910,6 +4910,10 @@ When using Manual Check-Out, the system will not send polls to that location.</t
         <source>Serice items</source>
         <target state="translated">You must select at least one service.</target>
       </trans-unit>
+      <trans-unit id="shared.timezone">
+        <source>TimeZone</source>
+        <target state="translated">Time Zone</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

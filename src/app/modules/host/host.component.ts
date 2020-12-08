@@ -96,6 +96,7 @@ export class HostComponent implements OnInit {
   locationId: string = '';
   doorId: string = '';
   qrCode: string = '';
+  TimeZone: string = '';
 
   onError: string = '';
   manualGuests: number =  1;
@@ -232,7 +233,7 @@ export class HostComponent implements OnInit {
     if (msg['Tipo'] == 'APPO'){
       if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 1){
         let options = {
-          timeZone: 'America/Puerto_Rico',
+          timeZone: this.TimeZone,
           hour: 'numeric',
           minute: 'numeric',
           hour12: false,
@@ -555,6 +556,7 @@ export class HostComponent implements OnInit {
                 this.Providers = res.Locs[indexLoc].Providers;
                 this.locName = res.Locs[indexLoc].Name;
                 this.locationStatus = res.Locs[indexLoc].Open;
+                this.TimeZone = res.Locs[indexLoc].TimeZone;
                 this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
                 if (this.Providers.length > 0){
                   this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
@@ -614,6 +616,7 @@ export class HostComponent implements OnInit {
                   this.Providers = res.Locs[indexLoc].Providers;
                   this.locName = res.Locs[indexLoc].Name;
                   this.locationStatus = res.Locs[indexLoc].Open;
+                  this.TimeZone = res.Locs[indexLoc].TimeZone;
                   this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
                   if (this.Providers.length > 0){
                     this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
@@ -670,6 +673,7 @@ export class HostComponent implements OnInit {
             this.Providers = res.Locs[0].Providers;
             this.locName = res.Locs[0].Name;
             this.locationStatus = res.Locs[0].Open;  //0 CLOSED, 1 OPEN
+            this.TimeZone = res.Locs[0].TimeZone;
             this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
             if (this.Providers.length > 0){
               this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
@@ -761,7 +765,7 @@ export class HostComponent implements OnInit {
       map(() => {
         this.preCheckIn.forEach(res => {
           let options = {
-            timeZone: 'America/Puerto_Rico',
+            timeZone: this.TimeZone,
             hour: 'numeric',
             minute: 'numeric',
             second: 'numeric',
@@ -872,6 +876,7 @@ export class HostComponent implements OnInit {
               this.Providers = res.Locs[indexLoc].Providers;
               this.locName = res.Locs[indexLoc].Name;
               this.locationStatus = res.Locs[indexLoc].Open;
+              this.TimeZone = res.Locs[indexLoc].TimeZone;
               this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
               if (this.Providers.length > 0){
                 this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
@@ -967,6 +972,7 @@ export class HostComponent implements OnInit {
                   this.Providers = res.Locs[indexLoc].Providers;
                   this.locName = res.Locs[indexLoc].Name;
                   this.locationStatus = res.Locs[indexLoc].Open;
+                  this.TimeZone = res.Locs[indexLoc].TimeZone;
                   this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
                   if (this.Providers.length > 0){
                     this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
@@ -1237,7 +1243,7 @@ export class HostComponent implements OnInit {
     }
 
     let options = {
-      timeZone: 'America/Puerto_Rico',
+      timeZone: this.TimeZone,
       hour: 'numeric',
       minute: 'numeric',
       hour12: false,
@@ -1550,7 +1556,7 @@ export class HostComponent implements OnInit {
 
   onMessageApp(appointmentId: string, item: any, i: number, qeue: string){
     let options = {
-      timeZone: 'America/Puerto_Rico',
+      timeZone: this.TimeZone,
       month: 'long',
       day: 'numeric',
       hour: 'numeric',
@@ -1703,7 +1709,7 @@ export class HostComponent implements OnInit {
 
   getTimeAppo(): string{
     let options = {
-      timeZone: 'America/Puerto_Rico',
+      timeZone: this.TimeZone,
       hour: 'numeric',
       minute: 'numeric',
       second: 'numeric',
@@ -1728,7 +1734,7 @@ export class HostComponent implements OnInit {
 
   getTime(): string{
     let options = {
-      timeZone: 'America/Puerto_Rico',
+      timeZone: this.TimeZone,
       hour: 'numeric',
       minute: 'numeric',
       second: 'numeric',
@@ -1766,7 +1772,7 @@ export class HostComponent implements OnInit {
 
   getActTime(): string{
     let options = {
-      timeZone: 'America/Puerto_Rico',
+      timeZone: this.TimeZone,
       hour: 'numeric',
       minute: 'numeric',
       second: 'numeric',
@@ -1796,7 +1802,7 @@ export class HostComponent implements OnInit {
 
   getYear(): string{
     let options = {
-      timeZone: 'America/Puerto_Rico',
+      timeZone: this.TimeZone,
       year: 'numeric'
     },
     formatter = new Intl.DateTimeFormat([], options);
@@ -1806,7 +1812,7 @@ export class HostComponent implements OnInit {
 
   getMonth(): string{
     let options = {
-      timeZone: 'America/Puerto_Rico',
+      timeZone: this.TimeZone,
       month: 'numeric'
     },
     formatter = new Intl.DateTimeFormat([], options);
@@ -1816,7 +1822,7 @@ export class HostComponent implements OnInit {
 
   getDay(): string{
     let options = {
-      timeZone: 'America/Puerto_Rico',
+      timeZone: this.TimeZone,
       day: 'numeric'
     },
     formatter = new Intl.DateTimeFormat([], options);
@@ -2060,6 +2066,7 @@ export class HostComponent implements OnInit {
       this.Providers = data[0].Providers;
       this.locName = data[0].Name;
       this.locationStatus = data[0].Open;
+      this.TimeZone = data[0].TimeZone;
       this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
       if (data[0].Providers.length > 0){
         this.Providers = data[0].Providers;
@@ -2230,7 +2237,7 @@ export class HostComponent implements OnInit {
 
   calculateTime(cardTime: string): string{
     let options = {
-      timeZone: 'America/Puerto_Rico',
+      timeZone: this.TimeZone,
       hour: 'numeric',
       minute: 'numeric',
       second: 'numeric',

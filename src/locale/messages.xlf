@@ -4326,6 +4326,9 @@
       <trans-unit id="providers.serviceItems">
         <source>Serice items</source>
       </trans-unit>
+      <trans-unit id="shared.timezone">
+        <source>TimeZone</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

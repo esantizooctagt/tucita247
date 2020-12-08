@@ -16,6 +16,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ShopdialogComponent } from '@app/shared/shopdialog/shopdialog.component';
 import { MapsAPILoader } from '@agm/core';
 import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-location',
@@ -32,6 +33,7 @@ export class LocationComponent implements OnInit {
   parentBus$: Observable<any[]>;
   geoLoc$: Observable<any>;
   appos$: Observable<any>;
+  readonly timeZones = environment.timeZones;
 
   free: number = 0;
   invalid: number = 0;
@@ -98,6 +100,7 @@ export class LocationComponent implements OnInit {
     MaxConcurrentCustomer: ['1', [Validators.required, Validators.min(1)]],
     ManualCheckOut: [false],
     Doors: ['', [Validators.required]],
+    TimeZone: ['', [Validators.required]],
     Status: [true]
   });
 
@@ -224,7 +227,7 @@ export class LocationComponent implements OnInit {
   onDisplay() {
     if (this.locationDataList != undefined && this.locationDataList != "0") {
       var spinnerRef = this.spinnerService.start($localize`:@@locations.loadlocation:`);
-      this.locationForm.reset({ LocationId: '', BusinessId: '', Name: '', City: '', Sector: '', ZipCode: '', Address: '', Geolocation : '{0.00,0.00}', ParentLocation : '0', MaxConcurrentCustomer: '1', ManualCheckOut: false, Doors: '', Status: true});
+      this.locationForm.reset({ LocationId: '', BusinessId: '', Name: '', City: '', Sector: '', ZipCode: '', Address: '', Geolocation : '{0.00,0.00}', ParentLocation : '0', MaxConcurrentCustomer: '1', ManualCheckOut: false, Doors: '', TimeZone: '', Status: true});
       this.location$ = this.locationService.getLocation(this.businessId, this.locationDataList, this.countryCode, this.language).pipe(
         map((res: any) => {
           if (res.Code == 200) {
@@ -248,6 +251,7 @@ export class LocationComponent implements OnInit {
                 ParentLocation: loc.ParentLocation,
                 MaxConcurrentCustomer: loc.MaxConcurrentCustomer,
                 ManualCheckOut: loc.ManualCheckOut,
+                TimeZone: loc.TimeZone,
                 Doors: loc.Doors,
                 Status: (loc.Status == 1 ? true : false)
               });
@@ -325,6 +329,10 @@ export class LocationComponent implements OnInit {
       return this.f.maxConcurrentCustomer.hasError('required') ? $localize`:@@shared.entervalue:` :
         '';
     }
+    if (component === 'TimeZone') {
+      return this.f.TimeZone.hasError('required') ? $localize`:@@shared.timezone:` :
+        '';
+    }
   }
 
   removeDoor(door: string): void {
@@ -380,6 +388,7 @@ export class LocationComponent implements OnInit {
         MaxConcurrentCustomer: this.locationForm.value.MaxConcurrentCustomer,
         Status: (this.locationForm.value.Status == true ? 1 : 0),
         ManualCheckOut: (this.locationForm.value.ManualCheckOut == true ? 1 : 0),
+        TimeZone: this.locationForm.value.TimeZone,
         Doors: this.doors.toString()
       }
       var spinnerRef = this.spinnerService.start($localize`:@@locations.savinglocations:`);
