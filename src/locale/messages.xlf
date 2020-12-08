@@ -4329,6 +4329,12 @@
       <trans-unit id="shared.timezone">
         <source>TimeZone</source>
       </trans-unit>
+      <trans-unit id="host.returnqeue">
+        <source>Return to qeue</source>
+      </trans-unit>
+      <trans-unit id="shared.reverse">
+        <source>Reverse</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

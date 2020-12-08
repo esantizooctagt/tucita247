@@ -4914,6 +4914,14 @@ When using Manual Check-Out, the system will not send polls to that location.</t
         <source>TimeZone</source>
         <target state="translated">Time Zone</target>
       </trans-unit>
+      <trans-unit id="host.returnqeue">
+        <source>Return to qeue</source>
+        <target state="translated">Return to qeue</target>
+      </trans-unit>
+      <trans-unit id="shared.reverse">
+        <source>Reverse</source>
+        <target state="translated">Reverse</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

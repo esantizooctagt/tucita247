@@ -798,7 +798,7 @@ export class HostComponent implements OnInit {
                   }
                   var data = this.preCheckIn.findIndex(e => e.AppId === res.AppId);
                   if (data >= 0 ){this.preCheckIn.splice(data, 1);}
-                  this.openSnackBar($localize`:@@host.cancelsuccess:`, $localize`:@@shared.cancel:`);
+                  this.openSnackBar($localize`:@@host.returnqeue:`, $localize`:@@shared.reverse:`);
                 }
               }),
               catchError(err => {
