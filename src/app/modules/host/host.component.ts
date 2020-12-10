@@ -243,10 +243,6 @@ export class HostComponent implements OnInit {
         let actTime = (+actualTime.replace(':','-').substring(0,2) == 24 ? 0 :+actualTime.replace(':','-').substring(0,2));
         let appoTime = +msg['DateFull'].substring(11).replace(':','-').substring(0,2);
         let hora = msg['DateAppo'];
-        let qrCode = msg['QrCode'];
-        if (qrCode == undefined){
-          qrCode = msg['QRCode'];
-        }
         let data = {
           AppId: msg['AppId'],
           ClientId: msg['CustomerId'],
@@ -267,7 +263,7 @@ export class HostComponent implements OnInit {
           OpenMess: 0,
           OpenCanc: 0,
           OpenItem: 0,
-          QrCode: qrCode,
+          QrCode: msg['QrCode'],
           DateTrans: msg['DateTrans']
         }
         if (msg['Type'] == "1"){
@@ -311,10 +307,6 @@ export class HostComponent implements OnInit {
         var verifpreCheck = this.preCheckIn.findIndex(x => x.AppId === msg['AppId']);
         if (verifpreCheck >= 0){this.preCheckIn.splice(verifpreCheck, 1);}
         let hora = msg['DateAppo'];
-        let qrCode = msg['QrCode'];
-        if (qrCode == undefined){
-          qrCode = msg['QRCode'];
-        }
         let data = {
           AppId: msg['AppId'],
           ClientId: msg['CustomerId'],
@@ -335,7 +327,7 @@ export class HostComponent implements OnInit {
           OpenMess: 0,
           OpenCanc: 0,
           OpenItem: 0,
-          QrCode: qrCode,
+          QrCode: msg['QrCode'],
           DateTrans: msg['DateTrans']
         }
         if (msg['Type'] == 1){
@@ -446,10 +438,6 @@ export class HostComponent implements OnInit {
             if (custId == undefined){
               custId = dataSche['ClientId'];
             }
-            let qrCode = dataSche['QrCode'];
-            if (qrCode == undefined){
-              qrCode = dataSche['QRCode'];
-            }
             this.schedule.splice(verifSche, 1);
             let data = {
               AppId: dataSche['AppId'],
@@ -467,7 +455,7 @@ export class HostComponent implements OnInit {
               Unread: dataSche['Unread'],
               CheckInTime: msg['Time'],
               BufferTime: dataSche['BufferTime'],
-              QrCode: qrCode,
+              QrCode: dataSche['QrCode'],
               ElapsedTime: "0",
               Pause: "0"
             }
@@ -481,10 +469,6 @@ export class HostComponent implements OnInit {
             let custId = dataWalk['CustomerId'];
             if (custId == undefined){
               custId = dataWalk['ClientId'];
-            }
-            let qrCode = dataWalk['QrCode'];
-            if (qrCode == undefined){
-              qrCode = dataWalk['QRCode'];
             }
             this.walkIns.splice(verifWalkIns, 1);
             let data = {
@@ -503,7 +487,7 @@ export class HostComponent implements OnInit {
               Unread: dataWalk['UnRead'],
               CheckInTime: msg['Time'],
               BufferTime: dataWalk['BufferTime'],
-              QrCode: qrCode,
+              QrCode: dataWalk['QrCode'],
               ElapsedTime: "0",
               Pause: "0"
             }
@@ -517,10 +501,6 @@ export class HostComponent implements OnInit {
             let custId = dataPrev['CustomerId'];
             if (custId == undefined){
               custId = dataPrev['ClientId'];
-            }
-            let qrCode = dataPrev['QrCode'];
-            if (qrCode == undefined){
-              qrCode = dataPrev['QRCode'];
             }
             this.waitlist.splice(verifwaitList, 1);
             let data = {
@@ -539,7 +519,7 @@ export class HostComponent implements OnInit {
               Unread: dataPrev['Unread'],
               CheckInTime: msg['Time'],
               BufferTime: dataPrev['BufferTime'],
-              QrCode: qrCode,
+              QrCode: dataPrev['QrCode'],
               ElapsedTime: "0",
               Pause: "0"
             }
