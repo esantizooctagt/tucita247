@@ -325,6 +325,9 @@ mat-icon.mat-icon.notranslate.material-icons.mat-icon-no-color {
     font-size: 8px;
     line-height: 10px;
 }
+.size-icon{
+    font-size: 20px;
+}
 .elapsed-time{
     font-family: Montserrat;
     font-style: normal;
@@ -333,8 +336,7 @@ mat-icon.mat-icon.notranslate.material-icons.mat-icon-no-color {
     line-height: 9px;
     color: #FF4F00;
     text-align: right;
-    position: relative;
-    top: 16px;
+    display: contents;
 }
 .elapsed-tag{
     font-family: Montserrat;
@@ -344,11 +346,22 @@ mat-icon.mat-icon.notranslate.material-icons.mat-icon-no-color {
     line-height: 1px;
     text-align: right;
     color: #FF4F00;
-    top: 31px;
-    position: relative;
+    display: flow-root;
+}
+.buffer-time{
+    margin-left: auto;
+    width: 40px;
+    top: 5px;
+    float: unset;
+    margin-right: -16px;
+    margin-top: 5px;
 }
 .elapsed-clock{
-    position: absolute;
+    font-size: 20px;
+    height: 20px;
+    line-height: 20px;
+    float: left;
+    margin-top: 5px;
 }
 .checkin-list{
     font-family: Montserrat;

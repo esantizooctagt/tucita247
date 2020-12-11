@@ -803,7 +803,7 @@ export class HostComponent implements OnInit {
           var diffMins = Math.round(((diff % 86400000) % 3600000) / 60000); // minutes
           var diff = (diffHrs*60)+diffMins;
           res.ElapsedTime = diff.toString();
-          if (+diff >= res.BufferTime && res.Pause == '0'){
+          if (+diff >= res.BufferTime && res.Pause == 0){
             //CANCEL APPO
             this.cancelAppo$ = this.adminService.putNoShow(res.AppId).pipe(
               map((res: any) => {
@@ -1440,7 +1440,7 @@ export class HostComponent implements OnInit {
   onCheckInApp(appo: any){
     //READ QR CODE AND CHECK-IN PROCESS
     if (appo.QrCode != 'VALID') {
-      appo.Pause = '1';
+      appo.Pause = 1;
       const dialogRef = new MatDialogConfig();
       dialogRef.width ='450px';
       dialogRef.minWidth = '320px';
@@ -1468,11 +1468,11 @@ export class HostComponent implements OnInit {
               }
               this.checkInModule = 1;
             } else {
-              appo.Pause = '1';
+              appo.Pause = 1;
               throw 'exit process';
             }
           } else {
-            appo.Pause = '0';
+            appo.Pause = 0;
             throw 'exit process';
           }
           return result;
@@ -1708,7 +1708,7 @@ export class HostComponent implements OnInit {
           }
           appo.CheckInTime = appoObj['TIMECHEK'];
           appo.ElapsedTime = "0";
-          appo.Pause = "0";
+          appo.Pause = 0;
           var dataPre = this.preCheckIn.findIndex(e => e.AppId === appo.AppId);
           if (dataPre < 0){
             this.preCheckIn.push(appo);
@@ -2367,7 +2367,7 @@ export class HostComponent implements OnInit {
   }
 
   onPause(appo: any, pause: string){
-    appo.Pause = pause;
+    appo.Pause = +pause;
   }
 
   learnMore(textNumber: number){
