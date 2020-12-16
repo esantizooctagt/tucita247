@@ -2,6 +2,38 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template" target-language="en">
     <body>
+      <trans-unit id="host.pause" datatype="html">
+        <source>Pause</source>
+        <target state="translated">Pause</target>
+        <context-group purpose="host">
+          <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
+          <context context-type="linenumber">550</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="host.resume" datatype="html">
+        <source>Resume</source>
+        <target state="translated">Resume</target>
+        <context-group purpose="host">
+          <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
+          <context context-type="linenumber">549</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="locations.timezone" datatype="html">
+        <source>Time zone</source>
+        <target state="translated">Time zone</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/locations/location/location.component.html</context>
+          <context context-type="linenumber">133</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="host.waitinglist" datatype="html">
+        <source>Waiting List</source>
+        <target state="translated">Waiting List</target>
+        <context-group purpose="host">
+          <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
+          <context context-type="linenumber">433</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="host.servicetext" datatype="html">
         <source>Service</source>
         <target state="translated">Service: </target>
@@ -4731,7 +4763,9 @@
       <trans-unit id="learnMore.LMCON16">
         <source>LMCON16</source>
         <target state="translated">You can check out people who are leaving this location. This helps to keep track of how many people are inside this location at all times.
-There are two ways to check-out: 1. Automatic check-out, using the Las Citas module, where the client's QR code is scanned. 2. Manual check-out, using Las Citas Lite module, which works like a manual counter (clicker type) and counts the people leaving the premises, without scanning the QR code.
+There are two ways to check-out. 
+1. Automatic check-out: the client's QR code is scanned. 
+2. Manual check-out: works like a manual counter (clicker type) and counts the people leaving the premises, without scanning the QR code.
 To use manual check-out, you must enable this button. To use automatic check-out, this button must be off.</target>
       </trans-unit>
       <trans-unit id="learnMore.LMCON17">
@@ -4772,16 +4806,15 @@ To use manual check-out, you must enable this button. To use automatic check-out
       </trans-unit>
       <trans-unit id="learnMore.LMCON26">
         <source>LMCON26</source>
-        <target state="translated">Open location means that this location is available to receive visitors. In this module of Las Citas Lite, you can open or close locations and select service providers. You can also check-in clients who don't have a previous appointment (walk -in), check-in clients with a Tu Cita 24/7 booking and check-out all clients.
-To check-in a walk-in customer, just press the Walk-in button, enter the requested data. Fields with the * symbol are required to continue.
-To check-in a customer with a booking, you can scan the QR code, or write the Cita Code number.
-To check-out customers leaving the premises, you can either scan the QR code, write the Cita Code number, or use the manual counter (clicker type) and use the + symbol to add people to the check out.</target>
+        <target state="translated">Open location means that this location is available to receive visitors. In this module you can open or close locations and select service providers. You can also check-in and check-out clients. 
+To check-in customer, just press + and enter the requested data.
+ To check-out customers, just press - and enter the requested data.</target>
       </trans-unit>
       <trans-unit id="learnMore.LMCON27">
         <source>LMCON27</source>
-        <target state="translated">Open location means that this location is available to receive visitors. Las Citas module has all the features of Las Citas Lite, but also offers a virtual queue management, with details of the bookings including communication with your customers. You can see all the bookings. When the business is ready to receive a customer, you can move it to " Ready to check-in" and this will send a message to the customer.
+        <target state="translated">Open location means that this location is available to receive visitors. This module offers a virtual queue management. It shows details of the bookings and allows communication with your customers. When the business is ready to receive a customer, move it to " Ready to check-in" and this will send a message to the customer.
 In Las Citas, you can open or close locations and select service providers. You can also check-in clients who don't have a previous appointment (walk -in), check-in clients with a Tu Cita 24/7 booking and check-out all clients.
-To check-in a walk-in customer, just press the Walk-in+ button, enter the requested data. Fields with the * symbol are required to continue.
+To check-in a walk-in customer, just press the Upcoming+ button, and enter the requested data. Fields with the * symbol are required to continue.
 To check-in a customer with a booking, you can scan the QR code, or write the Cita Code number.
 To check-out customers leaving the premises, you can either scan the QR code, write the Cita Code number, or use the manual counter (clicker type) and use the + symbol to add people to the check out.</target>
       </trans-unit>
@@ -4904,7 +4937,7 @@ When using Manual Check-Out, the system will not send polls to that location.</t
       </trans-unit>
       <trans-unit id="learnMore.LMCON45">
         <source>LMCON45</source>
-        <target state="translated">The grace period for late arrival is the time that clients will be allowed to be late for their appointment due to unforeseen delays. After this period, the appointment will be automatically cancelled, and the client will be notified. For example, you can assign a grace period of 15 minutes to your clients, before the appointment is cancelled.</target>
+        <target state="translated">The grace period is the time that clients will be allowed to be late for their appointment. It starts when the booking is moved to "Ready to check-in." At the end of the grace period, the appointment will be moved to its previous queue.</target>
       </trans-unit>
       <trans-unit id="providers.serviceItems">
         <source>Serice items</source>

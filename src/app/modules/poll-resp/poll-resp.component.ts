@@ -81,19 +81,22 @@ export class PollRespComponent implements OnInit {
         if (res != null){
           if (res.Code == 200){
             this.spinnerService.stop(spinnerRef);
-            this.savePoll = true
+            this.savePoll = true;
           } else {
             this.spinnerService.stop(spinnerRef);
-            this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@shared.error:`);
+            this.savePoll = true;
+            // this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@shared.error:`);
           }
         } else {
           this.spinnerService.stop(spinnerRef);
-          this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@shared.error:`);
+          this.savePoll = true;
+          // this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@shared.error:`);
         }
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
-        this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@shared.error:`);
+        this.savePoll = true;
+        // this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@shared.error:`);
         return err.message;
       })
     );

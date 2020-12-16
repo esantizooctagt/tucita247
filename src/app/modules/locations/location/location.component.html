@@ -108,7 +108,7 @@
                                             <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                                         </mat-chip>
                                     </ng-container>
-                                    <input placeholder="New Door..." [matChipInputFor]="chipDoors"
+                                    <input i18n-placeholder="Doors|text in locations@@locations.doors" placeholder="Entrances" [matChipInputFor]="chipDoors"
                                         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                                         [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addDoor($event)">
                                     <button type="button" mat-icon-button matSuffix color="primary" (click)="learnMore(14)">

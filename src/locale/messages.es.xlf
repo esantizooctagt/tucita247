@@ -2,6 +2,38 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template" target-language="es">
     <body>
+      <trans-unit id="host.pause" datatype="html">
+        <source>Pause</source>
+        <target state="translated">Pausa</target>
+        <context-group purpose="host">
+          <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
+          <context context-type="linenumber">550</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="host.resume" datatype="html">
+        <source>Resume</source>
+        <target state="translated">Continuar</target>
+        <context-group purpose="host">
+          <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
+          <context context-type="linenumber">549</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="locations.timezone" datatype="html">
+        <source>Time zone</source>
+        <target state="translated">Zona horaria</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/locations/location/location.component.html</context>
+          <context context-type="linenumber">133</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="host.waitinglist" datatype="html">
+        <source>Waiting List</source>
+        <target state="translated">Lista de espera</target>
+        <context-group purpose="host">
+          <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
+          <context context-type="linenumber">433</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="host.servicetext" datatype="html">
         <source>Service</source>
         <target state="translated">Servicio: </target>
@@ -4732,7 +4764,9 @@
       <trans-unit id="learnMore.LMCON16">
         <source>LMCON16</source>
         <target state="translated">Usted puede hacer check-out a las personas que estén saiendo de esta localidad. Esto ayuda a mantener un registro de cuantas personas están dentro de esta localidad en todo momento. 
-Hay dos formas de hacer check-out: 1. Check-out automático, utilizando el módulo Las Citas, en donde se escanea el código QR de la cita del cliente.  2. Check-out manual, utilizando el módulo Las Citas Lite, en donde srive de contador manual (tipo clicker) y va contando las personas que salen del local, sin escanear el código QR.  
+Hay dos formas de hacer check-out.
+1. Check-out automático: se escanea el código QR de la cita del cliente.  
+2. Check-out manual: un contador manual (tipo clicker) que va contando las personas que salen del local, sin escanear el código QR.  
 Para utilizar el check-out manual, debe habilitar este botón.  Para utilizar el check-out automático, este botón debe estar desactivado.</target>
       </trans-unit>
       <trans-unit id="learnMore.LMCON17">
@@ -4773,18 +4807,17 @@ Para utilizar el check-out manual, debe habilitar este botón.  Para utilizar el
       </trans-unit>
       <trans-unit id="learnMore.LMCON26">
         <source>LMCON26</source>
-        <target state="translated">Localidad abierta significa que esta localidad está disponible para recibir visitantes. En este módulo de Las Citas Lite, usted puede abrir o cerrar localidades y seleccionar los proveedores de servicio.  Usted también puede registrar la entrada (check-in) a clientes que no tienen cita previa (walk-in), check-in a clientes con cita de Tu Cita 24/7 y registrar la salida (check-out) a todos sus clientes.
-Para hacer check-in a un walk-in, solo presione el botón de Walk-in, e ingrese los datos solicitados.  Campos con el símbolo * son obligatorios para continuar.
-Para hacer check-in a un cliente con cita, usted puede escanear el código QR, o escribir el número de Código de Cita.
-Para hacer check-out a un cliente que está saliendo de la localidad, usted puede escanear el código QR, escribir el número de Código de Cita, o usar el contador manual (tipo clicker) y usar el símbolo de +  para añadir personas a la salida.</target>
+        <target state="translated">Localidad abierta significa que esta localidad está disponible para recibir visitantes. En este módulo, puede abrir o cerrar localidades y seleccionar proveedores de servicio. También puede registrar la entrada (check-in) y la salida (check-out) a todos sus clientes.
+Para hacer check-in, presione el símbolo de +, e ingrese los datos.  
+Para hacer check-out, presione el símbolo de - , e ingrese los datos.</target>
       </trans-unit>
       <trans-unit id="learnMore.LMCON27">
         <source>LMCON27</source>
-        <target state="translated">Localidad abierta significa que esta localidad está disponible para recibir visitantes. Este módulo de Las Citas tiene todas las funciones de Las Citas Lite, y en adición ofrece un manejo de cola virtual, con detalles de las citas que incluyen comunicación con sus clientes. Puede ver todas las citas. Cuando el negocio esté listo para recibir a ese cliente, puede moverlo a "Listos para check in" y esto enviará un mensaje al cliente. 
-En Las Citas, usted puede abrir o cerrar localidades y seleccionar los proveedores de servicio.  Usted también puede registrar la entrada (check-in) a clientes que no tienen cita previa (walk-in), check-in a clientes con cita de Tu Cita 24/7 y registrar la salida (check-out) a todos sus clientes.  
-Para hacer check-in a un walk-in, solo presione el botón de Walk-in+, en ingrese los datos solicitados.  Campos con el símbolo * son obligatorios para continuar.
+        <target state="translated">Localidad abierta significa que esta localidad está disponible para recibir visitantes. Este módulo ofrece un manejo de cola virtual. Puede ver detalles de las citas y permite comunicación con sus clientes. Cuando el negocio esté listo para recibir a ese cliente, puede moverlo a "Listos para check in" y esto enviará un mensaje al cliente. 
+En Las Citas, puede abrir o cerrar localidades y seleccionar los proveedores de servicio.  También puede registrar la entrada (check-in) a clientes que no tienen cita previa (walk-in), check-in a clientes con cita de Tu Cita 24/7 y registrar la salida (check-out) a todos sus clientes.  
+Para hacer check-in a un walk-in, solo presione el botón de Próximas+, e ingrese los datos solicitados.  Campos con el símbolo * son obligatorios para continuar.
 Para hacer check-in a un cliente con cita, usted puede escanear el código QR, o escribir el número de Código de Cita.
-Para hacer check-out a un cliente que está saliendo de la localidad, usted puede escanear el código QR, escribir el número de Código de Cita, o usar el contador manual (tipo clicker) y usar el símbolo de +  para añadir personas a la salida.</target>
+Para hacer check-out a un cliente que está saliendo de la localidad, puede escanear el código QR, escribir el número de Código de Cita, o usar el contador manual (tipo clicker) y usar el símbolo de +  para añadir personas a la salida.</target>
       </trans-unit>
       <trans-unit id="learnMore.LMCON28">
         <source>LMCON28</source>
@@ -4905,7 +4938,7 @@ Cuando se escoge la opción de Check-Out Manual, el sistema no enviará encuesta
       </trans-unit>
       <trans-unit id="learnMore.LMCON45">
         <source>LMCON45</source>
-        <target state="translated">El periodo de gracia por llegada tardía es el tiempo que se le permitirá a los clientes llegar tardíamente a la cita, por retrasos imprevistos. Luego de este periodo, la cita será cancelada automáticamente y se le notificará al cliente. Por ejemplo, usted puede asignar un periodo de gracia de 15 minutos a sus clientes, antes de que la cita sea cancelada.</target>
+        <target state="translated">El periodo de gracia es el tiempo que le permitirá a los clientes llegar tardíamente a la cita. Comienza a contar cuando la cita se mueve a "Listo para check-in". Cuando termina el periodo de gracia, la cita se moverá a la cola anterior.</target>
       </trans-unit>
       <trans-unit id="providers.serviceItems">
         <source>Serice items</source>

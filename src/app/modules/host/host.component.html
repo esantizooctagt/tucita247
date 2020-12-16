@@ -430,7 +430,7 @@
                         [cdkDropListConnectedTo]="[preCheckInList]"
                         [cdkDropListData]="waitlist" class="col-md partial-qeue">
                         <ng-container *ngIf="appointmentsWaitList$ | async"></ng-container>
-                        <div class="title-qeue">Waiting List</div>
+                        <div class="title-qeue" i18n="Waiting List|text in citas@@host.waitinglist">Waiting List</div>
                         <div class="col-md waitlist">
                             <mat-card class="mt-2 appCard" *ngFor="let item of waitlist;let i=index" cdkDrag>
                                 <div class="row pr-3 pl-3">
@@ -546,8 +546,8 @@
                                 <div *ngIf="!item.OpenItem" class="card-user col-md-9 pl-0 pr-0">{{item.Name}}</div>
                                 <div *ngIf="item.OpenItem" class="card-user-disp col-md-9 pl-0 pr-0">{{item.Name}}</div>
                                 <div class="col-md pr-0 pl-0">
-                                    <button mat-icon-button class="elapsed-clock" color="secondary" *ngIf="item.ElapsedTime != '' && item.Pause == '0'" (click)="onPause(item, '1')"><mat-icon class="size-icon" svgIcon="clock"></mat-icon></button>
-                                    <button mat-icon-button class="elapsed-clock" color="secondary" *ngIf="item.ElapsedTime != '' && item.Pause == '1'" (click)="onPause(item, '0')"><mat-icon class="size-icon" svgIcon="pause"></mat-icon></button>
+                                    <button mat-icon-button class="elapsed-clock" color="secondary" *ngIf="item.ElapsedTime != '' && item.Pause == '0'" (click)="onPause(item, '1')" i18n-matTooltip="Resume|Resume@@host.resume" matTooltip="Resume"><mat-icon class="size-icon" svgIcon="clock"></mat-icon></button>
+                                    <button mat-icon-button class="elapsed-clock" color="secondary" *ngIf="item.ElapsedTime != '' && item.Pause == '1'" (click)="onPause(item, '0')" i18n-matTooltip="Pause|Resume@@host.pause" matTooltip="Pause"><mat-icon class="size-icon" svgIcon="pause"></mat-icon></button>
                                     <div class="buffer-time">
                                         <span class="elapsed-time">{{item.ElapsedTime}}</span>
                                     </div>

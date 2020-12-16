@@ -2,6 +2,34 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="host.pause" datatype="html">
+        <source>Pause</source>
+        <context-group purpose="host">
+          <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
+          <context context-type="linenumber">550</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="host.resume" datatype="html">
+        <source>Resume</source>
+        <context-group purpose="host">
+          <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
+          <context context-type="linenumber">549</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="locations.timezone" datatype="html">
+        <source>Time zone</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/locations/location/location.component.html</context>
+          <context context-type="linenumber">133</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="host.waitinglist" datatype="html">
+        <source>Waiting List</source>
+        <context-group purpose="host">
+          <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
+          <context context-type="linenumber">433</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="host.servicetext" datatype="html">
         <source>Service</source>
         <context-group purpose="host">
