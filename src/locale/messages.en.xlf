@@ -4382,7 +4382,7 @@
       </trans-unit>      
       <trans-unit id="providers.deletemessage">
         <source>Are you sure to delete this Service provider?</source>
-        <target state="translated">Are you sure you want to delete this service provider?</target>
+        <target state="translated">Are you sure you want to  delete this provider and  cancel all their appointments?</target>
       </trans-unit>
       <trans-unit id="providers.deletingservice">
         <source>Deleting Service...</source>
