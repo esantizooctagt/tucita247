@@ -456,8 +456,14 @@ export class HostComponent implements OnInit {
               CheckInTime: msg['Time'],
               BufferTime: dataSche['BufferTime'],
               QrCode: dataSche['QrCode'],
+              Provider: dataSche['Provider'],
+              Service: dataSche['Service'],
               ElapsedTime: "0",
-              Pause: "0"
+              OpenMess: 0,
+              OpenCanc: 0,
+              OpenItem: 0,
+              Pause: "0",
+              DateTrans: dataSche['DateTrans']
             }
             this.preCheckIn.push(data);
           }
@@ -488,8 +494,14 @@ export class HostComponent implements OnInit {
               CheckInTime: msg['Time'],
               BufferTime: dataWalk['BufferTime'],
               QrCode: dataWalk['QrCode'],
+              Provider: dataWalk['Provider'],
+              Service: dataWalk['Service'],
               ElapsedTime: "0",
-              Pause: "0"
+              OpenMess: 0,
+              OpenCanc: 0,
+              OpenItem: 0,
+              Pause: "0",
+              DateTrans: dataWalk['DateTrans']
             }
             this.preCheckIn.push(data);
           }
@@ -520,8 +532,14 @@ export class HostComponent implements OnInit {
               CheckInTime: msg['Time'],
               BufferTime: dataPrev['BufferTime'],
               QrCode: dataPrev['QrCode'],
+              Provider: dataPrev['Provider'],
+              Service: dataPrev['Service'],
               ElapsedTime: "0",
-              Pause: "0"
+              OpenMess: 0,
+              OpenCanc: 0,
+              OpenItem: 0,
+              Pause: "0",
+              DateTrans: dataPrev['DateTrans']
             }
             this.preCheckIn.push(data);
           }
