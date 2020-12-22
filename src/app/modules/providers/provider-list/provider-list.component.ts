@@ -211,8 +211,8 @@ export class ProviderListComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
       if(result != undefined){
-        var spinnerRef = this.spinnerService.start($localize`:@@providers.deletingservice:`);
-        if (result){ 
+        if (result){
+          var spinnerRef = this.spinnerService.start($localize`:@@providers.deletingservice:`); 
           this.deleteProvider$ = this.providerService.deleteProvider(this.businessId, service.value.LocationId, service.value.ProviderId).pipe(
             tap(res => {
               this.spinnerService.stop(spinnerRef);
