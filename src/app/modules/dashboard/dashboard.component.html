@@ -7,6 +7,7 @@
                 </div>
             </div>
             <div class="row p-0 m-0 line-cards">
+                <ng-container *ngIf="soft$ | async"></ng-container>
                 <mat-card class="col-sm col-md col-lg mr-3 dashboard-plan">
                     <ng-container *ngIf="appos$ | async as appo">
                         <div class="row ml-2 mb-2">
@@ -47,15 +48,19 @@
                                 {{sumAvailable(appo.Packs, appo.Available)}}
                             </div>
                         </div>
-                        <div class="row" *ngIf="appo.Packs.length > 0">
+                        <!-- <div class="row" *ngIf="appo.Packs.length > 0">
                             <div class="col-md-6 ml-3 labels-appo" i18n="Citas about to expire on|Text in dashboard@@dashboard.largetext">Citas about to expire on </div>
                             <div class="col-md-2 labels-content">{{getExpire(appo.Packs) | date: 'MMM d'}}</div>
                             <div class="col-md-3 labels-content">{{getExpireCitas(appo.Packs)}}</div>
-                        </div>
-                        <!-- <div class="row">
+                        </div> -->
+                        <div class="row">
                             <div class="col-md-6 ml-3"></div>
                             <button mat-stroked-button class="col-md-3 ml-3" color="secondary" type="button" (click)="addCitas(appo.Name)" i18n="+ Add Citas|Buton en dashboard@@dashboard.button">+ Add Citas</button>
-                        </div> -->
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-6 ml-3"></div>
+                            <button mat-stroked-button class="col-md-3 ml-3" color="secondary" type="button" (click)="suspend()" i18n="Cancel Account|Buton en dashboard@@dashboard.cancel">Cancel Account</button>
+                        </div>
                     </ng-container>
                 </mat-card>
                 <mat-card class="col-sm col-md-4 col-lg-4">

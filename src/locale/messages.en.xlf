@@ -2,6 +2,22 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template" target-language="en">
     <body>
+      <trans-unit id="cancel.title" datatype="html">
+        <source>CANCEL</source>
+        <target state="translated">CANCEL</target>
+        <context-group purpose="cancel">
+          <context context-type="sourcefile">src/app/modules/cancel/cancel.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.cancel" datatype="html">
+        <source>Cancel Account</source>
+        <target state="translated">Cancel Account</target>
+        <context-group purpose="dashboard">
+          <context context-type="sourcefile">src/app/modules/dashboard/dashboard.component.html</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="host.pause" datatype="html">
         <source>Pause</source>
         <target state="translated">Pause</target>
@@ -4954,6 +4970,18 @@ When using Manual Check-Out, the system will not send polls to that location.</t
       <trans-unit id="shared.reverse">
         <source>Reverse</source>
         <target state="translated">Reverse</target>
+      </trans-unit>
+      <trans-unit id="dashboard.processing">
+        <source>Processing</source>
+        <target state="translated">Processing</target>
+      </trans-unit>
+      <trans-unit id="dashboard.cancelmess">
+        <source>Are you sure you want to cancel your account? You can't revert this process.</source>
+        <target state="translated">Are you sure you want to cancel your account? You can revert this process.</target>
+      </trans-unit>
+      <trans-unit id="dashboard.cancel">
+        <source>Cancel</source>
+        <target state="translated">Cancel</target>
       </trans-unit>
     </body>
   </file>

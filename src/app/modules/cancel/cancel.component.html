@@ -1,0 +1,35 @@
+<div class="container-fluid main-background">
+    <div class="row p-0">
+        <div class="col-md-12 pl-4 m-0">
+            <div class="pl-0 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
+                <h3 i18n="CANCEL|title in cancel@@cancel.title">CANCEL</h3>
+            </div>
+            <div class="row p-0 m-0">
+                <ng-container *ngIf="business$ | async"></ng-container>
+                <ng-container *ngIf="soft$ | async"></ng-container>
+                <ng-container *ngIf="hard$ | async"></ng-container>
+                <mat-card class="col-sm col-md col-lg-7">
+                    <div class="form-field pl-3 pr-3">
+                        <mat-form-field class="col-md-8 input-search mt-3">          
+                            <input placeholder="Search business..." 
+                                matInput
+                                type="text"
+                                [formControl]="frmBusiness"
+                                [matAutocomplete]="autoBusiness">
+                            <mat-autocomplete #autoBusiness="matAutocomplete" [displayWith]="displayFn" (optionSelected)="selectedBusiness($event)">
+                                <mat-option *ngFor="let business of filteredBusiness$ | async" [value]="business">
+                                    {{ business.Name }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                        <mat-label class="col-md-4">{{statBusiness}}</mat-label>
+                    </div>
+                    <div>
+                        <button mat-flat-button color="primary" id="soft" type="button" class="ml-3 mr-3 mt-2" (click)="suspend('1')">Soft Suspend</button>
+                        <button mat-flat-button color="primary" id="cancel" type="button" class="mt-2 ml-3" (click)="suspend('2')">Hard Suspend</button>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>

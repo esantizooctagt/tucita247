@@ -2,6 +2,20 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="cancel.title" datatype="html">
+        <source>CANCEL</source>
+        <context-group purpose="cancel">
+          <context context-type="sourcefile">src/app/modules/cancel/cancel.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.cancel" datatype="html">
+        <source>Cancel Account</source>
+        <context-group purpose="dashboard">
+          <context context-type="sourcefile">src/app/modules/dashboard/dashboard.component.html</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="host.pause" datatype="html">
         <source>Pause</source>
         <context-group purpose="host">
@@ -4362,6 +4376,15 @@
       </trans-unit>
       <trans-unit id="shared.reverse">
         <source>Reverse</source>
+      </trans-unit>
+      <trans-unit id="dashboard.processing">
+        <source>Processing</source>
+      </trans-unit>
+      <trans-unit id="dashboard.cancelmess">
+        <source>Are you sure you want to cancel your account? You can revert this process.</source>
+      </trans-unit>
+      <trans-unit id="dashboard.cancel">
+        <source>Cancel</source>
       </trans-unit>
     </body>
   </file>

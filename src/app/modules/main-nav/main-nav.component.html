@@ -28,6 +28,9 @@
               <mat-list-item class="submenu-item">
                 <a [routerLink]="['/roles-admin']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Roles@@main.roles" (click)="(screenWidth < 500) ? drawer.toggle() : ''">Roles</a>
               </mat-list-item>
+              <mat-list-item class="submenu-item">
+                <a [routerLink]="['/cancel']" routerLinkActive="submenu-active" class="value-submenu-item" i18n="Cancel@@dashboard.cancel" (click)="(screenWidth < 500) ? drawer.toggle() : ''">Cancel</a>
+              </mat-list-item>
             </mat-nav-list>
           </mat-expansion-panel>
         </mat-accordion>

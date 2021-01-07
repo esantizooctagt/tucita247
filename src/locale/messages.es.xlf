@@ -2,6 +2,22 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template" target-language="es">
     <body>
+      <trans-unit id="cancel.title" datatype="html">
+        <source>CANCEL</source>
+        <target state="translated">CANCELAR</target>
+        <context-group purpose="cancel">
+          <context context-type="sourcefile">src/app/modules/cancel/cancel.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dashboard.cancel" datatype="html">
+        <source>Cancel Account</source>
+        <target state="translated">Cancelar Cuenta</target>
+        <context-group purpose="dashboard">
+          <context context-type="sourcefile">src/app/modules/dashboard/dashboard.component.html</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="host.pause" datatype="html">
         <source>Pause</source>
         <target state="translated">Pausa</target>
@@ -4955,6 +4971,18 @@ Cuando se escoge la opción de Check-Out Manual, el sistema no enviará encuesta
       <trans-unit id="shared.reverse">
         <source>Reverse</source>
         <target state="translated">Revertir</target>
+      </trans-unit>
+      <trans-unit id="dashboard.processing">
+        <source>Processing</source>
+        <target state="translated">Procesando</target>
+      </trans-unit>
+      <trans-unit id="dashboard.cancelmess">
+        <source>Are you sure you want to cancel your account? You can revert this process.</source>
+        <target state="translated">Esta seguro de cancelar su cuenta? Este proceso ya no puede revertirse.</target>
+      </trans-unit>
+      <trans-unit id="dashboard.cancel">
+        <source>Cancel</source>
+        <target state="translated">Cancelar</target>
       </trans-unit>
     </body>
   </file>

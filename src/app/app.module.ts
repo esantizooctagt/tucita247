@@ -83,6 +83,7 @@ import { LocationListComponent } from '@modules/locations/location-list/location
 import { UserListAdminComponent } from '@modules/users-admin/user-list-admin/user-list-admin.component';
 import { RoleListAdminComponent } from '@modules/roles-admin/role-list-admin/role-list-admin.component';
 import { LearnDialogComponent } from './shared/learn-dialog/learn-dialog.component';
+import { CancelComponent } from './modules/cancel/cancel.component';
 
 @NgModule({
   declarations: [
@@ -111,7 +112,8 @@ import { LearnDialogComponent } from './shared/learn-dialog/learn-dialog.compone
     ShopdialogComponent,
     UserListAdminComponent,
     RoleListAdminComponent,
-    LearnDialogComponent
+    LearnDialogComponent,
+    CancelComponent
   ],
   imports: [
     BrowserModule,

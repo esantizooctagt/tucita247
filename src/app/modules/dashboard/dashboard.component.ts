@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthService } from '@app/core/services';
-import { LocationService, BusinessService } from '@app/services';
+import { LocationService, BusinessService, AdminService } from '@app/services';
 import { map, catchError, mergeMap, switchMap } from 'rxjs/operators';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { AppointmentService } from '@app/services/appointment.service';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,6 +20,7 @@ export class DashboardComponent implements OnInit {
   quantityPeople$: Observable<any>;
   appos$: Observable<any>;
   avgData$: Observable<any[]>;
+  soft$: Observable<any>;
   businessId: string = '';
   onError: string = '';
   locationId: string = '';
@@ -26,7 +30,7 @@ export class DashboardComponent implements OnInit {
   userId: string = '';
   isAdmin: number = 0;
   email: string = '';
-
+  language: string = '';
   selectedLoc: string = '';
   resultLoc: any[] =[];
   perLocation: number = 0;
@@ -43,6 +47,7 @@ export class DashboardComponent implements OnInit {
   showYAxisLabel: boolean = false;
   yAxisLabel: string = ''; //Average cita
   legendTitle: string = ''; //Locations
+  displayYesNo: boolean = false;
 
   tabSelected = 0;
 
@@ -56,8 +61,30 @@ export class DashboardComponent implements OnInit {
     private businessService: BusinessService,
     private appointmentService: AppointmentService,
     private datePipe: DatePipe,
+    private dialog: MatDialog,
+    private adminService: AdminService,
+    private router: Router,
     private spinnerService: SpinnerService
-  ) { }
+  ) {
+    this.language = this.authService.language().toLowerCase();
+   }
+
+  openDialog(header: string, message: string, success: boolean, error: boolean, warn: boolean): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      header: header, 
+      message: message, 
+      success: success, 
+      error: error, 
+      warn: warn
+    };
+    dialogConfig.width ='280px';
+    dialogConfig.minWidth = '280px';
+    dialogConfig.maxWidth = '280px';
+
+    this.dialog.open(DialogComponent, dialogConfig);
+  }
 
   ngOnInit(): void {
     var spinnerRef = this.spinnerService.start($localize`:@@dashboard.loading:`);
@@ -315,7 +342,48 @@ export class DashboardComponent implements OnInit {
   }
 
   addCitas(subs){
+    if (this.language == 'en'){
     window.open("https://tucita247.com/direct-shopping/?email="+this.email+"&business_id="+this.businessId+"&subscription_type="+this.MD5(subs.toLowerCase()), "_blank");
+    } else {
+      window.open("https://tucita247.com/es/compra-directa/?email="+this.email+"&business_id="+this.businessId+"&subscription_type="+this.MD5(subs.toLowerCase()), "_blank");
+    }
+  }
+
+  suspend(){
+    if (this.businessId == '') {return;}
+    this.displayYesNo = true;
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      header: $localize`:@@dashboard.cancel:`, 
+      message: $localize`:@@dashboard.cancelmess:`, 
+      success: false, 
+      error: false, 
+      warn: false,
+      ask: this.displayYesNo
+    };
+    dialogConfig.width ='280px';
+    dialogConfig.minWidth = '280px';
+    dialogConfig.maxWidth = '280px';
+
+    const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(result => {
+      if(result != undefined){
+        if (result){
+          var spinnerRef = this.spinnerService.start($localize`:@@dashboard.processing:`);
+          this.soft$ = this.adminService.putSuspend(this.businessId, '1', '1').pipe(
+            map((res: any) => {
+              if (res.Code == 200){
+                this.spinnerService.stop(spinnerRef);
+                this.authService.logout();
+                this.router.navigate(['/login']);
+              }
+              return res;
+            })
+          );
+        }
+      }
+    });
   }
 
   getYear(): string{

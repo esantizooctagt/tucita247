@@ -78,6 +78,11 @@ export class AdminService {
                       .pipe(catchError(this.errorHandler));
     }
 
+    putSuspend(busId: string, sns: string, type: string){
+      return this.http.put(this.apiURL + '/business/suspend/'+busId+'/'+sns+'/'+type, '')
+                      .pipe(catchError(this.errorHandler));
+    }
+
     errorHandler(error) {
       return throwError(error || 'Server Error');
     }
