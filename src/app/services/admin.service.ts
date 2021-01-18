@@ -83,6 +83,11 @@ export class AdminService {
                       .pipe(catchError(this.errorHandler));
     }
 
+    postMessage(payload: any){
+      return this.http.post(this.apiURL + '/messages', payload)
+                      .pipe(catchError(this.errorHandler));  
+    }
+
     errorHandler(error) {
       return throwError(error || 'Server Error');
     }

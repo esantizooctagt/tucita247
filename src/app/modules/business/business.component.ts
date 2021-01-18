@@ -162,6 +162,7 @@ export class BusinessComponent implements OnInit {
     Imagen: [''],
     ImagenLink:[''],
     Tags: [''],
+    Language: ['es'],
     Reasons: [''],
     Status: ['']
   });
@@ -249,6 +250,7 @@ export class BusinessComponent implements OnInit {
             ImagenLink: res.ImagenLink,
             ParentBusiness: res.ParentBusiness,
             Tags: res.Tags,
+            Language: res.Language,
             Reasons: res.Reasons,
             Status: res.Status
           });
@@ -258,12 +260,12 @@ export class BusinessComponent implements OnInit {
           this.spinnerService.stop(spinnerRef);
         } else {
           this.spinnerService.stop(spinnerRef);
-          this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', Reasons: '', ParentBusiness: 0, Status: 1});
+          this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', Language: '', Reasons: '', ParentBusiness: 0, Status: 1});
         }
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
-        this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', Reasons: '', ParentBusiness: 0, Status: 1});
+        this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', Language: '', Reasons: '', ParentBusiness: 0, Status: 1});
         this.openDialog('Error !', err.Message, false, true, false);
         return throwError(err || err.message);
       })
@@ -627,7 +629,8 @@ export class BusinessComponent implements OnInit {
       "Tags": this.tags.toString(),
       "Reasons": this.reasons.toString(),
       "Categories": JSON.stringify(this.categories),
-      "ParentBusiness": (this.businessForm.value.ParentBusiness ? 1 : 0)
+      "ParentBusiness": (this.businessForm.value.ParentBusiness ? 1 : 0),
+      "Language": this.businessForm.value.Language
     }
     var spinnerRef = this.spinnerService.start($localize`:@@business.saving:`);
     this.businessSave$ = this.businessService.updateBusiness(this.businessId, dataForm).pipe(

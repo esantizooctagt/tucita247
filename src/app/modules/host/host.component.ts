@@ -54,6 +54,8 @@ export class HostComponent implements OnInit {
   newCurrTime$: Observable<any>;
   runQeues$: Observable<any>;
   hours$: Observable<any>;
+  onHold$: Observable<any>;
+  reload$: Observable<any>;
 
   getCommentsSche=[];
   getCommentsWalk=[];
@@ -174,6 +176,7 @@ export class HostComponent implements OnInit {
     this.matIconRegistry.addSvgIcon('sms',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/sms.svg'));
     this.matIconRegistry.addSvgIcon('mas',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/mas.svg'));
     this.matIconRegistry.addSvgIcon('menos',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/menos.svg'));
+    this.matIconRegistry.addSvgIcon('download',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/download.svg'));
   }
 
   clientForm = this.fb.group({
@@ -427,13 +430,27 @@ export class HostComponent implements OnInit {
         if (verifwaitList >= 0){this.waitlist.splice(verifwaitList, 1);}
       }
     }
+    if (msg['Tipo'] == 'HOLD'){
+      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 1){
+        var verifpreCheck = this.preCheckIn.findIndex(x => x.AppId === msg['AppId']);
+        if (verifpreCheck >= 0){
+          this.preCheckIn[verifpreCheck].Pause = msg['Pause'].toString();
+        }
+      }
+    }
+    if (msg['Tipo'] == 'RELOAD'){
+      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 1){
+        this.getAppointmentsSche();
+        this.getAppointmentsWalk();
+        this.getAppointmentsWaitList();
+      }
+    }
     if (msg['Tipo'] == 'MOVE'){
       if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 1){
         if (msg['To'] == 'PRECHECK'){
           var verifSche = this.schedule.findIndex(x => x.AppId === msg['AppId']);
           if (verifSche >= 0){
             var dataSche = this.schedule[verifSche];
-            console.log(dataSche);
             let custId = dataSche['CustomerId'];
             if (custId == undefined){
               custId = dataSche['ClientId'];
@@ -471,7 +488,6 @@ export class HostComponent implements OnInit {
           var verifWalkIns = this.walkIns.findIndex(x => x.AppId === msg['AppId']);
           if (verifWalkIns >= 0){
             var dataWalk = this.walkIns[verifWalkIns];
-            console.log(dataWalk);
             let custId = dataWalk['CustomerId'];
             if (custId == undefined){
               custId = dataWalk['ClientId'];
@@ -509,7 +525,6 @@ export class HostComponent implements OnInit {
           var verifwaitList = this.waitlist.findIndex(x => x.AppId === msg['AppId']);
           if (verifwaitList >= 0){
             var dataPrev = this.waitlist[verifwaitList];
-            console.log(dataPrev);
             let custId = dataPrev['CustomerId'];
             if (custId == undefined){
               custId = dataPrev['ClientId'];
@@ -867,6 +882,34 @@ export class HostComponent implements OnInit {
         this.getAppointmentsWaitList();
       })
     );
+  }
+
+  reloadData(){
+    let formData = { 
+      BusinessId: this.businessId, 
+      LocationId: this.locationId, 
+      Tipo: "RELOAD" 
+    }
+    this.reload$ = this.adminService.postMessage(formData).pipe(
+      map((res:any) => {
+        if (res != null){
+          if (res.Code == 200){
+            console.log("OK");
+          } else {
+            console.log("Error");
+          }
+        } else {
+          console.log("Error");
+        }
+      }),
+      catchError(err => {
+        console.log("Error");
+        return this.onError;
+      })
+    );
+    this.getAppointmentsSche();
+    this.getAppointmentsWalk();
+    this.getAppointmentsWaitList();
   }
 
   openLocation(){
@@ -2387,6 +2430,30 @@ export class HostComponent implements OnInit {
 
   onPause(appo: any, pause: string){
     appo.Pause = +pause;
+    let formData = { 
+      BusinessId: this.businessId, 
+      AppId: appo.AppId, 
+      LocationId: this.locationId, 
+      Pause: +pause, 
+      Tipo: "HOLD" 
+    }
+    this.onHold$ = this.adminService.postMessage(formData).pipe(
+      map((res:any) => {
+        if (res != null){
+          if (res.Code == 200){
+            console.log("OK");
+          } else {
+            console.log("Error");
+          }
+        } else {
+          console.log("Error");
+        }
+      }),
+      catchError(err => {
+        console.log("Error");
+        return this.onError;
+      })
+    );
   }
 
   learnMore(textNumber: number){

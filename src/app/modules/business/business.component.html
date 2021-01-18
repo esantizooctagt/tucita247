@@ -279,6 +279,21 @@
                                 </div>
                             </div>
                         </mat-tab>
+                        <mat-tab label="Communication" i18n-label="Communication@@business.communication">
+                            <div class="row">
+                                <div class="col-md-4 pt-3 pb-0">
+                                    <mat-label class="" i18n="Language|text in business@@business.language">Language :</mat-label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 pb-3">
+                                    <mat-radio-group class="language-line" formControlName="Language">
+                                        <mat-radio-button value="en">English</mat-radio-button>
+                                        <mat-radio-button value="es">Español</mat-radio-button>
+                                    </mat-radio-group>
+                                </div>
+                            </div>
+                        </mat-tab>
                     </mat-tab-group>
                 </form>
                 <ng-container *ngIf="imgBusiness$ | async"></ng-container>

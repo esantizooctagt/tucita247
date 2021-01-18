@@ -102,6 +102,9 @@
                     <button mat-mini-fab class="add_client" *ngIf="locationStatus == 1" (click)="showAppointment()">
                         <mat-icon>add</mat-icon>
                     </button>
+                    <button mat-icon-button color="secondary" class="download-btn" (click)="reloadData()">
+                        <mat-icon class="download-ico" svgIcon="download"></mat-icon>
+                    </button>
                 </div>
                 <div class="col-md mt-2 title-qeue" i18n="Ready To Check-In|text in citas@@host.readycheckin">
                     Ready To Check-In
@@ -430,6 +433,7 @@
                         [cdkDropListConnectedTo]="[preCheckInList]"
                         [cdkDropListData]="waitlist" class="col-md partial-qeue">
                         <ng-container *ngIf="appointmentsWaitList$ | async"></ng-container>
+                        <ng-container *ngIf="reload$ | async"></ng-container>
                         <div class="title-qeue" i18n="Waiting List|text in citas@@host.waitinglist">Waiting List</div>
                         <div class="col-md waitlist">
                             <mat-card class="mt-2 appCard" *ngFor="let item of waitlist;let i=index" cdkDrag>
@@ -538,6 +542,7 @@
                      [cdkDropListConnectedTo]="[walkInsList, scheduleList, waitingList]"
                      [cdkDropListData]="preCheckIn" class="col-md drop-qeue">
                      <ng-container *ngIf="appointmentsPre$ | async"></ng-container>
+                     <ng-container *ngIf="onHold$ | async"></ng-container>
                      <div class="col-md precheck">
                         <ng-container *ngIf="checkIn$ | async"></ng-container>
                         <ng-container *ngIf="newTime$ | async"></ng-container>
