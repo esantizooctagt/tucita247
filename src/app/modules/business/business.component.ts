@@ -635,6 +635,9 @@ export class BusinessComponent implements OnInit {
     var spinnerRef = this.spinnerService.start($localize`:@@business.saving:`);
     this.businessSave$ = this.businessService.updateBusiness(this.businessId, dataForm).pipe(
       tap(res => { 
+        if (this.businessForm.value.Language != this.authService.businessLanguage()){
+          this.updateLanguage(this.businessForm.value.Language);
+        }
         this.spinnerService.stop(spinnerRef);
         this.savingBusiness = true;
         this.linkValidated = false;
@@ -651,6 +654,12 @@ export class BusinessComponent implements OnInit {
       })
     );
     // }
+  }
+
+  updateLanguage(lang){
+    let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
+    user.Business_Language = lang;
+    sessionStorage.setItem('TC247_USS', JSON.stringify(user));
   }
 
   loadSectors(cityId: string, i: number){
