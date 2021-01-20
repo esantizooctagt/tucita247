@@ -129,6 +129,11 @@ export class AppointmentService {
                     .pipe(catchError(this.errorHandler));
   }
 
+  putOnHold(appId, onhold, formData){
+    return this.http.put(this.apiURL + '/appointment/onhold/' + appId + '/' + onhold, formData)
+                    .pipe(catchError(this.errorHandler));
+  }
+
   errorHandler(error) {
     return throwError(error || 'Server Error');
   }

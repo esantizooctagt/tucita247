@@ -133,6 +133,7 @@ button.mat-stroked-button
     width: 100%;
     overflow: auto;
     border: dashed 1px #ff4f00;
+    -webkit-overflow-scrolling: touch;
 }
 .precheck{
     min-height: 300px;
@@ -308,6 +309,8 @@ mat-icon.mat-icon.notranslate.material-icons.mat-icon-no-color {
 }
 .card-chat{
     background-color: #F9F7F7;
+    overflow-y: auto;
+    height: 110px;
 }
 .card-chat-user{
     background: #D7D7D7;

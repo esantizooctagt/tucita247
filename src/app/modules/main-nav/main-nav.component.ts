@@ -271,4 +271,13 @@ export class MainNavComponent implements OnInit {
     return (filterValue != undefined ? this.allBusiness.filter((business: any) => business.Name.toLowerCase().indexOf(filterValue) === 0) : this.allBusiness);
   }
 
+  changeURL(language){
+    let newUrl;
+    if (language == 'en'){
+      newUrl = window.location.origin + window.location.pathname.replace('/es/', '/'+language+'/');
+    } else {
+      newUrl = window.location.origin + window.location.pathname.replace('/en/', '/'+language+'/');
+    }
+    location.replace(newUrl);
+  }
 }

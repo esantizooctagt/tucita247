@@ -36,7 +36,7 @@ export class PollListComponent implements OnInit {
 
   displayYesNo: boolean = false;
 
-  displayedColumns = ['Name', 'DatePoll', 'DateFinPoll', 'Actions'];
+  displayedColumns = ['Name', 'Location', 'DatePoll', 'DateFinPoll', 'Actions'];
   businessId: string = '';
   changeData: string;
   pollData: Poll;
@@ -161,6 +161,7 @@ export class PollListComponent implements OnInit {
       formArray.push(this.fb.group({
           PollId: res.PollId,
           Name: res.Name,
+          Location: res.Location,
           DatePoll: res.DatePoll,
           DateFinPoll: res.DateFinPoll
         })

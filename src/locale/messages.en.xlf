@@ -12,7 +12,7 @@
       </trans-unit>
       <trans-unit id="business.language" datatype="html">
         <source>Language</source>
-        <target state="translated">Language</target>
+        <target state="translated">Preferred language to communicate with your customers:</target>
         <context-group purpose="host">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">285</context>
@@ -4730,7 +4730,7 @@
       </trans-unit>
       <trans-unit id="shared.locationclosed">
         <source>This location is closed</source>
-        <target state="translated">This location is closed</target>
+        <target state="translated">This location has been closed</target>
       </trans-unit>
       <trans-unit id="learnMore.LMCON01">
         <source>LMCON01</source>
@@ -4950,6 +4950,10 @@ When using Manual Check-Out, the system will not send polls to that location.</t
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON45">
+        <source>LMCON45</source>
+        <target state="translated">Tu Cita 24/7 will use this language to send booking messages to your customers.</target>
       </trans-unit>
       <trans-unit id="sche.calendar" datatype="html">
         <source>CALENDAR</source>

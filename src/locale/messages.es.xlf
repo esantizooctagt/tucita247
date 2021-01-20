@@ -4,7 +4,7 @@
     <body>
       <trans-unit id="business.communication" datatype="html">
         <source>Communication</source>
-        <target state="translated">comunicación</target>
+        <target state="translated">Comunicación</target>
         <context-group purpose="host">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">282</context>
@@ -12,7 +12,7 @@
       </trans-unit>
       <trans-unit id="business.language" datatype="html">
         <source>Language</source>
-        <target state="translated">Lenguaje</target>
+        <target state="translated">Lenguaje preferido para comunicarse con sus clientes:</target>
         <context-group purpose="host">
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">285</context>
@@ -4730,7 +4730,7 @@
       </trans-unit>
       <trans-unit id="shared.locationclosed">
         <source>This location is closed</source>
-        <target state="translated">Localidad cerrada</target>
+        <target state="translated">Esta localidad ha sido cerrada</target>
       </trans-unit>
       <trans-unit id="learnMore.LMCON01">
         <source>LMCON01</source>
@@ -4951,6 +4951,10 @@ Cuando se escoge la opción de Check-Out Manual, el sistema no enviará encuesta
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON45">
+        <source>LMCON45</source>
+        <target state="translated">Tu Cita 24/7 utilizará este idioma para enviar mensajes de la cita a sus clientes.</target>
       </trans-unit>
       <trans-unit id="sche.calendar" datatype="html">
         <source>CALENDAR</source>

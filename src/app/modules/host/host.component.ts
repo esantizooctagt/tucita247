@@ -287,7 +287,6 @@ export class HostComponent implements OnInit {
             }
           }
         } else {
-          console.log("eingreso 02");
           if (this.waitlist.filter(x => x.AppId ==  msg['AppId']).length == 0){
             var verifWaitList = this.waitlist.findIndex(x => x.AppId === msg['AppId']);
             if (verifWaitList >= 0){return;}
@@ -388,28 +387,36 @@ export class HostComponent implements OnInit {
         let resScheMess = this.schedule.findIndex(x => x.AppId === msg['AppId']);
         if (resScheMess >= 0){
           if (this.schedule[resScheMess].OpenMess == 1){
+            this.getCommentsSche[resScheMess].reverse();
             this.getCommentsSche[resScheMess].push(msg['Message']);
+            this.getCommentsSche[resScheMess].reverse();
           }
           this.schedule[resScheMess].Unread = "H";
         }
         let resWalkInsMess = this.walkIns.findIndex(x => x.AppId === msg['AppId']);
         if (resWalkInsMess >= 0){
           if (this.walkIns[resWalkInsMess].OpenMess == 1){
+            this.getCommentsWalk[resWalkInsMess].reverse();
             this.getCommentsWalk[resWalkInsMess].push(msg['Message']);
+            this.getCommentsWalk[resWalkInsMess].reverse();
           }
           this.walkIns[resWalkInsMess].Unread = "H";
         }
         let resWaitListMess = this.waitlist.findIndex(x => x.AppId === msg['AppId']);
         if (resWaitListMess >= 0){
           if (this.waitlist[resWaitListMess].OpenMess == 1){
+            this.getCommentsWaitList[resWaitListMess].reverse();
             this.getCommentsWaitList[resWaitListMess].push(msg['Message']);
+            this.getCommentsWaitList[resWaitListMess].reverse();
           }
           this.waitlist[resWaitListMess].Unread = "H";
         }
         let resPreCheckInMess = this.preCheckIn.findIndex(x => x.AppId === msg['AppId']);
         if (resPreCheckInMess >= 0){
           if (this.preCheckIn[resPreCheckInMess].OpenMess == 1){
+            this.getCommentsCheck[resPreCheckInMess].reverse();
             this.getCommentsCheck[resPreCheckInMess].push(msg['Message']);
+            this.getCommentsCheck[resPreCheckInMess].reverse();
           }
           this.preCheckIn[resPreCheckInMess].Unread = "H";
         }
@@ -623,7 +630,7 @@ export class HostComponent implements OnInit {
             }
           })
         );
-        this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.locationclosed:`, false, true, false);
+        this.openDialog('', $localize`:@@shared.locationclosed:`, false, true, false);
       }
     }
     if (msg['Tipo'] == 'RESET'){
@@ -1646,16 +1653,24 @@ export class HostComponent implements OnInit {
     let value = item.value;
     item.value = '';
     if (qeue == 'schedule'){
+      this.getCommentsSche[i].reverse();
       this.getCommentsSche[i].push({'H': value, 'T': actual});
+      this.getCommentsSche[i].reverse();
     }
     if (qeue == 'walkin'){
+      this.getCommentsWalk[i].reverse();
       this.getCommentsWalk[i].push({'H': value, 'T': actual});
+      this.getCommentsWalk[i].reverse();
     }
     if (qeue == 'checkin'){
+      this.getCommentsCheck[i].reverse();
       this.getCommentsCheck[i].push({'H': value, 'T': actual});
+      this.getCommentsCheck[i].reverse();
     }
     if (qeue == 'waitlist'){
+      this.getCommentsWaitList[i].reverse();
       this.getCommentsWaitList[i].push({'H': value, 'T': actual});
+      this.getCommentsWaitList[i].reverse();
     }
     //GET MESSAGES APPOINTMENT
     let formData = {
@@ -1705,16 +1720,16 @@ export class HostComponent implements OnInit {
         if (res != null){
           if (res.Code == 200){
             if (type == 'schedule'){
-              this.getCommentsSche[i] = res.Messages;
+              this.getCommentsSche[i] = res.Messages.reverse();
             }
             if (type == 'walkin'){
-              this.getCommentsWalk[i] = res.Messages;
+              this.getCommentsWalk[i] = res.Messages.reverse();
             }
             if (type == 'checkin'){
-              this.getCommentsCheck[i] = res.Messages;
+              this.getCommentsCheck[i] = res.Messages.reverse();
             }
             if (type == 'waitlist'){
-              this.getCommentsWaitList[i] = res.Messages;
+              this.getCommentsWaitList[i] = res.Messages.reverse();
             }
           } else {
             this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@host.messages:`);
@@ -2105,7 +2120,7 @@ export class HostComponent implements OnInit {
               Unread: item['Unread'],
               CheckInTime: item['CheckInTime'],
               ElapsedTime: this.calculateTime(item['CheckInTime']),
-              Pause: '0'
+              Pause: item['Pause']
             }
             this.preCheckIn.push(data);
           });
@@ -2437,7 +2452,7 @@ export class HostComponent implements OnInit {
       Pause: +pause, 
       Tipo: "HOLD" 
     }
-    this.onHold$ = this.adminService.postMessage(formData).pipe(
+    this.onHold$ = this.appointmentService.putOnHold(appo.AppId, +pause, formData).pipe(
       map((res:any) => {
         if (res != null){
           if (res.Code == 200){
