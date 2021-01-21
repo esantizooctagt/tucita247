@@ -102,7 +102,7 @@
                     <button mat-mini-fab class="add_client" *ngIf="locationStatus == 1" (click)="showAppointment()">
                         <mat-icon>add</mat-icon>
                     </button>
-                    <button mat-icon-button color="secondary" class="download-btn" (click)="reloadData()">
+                    <button mat-icon-button class="download-btn" *ngIf="locationStatus == 1" (click)="reloadData()">
                         <mat-icon class="download-ico" svgIcon="download"></mat-icon>
                     </button>
                 </div>
@@ -551,12 +551,18 @@
                                 <div *ngIf="!item.OpenItem" class="card-user col-md-9 pl-0 pr-0">{{item.Name}}</div>
                                 <div *ngIf="item.OpenItem" class="card-user-disp col-md-9 pl-0 pr-0">{{item.Name}}</div>
                                 <div class="col-md pr-0 pl-0">
-                                    <button mat-icon-button class="elapsed-clock" color="secondary" *ngIf="item.ElapsedTime != '' && item.Pause == '0'" (click)="onPause(item, '1')" i18n-matTooltip="Resume|Resume@@host.resume" matTooltip="Resume"><mat-icon class="size-icon" svgIcon="clock"></mat-icon></button>
-                                    <button mat-icon-button class="elapsed-clock" color="secondary" *ngIf="item.ElapsedTime != '' && item.Pause == '1'" (click)="onPause(item, '0')" i18n-matTooltip="Pause|Resume@@host.pause" matTooltip="Pause"><mat-icon class="size-icon" svgIcon="pause"></mat-icon></button>
-                                    <div class="buffer-time">
-                                        <span class="elapsed-time">{{item.ElapsedTime}}</span>
+                                    <div class="row">
+                                        <div class="col-md-7 pr-0 disp-button">
+                                            <button mat-icon-button class="elapsed-clock" color="secondary" *ngIf="item.ElapsedTime != '' && item.Pause == '0'" (click)="onPause(item, '1')" i18n-matTooltip="Resume|Resume@@host.resume" matTooltip="Resume"><mat-icon class="size-icon" svgIcon="clock"></mat-icon></button>
+                                            <button mat-icon-button class="elapsed-clock" color="secondary" *ngIf="item.ElapsedTime != '' && item.Pause == '1'" (click)="onPause(item, '0')" i18n-matTooltip="Pause|Resume@@host.pause" matTooltip="Pause"><mat-icon class="size-icon" svgIcon="pause"></mat-icon></button>
+                                        </div>
+                                        <div class="col-md-5 pl-1">
+                                            <div class="buffer-time">
+                                                <span class="elapsed-time">{{item.ElapsedTime}}</span>
+                                            </div>
+                                            <div class="elapsed-tag">{{ (item.ElapsedTime > 1 ? 'mins' : 'min') }}</div>
+                                        </div>
                                     </div>
-                                    <div class="elapsed-tag">{{ (item.ElapsedTime > 1 ? 'mins' : 'min') }}</div>
                                 </div>
                             </div>
                             <div class="row pr-3 pl-3">

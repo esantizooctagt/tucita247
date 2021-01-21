@@ -99,45 +99,6 @@ mat-error{
 }
 
 @media print {
-    .sidenav{
-        display: none !important;
-    }
-    .header-route{
-        display: none !important;
-    }
-    .invoice-actions{
-        display: none !important;
-    }
-    mat-toolbar{
-        display: none !important;
-    }
-    mat-card{
-        width: 100% !important;
-    }
-    mat-sidenav-content{
-        margin-left: 0px !important;
-    }
-    mat-table{
-        box-shadow: none !important;
-    }
-    mat-card{
-        box-shadow: none !important;
-    }
-    .customer-form{
-        display: none !important;
-    }
-    .payment-form{
-        display: none !important;
-    }
-    .invoice-total{
-        display: none !important;
-    }
-    .invoice-buttons{
-        display: none !important;
-    }
-    .invoice-form{
-        display: none !important;
-    }
     .print-area{
         display: block;
         height: 100%;
