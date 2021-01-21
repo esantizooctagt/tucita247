@@ -435,7 +435,7 @@
                         <ng-container *ngIf="appointmentsWaitList$ | async"></ng-container>
                         <ng-container *ngIf="reload$ | async"></ng-container>
                         <div class="title-qeue" i18n="Waiting List|text in citas@@host.waitinglist">Waiting List</div>
-                        <div class="col-md waitlist">
+                        <div class="col-md waitlist pr-4">
                             <mat-card class="mt-2 appCard" *ngFor="let item of waitlist;let i=index" cdkDrag>
                                 <div class="row pr-3 pl-3">
                                     <div *ngIf="!item.OpenItem" class="card-user col-md-9 pl-0 pr-0">{{item.Name}}</div>
@@ -553,8 +553,8 @@
                                 <div class="col-md pr-0 pl-0">
                                     <div class="row">
                                         <div class="col-md-7 pr-0 disp-button">
-                                            <button mat-icon-button class="elapsed-clock" color="secondary" *ngIf="item.ElapsedTime != '' && item.Pause == '0'" (click)="onPause(item, '1')" i18n-matTooltip="Resume|Resume@@host.resume" matTooltip="Resume"><mat-icon class="size-icon" svgIcon="clock"></mat-icon></button>
-                                            <button mat-icon-button class="elapsed-clock" color="secondary" *ngIf="item.ElapsedTime != '' && item.Pause == '1'" (click)="onPause(item, '0')" i18n-matTooltip="Pause|Resume@@host.pause" matTooltip="Pause"><mat-icon class="size-icon" svgIcon="pause"></mat-icon></button>
+                                            <button mat-icon-button class="elapsed-clock" color="secondary" *ngIf="item.ElapsedTime != '' && item.Pause == '0'" (click)="onPause(item, '1')" i18n-matTooltip="Resume|Resume@@host.resume" matTooltip="Resume"><mat-icon class="size-icon play-btn" svgIcon="clock"></mat-icon></button>
+                                            <button mat-icon-button class="elapsed-clock" color="secondary" *ngIf="item.ElapsedTime != '' && item.Pause == '1'" (click)="onPause(item, '0')" i18n-matTooltip="Pause|Resume@@host.pause" matTooltip="Pause"><mat-icon class="size-icon play-btn" svgIcon="pause"></mat-icon></button>
                                         </div>
                                         <div class="col-md-5 pl-1">
                                             <div class="buffer-time">
