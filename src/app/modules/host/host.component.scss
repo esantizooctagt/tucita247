@@ -452,6 +452,23 @@ mat-menu{
 ::ng-deep .mat-tooltip {
     background-color: #ff4f00;
 }
+.waitlist::-webkit-scrollbar {
+    width: 8px;
+}
+/* Track */
+.waitlist::-webkit-scrollbar-track {
+    /*box-shadow: inset 0 0 5px grey; */
+    border-radius: 10px;
+}
+/* Handle */
+.waitlist::-webkit-scrollbar-thumb {
+    background: #ff4f00; 
+    border-radius: 10px;
+}
+/* Handle on hover */
+.waitlist::-webkit-scrollbar-thumb:hover {
+    background: #b30000; 
+}
 @media (max-width: 1024px){
     .title-qeue{
         font-size: 20px;
@@ -474,12 +491,13 @@ mat-menu{
     }
     .elapsed-tag{
         font-size:13px;
+        left: -14px;
     }
     .elapsed-clock{
         font-size: 20px;
         height: 20px;
         line-height: 20px;
-        text-align: right;
+        text-align: left;
     }
     .card-contentprio{
         line-height: 12px;
@@ -488,5 +506,11 @@ mat-menu{
     .card-resultprio{
         line-height: 12px;
         font-size: 13px;
+    }
+    .mat-icon-button .mat-icon {
+        line-height: 20px;
+    }
+    .disp-button{
+        text-align: left;
     }
 } 
