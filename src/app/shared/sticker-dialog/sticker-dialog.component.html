@@ -1,0 +1,21 @@
+<div mat-dialog-content class="content-st">
+    <div class="row">
+        <div class="col-md-12 title">
+            <p class="qr-text pt-3" i18n="sticker@@business.bookhere">Book here</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <mat-icon class="qr-img" svgIcon="qrCode"></mat-icon>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <p class="qr-text pt-3">{{business}}</p>
+        </div>
+    </div>
+</div>
+<div mat-dialog-actions align="end">
+    <button mat-flat-button color="primary" i18n="Print@@shared.print" (click)="doPrint()">Print</button>
+    <!-- [mat-dialog-close]="true" -->
+</div>

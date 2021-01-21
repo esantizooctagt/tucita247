@@ -17,6 +17,7 @@ import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MapsAPILoader } from '@agm/core';
 import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
+import { StickerDialogComponent } from '@app/shared/sticker-dialog/sticker-dialog.component';
 
 @Component({
   selector: 'app-business',
@@ -114,6 +115,7 @@ export class BusinessComponent implements OnInit {
     private fb: FormBuilder,
     private dialog: MatDialog,
     private learnmore: MatDialog,
+    private stickerDialog: MatDialog,
     private authService: AuthService,
     private _snackBar: MatSnackBar,
     private businessService: BusinessService,
@@ -182,6 +184,20 @@ export class BusinessComponent implements OnInit {
       message: message
     };
     this.learnmore.open(LearnDialogComponent, dialogConfig);
+  }
+
+  openSticker(businessName: string): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      businessName: businessName
+    };
+    dialogConfig.width ='418px';
+    dialogConfig.minWidth = '418px';
+    dialogConfig.maxWidth = '418px';
+    dialogConfig.height ='490px';
+    dialogConfig.minHeight ='490px';
+    this.stickerDialog.open(StickerDialogComponent, dialogConfig);
   }
 
   ngOnInit() {
@@ -281,7 +297,7 @@ export class BusinessComponent implements OnInit {
         }
     }
     return invalid;
-}
+  }
 
   checkLinkAvailability(data) { 
     this.linkValidated = false;
@@ -757,6 +773,10 @@ export class BusinessComponent implements OnInit {
           console.log('Error - ', results, ' & Status - ', status);
       }
     });
+  }
+
+  printSticker(){
+    this.openSticker(this.businessForm.value.Name);
   }
 
   learnMore(textNumber: number){
