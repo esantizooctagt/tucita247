@@ -435,7 +435,7 @@
                         <ng-container *ngIf="appointmentsWaitList$ | async"></ng-container>
                         <ng-container *ngIf="reload$ | async"></ng-container>
                         <div class="title-qeue" i18n="Waiting List|text in citas@@host.waitinglist">Waiting List</div>
-                        <div class="col-md waitlist pr-3">
+                        <div class="col-md waitlist pr-3 disp-scroll">
                             <mat-card class="mt-2 appCard" *ngFor="let item of waitlist;let i=index" cdkDrag>
                                 <div class="row pr-3 pl-3">
                                     <div *ngIf="!item.OpenItem" class="card-user col-md-9 pl-0 pr-0">{{item.Name}}</div>
