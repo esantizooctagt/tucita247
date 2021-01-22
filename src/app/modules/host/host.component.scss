@@ -492,7 +492,7 @@ mat-menu{
     }
     .elapsed-tag{
         font-size:13px;
-        left: -14px;
+        text-align: right;
     }
     .elapsed-clock{
         font-size: 20px;
@@ -514,12 +514,13 @@ mat-menu{
     .disp-button{
         text-align: left;
         position: relative;
-        top: -4px;
+        top: -2px;
     }
     .buffer-time{
-        position: relative;
-        top: -1px;
-        left: -5px;
+        margin-left: auto;
+        top: 5px;
+        text-align: right;
+        width: auto;
     }
     .play-btn{
         height: 20px !important;
