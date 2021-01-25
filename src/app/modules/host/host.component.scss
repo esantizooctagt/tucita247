@@ -11,6 +11,16 @@ mat-card{
     font-weight: 500;
     top: 9px;
 }
+.waitlist::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+  
+.waitlist::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color:#ff4f00;
+    box-shadow: 0 0 1px #ff4f00;
+}
 :host ::ng-deep .mat-form-field {
     .mat-form-field-wrapper {
         padding-bottom: 0;
