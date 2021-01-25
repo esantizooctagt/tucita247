@@ -177,6 +177,7 @@ export class HostComponent implements OnInit {
     this.matIconRegistry.addSvgIcon('mas',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/mas.svg'));
     this.matIconRegistry.addSvgIcon('menos',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/menos.svg'));
     this.matIconRegistry.addSvgIcon('download',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/download.svg'));
+    this.matIconRegistry.addSvgIcon('dragdrop',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/dragdrop.svg'));
   }
 
   clientForm = this.fb.group({

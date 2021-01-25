@@ -121,16 +121,29 @@
                     <div class="col-md plan">
                         <mat-card class="mt-2 appCard" *ngFor="let item of schedule;let i=index" cdkDrag>
                             <div class="row pr-3 pl-3">
-                                <div *ngIf="!item.OpenItem" class="card-user col-md-9 pl-0 pr-0">{{item.Name}}</div>
-                                <div *ngIf="item.OpenItem" class="card-user-disp col-md-9 pl-0 pr-0">{{item.Name}}</div>
-                                <div class="card-time col-md pr-0 pl-0">{{item.DateAppo.substring(0,2) + item.DateAppo.substring(5,8)}}</div>
-                            </div>
-                            <div class="row pr-3 pl-3">
-                                <div class="card-phone col-md-9 pl-0 pr-0">{{item.Phone | phone}}</div>
-                                <div class="card-disability col-md pr-0 pl-0">
+                                <div *ngIf="!item.OpenItem" class="card-user col-md-11 pl-0 pr-0 pb-1">
                                     <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
                                     <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
                                     <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
+                                    {{item.Name}}
+                                </div>
+                                <div *ngIf="item.OpenItem" class="card-user-disp col-md-11 pl-0 pr-0 pb-1">
+                                    <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
+                                    <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
+                                    <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
+                                    {{item.Name}}
+                                </div>
+                                <!-- <div class="card-time col-md pr-0 pl-0">{{item.DateAppo.substring(0,2) + item.DateAppo.substring(5,8)}}</div> -->
+                                <div class="col-md pr-0 pl-0 pb-1">
+                                    <div class="div-drag" cdkDragHandle>
+                                        <mat-icon svgIcon="dragdrop"></mat-icon>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pr-3 pl-3">
+                                <div class="card-phone col-md-9 pl-0 pr-0">{{item.Phone | phone}}</div>
+                                <div class="card-time col-md pr-0 pl-0">
+                                    {{item.DateAppo.substring(0,2) + item.DateAppo.substring(5,8)}}
                                 </div>
                             </div>
                             <ng-container *ngIf="item.OpenItem">
@@ -330,16 +343,29 @@
                             </mat-card>
                             <mat-card class="mt-2 appCard" *ngFor="let item of walkIns;let i=index" cdkDrag>
                                 <div class="row pr-3 pl-3">
-                                    <div *ngIf="!item.OpenItem" class="card-user col-md-9 pl-0 pr-0">{{item.Name}}</div>
-                                    <div *ngIf="item.OpenItem" class="card-user-disp col-md-9 pl-0 pr-0">{{item.Name}}</div>
-                                    <div class="card-time col-md pr-0 pl-0">{{item.DateAppo.substring(0,2) + item.DateAppo.substring(5,8)}}</div>
-                                </div>
-                                <div class="row pr-3 pl-3">
-                                    <div class="card-phone col-md-9 pl-0 pr-0">{{item.Phone | phone}}</div>
-                                    <div class="card-disability col-md pr-0 pl-0">
+                                    <div *ngIf="!item.OpenItem" class="card-user col-md-11 pl-0 pr-0 pb-1">
                                         <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
                                         <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
                                         <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
+                                        {{item.Name}}
+                                    </div>
+                                    <div *ngIf="item.OpenItem" class="card-user-disp col-md-11 pl-0 pr-0 pb-1">
+                                        <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
+                                        <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
+                                        <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
+                                        {{item.Name}}
+                                    </div>
+                                    <!-- <div class="card-time col-md pr-0 pl-0">{{item.DateAppo.substring(0,2) + item.DateAppo.substring(5,8)}}</div> -->
+                                    <div class="col-md pr-0 pl-0 pb-1">
+                                        <div class="div-drag" cdkDragHandle>
+                                            <mat-icon svgIcon="dragdrop"></mat-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row pr-3 pl-3">
+                                    <div class="card-phone col-md-9 pl-0 pr-0">{{item.Phone | phone}}</div>
+                                    <div class="card-time col-md pr-0 pl-0">
+                                        {{item.DateAppo.substring(0,2) + item.DateAppo.substring(5,8)}}
                                     </div>
                                 </div>
                                 <ng-container *ngIf="item.OpenItem">
@@ -435,19 +461,31 @@
                         <ng-container *ngIf="appointmentsWaitList$ | async"></ng-container>
                         <ng-container *ngIf="reload$ | async"></ng-container>
                         <div class="title-qeue" i18n="Waiting List|text in citas@@host.waitinglist">Waiting List</div>
-                        <div class="col-md waitlist pr-3 disp-scroll">
+                        <div class="col-md waitlist">
                             <mat-card class="mt-2 appCard" *ngFor="let item of waitlist;let i=index" cdkDrag>
                                 <div class="row pr-3 pl-3">
-                                    <div *ngIf="!item.OpenItem" class="card-user col-md-9 pl-0 pr-0">{{item.Name}}</div>
-                                    <div *ngIf="item.OpenItem" class="card-user-disp col-md-9 pl-0 pr-0">{{item.Name}}</div>
-                                    <div class="card-time col-md pr-0 pl-0">{{item.DateAppo.substring(0,2) + item.DateAppo.substring(5,8)}}</div>
-                                </div>
-                                <div class="row pr-3 pl-3">
-                                    <div class="card-phone col-md-9 pl-0 pr-0">{{item.Phone | phone}}</div>
-                                    <div class="card-disability col-md pr-0 pl-0">
+                                    <div *ngIf="!item.OpenItem" class="card-user col-md-11 pl-0 pr-0 pb-1">
                                         <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
                                         <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
                                         <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
+                                        {{item.Name}}
+                                    </div>
+                                    <div *ngIf="item.OpenItem" class="card-user-disp col-md-11 pl-0 pr-0 pb-1">
+                                        <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
+                                        <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
+                                        <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
+                                        {{item.Name}}
+                                    </div>
+                                    <div class="col-md pr-0 pl-0 pb-1">
+                                        <div class="div-drag" cdkDragHandle>
+                                            <mat-icon svgIcon="dragdrop"></mat-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row pr-3 pl-3">
+                                    <div class="card-phone col-md-9 pl-0 pr-0">{{item.Phone | phone}}</div>
+                                    <div class="card-time col-md pr-0 pl-0">
+                                        {{item.DateAppo.substring(0,2) + item.DateAppo.substring(5,8)}}
                                     </div>
                                 </div>
                                 <ng-container *ngIf="item.OpenItem">
@@ -548,29 +586,35 @@
                         <ng-container *ngIf="newTime$ | async"></ng-container>
                         <mat-card class="mt-2 appCard" *ngFor="let item of preCheckIn;let i=index" cdkDrag>
                             <div class="row pr-3 pl-3">
-                                <div *ngIf="!item.OpenItem" class="card-user col-md-9 pl-0 pr-0">{{item.Name}}</div>
-                                <div *ngIf="item.OpenItem" class="card-user-disp col-md-9 pl-0 pr-0">{{item.Name}}</div>
-                                <div class="col-md pr-0 pl-0">
-                                    <div class="row m-0">
-                                        <div class="col-md-7 p-0 disp-button">
-                                            <button mat-icon-button class="elapsed-clock" color="secondary" *ngIf="item.ElapsedTime != '' && item.Pause == '0'" (click)="onPause(item, '1')" i18n-matTooltip="Resume|Resume@@host.resume" matTooltip="Resume"><mat-icon class="size-icon play-btn" svgIcon="clock"></mat-icon></button>
-                                            <button mat-icon-button class="elapsed-clock" color="secondary" *ngIf="item.ElapsedTime != '' && item.Pause == '1'" (click)="onPause(item, '0')" i18n-matTooltip="Pause|Resume@@host.pause" matTooltip="Pause"><mat-icon class="size-icon play-btn" svgIcon="pause"></mat-icon></button>
-                                        </div>
-                                        <div class="col-md-5 p-0">
-                                            <div class="buffer-time">
-                                                <span class="elapsed-time">{{item.ElapsedTime}}</span>
-                                            </div>
-                                            <div class="elapsed-tag">{{ (item.ElapsedTime > 1 ? 'mins' : 'min') }}</div>
-                                        </div>
+                                <div *ngIf="!item.OpenItem" class="card-user col-md-11 pl-0 pr-0 pb-1">
+                                    <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
+                                    <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
+                                    <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
+                                    {{item.Name}}
+                                </div>
+                                <div *ngIf="item.OpenItem" class="card-user-disp col-md-11 pl-0 pr-0 pb-1">
+                                    <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
+                                    <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
+                                    <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
+                                    {{item.Name}}
+                                </div>
+                                <div class="col-md pr-0 pl-0 pb-1">
+                                    <div class="div-drag" cdkDragHandle>
+                                        <mat-icon svgIcon="dragdrop"></mat-icon>
                                     </div>
                                 </div>
                             </div>
                             <div class="row pr-3 pl-3">
-                                <div class="card-phone col-md-9 pl-0 pr-0">{{item.Phone | phone}}</div>
-                                <div class="card-disability-pre col-md pr-0 pl-0">
-                                    <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
-                                    <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
-                                    <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
+                                <div class="card-phone col-md-8 pl-0 pr-0">{{item.Phone | phone}}</div>
+                                <!-- <div class="col-md-1 p-0 disp-button">
+                                    
+                                </div> -->
+                                <div class="col-md-4 p-0 pl-2 elapsed-time">
+                                    <button mat-icon-button class="elapsed-clock" color="secondary" *ngIf="item.ElapsedTime != '' && item.Pause == '0'" (click)="onPause(item, '1')" i18n-matTooltip="Resume|Resume@@host.resume" matTooltip="Resume"><mat-icon class="size-icon play-btn" svgIcon="clock"></mat-icon></button>
+                                    <button mat-icon-button class="elapsed-clock" color="secondary" *ngIf="item.ElapsedTime != '' && item.Pause == '1'" (click)="onPause(item, '0')" i18n-matTooltip="Pause|Resume@@host.pause" matTooltip="Pause"><mat-icon class="size-icon play-btn" svgIcon="pause"></mat-icon></button>
+                                    <!-- <span class=""> -->
+                                        {{item.ElapsedTime + ' ' + (item.ElapsedTime > 1 ? 'mins' : 'min')}}
+                                    <!-- </span> -->
                                 </div>
                             </div>
                             <ng-container *ngIf="item.OpenItem">
