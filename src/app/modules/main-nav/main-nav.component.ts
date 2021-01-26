@@ -59,7 +59,7 @@ export class MainNavComponent implements OnInit {
 
   users: User[] = [];
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.TabletLandscape)
     .pipe(
       map(result => result.matches),
       shareReplay()

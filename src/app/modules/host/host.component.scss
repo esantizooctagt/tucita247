@@ -531,12 +531,6 @@ mat-menu{
         text-align: right;
     }
     .elapsed-clock{
-        // font-size: 20px;
-        // height: 50px;
-        // line-height: 20px;
-        // text-align: left;
-        // position:absolute;
-        // top:-15px;
         height: 24px;
         width: 24px;
         line-height: 24px;
@@ -548,7 +542,8 @@ mat-menu{
         font-size: 11px;
         color: #f44f00;
         font-weight: 600;
-        top: -5px;
+        top: 0px;
+        line-height: 10px;
     }
     .card-contentprio{
         line-height: 12px;
