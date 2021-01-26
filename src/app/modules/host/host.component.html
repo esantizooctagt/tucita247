@@ -604,17 +604,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row pr-3 pl-3">
+                            <div class="row pr-3 pl-3 data-hg">
                                 <div class="card-phone col-md-8 pl-0 pr-0">{{item.Phone | phone}}</div>
-                                <!-- <div class="col-md-1 p-0 disp-button">
-                                    
-                                </div> -->
                                 <div class="col-md-4 p-0 pl-2 elapsed-time">
                                     <button mat-icon-button class="elapsed-clock" color="secondary" *ngIf="item.ElapsedTime != '' && item.Pause == '0'" (click)="onPause(item, '1')" i18n-matTooltip="Resume|Resume@@host.resume" matTooltip="Resume"><mat-icon class="size-icon play-btn" svgIcon="clock"></mat-icon></button>
                                     <button mat-icon-button class="elapsed-clock" color="secondary" *ngIf="item.ElapsedTime != '' && item.Pause == '1'" (click)="onPause(item, '0')" i18n-matTooltip="Pause|Resume@@host.pause" matTooltip="Pause"><mat-icon class="size-icon play-btn" svgIcon="pause"></mat-icon></button>
-                                    <!-- <span class=""> -->
-                                        {{item.ElapsedTime + ' ' + (item.ElapsedTime > 1 ? 'mins' : 'min')}}
-                                    <!-- </span> -->
+                                    {{item.ElapsedTime + ' ' + (item.ElapsedTime > 1 ? 'mins' : 'min')}}
                                 </div>
                             </div>
                             <ng-container *ngIf="item.OpenItem">
