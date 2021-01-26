@@ -439,8 +439,10 @@ mat-menu{
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 .download-ico{
-    width: 35px;
-    height: 35px;
+    width: 37px;
+    height: 37px;
+    top: -3px;
+    position: relative;
 }
 .download-btn{
     width: 35px;
@@ -539,6 +541,14 @@ mat-menu{
         width: 24px;
         line-height: 24px;
         top: -2px;
+    }
+    .elapsed-time{
+        text-align: right;
+        font-family: "Montserrat";
+        font-size: 11px;
+        color: #f44f00;
+        font-weight: 600;
+        top: -5px;
     }
     .card-contentprio{
         line-height: 12px;

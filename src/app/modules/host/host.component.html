@@ -99,12 +99,13 @@
                 </div>
                 <div class="col-md mt-2 title-qeue">
                     <ng-container i18n="Walk-Ins|text in citas@@host.upcomming">Upcoming</ng-container>
-                    <button mat-mini-fab class="add_client" *ngIf="locationStatus == 1" (click)="showAppointment()">
+                    <button mat-mini-fab class="add_client mr-3" *ngIf="locationStatus == 1" (click)="showAppointment()">
                         <mat-icon>add</mat-icon>
                     </button>
-                    <button mat-icon-button class="download-btn" *ngIf="locationStatus == 1" (click)="reloadData()">
-                        <mat-icon class="download-ico" svgIcon="download"></mat-icon>
-                    </button>
+                    <mat-icon class="download-ico" *ngIf="locationStatus == 1" (click)="reloadData()" svgIcon="download"></mat-icon>
+                    <!-- <button mat-icon-button class="download-btn" >
+                        
+                    </button> -->
                 </div>
                 <div class="col-md mt-2 title-qeue" i18n="Ready To Check-In|text in citas@@host.readycheckin">
                     Ready To Check-In
@@ -606,10 +607,14 @@
                             </div>
                             <div class="row pr-3 pl-3 data-hg">
                                 <div class="card-phone col-md-8 pl-0 pr-0">{{item.Phone | phone}}</div>
-                                <div class="col-md-4 p-0 pl-2 elapsed-time">
-                                    <button mat-icon-button class="elapsed-clock" color="secondary" *ngIf="item.ElapsedTime != '' && item.Pause == '0'" (click)="onPause(item, '1')" i18n-matTooltip="Resume|Resume@@host.resume" matTooltip="Resume"><mat-icon class="size-icon play-btn" svgIcon="clock"></mat-icon></button>
-                                    <button mat-icon-button class="elapsed-clock" color="secondary" *ngIf="item.ElapsedTime != '' && item.Pause == '1'" (click)="onPause(item, '0')" i18n-matTooltip="Pause|Resume@@host.pause" matTooltip="Pause"><mat-icon class="size-icon play-btn" svgIcon="pause"></mat-icon></button>
-                                    {{item.ElapsedTime + ' ' + (item.ElapsedTime > 1 ? 'mins' : 'min')}}
+                                <div class="col-md-4 p-0 elapsed-time">
+                                    <!-- <button mat-icon-button class="elapsed-clock" color="secondary" > -->
+                                        <mat-icon class="size-icon play-btn" svgIcon="clock" *ngIf="item.ElapsedTime != '' && item.Pause == '0'" (click)="onPause(item, '1')" i18n-matTooltip="Resume|Resume@@host.resume" matTooltip="Resume"></mat-icon>
+                                    <!-- </button> -->
+                                    <!-- <button mat-icon-button class="elapsed-clock" color="secondary" > -->
+                                        <mat-icon class="size-icon play-btn" svgIcon="pause" *ngIf="item.ElapsedTime != '' && item.Pause == '1'" (click)="onPause(item, '0')" i18n-matTooltip="Pause|Resume@@host.pause" matTooltip="Pause"></mat-icon>
+                                    <!-- </button> -->
+                                    {{(item.ElapsedTime == undefined ? '0' : item.ElapsedTime) + ' ' + ((item.ElapsedTime == undefined ? 0 : item.ElapsedTime) > 1 ? 'mins' : 'min')}}
                                 </div>
                             </div>
                             <ng-container *ngIf="item.OpenItem">
