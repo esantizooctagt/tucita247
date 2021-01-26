@@ -1,14 +1,13 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
-import { LocationService, ReasonsService, BusinessService, AppointmentService, ServService, AdminService } from '@app/services';
+import { BusinessService, AppointmentService, ServService, AdminService } from '@app/services';
 import { AuthService } from '@app/core/services';
 import { SpinnerService } from '@app/shared/spinner.service';
-import { map, catchError, switchMap, mergeMap, tap, shareReplay } from 'rxjs/operators';
-import { Appointment, Reason } from '@app/_models';
-import { AbstractControl, FormArray, FormBuilder, Validators } from '@angular/forms';
+import { map, catchError } from 'rxjs/operators';
+import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { ConfirmValidParentMatcher } from '@app/validators';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog, } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -158,43 +157,11 @@ export class AppowiDialogComponent implements OnInit {
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
       map((res: any) => {
         if (res.Code == 200){
-          let appoTime = +(res.Appointment.DateFull).substring(11).replace(':','-').substring(0,2);
-          if (appoTime >= actTime){
-            // if (typeAppo == 1){
-            //   let upComingIndex = this.walkIns.findIndex(x=>x.AppId == res.Appointment.AppId);
-            //   if (upComingIndex < 0){
-            //     this.walkIns.push(res.Appointment);
-            //     this.walkIns.sort(function(a, b) { 
-            //       if (a.DateFull == b.DateFull){
-            //         if (a.Disability == b.Disability){
-            //           return b.DateTrans > a.DateTrans ? -1 : 1
-            //       }
-            //       return b.Disability - a.Disability;
-            //       }
-            //       return a.DateFull > b.DateFull ? 1 : -1;
-            //     });
-            //   }
-            // } else {
-            //   let upComingIndex = this.waitlist.findIndex(x=>x.AppId == res.Appointment.AppId);
-            //   if (upComingIndex < 0){
-            //     this.waitlist.push(res.Appointment);
-            //     this.waitlist.sort(function(a, b) { 
-            //       if (a.DateFull == b.DateFull){
-            //         if (a.Disability == b.Disability){
-            //           return b.DateTrans > a.DateTrans ? -1 : 1
-            //       }
-            //       return b.Disability - a.Disability;
-            //       }
-            //       return a.DateFull > b.DateFull ? 1 : -1;
-            //     });
-            //   }
-            // }
-          }
+          this.spinnerService.stop(spinnerRef);
+          this.dialogRef.close();
+        } else {
+          this.onError = $localize`:@@shared.wrong:`;
         }
-        this.spinnerService.stop(spinnerRef);
-        this.dialogRef.close();
-        // this.clientForm.reset({Phone:'', Name:'', Email:'', DOB:'', Gender:'', Preference:1, Disability:'', ProviderId: '', ServiceId:'', Guests: 1});
-        // this.showApp = false;
         return res.Code;
       }),
       catchError(err => {

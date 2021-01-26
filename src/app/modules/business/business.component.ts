@@ -192,11 +192,11 @@ export class BusinessComponent implements OnInit {
     dialogConfig.data = {
       businessName: businessName
     };
-    dialogConfig.width ='418px';
-    dialogConfig.minWidth = '418px';
-    dialogConfig.maxWidth = '418px';
-    dialogConfig.height ='490px';
-    dialogConfig.minHeight ='490px';
+    dialogConfig.width ='740px';
+    dialogConfig.minWidth = '740px';
+    dialogConfig.maxWidth = '740px';
+    dialogConfig.height ='790px';
+    dialogConfig.minHeight ='790px';
     this.stickerDialog.open(StickerDialogComponent, dialogConfig);
   }
 

@@ -3,17 +3,19 @@
     margin-top: 10px;
     margin-bottom: 10px;
     font-weight: 600;
-    font-size: 65px;
+    font-size: 66px;
+    line-height: 48px;
 }
 .qr-img{
-    height: 688px;
-    width: 688px;
-    float: left;
-    margin-right: 10px;
+    height: 475px;
+    width: 475px;
+    // float: left;
+    // margin-right: 10px;
 }
 .title{
     text-align: center;
 }
 .content-st{
-    height: 410px;
+    height: 701px;
+    min-height: 701px;
 }
