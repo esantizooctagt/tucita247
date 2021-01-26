@@ -71,7 +71,7 @@
                     [errorStateMatcher]="confirmValidParentMatcher" required>
                 <mat-error *ngIf="f.Guests.invalid && f.Guests.touched">{{ 'Error: ' + getErrorMessage('Guests')}}</mat-error>
             </mat-form-field>
-            <button mat-icon-button (click)="remGuests()"                   >
+            <button mat-icon-button (click)="remGuests()">
                 <mat-icon class="site-color">remove</mat-icon>
             </button>
         </div>
