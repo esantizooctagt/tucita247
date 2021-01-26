@@ -1,0 +1,116 @@
+<ng-container *ngIf="newAppointment$ | async"></ng-container>
+<ng-container *ngIf="getLocInfo$ | async"></ng-container>
+<h3 class="pl-3 pr-3 pb-3" i18n="Add New Appointment|text in add new appo@@appos.title">Add New Appointment</h3>
+<form [formGroup]="clientForm">
+    <div class="form-field pl-3 pr-3">
+        <mat-form-field>
+            <input matInput #Phone placeholder="+1 (XXX) XXX-XXXX" appPhoneMask maxlength="17" formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher">
+            <mat-error *ngIf="f.Phone.invalid && f.Phone.touched">{{ 'Error: ' + getErrorMessage('Phone')}}</mat-error>
+        </mat-form-field>
+    </div>
+    <div class="form-field pl-3 pr-3">
+        <mat-form-field>
+            <input matInput #Name i18n-placeholder="Name|text in citas@@host.name" placeholder="Name" maxlength="100" minlength="3" formControlName="Name"
+                [errorStateMatcher]="confirmValidParentMatcher" required>
+            <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{ 'Error: ' + getErrorMessage('Name')}}</mat-error>
+        </mat-form-field>
+    </div>
+    <div class="form-field pl-3 pr-3" *ngIf="providerId == '0'">
+        <mat-form-field>
+            <mat-select i18n-placeholder="Provider|text in citas@@host.provider" placeholder="Provider" name="providers" formControlName="ProviderId" (selectionChange)="onProvChange($event)" required>
+                <mat-option *ngFor="let item of Providers" [value]="item.ProviderId">
+                    {{item.Name}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="f.ProviderId.invalid && f.ProviderId.touched">{{ 'Error: ' + getErrorMessage('Provider')}}</mat-error>
+        </mat-form-field>
+    </div>
+    <div class="form-field pl-3 pr-3">
+        <mat-form-field>
+            <mat-select i18n-placeholder="Service|text in citas@@host.service" placeholder="Service" name="services" formControlName="ServiceId" (selectionChange)="validateService($event)" required>
+                <mat-option *ngFor="let item of services" [value]="item.ServiceId">
+                    {{item.Name}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="f.ServiceId.invalid && f.ServiceId.touched">{{ 'Error: ' + getErrorMessage('Service')}}</mat-error>
+        </mat-form-field>
+    </div>
+    <div class="form-field pl-3 pr-3">
+        <mat-form-field>
+            <mat-select i18n-placeholder="Hour|text in citas@@host.hour" placeholder="Hour" name="hours" formControlName="Hour" required>
+                <mat-option value="--">Current Time</mat-option>
+                <mat-option *ngFor="let item of hours$ | async" [value]="item.Time24">
+                    {{item.Hour}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="f.Hour.invalid && f.Hour.touched">{{ 'Error: ' + getErrorMessage('Hour')}}</mat-error>
+        </mat-form-field>
+    </div>
+    <div class="form-field pl-3 pr-3">
+        <mat-form-field>
+            <input matInput #Email i18n-placeholder="Email@@shared.Email" placeholder="Email" maxlength="200" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" formControlName="Email"
+                [errorStateMatcher]="confirmValidParentMatcher">
+            <mat-error *ngIf="f.Email.invalid && f.Email.touched">{{ 'Error: ' + getErrorMessage('Email')}}</mat-error>
+        </mat-form-field>
+    </div>
+    <div class="form-field pl-3 pr-3">
+        <mat-form-field>
+            <mat-label i18n="Date of birth|text in citas@@host.dateofbirth">Date of birth</mat-label>
+            <input matInput [matDatepicker]="dobClient" formControlName="DOB">
+            <mat-datepicker-toggle matSuffix [for]="dobClient"></mat-datepicker-toggle>
+            <mat-datepicker #dobClient></mat-datepicker>
+        </mat-form-field>
+    </div>
+    <div class="row pl-3 pr-3">
+        <div class="form-field pl-3 pr-3 col-md-12">
+            <button mat-icon-button (click)="addGuests()">
+                <mat-icon class="site-color">add</mat-icon>
+            </button>
+            <mat-form-field class="col-md-8">
+                <input matInput #Guests i18n-placeholder="Number of Guests|text in new appo@appos.number" placeholder="Number of Guests" maxlength="2" min="1" [max]="maxGuests" formControlName="Guests"
+                    [errorStateMatcher]="confirmValidParentMatcher" required>
+                <mat-error *ngIf="f.Guests.invalid && f.Guests.touched">{{ 'Error: ' + getErrorMessage('Guests')}}</mat-error>
+            </mat-form-field>
+            <button mat-icon-button (click)="remGuests()"                   >
+                <mat-icon class="site-color">remove</mat-icon>
+            </button>
+        </div>
+    </div>
+    <div class="row pl-3 pr-3">
+        <div class="form-field pl-3 pr-3 col-md-6">
+            <label i18n="Gender|text in citas@@host.gender">Gender</label>
+            <mat-radio-group aria-label="Select an option" formControlName="Gender" class="client_gender mt-0">
+                <mat-radio-button matLine value="M" i18n="Male|text in citas@@host.male">Male</mat-radio-button>
+                <mat-radio-button matLine value="F" i18n="Female|text in citas@@host.female">Female</mat-radio-button>
+                <mat-radio-button matLine value="NA" i18n="Doesn't want to answer|text in citas@@host.na">Doesn't want to answer</mat-radio-button>
+            </mat-radio-group>
+        </div>
+        <div class="form-field pl-3 pr-3 col-md-6">
+            <label i18n="Priority|text in citas@@host.priority">Priority</label>
+            <mat-radio-group aria-label="Select an option" formControlName="Disability" class="client_gender mt-0">
+                <mat-radio-button matLine value="1" i18n="Senior|text in citas@@host.senior">Senior</mat-radio-button>
+                <mat-radio-button matLine value="2" i18n="Pregnant|text in citas@@host.pregnant">Pregnant</mat-radio-button>
+                <mat-radio-button matLine value="3" i18n="Disability|text in citas@@host.disability">Disability</mat-radio-button>
+            </mat-radio-group>
+        </div>
+    </div>
+
+    <div class="row pl-3 pr-3">
+        <div class="form-field pl-3 pr-3 col-md-12">
+            <label i18n="Preference|text in citas@@host.preference">Preference</label>
+            <mat-radio-group aria-label="Select an option" formControlName="Preference" class="client_gender mt-0">
+                <mat-radio-button matLine [checked]="true" value="1" i18n="SMS|text in citas@@host.sms">SMS</mat-radio-button>
+                <mat-radio-button matLine value="2" i18n="Email@@shared.Email">Email</mat-radio-button>
+            </mat-radio-group>
+        </div>
+    </div>
+
+    <div class="ml-3 mr-3 mt-2">
+        <button mat-flat-button color="primary" id="save" type="submit" [disabled]="!clientForm.valid" (click)="addAppointment()" class="button-appo mr-3" i18n="Save@@shared.save">Save</button>
+        <button mat-flat-button color="accent" id="cancel" type="button" (click)="onNoClick()" class="button-appo" i18n="Cancel@@shared.cancel">Cancel</button>
+    </div>
+    <div class="err-message">
+        {{onError}}
+    </div>
+    <!-- {{ clientForm.value | json }} -->
+</form>

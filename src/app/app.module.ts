@@ -85,6 +85,7 @@ import { RoleListAdminComponent } from '@modules/roles-admin/role-list-admin/rol
 import { LearnDialogComponent } from './shared/learn-dialog/learn-dialog.component';
 import { CancelComponent } from './modules/cancel/cancel.component';
 import { StickerDialogComponent } from './shared/sticker-dialog/sticker-dialog.component';
+import { AppowiDialogComponent } from './shared/appowi-dialog/appowi-dialog.component';
 
 @NgModule({
   declarations: [
@@ -115,7 +116,8 @@ import { StickerDialogComponent } from './shared/sticker-dialog/sticker-dialog.c
     RoleListAdminComponent,
     LearnDialogComponent,
     CancelComponent,
-    StickerDialogComponent
+    StickerDialogComponent,
+    AppowiDialogComponent
   ],
   imports: [
     BrowserModule,

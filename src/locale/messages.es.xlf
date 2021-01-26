@@ -20,7 +20,7 @@
       </trans-unit>
       <trans-unit id="business.bookhere" datatype="html">
         <source>Book here</source>
-        <target state="translated">Haz tu Cita aquí</target>
+        <target state="translated">Escanea y haz tu cita aquí:</target>
         <context-group purpose="business">
           <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
           <context context-type="linenumber">243</context>

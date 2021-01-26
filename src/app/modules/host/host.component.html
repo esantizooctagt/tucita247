@@ -103,9 +103,6 @@
                         <mat-icon>add</mat-icon>
                     </button>
                     <mat-icon class="download-ico" *ngIf="locationStatus == 1" (click)="reloadData()" svgIcon="download"></mat-icon>
-                    <!-- <button mat-icon-button class="download-btn" >
-                        
-                    </button> -->
                 </div>
                 <div class="col-md mt-2 title-qeue" i18n="Ready To Check-In|text in citas@@host.readycheckin">
                     Ready To Check-In
@@ -134,7 +131,6 @@
                                     <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
                                     {{item.Name}}
                                 </div>
-                                <!-- <div class="card-time col-md pr-0 pl-0">{{item.DateAppo.substring(0,2) + item.DateAppo.substring(5,8)}}</div> -->
                                 <div class="col-md pr-0 pl-0 pb-1">
                                     <div class="div-drag" cdkDragHandle>
                                         <mat-icon svgIcon="dragdrop"></mat-icon>
@@ -239,10 +235,10 @@
                         [cdkDropListConnectedTo]="[preCheckInList]"
                         [cdkDropListData]="walkIns" class="col-md upc-partial-qeue">
                         <ng-container *ngIf="appointmentsWalk$ | async"></ng-container>
-                        <ng-container *ngIf="newAppointment$ | async"></ng-container>
+                        <!-- <ng-container *ngIf="newAppointment$ | async"></ng-container> -->
                         <div class="col-md walkin">
-                            <mat-card *ngIf="showApp" class="card-Appointment mt-2">
-                                <form [formGroup]="clientForm">
+                            <!-- <mat-card *ngIf="showApp" class="card-Appointment mt-2"> -->
+                                <!-- <form [formGroup]="clientForm">
                                     <div class="form-field pl-3 pr-3">
                                         <mat-form-field>
                                             <input matInput #Phone placeholder="+1 (XXX) XXX-XXXX" appPhoneMask maxlength="17" formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher">
@@ -339,9 +335,9 @@
                                         <button mat-flat-button color="primary" id="save" type="button" [disabled]="!clientForm.valid" (click)="addAppointment()" class="ml-3 mr-3 mt-2" i18n="Save@@shared.save">Save</button>
                                         <button mat-flat-button color="accent" id="cancel" type="button" (click)="onCancelAddAppointment()" class="mt-2" i18n="Cancel@@shared.cancel">Cancel</button>
                                     </div>
-                                    <!-- {{ clientForm.value | json }} -->
-                                </form>
-                            </mat-card>
+                                    {{ clientForm.value | json }}
+                                </form> -->
+                            <!-- </mat-card> -->
                             <mat-card class="mt-2 appCard" *ngFor="let item of walkIns;let i=index" cdkDrag>
                                 <div class="row pr-3 pl-3">
                                     <div *ngIf="!item.OpenItem" class="card-user col-md-11 pl-0 pr-0 pb-1">
@@ -356,7 +352,6 @@
                                         <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
                                         {{item.Name}}
                                     </div>
-                                    <!-- <div class="card-time col-md pr-0 pl-0">{{item.DateAppo.substring(0,2) + item.DateAppo.substring(5,8)}}</div> -->
                                     <div class="col-md pr-0 pl-0 pb-1">
                                         <div class="div-drag" cdkDragHandle>
                                             <mat-icon svgIcon="dragdrop"></mat-icon>
@@ -608,12 +603,8 @@
                             <div class="row pr-3 pl-3 data-hg">
                                 <div class="card-phone col-md-8 pl-0 pr-0">{{item.Phone | phone}}</div>
                                 <div class="col-md-4 p-0 elapsed-time">
-                                    <!-- <button mat-icon-button class="elapsed-clock" color="secondary" > -->
-                                        <mat-icon class="size-icon play-btn" svgIcon="clock" *ngIf="item.ElapsedTime != '' && item.Pause == '0'" (click)="onPause(item, '1')" i18n-matTooltip="Resume|Resume@@host.resume" matTooltip="Resume"></mat-icon>
-                                    <!-- </button> -->
-                                    <!-- <button mat-icon-button class="elapsed-clock" color="secondary" > -->
-                                        <mat-icon class="size-icon play-btn" svgIcon="pause" *ngIf="item.ElapsedTime != '' && item.Pause == '1'" (click)="onPause(item, '0')" i18n-matTooltip="Pause|Resume@@host.pause" matTooltip="Pause"></mat-icon>
-                                    <!-- </button> -->
+                                    <mat-icon class="size-icon play-btn" svgIcon="clock" *ngIf="item.ElapsedTime != '' && item.Pause == '0'" (click)="onPause(item, '1')" i18n-matTooltip="Resume|Resume@@host.resume" matTooltip="Resume"></mat-icon>
+                                    <mat-icon class="size-icon play-btn" svgIcon="pause" *ngIf="item.ElapsedTime != '' && item.Pause == '1'" (click)="onPause(item, '0')" i18n-matTooltip="Pause|Resume@@host.pause" matTooltip="Pause"></mat-icon>
                                     {{(item.ElapsedTime == undefined ? '0' : item.ElapsedTime) + ' ' + ((item.ElapsedTime == undefined ? 0 : item.ElapsedTime) > 1 ? 'mins' : 'min')}}
                                 </div>
                             </div>
