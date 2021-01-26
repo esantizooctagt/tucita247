@@ -81,6 +81,12 @@ mat-card{
     border-radius: 15px;
     height: 20px !important;
 }
+::ng-deep .elapsed-clock{
+    height: 24px !important;
+    width: 24px !important;
+    line-height: 20px !important;
+    top: -2px !important;
+}
 /* Use the button type you're using here */
 button.mat-icon-button
 {
