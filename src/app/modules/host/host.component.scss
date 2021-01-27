@@ -512,6 +512,14 @@ mat-menu{
 .precheck::-webkit-scrollbar-thumb:hover {
     background: #b30000; 
 }
+@media only screen and (orientation: landscape){
+    .partial-qeue{
+        height: 55%;
+    }
+    .upc-partial-qeue{
+        height: 45%;
+    }
+}
 @media (max-width: 1024px){
     .title-qeue{
         font-size: 20px;
