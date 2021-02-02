@@ -1,16 +1,34 @@
-<div mat-dialog-content class="content-st">
+<div mat-dialog-content class="display-area">
     <div class="row">
-        <div class="col-md-12 title">
+        <div class="col-md-12 title-disp">
+            <p class="qr-text-disp pt-3" i18n="sticker@@business.bookhere">Book here</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 title-disp qr-style-disp">
+            <mat-icon class="qr-img-disp" svgIcon="qrCode"></mat-icon>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 title-disp">
+            <p class="qr-text-disp pt-3">{{business}}</p>
+        </div>
+    </div>
+</div>
+<div class="print-area">
+    <div class="row">
+        <div class="col-md-12 qr-title">
             <p class="qr-text pt-3" i18n="sticker@@business.bookhere">Book here</p>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12 title">
-            <mat-icon class="qr-img" svgIcon="qrCode"></mat-icon>
+        <div class="col-md-12 qr-title qr-style">
+            <img class="qr-img" src="assets/images/qrImg.png">
+            <!-- <mat-icon class="qr-img" svgIcon="qrCode"></mat-icon> -->
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12 title">
+        <div class="col-md-12 qr-title">
             <p class="qr-text pt-3">{{business}}</p>
         </div>
     </div>

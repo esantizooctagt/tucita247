@@ -394,6 +394,12 @@ export class HostComponent implements OnInit {
             this.getCommentsSche[resScheMess].reverse();
           }
           this.schedule[resScheMess].Unread = "H";
+
+          const itemToScrollTo = document.getElementById('chat-' + resScheMess);
+          // null check to ensure that the element actually exists
+          if (itemToScrollTo) {
+            itemToScrollTo.scrollIntoView(true);
+          }
         }
         let resWalkInsMess = this.walkIns.findIndex(x => x.AppId === msg['AppId']);
         if (resWalkInsMess >= 0){
@@ -403,6 +409,12 @@ export class HostComponent implements OnInit {
             this.getCommentsWalk[resWalkInsMess].reverse();
           }
           this.walkIns[resWalkInsMess].Unread = "H";
+
+          const itemToScrollTo = document.getElementById('chat-' + resWalkInsMess);
+          // null check to ensure that the element actually exists
+          if (itemToScrollTo) {
+            itemToScrollTo.scrollIntoView(true);
+          }
         }
         let resWaitListMess = this.waitlist.findIndex(x => x.AppId === msg['AppId']);
         if (resWaitListMess >= 0){
@@ -412,6 +424,12 @@ export class HostComponent implements OnInit {
             this.getCommentsWaitList[resWaitListMess].reverse();
           }
           this.waitlist[resWaitListMess].Unread = "H";
+
+          const itemToScrollTo = document.getElementById('chat-' + resWaitListMess);
+          // null check to ensure that the element actually exists
+          if (itemToScrollTo) {
+            itemToScrollTo.scrollIntoView(true);
+          }
         }
         let resPreCheckInMess = this.preCheckIn.findIndex(x => x.AppId === msg['AppId']);
         if (resPreCheckInMess >= 0){
@@ -421,6 +439,12 @@ export class HostComponent implements OnInit {
             this.getCommentsCheck[resPreCheckInMess].reverse();
           }
           this.preCheckIn[resPreCheckInMess].Unread = "H";
+
+          const itemToScrollTo = document.getElementById('chat-' + resPreCheckInMess);
+          // null check to ensure that the element actually exists
+          if (itemToScrollTo) {
+            itemToScrollTo.scrollIntoView(true);
+          }
         }
       }
     }
@@ -1669,21 +1693,45 @@ export class HostComponent implements OnInit {
       this.getCommentsSche[i].reverse();
       this.getCommentsSche[i].push({'H': value, 'T': actual});
       this.getCommentsSche[i].reverse();
+
+      const itemToScrollTo = document.getElementById('chat-' + i);
+      // null check to ensure that the element actually exists
+      if (itemToScrollTo) {
+        itemToScrollTo.scrollIntoView(true);
+      }
     }
     if (qeue == 'walkin'){
       this.getCommentsWalk[i].reverse();
       this.getCommentsWalk[i].push({'H': value, 'T': actual});
       this.getCommentsWalk[i].reverse();
+
+      const itemToScrollTo = document.getElementById('chat-' + i);
+      // null check to ensure that the element actually exists
+      if (itemToScrollTo) {
+        itemToScrollTo.scrollIntoView(true);
+      }
     }
     if (qeue == 'checkin'){
       this.getCommentsCheck[i].reverse();
       this.getCommentsCheck[i].push({'H': value, 'T': actual});
       this.getCommentsCheck[i].reverse();
+
+      const itemToScrollTo = document.getElementById('chat-' + i);
+      // null check to ensure that the element actually exists
+      if (itemToScrollTo) {
+        itemToScrollTo.scrollIntoView(true);
+      }
     }
     if (qeue == 'waitlist'){
       this.getCommentsWaitList[i].reverse();
       this.getCommentsWaitList[i].push({'H': value, 'T': actual});
       this.getCommentsWaitList[i].reverse();
+
+      const itemToScrollTo = document.getElementById('chat-' + i);
+      // null check to ensure that the element actually exists
+      if (itemToScrollTo) {
+        itemToScrollTo.scrollIntoView(true);
+      }
     }
     //GET MESSAGES APPOINTMENT
     let formData = {

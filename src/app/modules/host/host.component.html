@@ -72,8 +72,25 @@
                     </button>
                 </ng-container>
                 <ng-container *ngIf="checkOutQR$ | async"></ng-container>
-                <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && manualCheckOut == 1" color="secondary" type="button" (click)="setManualCheckOut(manualGuests)" i18n="Check Out|text in citas@@host.checkout">Check Out</button>
-                <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && manualCheckOut == 0" color="secondary" type="button" (click)="checkOutQR()" i18n="Check Out|text in citas@@host.checkout">Check Out</button>
+                <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && manualCheckOut == 1" color="secondary" type="button" (click)="setManualCheckOut(manualGuests)" i18n="Check Out|text in citas@@host.checkout">
+                    <mat-icon class="btn-icon">logout</mat-icon>
+                    Check Out
+                </button>
+                <!--  i18n="Check Out|text in citas@@host.checkout" -->
+                <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && manualCheckOut == 0" color="secondary" type="button" (click)="checkOutQR()">
+                    <mat-icon class="btn-icon">logout</mat-icon>
+                    Check Out
+                </button>
+                <button mat-stroked-button class="action-buttons ml-3" *ngIf="locationStatus == 1" (click)="showAppointment()">
+                    <mat-icon class="btn-icon">add</mat-icon>
+                    Add
+                </button>
+                <ng-container *ngIf="reload$ | async"></ng-container>
+                <button mat-stroked-button class="action-buttons ml-3" *ngIf="locationStatus == 1" (click)="reloadData()">
+                    <mat-icon class="btn-icon">vertical_align_bottom</mat-icon>
+                    Download
+                </button>
+                <!-- <mat-icon class="download-ico" *ngIf="locationStatus == 1" (click)="reloadData()" svgIcon="download"></mat-icon> -->
             </div>
             <div class="row space-row">
                 <ng-container *ngIf="quantityPeople$ | async"></ng-container>
@@ -92,517 +109,427 @@
         <ng-container *ngIf="opeHours$ | async"></ng-container>
         <ng-container *ngIf="getLocInfo$ | async"></ng-container>
         <ng-container *ngIf="reasons$ | async"></ng-container>
-        <div class="col-sm col-md col-lg-12">
-            <div class="row space-row mb-2">
-                <div class="col-md mt-2 title-qeue" i18n="Citas|text in citas@@host.citas">
-                    Citas
-                </div>
-                <div class="col-md mt-2 title-qeue">
-                    <ng-container i18n="Walk-Ins|text in citas@@host.upcomming">Upcoming</ng-container>
-                    <button mat-mini-fab class="add_client mr-3" *ngIf="locationStatus == 1" (click)="showAppointment()">
-                        <mat-icon>add</mat-icon>
-                    </button>
-                    <mat-icon class="download-ico" *ngIf="locationStatus == 1" (click)="reloadData()" svgIcon="download"></mat-icon>
-                </div>
-                <div class="col-md mt-2 title-qeue" i18n="Ready To Check-In|text in citas@@host.readycheckin">
-                    Ready To Check-In
-                </div>
-            </div>
+        <div class="col-sm-6 col-md-8 col-lg-8">
             <ng-container *ngIf="messages$ | async"></ng-container>
-            <div class="row space-row">
-                <div cdkDropList
-                    #scheduleList="cdkDropList"
-                    (cdkDropListDropped)="drop($event)"
-                    [cdkDropListConnectedTo]="[preCheckInList]"
-                    [cdkDropListData]="schedule" class="col-md drop-qeue">
-                    <ng-container *ngIf="appointmentsSche$ | async"></ng-container>
-                    <div class="col-md plan">
-                        <mat-card class="mt-2 appCard" *ngFor="let item of schedule;let i=index" cdkDrag>
-                            <div class="row pr-3 pl-3">
-                                <div *ngIf="!item.OpenItem" class="card-user col-md-11 pl-0 pr-0 pb-1">
-                                    <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
-                                    <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
-                                    <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
-                                    {{item.Name}}
-                                </div>
-                                <div *ngIf="item.OpenItem" class="card-user-disp col-md-11 pl-0 pr-0 pb-1">
-                                    <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
-                                    <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
-                                    <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
-                                    {{item.Name}}
-                                </div>
-                                <div class="col-md pr-0 pl-0 pb-1">
-                                    <div class="div-drag" cdkDragHandle>
-                                        <mat-icon svgIcon="dragdrop"></mat-icon>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row pr-3 pl-3">
-                                <div class="card-phone col-md-9 pl-0 pr-0">{{item.Phone | phone}}</div>
-                                <div class="card-time col-md pr-0 pl-0">
-                                    {{item.DateAppo.substring(0,2) + item.DateAppo.substring(5,8)}}
-                                </div>
-                            </div>
-                            <ng-container *ngIf="item.OpenItem">
-                                <div class="row pr-3 pl-3 mt-2 mb-2">
-                                    <div class="card-contentprio col-md-6 pl-0" i18n="No. of guests: |text in citas@@host.noguests">Number of guests: </div><div class="card-resultprio col-md">{{item.Guests}}</div>
-                                </div>
-                                <div class="row pr-3 pl-3 mt-2 mb-2">
-                                    <div class="card-contentprio col-md-6 pl-0" i18n="Door: |text in citas@@host.door">Door: </div><div class="card-resultprio-door col-md">{{item.Door}}</div>
-                                </div>
-                                <div class="row pr-3 pl-3 mt-2 mb-2">
-                                    <div class="card-contentprio col-md-6 pl-0" i18n="On Behalf: |text in citas@@host.onbehalf">On Behalf: </div><div class="card-resultprio col-md" *ngIf="item.OnBehalf  == 0" i18n="Yes@@shared.no">No</div><div class="card-resultprio col-md" *ngIf="item.OnBehalf  != 0" i18n="Yes@@shared.yes">Yes</div>
-                                </div>
-                                <div class="row pr-3 pl-3 mt-2 mb-2" *ngIf="item.Provider != ''">
-                                    <div class="card-contentprio col-md-6 pl-0" i18n="Provider: |text in citas@@host.providertext">Provider: </div><div class="card-resultprio col-md">{{item.Provider}}</div>
-                                </div>
-                                <div class="row pr-3 pl-3 mt-2 mb-2" *ngIf="item.Service != ''">
-                                    <div class="card-contentprio col-md-6 pl-0" i18n="Service: |text in citas@@host.servicetext">Service: </div><div class="card-resultprio col-md">{{item.Service}}</div>
-                                </div>
-                            </ng-container>
-                            <div class="row mb-0 mt-2">
-                                <div class="card-actions-center col-sm-3 p-0">
-                                    <button mat-icon-button color="secondary" (click)="onShowCancel(item)" i18n-matTooltip="Cancel this booking|Cancel this booking tooltip@@learnMore.LMCON36" matTooltip="Cancel this booking">
-                                        <mat-icon svgIcon="cancel"></mat-icon>
-                                    </button>
-                                </div>
-                                <div class="card-actions-center col-sm-3 p-0">
-                                    <button mat-icon-button color="secondary" (click)="onShowMessage(item, i, 'schedule');" i18n-matTooltip="Messages|Messages tooltip@@learnMore.LMCON37" matTooltip="Messages">
-                                        <mat-icon [matBadgeHidden]="item.Unread != 'H'" matBadgeSize="small" matBadge="*" matBadgePosition="after" matBadgeColor="warn" matBadgeOverlap="true" svgIcon="sms"></mat-icon>
-                                    </button>
-                                </div>
-                                <div class="card-actions-center col-sm-3 p-0">
-                                    <button mat-icon-button color="secondary" (click)="onReadyCheckIn(item, 1)" i18n-matTooltip="Ready to check-in|Ready to check-in tooltip@@learnMore.LMCON42" matTooltip="Ready to check-in">
-                                        <mat-icon svgIcon="readycheck"></mat-icon>
-                                    </button>
-                                </div>
-                                <div class="card-actions-center col-sm-3 p-0">
-                                    <button mat-icon-button color="secondary" (click)="onShowDetail(item)">
-                                        <mat-icon svgIcon="expand"></mat-icon>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenCanc">
-                                <div class="col-md-12 pl-0 pr-0">
-                                    <mat-form-field>
-                                        <mat-label i18n="Cancel reasons|text in citas@@host.cancelreasons">Cancel reasons</mat-label>
-                                        <mat-select [(value)]="selectedSche[i]">
-                                            <mat-option *ngFor="let reason of reasons" [value]="reason">
-                                                {{reason}}
-                                            </mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                </div>
-                                <div class="col-md-12 pl-0 pr-0 mt-2 mb-2">
-                                    <button mat-flat-button type="button" color="primary" (click)="onCancelApp(item, selectedSche[i], i, 'schedule')" [disabled]="selectedSche[i] == undefined" i18n="Cancel Appointment|text in citas@@host.cancelappo">
-                                        Cancel Appointment
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenMess">
-                                <div class="col-sm-10 pl-0 pr-0">
-                                    <textarea class="card-text" #messageTextSche matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
-                                </div>
-                                <div class="button-send col-md pr-0 pl-0">
-                                    <button mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageTextSche, i, 'schedule')">
-                                        <mat-icon class="send_icon">send</mat-icon>
-                                    </button>
-                                </div>
-                                <div class="card-chat pl-3 pr-3 mb-0 mt-3 col-md-12">
-                                    <ng-container *ngFor="let item of getCommentsSche[i]">
-                                        <div class="row row justify-content-start" *ngIf="item.U != undefined">
-                                            <div class="card-chat-user col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
-                                                <div class="card-chat-time">{{item.T}}</div>
-                                                {{item.U}}
-                                            </div>
-                                        </div>
-                                        <div class="row justify-content-end" *ngIf="item.H != undefined">
-                                            <div class="card-chat-host col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
-                                                <div class="card-chat-time">{{item.T}}</div>
-                                                {{item.H}}
-                                            </div>
-                                        </div>
-                                    </ng-container>
-                                </div>
-                            </div>
-                        </mat-card>
-                    </div>
-                </div>
-                <div class="col-md drop-qeue parent">
+            <ng-container *ngIf="appointmentsSche$ | async"></ng-container>
+            <ng-container *ngIf="appointmentsWalk$ | async"></ng-container>
+            <ng-container *ngIf="appointmentsWaitList$ | async"></ng-container>
+            <mat-tab-group mat-stretch-tabs class="tabs-detail">
+                <mat-tab i18n-label="Walk-Ins|text in citas@@host.upcomming" label="Upcoming"> 
                     <div cdkDropList 
                         #walkInsList="cdkDropList"
                         (cdkDropListDropped)="drop($event)"
                         [cdkDropListConnectedTo]="[preCheckInList]"
-                        [cdkDropListData]="walkIns" class="col-md upc-partial-qeue">
-                        <ng-container *ngIf="appointmentsWalk$ | async"></ng-container>
-                        <!-- <ng-container *ngIf="newAppointment$ | async"></ng-container> -->
-                        <div class="col-md walkin">
-                            <!-- <mat-card *ngIf="showApp" class="card-Appointment mt-2"> -->
-                                <!-- <form [formGroup]="clientForm">
-                                    <div class="form-field pl-3 pr-3">
-                                        <mat-form-field>
-                                            <input matInput #Phone placeholder="+1 (XXX) XXX-XXXX" appPhoneMask maxlength="17" formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher">
-                                            <mat-error *ngIf="f.Phone.invalid && f.Phone.touched">{{ 'Error: ' + getErrorMessage('Phone')}}</mat-error>
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="form-field pl-3 pr-3">
-                                        <mat-form-field>
-                                            <input matInput #Name i18n-placeholder="Name|text in citas@@host.name" placeholder="Name" maxlength="100" minlength="3" formControlName="Name"
-                                                [errorStateMatcher]="confirmValidParentMatcher" required>
-                                            <mat-error *ngIf="f.Name.invalid && f.Name.touched">{{ 'Error: ' + getErrorMessage('Name')}}</mat-error>
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="form-field pl-3 pr-3" *ngIf="providerId == '0'">
-                                        <mat-form-field>
-                                            <mat-select i18n-placeholder="Provider|text in citas@@host.provider" placeholder="Provider" name="providers" formControlName="ProviderId" (selectionChange)="onProvChange($event)" required>
-                                                <mat-option *ngFor="let item of Providers" [value]="item.ProviderId">
-                                                    {{item.Name}}
-                                                </mat-option>
-                                            </mat-select>
-                                            <mat-error *ngIf="f.ProviderId.invalid && f.ProviderId.touched">{{ 'Error: ' + getErrorMessage('Provider')}}</mat-error>
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="form-field pl-3 pr-3">
-                                        <mat-form-field>
-                                            <mat-select i18n-placeholder="Service|text in citas@@host.service" placeholder="Service" name="services" formControlName="ServiceId" (selectionChange)="validateService($event)" required>
-                                                <mat-option *ngFor="let item of services" [value]="item.ServiceId">
-                                                    {{item.Name}}
-                                                </mat-option>
-                                            </mat-select>
-                                            <mat-error *ngIf="f.ServiceId.invalid && f.ServiceId.touched">{{ 'Error: ' + getErrorMessage('Service')}}</mat-error>
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="form-field pl-3 pr-3">
-                                        <mat-form-field>
-                                            <mat-select i18n-placeholder="Hour|text in citas@@host.hour" placeholder="Hour" name="hours" formControlName="Hour" required>
-                                                <mat-option value="--">Current Time</mat-option>
-                                                <mat-option *ngFor="let item of hours$ | async" [value]="item.Time24">
-                                                    {{item.Hour}}
-                                                </mat-option>
-                                            </mat-select>
-                                            <mat-error *ngIf="f.Hour.invalid && f.Hour.touched">{{ 'Error: ' + getErrorMessage('Hour')}}</mat-error>
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="form-field pl-3 pr-3">
-                                        <mat-form-field>
-                                            <input matInput #Email i18n-placeholder="Email@@shared.Email" placeholder="Email" maxlength="200" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" formControlName="Email"
-                                                [errorStateMatcher]="confirmValidParentMatcher">
-                                            <mat-error *ngIf="f.Email.invalid && f.Email.touched">{{ 'Error: ' + getErrorMessage('Email')}}</mat-error>
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="form-field pl-3 pr-3">
-                                        <mat-label class="label-custom" i18n="No of People|text in citas@@host.noofpeople">No of People</mat-label>
-                                        <button type="button" mat-icon-button (click)="addGuests()">
-                                            <mat-icon class="site-color">add</mat-icon>
-                                        </button>
-                                        <input class="input-guests" matInput #Guests i18n-placeholder="No of People|text in citas@@host.noofpeople" placeholder="No of People" min="1" [max]="maxGuests" formControlName="Guests">
-                                        <button type="button" mat-icon-button (click)="remGuests()">
-                                            <mat-icon class="site-color">remove</mat-icon>
-                                        </button>
-                                    </div>
-                                    <div class="form-field pl-3 pr-3">
-                                        <mat-form-field>
-                                            <mat-label i18n="Date of birth|text in citas@@host.dateofbirth">Date of birth</mat-label>
-                                            <input matInput [matDatepicker]="dobClient" formControlName="DOB">
-                                            <mat-datepicker-toggle matSuffix [for]="dobClient"></mat-datepicker-toggle>
-                                            <mat-datepicker #dobClient></mat-datepicker>
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="form-field pl-3 pr-3">
-                                        <label i18n="Gender|text in citas@@host.gender">Gender</label>
-                                        <mat-radio-group aria-label="Select an option" formControlName="Gender" class="client_gender mt-0">
-                                            <mat-radio-button matLine value="M" i18n="Male|text in citas@@host.male">Male</mat-radio-button>
-                                            <mat-radio-button matLine value="F" i18n="Female|text in citas@@host.female">Female</mat-radio-button>
-                                            <mat-radio-button matLine value="NA" i18n="Doesn't want to answer|text in citas@@host.na">Doesn't want to answer</mat-radio-button>
-                                        </mat-radio-group>
-                                    </div>
-                                    <div class="form-field pl-3 pr-3">
-                                        <label i18n="Priority|text in citas@@host.priority">Priority</label>
-                                        <mat-radio-group aria-label="Select an option" formControlName="Disability" class="client_gender mt-0">
-                                            <mat-radio-button matLine value="1" i18n="Senior|text in citas@@host.senior">Senior</mat-radio-button>
-                                            <mat-radio-button matLine value="2" i18n="Pregnant|text in citas@@host.pregnant">Pregnant</mat-radio-button>
-                                            <mat-radio-button matLine value="3" i18n="Disability|text in citas@@host.disability">Disability</mat-radio-button>
-                                        </mat-radio-group>
-                                    </div>
-                                    <div class="form-field pl-3 pr-3">
-                                        <label i18n="Preference|text in citas@@host.preference">Preference</label>
-                                        <mat-radio-group aria-label="Select an option" formControlName="Preference" class="client_gender mt-0">
-                                            <mat-radio-button matLine [checked]="true" value="1" i18n="SMS|text in citas@@host.sms">SMS</mat-radio-button>
-                                            <mat-radio-button matLine value="2" i18n="Email@@shared.Email">Email</mat-radio-button>
-                                        </mat-radio-group>
-                                    </div>
-                                    <div>
-                                        <button mat-flat-button color="primary" id="save" type="button" [disabled]="!clientForm.valid" (click)="addAppointment()" class="ml-3 mr-3 mt-2" i18n="Save@@shared.save">Save</button>
-                                        <button mat-flat-button color="accent" id="cancel" type="button" (click)="onCancelAddAppointment()" class="mt-2" i18n="Cancel@@shared.cancel">Cancel</button>
-                                    </div>
-                                    {{ clientForm.value | json }}
-                                </form> -->
-                            <!-- </mat-card> -->
-                            <mat-card class="mt-2 appCard" *ngFor="let item of walkIns;let i=index" cdkDrag>
-                                <div class="row pr-3 pl-3">
-                                    <div *ngIf="!item.OpenItem" class="card-user col-md-11 pl-0 pr-0 pb-1">
-                                        <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
-                                        <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
-                                        <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
-                                        {{item.Name}}
-                                    </div>
-                                    <div *ngIf="item.OpenItem" class="card-user-disp col-md-11 pl-0 pr-0 pb-1">
-                                        <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
-                                        <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
-                                        <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
-                                        {{item.Name}}
-                                    </div>
-                                    <div class="col-md pr-0 pl-0 pb-1">
-                                        <div class="div-drag" cdkDragHandle>
-                                            <mat-icon svgIcon="dragdrop"></mat-icon>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row pr-3 pl-3">
-                                    <div class="card-phone col-md-9 pl-0 pr-0">{{item.Phone | phone}}</div>
-                                    <div class="card-time col-md pr-0 pl-0">
-                                        {{item.DateAppo.substring(0,2) + item.DateAppo.substring(5,8)}}
-                                    </div>
-                                </div>
-                                <ng-container *ngIf="item.OpenItem">
-                                    <div class="row pr-3 pl-3 mt-2 mb-2">
-                                        <div class="card-contentprio col-md-6 pl-0" i18n="No. of guests: |text in citas@@host.noguests">Number of guests: </div><div class="card-resultprio col-md">{{item.Guests}}</div>
-                                    </div>
-                                    <div class="row pr-3 pl-3 mt-2 mb-2">
-                                        <div class="card-contentprio col-md-6 pl-0" i18n="Door: |text in citas@@host.door">Door: </div><div class="card-resultprio-door col-md">{{item.Door}}</div>
-                                    </div>
-                                    <div class="row pr-3 pl-3 mt-2 mb-2">
-                                        <div class="card-contentprio col-md-6 pl-0" i18n="On Behalf: |text in citas@@host.onbehalf">On Behalf: </div><div class="card-resultprio col-md" *ngIf="item.OnBehalf  == 0" i18n="Yes@@shared.no">No</div><div class="card-resultprio col-md" *ngIf="item.OnBehalf  != 0" i18n="Yes@@shared.yes">Yes</div>
-                                    </div>
-                                    <div class="row pr-3 pl-3 mt-2 mb-2" *ngIf="item.Provider != ''">
-                                        <div class="card-contentprio col-md-6 pl-0" i18n="Provider: |text in citas@@host.providertext">Provider: </div><div class="card-resultprio col-md">{{item.Provider}}</div>
-                                    </div>
-                                    <div class="row pr-3 pl-3 mt-2 mb-2" *ngIf="item.Service != ''">
-                                        <div class="card-contentprio col-md-6 pl-0" i18n="Service: |text in citas@@host.servicetext">Service: </div><div class="card-resultprio col-md">{{item.Service}}</div>
-                                    </div>
-                                </ng-container>
-                                <div class="row mb-0 mt-2">
-                                    <div class="card-actions-center col-sm-3 p-0">
-                                        <button mat-icon-button color="secondary" (click)="onShowCancel(item)" i18n-matTooltip="Cancel this booking|Cancel this booking tooltip@@learnMore.LMCON36" matTooltip="Cancel this booking">
-                                            <mat-icon svgIcon="cancel"></mat-icon>
-                                        </button>
-                                    </div>
-                                    <div class="card-actions-center col-sm-3 p-0">
-                                        <button mat-icon-button color="secondary" (click)="onShowMessage(item, i, 'walkin');" i18n-matTooltip="Messages|Messages tooltip@@learnMore.LMCON37" matTooltip="Messages">
-                                        <mat-icon [matBadgeHidden]="item.Unread != 'H'" matBadgeSize="small" matBadge="*" matBadgePosition="after" matBadgeColor="warn" matBadgeOverlap="true" svgIcon="sms"></mat-icon>
-                                        </button>
-                                    </div>
-                                    <div class="card-actions-center col-sm-3 p-0">
-                                        <button mat-icon-button color="secondary" (click)="onReadyCheckIn(item, 2)" i18n-matTooltip="Ready to check-in|Ready to check-in tooltip@@learnMore.LMCON42" matTooltip="Ready to check-in">
-                                            <mat-icon svgIcon="readycheck"></mat-icon>
-                                        </button>
-                                    </div>
-                                    <div class="card-actions-center col-sm-3 p-0">
-                                        <button mat-icon-button color="secondary" (click)="onShowDetail(item)">
-                                            <mat-icon svgIcon="expand"></mat-icon>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenCanc">
-                                    <div class="col-md-12 pl-0 pr-0">
-                                        <mat-form-field>
-                                            <mat-label i18n="Cancel reasons|text in citas@@host.cancelreasons">Cancel reasons</mat-label>
-                                            <mat-select [(value)]="selectedWalk[i]">
-                                                <mat-option *ngFor="let reason of reasons" [value]="reason">
-                                                    {{reason}}
-                                                </mat-option>
-                                            </mat-select>
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="col-md-12 pl-0 pr-0 mt-2 mb-2">
-                                        <button mat-flat-button type="button" color="primary" (click)="onCancelApp(item, selectedWalk[i], i, 'walkin')" [disabled]="selectedWalk[i] == undefined" i18n="Cancel Appointment|text in citas@@host.cancelappo">
-                                            Cancel Appointment
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenMess">
-                                    <div class="col-sm-10 pl-0 pr-0">
-                                        <textarea class="card-text" #messageTextWalk matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
-                                    </div>
-                                    <div class="button-send col-md pr-0 pl-0">
-                                        <button mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageTextWalk ,i, 'walkin')">
-                                            <mat-icon class="send_icon">send</mat-icon>
-                                        </button>
-                                    </div>
-                                    <div class="card-chat pl-3 pr-3 mb-0 mt-3 col-md-12">
-                                        <ng-container *ngFor="let item of getCommentsWalk[i]">
-                                            <div class="row row justify-content-start" *ngIf="item.U != undefined">
-                                                <div class="card-chat-user col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
-                                                    <div class="card-chat-time">{{item.T}}</div>
-                                                    {{item.U}}
+                        [cdkDropListData]="walkIns" class="row space-row drop-qeue">
+                        
+                        <div class="col-md plan">
+                            <div class="row space-row">
+                                <div class="col-sm-12 col-md-6 p-0" *ngFor="let item of walkIns;let i=index">
+                                    <mat-card class="appCard mr-3 ml-3 mt-3 mb-3" cdkDrag>
+                                        <div class="row pr-3 pl-3">
+                                            <div *ngIf="!item.OpenItem" class="card-user col-sm-10 col-md-11 pl-0 pr-0 pb-1">
+                                                <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
+                                                <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
+                                                <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
+                                                {{item.Name}}
+                                            </div>
+                                            <div *ngIf="item.OpenItem" class="card-user-disp col-sm-10 col-md-11 pl-0 pr-0 pb-1">
+                                                <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
+                                                <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
+                                                <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
+                                                {{item.Name}}
+                                            </div>
+                                            <div class="col-sm-2 col-md pr-0 pl-0 pb-1">
+                                                <div class="div-drag" cdkDragHandle>
+                                                    <mat-icon svgIcon="dragdrop"></mat-icon>
                                                 </div>
                                             </div>
-                                            <div class="row justify-content-end" *ngIf="item.H != undefined">
-                                                <div class="card-chat-host col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
-                                                    <div class="card-chat-time">{{item.T}}</div>
-                                                    {{item.H}}
-                                                </div>
+                                        </div>
+                                        <div class="row pr-3 pl-3">
+                                            <div class="card-phone col-sm-9 col-md-9 pl-0 pr-0">{{item.Phone | phone}}</div>
+                                            <div class="card-time col-sm-3 col-md pr-0 pl-0">
+                                                {{item.DateAppo.substring(0,2) + item.DateAppo.substring(5,8)}}
+                                            </div>
+                                        </div>
+                                        <ng-container *ngIf="item.OpenItem">
+                                            <div class="row pr-3 pl-3 mt-2 mb-2">
+                                                <div class="card-contentprio col-md-6 pl-0" i18n="No. of guests: |text in citas@@host.noguests">Number of guests: </div><div class="card-resultprio col-md">{{item.Guests}}</div>
+                                            </div>
+                                            <div class="row pr-3 pl-3 mt-2 mb-2">
+                                                <div class="card-contentprio col-md-6 pl-0" i18n="Door: |text in citas@@host.door">Door: </div><div class="card-resultprio-door col-md">{{item.Door}}</div>
+                                            </div>
+                                            <div class="row pr-3 pl-3 mt-2 mb-2">
+                                                <div class="card-contentprio col-md-6 pl-0" i18n="On Behalf: |text in citas@@host.onbehalf">On Behalf: </div><div class="card-resultprio col-md" *ngIf="item.OnBehalf  == 0" i18n="Yes@@shared.no">No</div><div class="card-resultprio col-md" *ngIf="item.OnBehalf  != 0" i18n="Yes@@shared.yes">Yes</div>
+                                            </div>
+                                            <div class="row pr-3 pl-3 mt-2 mb-2" *ngIf="item.Provider != ''">
+                                                <div class="card-contentprio col-md-6 pl-0" i18n="Provider: |text in citas@@host.providertext">Provider: </div><div class="card-resultprio col-md">{{item.Provider}}</div>
+                                            </div>
+                                            <div class="row pr-3 pl-3 mt-2 mb-2" *ngIf="item.Service != ''">
+                                                <div class="card-contentprio col-md-6 pl-0" i18n="Service: |text in citas@@host.servicetext">Service: </div><div class="card-resultprio col-md">{{item.Service}}</div>
                                             </div>
                                         </ng-container>
-                                    </div>
+                                        <div class="row mb-0 mt-2">
+                                            <div class="card-actions-center col-sm-3 p-0">
+                                                <button mat-icon-button color="secondary" (click)="onShowCancel(item)" i18n-matTooltip="Cancel this booking|Cancel this booking tooltip@@learnMore.LMCON36" matTooltip="Cancel this booking">
+                                                    <mat-icon svgIcon="cancel"></mat-icon>
+                                                </button>
+                                            </div>
+                                            <div class="card-actions-center col-sm-3 p-0">
+                                                <button mat-icon-button color="secondary" (click)="onShowMessage(item, i, 'walkin');" i18n-matTooltip="Messages|Messages tooltip@@learnMore.LMCON37" matTooltip="Messages">
+                                                <mat-icon [matBadgeHidden]="item.Unread != 'H'" matBadgeSize="small" matBadge="*" matBadgePosition="after" matBadgeColor="warn" matBadgeOverlap="true" svgIcon="sms"></mat-icon>
+                                                </button>
+                                            </div>
+                                            <div class="card-actions-center col-sm-3 p-0">
+                                                <button mat-icon-button color="secondary" (click)="onReadyCheckIn(item, 2)" i18n-matTooltip="Ready to check-in|Ready to check-in tooltip@@learnMore.LMCON42" matTooltip="Ready to check-in">
+                                                    <mat-icon svgIcon="readycheck"></mat-icon>
+                                                </button>
+                                            </div>
+                                            <div class="card-actions-center col-sm-3 p-0">
+                                                <button mat-icon-button color="secondary" (click)="onShowDetail(item)">
+                                                    <mat-icon svgIcon="expand"></mat-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenCanc">
+                                            <div class="col-md-12 pl-0 pr-0">
+                                                <mat-form-field>
+                                                    <mat-label i18n="Cancel reasons|text in citas@@host.cancelreasons">Cancel reasons</mat-label>
+                                                    <mat-select [(value)]="selectedWalk[i]">
+                                                        <mat-option *ngFor="let reason of reasons" [value]="reason">
+                                                            {{reason}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-12 pl-0 pr-0 mt-2 mb-2">
+                                                <button mat-flat-button type="button" color="primary" (click)="onCancelApp(item, selectedWalk[i], i, 'walkin')" [disabled]="selectedWalk[i] == undefined" i18n="Cancel Appointment|text in citas@@host.cancelappo">
+                                                    Cancel Appointment
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenMess">
+                                            <div class="col-sm-10 pl-0 pr-0">
+                                                <textarea class="card-text" #messageTextWalk matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
+                                            </div>
+                                            <div class="button-send col-md pr-0 pl-0">
+                                                <button mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageTextWalk ,i, 'walkin')">
+                                                    <mat-icon class="send_icon">send</mat-icon>
+                                                </button>
+                                            </div>
+                                            <div class="card-chat pl-3 pr-3 mb-0 mt-3 col-md-12">{{getCommentsWalk[i]}}
+                                                <ng-container *ngFor="let item of getCommentsWalk[i];let j=index">
+                                                    <div class="row row justify-content-start" id="chat-{{j}}" *ngIf="item.U != undefined">
+                                                        <div class="card-chat-user col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
+                                                            <div class="card-chat-time">{{item.T}}</div>
+                                                            {{item.U}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="row justify-content-end" id="chat-{{j}}" *ngIf="item.H != undefined">
+                                                        <div class="card-chat-host col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
+                                                            <div class="card-chat-time">{{item.T}}</div>
+                                                            {{item.H}}
+                                                        </div>
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+                                        </div>
+                                    </mat-card>
                                 </div>
-                            </mat-card>
+                            </div>
                         </div>
-                    </div>
+                    </div> 
+                </mat-tab>
+                <mat-tab i18n-label="Waiting List|text in citas@@host.waitinglist" label="Waiting List">
                     <div cdkDropList 
                         #waitingList="cdkDropList"
                         (cdkDropListDropped)="drop($event)"
                         [cdkDropListConnectedTo]="[preCheckInList]"
-                        [cdkDropListData]="waitlist" class="col-md partial-qeue">
-                        <ng-container *ngIf="appointmentsWaitList$ | async"></ng-container>
-                        <ng-container *ngIf="reload$ | async"></ng-container>
-                        <div class="title-qeue" i18n="Waiting List|text in citas@@host.waitinglist">Waiting List</div>
-                        <div class="col-md waitlist">
-                            <mat-card class="mt-2 appCard" *ngFor="let item of waitlist;let i=index" cdkDrag>
-                                <div class="row pr-3 pl-3">
-                                    <div *ngIf="!item.OpenItem" class="card-user col-md-11 pl-0 pr-0 pb-1">
-                                        <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
-                                        <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
-                                        <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
-                                        {{item.Name}}
-                                    </div>
-                                    <div *ngIf="item.OpenItem" class="card-user-disp col-md-11 pl-0 pr-0 pb-1">
-                                        <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
-                                        <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
-                                        <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
-                                        {{item.Name}}
-                                    </div>
-                                    <div class="col-md pr-0 pl-0 pb-1">
-                                        <div class="div-drag" cdkDragHandle>
-                                            <mat-icon svgIcon="dragdrop"></mat-icon>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row pr-3 pl-3">
-                                    <div class="card-phone col-md-9 pl-0 pr-0">{{item.Phone | phone}}</div>
-                                    <div class="card-time col-md pr-0 pl-0">
-                                        {{item.DateAppo.substring(0,2) + item.DateAppo.substring(5,8)}}
-                                    </div>
-                                </div>
-                                <ng-container *ngIf="item.OpenItem">
-                                    <div class="row pr-3 pl-3 mt-2 mb-2">
-                                        <div class="card-contentprio col-md-6 pl-0" i18n="No. of guests: |text in citas@@host.noguests">Number of guests: </div><div class="card-resultprio col-md">{{item.Guests}}</div>
-                                    </div>
-                                    <div class="row pr-3 pl-3 mt-2 mb-2">
-                                        <div class="card-contentprio col-md-6 pl-0" i18n="Door: |text in citas@@host.door">Door: </div><div class="card-resultprio-door col-md">{{item.Door}}</div>
-                                    </div>
-                                    <div class="row pr-3 pl-3 mt-2 mb-2">
-                                        <div class="card-contentprio col-md-6 pl-0" i18n="On Behalf: |text in citas@@host.onbehalf">On Behalf: </div><div class="card-resultprio col-md" *ngIf="item.OnBehalf  == 0" i18n="Yes@@shared.no">No</div><div class="card-resultprio col-md" *ngIf="item.OnBehalf  != 0" i18n="Yes@@shared.yes">Yes</div>
-                                    </div>
-                                    <div class="row pr-3 pl-3 mt-2 mb-2" *ngIf="item.Provider != ''">
-                                        <div class="card-contentprio col-md-6 pl-0" i18n="Provider: |text in citas@@host.providertext">Provider: </div><div class="card-resultprio col-md">{{item.Provider}}</div>
-                                    </div>
-                                    <div class="row pr-3 pl-3 mt-2 mb-2" *ngIf="item.Service != ''">
-                                        <div class="card-contentprio col-md-6 pl-0" i18n="Service: |text in citas@@host.servicetext">Service: </div><div class="card-resultprio col-md">{{item.Service}}</div>
-                                    </div>
-                                </ng-container>
-                                <div class="row mb-0 mt-2">
-                                    <div class="card-actions-center col-sm-3 p-0">
-                                        <button mat-icon-button color="secondary" (click)="onShowCancel(item)" i18n-matTooltip="Cancel this booking|Cancel this booking tooltip@@learnMore.LMCON36" matTooltip="Cancel this booking">
-                                            <mat-icon svgIcon="cancel"></mat-icon>
-                                        </button>
-                                    </div>
-                                    <div class="card-actions-center col-sm-3 p-0">
-                                        <button mat-icon-button color="secondary" (click)="onShowMessage(item, i, 'waitlist');" i18n-matTooltip="Messages|Messages tooltip@@learnMore.LMCON37" matTooltip="Messages">
-                                        <mat-icon [matBadgeHidden]="item.Unread != 'H'" matBadgeSize="small" matBadge="*" matBadgePosition="after" matBadgeColor="warn" matBadgeOverlap="true" svgIcon="sms"></mat-icon>
-                                        </button>
-                                    </div>
-                                    <div class="card-actions-center col-sm-3 p-0">
-                                        <button mat-icon-button color="secondary" (click)="onReadyCheckIn(item, 3)" i18n-matTooltip="Ready to check-in|Ready to check-in tooltip@@learnMore.LMCON42" matTooltip="Ready to check-in">
-                                            <mat-icon svgIcon="readycheck"></mat-icon>
-                                        </button>
-                                    </div>
-                                    <div class="card-actions-center col-sm-3 p-0">
-                                        <button mat-icon-button color="secondary" (click)="onShowDetail(item)">
-                                            <mat-icon svgIcon="expand"></mat-icon>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenCanc">
-                                    <div class="col-md-12 pl-0 pr-0">
-                                        <mat-form-field>
-                                            <mat-label i18n="Cancel reasons|text in citas@@host.cancelreasons">Cancel reasons</mat-label>
-                                            <mat-select [(value)]="selectedWaitList[i]">
-                                                <mat-option *ngFor="let reason of reasons" [value]="reason">
-                                                    {{reason}}
-                                                </mat-option>
-                                            </mat-select>
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="col-md-12 pl-0 pr-0 mt-2 mb-2">
-                                        <button mat-flat-button type="button" color="primary" (click)="onCancelApp(item, selectedWaitList[i], i, 'waitlist')" [disabled]="selectedWaitList[i] == undefined" i18n="Cancel Appointment|text in citas@@host.cancelappo">
-                                            Cancel Appointment
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenMess">
-                                    <div class="col-sm-10 pl-0 pr-0">
-                                        <textarea class="card-text" #messageTextWaitList matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
-                                    </div>
-                                    <div class="button-send col-md pr-0 pl-0">
-                                        <button mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageTextWaitList ,i, 'waitlist')">
-                                            <mat-icon class="send_icon">send</mat-icon>
-                                        </button>
-                                    </div>
-                                    <div class="card-chat pl-3 pr-3 mb-0 mt-3 col-md-12">
-                                        <ng-container *ngFor="let item of getCommentsWaitList[i]">
-                                            <div class="row row justify-content-start" *ngIf="item.U != undefined">
-                                                <div class="card-chat-user col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
-                                                    <div class="card-chat-time">{{item.T}}</div>
-                                                    {{item.U}}
+                        [cdkDropListData]="waitlist" class="row space-row drop-qeue">
+                        
+                        <!-- <div class="title-qeue" i18n="Waiting List|text in citas@@host.waitinglist">Waiting List</div> -->
+                        <div class="col-md plan">
+                            <div class="row space-row">
+                                <div class="col-sm-12 col-md-6 p-0" *ngFor="let item of waitlist;let i=index">
+                                    <mat-card class="appCard mr-3 ml-3 mt-3 mb-3" cdkDrag>
+                                        <div class="row pr-3 pl-3">
+                                            <div *ngIf="!item.OpenItem" class="card-user col-sm-10 col-md-11 pl-0 pr-0 pb-1">
+                                                <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
+                                                <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
+                                                <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
+                                                {{item.Name}}
+                                            </div>
+                                            <div *ngIf="item.OpenItem" class="card-user-disp col-sm-10 col-md-11 pl-0 pr-0 pb-1">
+                                                <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
+                                                <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
+                                                <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
+                                                {{item.Name}}
+                                            </div>
+                                            <div class="col-sm-2 col-md pr-0 pl-0 pb-1">
+                                                <div class="div-drag" cdkDragHandle>
+                                                    <mat-icon svgIcon="dragdrop"></mat-icon>
                                                 </div>
                                             </div>
-                                            <div class="row justify-content-end" *ngIf="item.H != undefined">
-                                                <div class="card-chat-host col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
-                                                    <div class="card-chat-time">{{item.T}}</div>
-                                                    {{item.H}}
-                                                </div>
+                                        </div>
+                                        <div class="row pr-3 pl-3">
+                                            <div class="card-phone col-sm-9 col-md-9 pl-0 pr-0">{{item.Phone | phone}}</div>
+                                            <div class="card-time col-sm-3 col-md pr-0 pl-0">
+                                                {{item.DateAppo.substring(0,2) + item.DateAppo.substring(5,8)}}
+                                            </div>
+                                        </div>
+                                        <ng-container *ngIf="item.OpenItem">
+                                            <div class="row pr-3 pl-3 mt-2 mb-2">
+                                                <div class="card-contentprio col-md-6 pl-0" i18n="No. of guests: |text in citas@@host.noguests">Number of guests: </div><div class="card-resultprio col-md">{{item.Guests}}</div>
+                                            </div>
+                                            <div class="row pr-3 pl-3 mt-2 mb-2">
+                                                <div class="card-contentprio col-md-6 pl-0" i18n="Door: |text in citas@@host.door">Door: </div><div class="card-resultprio-door col-md">{{item.Door}}</div>
+                                            </div>
+                                            <div class="row pr-3 pl-3 mt-2 mb-2">
+                                                <div class="card-contentprio col-md-6 pl-0" i18n="On Behalf: |text in citas@@host.onbehalf">On Behalf: </div><div class="card-resultprio col-md" *ngIf="item.OnBehalf  == 0" i18n="Yes@@shared.no">No</div><div class="card-resultprio col-md" *ngIf="item.OnBehalf  != 0" i18n="Yes@@shared.yes">Yes</div>
+                                            </div>
+                                            <div class="row pr-3 pl-3 mt-2 mb-2" *ngIf="item.Provider != ''">
+                                                <div class="card-contentprio col-md-6 pl-0" i18n="Provider: |text in citas@@host.providertext">Provider: </div><div class="card-resultprio col-md">{{item.Provider}}</div>
+                                            </div>
+                                            <div class="row pr-3 pl-3 mt-2 mb-2" *ngIf="item.Service != ''">
+                                                <div class="card-contentprio col-md-6 pl-0" i18n="Service: |text in citas@@host.servicetext">Service: </div><div class="card-resultprio col-md">{{item.Service}}</div>
                                             </div>
                                         </ng-container>
-                                    </div>
+                                        <div class="row mb-0 mt-2">
+                                            <div class="card-actions-center col-sm-3 p-0">
+                                                <button mat-icon-button color="secondary" (click)="onShowCancel(item)" i18n-matTooltip="Cancel this booking|Cancel this booking tooltip@@learnMore.LMCON36" matTooltip="Cancel this booking">
+                                                    <mat-icon svgIcon="cancel"></mat-icon>
+                                                </button>
+                                            </div>
+                                            <div class="card-actions-center col-sm-3 p-0">
+                                                <button mat-icon-button color="secondary" (click)="onShowMessage(item, i, 'waitlist');" i18n-matTooltip="Messages|Messages tooltip@@learnMore.LMCON37" matTooltip="Messages">
+                                                <mat-icon [matBadgeHidden]="item.Unread != 'H'" matBadgeSize="small" matBadge="*" matBadgePosition="after" matBadgeColor="warn" matBadgeOverlap="true" svgIcon="sms"></mat-icon>
+                                                </button>
+                                            </div>
+                                            <div class="card-actions-center col-sm-3 p-0">
+                                                <button mat-icon-button color="secondary" (click)="onReadyCheckIn(item, 3)" i18n-matTooltip="Ready to check-in|Ready to check-in tooltip@@learnMore.LMCON42" matTooltip="Ready to check-in">
+                                                    <mat-icon svgIcon="readycheck"></mat-icon>
+                                                </button>
+                                            </div>
+                                            <div class="card-actions-center col-sm-3 p-0">
+                                                <button mat-icon-button color="secondary" (click)="onShowDetail(item)">
+                                                    <mat-icon svgIcon="expand"></mat-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenCanc">
+                                            <div class="col-md-12 pl-0 pr-0">
+                                                <mat-form-field>
+                                                    <mat-label i18n="Cancel reasons|text in citas@@host.cancelreasons">Cancel reasons</mat-label>
+                                                    <mat-select [(value)]="selectedWaitList[i]">
+                                                        <mat-option *ngFor="let reason of reasons" [value]="reason">
+                                                            {{reason}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-12 pl-0 pr-0 mt-2 mb-2">
+                                                <button mat-flat-button type="button" color="primary" (click)="onCancelApp(item, selectedWaitList[i], i, 'waitlist')" [disabled]="selectedWaitList[i] == undefined" i18n="Cancel Appointment|text in citas@@host.cancelappo">
+                                                    Cancel Appointment
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenMess">
+                                            <div class="col-sm-10 pl-0 pr-0">
+                                                <textarea class="card-text" #messageTextWaitList matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
+                                            </div>
+                                            <div class="button-send col-md pr-0 pl-0">
+                                                <button mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageTextWaitList ,i, 'waitlist')">
+                                                    <mat-icon class="send_icon">send</mat-icon>
+                                                </button>
+                                            </div>
+                                            <div class="card-chat pl-3 pr-3 mb-0 mt-3 col-md-12">
+                                                <ng-container *ngFor="let item of getCommentsWaitList[i]">
+                                                    <div class="row row justify-content-start" id="chat-{{i}}" *ngIf="item.U != undefined">
+                                                        <div class="card-chat-user col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
+                                                            <div class="card-chat-time">{{item.T}}</div>
+                                                            {{item.U}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="row justify-content-end" id="chat-{{i}}" *ngIf="item.H != undefined">
+                                                        <div class="card-chat-host col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
+                                                            <div class="card-chat-time">{{item.T}}</div>
+                                                            {{item.H}}
+                                                        </div>
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+                                        </div>
+                                    </mat-card>
                                 </div>
-                            </mat-card>
+                            </div>
                         </div>
-                    </div>
+                    </div> 
+                </mat-tab>
+                <mat-tab i18n-label="Citas|text in citas@@host.citas" label="Citas"> 
+                    <div cdkDropList
+                        #scheduleList="cdkDropList"
+                        (cdkDropListDropped)="drop($event)"
+                        [cdkDropListConnectedTo]="[preCheckInList]"
+                        [cdkDropListData]="schedule" class="row space-row drop-qeue">
+                        <!-- col-md plan -->
+                        <div class="col-md plan">
+                            <div class="row space-row">
+                                <div class="col-sm-12 col-md-6 p-0" *ngFor="let item of schedule;let i=index">
+                                    <mat-card class="appCard mr-3 ml-3 mt-3 mb-3" cdkDrag>
+                                        <div class="row pr-3 pl-3">
+                                            <div *ngIf="!item.OpenItem" class="card-user col-sm-10 col-md-11 pl-0 pr-0 pb-1">
+                                                <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
+                                                <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
+                                                <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
+                                                {{item.Name}}
+                                            </div>
+                                            <div *ngIf="item.OpenItem" class="card-user-disp col-sm-10 col-md-11 pl-0 pr-0 pb-1">
+                                                <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
+                                                <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
+                                                <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
+                                                {{item.Name}}
+                                            </div>
+                                            <div class="col-sm-2 col-md pr-0 pl-0 pb-1">
+                                                <div class="div-drag" cdkDragHandle>
+                                                    <mat-icon svgIcon="dragdrop"></mat-icon>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row pr-3 pl-3">
+                                            <div class="card-phone col-sm-9 col-md-9 pl-0 pr-0">{{item.Phone | phone}}</div>
+                                            <div class="card-time col-sm-3 col-md pr-0 pl-0">
+                                                {{item.DateAppo.substring(0,2) + item.DateAppo.substring(5,8)}}
+                                            </div>
+                                        </div>
+                                        <ng-container *ngIf="item.OpenItem">
+                                            <div class="row pr-3 pl-3 mt-2 mb-2">
+                                                <div class="card-contentprio col-md-6 pl-0" i18n="No. of guests: |text in citas@@host.noguests">Number of guests: </div><div class="card-resultprio col-md">{{item.Guests}}</div>
+                                            </div>
+                                            <div class="row pr-3 pl-3 mt-2 mb-2">
+                                                <div class="card-contentprio col-md-6 pl-0" i18n="Door: |text in citas@@host.door">Door: </div><div class="card-resultprio-door col-md">{{item.Door}}</div>
+                                            </div>
+                                            <div class="row pr-3 pl-3 mt-2 mb-2">
+                                                <div class="card-contentprio col-md-6 pl-0" i18n="On Behalf: |text in citas@@host.onbehalf">On Behalf: </div><div class="card-resultprio col-md" *ngIf="item.OnBehalf  == 0" i18n="Yes@@shared.no">No</div><div class="card-resultprio col-md" *ngIf="item.OnBehalf  != 0" i18n="Yes@@shared.yes">Yes</div>
+                                            </div>
+                                            <div class="row pr-3 pl-3 mt-2 mb-2" *ngIf="item.Provider != ''">
+                                                <div class="card-contentprio col-md-6 pl-0" i18n="Provider: |text in citas@@host.providertext">Provider: </div><div class="card-resultprio col-md">{{item.Provider}}</div>
+                                            </div>
+                                            <div class="row pr-3 pl-3 mt-2 mb-2" *ngIf="item.Service != ''">
+                                                <div class="card-contentprio col-md-6 pl-0" i18n="Service: |text in citas@@host.servicetext">Service: </div><div class="card-resultprio col-md">{{item.Service}}</div>
+                                            </div>
+                                        </ng-container>
+                                        <div class="row mb-0 mt-2">
+                                            <div class="card-actions-center col-sm-3 p-0">
+                                                <button mat-icon-button color="secondary" (click)="onShowCancel(item)" i18n-matTooltip="Cancel this booking|Cancel this booking tooltip@@learnMore.LMCON36" matTooltip="Cancel this booking">
+                                                    <mat-icon svgIcon="cancel"></mat-icon>
+                                                </button>
+                                            </div>
+                                            <div class="card-actions-center col-sm-3 p-0">
+                                                <button mat-icon-button color="secondary" (click)="onShowMessage(item, i, 'schedule');" i18n-matTooltip="Messages|Messages tooltip@@learnMore.LMCON37" matTooltip="Messages">
+                                                    <mat-icon [matBadgeHidden]="item.Unread != 'H'" matBadgeSize="small" matBadge="*" matBadgePosition="after" matBadgeColor="warn" matBadgeOverlap="true" svgIcon="sms"></mat-icon>
+                                                </button>
+                                            </div>
+                                            <div class="card-actions-center col-sm-3 p-0">
+                                                <button mat-icon-button color="secondary" (click)="onReadyCheckIn(item, 1)" i18n-matTooltip="Ready to check-in|Ready to check-in tooltip@@learnMore.LMCON42" matTooltip="Ready to check-in">
+                                                    <mat-icon svgIcon="readycheck"></mat-icon>
+                                                </button>
+                                            </div>
+                                            <div class="card-actions-center col-sm-3 p-0">
+                                                <button mat-icon-button color="secondary" (click)="onShowDetail(item)">
+                                                    <mat-icon svgIcon="expand"></mat-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenCanc">
+                                            <div class="col-md-12 pl-0 pr-0">
+                                                <mat-form-field>
+                                                    <mat-label i18n="Cancel reasons|text in citas@@host.cancelreasons">Cancel reasons</mat-label>
+                                                    <mat-select [(value)]="selectedSche[i]">
+                                                        <mat-option *ngFor="let reason of reasons" [value]="reason">
+                                                            {{reason}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-12 pl-0 pr-0 mt-2 mb-2">
+                                                <button mat-flat-button type="button" color="primary" (click)="onCancelApp(item, selectedSche[i], i, 'schedule')" [disabled]="selectedSche[i] == undefined" i18n="Cancel Appointment|text in citas@@host.cancelappo">
+                                                    Cancel Appointment
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenMess">
+                                            <div class="col-sm-10 pl-0 pr-0">
+                                                <textarea class="card-text" #messageTextSche matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
+                                            </div>
+                                            <div class="button-send col-md pr-0 pl-0">
+                                                <button mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageTextSche, i, 'schedule')">
+                                                    <mat-icon class="send_icon">send</mat-icon>
+                                                </button>
+                                            </div>
+                                            <div class="card-chat pl-3 pr-3 mb-0 mt-3 col-md-12">
+                                                <ng-container *ngFor="let item of getCommentsSche[i]">
+                                                    <div class="row row justify-content-start" id="chat-{{i}}" *ngIf="item.U != undefined">
+                                                        <div class="card-chat-user col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
+                                                            <div class="card-chat-time">{{item.T}}</div>
+                                                            {{item.U}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="row justify-content-end" id="chat-{{i}}" *ngIf="item.H != undefined">
+                                                        <div class="card-chat-host col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
+                                                            <div class="card-chat-time">{{item.T}}</div>
+                                                            {{item.H}}
+                                                        </div>
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+                                        </div>
+                                    </mat-card>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-4 pl-0">
+            <div class="row space-row">
+                <div class="col-md mt-2 ready-text" i18n="Ready To Check-In|text in citas@@host.readycheckin">
+                    Ready To Check-In
                 </div>
+            </div>
+            <div class="row space-row">
                 <div cdkDropList
-                     #preCheckInList="cdkDropList"
-                     (cdkDropListDropped)="drop($event)"
-                     [cdkDropListConnectedTo]="[walkInsList, scheduleList, waitingList]"
-                     [cdkDropListData]="preCheckIn" class="col-md drop-qeue">
-                     <ng-container *ngIf="appointmentsPre$ | async"></ng-container>
-                     <ng-container *ngIf="onHold$ | async"></ng-container>
-                     <div class="col-md precheck">
+                    #preCheckInList="cdkDropList"
+                    (cdkDropListDropped)="drop($event)"
+                    [cdkDropListConnectedTo]="[walkInsList, scheduleList, waitingList]"
+                    [cdkDropListData]="preCheckIn" class="col-md drop-qeue">
+                    <ng-container *ngIf="appointmentsPre$ | async"></ng-container>
+                    <ng-container *ngIf="onHold$ | async"></ng-container>
+                    <div class="col-md precheck">
                         <ng-container *ngIf="checkIn$ | async"></ng-container>
                         <ng-container *ngIf="newTime$ | async"></ng-container>
-                        <mat-card class="mt-2 appCard" *ngFor="let item of preCheckIn;let i=index" cdkDrag>
+                        <mat-card class="mt-3 ml-2 appCard" *ngFor="let item of preCheckIn;let i=index" cdkDrag>
                             <div class="row pr-3 pl-3">
-                                <div *ngIf="!item.OpenItem" class="card-user col-md-11 pl-0 pr-0 pb-1">
+                                <div *ngIf="!item.OpenItem" class="card-user col-sm-10 col-md-11 pl-0 pr-0 pb-1">
                                     <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
                                     <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
                                     <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
                                     {{item.Name}}
                                 </div>
-                                <div *ngIf="item.OpenItem" class="card-user-disp col-md-11 pl-0 pr-0 pb-1">
+                                <div *ngIf="item.OpenItem" class="card-user-disp col-sm-10 col-md-11 pl-0 pr-0 pb-1">
                                     <mat-icon *ngIf="item.Disability == '1'" svgIcon="older"></mat-icon>
                                     <mat-icon *ngIf="item.Disability == '2'" svgIcon="pregnant"></mat-icon>
                                     <mat-icon *ngIf="item.Disability == '3'" svgIcon="handicap"></mat-icon>
                                     {{item.Name}}
                                 </div>
-                                <div class="col-md pr-0 pl-0 pb-1">
+                                <div class="col-sm-2 col-md pr-0 pl-0 pb-1">
                                     <div class="div-drag" cdkDragHandle>
                                         <mat-icon svgIcon="dragdrop"></mat-icon>
                                     </div>
                                 </div>
                             </div>
                             <div class="row pr-3 pl-3 data-hg">
-                                <div class="card-phone col-md-8 pl-0 pr-0">{{item.Phone | phone}}</div>
-                                <div class="col-md-4 p-0 elapsed-time">
+                                <div class="card-phone col-sm-7 col-md-8 pl-0 pr-0">{{item.Phone | phone}}</div>
+                                <div class="col-sm-5 col-md-4 p-0 elapsed-time">
                                     <mat-icon class="size-icon play-btn" svgIcon="clock" *ngIf="item.ElapsedTime != '' && item.Pause == '0'" (click)="onPause(item, '1')" i18n-matTooltip="Resume|Resume@@host.resume" matTooltip="Resume"></mat-icon>
                                     <mat-icon class="size-icon play-btn" svgIcon="pause" *ngIf="item.ElapsedTime != '' && item.Pause == '1'" (click)="onPause(item, '0')" i18n-matTooltip="Pause|Resume@@host.pause" matTooltip="Pause"></mat-icon>
                                     {{(item.ElapsedTime == undefined ? '0' : item.ElapsedTime) + ' ' + ((item.ElapsedTime == undefined ? 0 : item.ElapsedTime) > 1 ? 'mins' : 'min')}}
@@ -675,13 +602,13 @@
                                 </div>
                                 <div class="card-chat pl-3 pr-3 mb-0 mt-3 col-md-12">
                                     <ng-container *ngFor="let item of getCommentsCheck[i]">
-                                        <div class="row row justify-content-start" *ngIf="item.U != undefined">
+                                        <div class="row row justify-content-start" id="chat-{{i}}" *ngIf="item.U != undefined">
                                             <div class="card-chat-user col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
                                                 <div class="card-chat-time">{{item.T}}</div>
                                                 {{item.U}}
                                             </div>
                                         </div>
-                                        <div class="row justify-content-end" *ngIf="item.H != undefined">
+                                        <div class="row justify-content-end" id="chat-{{i}}" *ngIf="item.H != undefined">
                                             <div class="card-chat-host col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
                                                 <div class="card-chat-time">{{item.T}}</div>
                                                 {{item.H}}

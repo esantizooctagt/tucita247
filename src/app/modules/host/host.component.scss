@@ -5,6 +5,8 @@ mat-card{
     background: #FFFFFF;
     box-shadow: -3px 1px 4px rgba(0, 0, 0, 0.25) !important;
     border-radius: 0px; //10px;
+    min-width: 350px;
+    width: 350px;
 }
 .text-loc{
     position: absolute;
@@ -19,6 +21,22 @@ mat-card{
 }
 .data-hg{
     height: 25px;
+}
+.ready-text{
+    font-family: Montserrat;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 41px;
+    text-align: center;
+    color: #979797;
+}
+.btn-icon{
+    color: #f44f00;
+    top: -2px;
+}
+:host ::ng-deep .mat-tab-label.mat-tab-label-active {
+    color: #ff4f00;
+    font-weight: 600;
 }
 :host ::ng-deep .mat-form-field {
     .mat-form-field-wrapper {
@@ -113,6 +131,13 @@ button.mat-stroked-button
     padding-right: 2px;
     padding-left: 1px;
 }
+.tabs-detail{
+    width: 100%;
+}
+:host ::ng-deep .mat-tab-body-content{
+    overflow-y: auto;
+    overflow-x: hidden;
+}
 .plan{
     min-height: calc(100% - 37.33px);
     height: 100%;
@@ -167,12 +192,12 @@ button.mat-stroked-button
 .host-container{
     background-color: #F5F5F5;
 }
-.title-qeue{
-    font-size: 25px;
-    font-weight: 600;
-    color: #797979;
-    text-align: center;
-}
+// .title-qeue{
+//     font-size: 25px;
+//     font-weight: 600;
+//     color: #797979;
+//     text-align: center;
+// }
 .add_client{
     color: #ff4f00;
     background: white;
@@ -214,7 +239,7 @@ button.mat-stroked-button
     border-bottom-color: #FF4F00;
 }
 mat-icon.mat-icon.notranslate.material-icons.mat-icon-no-color {
-    top: -4px;
+    top: -2px;
     position: relative;
 }
 .card-Appointment{
@@ -518,6 +543,37 @@ mat-menu{
     }
     .upc-partial-qeue{
         height: 45%;
+    }
+    mat-card{
+        margin-right: 0 !important;
+        min-width: 95%;
+        width: 95%;
+    }
+    // @media(max-width: 1024px){
+    //     mat-card{
+    //         min-width: 275px;
+    //         width: 275px;
+    //     }
+    // }
+    // @media(max-width: 1200px){
+    //     mat-card{
+    //         min-width: 290px;
+    //     }
+    // }
+    // @media(max-width: 1366px){
+    //     mat-card{
+    //         min-width: 350px;
+    //     }
+    // }
+}
+@media only screen and (orientation: portrait){
+    @media(max-width: 700px){
+        mat-card{
+            min-width: 100%;
+            width: 265px;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+        }
     }
 }
 @media (max-width: 1024px){

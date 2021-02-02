@@ -1,21 +1,23 @@
-.qr-text{
+.qr-text-disp{
     display: inline;
     margin-top: 10px;
     margin-bottom: 10px;
     font-weight: 600;
-    font-size: 66px;
-    line-height: 48px;
+    font-size: 46px;
+    line-height: 46px;
 }
-.qr-img{
+.qr-img-disp{
     height: 475px;
     width: 475px;
-    // float: left;
-    // margin-right: 10px;
 }
-.title{
+.title-disp{
     text-align: center;
 }
-.content-st{
-    height: 701px;
-    min-height: 701px;
+.qr-style-disp{
+    margin-top: 38px;
+    margin-bottom: 38px;
+}
+.display-area{
+    height: 675px;
+    min-height: 675px;
 }
