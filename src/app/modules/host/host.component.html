@@ -105,12 +105,12 @@
                   }" mode="determinate" [value]="perLocation"></mat-progress-bar>
             </div>
         </div>
-        <ng-container *ngIf="comments$ | async"></ng-container>
+        <!-- <ng-container *ngIf="comments$ | async"></ng-container> -->
         <ng-container *ngIf="opeHours$ | async"></ng-container>
         <ng-container *ngIf="getLocInfo$ | async"></ng-container>
         <ng-container *ngIf="reasons$ | async"></ng-container>
         <div class="col-sm-6 col-md-8 col-lg-8 qeue-tab">
-            <ng-container *ngIf="messages$ | async"></ng-container>
+            <!-- <ng-container *ngIf="messages$ | async"></ng-container> -->
             <ng-container *ngIf="appointmentsSche$ | async"></ng-container>
             <ng-container *ngIf="appointmentsWalk$ | async"></ng-container>
             <ng-container *ngIf="appointmentsWaitList$ | async"></ng-container>
@@ -207,7 +207,7 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenMess">
+                                        <!-- <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenMess">
                                             <div class="col-sm-10 pl-0 pr-0">
                                                 <textarea class="card-text" #messageTextWalk matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
                                             </div>
@@ -232,7 +232,7 @@
                                                     </div>
                                                 </ng-container>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </mat-card>
                                 </div>
                             </div>
@@ -332,7 +332,7 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenMess">
+                                        <!-- <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenMess">
                                             <div class="col-sm-10 pl-0 pr-0">
                                                 <textarea class="card-text" #messageTextWaitList matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
                                             </div>
@@ -357,7 +357,7 @@
                                                     </div>
                                                 </ng-container>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </mat-card>
                                 </div>
                             </div>
@@ -456,7 +456,7 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenMess">
+                                        <!-- <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenMess">
                                             <div class="col-sm-10 pl-0 pr-0">
                                                 <textarea class="card-text" #messageTextSche matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
                                             </div>
@@ -481,7 +481,7 @@
                                                     </div>
                                                 </ng-container>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </mat-card>
                                 </div>
                             </div>
@@ -591,7 +591,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenMess">
+                            <!-- <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenMess">
                                 <div class="col-sm-10 pl-0 pr-0">
                                     <textarea class="card-text" #messageTextCheckIn matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
                                 </div>
@@ -616,7 +616,7 @@
                                         </div>
                                     </ng-container>
                                 </div>
-                            </div>
+                            </div> -->
                         </mat-card>
                     </div>
                 </div>

@@ -21,6 +21,7 @@ import { MonitorService } from '@app/shared/monitor.service';
 import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { AppowiDialogComponent } from '@app/shared/appowi-dialog/appowi-dialog.component';
+import { MessDialogComponent } from '@app/shared/mess-dialog/mess-dialog.component';
 
 @Component({
   selector: 'app-host',
@@ -180,20 +181,6 @@ export class HostComponent implements OnInit {
     this.matIconRegistry.addSvgIcon('download',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/download.svg'));
     this.matIconRegistry.addSvgIcon('dragdrop',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/dragdrop.svg'));
   }
-
-  // clientForm = this.fb.group({
-  //   Phone: ['',[Validators.maxLength(17)]],
-  //   Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
-  //   ServiceId: ['', [Validators.required]],
-  //   Hour: ['', [Validators.required]],
-  //   Email: ['', [Validators.maxLength(200), Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
-  //   DOB: [''],
-  //   Gender: [''],
-  //   Preference: ['1'],
-  //   Disability: [''],
-  //   Guests: ['1', [Validators.required, (control: AbstractControl) => Validators.max(this.maxGuests)(control), Validators.min(1)]],
-  //   ProviderId: ['']
-  // })
 
   schedule =[];
   walkIns =[];
@@ -395,11 +382,11 @@ export class HostComponent implements OnInit {
           }
           this.schedule[resScheMess].Unread = "H";
 
-          const itemToScrollTo = document.getElementById('chat-' + resScheMess);
-          // null check to ensure that the element actually exists
-          if (itemToScrollTo) {
-            itemToScrollTo.scrollIntoView(true);
-          }
+          // const itemToScrollTo = document.getElementById('chat-' + resScheMess);
+          // // null check to ensure that the element actually exists
+          // if (itemToScrollTo) {
+          //   itemToScrollTo.scrollIntoView(true);
+          // }
         }
         let resWalkInsMess = this.walkIns.findIndex(x => x.AppId === msg['AppId']);
         if (resWalkInsMess >= 0){
@@ -410,11 +397,11 @@ export class HostComponent implements OnInit {
           }
           this.walkIns[resWalkInsMess].Unread = "H";
 
-          const itemToScrollTo = document.getElementById('chat-' + resWalkInsMess);
-          // null check to ensure that the element actually exists
-          if (itemToScrollTo) {
-            itemToScrollTo.scrollIntoView(true);
-          }
+          // const itemToScrollTo = document.getElementById('chat-' + resWalkInsMess);
+          // // null check to ensure that the element actually exists
+          // if (itemToScrollTo) {
+          //   itemToScrollTo.scrollIntoView(true);
+          // }
         }
         let resWaitListMess = this.waitlist.findIndex(x => x.AppId === msg['AppId']);
         if (resWaitListMess >= 0){
@@ -425,11 +412,11 @@ export class HostComponent implements OnInit {
           }
           this.waitlist[resWaitListMess].Unread = "H";
 
-          const itemToScrollTo = document.getElementById('chat-' + resWaitListMess);
-          // null check to ensure that the element actually exists
-          if (itemToScrollTo) {
-            itemToScrollTo.scrollIntoView(true);
-          }
+          // const itemToScrollTo = document.getElementById('chat-' + resWaitListMess);
+          // // null check to ensure that the element actually exists
+          // if (itemToScrollTo) {
+          //   itemToScrollTo.scrollIntoView(true);
+          // }
         }
         let resPreCheckInMess = this.preCheckIn.findIndex(x => x.AppId === msg['AppId']);
         if (resPreCheckInMess >= 0){
@@ -440,11 +427,11 @@ export class HostComponent implements OnInit {
           }
           this.preCheckIn[resPreCheckInMess].Unread = "H";
 
-          const itemToScrollTo = document.getElementById('chat-' + resPreCheckInMess);
-          // null check to ensure that the element actually exists
-          if (itemToScrollTo) {
-            itemToScrollTo.scrollIntoView(true);
-          }
+          // const itemToScrollTo = document.getElementById('chat-' + resPreCheckInMess);
+          // // null check to ensure that the element actually exists
+          // if (itemToScrollTo) {
+          //   itemToScrollTo.scrollIntoView(true);
+          // }
         }
       }
     }
@@ -1313,182 +1300,18 @@ export class HostComponent implements OnInit {
     );
   }
 
-  // addAppointment(){
-  //   let timeAppo = this.getTimeAppo();
-  //   if (!this.clientForm.valid) {return;}
-  //   //AGREGAR WALK IN Y APPOINTMENT
-  //   let dobClient: Date = this.clientForm.value.DOB;
-  //   let dob: string = '';
-  //   if (dobClient.toString() == '') {
-  //     dob = '';
-  //   } else {
-  //     let month = (dobClient.getMonth()+1).toString().padStart(2, '0'); 
-  //     let day = dobClient.getDate().toString().padStart(2, '0');
-  //     dob = dobClient.getUTCFullYear().toString() + '-' + month + '-' + day;
-  //   }
-  //   let phoneNumber = this.clientForm.value.Phone.toString().replace(/[^0-9]/g,'');
-  //   let yearCurr = this.getYear();
-  //   let monthCurr = this.getMonth();
-  //   let dayCurr = this.getDay();
-  //   let dateAppo = yearCurr + '-' + monthCurr + '-' + dayCurr;
-  //   let typeAppo = ((this.clientForm.value.Hour).toString() == "--" ? 2 : 1);
-  //   let formData = {
-  //     BusinessId: this.businessId,
-  //     LocationId: this.locationId,
-  //     ProviderId: (this.providerId != '0' ? this.providerId : this.clientForm.value.ProviderId),
-  //     ServiceId: this.clientForm.value.ServiceId,
-  //     BusinessName: (this.authService.businessName().length > 27 ? this.authService.businessName().substring(0,27)+'...' : this.authService.businessName()),
-  //     Language: this.authService.businessLanguage(),
-  //     Door: this.doorId,
-  //     Phone: (phoneNumber == '' ?  '00000000000' : (phoneNumber.length <= 10 ? '1' + phoneNumber : phoneNumber)),
-  //     Name: this.clientForm.value.Name,
-  //     Email: (this.clientForm.value.Email == '' ? '' : this.clientForm.value.Email),
-  //     DOB: dob,
-  //     Gender: (this.clientForm.value.Gender == '' ? '': this.clientForm.value.Gender),
-  //     Preference: (this.clientForm.value.Preference == '' ? '': this.clientForm.value.Preference),
-  //     Disability: (this.clientForm.value.Disability == null ? '': this.clientForm.value.Disability),
-  //     Guests: this.clientForm.value.Guests,
-  //     AppoDate: dateAppo,
-  //     AppoHour: ((this.clientForm.value.Hour).toString() == "--" ? timeAppo : (this.clientForm.value.Hour).toString().padStart(2,'0')+':00'),
-  //     Type: typeAppo
-  //   }
-
-  //   let options = {
-  //     timeZone: this.TimeZone,
-  //     hour: 'numeric',
-  //     minute: 'numeric',
-  //     hour12: false,
-  //   },
-  //   formatter = new Intl.DateTimeFormat([], options);
-  //   var actualTime = formatter.format(new Date());
-  //   let actTime = +actualTime.replace(':','-').substring(0,2);
-
-  //   var spinnerRef = this.spinnerService.start($localize`:@@host.addingappo:`);
-  //   this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
-  //     map((res: any) => {
-  //       if (res.Code == 200){
-  //         let appoTime = +(res.Appointment.DateFull).substring(11).replace(':','-').substring(0,2);
-  //         if (appoTime >= actTime){
-  //           if (typeAppo == 1){
-  //             let upComingIndex = this.walkIns.findIndex(x=>x.AppId == res.Appointment.AppId);
-  //             if (upComingIndex < 0){
-  //               this.walkIns.push(res.Appointment);
-  //               this.walkIns.sort(function(a, b) { 
-  //                 if (a.DateFull == b.DateFull){
-  //                   if (a.Disability == b.Disability){
-  //                     return b.DateTrans > a.DateTrans ? -1 : 1
-  //                 }
-  //                 return b.Disability - a.Disability;
-  //                 }
-  //                 return a.DateFull > b.DateFull ? 1 : -1;
-  //               });
-  //             }
-  //           } else {
-  //             let upComingIndex = this.waitlist.findIndex(x=>x.AppId == res.Appointment.AppId);
-  //             if (upComingIndex < 0){
-  //               this.waitlist.push(res.Appointment);
-  //               this.waitlist.sort(function(a, b) { 
-  //                 if (a.DateFull == b.DateFull){
-  //                   if (a.Disability == b.Disability){
-  //                     return b.DateTrans > a.DateTrans ? -1 : 1
-  //                 }
-  //                 return b.Disability - a.Disability;
-  //                 }
-  //                 return a.DateFull > b.DateFull ? 1 : -1;
-  //               });
-  //             }
-  //           }
-  //         }
-  //       }
-  //       this.spinnerService.stop(spinnerRef);
-  //       this.clientForm.reset({Phone:'', Name:'', Email:'', DOB:'', Gender:'', Preference:1, Disability:'', ProviderId: '', ServiceId:'', Guests: 1});
-  //       this.showApp = false;
-  //       return res.Code;
-  //     }),
-  //     catchError(err => {
-  //       this.spinnerService.stop(spinnerRef);
-  //       this.onError = err.Message;
-  //       if (err.Status == 404){
-  //         this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.invalidDateTime:`, false, true, false);
-  //       } else {
-  //         this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.wrong:`, false, true, false);
-  //       }
-  //       return this.onError;
-  //     })
-  //   );
-  // }
-
   showAppointment(){
     const dialogRef = this.dialog.open(AppowiDialogComponent, {
       width: '450px',
       height: '700px',
       data: {timeZone: this.TimeZone, door: this.doorId, businessId: this.businessId, locationId: this.locationId, providerId: this.providerId, services: this.services, buckets: this.buckets, hours: this.hours, providers: this.Providers}
     });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result != undefined){
-        // this.loadHours();
-      }
-    });
-
-    // this.showApp = !this.showApp;
-    // if (this.showApp){
-    //   this.clientForm.reset({Phone:'', Name:'', Email:'', DOB:'', Gender:'', Preference:1, Disability:'', ProviderId:'', ServiceId:'', Guests: 1});
-    // }
+    // dialogRef.afterClosed().subscribe(result => {
+    //   if (result != undefined){
+    //     // this.loadHours();
+    //   }
+    // });
   }
-
-  // onCancelAddAppointment(){
-  //   this.clientForm.reset({Phone:'', Name:'', Email:'', DOB:'', Gender:'', Preference:1, Disability:'', ProviderId:'', ServiceId:'', Guests: 1});
-  //   this.showApp = false;
-  // }
-
-  // getErrorMessage(component: string){
-  //   const val200 = '200';
-  //   const val3 = '3';
-  //   const val2 = '2';
-  //   const val1 = '1';
-  //   const val6 = '6';
-  //   const val14 = '14';
-  //   const val99 = '99';
-  //   const val100 = '100';
-  //   const maxVal = this.maxGuests;
-
-  //   if (component === 'Email'){
-  //     return this.f.Email.hasError('required') ? $localize`:@@shared.entervalue:` :
-  //       this.f.Email.hasError('maxlength') ? $localize`:@@shared.maximun: ${val200}` :
-  //         this.f.Email.hasError('pattern') ? $localize`:@@forgot.emailformat:` :
-  //         '';
-  //   }
-  //   if (component === 'Name'){
-  //     return this.f.Name.hasError('required') ? $localize`:@@shared.entervalue:` :
-  //       this.f.Name.hasError('minlength') ? $localize`:@@shared.minimun: ${val3}` :
-  //         this.f.Name.hasError('maxlength') ? $localize`:@@shared.maximun: ${val100}` :
-  //           '';
-  //   }
-  //   if (component === 'ServiceId'){
-  //     return this.f.ServiceId.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
-  //           '';
-  //   }
-  //   if (component === 'ProviderId'){
-  //     return this.f.ProviderId.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
-  //           '';
-  //   }
-  //   if (component === 'Hour'){
-  //     return this.f.Hour.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
-  //           '';
-  //   }
-  //   if (component === 'Phone'){
-  //     return this.f.Phone.hasError('minlength') ? $localize`:@@shared.minimun: ${val6}` :
-  //       this.f.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: ${val14}` :
-  //         '';
-  //   }
-  //   if (component === 'Guests'){
-  //     return this.f.Guests.hasError('required') ? $localize`:@@shared.entervalue:` :
-  //     this.f.Guests.hasError('maxlength') ? $localize`:@@shared.maximun: ${val2}` :
-  //       this.f.Guests.hasError('min') ? $localize`:@@shared.minvalue: ${val1}` :
-  //         this.f.Guests.hasError('max') ? $localize`:@@shared.maxvalue: ${maxVal}` :
-  //           '';
-  //   }
-  // }
 
   onCancelApp(appo: any, reasonId: string, index: number, origin: string){
     //CANCELAR APPOINTMENT
@@ -1676,132 +1499,56 @@ export class HostComponent implements OnInit {
     );
   }
 
-  onMessageApp(appointmentId: string, item: any, i: number, qeue: string){
-    let options = {
-      timeZone: this.TimeZone,
-      month: 'long',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true,
-    },
-    formatter = new Intl.DateTimeFormat([], options);
-    var actual = formatter.format(new Date());
-    let value = item.value;
-    item.value = '';
-    if (qeue == 'schedule'){
-      this.getCommentsSche[i].reverse();
-      this.getCommentsSche[i].push({'H': value, 'T': actual});
-      this.getCommentsSche[i].reverse();
-
-      const itemToScrollTo = document.getElementById('chat-' + i);
-      // null check to ensure that the element actually exists
-      if (itemToScrollTo) {
-        itemToScrollTo.scrollIntoView(true);
-      }
-    }
-    if (qeue == 'walkin'){
-      this.getCommentsWalk[i].reverse();
-      this.getCommentsWalk[i].push({'H': value, 'T': actual});
-      this.getCommentsWalk[i].reverse();
-
-      const itemToScrollTo = document.getElementById('chat-' + i);
-      // null check to ensure that the element actually exists
-      if (itemToScrollTo) {
-        itemToScrollTo.scrollIntoView(true);
-      }
-    }
-    if (qeue == 'checkin'){
-      this.getCommentsCheck[i].reverse();
-      this.getCommentsCheck[i].push({'H': value, 'T': actual});
-      this.getCommentsCheck[i].reverse();
-
-      const itemToScrollTo = document.getElementById('chat-' + i);
-      // null check to ensure that the element actually exists
-      if (itemToScrollTo) {
-        itemToScrollTo.scrollIntoView(true);
-      }
-    }
-    if (qeue == 'waitlist'){
-      this.getCommentsWaitList[i].reverse();
-      this.getCommentsWaitList[i].push({'H': value, 'T': actual});
-      this.getCommentsWaitList[i].reverse();
-
-      const itemToScrollTo = document.getElementById('chat-' + i);
-      // null check to ensure that the element actually exists
-      if (itemToScrollTo) {
-        itemToScrollTo.scrollIntoView(true);
-      }
-    }
-    //GET MESSAGES APPOINTMENT
-    let formData = {
-      Message: value,
-      BusinessName: this.authService.businessName()
-    }
-    this.messages$ = this.appointmentService.putMessage(appointmentId, '1', formData).pipe(
-      map((res:any) => {
-        if (res != null){
-          if (res.Code == 200){
-            this.openSnackBar($localize`:@@host.messagessend:`,$localize`:@@host.messages:`);
-          } else {
-            this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@host.messages:`);
-          }
-        } else {
-          this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@host.messages:`);
-        }
-      }),
-      catchError(err => {
-        this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@host.messages:`);
-        this.onError = err.Message;
-        return this.onError;
-      })
-    );
-  }
-
   onShowMessage(appo: any, i: number, type: string){
     if (appo.Unread == 'H') {
       appo.Unread = '0';
     }
-    if (type == 'schedule'){
-      this.getCommentsSche[i] = "";
-    }
-    if (type == 'walkin'){
-      this.getCommentsWalk[i] = "";
-    }
-    if (type == 'checkin'){
-      this.getCommentsCheck[i] = "";
-    }
-    if (type == 'waitlist'){
-      this.getCommentsWaitList[i] = "";
-    }
-    // console.log(appo.OpenMess);
-    appo.OpenMess = (appo.OpenMess == 0 || appo.OpenMess == undefined ? 1 : 0);
-    this.comments$ = this.appointmentService.getMessages(appo.AppId, 'H').pipe(
-      map((res: any) => {
-        if (res != null){
-          if (res.Code == 200){
-            if (type == 'schedule'){
-              this.getCommentsSche[i] = res.Messages.reverse();
-            }
-            if (type == 'walkin'){
-              this.getCommentsWalk[i] = res.Messages.reverse();
-            }
-            if (type == 'checkin'){
-              this.getCommentsCheck[i] = res.Messages.reverse();
-            }
-            if (type == 'waitlist'){
-              this.getCommentsWaitList[i] = res.Messages.reverse();
-            }
-          } else {
-            this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@host.messages:`);
-          }
-        }
-      }),
-      catchError(err => {
-        this.onError = err.Message;
-        return this.onError;
-      })
-    );
+
+    const dialogRef = this.dialog.open(MessDialogComponent, {
+      width: '450px',
+      height: '400px',
+      data: {timeZone: this.TimeZone, appo: appo}
+    });
+    // if (type == 'schedule'){
+    //   this.getCommentsSche[i] = "";
+    // }
+    // if (type == 'walkin'){
+    //   this.getCommentsWalk[i] = "";
+    // }
+    // if (type == 'checkin'){
+    //   this.getCommentsCheck[i] = "";
+    // }
+    // if (type == 'waitlist'){
+    //   this.getCommentsWaitList[i] = "";
+    // }
+    // // console.log(appo.OpenMess);
+    // appo.OpenMess = (appo.OpenMess == 0 || appo.OpenMess == undefined ? 1 : 0);
+    // this.comments$ = this.appointmentService.getMessages(appo.AppId, 'H').pipe(
+    //   map((res: any) => {
+    //     if (res != null){
+    //       if (res.Code == 200){
+    //         if (type == 'schedule'){
+    //           this.getCommentsSche[i] = res.Messages.reverse();
+    //         }
+    //         if (type == 'walkin'){
+    //           this.getCommentsWalk[i] = res.Messages.reverse();
+    //         }
+    //         if (type == 'checkin'){
+    //           this.getCommentsCheck[i] = res.Messages.reverse();
+    //         }
+    //         if (type == 'waitlist'){
+    //           this.getCommentsWaitList[i] = res.Messages.reverse();
+    //         }
+    //       } else {
+    //         this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@host.messages:`);
+    //       }
+    //     }
+    //   }),
+    //   catchError(err => {
+    //     this.onError = err.Message;
+    //     return this.onError;
+    //   })
+    // );
   }
 
   onShowCancel(appo: any){
