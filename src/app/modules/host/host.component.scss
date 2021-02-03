@@ -573,9 +573,12 @@ mat-menu{
     @media(max-width: 700px){
         mat-card{
             min-width: 100%;
-            width: 265px;
+            width: 255px;
             margin-left: 0 !important;
             margin-right: 0 !important;
+        }
+        .qeue-tab{
+            padding-right: .25rem!important;
         }
     }
 }

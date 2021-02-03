@@ -249,6 +249,13 @@ mat-accordion .mat-expansion-panel .mat-expansion-panel-body{
 :host ::-webkit-scrollbar {
   width: 15px;
 }
+@media only screen and (orientation: portrait){
+  @media(max-width: 700px){
+    :host ::-webkit-scrollbar {
+      width: 3px;
+    }
+  }
+}
 :host ::-webkit-scrollbar-track {
   background: #f1f1f1; 
   border-radius: 10px;
