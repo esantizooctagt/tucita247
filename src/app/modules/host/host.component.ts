@@ -116,10 +116,6 @@ export class HostComponent implements OnInit {
   matcher: MediaQueryList;
   lastTime = new Date().getTime();
 
-  // get f(){
-  //   return this.clientForm.controls;
-  // }
-
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
@@ -381,12 +377,6 @@ export class HostComponent implements OnInit {
             this.getCommentsSche[resScheMess].reverse();
           }
           this.schedule[resScheMess].Unread = "H";
-
-          // const itemToScrollTo = document.getElementById('chat-' + resScheMess);
-          // // null check to ensure that the element actually exists
-          // if (itemToScrollTo) {
-          //   itemToScrollTo.scrollIntoView(true);
-          // }
         }
         let resWalkInsMess = this.walkIns.findIndex(x => x.AppId === msg['AppId']);
         if (resWalkInsMess >= 0){
@@ -396,12 +386,6 @@ export class HostComponent implements OnInit {
             this.getCommentsWalk[resWalkInsMess].reverse();
           }
           this.walkIns[resWalkInsMess].Unread = "H";
-
-          // const itemToScrollTo = document.getElementById('chat-' + resWalkInsMess);
-          // // null check to ensure that the element actually exists
-          // if (itemToScrollTo) {
-          //   itemToScrollTo.scrollIntoView(true);
-          // }
         }
         let resWaitListMess = this.waitlist.findIndex(x => x.AppId === msg['AppId']);
         if (resWaitListMess >= 0){
@@ -411,12 +395,6 @@ export class HostComponent implements OnInit {
             this.getCommentsWaitList[resWaitListMess].reverse();
           }
           this.waitlist[resWaitListMess].Unread = "H";
-
-          // const itemToScrollTo = document.getElementById('chat-' + resWaitListMess);
-          // // null check to ensure that the element actually exists
-          // if (itemToScrollTo) {
-          //   itemToScrollTo.scrollIntoView(true);
-          // }
         }
         let resPreCheckInMess = this.preCheckIn.findIndex(x => x.AppId === msg['AppId']);
         if (resPreCheckInMess >= 0){
@@ -426,12 +404,6 @@ export class HostComponent implements OnInit {
             this.getCommentsCheck[resPreCheckInMess].reverse();
           }
           this.preCheckIn[resPreCheckInMess].Unread = "H";
-
-          // const itemToScrollTo = document.getElementById('chat-' + resPreCheckInMess);
-          // // null check to ensure that the element actually exists
-          // if (itemToScrollTo) {
-          //   itemToScrollTo.scrollIntoView(true);
-          // }
         }
       }
     }
@@ -1113,46 +1085,6 @@ export class HostComponent implements OnInit {
     );
   }
 
-  // validateService(event){
-  //   let res = this.services.filter(x => x.ServiceId == event.value);
-  //   if (res.length > 0) { this.maxGuests = res[0].CustomerPerBooking; }
-  //   this.numGuests =  1;
-  //   this.clientForm.patchValue({'Guests': this.numGuests});
-
-  //   this.hours$ = this.appointmentService.getAvailability(this.businessId, this.locationId, this.clientForm.value.ProviderId, event.value).pipe(
-  //     map((res: any) => {
-  //       if (res.Code == 200){
-  //         // this.hours = res.Hours;
-  //         return res.Hours;
-  //         // this.openSnackBar($localize`:@@host.checkoutsuccess:`, $localize`:@@host.checkoutpop:`);
-  //       }
-  //     }),
-  //     catchError(err => {
-  //       this.onError = err.Message;
-  //       this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@host.checkoutpop:`);
-  //       return this.onError;
-  //     })
-  //   );
-  // }
-
-  // addGuests(){
-  //   if (this.numGuests < this.maxGuests) {
-  //     this.numGuests = this.numGuests+1;
-  //   } else {
-  //     this.numGuests = this.numGuests;
-  //   }
-  //   this.clientForm.patchValue({'Guests': this.numGuests});
-  // }
-
-  // remGuests(){
-  //   if (this.numGuests > 1) {
-  //     this.numGuests=this.numGuests-1;
-  //    } else {
-  //     this.numGuests = this.numGuests;
-  //    }
-  //    this.clientForm.patchValue({'Guests': this.numGuests});
-  // }
-
   checkOutQR(){
     const dialogRef = new MatDialogConfig();
     dialogRef.width ='450px';
@@ -1306,11 +1238,6 @@ export class HostComponent implements OnInit {
       height: '700px',
       data: {timeZone: this.TimeZone, door: this.doorId, businessId: this.businessId, locationId: this.locationId, providerId: this.providerId, services: this.services, buckets: this.buckets, hours: this.hours, providers: this.Providers}
     });
-    // dialogRef.afterClosed().subscribe(result => {
-    //   if (result != undefined){
-    //     // this.loadHours();
-    //   }
-    // });
   }
 
   onCancelApp(appo: any, reasonId: string, index: number, origin: string){
@@ -1507,48 +1434,11 @@ export class HostComponent implements OnInit {
     const dialogRef = this.dialog.open(MessDialogComponent, {
       width: '450px',
       height: '400px',
-      data: {timeZone: this.TimeZone, appo: appo}
+      data: {timeZone: this.TimeZone, appo: appo, businessId: this.businessId, locationId: this.locationId}
     });
-    // if (type == 'schedule'){
-    //   this.getCommentsSche[i] = "";
-    // }
-    // if (type == 'walkin'){
-    //   this.getCommentsWalk[i] = "";
-    // }
-    // if (type == 'checkin'){
-    //   this.getCommentsCheck[i] = "";
-    // }
-    // if (type == 'waitlist'){
-    //   this.getCommentsWaitList[i] = "";
-    // }
-    // // console.log(appo.OpenMess);
-    // appo.OpenMess = (appo.OpenMess == 0 || appo.OpenMess == undefined ? 1 : 0);
-    // this.comments$ = this.appointmentService.getMessages(appo.AppId, 'H').pipe(
-    //   map((res: any) => {
-    //     if (res != null){
-    //       if (res.Code == 200){
-    //         if (type == 'schedule'){
-    //           this.getCommentsSche[i] = res.Messages.reverse();
-    //         }
-    //         if (type == 'walkin'){
-    //           this.getCommentsWalk[i] = res.Messages.reverse();
-    //         }
-    //         if (type == 'checkin'){
-    //           this.getCommentsCheck[i] = res.Messages.reverse();
-    //         }
-    //         if (type == 'waitlist'){
-    //           this.getCommentsWaitList[i] = res.Messages.reverse();
-    //         }
-    //       } else {
-    //         this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@host.messages:`);
-    //       }
-    //     }
-    //   }),
-    //   catchError(err => {
-    //     this.onError = err.Message;
-    //     return this.onError;
-    //   })
-    // );
+    dialogRef.afterClosed().subscribe(result => {
+      appo.Unread = '0';
+    });
   }
 
   onShowCancel(appo: any){

@@ -134,6 +134,11 @@ export class AppointmentService {
                     .pipe(catchError(this.errorHandler));
   }
 
+  getMobile(mobile): Observable<any> {
+    return this.http.get<any>(this.apiURL + '/mobile/' + mobile)
+                    .pipe(catchError(this.errorHandler));
+}
+
   errorHandler(error) {
     return throwError(error || 'Server Error');
   }

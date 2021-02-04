@@ -5,10 +5,13 @@ import { catchError, map } from 'rxjs/operators';
 import { AppointmentService } from '@app/services';
 import { AuthService } from '@app/core/services';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MonitorService } from '../monitor.service';
 
 export interface DialogData {
   timeZone: string;
   appo: any;
+  businessId: string;
+  locationId: string;
 }
 
 @Component({
@@ -22,22 +25,47 @@ export class MessDialogComponent implements OnInit {
   messages$: Observable<any>;
   comments$: Observable<any>;
   onError: string = '';
+  businessId: string = '';
+  locationId: string = '';
 
   appo: any;
   appId: string = '';
 
+  liveData$ = this.monitorService.syncMessage.pipe(
+    map((message: any) => {
+      this.syncData(message);
+    })
+  );
+
   constructor(
     private _snackBar: MatSnackBar,
     private authService: AuthService,
+    private monitorService: MonitorService,
     private appointmentService: AppointmentService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
   ) { }
 
+  syncData(msg: any){
+    //NEW APPOINTMENT
+    if (msg == null) {return;}
+    console.log(msg);
+    if (msg['Tipo'] == 'MESS'){
+      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && msg['User'] == 'H'){
+        if (this.appId == msg['AppId']){
+          this.getComments.reverse();
+          this.getComments.push(msg['Message']);
+          this.getComments.reverse();
+        }
+      }
+    }
+  }
+
   ngOnInit(): void {
     this.appo = this.data.appo;
+    this.businessId = this.data.businessId;
+    this.locationId = this.data.locationId;
     this.TimeZone = this.data.timeZone;
     this.appId = this.data.appo.AppId;
-    console.log(this.appo);
     this.onShowMessage();
   }
   
@@ -64,11 +92,11 @@ export class MessDialogComponent implements OnInit {
     this.getComments.push({'H': value, 'T': actual});
     this.getComments.reverse();
 
-    const itemToScrollTo = document.getElementById('chat');
-    // null check to ensure that the element actually exists
-    if (itemToScrollTo) {
-      itemToScrollTo.scrollIntoView(true);
-    }
+    // const itemToScrollTo = document.getElementById('chat');
+    // // null check to ensure that the element actually exists
+    // if (itemToScrollTo) {
+    //   itemToScrollTo.scrollIntoView(true);
+    // }
     
     //GET MESSAGES APPOINTMENT
     let formData = {

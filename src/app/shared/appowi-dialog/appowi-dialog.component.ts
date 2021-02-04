@@ -1,15 +1,12 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
-import { BusinessService, AppointmentService, ServService, AdminService } from '@app/services';
+import { AppointmentService, ServService } from '@app/services';
 import { AuthService } from '@app/core/services';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { map, catchError } from 'rxjs/operators';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { ConfirmValidParentMatcher } from '@app/validators';
-import { MatDialog, } from '@angular/material/dialog';
-import { DomSanitizer } from '@angular/platform-browser';
-import { Router } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 export interface DialogData {
@@ -43,10 +40,13 @@ export class AppowiDialogComponent implements OnInit {
   hours: any[]=[];
   Providers: any[]=[];
   numGuests: number = 0;
+  search: number = 0;
+  currEmail: string = '';
 
   newAppointment$: Observable<any>;
   hours$: Observable<any>;
   getLocInfo$: Observable<any>;
+  getCustomer$: Observable<any>;
 
   get f(){
     return this.clientForm.controls;
@@ -55,18 +55,12 @@ export class AppowiDialogComponent implements OnInit {
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
   constructor(
-    private domSanitizer: DomSanitizer,
     private spinnerService: SpinnerService,
     private _snackBar: MatSnackBar,
     private authService: AuthService,
     private appointmentService: AppointmentService,
-    private businessService: BusinessService,
     private serviceService: ServService,
     private fb: FormBuilder,
-    private dialog: MatDialog,
-    private learnmore: MatDialog,
-    private adminService: AdminService,
-    private router: Router,
     private dialogRef: MatDialogRef<AppowiDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
   ) { }
@@ -140,7 +134,8 @@ export class AppowiDialogComponent implements OnInit {
       Guests: this.clientForm.value.Guests,
       AppoDate: dateAppo,
       AppoHour: ((this.clientForm.value.Hour).toString() == "--" ? timeAppo : (this.clientForm.value.Hour).toString().padStart(2,'0')+':00'),
-      Type: typeAppo
+      Type: typeAppo,
+      UpdEmail: (this.currEmail != this.clientForm.value.Email ? 1 : 0)
     }
 
     let options = {
@@ -175,6 +170,36 @@ export class AppowiDialogComponent implements OnInit {
         return this.onError;
       })
     );
+  }
+
+  loadCustomer(){
+    let phoneNumber = this.clientForm.value.Phone.toString().replace(/[^0-9]/g,'');
+    let phone = (phoneNumber == '' ?  '00000000000' : (phoneNumber.length <= 10 ? '1' + phoneNumber : phoneNumber));
+    if (phone != '00000000000'){
+      this.search = 1;
+      this.getCustomer$ = this.appointmentService.getMobile(phone).pipe(
+        map((res: any) => {
+          if (res.Code == 200){
+            this.clientForm.patchValue(
+              { Name: res.Customer.Name, 
+                Email: res.Customer.Email,
+                Preference: res.Customer.Preferences.toString(), 
+                Disability: res.Customer.Disability.toString(), 
+                Gender: res.Customer.Gender.toString(),
+                DOB: res.Customer.DOB }
+            );
+            this.currEmail = res.Customer.Email;
+            this.search = 0;
+          }
+          return res.Code;
+        }),
+        catchError(err => {
+          this.onError = err.Message;
+          this.search = 0;
+          return this.onError;
+        })
+      );
+    }
   }
 
   addGuests(){

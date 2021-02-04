@@ -4,6 +4,7 @@
 <div class="row pl-3 pr-3 mb-0 mt-3">
     <ng-container *ngIf="messages$ | async"></ng-container>
     <ng-container *ngIf="comments$ | async"></ng-container>
+    <ng-container *ngIf="liveData$ | async"></ng-container>
     <div class="col-sm-11 pl-0 pr-0">
         <textarea class="card-text" #messageText matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
     </div>
