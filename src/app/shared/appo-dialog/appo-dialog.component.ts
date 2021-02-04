@@ -145,7 +145,11 @@ export class AppoDialogComponent implements OnInit {
         updE = 0;
       }
     } else {
-      updE = 0;
+      if (this.clientForm.value.Email != ''){
+        updE = 1;
+      } else {
+        updE = 0;
+      }
     }
     let formData = {
       BusinessId: this.data.businessId,
