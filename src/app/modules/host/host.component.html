@@ -72,23 +72,23 @@
                     </button>
                 </ng-container>
                 <ng-container *ngIf="checkOutQR$ | async"></ng-container>
-                <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && manualCheckOut == 1" color="secondary" type="button" (click)="setManualCheckOut(manualGuests)" i18n="Check Out|text in citas@@host.checkout">
+                <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && manualCheckOut == 1" color="secondary" type="button" (click)="setManualCheckOut(manualGuests)">
                     <mat-icon class="btn-icon">logout</mat-icon>
-                    Check Out
+                    {{txtCheckout}}
                 </button>
                 <!--  i18n="Check Out|text in citas@@host.checkout" -->
                 <button mat-stroked-button class="action-buttons" *ngIf="locationStatus == 1 && manualCheckOut == 0" color="secondary" type="button" (click)="checkOutQR()">
                     <mat-icon class="btn-icon">logout</mat-icon>
-                    Check Out
+                    {{txtCheckout}}
                 </button>
                 <button mat-stroked-button class="action-buttons ml-3" *ngIf="locationStatus == 1" (click)="showAppointment()">
                     <mat-icon class="btn-icon">add</mat-icon>
-                    Add
+                    {{txtAdd}}
                 </button>
                 <ng-container *ngIf="reload$ | async"></ng-container>
                 <button mat-stroked-button class="action-buttons ml-3" *ngIf="locationStatus == 1" (click)="reloadData()">
                     <mat-icon class="btn-icon">vertical_align_bottom</mat-icon>
-                    Download
+                    {{txtDownload}}
                 </button>
                 <!-- <mat-icon class="download-ico" *ngIf="locationStatus == 1" (click)="reloadData()" svgIcon="download"></mat-icon> -->
             </div>
@@ -207,32 +207,6 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        <!-- <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenMess">
-                                            <div class="col-sm-10 pl-0 pr-0">
-                                                <textarea class="card-text" #messageTextWalk matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
-                                            </div>
-                                            <div class="button-send col-md pr-0 pl-0">
-                                                <button mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageTextWalk ,i, 'walkin')">
-                                                    <mat-icon class="send_icon">send</mat-icon>
-                                                </button>
-                                            </div>
-                                            <div class="card-chat pl-3 pr-3 mb-0 mt-3 col-md-12">
-                                                <ng-container *ngFor="let item of getCommentsWalk[i];let j=index">
-                                                    <div class="row row justify-content-start" id="chat-{{j}}" *ngIf="item.U != undefined">
-                                                        <div class="card-chat-user col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
-                                                            <div class="card-chat-time">{{item.T}}</div>
-                                                            {{item.U}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row justify-content-end" id="chat-{{j}}" *ngIf="item.H != undefined">
-                                                        <div class="card-chat-host col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
-                                                            <div class="card-chat-time">{{item.T}}</div>
-                                                            {{item.H}}
-                                                        </div>
-                                                    </div>
-                                                </ng-container>
-                                            </div>
-                                        </div> -->
                                     </mat-card>
                                 </div>
                             </div>
@@ -332,32 +306,6 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        <!-- <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenMess">
-                                            <div class="col-sm-10 pl-0 pr-0">
-                                                <textarea class="card-text" #messageTextWaitList matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
-                                            </div>
-                                            <div class="button-send col-md pr-0 pl-0">
-                                                <button mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageTextWaitList ,i, 'waitlist')">
-                                                    <mat-icon class="send_icon">send</mat-icon>
-                                                </button>
-                                            </div>
-                                            <div class="card-chat pl-3 pr-3 mb-0 mt-3 col-md-12">
-                                                <ng-container *ngFor="let item of getCommentsWaitList[i]">
-                                                    <div class="row row justify-content-start" id="chat-{{i}}" *ngIf="item.U != undefined">
-                                                        <div class="card-chat-user col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
-                                                            <div class="card-chat-time">{{item.T}}</div>
-                                                            {{item.U}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row justify-content-end" id="chat-{{i}}" *ngIf="item.H != undefined">
-                                                        <div class="card-chat-host col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
-                                                            <div class="card-chat-time">{{item.T}}</div>
-                                                            {{item.H}}
-                                                        </div>
-                                                    </div>
-                                                </ng-container>
-                                            </div>
-                                        </div> -->
                                     </mat-card>
                                 </div>
                             </div>
@@ -456,32 +404,6 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        <!-- <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenMess">
-                                            <div class="col-sm-10 pl-0 pr-0">
-                                                <textarea class="card-text" #messageTextSche matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
-                                            </div>
-                                            <div class="button-send col-md pr-0 pl-0">
-                                                <button mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageTextSche, i, 'schedule')">
-                                                    <mat-icon class="send_icon">send</mat-icon>
-                                                </button>
-                                            </div>
-                                            <div class="card-chat pl-3 pr-3 mb-0 mt-3 col-md-12">
-                                                <ng-container *ngFor="let item of getCommentsSche[i]">
-                                                    <div class="row row justify-content-start" id="chat-{{i}}" *ngIf="item.U != undefined">
-                                                        <div class="card-chat-user col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
-                                                            <div class="card-chat-time">{{item.T}}</div>
-                                                            {{item.U}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="row justify-content-end" id="chat-{{i}}" *ngIf="item.H != undefined">
-                                                        <div class="card-chat-host col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
-                                                            <div class="card-chat-time">{{item.T}}</div>
-                                                            {{item.H}}
-                                                        </div>
-                                                    </div>
-                                                </ng-container>
-                                            </div>
-                                        </div> -->
                                     </mat-card>
                                 </div>
                             </div>
@@ -591,32 +513,6 @@
                                     </button>
                                 </div>
                             </div>
-                            <!-- <div class="row pl-3 pr-3 mb-0 mt-3" *ngIf="item.OpenMess">
-                                <div class="col-sm-10 pl-0 pr-0">
-                                    <textarea class="card-text" #messageTextCheckIn matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
-                                </div>
-                                <div class="button-send col-md pr-0 pl-0">
-                                    <button mat-icon-button type="button" (click)="onMessageApp(item.AppId, messageTextCheckIn ,i, 'checkin')">
-                                        <mat-icon class="send_icon">send</mat-icon>
-                                    </button>
-                                </div>
-                                <div class="card-chat pl-3 pr-3 mb-0 mt-3 col-md-12">
-                                    <ng-container *ngFor="let item of getCommentsCheck[i]">
-                                        <div class="row row justify-content-start" id="chat-{{i}}" *ngIf="item.U != undefined">
-                                            <div class="card-chat-user col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
-                                                <div class="card-chat-time">{{item.T}}</div>
-                                                {{item.U}}
-                                            </div>
-                                        </div>
-                                        <div class="row justify-content-end" id="chat-{{i}}" *ngIf="item.H != undefined">
-                                            <div class="card-chat-host col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
-                                                <div class="card-chat-time">{{item.T}}</div>
-                                                {{item.H}}
-                                            </div>
-                                        </div>
-                                    </ng-container>
-                                </div>
-                            </div> -->
                         </mat-card>
                     </div>
                 </div>

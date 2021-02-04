@@ -115,6 +115,9 @@ export class HostComponent implements OnInit {
   hideDetails: string = $localize`:@@shared.hidedetails:`;
   matcher: MediaQueryList;
   lastTime = new Date().getTime();
+  txtDownload: string = $localize`:@@citas.download:`;
+  txtAdd: string = $localize`:@@citas.add:`;
+  txtCheckout: string = $localize`:@@citas.checkout:`;
 
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
 

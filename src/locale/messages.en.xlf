@@ -2,6 +2,26 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template" target-language="en">
     <body>
+      <trans-unit id="citas.download">
+        <source>Download</source>
+        <target state="translated">Download</target>
+      </trans-unit>
+      <trans-unit id="citas.add">
+        <source>Add</source>
+        <target state="translated">Add</target>
+      </trans-unit>
+      <trans-unit id="citas.checkout">
+        <source>Checkout</source>
+        <target state="translated">Check Out</target>
+      </trans-unit>
+      <trans-unit id="message.title" datatype="html">
+        <source>Appointment messages</source>
+        <target state="translated">Appointment messages</target>
+        <context-group purpose="mess-dialog">
+          <context context-type="sourcefile">src/app/modules/shared/mess-dialog/mess-dialog.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="shared.print" datatype="html">
         <source>Print</source>
         <target state="translated">Print</target>
