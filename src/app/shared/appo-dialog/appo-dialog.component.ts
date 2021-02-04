@@ -157,7 +157,7 @@ export class AppoDialogComponent implements OnInit {
       Guests: this.clientForm.value.Guests,
       Status: 1,
       Type: 1,
-      UpdEmail: (this.currEmail != this.clientForm.value.Email ? 1 : 0)
+      UpdEmail: (this.currEmail != this.clientForm.value.Email && this.currEmail != '' ? 1 : 0)
     }
     var spinnerRef = this.spinnerService.start($localize`:@@host.addingappo:`);
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(

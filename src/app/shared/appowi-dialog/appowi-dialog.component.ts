@@ -135,7 +135,7 @@ export class AppowiDialogComponent implements OnInit {
       AppoDate: dateAppo,
       AppoHour: ((this.clientForm.value.Hour).toString() == "--" ? timeAppo : (this.clientForm.value.Hour).toString().padStart(2,'0')+':00'),
       Type: typeAppo,
-      UpdEmail: (this.currEmail != this.clientForm.value.Email ? 1 : 0)
+      UpdEmail: (this.currEmail != this.clientForm.value.Email && this.currEmail != '' ? 1 : 0)
     }
 
     let options = {
