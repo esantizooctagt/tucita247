@@ -46,13 +46,19 @@ export class PollRespComponent implements OnInit {
       map((poll: any) => {
         let actualDate = new Date();
         let dateStr = actualDate.getFullYear().toString() + '-' + (actualDate.getMonth() + 1).toString().padStart(2,'0') + '-' + (actualDate.getDate()).toString().padStart(2,'0');
-        if (poll.DateFinPoll > dateStr && poll.Status == 1) {
+        if (poll.DateFinPoll != ''){
+          if (poll.DateFinPoll > dateStr && poll.Status == 1) {
+            this.PollId = poll.PollId;
+            this.LocationId = poll.LocationId;
+            this.Name = poll.Name;
+          }
+          else {
+            this.error = $localize`:@@polls.errorpoll:`;          
+          }
+        } else {
           this.PollId = poll.PollId;
           this.LocationId = poll.LocationId;
           this.Name = poll.Name;
-        }
-        else {
-          this.error = $localize`:@@polls.errorpoll:`;          
         }
         this.spinnerService.stop(spinnerRef);
         return '';
