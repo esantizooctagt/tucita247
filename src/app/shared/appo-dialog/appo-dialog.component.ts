@@ -137,6 +137,16 @@ export class AppoDialogComponent implements OnInit {
     //NEW FULL APPOINTMENT
     let phoneNumber = this.clientForm.value.Phone.replace( /\D+/g, '');
     let dateAppo = (this.data.appoTime.substring(6,8) == 'PM' ? (+this.data.appoTime.substring(0,2) == 12 ? this.data.appoTime.substring(0,2) : +this.data.appoTime.substring(0,2)+12) : this.data.appoTime.substring(0,2).padStart(2,'0'));
+    let updE: number;
+    if (this.currEmail != ''){
+      if (this.currEmail != this.clientForm.value.Email){
+        updE = 1;
+      } else {
+        updE = 0;
+      }
+    } else {
+      updE = 0;
+    }
     let formData = {
       BusinessId: this.data.businessId,
       LocationId: this.data.locationId,
@@ -157,7 +167,7 @@ export class AppoDialogComponent implements OnInit {
       Guests: this.clientForm.value.Guests,
       Status: 1,
       Type: 1,
-      UpdEmail: (this.currEmail != this.clientForm.value.Email && this.currEmail != '' ? 1 : 0)
+      UpdEmail: updE
     }
     var spinnerRef = this.spinnerService.start($localize`:@@host.addingappo:`);
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(

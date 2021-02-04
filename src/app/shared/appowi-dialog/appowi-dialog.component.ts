@@ -116,6 +116,16 @@ export class AppowiDialogComponent implements OnInit {
     let dayCurr = this.getDay();
     let dateAppo = yearCurr + '-' + monthCurr + '-' + dayCurr;
     let typeAppo = ((this.clientForm.value.Hour).toString() == "--" ? 2 : 1);
+    let updE: number;
+    if (this.currEmail != ''){
+      if (this.currEmail != this.clientForm.value.Email){
+        updE = 1;
+      } else {
+        updE = 0;
+      }
+    } else {
+      updE = 0;
+    }
     let formData = {
       BusinessId: this.businessId,
       LocationId: this.locationId,
@@ -135,7 +145,7 @@ export class AppowiDialogComponent implements OnInit {
       AppoDate: dateAppo,
       AppoHour: ((this.clientForm.value.Hour).toString() == "--" ? timeAppo : (this.clientForm.value.Hour).toString().padStart(2,'0')+':00'),
       Type: typeAppo,
-      UpdEmail: (this.currEmail != this.clientForm.value.Email && this.currEmail != '' ? 1 : 0)
+      UpdEmail: updE
     }
 
     let options = {
