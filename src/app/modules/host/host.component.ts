@@ -135,15 +135,15 @@ export class HostComponent implements OnInit {
     })
   );
 
-  // sleep$ = interval(1000).pipe(
-  //   map(() => {
-  //     if ((new Date().getTime() - this.lastTime) > 4000) {
-  //       console.log("reload on location");
-  //       location.reload();
-  //     }
-  //     this.lastTime = new Date().getTime();
-  //   })
-  // );
+  sleep$ = interval(1000).pipe(
+    map(() => {
+      if ((new Date().getTime() - this.lastTime) > 4000) {
+        console.log("reload on location");
+        location.reload();
+      }
+      this.lastTime = new Date().getTime();
+    })
+  );
 
   // readonly PUSH_URL = 'wss://1wn0vx0tva.execute-api.us-east-1.amazonaws.com/prod?businessId=12345';
   constructor(
@@ -693,12 +693,12 @@ export class HostComponent implements OnInit {
 
   screenSize(event){
     console.log("screen Size");
-    alert("screen size");
+    // alert("screen size");
     location.reload();
   }
 
   ngOnInit(): void {
-    this.matcher = this.mediaMatcher.matchMedia(Breakpoints.Handset);
+    this.matcher = this.mediaMatcher.matchMedia('(max-width: 600px)');
     this.matcher.addListener(this.screenSize);
 
     if (this.matcher.matches) {return;}

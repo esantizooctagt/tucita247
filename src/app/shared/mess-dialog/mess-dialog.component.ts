@@ -92,11 +92,11 @@ export class MessDialogComponent implements OnInit {
     this.getComments.push({'H': value, 'T': actual});
     this.getComments.reverse();
 
-    // const itemToScrollTo = document.getElementById('chat');
-    // // null check to ensure that the element actually exists
-    // if (itemToScrollTo) {
-    //   itemToScrollTo.scrollIntoView(true);
-    // }
+    const itemToScrollTo = document.getElementById('chat');
+    // null check to ensure that the element actually exists
+    if (itemToScrollTo) {
+      itemToScrollTo.scrollIntoView(true);
+    }
     
     //GET MESSAGES APPOINTMENT
     let formData = {
