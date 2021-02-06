@@ -691,18 +691,18 @@ export class HostComponent implements OnInit {
     }
   }
 
-  screenSize(event){
-    console.log("screen Size");
-    // alert("screen size");
-    location.reload();
-  }
+  // screenSize(event){
+  //   console.log("screen Size");
+  //   // alert("screen size");
+  //   location.reload();
+  // }
 
   ngOnInit(): void {
-    this.matcher = this.mediaMatcher.matchMedia('(max-width: 599px)');
-    console.log(this.matcher);
-    this.matcher.addListener(this.screenSize);
+    // this.matcher = this.mediaMatcher.matchMedia('(max-width: 599px)');
+    // console.log(this.matcher);
+    // this.matcher.addListener(this.screenSize);
 
-    if (this.matcher.matches) {return;}
+    // if (this.matcher.matches) {return;}
 
     this.businessId = this.authService.businessId();
     this.userId = this.authService.userId();
