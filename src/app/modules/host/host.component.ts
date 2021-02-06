@@ -691,24 +691,23 @@ export class HostComponent implements OnInit {
     }
   }
 
-  // screenSize(event){
-  //   console.log("screen Size");
-  //   // alert("screen size");
-  //   location.reload();
-  // }
+  screenSize(event){
+    console.log("screen Size");
+    // alert("screen size");
+    location.reload();
+  }
 
   ngOnInit(): void {
-    // this.matcher = this.mediaMatcher.matchMedia('(max-width: 599px)');
+    this.matcher = this.mediaMatcher.matchMedia('(max-width: 599px)');
     // console.log(this.matcher);
-    // this.matcher.addListener(this.screenSize);
+    this.matcher.addListener(this.screenSize);
 
-    // if (this.matcher.matches) {return;}
-    console.log("evalur screen");
-    console.log(this.screenDisp);
-    alert("ingreso aca");
+    if (this.matcher.matches) {return;}
+
     if (this.screenDisp) {return;}
     this.businessId = this.authService.businessId();
     this.userId = this.authService.userId();
+    console.log("ingreso aca");
 
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadinglocs:`);
     this.getLocInfo$ = this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
