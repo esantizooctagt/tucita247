@@ -124,7 +124,7 @@ export class HostComponent implements OnInit {
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
       map(result => { 
-        this.screenDisp = result.matches; 
+        this.screenDisp = result.matches;
         return result.matches;}),
       shareReplay()
     );
@@ -703,7 +703,9 @@ export class HostComponent implements OnInit {
     // this.matcher.addListener(this.screenSize);
 
     // if (this.matcher.matches) {return;}
-
+    console.log("evalur screen");
+    console.log(this.screenDisp);
+    if (this.screenDisp) {return;}
     this.businessId = this.authService.businessId();
     this.userId = this.authService.userId();
 

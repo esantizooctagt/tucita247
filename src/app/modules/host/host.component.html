@@ -1,4 +1,5 @@
-<div class="container-fluid host-container" *ngIf="!(isHandset$ | async)">
+<ng-container *ngIf="isHandset$ | async"></ng-container>
+<div class="container-fluid host-container" *ngIf="!screenDisp">
     <div class="row">
         <ng-container *ngIf="updAppointment$ | async"></ng-container>
         <ng-container *ngIf="openLoc$ | async"></ng-container>
@@ -520,6 +521,6 @@
         </div>
     </div>
 </div>
-<div *ngIf="(isHandset$ | async)">
+<div *ngIf="screenDisp">
     <app-quick-checkin></app-quick-checkin>
 </div>
