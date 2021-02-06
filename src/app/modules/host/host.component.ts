@@ -698,7 +698,7 @@ export class HostComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.matcher = this.mediaMatcher.matchMedia('(max-width: 600px)');
+    this.matcher = this.mediaMatcher.matchMedia('(max-width: 599px)');
     this.matcher.addListener(this.screenSize);
 
     if (this.matcher.matches) {return;}
