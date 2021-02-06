@@ -9,7 +9,7 @@
         <ng-container *ngIf="cancelAppo$ | async"></ng-container>
         <ng-container *ngIf="newCurrTime$ | async"></ng-container>
         <ng-container *ngIf="runQeues$ | async"></ng-container>
-        <!-- <ng-container *ngIf="sleep$ | async"></ng-container> -->
+        <ng-container *ngIf="sleep$ | async"></ng-container>
         <div class="col-md-12 pt-2">
             <mat-accordion>
                 <mat-expansion-panel class="mt-2" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
