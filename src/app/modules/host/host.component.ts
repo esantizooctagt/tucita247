@@ -693,6 +693,7 @@ export class HostComponent implements OnInit {
 
   screenSize(event){
     console.log("screen Size");
+    alert("screen size");
     location.reload();
   }
 
