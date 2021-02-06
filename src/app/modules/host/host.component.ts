@@ -135,15 +135,15 @@ export class HostComponent implements OnInit {
     })
   );
 
-  sleep$ = interval(1000).pipe(
-    map(() => {
-      if ((new Date().getTime() - this.lastTime) > 4000) {
-        console.log("reload on location");
-        location.reload();
-      }
-      this.lastTime = new Date().getTime();
-    })
-  );
+  // sleep$ = interval(1000).pipe(
+  //   map(() => {
+  //     if ((new Date().getTime() - this.lastTime) > 4000) {
+  //       console.log("reload on location");
+  //       location.reload();
+  //     }
+  //     this.lastTime = new Date().getTime();
+  //   })
+  // );
 
   // readonly PUSH_URL = 'wss://1wn0vx0tva.execute-api.us-east-1.amazonaws.com/prod?businessId=12345';
   constructor(
