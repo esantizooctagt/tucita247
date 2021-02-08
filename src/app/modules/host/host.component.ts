@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OnInit, QueryList, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { interval, Observable, of } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -8,7 +8,6 @@ import { AuthService } from '@app/core/services';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { map, catchError, switchMap, mergeMap, tap, shareReplay } from 'rxjs/operators';
 import { Appointment, Reason } from '@app/_models';
-import { AbstractControl, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
@@ -37,7 +36,6 @@ export class HostComponent implements OnInit {
   appointmentsWaitList$: Observable<Appointment[]>;
   getWalkIns$: Observable<any[]>;
   messages$: Observable<any>;
-  // newAppointment$: Observable<any>;
   updAppointment$: Observable<any>;
   getMessages$: Observable<any[]>;
   quantityPeople$: Observable<any>;
@@ -55,7 +53,6 @@ export class HostComponent implements OnInit {
   cancelAppo$: Observable<any>;
   newCurrTime$: Observable<any>;
   runQeues$: Observable<any>;
-  // hours$: Observable<any>;
   onHold$: Observable<any>;
   reload$: Observable<any>;
 
@@ -119,6 +116,10 @@ export class HostComponent implements OnInit {
   txtAdd: string = $localize`:@@citas.add:`;
   txtCheckout: string = $localize`:@@citas.checkout:`;
 
+  countUpc: number = 0;
+  countWai: number = 0;
+  countPre: number = 0;
+
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe('(max-width: 599px)')
@@ -157,7 +158,6 @@ export class HostComponent implements OnInit {
     private reasonService: ReasonsService,
     private locationService: LocationService,
     private serviceService: ServService,
-    private fb: FormBuilder,
     private dialog: MatDialog,
     private learnmore: MatDialog,
     private matIconRegistry: MatIconRegistry,
@@ -294,8 +294,8 @@ export class HostComponent implements OnInit {
     }
     if (msg['Tipo'] == 'REVERSE'){
       if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 1){
-        var verifpreCheck = this.preCheckIn.findIndex(x => x.AppId === msg['AppId']);
-        if (verifpreCheck >= 0){this.preCheckIn.splice(verifpreCheck, 1);}
+        // var verifpreCheck = this.preCheckIn.findIndex(x => x.AppId === msg['AppId']);
+        // if (verifpreCheck >= 0){this.preCheckIn.splice(verifpreCheck, 1);}
         let hora = msg['DateAppo'];
         let data = {
           AppId: msg['AppId'],
@@ -320,6 +320,13 @@ export class HostComponent implements OnInit {
           QrCode: msg['QrCode'],
           DateTrans: msg['DateTrans']
         }
+        var verifWI = this.walkIns.findIndex(x => x.AppId === msg['AppId']);
+        if (verifWI >= 0){this.walkIns.splice(verifWI, 1);}
+        var verifWL = this.waitlist.findIndex(x => x.AppId === msg['AppId']);
+        if (verifWL >= 0){this.waitlist.splice(verifWL, 1);}
+        var verifPR = this.schedule.findIndex(x => x.AppId === msg['AppId']);
+        if (verifPR >= 0){this.schedule.splice(verifPR, 1);}
+
         if (msg['Type'] == 1){
           if (msg['Qeue'] == 'UPC'){
             if (this.walkIns.filter(x => x.AppId ==  msg['AppId']).length == 0){
@@ -689,6 +696,9 @@ export class HostComponent implements OnInit {
         );
       }
     }
+    this.countUpc = this.walkIns.length;
+    this.countPre = this.schedule.length;
+    this.countWai = this.waitlist.length;
   }
 
   screenSize(event){
@@ -1670,6 +1680,7 @@ export class HostComponent implements OnInit {
               }
               return a.DateFull > b.DateFull ? -1 : 1;
             });
+            this.countPre = this.schedule.length;
           });
           this.spinnerService.stop(spinnerRef);
         }
@@ -1725,6 +1736,7 @@ export class HostComponent implements OnInit {
               }
               return a.DateFull > b.DateFull ? 1 : -1;
             });
+            this.countUpc = this.walkIns.length;
           });
           this.spinnerService.stop(spinnerRef);
         }
@@ -1780,6 +1792,7 @@ export class HostComponent implements OnInit {
               }
               return a.DateFull > b.DateFull ? 1 : -1;
             });
+            this.countWai = this.waitlist.length;
           });
           this.spinnerService.stop(spinnerRef);
         }
@@ -2066,6 +2079,11 @@ export class HostComponent implements OnInit {
     if (event.previousContainer.id == "cdk-drop-list-3" && event.container != event.previousContainer){
       let appo = JSON.parse(JSON.stringify(event.previousContainer.data[event.previousIndex]));
       let container = event.previousContainer.id;
+      if (appo.Type == 2){
+        transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, this.waitlist.length);
+      } else {
+        transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, this.walkIns.length);
+      }
       // transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, this.preCheckIn.length);
       this.cancelAppo$ = this.adminService.putNoShow(appo.AppId).pipe(
         map((res: any) => {

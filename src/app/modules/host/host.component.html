@@ -116,7 +116,10 @@
             <ng-container *ngIf="appointmentsWalk$ | async"></ng-container>
             <ng-container *ngIf="appointmentsWaitList$ | async"></ng-container>
             <mat-tab-group mat-stretch-tabs class="tabs-detail">
-                <mat-tab i18n-label="Walk-Ins|text in citas@@host.upcomming" label="Upcoming"> 
+                <mat-tab> 
+                    <ng-template mat-tab-label>
+                        <span [matBadge]="countUpc" matBadgeColor="accent" matBadgeOverlap="false" i18n="Walk-Ins|text in citas@@host.upcomming">Upcoming</span>
+                    </ng-template>
                     <div cdkDropList 
                         #walkInsList="cdkDropList"
                         (cdkDropListDropped)="drop($event)"
@@ -214,7 +217,10 @@
                         </div>
                     </div> 
                 </mat-tab>
-                <mat-tab i18n-label="Waiting List|text in citas@@host.waitinglist" label="Waiting List">
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <span [matBadge]="countWai" matBadgeColor="accent" matBadgeOverlap="false" i18n="Waiting List|text in citas@@host.waitinglist">Waiting List</span>
+                    </ng-template>
                     <div cdkDropList 
                         #waitingList="cdkDropList"
                         (cdkDropListDropped)="drop($event)"
@@ -313,7 +319,10 @@
                         </div>
                     </div> 
                 </mat-tab>
-                <mat-tab i18n-label="Citas|text in citas@@host.citas" label="Citas"> 
+                <mat-tab> 
+                    <ng-template mat-tab-label>
+                        <span [matBadge]="countPre" matBadgeColor="accent" matBadgeOverlap="false" i18n="Citas|text in citas@@host.citas">Citas</span>
+                    </ng-template>
                     <div cdkDropList
                         #scheduleList="cdkDropList"
                         (cdkDropListDropped)="drop($event)"
