@@ -5,24 +5,24 @@
     <ng-container *ngIf="messages$ | async"></ng-container>
     <ng-container *ngIf="comments$ | async"></ng-container>
     <ng-container *ngIf="liveData$ | async"></ng-container>
-    <div class="col-sm-11 pl-0 pr-0">
+    <div class="col-sm-10 col-md-11 pl-0 pr-0">
         <textarea class="card-text" #messageText matInput i18n-placeholder="Write a comment...|text in citas@@host.comments" placeholder="Write a comment..."></textarea>
     </div>
-    <div class="button-send col-md pr-0 pl-0">
+    <div class="button-send col-sm-2 col-md pr-0 pl-0">
         <button mat-icon-button type="button" (click)="onMessageApp( messageText )">
             <mat-icon class="send_icon">send</mat-icon>
         </button>
     </div>
-    <div class="card-chat pl-3 pr-3 mb-0 mt-3 col-md-12">
+    <div class="card-chat pl-3 pr-3 mb-0 mt-3 col-md-12 col-sm-12">
         <ng-container *ngFor="let item of getComments;">
             <div class="row row justify-content-start" id="chat" *ngIf="item.U != undefined">
-                <div class="card-chat-user col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
+                <div class="card-chat-user col-sm-9 col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
                     <div class="card-chat-time">{{item.T}}</div>
                     {{item.U}}
                 </div>
             </div>
             <div class="row justify-content-end" id="chat" *ngIf="item.H != undefined">
-                <div class="card-chat-host col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
+                <div class="card-chat-host col-sm-9 col-md-9 pt-2 pb-2 mt-1 mb-1 mr-1 ml-1">
                     <div class="card-chat-time">{{item.T}}</div>
                     {{item.H}}
                 </div>

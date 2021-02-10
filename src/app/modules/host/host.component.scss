@@ -555,22 +555,6 @@ mat-menu{
         min-width: 95%;
         width: 95%;
     }
-    // @media(max-width: 1024px){
-    //     mat-card{
-    //         min-width: 275px;
-    //         width: 275px;
-    //     }
-    // }
-    // @media(max-width: 1200px){
-    //     mat-card{
-    //         min-width: 290px;
-    //     }
-    // }
-    // @media(max-width: 1366px){
-    //     mat-card{
-    //         min-width: 350px;
-    //     }
-    // }
 }
 @media only screen and (orientation: portrait){
     @media(max-width: 700px){
@@ -646,3 +630,27 @@ mat-menu{
         width: 20px !important;
     }
 } 
+
+// mat-tab-group .mat-tab-header .mat-tab-header-pagination {
+//     display: none !important; 
+// }
+
+::ng-deep mat-tab-group {
+    .mat-tab-header {
+        .mat-tab-header-pagination {
+            display: none !important; // <== disable pagination
+        }
+        .mat-tab-label-container {
+            // left: 0px; // if you need to use it on mobile - set left position to 0
+            // width: 100%;
+            .mat-tab-list {
+                overflow-x: auto !important; // <== set horisontal scroll bar imperatively
+                // below rule prevents sliding of buttons' container - because it not sliding properly - to left it not slide as well
+                transform: none !important;
+            }
+            .mat-tab-list::-webkit-scrollbar {
+                display: none;
+            }
+        }
+    }
+}
