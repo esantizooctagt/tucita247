@@ -327,6 +327,13 @@ export class HostComponent implements OnInit {
         var verifPR = this.schedule.findIndex(x => x.AppId === msg['AppId']);
         if (verifPR >= 0){this.schedule.splice(verifPR, 1);}
 
+        let val = this.preCheckIn.findIndex(x=>x.AppId == msg['AppId']);
+        if (val >= 0){
+          this.selectedCheck[val] = undefined;
+        }
+        var dataPRE = this.preCheckIn.findIndex(e => e.AppId === msg['AppId']);
+        if (dataPRE >= 0 ){this.preCheckIn.splice(dataPRE, 1);}
+
         if (msg['Type'] == 1){
           if (msg['Qeue'] == 'UPC'){
             if (this.walkIns.filter(x => x.AppId ==  msg['AppId']).length == 0){
