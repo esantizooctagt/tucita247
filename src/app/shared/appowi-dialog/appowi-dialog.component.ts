@@ -194,13 +194,14 @@ export class AppowiDialogComponent implements OnInit {
       this.getCustomer$ = this.appointmentService.getMobile(phone).pipe(
         map((res: any) => {
           if (res.Code == 200){
+            let dateDOB = new Date(res.Customer.DOB+'T06:00:00');
             this.clientForm.patchValue(
               { Name: res.Customer.Name, 
                 Email: res.Customer.Email,
                 Preference: res.Customer.Preferences.toString(), 
                 Disability: res.Customer.Disability.toString(), 
                 Gender: res.Customer.Gender.toString(),
-                DOB: res.Customer.DOB }
+                DOB: dateDOB }
             );
             this.currEmail = res.Customer.Email;
             this.search = 0;
