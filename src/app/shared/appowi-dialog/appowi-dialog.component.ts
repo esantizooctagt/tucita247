@@ -201,7 +201,7 @@ export class AppowiDialogComponent implements OnInit {
                 Preference: res.Customer.Preferences.toString(), 
                 Disability: res.Customer.Disability.toString(), 
                 Gender: res.Customer.Gender.toString(),
-                DOB: dateDOB }
+                DOB: (res.Customer.DOB == '' ? '' : dateDOB) }
             );
             this.currEmail = res.Customer.Email;
             this.search = 0;
