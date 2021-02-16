@@ -17,6 +17,7 @@ import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MapsAPILoader } from '@agm/core';
 import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
+import { StickerDialogComponent } from '@app/shared/sticker-dialog/sticker-dialog.component';
 
 @Component({
   selector: 'app-business',
@@ -114,6 +115,7 @@ export class BusinessComponent implements OnInit {
     private fb: FormBuilder,
     private dialog: MatDialog,
     private learnmore: MatDialog,
+    private stickerDialog: MatDialog,
     private authService: AuthService,
     private _snackBar: MatSnackBar,
     private businessService: BusinessService,
@@ -162,6 +164,7 @@ export class BusinessComponent implements OnInit {
     Imagen: [''],
     ImagenLink:[''],
     Tags: [''],
+    Language: ['es'],
     Reasons: [''],
     Status: ['']
   });
@@ -181,6 +184,20 @@ export class BusinessComponent implements OnInit {
       message: message
     };
     this.learnmore.open(LearnDialogComponent, dialogConfig);
+  }
+
+  openSticker(businessName: string): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      businessName: businessName
+    };
+    dialogConfig.width ='740px';
+    dialogConfig.minWidth = '740px';
+    dialogConfig.maxWidth = '740px';
+    dialogConfig.height ='830px'; //'680px'
+    dialogConfig.minHeight ='830px';
+    this.stickerDialog.open(StickerDialogComponent, dialogConfig);
   }
 
   ngOnInit() {
@@ -249,6 +266,7 @@ export class BusinessComponent implements OnInit {
             ImagenLink: res.ImagenLink,
             ParentBusiness: res.ParentBusiness,
             Tags: res.Tags,
+            Language: res.Language,
             Reasons: res.Reasons,
             Status: res.Status
           });
@@ -258,12 +276,12 @@ export class BusinessComponent implements OnInit {
           this.spinnerService.stop(spinnerRef);
         } else {
           this.spinnerService.stop(spinnerRef);
-          this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', Reasons: '', ParentBusiness: 0, Status: 1});
+          this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', Language: '', Reasons: '', ParentBusiness: 0, Status: 1});
         }
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
-        this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', Reasons: '', ParentBusiness: 0, Status: 1});
+        this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', Language: '', Reasons: '', ParentBusiness: 0, Status: 1});
         this.openDialog('Error !', err.Message, false, true, false);
         return throwError(err || err.message);
       })
@@ -279,7 +297,7 @@ export class BusinessComponent implements OnInit {
         }
     }
     return invalid;
-}
+  }
 
   checkLinkAvailability(data) { 
     this.linkValidated = false;
@@ -627,11 +645,15 @@ export class BusinessComponent implements OnInit {
       "Tags": this.tags.toString(),
       "Reasons": this.reasons.toString(),
       "Categories": JSON.stringify(this.categories),
-      "ParentBusiness": (this.businessForm.value.ParentBusiness ? 1 : 0)
+      "ParentBusiness": (this.businessForm.value.ParentBusiness ? 1 : 0),
+      "Language": this.businessForm.value.Language
     }
     var spinnerRef = this.spinnerService.start($localize`:@@business.saving:`);
     this.businessSave$ = this.businessService.updateBusiness(this.businessId, dataForm).pipe(
       tap(res => { 
+        if (this.businessForm.value.Language != this.authService.businessLanguage()){
+          this.updateLanguage(this.businessForm.value.Language);
+        }
         this.spinnerService.stop(spinnerRef);
         this.savingBusiness = true;
         this.linkValidated = false;
@@ -648,6 +670,12 @@ export class BusinessComponent implements OnInit {
       })
     );
     // }
+  }
+
+  updateLanguage(lang){
+    let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
+    user.Business_Language = lang;
+    sessionStorage.setItem('TC247_USS', JSON.stringify(user));
   }
 
   loadSectors(cityId: string, i: number){
@@ -747,6 +775,10 @@ export class BusinessComponent implements OnInit {
     });
   }
 
+  printSticker(){
+    this.openSticker(this.businessForm.value.Name);
+  }
+
   learnMore(textNumber: number){
     let message = '';
     switch(textNumber) { 
@@ -784,6 +816,10 @@ export class BusinessComponent implements OnInit {
       }
       case 9: { 
         message = $localize`:@@learnMore.LMCON09:`;
+        break; 
+      }
+      case 45: { 
+        message = $localize`:@@learnMore.LMCON45:`;
         break; 
       }
       default: { 

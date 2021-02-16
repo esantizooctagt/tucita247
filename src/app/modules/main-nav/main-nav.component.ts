@@ -59,7 +59,7 @@ export class MainNavComponent implements OnInit {
 
   users: User[] = [];
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe([Breakpoints.TabletLandscape, Breakpoints.Medium, Breakpoints.TabletPortrait, Breakpoints.HandsetLandscape, Breakpoints.Handset, Breakpoints.HandsetPortrait])
     .pipe(
       map(result => result.matches),
       shareReplay()
@@ -271,4 +271,13 @@ export class MainNavComponent implements OnInit {
     return (filterValue != undefined ? this.allBusiness.filter((business: any) => business.Name.toLowerCase().indexOf(filterValue) === 0) : this.allBusiness);
   }
 
+  changeURL(language){
+    let newUrl;
+    if (language == 'en'){
+      newUrl = window.location.origin + window.location.pathname.replace('/es/', '/'+language+'/');
+    } else {
+      newUrl = window.location.origin + window.location.pathname.replace('/en/', '/'+language+'/');
+    }
+    location.replace(newUrl);
+  }
 }

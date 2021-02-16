@@ -2,6 +2,66 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template" target-language="en">
     <body>
+      <trans-unit id="citas.download">
+        <source>Download</source>
+        <target state="translated">Download</target>
+      </trans-unit>
+      <trans-unit id="citas.add">
+        <source>Add</source>
+        <target state="translated">Add</target>
+      </trans-unit>
+      <trans-unit id="citas.checkout">
+        <source>Checkout</source>
+        <target state="translated">Check Out</target>
+      </trans-unit>
+      <trans-unit id="message.title" datatype="html">
+        <source>Appointment messages</source>
+        <target state="translated">Appointment messages</target>
+        <context-group purpose="mess-dialog">
+          <context context-type="sourcefile">src/app/modules/shared/mess-dialog/mess-dialog.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="shared.print" datatype="html">
+        <source>Print</source>
+        <target state="translated">Print</target>
+        <context-group purpose="sticker-dialog">
+          <context context-type="sourcefile">src/app/modules/shared/sticker-dialog/sticker-dialog.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="business.sticker" datatype="html">
+        <source>Print Business Sign</source>
+        <target state="translated">Print Business Sign</target>
+        <context-group purpose="business">
+          <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
+          <context context-type="linenumber">243</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="business.bookhere" datatype="html">
+        <source>Book here</source>
+        <target state="translated">Scan and book here:</target>
+        <context-group purpose="business">
+          <context context-type="sourcefile">src/app/modules/business/business.component.html</context>
+          <context context-type="linenumber">243</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="business.communication" datatype="html">
+        <source>Communication</source>
+        <target state="translated">Communication</target>
+        <context-group purpose="host">
+          <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
+          <context context-type="linenumber">282</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="business.language" datatype="html">
+        <source>Language</source>
+        <target state="translated">Preferred language to communicate with your customers:</target>
+        <context-group purpose="host">
+          <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
+          <context context-type="linenumber">285</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="cancel.title" datatype="html">
         <source>CANCEL</source>
         <target state="translated">CANCEL</target>
@@ -4714,7 +4774,7 @@
       </trans-unit>
       <trans-unit id="shared.locationclosed">
         <source>This location is closed</source>
-        <target state="translated">This location is closed</target>
+        <target state="translated">This location has been closed</target>
       </trans-unit>
       <trans-unit id="learnMore.LMCON01">
         <source>LMCON01</source>
@@ -4934,6 +4994,10 @@ When using Manual Check-Out, the system will not send polls to that location.</t
           <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
+      </trans-unit>
+      <trans-unit id="learnMore.LMCON45">
+        <source>LMCON45</source>
+        <target state="translated">Tu Cita 24/7 will use this language to send booking messages to your customers.</target>
       </trans-unit>
       <trans-unit id="sche.calendar" datatype="html">
         <source>CALENDAR</source>

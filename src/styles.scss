@@ -97,6 +97,55 @@ button.mat-stroked-button{
 mat-error{
     font-weight: 600;
 }
+.print-area{
+    display: none;
+}
+.qr-img{
+    height: 475px !important;
+    width: 475px !important;
+}
+.qr-style{
+    margin-top: 38px;
+    margin-bottom: 38px;
+}
+.qr-title{
+    text-align: center;
+}
+.qr-text{
+    display: inline;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 66px;
+    line-height: 66px;
+}
+@media print {
+    body {
+        -webkit-print-color-adjust: exact;
+    }
+    .display-area{
+        display: none !important;
+    }
+    .print-area{
+        display: block;
+        min-height: 920px;
+        height: 920px;
+        overflow: visible;
+        // position:relative;
+        // top: -30px;
+        margin:auto;
+    }
+    .init-pos{
+        position:relative;
+        top: 10px;
+    }
+    .cdk-overlay-dark-backdrop{
+        background: #fff;
+    }
+    .mat-dialog-container{
+        box-shadow: none;
+    }
+}
 @import '~@angular/material/theming';
 
 //Barra de mensajes de alerte igual a Google

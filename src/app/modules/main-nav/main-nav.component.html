@@ -195,8 +195,8 @@
           <mat-icon>language</mat-icon>
         </button>
         <mat-menu #languageMenu="matMenu" xPosition="before">
-          <a class="item-language" mat-menu-item href="https://console.tucita247.com/en">English</a>
-          <a class="item-language" mat-menu-item href="https://console.tucita247.com/es/index.html">Español</a>
+          <a class="item-language" mat-menu-item (click)="changeURL('en');">English</a>
+          <a class="item-language" mat-menu-item (click)="changeURL('es');">Español</a>
         </mat-menu>
         <!-- <button mat-icon-button class="mr-1" [routerLink]="['/help']">
           <mat-icon>help</mat-icon>

@@ -29,7 +29,11 @@ export interface DialogData {
 export class AppoDialogComponent implements OnInit {
   newAppointment$: Observable<any>;
   services$: Observable<any[]>;
+  getCustomer$: Observable<any>;
 
+  search: number = 0;
+  currEmail: string = '';
+  onError: string = '';
   doors: string[];
   serviceId: string = '';
   businessId: string = '';
@@ -133,6 +137,20 @@ export class AppoDialogComponent implements OnInit {
     //NEW FULL APPOINTMENT
     let phoneNumber = this.clientForm.value.Phone.replace( /\D+/g, '');
     let dateAppo = (this.data.appoTime.substring(6,8) == 'PM' ? (+this.data.appoTime.substring(0,2) == 12 ? this.data.appoTime.substring(0,2) : +this.data.appoTime.substring(0,2)+12) : this.data.appoTime.substring(0,2).padStart(2,'0'));
+    let updE: number;
+    if (this.currEmail != ''){
+      if (this.currEmail != this.clientForm.value.Email){
+        updE = 1;
+      } else {
+        updE = 0;
+      }
+    } else {
+      if (this.clientForm.value.Email != ''){
+        updE = 1;
+      } else {
+        updE = 0;
+      }
+    }
     let formData = {
       BusinessId: this.data.businessId,
       LocationId: this.data.locationId,
@@ -152,7 +170,8 @@ export class AppoDialogComponent implements OnInit {
       Disability: (this.clientForm.value.Disability == null ? '': this.clientForm.value.Disability),
       Guests: this.clientForm.value.Guests,
       Status: 1,
-      Type: 1
+      Type: 1,
+      UpdEmail: updE
     }
     var spinnerRef = this.spinnerService.start($localize`:@@host.addingappo:`);
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
@@ -175,6 +194,37 @@ export class AppoDialogComponent implements OnInit {
         return err;
       })
     );
+  }
+
+  loadCustomer(){
+    let phoneNumber = this.clientForm.value.Phone.toString().replace(/[^0-9]/g,'');
+    let phone = (phoneNumber == '' ?  '00000000000' : (phoneNumber.length <= 10 ? '1' + phoneNumber : phoneNumber));
+    if (phone != '00000000000'){
+      this.search = 1;
+      this.getCustomer$ = this.appointmentService.getMobile(phone).pipe(
+        map((res: any) => {
+          if (res.Code == 200){
+            let dateDOB = new Date(res.Customer.DOB+'T06:00:00');
+            this.clientForm.patchValue(
+              { Name: res.Customer.Name, 
+                Email: res.Customer.Email,
+                Preference: res.Customer.Preferences.toString(), 
+                Disability: res.Customer.Disability.toString(), 
+                Gender: res.Customer.Gender.toString(),
+                DOB: (res.Customer.DOB == '' ? '' : dateDOB) }
+            );
+            this.currEmail = res.Customer.Email;
+            this.search = 0;
+          }
+          return res.Code;
+        }),
+        catchError(err => {
+          this.onError = err.Message;
+          this.search = 0;
+          return this.onError;
+        })
+      );
+    }
   }
 
   getErrorMessage(component: string){

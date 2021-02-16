@@ -1,14 +1,42 @@
+//CAMBIO ERICK SANTIZO
 mat-card{
     margin-left:0px;
     padding: 5px 8px;
     background: #FFFFFF;
     box-shadow: -3px 1px 4px rgba(0, 0, 0, 0.25) !important;
     border-radius: 0px; //10px;
+    min-width: 95%;
+    width: 95%;
 }
 .text-loc{
     position: absolute;
     font-weight: 500;
     top: 9px;
+}
+.div-drag{
+    cursor: move;
+    width: 24px;
+    text-align: right;
+    width: 100%;
+}
+.data-hg{
+    height: 25px;
+}
+.ready-text{
+    font-family: Montserrat;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 41px;
+    text-align: center;
+    color: #979797;
+}
+.btn-icon{
+    color: #f44f00;
+    top: -2px;
+}
+:host ::ng-deep .mat-tab-label.mat-tab-label-active {
+    color: #ff4f00;
+    font-weight: 600;
 }
 :host ::ng-deep .mat-form-field {
     .mat-form-field-wrapper {
@@ -71,6 +99,12 @@ mat-card{
     border-radius: 15px;
     height: 20px !important;
 }
+::ng-deep .elapsed-clock{
+    height: 24px !important;
+    width: 24px !important;
+    line-height: 20px !important;
+    top: -2px !important;
+}
 /* Use the button type you're using here */
 button.mat-icon-button
 {
@@ -97,8 +131,15 @@ button.mat-stroked-button
     padding-right: 2px;
     padding-left: 1px;
 }
+.tabs-detail{
+    width: 100%;
+}
+:host ::ng-deep .mat-tab-body-content{
+    overflow-y: auto;
+    overflow-x: hidden;
+}
 .plan{
-    min-height: 300px;
+    min-height: calc(100% - 37.33px);
     height: 100%;
     width: 100%;
     overflow: auto;
@@ -135,7 +176,7 @@ button.mat-stroked-button
     border: dashed 1px #ff4f00;
 }
 .precheck{
-    min-height: 300px;
+    min-height: calc(100% - 37.33px);
     height: 100%;
     width: 100%;
     overflow: auto;
@@ -151,12 +192,12 @@ button.mat-stroked-button
 .host-container{
     background-color: #F5F5F5;
 }
-.title-qeue{
-    font-size: 25px;
-    font-weight: 600;
-    color: #797979;
-    text-align: center;
-}
+// .title-qeue{
+//     font-size: 25px;
+//     font-weight: 600;
+//     color: #797979;
+//     text-align: center;
+// }
 .add_client{
     color: #ff4f00;
     background: white;
@@ -164,6 +205,8 @@ button.mat-stroked-button
     width: 35px;
     box-shadow: none !important;
     border: 1px solid #ff4f00;
+    position: relative;
+    left: 10px;
 }
 .card-previous{
     font-family: Montserrat;
@@ -196,7 +239,7 @@ button.mat-stroked-button
     border-bottom-color: #FF4F00;
 }
 mat-icon.mat-icon.notranslate.material-icons.mat-icon-no-color {
-    top: -4px;
+    top: -2px;
     position: relative;
 }
 .card-Appointment{
@@ -207,13 +250,16 @@ mat-icon.mat-icon.notranslate.material-icons.mat-icon-no-color {
     flex-direction: column;
     margin: 15px 0;
 }
-.send_icon{
-    color: #ff4f00;
+.badge-color{
+    color:white;
 }
-.button-send{
-    position: relative;
-    top: -10px;
-}
+// .send_icon{
+//     color: #ff4f00;
+// }
+// .button-send{
+//     position: relative;
+//     top: -10px;
+// }
 .card {
     padding-top: 14px;
 }
@@ -300,68 +346,56 @@ mat-icon.mat-icon.notranslate.material-icons.mat-icon-no-color {
     line-height: 30px;
     right: -6px;
 }
-.card-text{
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    outline: 2px solid #18A0FB !important;
-}
-.card-chat{
-    background-color: #F9F7F7;
-}
-.card-chat-user{
-    background: #D7D7D7;
-    border-radius: 8px;
-}
-.card-chat-host{
-    background: linear-gradient(0deg, #E8E8E8, #E8E8E8), #E1DDDD;
-    border-radius: 8px;
-    text-align: right;
-}
-.card-chat-time{
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 8px;
-    line-height: 10px;
-}
+// .card-text{
+//     width: 100%;
+//     height: 100%;
+//     box-sizing: border-box;
+//     outline: 2px solid #18A0FB !important;
+// }
+// .card-chat{
+//     background-color: #F9F7F7;
+//     overflow-y: auto;
+//     height: 110px;
+// }
+// .card-chat-user{
+//     background: #D7D7D7;
+//     border-radius: 8px;
+// }
+// .card-chat-host{
+//     background: linear-gradient(0deg, #E8E8E8, #E8E8E8), #E1DDDD;
+//     border-radius: 8px;
+//     text-align: right;
+// }
+// .card-chat-time{
+//     font-family: Montserrat;
+//     font-style: normal;
+//     font-weight: 600;
+//     font-size: 8px;
+//     line-height: 10px;
+// }
 .size-icon{
     font-size: 20px;
+    cursor: pointer;
 }
 .elapsed-time{
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 26px;
-    line-height: 9px;
-    color: #FF4F00;
     text-align: right;
-    display: contents;
-}
-.elapsed-tag{
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 1px;
-    text-align: right;
-    color: #FF4F00;
-    display: flow-root;
+    font-family: 'Montserrat';
+    color: #f44f00;
+    font-weight: 600;
 }
 .buffer-time{
     margin-left: auto;
     width: 40px;
     top: 5px;
-    float: unset;
-    margin-right: -16px;
-    margin-top: 5px;
 }
 .elapsed-clock{
-    font-size: 20px;
-    height: 20px;
-    line-height: 20px;
-    float: left;
-    margin-top: 5px;
+    height: 24px;
+    width: 24px;
+    line-height: 24px;
+    top: -2px;
+}
+.disp-button{
+    text-align: right;
 }
 .checkin-list{
     font-family: Montserrat;
@@ -410,6 +444,9 @@ mat-menu{
 .cdk-drag-preview {
     box-sizing: border-box;
     border-radius: 4px;
+    width: 350px;
+    max-width: 350px;
+    min-width: 350px;
     box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
             0 8px 10px 1px rgba(0, 0, 0, 0.14),
             0 3px 14px 2px rgba(0, 0, 0, 0.12);
@@ -433,8 +470,104 @@ mat-menu{
 .partial-qeue.cdk-drop-list-dragging .appCard:not(.cdk-drag-placeholder) {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
+.download-ico{
+    width: 37px;
+    height: 37px;
+    top: -1px;
+    position: relative;
+    cursor: pointer;
+}
+.download-btn{
+    width: 35px;
+    top: -4px;
+    left: 16px;
+    height: 35px;
+}
 ::ng-deep .mat-tooltip {
     background-color: #ff4f00;
+}
+.waitlist::-webkit-scrollbar {
+    width: 8px;
+    -webkit-overflow-scrolling: touch;
+    overflow: auto;
+}
+.walkin::-webkit-scrollbar {
+    width: 8px;
+    -webkit-overflow-scrolling: touch;
+    overflow: auto;
+}
+/* Track */
+.waitlist::-webkit-scrollbar-track {
+    /*box-shadow: inset 0 0 5px grey; */
+    border-radius: 10px;
+}
+.walkin::-webkit-scrollbar-track {
+    /*box-shadow: inset 0 0 5px grey; */
+    border-radius: 10px;
+}
+.plan::-webkit-scrollbar-track {
+    /*box-shadow: inset 0 0 5px grey; */
+    border-radius: 10px;
+}
+.precheck::-webkit-scrollbar-track {
+    /*box-shadow: inset 0 0 5px grey; */
+    border-radius: 10px;
+}
+/* Handle */
+.waitlist::-webkit-scrollbar-thumb {
+    background: #ff4f00; 
+    border-radius: 10px;
+}
+.walkin::-webkit-scrollbar-thumb {
+    background: #ff4f00; 
+    border-radius: 10px;
+}
+.plan::-webkit-scrollbar-thumb {
+    background: #ff4f00; 
+    border-radius: 10px;
+}
+.precheck::-webkit-scrollbar-thumb {
+    background: #ff4f00; 
+    border-radius: 10px;
+}
+/* Handle on hover */
+.waitlist::-webkit-scrollbar-thumb:hover {
+    background: #b30000; 
+}
+.walkin::-webkit-scrollbar-thumb:hover {
+    background: #b30000; 
+}
+.plan::-webkit-scrollbar-thumb:hover {
+    background: #b30000; 
+}
+.precheck::-webkit-scrollbar-thumb:hover {
+    background: #b30000; 
+}
+@media only screen and (orientation: landscape){
+    .partial-qeue{
+        height: 55%;
+    }
+    .upc-partial-qeue{
+        height: 45%;
+    }
+    mat-card{
+        margin-right: 0 !important;
+        min-width: 95%;
+        width: 95%;
+    }
+}
+@media only screen and (orientation: portrait){
+    @media(max-width: 700px){
+        mat-card{
+            min-width: 100%;
+            width: 255px;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+        }
+        .qeue-tab{
+            padding-right: .25rem!important;
+        }
+    }
 }
 @media (max-width: 1024px){
     .title-qeue{
@@ -452,18 +585,24 @@ mat-menu{
     .card-phone{
         font-size: 15px;
     }
-    .elapsed-time{
-        font-size: 20px;
-        line-height: 1px;
-    }
     .elapsed-tag{
         font-size:13px;
+        text-align: right;
     }
     .elapsed-clock{
-        height: 16px;
-        width: 16px;
-        left: 0px;
-        top: -3px;
+        height: 24px;
+        width: 24px;
+        line-height: 24px;
+        top: -2px;
+    }
+    .elapsed-time{
+        text-align: right;
+        font-family: "Montserrat";
+        font-size: 11px;
+        color: #f44f00;
+        font-weight: 600;
+        top: 0px;
+        line-height: 10px;
     }
     .card-contentprio{
         line-height: 12px;
@@ -473,4 +612,45 @@ mat-menu{
         line-height: 12px;
         font-size: 13px;
     }
+    .mat-icon-button .mat-icon {
+        line-height: 20px;
+    }
+    .disp-button{
+        text-align: left;
+        top: -2px;
+    }
+    .buffer-time{
+        margin-left: auto;
+        top: 5px;
+        text-align: right;
+        width: auto;
+    }
+    .play-btn{
+        height: 20px !important;
+        width: 20px !important;
+    }
 } 
+
+// mat-tab-group .mat-tab-header .mat-tab-header-pagination {
+//     display: none !important; 
+// }
+
+::ng-deep mat-tab-group {
+    .mat-tab-header {
+        .mat-tab-header-pagination {
+            display: none !important; // <== disable pagination
+        }
+        .mat-tab-label-container {
+            // left: 0px; // if you need to use it on mobile - set left position to 0
+            // width: 100%;
+            .mat-tab-list {
+                overflow-x: auto !important; // <== set horisontal scroll bar imperatively
+                // below rule prevents sliding of buttons' container - because it not sliding properly - to left it not slide as well
+                transform: none !important;
+            }
+            .mat-tab-list::-webkit-scrollbar {
+                display: none;
+            }
+        }
+    }
+}

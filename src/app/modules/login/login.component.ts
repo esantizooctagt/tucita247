@@ -65,7 +65,7 @@ export class LoginComponent implements OnInit {
     var ctObj = CryptoJS.AES.encrypt(data, password);
     var ctStr = ctObj.toString();
 
-    this.authService.login(this.f.email.value, ctStr, this.f.authcode.value)
+    this.authService.login(this.f.email.value.trim().toLowerCase(), ctStr, this.f.authcode.value)
       .pipe(first())
       .subscribe(
           data => {

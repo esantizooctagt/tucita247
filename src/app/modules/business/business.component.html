@@ -230,7 +230,7 @@
                                 </mat-form-field>
                             </ng-container>
                             <ng-template #labelTuCita>
-                                <div class="content-label col-md-6 form-field pl-0 pr-3 pb-3 mb-3">
+                                <div class="content-label col-md-9 form-field pl-0 pb-3">
                                     <mat-label class="" i18n="Tu Cita 24/7 Link :|text in business@@business.labeltucitablink">
                                         Tu Cita 24/7 Link :
                                     </mat-label>
@@ -238,6 +238,9 @@
                                     <button type="button" mat-icon-button color="primary" *ngIf="!loadingBusiness" matSuffix (click)="learnMore(7)">
                                         <mat-icon>help</mat-icon>
                                     </button>
+                                </div>
+                                <div class="col-md-3 pl-0 pr-0 mb-3">
+                                    <button type="button" class="mr-3 mt-2" mat-flat-button color="primary" (click)="printSticker()" i18n="sticker@@business.sticker">Print Business Sign</button>
                                 </div>
                             </ng-template>
                             <div class="image-business mt-2 mb-2 row ml-0 mr-0">
@@ -276,6 +279,24 @@
                                             </div>
                                         </div>
                                     </form>
+                                </div>
+                            </div>
+                        </mat-tab>
+                        <mat-tab label="Communication" i18n-label="Communication@@business.communication">
+                            <div class="row">
+                                <div class="col-md-7 pt-3 pb-0">
+                                    <mat-label class="" i18n="Language|text in business@@business.language">Language :</mat-label>
+                                    <button type="button" mat-icon-button color="primary" class="learn" matSuffix (click)="learnMore(45)">
+                                        <mat-icon>help</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 pb-3">
+                                    <mat-radio-group class="language-line" formControlName="Language">
+                                        <mat-radio-button value="en">English</mat-radio-button>
+                                        <mat-radio-button value="es">Español</mat-radio-button>
+                                    </mat-radio-group>
                                 </div>
                             </div>
                         </mat-tab>

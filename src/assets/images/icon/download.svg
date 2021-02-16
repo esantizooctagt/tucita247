@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+	<style>
+		tspan { white-space:pre }
+		.shp5 { fill: #fff;stroke: #ff4f00;stroke-width: 10px} 
+		.shp6 { fill: #fff;stroke: #ff4f00;stroke-width: 5px} 
+	</style>
+	<path id="Shape 1" class="shp6" d="M127.5 245C62.52 245 10 192.48 10 127.5C10 62.52 62.52 10 127.5 10C192.48 10 245 62.52 245 127.5C245 192.48 192.48 245 127.5 245Z"/>
+	<path id="Shape 3" class="shp5" d="M79.4 189.19L93.77 189.19L117.72 189.19L136.89 189.19L160.04 189.19L164.84 189.19L169.63 189.19L177.61 189.19"/>
+	<path id="Shape 3" class="shp5" d="M77 104.75L129.7 157.95L184 104"/>
+	<path id="Shape 2" class="shp5" d="M129.53 44.19L129.53 157.49"/>
+</svg>

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OnInit, QueryList, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { interval, Observable, of } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -8,7 +8,6 @@ import { AuthService } from '@app/core/services';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { map, catchError, switchMap, mergeMap, tap, shareReplay } from 'rxjs/operators';
 import { Appointment, Reason } from '@app/_models';
-import { AbstractControl, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
@@ -20,6 +19,8 @@ import { DirDialogComponent } from '@app/shared/dir-dialog/dir-dialog.component'
 import { MonitorService } from '@app/shared/monitor.service';
 import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.component';
 import { MediaMatcher } from '@angular/cdk/layout';
+import { AppowiDialogComponent } from '@app/shared/appowi-dialog/appowi-dialog.component';
+import { MessDialogComponent } from '@app/shared/mess-dialog/mess-dialog.component';
 
 @Component({
   selector: 'app-host',
@@ -35,7 +36,6 @@ export class HostComponent implements OnInit {
   appointmentsWaitList$: Observable<Appointment[]>;
   getWalkIns$: Observable<any[]>;
   messages$: Observable<any>;
-  newAppointment$: Observable<any>;
   updAppointment$: Observable<any>;
   getMessages$: Observable<any[]>;
   quantityPeople$: Observable<any>;
@@ -53,7 +53,8 @@ export class HostComponent implements OnInit {
   cancelAppo$: Observable<any>;
   newCurrTime$: Observable<any>;
   runQeues$: Observable<any>;
-  hours$: Observable<any>;
+  onHold$: Observable<any>;
+  reload$: Observable<any>;
 
   getCommentsSche=[];
   getCommentsWalk=[];
@@ -111,17 +112,20 @@ export class HostComponent implements OnInit {
   hideDetails: string = $localize`:@@shared.hidedetails:`;
   matcher: MediaQueryList;
   lastTime = new Date().getTime();
+  txtDownload: string = $localize`:@@citas.download:`;
+  txtAdd: string = $localize`:@@citas.add:`;
+  txtCheckout: string = $localize`:@@citas.checkout:`;
 
-  get f(){
-    return this.clientForm.controls;
-  }
+  countUpc: number = 0;
+  countWai: number = 0;
+  countPre: number = 0;
 
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe('(max-width: 599px)')
     .pipe(
       map(result => { 
-        this.screenDisp = result.matches; 
+        this.screenDisp = result.matches;
         return result.matches;}),
       shareReplay()
     );
@@ -154,7 +158,6 @@ export class HostComponent implements OnInit {
     private reasonService: ReasonsService,
     private locationService: LocationService,
     private serviceService: ServService,
-    private fb: FormBuilder,
     private dialog: MatDialog,
     private learnmore: MatDialog,
     private matIconRegistry: MatIconRegistry,
@@ -174,21 +177,9 @@ export class HostComponent implements OnInit {
     this.matIconRegistry.addSvgIcon('sms',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/sms.svg'));
     this.matIconRegistry.addSvgIcon('mas',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/mas.svg'));
     this.matIconRegistry.addSvgIcon('menos',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/menos.svg'));
+    this.matIconRegistry.addSvgIcon('download',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/download.svg'));
+    this.matIconRegistry.addSvgIcon('dragdrop',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/dragdrop.svg'));
   }
-
-  clientForm = this.fb.group({
-    Phone: ['',[Validators.maxLength(17)]],
-    Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
-    ServiceId: ['', [Validators.required]],
-    Hour: ['', [Validators.required]],
-    Email: ['', [Validators.maxLength(200), Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
-    DOB: [''],
-    Gender: [''],
-    Preference: ['1'],
-    Disability: [''],
-    Guests: ['1', [Validators.required, (control: AbstractControl) => Validators.max(this.maxGuests)(control), Validators.min(1)]],
-    ProviderId: ['']
-  })
 
   schedule =[];
   walkIns =[];
@@ -284,7 +275,6 @@ export class HostComponent implements OnInit {
             }
           }
         } else {
-          console.log("eingreso 02");
           if (this.waitlist.filter(x => x.AppId ==  msg['AppId']).length == 0){
             var verifWaitList = this.waitlist.findIndex(x => x.AppId === msg['AppId']);
             if (verifWaitList >= 0){return;}
@@ -304,8 +294,8 @@ export class HostComponent implements OnInit {
     }
     if (msg['Tipo'] == 'REVERSE'){
       if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 1){
-        var verifpreCheck = this.preCheckIn.findIndex(x => x.AppId === msg['AppId']);
-        if (verifpreCheck >= 0){this.preCheckIn.splice(verifpreCheck, 1);}
+        // var verifpreCheck = this.preCheckIn.findIndex(x => x.AppId === msg['AppId']);
+        // if (verifpreCheck >= 0){this.preCheckIn.splice(verifpreCheck, 1);}
         let hora = msg['DateAppo'];
         let data = {
           AppId: msg['AppId'],
@@ -330,6 +320,20 @@ export class HostComponent implements OnInit {
           QrCode: msg['QrCode'],
           DateTrans: msg['DateTrans']
         }
+        var verifWI = this.walkIns.findIndex(x => x.AppId === msg['AppId']);
+        if (verifWI >= 0){this.walkIns.splice(verifWI, 1);}
+        var verifWL = this.waitlist.findIndex(x => x.AppId === msg['AppId']);
+        if (verifWL >= 0){this.waitlist.splice(verifWL, 1);}
+        var verifPR = this.schedule.findIndex(x => x.AppId === msg['AppId']);
+        if (verifPR >= 0){this.schedule.splice(verifPR, 1);}
+
+        let val = this.preCheckIn.findIndex(x=>x.AppId == msg['AppId']);
+        if (val >= 0){
+          this.selectedCheck[val] = undefined;
+        }
+        var dataPRE = this.preCheckIn.findIndex(e => e.AppId === msg['AppId']);
+        if (dataPRE >= 0 ){this.preCheckIn.splice(dataPRE, 1);}
+
         if (msg['Type'] == 1){
           if (msg['Qeue'] == 'UPC'){
             if (this.walkIns.filter(x => x.AppId ==  msg['AppId']).length == 0){
@@ -385,28 +389,36 @@ export class HostComponent implements OnInit {
         let resScheMess = this.schedule.findIndex(x => x.AppId === msg['AppId']);
         if (resScheMess >= 0){
           if (this.schedule[resScheMess].OpenMess == 1){
+            this.getCommentsSche[resScheMess].reverse();
             this.getCommentsSche[resScheMess].push(msg['Message']);
+            this.getCommentsSche[resScheMess].reverse();
           }
           this.schedule[resScheMess].Unread = "H";
         }
         let resWalkInsMess = this.walkIns.findIndex(x => x.AppId === msg['AppId']);
         if (resWalkInsMess >= 0){
           if (this.walkIns[resWalkInsMess].OpenMess == 1){
+            this.getCommentsWalk[resWalkInsMess].reverse();
             this.getCommentsWalk[resWalkInsMess].push(msg['Message']);
+            this.getCommentsWalk[resWalkInsMess].reverse();
           }
           this.walkIns[resWalkInsMess].Unread = "H";
         }
         let resWaitListMess = this.waitlist.findIndex(x => x.AppId === msg['AppId']);
         if (resWaitListMess >= 0){
           if (this.waitlist[resWaitListMess].OpenMess == 1){
+            this.getCommentsWaitList[resWaitListMess].reverse();
             this.getCommentsWaitList[resWaitListMess].push(msg['Message']);
+            this.getCommentsWaitList[resWaitListMess].reverse();
           }
           this.waitlist[resWaitListMess].Unread = "H";
         }
         let resPreCheckInMess = this.preCheckIn.findIndex(x => x.AppId === msg['AppId']);
         if (resPreCheckInMess >= 0){
           if (this.preCheckIn[resPreCheckInMess].OpenMess == 1){
+            this.getCommentsCheck[resPreCheckInMess].reverse();
             this.getCommentsCheck[resPreCheckInMess].push(msg['Message']);
+            this.getCommentsCheck[resPreCheckInMess].reverse();
           }
           this.preCheckIn[resPreCheckInMess].Unread = "H";
         }
@@ -427,13 +439,27 @@ export class HostComponent implements OnInit {
         if (verifwaitList >= 0){this.waitlist.splice(verifwaitList, 1);}
       }
     }
+    if (msg['Tipo'] == 'HOLD'){
+      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 1){
+        var verifpreCheck = this.preCheckIn.findIndex(x => x.AppId === msg['AppId']);
+        if (verifpreCheck >= 0){
+          this.preCheckIn[verifpreCheck].Pause = msg['Pause'].toString();
+        }
+      }
+    }
+    if (msg['Tipo'] == 'RELOAD'){
+      if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 1){
+        this.getAppointmentsSche();
+        this.getAppointmentsWalk();
+        this.getAppointmentsWaitList();
+      }
+    }
     if (msg['Tipo'] == 'MOVE'){
       if (msg['BusinessId'] == this.businessId && msg['LocationId'] == this.locationId && this.locationStatus == 1){
         if (msg['To'] == 'PRECHECK'){
           var verifSche = this.schedule.findIndex(x => x.AppId === msg['AppId']);
           if (verifSche >= 0){
             var dataSche = this.schedule[verifSche];
-            console.log(dataSche);
             let custId = dataSche['CustomerId'];
             if (custId == undefined){
               custId = dataSche['ClientId'];
@@ -471,7 +497,6 @@ export class HostComponent implements OnInit {
           var verifWalkIns = this.walkIns.findIndex(x => x.AppId === msg['AppId']);
           if (verifWalkIns >= 0){
             var dataWalk = this.walkIns[verifWalkIns];
-            console.log(dataWalk);
             let custId = dataWalk['CustomerId'];
             if (custId == undefined){
               custId = dataWalk['ClientId'];
@@ -509,7 +534,6 @@ export class HostComponent implements OnInit {
           var verifwaitList = this.waitlist.findIndex(x => x.AppId === msg['AppId']);
           if (verifwaitList >= 0){
             var dataPrev = this.waitlist[verifwaitList];
-            console.log(dataPrev);
             let custId = dataPrev['CustomerId'];
             if (custId == undefined){
               custId = dataPrev['ClientId'];
@@ -608,7 +632,7 @@ export class HostComponent implements OnInit {
             }
           })
         );
-        this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.locationclosed:`, false, true, false);
+        this.openDialog('', $localize`:@@shared.locationclosed:`, false, true, false);
       }
     }
     if (msg['Tipo'] == 'RESET'){
@@ -679,21 +703,28 @@ export class HostComponent implements OnInit {
         );
       }
     }
+    this.countUpc = this.walkIns.length;
+    this.countPre = this.schedule.length;
+    this.countWai = this.waitlist.length;
   }
 
   screenSize(event){
     console.log("screen Size");
+    // alert("screen size");
     location.reload();
   }
 
   ngOnInit(): void {
-    this.matcher = this.mediaMatcher.matchMedia(Breakpoints.Handset);
+    this.matcher = this.mediaMatcher.matchMedia('(max-width: 599px)');
+    // console.log(this.matcher);
     this.matcher.addListener(this.screenSize);
 
     if (this.matcher.matches) {return;}
 
+    if (this.screenDisp) {return;}
     this.businessId = this.authService.businessId();
     this.userId = this.authService.userId();
+    console.log("ingreso aca");
 
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadinglocs:`);
     this.getLocInfo$ = this.appointmentService.getHostLocations(this.businessId, this.userId).pipe(
@@ -867,6 +898,34 @@ export class HostComponent implements OnInit {
         this.getAppointmentsWaitList();
       })
     );
+  }
+
+  reloadData(){
+    let formData = { 
+      BusinessId: this.businessId, 
+      LocationId: this.locationId, 
+      Tipo: "RELOAD" 
+    }
+    this.reload$ = this.adminService.postMessage(formData).pipe(
+      map((res:any) => {
+        if (res != null){
+          if (res.Code == 200){
+            console.log("OK");
+          } else {
+            console.log("Error");
+          }
+        } else {
+          console.log("Error");
+        }
+      }),
+      catchError(err => {
+        console.log("Error");
+        return this.onError;
+      })
+    );
+    this.getAppointmentsSche();
+    this.getAppointmentsWalk();
+    this.getAppointmentsWaitList();
   }
 
   openLocation(){
@@ -1050,46 +1109,6 @@ export class HostComponent implements OnInit {
     );
   }
 
-  validateService(event){
-    let res = this.services.filter(x => x.ServiceId == event.value);
-    if (res.length > 0) { this.maxGuests = res[0].CustomerPerBooking; }
-    this.numGuests =  1;
-    this.clientForm.patchValue({'Guests': this.numGuests});
-
-    this.hours$ = this.appointmentService.getAvailability(this.businessId, this.locationId, this.clientForm.value.ProviderId, event.value).pipe(
-      map((res: any) => {
-        if (res.Code == 200){
-          // this.hours = res.Hours;
-          return res.Hours;
-          // this.openSnackBar($localize`:@@host.checkoutsuccess:`, $localize`:@@host.checkoutpop:`);
-        }
-      }),
-      catchError(err => {
-        this.onError = err.Message;
-        this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@host.checkoutpop:`);
-        return this.onError;
-      })
-    );
-  }
-
-  addGuests(){
-    if (this.numGuests < this.maxGuests) {
-      this.numGuests = this.numGuests+1;
-    } else {
-      this.numGuests = this.numGuests;
-    }
-    this.clientForm.patchValue({'Guests': this.numGuests});
-  }
-
-  remGuests(){
-    if (this.numGuests > 1) {
-      this.numGuests=this.numGuests-1;
-     } else {
-      this.numGuests = this.numGuests;
-     }
-     this.clientForm.patchValue({'Guests': this.numGuests});
-  }
-
   checkOutQR(){
     const dialogRef = new MatDialogConfig();
     dialogRef.width ='450px';
@@ -1237,170 +1256,12 @@ export class HostComponent implements OnInit {
     );
   }
 
-  addAppointment(){
-    let timeAppo = this.getTimeAppo();
-    if (!this.clientForm.valid) {return;}
-    //AGREGAR WALK IN Y APPOINTMENT
-    let dobClient: Date = this.clientForm.value.DOB;
-    let dob: string = '';
-    if (dobClient.toString() == '') {
-      dob = '';
-    } else {
-      let month = (dobClient.getMonth()+1).toString().padStart(2, '0'); 
-      let day = dobClient.getDate().toString().padStart(2, '0');
-      dob = dobClient.getUTCFullYear().toString() + '-' + month + '-' + day;
-    }
-    let phoneNumber = this.clientForm.value.Phone.toString().replace(/[^0-9]/g,'');
-    let yearCurr = this.getYear();
-    let monthCurr = this.getMonth();
-    let dayCurr = this.getDay();
-    let dateAppo = yearCurr + '-' + monthCurr + '-' + dayCurr;
-    let typeAppo = ((this.clientForm.value.Hour).toString() == "--" ? 2 : 1);
-    let formData = {
-      BusinessId: this.businessId,
-      LocationId: this.locationId,
-      ProviderId: (this.providerId != '0' ? this.providerId : this.clientForm.value.ProviderId),
-      ServiceId: this.clientForm.value.ServiceId,
-      BusinessName: (this.authService.businessName().length > 27 ? this.authService.businessName().substring(0,27)+'...' : this.authService.businessName()),
-      Language: this.authService.businessLanguage(),
-      Door: this.doorId,
-      Phone: (phoneNumber == '' ?  '00000000000' : (phoneNumber.length <= 10 ? '1' + phoneNumber : phoneNumber)),
-      Name: this.clientForm.value.Name,
-      Email: (this.clientForm.value.Email == '' ? '' : this.clientForm.value.Email),
-      DOB: dob,
-      Gender: (this.clientForm.value.Gender == '' ? '': this.clientForm.value.Gender),
-      Preference: (this.clientForm.value.Preference == '' ? '': this.clientForm.value.Preference),
-      Disability: (this.clientForm.value.Disability == null ? '': this.clientForm.value.Disability),
-      Guests: this.clientForm.value.Guests,
-      AppoDate: dateAppo,
-      AppoHour: ((this.clientForm.value.Hour).toString() == "--" ? timeAppo : (this.clientForm.value.Hour).toString().padStart(2,'0')+':00'),
-      Type: typeAppo
-    }
-
-    let options = {
-      timeZone: this.TimeZone,
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: false,
-    },
-    formatter = new Intl.DateTimeFormat([], options);
-    var actualTime = formatter.format(new Date());
-    let actTime = +actualTime.replace(':','-').substring(0,2);
-
-    var spinnerRef = this.spinnerService.start($localize`:@@host.addingappo:`);
-    this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
-      map((res: any) => {
-        if (res.Code == 200){
-          let appoTime = +(res.Appointment.DateFull).substring(11).replace(':','-').substring(0,2);
-          if (appoTime >= actTime){
-            if (typeAppo == 1){
-              let upComingIndex = this.walkIns.findIndex(x=>x.AppId == res.Appointment.AppId);
-              if (upComingIndex < 0){
-                this.walkIns.push(res.Appointment);
-                this.walkIns.sort(function(a, b) { 
-                  if (a.DateFull == b.DateFull){
-                    if (a.Disability == b.Disability){
-                      return b.DateTrans > a.DateTrans ? -1 : 1
-                  }
-                  return b.Disability - a.Disability;
-                  }
-                  return a.DateFull > b.DateFull ? 1 : -1;
-                });
-              }
-            } else {
-              let upComingIndex = this.waitlist.findIndex(x=>x.AppId == res.Appointment.AppId);
-              if (upComingIndex < 0){
-                this.waitlist.push(res.Appointment);
-                this.waitlist.sort(function(a, b) { 
-                  if (a.DateFull == b.DateFull){
-                    if (a.Disability == b.Disability){
-                      return b.DateTrans > a.DateTrans ? -1 : 1
-                  }
-                  return b.Disability - a.Disability;
-                  }
-                  return a.DateFull > b.DateFull ? 1 : -1;
-                });
-              }
-            }
-          }
-        }
-        this.spinnerService.stop(spinnerRef);
-        this.clientForm.reset({Phone:'', Name:'', Email:'', DOB:'', Gender:'', Preference:1, Disability:'', ProviderId: '', ServiceId:'', Guests: 1});
-        this.showApp = false;
-        return res.Code;
-      }),
-      catchError(err => {
-        this.spinnerService.stop(spinnerRef);
-        this.onError = err.Message;
-        if (err.Status == 404){
-          this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.invalidDateTime:`, false, true, false);
-        } else {
-          this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.wrong:`, false, true, false);
-        }
-        return this.onError;
-      })
-    );
-  }
-
   showAppointment(){
-    this.showApp = !this.showApp;
-    if (this.showApp){
-      this.clientForm.reset({Phone:'', Name:'', Email:'', DOB:'', Gender:'', Preference:1, Disability:'', ProviderId:'', ServiceId:'', Guests: 1});
-    }
-  }
-
-  onCancelAddAppointment(){
-    this.clientForm.reset({Phone:'', Name:'', Email:'', DOB:'', Gender:'', Preference:1, Disability:'', ProviderId:'', ServiceId:'', Guests: 1});
-    this.showApp = false;
-  }
-
-  getErrorMessage(component: string){
-    const val200 = '200';
-    const val3 = '3';
-    const val2 = '2';
-    const val1 = '1';
-    const val6 = '6';
-    const val14 = '14';
-    const val99 = '99';
-    const val100 = '100';
-    const maxVal = this.maxGuests;
-
-    if (component === 'Email'){
-      return this.f.Email.hasError('required') ? $localize`:@@shared.entervalue:` :
-        this.f.Email.hasError('maxlength') ? $localize`:@@shared.maximun: ${val200}` :
-          this.f.Email.hasError('pattern') ? $localize`:@@forgot.emailformat:` :
-          '';
-    }
-    if (component === 'Name'){
-      return this.f.Name.hasError('required') ? $localize`:@@shared.entervalue:` :
-        this.f.Name.hasError('minlength') ? $localize`:@@shared.minimun: ${val3}` :
-          this.f.Name.hasError('maxlength') ? $localize`:@@shared.maximun: ${val100}` :
-            '';
-    }
-    if (component === 'ServiceId'){
-      return this.f.ServiceId.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
-            '';
-    }
-    if (component === 'ProviderId'){
-      return this.f.ProviderId.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
-            '';
-    }
-    if (component === 'Hour'){
-      return this.f.Hour.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
-            '';
-    }
-    if (component === 'Phone'){
-      return this.f.Phone.hasError('minlength') ? $localize`:@@shared.minimun: ${val6}` :
-        this.f.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: ${val14}` :
-          '';
-    }
-    if (component === 'Guests'){
-      return this.f.Guests.hasError('required') ? $localize`:@@shared.entervalue:` :
-      this.f.Guests.hasError('maxlength') ? $localize`:@@shared.maximun: ${val2}` :
-        this.f.Guests.hasError('min') ? $localize`:@@shared.minvalue: ${val1}` :
-          this.f.Guests.hasError('max') ? $localize`:@@shared.maxvalue: ${maxVal}` :
-            '';
-    }
+    const dialogRef = this.dialog.open(AppowiDialogComponent, {
+      width: '450px',
+      height: '700px',
+      data: {timeZone: this.TimeZone, door: this.doorId, businessId: this.businessId, locationId: this.locationId, providerId: this.providerId, services: this.services, buckets: this.buckets, hours: this.hours, providers: this.Providers}
+    });
   }
 
   onCancelApp(appo: any, reasonId: string, index: number, origin: string){
@@ -1589,100 +1450,19 @@ export class HostComponent implements OnInit {
     );
   }
 
-  onMessageApp(appointmentId: string, item: any, i: number, qeue: string){
-    let options = {
-      timeZone: this.TimeZone,
-      month: 'long',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true,
-    },
-    formatter = new Intl.DateTimeFormat([], options);
-    var actual = formatter.format(new Date());
-    let value = item.value;
-    item.value = '';
-    if (qeue == 'schedule'){
-      this.getCommentsSche[i].push({'H': value, 'T': actual});
-    }
-    if (qeue == 'walkin'){
-      this.getCommentsWalk[i].push({'H': value, 'T': actual});
-    }
-    if (qeue == 'checkin'){
-      this.getCommentsCheck[i].push({'H': value, 'T': actual});
-    }
-    if (qeue == 'waitlist'){
-      this.getCommentsWaitList[i].push({'H': value, 'T': actual});
-    }
-    //GET MESSAGES APPOINTMENT
-    let formData = {
-      Message: value,
-      BusinessName: this.authService.businessName()
-    }
-    this.messages$ = this.appointmentService.putMessage(appointmentId, '1', formData).pipe(
-      map((res:any) => {
-        if (res != null){
-          if (res.Code == 200){
-            this.openSnackBar($localize`:@@host.messagessend:`,$localize`:@@host.messages:`);
-          } else {
-            this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@host.messages:`);
-          }
-        } else {
-          this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@host.messages:`);
-        }
-      }),
-      catchError(err => {
-        this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@host.messages:`);
-        this.onError = err.Message;
-        return this.onError;
-      })
-    );
-  }
-
   onShowMessage(appo: any, i: number, type: string){
     if (appo.Unread == 'H') {
       appo.Unread = '0';
     }
-    if (type == 'schedule'){
-      this.getCommentsSche[i] = "";
-    }
-    if (type == 'walkin'){
-      this.getCommentsWalk[i] = "";
-    }
-    if (type == 'checkin'){
-      this.getCommentsCheck[i] = "";
-    }
-    if (type == 'waitlist'){
-      this.getCommentsWaitList[i] = "";
-    }
-    // console.log(appo.OpenMess);
-    appo.OpenMess = (appo.OpenMess == 0 || appo.OpenMess == undefined ? 1 : 0);
-    this.comments$ = this.appointmentService.getMessages(appo.AppId, 'H').pipe(
-      map((res: any) => {
-        if (res != null){
-          if (res.Code == 200){
-            if (type == 'schedule'){
-              this.getCommentsSche[i] = res.Messages;
-            }
-            if (type == 'walkin'){
-              this.getCommentsWalk[i] = res.Messages;
-            }
-            if (type == 'checkin'){
-              this.getCommentsCheck[i] = res.Messages;
-            }
-            if (type == 'waitlist'){
-              this.getCommentsWaitList[i] = res.Messages;
-            }
-          } else {
-            this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@host.messages:`);
-          }
-        }
-      }),
-      catchError(err => {
-        this.onError = err.Message;
-        return this.onError;
-      })
-    );
+
+    const dialogRef = this.dialog.open(MessDialogComponent, {
+      width: '450px',
+      height: '400px',
+      data: {timeZone: this.TimeZone, appo: appo, businessId: this.businessId, locationId: this.locationId}
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      appo.Unread = '0';
+    });
   }
 
   onShowCancel(appo: any){
@@ -1907,6 +1687,7 @@ export class HostComponent implements OnInit {
               }
               return a.DateFull > b.DateFull ? -1 : 1;
             });
+            this.countPre = this.schedule.length;
           });
           this.spinnerService.stop(spinnerRef);
         }
@@ -1962,6 +1743,7 @@ export class HostComponent implements OnInit {
               }
               return a.DateFull > b.DateFull ? 1 : -1;
             });
+            this.countUpc = this.walkIns.length;
           });
           this.spinnerService.stop(spinnerRef);
         }
@@ -2017,6 +1799,7 @@ export class HostComponent implements OnInit {
               }
               return a.DateFull > b.DateFull ? 1 : -1;
             });
+            this.countWai = this.waitlist.length;
           });
           this.spinnerService.stop(spinnerRef);
         }
@@ -2062,7 +1845,7 @@ export class HostComponent implements OnInit {
               Unread: item['Unread'],
               CheckInTime: item['CheckInTime'],
               ElapsedTime: this.calculateTime(item['CheckInTime']),
-              Pause: '0'
+              Pause: item['Pause']
             }
             this.preCheckIn.push(data);
           });
@@ -2256,19 +2039,19 @@ export class HostComponent implements OnInit {
     );
   }
 
-  onProvChange(event){
-    this.hours = [];
-    this.getLocInfo$ = this.serviceService.getServicesProvider(this.businessId, event.value).pipe(
-      map((res: any) =>{
-        this.services = res.services.filter(x => x.Selected === 1);
-        return res;
-      }),
-      catchError(err => {
-        this.onError = err.Message;
-        return '0';
-      })
-    );
-  }
+  // onProvChange(event){
+  //   this.hours = [];
+  //   this.getLocInfo$ = this.serviceService.getServicesProvider(this.businessId, event.value).pipe(
+  //     map((res: any) =>{
+  //       this.services = res.services.filter(x => x.Selected === 1);
+  //       return res;
+  //     }),
+  //     catchError(err => {
+  //       this.onError = err.Message;
+  //       return '0';
+  //     })
+  //   );
+  // }
 
   calculateTime(cardTime: string): string{
     let options = {
@@ -2303,6 +2086,11 @@ export class HostComponent implements OnInit {
     if (event.previousContainer.id == "cdk-drop-list-3" && event.container != event.previousContainer){
       let appo = JSON.parse(JSON.stringify(event.previousContainer.data[event.previousIndex]));
       let container = event.previousContainer.id;
+      if (appo.Type == 2){
+        transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, this.waitlist.length);
+      } else {
+        transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, this.walkIns.length);
+      }
       // transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, this.preCheckIn.length);
       this.cancelAppo$ = this.adminService.putNoShow(appo.AppId).pipe(
         map((res: any) => {
@@ -2387,6 +2175,30 @@ export class HostComponent implements OnInit {
 
   onPause(appo: any, pause: string){
     appo.Pause = +pause;
+    let formData = { 
+      BusinessId: this.businessId, 
+      AppId: appo.AppId, 
+      LocationId: this.locationId, 
+      Pause: +pause, 
+      Tipo: "HOLD" 
+    }
+    this.onHold$ = this.appointmentService.putOnHold(appo.AppId, +pause, formData).pipe(
+      map((res:any) => {
+        if (res != null){
+          if (res.Code == 200){
+            console.log("OK");
+          } else {
+            console.log("Error");
+          }
+        } else {
+          console.log("Error");
+        }
+      }),
+      catchError(err => {
+        console.log("Error");
+        return this.onError;
+      })
+    );
   }
 
   learnMore(textNumber: number){

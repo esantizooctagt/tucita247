@@ -84,6 +84,9 @@ import { UserListAdminComponent } from '@modules/users-admin/user-list-admin/use
 import { RoleListAdminComponent } from '@modules/roles-admin/role-list-admin/role-list-admin.component';
 import { LearnDialogComponent } from './shared/learn-dialog/learn-dialog.component';
 import { CancelComponent } from './modules/cancel/cancel.component';
+import { StickerDialogComponent } from './shared/sticker-dialog/sticker-dialog.component';
+import { AppowiDialogComponent } from './shared/appowi-dialog/appowi-dialog.component';
+import { MessDialogComponent } from './shared/mess-dialog/mess-dialog.component';
 
 @NgModule({
   declarations: [
@@ -113,7 +116,10 @@ import { CancelComponent } from './modules/cancel/cancel.component';
     UserListAdminComponent,
     RoleListAdminComponent,
     LearnDialogComponent,
-    CancelComponent
+    CancelComponent,
+    StickerDialogComponent,
+    AppowiDialogComponent,
+    MessDialogComponent
   ],
   imports: [
     BrowserModule,

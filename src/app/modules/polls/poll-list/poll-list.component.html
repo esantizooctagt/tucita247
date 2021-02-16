@@ -10,9 +10,16 @@
     <mat-table [dataSource]="fPolls.controls" formArrayName="Polls" [trackBy]="trackRow"
         class="pl-0 pr-0 pt-1 pb-2 col-md-12 mt-1 mb-1 mat-elevation-z8">
         <ng-container matColumnDef="Name">
-            <mat-header-cell *matHeaderCellDef class="col-md-7" i18n="Name@@shared.name"> Name </mat-header-cell>
-            <mat-cell *matCellDef="let element;let i=index" class="col-md-7">
+            <mat-header-cell *matHeaderCellDef class="col-md-4" i18n="Name@@shared.name"> Name </mat-header-cell>
+            <mat-cell *matCellDef="let element;let i=index" class="col-md-4">
                 {{element.value.Name}}
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="Location">
+            <mat-header-cell *matHeaderCellDef class="col-md-3" i18n="Location@@shared.location"> Location </mat-header-cell>
+            <mat-cell *matCellDef="let element;let i=index" class="col-md-3">
+                {{element.value.Location}}
             </mat-cell>
         </ng-container>
 
