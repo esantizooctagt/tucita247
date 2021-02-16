@@ -4,8 +4,10 @@ import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { map, catchError } from 'rxjs/operators';
 import { environment } from '@environments/environment';
-import {DomSanitizer} from '@angular/platform-browser';
-import {MatIconRegistry} from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+import { MatIconRegistry } from '@angular/material/icon';
+import { AppowiDialogComponent } from '@app/shared/appowi-dialog/appowi-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-landing',
@@ -20,6 +22,7 @@ export class LandingComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private businessService: BusinessService,
+    private dialog: MatDialog,
     iconRegistry: MatIconRegistry, 
     sanitizer: DomSanitizer
   ) {
@@ -52,6 +55,15 @@ export class LandingComponent implements OnInit {
 
   openLink(link){
     window.open(link, "_blank");
+  }
+
+  newAppo(locationId, businessId, timeZone){
+    console.log(locationId + ' -- ' + businessId);
+    // const dialogRef = this.dialog.open(AppowiDialogComponent, {
+    //   width: '450px',
+    //   height: '700px',
+    //   data: {timeZone: timeZone, door: '', businessId: businessId, locationId: locationId, providerId: '', services: '', buckets: [], hours: [], providers: providers}
+    // });
   }
 
 }

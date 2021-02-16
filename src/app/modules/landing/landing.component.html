@@ -19,7 +19,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-6 order-lg-1 mt-3 mb-3">
                     <h2 class="display-4" i18n="Locations|text in landings@@landing.locations">Locations</h2>
-                    <div class="list-group-item" *ngFor="let item of bus.Locs">
+                    <div class="list-group-item" *ngFor="let item of bus.Locs" (click)="newAppo(item.LocationId, bus.BusinessId, item.TimeZone)">
                         <span>{{item.Name}}</span>
                     </div>
                     <div class="tucita mt-3"></div>

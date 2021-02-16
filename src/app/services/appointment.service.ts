@@ -10,6 +10,7 @@ import { Appointment } from '@app/_models';
 })
 export class AppointmentService {
   readonly apiURL = environment.apiUrl;
+  readonly apiMobURL = environment.apiMobURL;
   readonly apiRepoUrl = environment.apiRepoUrl;
   
   constructor(private http: HttpClient) {}
@@ -36,6 +37,11 @@ export class AppointmentService {
 
   getAvailability(businessId, locationId, providerId, serviceId): Observable<Appointment[]> {
     return this.http.get<Appointment[]>(this.apiURL + '/appointments/availability/' + businessId + '/' + locationId + '/' + providerId + '/' + serviceId)
+                    .pipe(catchError(this.errorHandler));
+  }
+
+  getAvailabityUser(businessId: string, locationId: string, providerId: string, serviceId: string, appoDate: string): Observable<any[]>{
+    return this.http.get<any[]>(this.apiMobURL + '/mobile/appointment/availability/' + businessId + '/' + locationId + '/' + providerId + '/' + serviceId + '/' + appoDate)
                     .pipe(catchError(this.errorHandler));
   }
 
