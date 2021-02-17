@@ -186,11 +186,12 @@ export class BusinessComponent implements OnInit {
     this.learnmore.open(LearnDialogComponent, dialogConfig);
   }
 
-  openSticker(businessName: string): void {
+  openSticker(businessName: string, citaLink: string): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = false;
     dialogConfig.data = {
-      businessName: businessName
+      businessName: businessName,
+      citaLink: 'https://'+window.location.hostname+'/'+citaLink
     };
     dialogConfig.width ='740px';
     dialogConfig.minWidth = '740px';
@@ -776,7 +777,7 @@ export class BusinessComponent implements OnInit {
   }
 
   printSticker(){
-    this.openSticker(this.businessForm.value.Name);
+    this.openSticker(this.businessForm.value.Name, this.businessForm.value.TuCitaLink);
   }
 
   learnMore(textNumber: number){

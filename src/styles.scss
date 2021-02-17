@@ -119,6 +119,14 @@ mat-error{
     font-size: 66px;
     line-height: 66px;
 }
+.qr-link{
+    display: inline;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 33px;
+    line-height: 33px;
+}
 @media print {
     body {
         -webkit-print-color-adjust: exact;

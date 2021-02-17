@@ -5,6 +5,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 export interface DialogData {
   businessName: string;
+  citaLink: string;
 }
 
 @Component({
@@ -15,6 +16,7 @@ export interface DialogData {
 export class StickerDialogComponent implements OnInit {
   base: DialogData;
   business: string = '';
+  link: string = '';
 
   constructor(
     private domSanitizer: DomSanitizer,
@@ -27,6 +29,7 @@ export class StickerDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.business = this.data.businessName;
+    this.link = this.data.citaLink;
   }
 
   doPrint() {
