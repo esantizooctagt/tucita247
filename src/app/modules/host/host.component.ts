@@ -1257,10 +1257,11 @@ export class HostComponent implements OnInit {
   }
 
   showAppointment(){
+    console.log({timeZone: this.TimeZone, door: this.doorId, businessId: this.businessId, locationId: this.locationId, providerId: this.providerId, services: this.services, buckets: this.buckets, hours: this.hours, providers: this.Providers});
     const dialogRef = this.dialog.open(AppowiDialogComponent, {
       width: '450px',
       height: '700px',
-      data: {timeZone: this.TimeZone, door: this.doorId, businessId: this.businessId, locationId: this.locationId, providerId: this.providerId, services: this.services, buckets: this.buckets, hours: this.hours, providers: this.Providers}
+      data: {timeZone: this.TimeZone, door: this.doorId, businessId: this.businessId, locationId: this.locationId, providerId: this.providerId, services: this.services, buckets: this.buckets, hours: this.hours, providers: this.Providers, tipo: 1}
     });
   }
 

@@ -19,6 +19,7 @@ export interface DialogData {
   buckets: [];
   hours: any[];
   providers: any[];
+  tipo: number;
 }
 
 @Component({
@@ -29,6 +30,7 @@ export interface DialogData {
 export class AppowiDialogComponent implements OnInit {
   base: DialogData;
   maxGuests: number = 1;
+  tipo: number;
   TimeZone: string = '';
   businessId: string = '';
   locationId: string = '';
@@ -42,6 +44,9 @@ export class AppowiDialogComponent implements OnInit {
   numGuests: number = 0;
   search: number = 0;
   currEmail: string = '';
+
+  currHour: number = 0;
+  bucketInterval: number = 0;
 
   newAppointment$: Observable<any>;
   hours$: Observable<any>;
@@ -75,6 +80,7 @@ export class AppowiDialogComponent implements OnInit {
     Gender: [''],
     Preference: ['1'],
     Disability: [''],
+    DateAppo: [''],
     Guests: ['1', [Validators.required, (control: AbstractControl) => Validators.max(this.maxGuests)(control), Validators.min(1)]],
     ProviderId: ['']
   })
@@ -89,6 +95,50 @@ export class AppowiDialogComponent implements OnInit {
     this.buckets = this.data.buckets;
     this.hours = this.data.hours;
     this.Providers = this.data.providers;
+    this.tipo = this.data.tipo;
+
+    // if (this.tipo == 2){
+    //   this.getLocInfo$ = this.businessService.getBusinessOpeHours(this.businessId, this.locationId).pipe(
+    //     map((res: any) => {
+    //       if (res.Code == 200) {
+    //         this.bucketInterval = 1; //parseFloat(res.BucketInterval);
+    //         this.currHour = parseFloat(res.CurrHour);
+    //         let hours = res.Hours;
+    //         this.buckets = [];
+    //         for (var i=0; i<=hours.length-1; i++){
+    //           let horaIni = parseFloat(hours[i].HoraIni);
+    //           let horaFin = parseFloat(hours[i].HoraFin);
+    //           if (i ==0){
+    //             this.firstHour = horaIni;
+    //           }
+    //           for (var x=horaIni; x<=horaFin; x+=this.bucketInterval){
+    //             let hora = '';
+    //             if (x % 1 != 0){
+    //               hora = (x - (x%1)).toString().padStart(2,'0') + ':30';
+    //             } else {
+    //               hora = x.toString().padStart(2, '0') + ':00';
+    //             }
+    //             this.buckets.push({ TimeFormat: hora, Time: x });
+    //             if (x == this.currHour) {
+    //               if (x-this.bucketInterval>= horaIni){
+    //                 this.prevHour = this.currHour-this.bucketInterval;
+    //               }
+    //             }
+    //           }
+    //         }
+    //         this.spinnerService.stop(spinnerRef);
+    //       } else {
+    //         this.spinnerService.stop(spinnerRef);
+    //         return;
+    //       }
+    //     }),
+    //     catchError(err => {
+    //       this.spinnerService.stop(spinnerRef);
+    //       this.onError = err.Message;
+    //       return '0';
+    //     })
+    //   );
+    // }
   }
 
   openSnackBar(message: string, action: string) {
@@ -114,7 +164,21 @@ export class AppowiDialogComponent implements OnInit {
     let yearCurr = this.getYear();
     let monthCurr = this.getMonth();
     let dayCurr = this.getDay();
-    let dateAppo = yearCurr + '-' + monthCurr + '-' + dayCurr;
+    let dateAppo = '';
+    if (this.tipo == 1){
+      dateAppo = yearCurr + '-' + monthCurr + '-' + dayCurr;
+    } else {
+      let dateApp: Date = this.clientForm.value.DateAppo;
+      let dateA: string = '';
+      if (dateApp.toString() == ''){
+        dateA = '';
+      } else {
+        let month = (dateApp.getMonth()+1).toString().padStart(2, '0'); 
+        let day = dateApp.getDate().toString().padStart(2, '0');
+        dateAppo = dateApp.getUTCFullYear().toString() + '-' + month + '-' + day;
+      }
+    }
+    
     let typeAppo = ((this.clientForm.value.Hour).toString() == "--" ? 2 : 1);
     let updE: number;
     if (this.currEmail != ''){
@@ -307,8 +371,32 @@ export class AppowiDialogComponent implements OnInit {
     if (res.length > 0) { this.maxGuests = res[0].CustomerPerBooking; }
     this.clientForm.patchValue({'Guests': 1});
 
-    this.hours$ = this.appointmentService.getAvailability(this.businessId, this.locationId, this.clientForm.value.ProviderId, event.value).pipe(
+    if (this.tipo == 1){
+      this.hours$ = this.appointmentService.getAvailability(this.businessId, this.locationId, this.clientForm.value.ProviderId, event.value).pipe(
+        map((res: any) => {
+          if (res.Code == 200){
+            // this.hours = res.Hours;
+            return res.Hours;
+            // this.openSnackBar($localize`:@@host.checkoutsuccess:`, $localize`:@@host.checkoutpop:`);
+          }
+        }),
+        catchError(err => {
+          this.onError = err.Message;
+          this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@host.error:`);
+          return this.onError;
+        })
+      );
+    }
+  }
+
+  selectDate(dateSel){
+    let dateApp: Date = dateSel.value;
+    let month = (dateApp.getMonth()+1).toString().padStart(2, '0'); 
+    let day = dateApp.getDate().toString().padStart(2, '0');
+    let dateAppo =  month + '-' + day + '-' + dateApp.getUTCFullYear().toString();
+    this.hours$ = this.appointmentService.getAvailabityUser(this.businessId, this.locationId, this.clientForm.value.ProviderId, this.clientForm.value.ServiceId, dateAppo).pipe(
       map((res: any) => {
+        console.log(res);
         if (res.Code == 200){
           // this.hours = res.Hours;
           return res.Hours;
@@ -317,7 +405,8 @@ export class AppowiDialogComponent implements OnInit {
       }),
       catchError(err => {
         this.onError = err.Message;
-        this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@host.checkoutpop:`);
+        console.log("error " + this.onError);
+        this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@host.error:`);
         return this.onError;
       })
     );

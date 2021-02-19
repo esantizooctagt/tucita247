@@ -37,6 +37,14 @@
             <mat-error *ngIf="f.ServiceId.invalid && f.ServiceId.touched">{{ 'Error: ' + getErrorMessage('Service')}}</mat-error>
         </mat-form-field>
     </div>
+    <div class="form-field pl-3 pr-3" *ngIf="tipo == 2">
+        <mat-form-field>
+            <mat-label i18n="Date|text in citas@@host.date">Date</mat-label>
+            <input matInput [matDatepicker]="dateAppointment" formControlName="DateAppo" (dateChange)="selectDate($event)">
+            <mat-datepicker-toggle matSuffix [for]="dateAppointment"></mat-datepicker-toggle>
+            <mat-datepicker #dateAppointment></mat-datepicker>
+        </mat-form-field>
+    </div>
     <div class="form-field pl-3 pr-3">
         <mat-form-field>
             <mat-select i18n-placeholder="Hour|text in citas@@host.hour" placeholder="Hour" name="hours" formControlName="Hour" required>
