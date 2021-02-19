@@ -101,8 +101,8 @@ mat-error{
     display: none;
 }
 .qr-img{
-    height: 475px !important;
-    width: 475px !important;
+    height: 450px !important;
+    width: 450px !important;
 }
 .qr-style{
     margin-top: 38px;
@@ -121,11 +121,11 @@ mat-error{
 }
 .qr-link{
     display: inline;
-    margin-top: 5px;
+    margin-top: 8px;
     margin-bottom: 5px;
     font-weight: 600;
-    font-size: 33px;
-    line-height: 33px;
+    font-size: 29px;
+    line-height: 29px;
 }
 @media print {
     body {

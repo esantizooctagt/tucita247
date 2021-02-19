@@ -191,7 +191,7 @@ export class BusinessComponent implements OnInit {
     dialogConfig.autoFocus = false;
     dialogConfig.data = {
       businessName: businessName,
-      citaLink: 'https://'+window.location.hostname+'/'+citaLink
+      citaLink: 'tucita247.com/b/'+citaLink
     };
     dialogConfig.width ='740px';
     dialogConfig.minWidth = '740px';
