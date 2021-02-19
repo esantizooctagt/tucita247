@@ -1049,6 +1049,10 @@ export class HostComponent implements OnInit {
                 this.walkIns = [];
                 this.preCheckIn = [];
                 this.waitlist = [];
+
+                this.countUpc = 0;
+                this.countPre = 0;
+                this.countWai = 0;
               }
             }
           }),
@@ -1648,6 +1652,7 @@ export class HostComponent implements OnInit {
 
   getAppointmentsSche(){
     this.schedule = [];
+    this.countPre = this.schedule.length;
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
     this.appointmentsSche$ = this.appointmentService.getAppointments(this.businessId, this.locationId, this.providerId, 1, 1, 1).pipe(
       map((res: any) => {
@@ -1704,6 +1709,7 @@ export class HostComponent implements OnInit {
 
   getAppointmentsWalk(){
     this.walkIns = [];
+    this.countUpc = this.walkIns.length;
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
     this.appointmentsWalk$ = this.appointmentService.getAppointments(this.businessId, this.locationId, this.providerId, 1, 2, 1).pipe(
       map((res: any) => {
@@ -1760,6 +1766,7 @@ export class HostComponent implements OnInit {
 
   getAppointmentsWaitList(){
     this.waitlist = [];
+    this.countWai = this.waitlist.length;
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
     this.appointmentsWaitList$ = this.appointmentService.getAppointments(this.businessId, this.locationId, this.providerId, 1, 1, 2).pipe(
       map((res: any) => {
