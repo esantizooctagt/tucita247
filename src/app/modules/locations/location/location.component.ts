@@ -95,7 +95,7 @@ export class LocationComponent implements OnInit {
     Sector: ['', Validators.required],
     ZipCode: ['', [Validators.maxLength(10), Validators.minLength(3)]],
     Address: ['', [Validators.required, Validators.maxLength(500), Validators.minLength(3)]],
-    Geolocation: ['{0.00,0.00}', [Validators.maxLength(50), Validators.minLength(5)]],
+    Geolocation: ['{0.00,0.00}', [Validators.maxLength(100), Validators.minLength(5)]],
     ParentLocation: ['0'],
     MaxConcurrentCustomer: ['1', [Validators.required, Validators.min(1)]],
     ManualCheckOut: [false],
