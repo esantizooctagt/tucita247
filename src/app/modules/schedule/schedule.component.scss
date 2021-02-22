@@ -95,6 +95,17 @@
     position: relative;
     top: -3px;
 }
+.content-hr {
+    position: relative;;
+    top: 345px;
+}
+.sticky-header{
+    position: fixed;
+    height: 340px;
+    width: calc(100vw - 15px);
+    z-index: 100;
+    background-color: #f5f5f5;
+}
 ::ng-deep .mat-tooltip {
     background-color: #ff4f00;
 }
@@ -124,5 +135,10 @@ button.mat-stroked-button
         {
             opacity: 0;  // hide overlay
         }
+    }
+}
+@media (min-width: 1201px){
+    .sticky-header{
+        width: calc(100vw - 239px - 15px);
     }
 }

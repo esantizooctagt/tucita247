@@ -1,274 +1,286 @@
 <div class="container-fluid h-100 main-background host-container d-none d-md-block d-lg-block d-xl-block">
     <ng-container *ngIf="operationHours$ | async"></ng-container>
-    <div class="col-sm col-md col-lg pt-2 pb-2 calendar-title">
-        <h3 class="text-schedule" i18n="CALENDAR|text in schedule@@sche.calendar">CALENDAR</h3>
-        <button class="help-btn" mat-icon-button color="primary" (click)="learnMore(35)">
-            <mat-icon>help</mat-icon>
-        </button>
-    </div>
-    <div class="row mt-2 mb-2">
-        <mat-form-field class="col-md-4 pb-0 selection-line">
-            <mat-select name="locations" [(value)]="locationData" (selectionChange)="onSelectLocation($event)">
-                <mat-optgroup *ngFor="let item of locationData$ | async">
-                    {{item.Name}}
-                    <mat-option *ngFor="let prov of item.Providers" [value]="prov.ProviderId" class="option-prov">
-                        {{ '> ' + prov.Name}}
-                    </mat-option>
-                </mat-optgroup>
-            </mat-select>
-        </mat-form-field>
-    </div>
-    <div class="row mt-3 mb-3">
-        <mat-list class="list-horizontal">
-            <mat-list-item *ngFor="let item of services$ | async"><div class="square-color" [ngStyle]="{'background': item.Color}"></div> {{ item.Name }} </mat-list-item>
-        </mat-list>
-    </div>
-    <div class="row mt-3 mb-3">
-        <button mat-icon-button class="ml-3 nav-buttons" type="button" (click)="prevWeek()">
-            <mat-icon [ngClass]="{'back-disabled': currWeek == 1,
-                'back-enabled': currWeek == 0}">arrow_back</mat-icon>
-        </button>
-        <div class="col-sm col-md col-lg pt-2 pb-2 month-qeue">{{(weekStart | date: 'MMM d') + ' - ' + (weekEnd | date: 'MMM d') + '   '}}
-            <button mat-icon-button class="mr-3 nav-refresh" type="button" (click)="refresh()">
-                <mat-icon class="action-enabled" svgIcon="refresh"></mat-icon>
+    <div class="row sticky-header">
+        <div class="col-md-12 col-lg-12 pt-2 pb-2 calendar-title">
+            <h3 class="text-schedule" i18n="CALENDAR|text in schedule@@sche.calendar">CALENDAR</h3>
+            <button class="help-btn" mat-icon-button color="primary" (click)="learnMore(35)">
+                <mat-icon>help</mat-icon>
             </button>
         </div>
-        <button mat-icon-button class="mr-3 nav-buttons" type="button" (click)="nextWeek()">
-            <mat-icon>arrow_forward</mat-icon>
-        </button>
-    </div>
-    <div class="row">
-        <div class="col-sm col-md col-lg-12 time-week">
-            <div class="row space-row mb-2 ml-1 mr-1 time-week">
-                <div class="col-md mt-2 title-qeue" i18n="Time|text in schedule@@sche.time">
-                    Time
+        <div class="col-md-12 col-lg-12">
+            <div class="row mt-2 mb-2">
+                <mat-form-field class="col-md-4 pb-0 selection-line">
+                    <mat-select name="locations" [(value)]="locationData" (selectionChange)="onSelectLocation($event)">
+                        <mat-optgroup *ngFor="let item of locationData$ | async">
+                            {{item.Name}}
+                            <mat-option *ngFor="let prov of item.Providers" [value]="prov.ProviderId" class="option-prov">
+                                {{ '> ' + prov.Name}}
+                            </mat-option>
+                        </mat-optgroup>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-12">
+            <div class="row mt-3 mb-3">
+                <mat-list class="list-horizontal">
+                    <mat-list-item *ngFor="let item of services$ | async"><div class="square-color" [ngStyle]="{'background': item.Color}"></div> {{ item.Name }} </mat-list-item>
+                </mat-list>
+            </div>
+        </div>
+        <div class="col-m-12 col-lg-12">
+            <div class="row mt-3 mb-3">
+                <button mat-icon-button class="ml-3 nav-buttons" type="button" (click)="prevWeek()">
+                    <mat-icon [ngClass]="{'back-disabled': currWeek == 1,
+                        'back-enabled': currWeek == 0}">arrow_back</mat-icon>
+                </button>
+                <div class="col-sm col-md col-lg pt-2 pb-2 month-qeue">{{(weekStart | date: 'MMM d') + ' - ' + (weekEnd | date: 'MMM d') + '   '}}
+                    <button mat-icon-button class="mr-3 nav-refresh" type="button" (click)="refresh()">
+                        <mat-icon class="action-enabled" svgIcon="refresh"></mat-icon>
+                    </button>
                 </div>
-                <div class="col-md mt-2 title-qeue p-0">
-                    <ng-container i18n="Mon|text in schedule@@sche.mon">Mon</ng-container><br/>{{((monday | date: 'd') == '1' ? (monday | date: 'MMM d') : (monday | date: 'd') )}}
-                </div>
-                <div class="col-md mt-2 title-qeue p-0">
-                    <ng-container i18n="Tue|text in schedule@@sche.tue">Tue</ng-container><br/>{{( (tuesday | date: 'd') == '1' ? (tuesday | date: 'MMM d') : (tuesday | date: 'd') )}}
-                </div>
-                <div class="col-md mt-2 title-qeue p-0">
-                    <ng-container i18n="Wed|text in schedule@@sche.wed">Wed</ng-container><br/>{{( (wednesday | date: 'd') == '1' ? (wednesday | date: 'MMM d') : (wednesday | date: 'd') )}}
-                </div>
-                <div class="col-md mt-2 title-qeue p-0">
-                    <ng-container i18n="Thu|text in schedule@@sche.thu">Thu</ng-container><br/>{{( (thursday | date: 'd') == '1' ? (thursday | date: 'MMM d') : (thursday | date: 'd') )}}
-                </div>
-                <div class="col-md mt-2 title-qeue p-0">
-                    <ng-container i18n="Fri|text in schedule@@sche.fri">Fri</ng-container><br/>{{( (friday | date: 'd') == '1' ? (friday | date: 'MMM d') : (friday | date: 'd') )}}
-                </div>
-                <div class="col-md mt-2 title-qeue p-0">
-                    <ng-container i18n="Sat|text in schedule@@sche.sat">Sat</ng-container><br/>{{( (saturday | date: 'd') == '1' ? (saturday | date: 'MMM d') : (saturday | date: 'd') )}}
-                </div>
-                <div class="col-md mt-2 title-qeue p-0">
-                    <ng-container i18n="Sun|text in schedule@@sche.sun">Sun</ng-container><br/>{{( (sunday | date: 'd') == '1' ? (sunday | date: 'MMM d') : (sunday | date: 'd') )}}
+                <button mat-icon-button class="mr-3 nav-buttons" type="button" (click)="nextWeek()">
+                    <mat-icon>arrow_forward</mat-icon>
+                </button>
+            </div>
+        </div>
+        <div class="col-sm col-md col-lg-12">
+            <div class="row">
+                <div class="col-sm col-md col-lg-12 time-week">
+                    <div class="row space-row mb-2 ml-1 mr-1 time-week">
+                        <div class="col-md mt-2 title-qeue" i18n="Time|text in schedule@@sche.time">
+                            Time
+                        </div>
+                        <div class="col-md mt-2 title-qeue p-0">
+                            <ng-container i18n="Mon|text in schedule@@sche.mon">Mon</ng-container><br/>{{((monday | date: 'd') == '1' ? (monday | date: 'MMM d') : (monday | date: 'd') )}}
+                        </div>
+                        <div class="col-md mt-2 title-qeue p-0">
+                            <ng-container i18n="Tue|text in schedule@@sche.tue">Tue</ng-container><br/>{{( (tuesday | date: 'd') == '1' ? (tuesday | date: 'MMM d') : (tuesday | date: 'd') )}}
+                        </div>
+                        <div class="col-md mt-2 title-qeue p-0">
+                            <ng-container i18n="Wed|text in schedule@@sche.wed">Wed</ng-container><br/>{{( (wednesday | date: 'd') == '1' ? (wednesday | date: 'MMM d') : (wednesday | date: 'd') )}}
+                        </div>
+                        <div class="col-md mt-2 title-qeue p-0">
+                            <ng-container i18n="Thu|text in schedule@@sche.thu">Thu</ng-container><br/>{{( (thursday | date: 'd') == '1' ? (thursday | date: 'MMM d') : (thursday | date: 'd') )}}
+                        </div>
+                        <div class="col-md mt-2 title-qeue p-0">
+                            <ng-container i18n="Fri|text in schedule@@sche.fri">Fri</ng-container><br/>{{( (friday | date: 'd') == '1' ? (friday | date: 'MMM d') : (friday | date: 'd') )}}
+                        </div>
+                        <div class="col-md mt-2 title-qeue p-0">
+                            <ng-container i18n="Sat|text in schedule@@sche.sat">Sat</ng-container><br/>{{( (saturday | date: 'd') == '1' ? (saturday | date: 'MMM d') : (saturday | date: 'd') )}}
+                        </div>
+                        <div class="col-md mt-2 title-qeue p-0">
+                            <ng-container i18n="Sun|text in schedule@@sche.sun">Sun</ng-container><br/>{{( (sunday | date: 'd') == '1' ? (sunday | date: 'MMM d') : (sunday | date: 'd') )}}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <ng-container *ngIf="cancelAppos$ | async"></ng-container>
     <ng-container *ngIf="putAppo$ | async"></ng-container><ng-container *ngIf="validBusiness$ | async"></ng-container>
-    <div class="row" *ngFor="let item of hours">
-        <div class="col-sm col-md col-lg-12">
-            <div class="row space-row ml-1 mr-1">
-                <div class="col-md mt-2 title-qeue">
-                    {{item.Time}}
-                </div>
-                <div class="time-bucket col-md p-0">
-                    <div class="row m-0" [ngStyle]="{'background': (MonHours | servcolor: item.Time: resServices)}" [ngClass]="{'time-actions': (MonHours | hourdata: item.Time).Time != undefined,
-                                    'time-disabled': (MonHours | hourdata: item.Time).Time == undefined || (MonHours | hourdata: item.Time).Cancel == 1}">
-                        <ng-container *ngIf="(MonHours | hourdata: item.Time).Bucket > 0 && ((monday > today) || (monday.toString() == today.toString() && currTime < item.Time24H)) && (MonHours | hourdata: item.Time).Cancel == 0"> 
-                            <button mat-icon-button class="col-md-3" (click)="newAppo(item.Time, monday, 1)" *ngIf="(MonHours | hourdata: item.Time).Available > 0" i18n-matTooltip="Add booking|Add booking tooltip@@learnMore.LMCON39" matTooltip="Add booking">
-                                <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
-                            </button>
-                            <button mat-icon-button class="col-md-3" (click)="cancelTime(item.Time24H, monday)" i18n-matTooltip="Disabled|Disabled time slot tooltip@@learnMore.LMCON40" matTooltip="Disabled">
-                                <mat-icon class="action-enabled" svgIcon="cancel02"></mat-icon>
-                            </button>
-                            <button mat-icon-button class="col-md-3" (click)="expandTime(item.Time24H, monday, item.Time, 1)" *ngIf="(MonHours | hourdata: item.Time).Used > 0" i18n-matTooltip="Additional Info|Additional Info tooltip@@learnMore.LMCON38" matTooltip="Additional Info">
-                                <mat-icon class="action-enabled" svgIcon="view"></mat-icon>
-                            </button>
-                            <div class="hour-available col-md-3 p-0" i18n-matTooltip="Available booking|Available booking tooltip@@learnMore.LMCON41" matTooltip="Available booking">{{ ( (MonHours | hourdata: item.Time).Used > 0 ? (MonHours | hourdata: item.Time).Available : '') }}</div>
-                        </ng-container>
-                        <ng-container *ngIf="((monday < today) || (monday.toString() == today.toString() && currTime > item.Time24H)); else valCheckMon">
-                            <div class="time-actions-disabled col-md">
-                            </div>
-                        </ng-container>
-                        <ng-template #valCheckMon>
-                            <ng-container *ngIf="(MonHours | hourdata: item.Time).Time == undefined || ((MonHours | hourdata: item.Time).Cancel == 1 && ((monday > today) || (monday.toString() == today.toString() && currTime < item.Time24H)))">
-                                <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, monday, item.Time, 1)">
-                                    <mat-icon class="action-enabled" svgIcon="check"></mat-icon>
-                                </button>
-                            </ng-container>
-                        </ng-template>
+    <div class="content-hr col-md-12 col-lg-12 p-0">
+        <div class="row" *ngFor="let item of hours">
+            <div class="col-sm col-md col-lg-12">
+                <div class="row space-row ml-1 mr-1">
+                    <div class="col-md mt-2 title-qeue">
+                        {{item.Time}}
                     </div>
-                </div>
-                <div class="time-bucket col-md p-0">
-                    <div class="row m-0" [ngStyle]="{'background': (TueHours | servcolor: item.Time: resServices)}" [ngClass]="{'time-actions': (TueHours | hourdata: item.Time).Time != undefined,
-                                    'time-disabled': (TueHours | hourdata: item.Time).Time == undefined || (TueHours | hourdata: item.Time).Cancel == 1}">
-                        <ng-container *ngIf="(TueHours | hourdata: item.Time).Bucket > 0 && ((tuesday > today) || (tuesday.toString() == today.toString() && currTime < item.Time24H)) && (TueHours | hourdata: item.Time).Cancel == 0">
-                            <button mat-icon-button class="col-md-3" (click)="newAppo(item.Time, tuesday, 2)" *ngIf="(TueHours | hourdata: item.Time).Available > 0" i18n-matTooltip="Add booking|Add booking tooltip@@learnMore.LMCON39" matTooltip="Add booking">
-                                <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
-                            </button>
-                            <button mat-icon-button class="col-md-3" (click)="cancelTime(item.Time24H, tuesday)" i18n-matTooltip="Disabled|Disabled time slot tooltip@@learnMore.LMCON40" matTooltip="Disabled">
-                                <mat-icon class="action-enabled" svgIcon="cancel02"></mat-icon>
-                            </button>
-                            <button mat-icon-button class="col-md-3" (click)="expandTime(item.Time24H, tuesday, item.Time, 2)" *ngIf="(TueHours | hourdata: item.Time).Used > 0" i18n-matTooltip="Additional Info|Additional Info tooltip@@learnMore.LMCON38" matTooltip="Additional Info">
-                                <mat-icon class="action-enabled" svgIcon="view"></mat-icon>
-                            </button>
-                            <div class="hour-available col-md-3 p-0" i18n-matTooltip="Available booking|Available booking tooltip@@learnMore.LMCON41" matTooltip="Available booking">{{ ( (TueHours | hourdata: item.Time).Used > 0 ? (TueHours | hourdata: item.Time).Available : '') }}</div>
-                        </ng-container>
-                        <ng-container *ngIf="((tuesday < today) || (tuesday.toString() == today.toString() && currTime > item.Time24H)); else valCheckTue">
-                            <div class="time-actions-disabled col-md">
-                            </div>
-                        </ng-container>
-                        <ng-template #valCheckTue>
-                            <ng-container *ngIf="(TueHours | hourdata: item.Time).Time == undefined || ((TueHours | hourdata: item.Time).Cancel == 1 && ((tuesday > today) || (tuesday.toString() == today.toString() && currTime < item.Time24H)))">
-                                <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, tuesday, item.Time, 2)">
-                                    <mat-icon class="action-enabled" svgIcon="check"></mat-icon>
+                    <div class="time-bucket col-md p-0">
+                        <div class="row m-0" [ngStyle]="{'background': (MonHours | servcolor: item.Time: resServices)}" [ngClass]="{'time-actions': (MonHours | hourdata: item.Time).Time != undefined,
+                                        'time-disabled': (MonHours | hourdata: item.Time).Time == undefined || (MonHours | hourdata: item.Time).Cancel == 1}">
+                            <ng-container *ngIf="(MonHours | hourdata: item.Time).Bucket > 0 && ((monday > today) || (monday.toString() == today.toString() && currTime < item.Time24H)) && (MonHours | hourdata: item.Time).Cancel == 0"> 
+                                <button mat-icon-button class="col-md-3" (click)="newAppo(item.Time, monday, 1)" *ngIf="(MonHours | hourdata: item.Time).Available > 0" i18n-matTooltip="Add booking|Add booking tooltip@@learnMore.LMCON39" matTooltip="Add booking">
+                                    <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
                                 </button>
-                            </ng-container>
-                        </ng-template>
-                    </div>
-                </div>
-                <div class="time-bucket col-md p-0">
-                    <div class="row m-0" [ngStyle]="{'background': (WedHours | servcolor: item.Time: resServices)}" [ngClass]="{'time-actions': (WedHours | hourdata: item.Time).Time != undefined,
-                                    'time-disabled': (WedHours | hourdata: item.Time).Time == undefined || (WedHours | hourdata: item.Time).Cancel == 1}">
-                        <ng-container *ngIf="(WedHours | hourdata: item.Time).Bucket > 0 && ((wednesday > today) || (wednesday.toString() == today.toString() && currTime < item.Time24H)) && (WedHours | hourdata: item.Time).Cancel == 0">
-                            <button mat-icon-button class="col-md-3" (click)="newAppo(item.Time, wednesday, 3)" *ngIf="(WedHours | hourdata: item.Time).Available > 0" i18n-matTooltip="Add booking|Add booking tooltip@@learnMore.LMCON39" matTooltip="Add booking">
-                                <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
-                            </button>
-                            <button mat-icon-button class="col-md-3" (click)="cancelTime(item.Time24H, wednesday)" i18n-matTooltip="Disabled|Disabled time slot tooltip@@learnMore.LMCON40" matTooltip="Disabled">
-                                <mat-icon class="action-enabled" svgIcon="cancel02"></mat-icon>
-                            </button>
-                            <button mat-icon-button class="col-md-3" (click)="expandTime(item.Time24H, wednesday, item.Time, 3)" *ngIf="(WedHours | hourdata: item.Time).Used > 0" i18n-matTooltip="Additional Info|Additional Info tooltip@@learnMore.LMCON38" matTooltip="Additional Info">
-                                <mat-icon class="action-enabled" svgIcon="view"></mat-icon>
-                            </button>
-                            <div class="hour-available col-md-3 p-0" i18n-matTooltip="Available booking|Available booking tooltip@@learnMore.LMCON41" matTooltip="Available booking">{{ ( (WedHours | hourdata: item.Time).Used > 0 ? (WedHours | hourdata: item.Time).Available : '') }}</div>
-                        </ng-container>
-                        <ng-container *ngIf="((wednesday < today) || (wednesday.toString() == today.toString() && currTime > item.Time24H)); else valCheckWed">
-                            <div class="time-actions-disabled col-md">
-                            </div>
-                        </ng-container>
-                        <ng-template #valCheckWed>
-                            <ng-container *ngIf="(WedHours | hourdata: item.Time).Time == undefined || ((WedHours | hourdata: item.Time).Cancel == 1 && ((wednesday > today) || (wednesday.toString() == today.toString() && currTime < item.Time24H)))">
-                                <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, wednesday, item.Time, 3)">
-                                    <mat-icon class="action-enabled" svgIcon="check"></mat-icon>
+                                <button mat-icon-button class="col-md-3" (click)="cancelTime(item.Time24H, monday)" i18n-matTooltip="Disabled|Disabled time slot tooltip@@learnMore.LMCON40" matTooltip="Disabled">
+                                    <mat-icon class="action-enabled" svgIcon="cancel02"></mat-icon>
                                 </button>
-                            </ng-container>
-                        </ng-template>
-                    </div>
-                </div>
-                <div class="time-bucket col-md p-0">
-                    <div class="row m-0" [ngStyle]="{'background': (ThuHours | servcolor: item.Time: resServices)}" [ngClass]="{'time-actions': (ThuHours | hourdata: item.Time).Time != undefined,
-                                    'time-disabled': (ThuHours | hourdata: item.Time).Time == undefined || (ThuHours | hourdata: item.Time).Cancel == 1}">
-                        <ng-container *ngIf="(ThuHours | hourdata: item.Time).Bucket > 0 && ((thursday > today) || (thursday.toString() == today.toString() && currTime < item.Time24H)) && (ThuHours | hourdata: item.Time).Cancel == 0">
-                            <button mat-icon-button class="col-md-3" (click)="newAppo(item.Time, thursday, 4)" *ngIf="(ThuHours | hourdata: item.Time).Available > 0" i18n-matTooltip="Add booking|Add booking tooltip@@learnMore.LMCON39" matTooltip="Add booking">
-                                <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
-                            </button>
-                            <button mat-icon-button class="col-md-3" (click)="cancelTime(item.Time24H, thursday)"  i18n-matTooltip="Disabled|Disabled time slot tooltip@@learnMore.LMCON40" matTooltip="Disabled">
-                                <mat-icon class="action-enabled" svgIcon="cancel02"></mat-icon>
-                            </button>
-                            <button mat-icon-button class="col-md-3" (click)="expandTime(item.Time24H, thursday, item.Time, 4)" *ngIf="(ThuHours | hourdata: item.Time).Used > 0" i18n-matTooltip="Additional Info|Additional Info tooltip@@learnMore.LMCON38" matTooltip="Additional Info">
-                                <mat-icon class="action-enabled" svgIcon="view"></mat-icon>
-                            </button>
-                            <div class="hour-available col-md-3 p-0" i18n-matTooltip="Available booking|Available booking tooltip@@learnMore.LMCON41" matTooltip="Available booking">{{ ( (ThuHours | hourdata: item.Time).Used > 0 ? (ThuHours | hourdata: item.Time).Available : '') }}</div>
-                        </ng-container>
-                        <ng-container *ngIf="((thursday < today) || (thursday.toString() == today.toString() && currTime > item.Time24H)); else valCheckThu">
-                            <div class="time-actions-disabled col-md">
-                            </div>
-                        </ng-container>
-                        <ng-template #valCheckThu>
-                            <ng-container *ngIf="(ThuHours | hourdata: item.Time).Time == undefined || ((ThuHours | hourdata: item.Time).Cancel == 1 && ((thursday > today) || (thursday.toString() == today.toString() && currTime < item.Time24H)))">
-                                <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, thursday, item.Time, 4)">
-                                    <mat-icon class="action-enabled" svgIcon="check"></mat-icon>
+                                <button mat-icon-button class="col-md-3" (click)="expandTime(item.Time24H, monday, item.Time, 1)" *ngIf="(MonHours | hourdata: item.Time).Used > 0" i18n-matTooltip="Additional Info|Additional Info tooltip@@learnMore.LMCON38" matTooltip="Additional Info">
+                                    <mat-icon class="action-enabled" svgIcon="view"></mat-icon>
                                 </button>
+                                <div class="hour-available col-md-3 p-0" i18n-matTooltip="Available booking|Available booking tooltip@@learnMore.LMCON41" matTooltip="Available booking">{{ ( (MonHours | hourdata: item.Time).Used > 0 ? (MonHours | hourdata: item.Time).Available : '') }}</div>
                             </ng-container>
-                        </ng-template>
-                    </div>
-                </div>
-                <div class="time-bucket col-md p-0">
-                    <div class="row m-0" [ngStyle]="{'background': (FriHours | servcolor: item.Time: resServices)}" [ngClass]="{'time-actions': (FriHours | hourdata: item.Time).Time != undefined,
-                                    'time-disabled': (FriHours | hourdata: item.Time).Time == undefined || (FriHours | hourdata: item.Time).Cancel == 1}">
-                    <ng-container *ngIf="(FriHours | hourdata: item.Time).Bucket > 0 && ((friday > today) || (friday.toString() == today.toString() && currTime < item.Time24H)) && (FriHours | hourdata: item.Time).Cancel == 0">
-                        <button mat-icon-button class="col-md-3" (click)="newAppo(item.Time, friday, 5)" *ngIf="(FriHours | hourdata: item.Time).Available > 0" i18n-matTooltip="Add booking|Add booking tooltip@@learnMore.LMCON39" matTooltip="Add booking">
-                            <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
-                        </button>
-                        <button mat-icon-button class="col-md-3" (click)="cancelTime(item.Time24H, friday)" i18n-matTooltip="Disabled|Disabled time slot tooltip@@learnMore.LMCON40" matTooltip="Disabled">
-                            <mat-icon class="action-enabled" svgIcon="cancel02"></mat-icon>
-                        </button>
-                        <button mat-icon-button class="col-md-3" (click)="expandTime(item.Time24H, friday, item.Time, 5)" *ngIf="(FriHours | hourdata: item.Time).Used > 0" i18n-matTooltip="Additional Info|Additional Info tooltip@@learnMore.LMCON38" matTooltip="Additional Info">
-                            <mat-icon class="action-enabled" svgIcon="view"></mat-icon>
-                        </button>
-                        <div class="hour-available col-md-3 p-0" i18n-matTooltip="Available booking|Available booking tooltip@@learnMore.LMCON41" matTooltip="Available booking">{{ ( (FriHours | hourdata: item.Time).Used > 0 ? (FriHours | hourdata: item.Time).Available : '') }}</div>
-                    </ng-container>
-                    <ng-container *ngIf="((friday < today) || (friday.toString() == today.toString() && currTime > item.Time24H)); else valCheckFri">
-                        <div class="time-actions-disabled col-md">
+                            <ng-container *ngIf="((monday < today) || (monday.toString() == today.toString() && currTime > item.Time24H)); else valCheckMon">
+                                <div class="time-actions-disabled col-md">
+                                </div>
+                            </ng-container>
+                            <ng-template #valCheckMon>
+                                <ng-container *ngIf="(MonHours | hourdata: item.Time).Time == undefined || ((MonHours | hourdata: item.Time).Cancel == 1 && ((monday > today) || (monday.toString() == today.toString() && currTime < item.Time24H)))">
+                                    <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, monday, item.Time, 1)">
+                                        <mat-icon class="action-enabled" svgIcon="check"></mat-icon>
+                                    </button>
+                                </ng-container>
+                            </ng-template>
                         </div>
-                    </ng-container>
-                    <ng-template #valCheckFri>
-                        <ng-container *ngIf="(FriHours | hourdata: item.Time).Time == undefined || ((FriHours | hourdata: item.Time).Cancel == 1 && ((friday > today) || (friday.toString() == today.toString() && currTime < item.Time24H)))">
-                            <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, friday, item.Time, 5)">
-                                <mat-icon class="action-enabled" svgIcon="check"></mat-icon>
-                            </button>
-                        </ng-container>
-                    </ng-template>
-                </div>
-                </div>
-                <div class="time-bucket col-md p-0">
-                    <div class="row m-0" [ngStyle]="{'background': (SatHours | servcolor: item.Time: resServices)}" [ngClass]="{'time-actions': (SatHours | hourdata: item.Time).Time != undefined,
-                                                    'time-disabled': (SatHours | hourdata: item.Time).Time == undefined || (SatHours | hourdata: item.Time).Cancel == 1}">
-                        <ng-container *ngIf="(SatHours | hourdata: item.Time).Bucket > 0 && ((saturday > today) || (saturday.toString() == today.toString() && currTime < item.Time24H)) && (SatHours | hourdata: item.Time).Cancel == 0">
-                            <button mat-icon-button class="col-md-3" (click)="newAppo(item.Time, saturday, 6)" *ngIf="(SatHours | hourdata: item.Time).Available > 0" i18n-matTooltip="Add booking|Add booking tooltip@@learnMore.LMCON39" matTooltip="Add booking">
+                    </div>
+                    <div class="time-bucket col-md p-0">
+                        <div class="row m-0" [ngStyle]="{'background': (TueHours | servcolor: item.Time: resServices)}" [ngClass]="{'time-actions': (TueHours | hourdata: item.Time).Time != undefined,
+                                        'time-disabled': (TueHours | hourdata: item.Time).Time == undefined || (TueHours | hourdata: item.Time).Cancel == 1}">
+                            <ng-container *ngIf="(TueHours | hourdata: item.Time).Bucket > 0 && ((tuesday > today) || (tuesday.toString() == today.toString() && currTime < item.Time24H)) && (TueHours | hourdata: item.Time).Cancel == 0">
+                                <button mat-icon-button class="col-md-3" (click)="newAppo(item.Time, tuesday, 2)" *ngIf="(TueHours | hourdata: item.Time).Available > 0" i18n-matTooltip="Add booking|Add booking tooltip@@learnMore.LMCON39" matTooltip="Add booking">
+                                    <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
+                                </button>
+                                <button mat-icon-button class="col-md-3" (click)="cancelTime(item.Time24H, tuesday)" i18n-matTooltip="Disabled|Disabled time slot tooltip@@learnMore.LMCON40" matTooltip="Disabled">
+                                    <mat-icon class="action-enabled" svgIcon="cancel02"></mat-icon>
+                                </button>
+                                <button mat-icon-button class="col-md-3" (click)="expandTime(item.Time24H, tuesday, item.Time, 2)" *ngIf="(TueHours | hourdata: item.Time).Used > 0" i18n-matTooltip="Additional Info|Additional Info tooltip@@learnMore.LMCON38" matTooltip="Additional Info">
+                                    <mat-icon class="action-enabled" svgIcon="view"></mat-icon>
+                                </button>
+                                <div class="hour-available col-md-3 p-0" i18n-matTooltip="Available booking|Available booking tooltip@@learnMore.LMCON41" matTooltip="Available booking">{{ ( (TueHours | hourdata: item.Time).Used > 0 ? (TueHours | hourdata: item.Time).Available : '') }}</div>
+                            </ng-container>
+                            <ng-container *ngIf="((tuesday < today) || (tuesday.toString() == today.toString() && currTime > item.Time24H)); else valCheckTue">
+                                <div class="time-actions-disabled col-md">
+                                </div>
+                            </ng-container>
+                            <ng-template #valCheckTue>
+                                <ng-container *ngIf="(TueHours | hourdata: item.Time).Time == undefined || ((TueHours | hourdata: item.Time).Cancel == 1 && ((tuesday > today) || (tuesday.toString() == today.toString() && currTime < item.Time24H)))">
+                                    <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, tuesday, item.Time, 2)">
+                                        <mat-icon class="action-enabled" svgIcon="check"></mat-icon>
+                                    </button>
+                                </ng-container>
+                            </ng-template>
+                        </div>
+                    </div>
+                    <div class="time-bucket col-md p-0">
+                        <div class="row m-0" [ngStyle]="{'background': (WedHours | servcolor: item.Time: resServices)}" [ngClass]="{'time-actions': (WedHours | hourdata: item.Time).Time != undefined,
+                                        'time-disabled': (WedHours | hourdata: item.Time).Time == undefined || (WedHours | hourdata: item.Time).Cancel == 1}">
+                            <ng-container *ngIf="(WedHours | hourdata: item.Time).Bucket > 0 && ((wednesday > today) || (wednesday.toString() == today.toString() && currTime < item.Time24H)) && (WedHours | hourdata: item.Time).Cancel == 0">
+                                <button mat-icon-button class="col-md-3" (click)="newAppo(item.Time, wednesday, 3)" *ngIf="(WedHours | hourdata: item.Time).Available > 0" i18n-matTooltip="Add booking|Add booking tooltip@@learnMore.LMCON39" matTooltip="Add booking">
+                                    <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
+                                </button>
+                                <button mat-icon-button class="col-md-3" (click)="cancelTime(item.Time24H, wednesday)" i18n-matTooltip="Disabled|Disabled time slot tooltip@@learnMore.LMCON40" matTooltip="Disabled">
+                                    <mat-icon class="action-enabled" svgIcon="cancel02"></mat-icon>
+                                </button>
+                                <button mat-icon-button class="col-md-3" (click)="expandTime(item.Time24H, wednesday, item.Time, 3)" *ngIf="(WedHours | hourdata: item.Time).Used > 0" i18n-matTooltip="Additional Info|Additional Info tooltip@@learnMore.LMCON38" matTooltip="Additional Info">
+                                    <mat-icon class="action-enabled" svgIcon="view"></mat-icon>
+                                </button>
+                                <div class="hour-available col-md-3 p-0" i18n-matTooltip="Available booking|Available booking tooltip@@learnMore.LMCON41" matTooltip="Available booking">{{ ( (WedHours | hourdata: item.Time).Used > 0 ? (WedHours | hourdata: item.Time).Available : '') }}</div>
+                            </ng-container>
+                            <ng-container *ngIf="((wednesday < today) || (wednesday.toString() == today.toString() && currTime > item.Time24H)); else valCheckWed">
+                                <div class="time-actions-disabled col-md">
+                                </div>
+                            </ng-container>
+                            <ng-template #valCheckWed>
+                                <ng-container *ngIf="(WedHours | hourdata: item.Time).Time == undefined || ((WedHours | hourdata: item.Time).Cancel == 1 && ((wednesday > today) || (wednesday.toString() == today.toString() && currTime < item.Time24H)))">
+                                    <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, wednesday, item.Time, 3)">
+                                        <mat-icon class="action-enabled" svgIcon="check"></mat-icon>
+                                    </button>
+                                </ng-container>
+                            </ng-template>
+                        </div>
+                    </div>
+                    <div class="time-bucket col-md p-0">
+                        <div class="row m-0" [ngStyle]="{'background': (ThuHours | servcolor: item.Time: resServices)}" [ngClass]="{'time-actions': (ThuHours | hourdata: item.Time).Time != undefined,
+                                        'time-disabled': (ThuHours | hourdata: item.Time).Time == undefined || (ThuHours | hourdata: item.Time).Cancel == 1}">
+                            <ng-container *ngIf="(ThuHours | hourdata: item.Time).Bucket > 0 && ((thursday > today) || (thursday.toString() == today.toString() && currTime < item.Time24H)) && (ThuHours | hourdata: item.Time).Cancel == 0">
+                                <button mat-icon-button class="col-md-3" (click)="newAppo(item.Time, thursday, 4)" *ngIf="(ThuHours | hourdata: item.Time).Available > 0" i18n-matTooltip="Add booking|Add booking tooltip@@learnMore.LMCON39" matTooltip="Add booking">
+                                    <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
+                                </button>
+                                <button mat-icon-button class="col-md-3" (click)="cancelTime(item.Time24H, thursday)"  i18n-matTooltip="Disabled|Disabled time slot tooltip@@learnMore.LMCON40" matTooltip="Disabled">
+                                    <mat-icon class="action-enabled" svgIcon="cancel02"></mat-icon>
+                                </button>
+                                <button mat-icon-button class="col-md-3" (click)="expandTime(item.Time24H, thursday, item.Time, 4)" *ngIf="(ThuHours | hourdata: item.Time).Used > 0" i18n-matTooltip="Additional Info|Additional Info tooltip@@learnMore.LMCON38" matTooltip="Additional Info">
+                                    <mat-icon class="action-enabled" svgIcon="view"></mat-icon>
+                                </button>
+                                <div class="hour-available col-md-3 p-0" i18n-matTooltip="Available booking|Available booking tooltip@@learnMore.LMCON41" matTooltip="Available booking">{{ ( (ThuHours | hourdata: item.Time).Used > 0 ? (ThuHours | hourdata: item.Time).Available : '') }}</div>
+                            </ng-container>
+                            <ng-container *ngIf="((thursday < today) || (thursday.toString() == today.toString() && currTime > item.Time24H)); else valCheckThu">
+                                <div class="time-actions-disabled col-md">
+                                </div>
+                            </ng-container>
+                            <ng-template #valCheckThu>
+                                <ng-container *ngIf="(ThuHours | hourdata: item.Time).Time == undefined || ((ThuHours | hourdata: item.Time).Cancel == 1 && ((thursday > today) || (thursday.toString() == today.toString() && currTime < item.Time24H)))">
+                                    <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, thursday, item.Time, 4)">
+                                        <mat-icon class="action-enabled" svgIcon="check"></mat-icon>
+                                    </button>
+                                </ng-container>
+                            </ng-template>
+                        </div>
+                    </div>
+                    <div class="time-bucket col-md p-0">
+                        <div class="row m-0" [ngStyle]="{'background': (FriHours | servcolor: item.Time: resServices)}" [ngClass]="{'time-actions': (FriHours | hourdata: item.Time).Time != undefined,
+                                        'time-disabled': (FriHours | hourdata: item.Time).Time == undefined || (FriHours | hourdata: item.Time).Cancel == 1}">
+                        <ng-container *ngIf="(FriHours | hourdata: item.Time).Bucket > 0 && ((friday > today) || (friday.toString() == today.toString() && currTime < item.Time24H)) && (FriHours | hourdata: item.Time).Cancel == 0">
+                            <button mat-icon-button class="col-md-3" (click)="newAppo(item.Time, friday, 5)" *ngIf="(FriHours | hourdata: item.Time).Available > 0" i18n-matTooltip="Add booking|Add booking tooltip@@learnMore.LMCON39" matTooltip="Add booking">
                                 <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
                             </button>
-                            <button mat-icon-button class="col-md-3" (click)="cancelTime(item.Time24H, saturday)" i18n-matTooltip="Disabled|Disabled time slot tooltip@@learnMore.LMCON40" matTooltip="Disabled">
+                            <button mat-icon-button class="col-md-3" (click)="cancelTime(item.Time24H, friday)" i18n-matTooltip="Disabled|Disabled time slot tooltip@@learnMore.LMCON40" matTooltip="Disabled">
                                 <mat-icon class="action-enabled" svgIcon="cancel02"></mat-icon>
                             </button>
-                            <button mat-icon-button class="col-md-3" (click)="expandTime(item.Time24H, saturday, item.Time, 6)" *ngIf="(SatHours | hourdata: item.Time).Used > 0" i18n-matTooltip="Additional Info|Additional Info tooltip@@learnMore.LMCON38" matTooltip="Additional Info">
+                            <button mat-icon-button class="col-md-3" (click)="expandTime(item.Time24H, friday, item.Time, 5)" *ngIf="(FriHours | hourdata: item.Time).Used > 0" i18n-matTooltip="Additional Info|Additional Info tooltip@@learnMore.LMCON38" matTooltip="Additional Info">
                                 <mat-icon class="action-enabled" svgIcon="view"></mat-icon>
                             </button>
-                            <div class="hour-available col-md-3 p-0" i18n-matTooltip="Available booking|Available booking tooltip@@learnMore.LMCON41" matTooltip="Available booking">{{ ( (SatHours | hourdata: item.Time).Used > 0 ? (SatHours | hourdata: item.Time).Available : '') }}</div>
+                            <div class="hour-available col-md-3 p-0" i18n-matTooltip="Available booking|Available booking tooltip@@learnMore.LMCON41" matTooltip="Available booking">{{ ( (FriHours | hourdata: item.Time).Used > 0 ? (FriHours | hourdata: item.Time).Available : '') }}</div>
                         </ng-container>
-                        <ng-container *ngIf="((saturday < today) || (saturday.toString() == today.toString() && currTime > item.Time24H)); else valCheckSat">
+                        <ng-container *ngIf="((friday < today) || (friday.toString() == today.toString() && currTime > item.Time24H)); else valCheckFri">
                             <div class="time-actions-disabled col-md">
                             </div>
                         </ng-container>
-                        <ng-template #valCheckSat>
-                            <ng-container *ngIf="(SatHours | hourdata: item.Time).Time == undefined || ((SatHours | hourdata: item.Time).Cancel == 1 && ((saturday > today) || (saturday.toString() == today.toString() && currTime < item.Time24H)))">
-                                <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, saturday, item.Time, 6)">
+                        <ng-template #valCheckFri>
+                            <ng-container *ngIf="(FriHours | hourdata: item.Time).Time == undefined || ((FriHours | hourdata: item.Time).Cancel == 1 && ((friday > today) || (friday.toString() == today.toString() && currTime < item.Time24H)))">
+                                <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, friday, item.Time, 5)">
                                     <mat-icon class="action-enabled" svgIcon="check"></mat-icon>
                                 </button>
                             </ng-container>
                         </ng-template>
                     </div>
-                </div>
-                <div class="time-bucket col-md p-0">
-                    <div class="row m-0" [ngStyle]="{'background': (SunHours | servcolor: item.Time: resServices)}" [ngClass]="{'time-actions': (SunHours | hourdata: item.Time).Time != undefined,
-                                    'time-disabled': (SunHours | hourdata: item.Time).Time == undefined || (SunHours | hourdata: item.Time).Cancel == 1}">
-                        <ng-container *ngIf="(SunHours | hourdata: item.Time).Bucket > 0 && ((sunday > today) || (sunday.toString() == today.toString() && currTime < item.Time24H)) && (SunHours | hourdata: item.Time).Cancel == 0">
-                            <button mat-icon-button class="col-md-3" (click)="newAppo(item.Time, sunday, 7)" *ngIf="(SunHours | hourdata: item.Time).Available > 0" i18n-matTooltip="Add booking|Add booking tooltip@@learnMore.LMCON39" matTooltip="Add booking">
-                                <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
-                            </button>
-                            <button mat-icon-button class="col-md-3" (click)="cancelTime(item.Time24H, sunday)" i18n-matTooltip="Disabled|Disabled time slot tooltip@@learnMore.LMCON40" matTooltip="Disabled">
-                                <mat-icon class="action-enabled" svgIcon="cancel02"></mat-icon>
-                            </button>
-                            <button mat-icon-button class="col-md-3" (click)="expandTime(item.Time24H, sunday, item.Time, 7)" *ngIf="(SunHours | hourdata: item.Time).Used > 0" i18n-matTooltip="Additional Info|Additional Info tooltip@@learnMore.LMCON38" matTooltip="Additional Info">
-                                <mat-icon class="action-enabled" svgIcon="view"></mat-icon>
-                            </button>
-                            <div class="hour-available col-md-3 p-0" i18n-matTooltip="Available booking|Available booking tooltip@@learnMore.LMCON41" matTooltip="Available booking">{{ ( (SunHours | hourdata: item.Time).Used > 0 ? (SunHours | hourdata: item.Time).Available : '') }}</div>
-                        </ng-container>
-                        <ng-container *ngIf="((sunday < today) || (sunday.toString() == today.toString() && currTime > item.Time24H)); else valCheckSun">
-                            <div class="time-actions-disabled col-md">
-                            </div>
-                        </ng-container>
-                        <ng-template #valCheckSun>
-                            <ng-container *ngIf="(SunHours | hourdata: item.Time).Time == undefined || ((SunHours | hourdata: item.Time).Cancel == 1 && ((sunday > today) || (sunday.toString() == today.toString() && currTime < item.Time24H)))">
-                                <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, sunday, item.Time, 7)">
-                                    <mat-icon class="action-enabled" svgIcon="check"></mat-icon>
+                    </div>
+                    <div class="time-bucket col-md p-0">
+                        <div class="row m-0" [ngStyle]="{'background': (SatHours | servcolor: item.Time: resServices)}" [ngClass]="{'time-actions': (SatHours | hourdata: item.Time).Time != undefined,
+                                                        'time-disabled': (SatHours | hourdata: item.Time).Time == undefined || (SatHours | hourdata: item.Time).Cancel == 1}">
+                            <ng-container *ngIf="(SatHours | hourdata: item.Time).Bucket > 0 && ((saturday > today) || (saturday.toString() == today.toString() && currTime < item.Time24H)) && (SatHours | hourdata: item.Time).Cancel == 0">
+                                <button mat-icon-button class="col-md-3" (click)="newAppo(item.Time, saturday, 6)" *ngIf="(SatHours | hourdata: item.Time).Available > 0" i18n-matTooltip="Add booking|Add booking tooltip@@learnMore.LMCON39" matTooltip="Add booking">
+                                    <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
                                 </button>
+                                <button mat-icon-button class="col-md-3" (click)="cancelTime(item.Time24H, saturday)" i18n-matTooltip="Disabled|Disabled time slot tooltip@@learnMore.LMCON40" matTooltip="Disabled">
+                                    <mat-icon class="action-enabled" svgIcon="cancel02"></mat-icon>
+                                </button>
+                                <button mat-icon-button class="col-md-3" (click)="expandTime(item.Time24H, saturday, item.Time, 6)" *ngIf="(SatHours | hourdata: item.Time).Used > 0" i18n-matTooltip="Additional Info|Additional Info tooltip@@learnMore.LMCON38" matTooltip="Additional Info">
+                                    <mat-icon class="action-enabled" svgIcon="view"></mat-icon>
+                                </button>
+                                <div class="hour-available col-md-3 p-0" i18n-matTooltip="Available booking|Available booking tooltip@@learnMore.LMCON41" matTooltip="Available booking">{{ ( (SatHours | hourdata: item.Time).Used > 0 ? (SatHours | hourdata: item.Time).Available : '') }}</div>
                             </ng-container>
-                        </ng-template>
+                            <ng-container *ngIf="((saturday < today) || (saturday.toString() == today.toString() && currTime > item.Time24H)); else valCheckSat">
+                                <div class="time-actions-disabled col-md">
+                                </div>
+                            </ng-container>
+                            <ng-template #valCheckSat>
+                                <ng-container *ngIf="(SatHours | hourdata: item.Time).Time == undefined || ((SatHours | hourdata: item.Time).Cancel == 1 && ((saturday > today) || (saturday.toString() == today.toString() && currTime < item.Time24H)))">
+                                    <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, saturday, item.Time, 6)">
+                                        <mat-icon class="action-enabled" svgIcon="check"></mat-icon>
+                                    </button>
+                                </ng-container>
+                            </ng-template>
+                        </div>
+                    </div>
+                    <div class="time-bucket col-md p-0">
+                        <div class="row m-0" [ngStyle]="{'background': (SunHours | servcolor: item.Time: resServices)}" [ngClass]="{'time-actions': (SunHours | hourdata: item.Time).Time != undefined,
+                                        'time-disabled': (SunHours | hourdata: item.Time).Time == undefined || (SunHours | hourdata: item.Time).Cancel == 1}">
+                            <ng-container *ngIf="(SunHours | hourdata: item.Time).Bucket > 0 && ((sunday > today) || (sunday.toString() == today.toString() && currTime < item.Time24H)) && (SunHours | hourdata: item.Time).Cancel == 0">
+                                <button mat-icon-button class="col-md-3" (click)="newAppo(item.Time, sunday, 7)" *ngIf="(SunHours | hourdata: item.Time).Available > 0" i18n-matTooltip="Add booking|Add booking tooltip@@learnMore.LMCON39" matTooltip="Add booking">
+                                    <mat-icon class="action-enabled" svgIcon="new"></mat-icon>
+                                </button>
+                                <button mat-icon-button class="col-md-3" (click)="cancelTime(item.Time24H, sunday)" i18n-matTooltip="Disabled|Disabled time slot tooltip@@learnMore.LMCON40" matTooltip="Disabled">
+                                    <mat-icon class="action-enabled" svgIcon="cancel02"></mat-icon>
+                                </button>
+                                <button mat-icon-button class="col-md-3" (click)="expandTime(item.Time24H, sunday, item.Time, 7)" *ngIf="(SunHours | hourdata: item.Time).Used > 0" i18n-matTooltip="Additional Info|Additional Info tooltip@@learnMore.LMCON38" matTooltip="Additional Info">
+                                    <mat-icon class="action-enabled" svgIcon="view"></mat-icon>
+                                </button>
+                                <div class="hour-available col-md-3 p-0" i18n-matTooltip="Available booking|Available booking tooltip@@learnMore.LMCON41" matTooltip="Available booking">{{ ( (SunHours | hourdata: item.Time).Used > 0 ? (SunHours | hourdata: item.Time).Available : '') }}</div>
+                            </ng-container>
+                            <ng-container *ngIf="((sunday < today) || (sunday.toString() == today.toString() && currTime > item.Time24H)); else valCheckSun">
+                                <div class="time-actions-disabled col-md">
+                                </div>
+                            </ng-container>
+                            <ng-template #valCheckSun>
+                                <ng-container *ngIf="(SunHours | hourdata: item.Time).Time == undefined || ((SunHours | hourdata: item.Time).Cancel == 1 && ((sunday > today) || (sunday.toString() == today.toString() && currTime < item.Time24H)))">
+                                    <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, sunday, item.Time, 7)">
+                                        <mat-icon class="action-enabled" svgIcon="check"></mat-icon>
+                                    </button>
+                                </ng-container>
+                            </ng-template>
+                        </div>
                     </div>
                 </div>
             </div>

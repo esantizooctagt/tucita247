@@ -20,8 +20,11 @@ import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.comp
   styleUrls: ['./schedule.component.scss']
 })
 export class ScheduleComponent implements OnInit {
+  // @HostListener('window:scroll', ['$event'])
+  
   currWeek: number = 1;
   currTime: string = '';
+  isSticky: boolean = false;
   today: Date;
   weekStart: Date;
   weekEnd: Date;
@@ -81,6 +84,10 @@ export class ScheduleComponent implements OnInit {
     this.matIconRegistry.addSvgIcon('check',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/check01.svg'));
     this.matIconRegistry.addSvgIcon('refresh',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/refresh.svg'));
    }
+
+  // checkScroll() {
+  //   this.isSticky = window.pageYOffset >= 350;
+  // }
 
   openDialog(header: string, message: string, success: boolean, error: boolean, warn: boolean): void {
     const dialogConfig = new MatDialogConfig();
