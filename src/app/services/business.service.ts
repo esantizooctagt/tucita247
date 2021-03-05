@@ -12,6 +12,7 @@ import { throwError } from 'rxjs';
 export class BusinessService {
   readonly apiURL = environment.apiUrl;
   readonly apiAdminUrl = environment.apiAdminUrl;
+  readonly apiWPURL = environment.apiWPUrl;
   constructor(private http: HttpClient) { }
 
   getBusinessAdmin(): Observable<any>{
@@ -80,6 +81,11 @@ export class BusinessService {
 
   updateBusiness(businessId, dataForm) {
     return this.http.put(this.apiURL + '/business/' + businessId, dataForm)
+                    .pipe(catchError(this.errorHandler));
+  }
+
+  postBusiness(dataForm) {
+    return this.http.post(this.apiWPURL + '/business', dataForm)
                     .pipe(catchError(this.errorHandler));
   }
 

@@ -2,6 +2,13 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="dashboard.newbusiness" datatype="html">
+        <source>New Business</source>
+        <context-group purpose="new-business">
+          <context context-type="sourcefile">src/app/modules/new-business/new-business.component.html</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="citas.download">
         <source>Download</source>
         <target state="translated">Download</target>

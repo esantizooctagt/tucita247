@@ -1,0 +1,224 @@
+<div class="container-fluid main-background">
+    <div class="row row pl-2 pr-1">
+        <div class="pl-15 pt-1 pb-2 col-md-12 mt-1 mb-1 header-route">
+            <h3 i18n="BUSINESS|Title page business@@business.business">BUSINESS</h3>
+        </div>
+        <div class="pl-15 pt-1 col-md-12">
+            <mat-card class="col-sm col-md-11 col-lg-11">
+                <ng-container *ngIf="businessSave$ | async"></ng-container>
+                <ng-container *ngIf="geoLoc$ | async"></ng-container>
+                <ng-container *ngIf="categories$ | async"></ng-container>
+                <ng-container *ngIf="cities$ | async"></ng-container>
+                <form [formGroup]="businessForm">
+                    <ng-template matStepLabel i18n="Business|Business Label@@business.businesslabel">Business</ng-template>
+                    <mat-form-field class="pt-3">
+                        <input matInput i18n-placeholder="Business Name|Business name placeholder@@business.busname" placeholder="Business Name" maxlength="500" minlength="3"
+                            formControlName="Name" [errorStateMatcher]="confirmValidParentMatcher" required>
+                        <mat-error *ngIf="fBusiness.Name.invalid && fBusiness.Name.touched">
+                            {{ 'Error: ' + getErrorMessage('Name')}}</mat-error>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input matInput i18n-placeholder="Tu Cita 24/7 Link|text in business@@business.tucitalink" placeholder="Tu Cita 24/7 Link" maxlength="50" minlength="2"
+                            formControlName="TuCitaLink" [errorStateMatcher]="confirmValidParentMatcher"
+                            (focusout)="checkLinkAvailability($event)" required>
+                        <mat-spinner matSuffix *ngIf="loadingBusiness" diameter="18" color="primary">
+                        </mat-spinner>
+                        <ng-container matSuffix *ngIf="availability$ | async as result">
+                            <mat-icon *ngIf="linkValidated"
+                                [ngClass]="{'icon-green':result.Available, 'icon-red':!result.Available}">
+                                {{result.Available ? 'check' : 'close' }}</mat-icon>
+                        </ng-container>
+                        <mat-error *ngIf="fBusiness.TuCitaLink.invalid && fBusiness.TuCitaLink.touched">
+                            {{ 'Error: ' + getErrorMessage('TuCitaLink')}}</mat-error>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input matInput i18n-placeholder="Email@@shared.email" placeholder="Email" maxlength="200"
+                            pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" formControlName="Email"
+                            [errorStateMatcher]="confirmValidParentMatcher" required>
+                        <mat-error *ngIf="fBusiness.Email.invalid && fBusiness.Email.touched">
+                            {{ 'Error: ' + getErrorMessage('Email')}}</mat-error>
+                    </mat-form-field>
+                    <div class="row">
+                        <mat-form-field class="col-md-6">
+                            <input matInput #First_Name i18n-placeholder="First Name|text in users@@users.firstname"
+                                placeholder="First Name" maxlength="100" minlength="3" formControlName="First_Name"
+                                [errorStateMatcher]="confirmValidParentMatcher" required>
+                            <mat-error *ngIf="fBusiness.First_Name.invalid && fBusiness.First_Name.touched">
+                                {{ 'Error: ' + getErrorMessage('First_Name')}}
+                            </mat-error>
+                        </mat-form-field>
+                        <mat-form-field class="col-md-6">
+                            <input matInput #Last_Name i18n-placeholder="Last Name|text in users@@users.lastname"
+                                placeholder="Last Name" maxlength="100" minlength="3" formControlName="Last_Name"
+                                [errorStateMatcher]="confirmValidParentMatcher" required>
+                            <mat-error *ngIf="fBusiness.Last_Name.invalid && fBusiness.Last_Name.touched">
+                                {{ 'Error: ' + getErrorMessage('Last_Name')}}
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <mat-form-field>
+                        <input matInput i18n-placeholder="Address|Address Business@@business.address" placeholder="Address" formControlName="Address" maxlength="500"
+                            minlength="3" [errorStateMatcher]="confirmValidParentMatcher" required>
+                        <mat-error *ngIf="fBusiness.Address.invalid && fBusiness.Address.touched">
+                            {{ 'Error: ' + getErrorMessage('Address')}}</mat-error>
+                    </mat-form-field>
+                    <div class="row">
+                        <mat-form-field class="col-md-4">
+                            <input type="text" i18n-placeholder="Country|Country in business@@business.country" placeholder="Country" matInput formControlName="Country"
+                                [matAutocomplete]="autoCountry" [errorStateMatcher]="confirmValidParentMatcher"
+                                required>
+                            <mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayFn"
+                                activeOption="activeOption" (optionSelected)='getCities($event.option.value)'>
+                                <mat-option *ngFor="let country of filteredCountries$ | async"
+                                    [value]="country">
+                                    {{country.n}}
+                                </mat-option>
+                            </mat-autocomplete>
+                            <mat-error *ngIf="fBusiness.Country.invalid && fBusiness.Country.touched">{{ 'Error: ' + getErrorMessage('Country')}}</mat-error>
+                        </mat-form-field>
+                        <ng-container *ngIf="sectors$ | async"></ng-container>
+                        <div class="form-field col-md-4">
+                            <mat-form-field>
+                                <mat-label i18n="City|text in locations@@locations.city">City</mat-label>
+                                <mat-select formControlName="City" (selectionChange)="loadSectors($event.value)" 
+                                [errorStateMatcher]="confirmValidParentMatcher" required>
+                                    <mat-option *ngFor="let city of cities" [value]="city.CityId">
+                                        {{ city.Name }}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="fBusiness.City.invalid && fBusiness.City.touched">{{ 'Error: ' + getErrorMessage('City')}}
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="form-field col-md-4">
+                            <mat-form-field>
+                                <mat-label i18n="Sector|text in locations@@locations.sector">Sector</mat-label>
+                                <mat-select formControlName="Sector" [errorStateMatcher]="confirmValidParentMatcher" required>
+                                    <mat-option *ngFor="let sector of sectors" [value]="sector.SectorId">
+                                        {{ sector.Name }}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="fBusiness.Sector.invalid && fBusiness.Sector.touched">
+                                    {{ 'Error: ' + getErrorMessage('Sector')}}</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <mat-form-field class="col-md-6">
+                            <input #zipcode (change)="setMarker(zipcode.value)" matInput i18n-placeholder="Zip Code|Zip code in business@business.zipcode" placeholder="Zip Code" formControlName="ZipCode" maxlength="10"
+                                minlength="3" [errorStateMatcher]="confirmValidParentMatcher" required>
+                            <mat-error *ngIf="fBusiness.ZipCode.invalid && fBusiness.ZipCode.touched">
+                                {{ 'Error: ' + getErrorMessage('ZipCode')}}</mat-error>
+                        </mat-form-field>
+                        <mat-form-field class="col-md-6">
+                            <input matInput appPhoneMask i18n-placeholder="Phone|Phone in business@@business.phone" placeholder="Phone" formControlName="Phone"
+                                maxlength="15" minlength="3" [errorStateMatcher]="confirmValidParentMatcher" required>
+                            <mat-error *ngIf="fBusiness.Phone.invalid && fBusiness.Phone.touched">
+                                {{ 'Error: ' + getErrorMessage('Phone')}}</mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="row">
+                        <div class="col-md mt-3 mb-3">
+                            <div i18n="Map info|text in location@@location.map">
+                                Zoom
+                            </div>
+                            <agm-map [latitude]="lat" [zoom]="zoom" [longitude]="lng">
+                                <agm-marker [latitude]="lat" [longitude]="lng" [markerDraggable]="true"
+                                    (dragEnd)="markerDragEnd($event)"></agm-marker>
+                            </agm-map>
+                        </div>
+                    </div>
+                    <div class="row pt-3">
+                        <mat-form-field class="col-md-12">
+                            <ng-container *ngIf="allCategories"></ng-container>
+                            <mat-chip-list #chipCategoriesList>
+                                <mat-chip *ngFor="let category of categories" 
+                                    [selectable]="selectableCategory"
+                                    [removable]="removableCategory" 
+                                    (removed)="removeCategory(category)">
+                                    {{ category.Name }}
+                                    <mat-icon matChipRemove *ngIf="removableCategory">cancel</mat-icon>
+                                </mat-chip>
+                                <input i18n-placeholder="New category@@business.newcat" placeholder="New category" #categoryInput 
+                                    [matAutocomplete]="autoCategory"
+                                    [matChipInputFor]="chipCategoriesList"
+                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [formControl]="Categories">
+                            </mat-chip-list>
+                            <mat-autocomplete 
+                                #autoCategory="matAutocomplete"
+                                (optionSelected)="selectedCategory($event)">
+                                <mat-option *ngFor="let category of filteredCategories$ | async"
+                                    [value]="category.CategoryId" [ngClass]="{'option-subcat':category.CategoryId.includes('#SUB#'),'option-cat':!category.CategoryId.includes('#SUB#')}">
+                                    {{ category.Name }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </div>
+                    <!-- <div class="row">
+                        <mat-form-field class="col-md-12">
+                            <mat-chip-list #chipReasons>
+                                <ng-container *ngIf="reasons.length > 0">
+                                    <mat-chip *ngFor="let reason of reasons" [selectable]="selectable"
+                                        [removable]="removable" (removed)="removeReason(reason)">
+                                        {{reason}}
+                                        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                    </mat-chip>
+                                </ng-container>
+                                <input i18n-placeholder="New Reason@@business.newreason" placeholder="New Reason..." [matChipInputFor]="chipReasons"
+                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                    [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addReason($event)">
+                            </mat-chip-list>
+                        </mat-form-field>
+                    </div> -->
+                    <mat-form-field>
+                        <input matInput i18n-placeholder="Short description for mobile app|text in business@@business.shorttext" placeholder="Short Description" maxlength="75" minlength="10"
+                            formControlName="ShortDescription" [errorStateMatcher]="confirmValidParentMatcher"
+                            required>
+                        <mat-error
+                            *ngIf="fBusiness.ShortDescription.invalid && fBusiness.ShortDescription.touched">
+                            {{ 'Error: ' + getErrorMessage('ShortDescription')}}</mat-error>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input matInput
+                            i18n-placeholder="Max concurrent customer|text in locations@@locations.maxcustomer"
+                            placeholder="Max Concurrent Customers" formControlName="MaxConcurrentCustomer"
+                            [errorStateMatcher]="confirmValidParentMatcher" required>
+                        <mat-error *ngIf="fBusiness.MaxConcurrentCustomer.invalid && fBusiness.MaxConcurrentCustomer.touched">
+                            {{ 'Error: ' + getErrorMessage('MaxConcurrentCustomer')}}</mat-error>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input matInput #NameService placeholder="Service Name"
+                            maxlength="100" minlength="3" formControlName="Service_Name"
+                            [errorStateMatcher]="confirmValidParentMatcher" required>
+                        <mat-error *ngIf="fBusiness.Service_Name.invalid && fBusiness.Service_Name.touched">{{ 'Error: ' + getErrorMessage('Service_Name')}}
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input matInput #NameProvider placeholder="Provider Name"
+                            maxlength="100" minlength="3" formControlName="Provider_Name"
+                            [errorStateMatcher]="confirmValidParentMatcher" required>
+                        <mat-error *ngIf="fBusiness.Provider_Name.invalid && fBusiness.Provider_Name.touched">{{ 'Error: ' + getErrorMessage('Provider_Name')}}
+                        </mat-error>
+                    </mat-form-field>
+                    <div class="row">
+                        <div class="col-md-7 pt-3 pb-0">
+                            <mat-label class="" i18n="Language|text in business@@business.language">Language :</mat-label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 pb-3">
+                            <mat-radio-group class="language-line" formControlName="Language">
+                                <mat-radio-button value="en">English</mat-radio-button>
+                                <mat-radio-button value="es">Español</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+                </form>
+                <div>
+                    <button class="button-save mr-3 mt-2" mat-flat-button color="primary"
+                        [disabled]="businessForm.invalid" (click)="onSubmitBusiness()" i18n="Save@@shared.save">Save</button>
+                </div>
+            </mat-card>
+        </div>
+    </div>
+</div>

@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '@modules/authentication/guards/auth.guard';
 
 /**Main Components**/
-import { MainNavComponent, NotFoundComponent, ServiceComponent, LocationComponent, PollComponent, CancelComponent, ProviderComponent, LoginComponent, UserComponent, UsersComponent, ClientsComponent, DashboardComponent, ProfileComponent, BusinessComponent, CategoriesComponent, ReportsComponent, RoleComponent, RolesComponent, HelpComponent, ResetComponent, VerificationComponent, ForgotpassComponent, HomeComponent, HostComponent, UserlocComponent, PollsComponent, PollRespComponent, QuickCheckinComponent, SurveysComponent, SurveyRespComponent, LandingComponent, ScheduleComponent, BusinessOpeComponent, BusinessDaysComponent, LocationsComponent, ProvidersComponent, WelcomeComponent, ServicesComponent, UsersAdminComponent, UserAdminComponent, RolesAdminComponent, RoleAdminComponent } from '@modules/index';
+import { MainNavComponent, NotFoundComponent, ServiceComponent, LocationComponent, PollComponent, CancelComponent, ProviderComponent, LoginComponent, UserComponent, UsersComponent, ClientsComponent, DashboardComponent, ProfileComponent, BusinessComponent, CategoriesComponent, ReportsComponent, RoleComponent, RolesComponent, HelpComponent, ResetComponent, VerificationComponent, ForgotpassComponent, HomeComponent, HostComponent, UserlocComponent, PollsComponent, PollRespComponent, QuickCheckinComponent, SurveysComponent, SurveyRespComponent, LandingComponent, ScheduleComponent, BusinessOpeComponent, BusinessDaysComponent, LocationsComponent, ProvidersComponent, WelcomeComponent, ServicesComponent, UsersAdminComponent, UserAdminComponent, RolesAdminComponent, RoleAdminComponent, NewBusinessComponent } from '@modules/index';
 
 const routes: Routes = [
   {
@@ -44,6 +44,7 @@ const routes: Routes = [
       { path: 'help', component: HelpComponent, canActivate: [AuthGuard] },
       { path: 'users-admin', component: UsersAdminComponent, canActivate: [AuthGuard] },
       { path: 'roles-admin', component: RolesAdminComponent, canActivate: [AuthGuard] },
+      { path: 'new-business', component: NewBusinessComponent, canActivate: [AuthGuard] },
       { path: 'user-admin/:userId', component: UserAdminComponent, canActivate: [AuthGuard] },
       { path: 'role-admin/:roleId', component: RoleAdminComponent, canActivate: [AuthGuard] }
     ]
@@ -134,5 +135,6 @@ export const routingComponents = [
   BusinessDaysComponent,
   ScheduleComponent,
   CancelComponent,
+  NewBusinessComponent,
   QuickCheckinComponent
 ]

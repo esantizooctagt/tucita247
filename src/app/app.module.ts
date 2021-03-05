@@ -87,6 +87,7 @@ import { CancelComponent } from './modules/cancel/cancel.component';
 import { StickerDialogComponent } from './shared/sticker-dialog/sticker-dialog.component';
 import { AppowiDialogComponent } from './shared/appowi-dialog/appowi-dialog.component';
 import { MessDialogComponent } from './shared/mess-dialog/mess-dialog.component';
+import { NewBusinessComponent } from './modules/new-business/new-business.component';
 
 @NgModule({
   declarations: [
@@ -119,7 +120,8 @@ import { MessDialogComponent } from './shared/mess-dialog/mess-dialog.component'
     CancelComponent,
     StickerDialogComponent,
     AppowiDialogComponent,
-    MessDialogComponent
+    MessDialogComponent,
+    NewBusinessComponent
   ],
   imports: [
     BrowserModule,

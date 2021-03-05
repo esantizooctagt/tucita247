@@ -561,23 +561,23 @@ export class BusinessComponent implements OnInit {
         '';
     }
     if (component === 'Website'){
-      return this.fBusiness.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: ${max150}` :
-        this.fBusiness.Phone.hasError('minlength') ? $localize`:@@shared.minimun: ${min4}` :
+      return this.fBusiness.Website.hasError('maxlength') ? $localize`:@@shared.maximun: ${max150}` :
+        this.fBusiness.Website.hasError('minlength') ? $localize`:@@shared.minimun: ${min4}` :
         '';
     }
     if (component === 'Facebook'){
-      return this.fBusiness.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: ${max150}` :
-        this.fBusiness.Phone.hasError('minlength') ? $localize`:@@shared.minimun: ${min4}` :
+      return this.fBusiness.Facebook.hasError('maxlength') ? $localize`:@@shared.maximun: ${max150}` :
+        this.fBusiness.Facebook.hasError('minlength') ? $localize`:@@shared.minimun: ${min4}` :
         '';
     }
     if (component === 'Twitter'){
-      return this.fBusiness.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: ${max150}` :
-        this.fBusiness.Phone.hasError('minlength') ? $localize`:@@shared.minimun: ${min4}` :
+      return this.fBusiness.Twitter.hasError('maxlength') ? $localize`:@@shared.maximun: ${max150}` :
+        this.fBusiness.Twitter.hasError('minlength') ? $localize`:@@shared.minimun: ${min4}` :
         '';
     }
     if (component === 'Instagram'){
-      return this.fBusiness.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: ${max150}` :
-        this.fBusiness.Phone.hasError('minlength') ? $localize`:@@shared.minimun: ${min4}` :
+      return this.fBusiness.Instagram.hasError('maxlength') ? $localize`:@@shared.maximun: ${max150}` :
+        this.fBusiness.Instagram.hasError('minlength') ? $localize`:@@shared.minimun: ${min4}` :
         '';
     }
     if (component === 'Email'){

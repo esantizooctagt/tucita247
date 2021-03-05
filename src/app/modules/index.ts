@@ -40,3 +40,4 @@ export * from './users-admin/user-admin/user-admin.component';
 export * from './roles-admin/roles-admin.component';
 export * from './roles-admin/role-admin/role-admin.component';
 export * from './cancel/cancel.component';
+export * from './new-business/new-business.component';
