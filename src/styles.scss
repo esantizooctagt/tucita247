@@ -101,12 +101,12 @@ mat-error{
     display: none;
 }
 .qr-img{
-    height: 450px !important;
-    width: 450px !important;
+    height: 420px !important;
+    width: 420px !important;
 }
 .qr-style{
-    margin-top: 38px;
-    margin-bottom: 38px;
+    margin-top: 28px;
+    margin-bottom: 32px;
 }
 .qr-title{
     text-align: center;
@@ -116,8 +116,8 @@ mat-error{
     margin-top: 10px;
     margin-bottom: 10px;
     font-weight: 600;
-    font-size: 66px;
-    line-height: 66px;
+    font-size: 64px;
+    line-height: 64px;
 }
 .qr-link{
     display: inline;
@@ -128,6 +128,10 @@ mat-error{
     line-height: 29px;
 }
 @media print {
+    @page {
+        size: landscape;
+        margin: 0px;
+    }
     body {
         -webkit-print-color-adjust: exact;
     }
