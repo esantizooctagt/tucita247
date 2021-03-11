@@ -461,4 +461,13 @@ export class NewBusinessComponent implements OnInit {
     }
   }
 
+  getCitaLink(data){
+    let text = data.target.value;
+    if (text != undefined){
+      text = text.toString().toLowerCase();
+      text = text.replace(/[^a-zA-ZÀ-ȕ0-9]+/g, '-');
+      text = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      this.businessForm.get('TuCitaLink').setValue(text);
+    }
+  }
 }

@@ -13,7 +13,7 @@
                     <ng-template matStepLabel i18n="Business|Business Label@@business.businesslabel">Business</ng-template>
                     <mat-form-field class="pt-3">
                         <input matInput i18n-placeholder="Business Name|Business name placeholder@@business.busname" placeholder="Business Name" maxlength="500" minlength="3"
-                            formControlName="Name" [errorStateMatcher]="confirmValidParentMatcher" required>
+                            formControlName="Name" [errorStateMatcher]="confirmValidParentMatcher" (focusout)="getCitaLink($event)" required>
                         <mat-error *ngIf="fBusiness.Name.invalid && fBusiness.Name.touched">
                             {{ 'Error: ' + getErrorMessage('Name')}}</mat-error>
                     </mat-form-field>
