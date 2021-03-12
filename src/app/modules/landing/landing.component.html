@@ -2,14 +2,18 @@
     <header class="masthead text-center text-white">
         <div class="masthead-content">
             <div class="container">
-                <div class="div-img col-md-3">
-                    <img class="imgbusiness-pic" [src]="imgPath+bus.Imagen">
+                <div class="row">
+                    <div class="div-img col-md-12 col-md">
+                        <img [src]="imgPath+bus.Imagen">
+                    </div>
                 </div>
-                <div class="div-content col-md-6">
-                    <h1 class="masthead-heading mb-0">{{bus.Name}}</h1>
-                    <h5 class="">{{bus.ShortDescript}}</h5>
-                    <a mat-button [attr.href]="'tel:'+bus.Phone">{{ 'Contact Us : ' + (bus.Phone | phone) }}</a>
-                    <a mat-button [attr.href]='bus.WebSite' target="_blank">{{bus.WebSite}}</a>
+                <div class="row">
+                    <div class="div-content col-md-12 col-md">
+                        <h1 class="masthead-heading mb-0">{{bus.Name}}</h1>
+                        <h5 class="">{{bus.ShortDescript}}</h5>
+                        <a class="btn-tel" mat-button [attr.href]="'tel:'+bus.Phone">{{ 'Contact Us : ' + (bus.Phone | phone) }}</a>
+                        <p><a class="link-web" [attr.href]='bus.WebSite' target="_blank">{{bus.WebSite}}</a></p>
+                    </div>
                 </div>
             </div>
         </div>

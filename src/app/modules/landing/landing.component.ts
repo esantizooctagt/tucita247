@@ -44,8 +44,11 @@ export class LandingComponent implements OnInit {
     this.business$ = this.businessService.getBusinessLanding(this.link).pipe(
       map((res: any) => {
         if (res != null){
+          let data: any;
+          data = res;
+          data.Locs.sort((a, b) => (a.Name < b.Name ? -1 : 1));
           this.servs = res.Services;
-          return res;
+          return data;
         }
       }),
       catchError(err => {

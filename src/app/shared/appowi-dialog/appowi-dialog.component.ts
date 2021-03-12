@@ -91,10 +91,10 @@ export class AppowiDialogComponent implements OnInit {
     this.providerId = this.data.providerId;
     this.TimeZone = this.data.timeZone;
     this.doorId = this.data.door;
-    this.services = this.data.services;
+    this.services = this.data.services.sort((a, b) => (a.Name < b.Name ? -1 : 1));;
     this.buckets = this.data.buckets;
     this.hours = this.data.hours;
-    this.Providers = this.data.providers;
+    this.Providers = this.data.providers.sort((a, b) => (a.Name < b.Name ? -1 : 1));;
     this.tipo = this.data.tipo;
 
     // if (this.tipo == 2){
