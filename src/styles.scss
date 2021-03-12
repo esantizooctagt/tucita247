@@ -100,37 +100,10 @@ mat-error{
 .print-area{
     display: none;
 }
-.qr-img{
-    height: 420px !important;
-    width: 420px !important;
-}
-.qr-style{
-    margin-top: 28px;
-    margin-bottom: 32px;
-}
-.qr-title{
-    text-align: center;
-}
-.qr-text{
-    display: inline;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    font-weight: 600;
-    font-size: 64px;
-    line-height: 64px;
-}
-.qr-link{
-    display: inline;
-    margin-top: 8px;
-    margin-bottom: 5px;
-    font-weight: 600;
-    font-size: 29px;
-    line-height: 29px;
-}
 @media print {
     @page {
         size: landscape;
-        margin: 0px;
+        margin: none;
     }
     body {
         -webkit-print-color-adjust: exact;
@@ -138,14 +111,44 @@ mat-error{
     .display-area{
         display: none !important;
     }
+    .non-print{
+        display: none !important;
+    }
     .print-area{
         display: block;
-        min-height: 920px;
-        height: 920px;
-        overflow: visible;
-        // position:relative;
-        // top: -30px;
+        min-height: 600px;
+        height: 600px;
+        min-width: 740px;
+        width: 740px;
+        overflow: visible !important;
         margin:auto;
+    }
+    .qr-img{
+        height: 420px !important;
+        width: 420px !important;
+    }
+    .qr-style{
+        margin-top: 28px;
+        margin-bottom: 32px;
+    }
+    .qr-title{
+        text-align: center;
+    }
+    .qr-text{
+        display: inline;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        font-weight: 600;
+        font-size: 64px;
+        line-height: 64px;
+    }
+    .qr-link{
+        display: inline;
+        margin-top: 8px;
+        margin-bottom: 5px;
+        font-weight: 600;
+        font-size: 29px;
+        line-height: 29px;
     }
     .init-pos{
         position:relative;
@@ -156,6 +159,7 @@ mat-error{
     }
     .mat-dialog-container{
         box-shadow: none;
+        border: 0px;
     }
 }
 @import '~@angular/material/theming';

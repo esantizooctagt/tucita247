@@ -191,13 +191,13 @@ export class BusinessComponent implements OnInit {
     dialogConfig.autoFocus = false;
     dialogConfig.data = {
       businessName: businessName,
-      citaLink: 'https://tucita247.com/b/'+citaLink
+      citaLink: 'tucita247.com/b/'+citaLink
     };
-    dialogConfig.width ='740px';
-    dialogConfig.minWidth = '740px';
-    dialogConfig.maxWidth = '740px';
-    dialogConfig.height ='830px'; //'680px'
-    dialogConfig.minHeight ='830px';
+    dialogConfig.width ='800px'; //740
+    dialogConfig.minWidth = '800px';
+    dialogConfig.maxWidth = '800px';
+    dialogConfig.height ='755px'; //830
+    dialogConfig.minHeight ='755px';
     this.stickerDialog.open(StickerDialogComponent, dialogConfig);
   }
 
