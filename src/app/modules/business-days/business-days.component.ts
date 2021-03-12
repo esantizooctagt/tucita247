@@ -108,13 +108,14 @@ export class BusinessDaysComponent implements OnInit {
             this.dateSelected = this.businessData.DaysOff;
           }
           if (this.locationId != "_" && this.providerId == "_"){
-            this.locationData = res.Data;
+            this.locationData = res.Data.sort((a, b) => (a.Name < b.Name ? -1 : 1));
             this.locationId = this.locationData[0].LocationId;
             this.dateSelected = this.locationData[0].DaysOff;
             this.locationParentDays = this.locationData[0].ParentDaysOff;
           }
           if (this.providerId != "_"){
-            this.serviceData = res.Data;
+            this.serviceData = res.Data.sort((a, b) => (a.Name < b.Name ? -1 : 1));
+            this.serviceData.forEach(x => x.Services.sort((a, b) => (a.Name < b.Name ? -1 : 1)));
             this.providerId = this.serviceData[0].Services[0].ProviderId;
             this.locationId = this.serviceData[0].LocationId;
             this.dateSelected = this.serviceData[0].Services[0].DaysOff;

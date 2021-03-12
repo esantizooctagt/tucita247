@@ -132,7 +132,8 @@ export class DashboardComponent implements OnInit {
         mergeMap(x => this.locationService.getLocationQuantityAll(this.businessId, this.locationId).pipe(
           map((res: any) => {
             if (res != null){
-              this.resultLoc = res.Data;
+              this.resultLoc = res.Data.Locs.sort((a, b) => (a.Name < b.Name ? -1 : 1));
+              this.resultLoc.forEach(x => x.Services.sort((a, b) => (a.Name < b.Name ? -1 : 1)));
               if (this.resultLoc.length > 0){
                 this.selectedLoc = this.resultLoc[0].LocationId + '#' + this.resultLoc[0].Services[0].ProviderId;
                 this.perLocation = this.resultLoc[0].Services[0].PerLocation;
@@ -175,7 +176,8 @@ export class DashboardComponent implements OnInit {
       this.quantityPeople$ = this.locationService.getLocationQuantityAll(this.businessId, this.locationId).pipe(
         map((res: any) => {
           if (res != null){
-            this.resultLoc = res.Data;
+            this.resultLoc = res.Data.sort((a, b) => (a.Name < b.Name ? -1 : 1));
+            this.resultLoc.forEach(x => x.Services.sort((a, b) => (a.Name < b.Name ? -1 : 1)));
             if (this.resultLoc.length > 0){
               this.selectedLoc = this.resultLoc[0].LocationId + '#' + this.resultLoc[0].Services[0].ProviderId;
               this.perLocation = this.resultLoc[0].Services[0].PerLocation;

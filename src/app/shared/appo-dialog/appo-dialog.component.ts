@@ -99,9 +99,9 @@ export class AppoDialogComponent implements OnInit {
       map((res: any) =>{
         this.spinnerService.stop(spinnerRef);
         if (this.serviceId == ''){
-          this.services = res.services.filter(x => x.Selected === 1);
+          this.services = res.services.sort((a, b) => (a.Name < b.Name ? -1 : 1)).filter(x => x.Selected === 1);
         } else {
-          this.services = res.services.filter(x => x.ServiceId == this.serviceId);
+          this.services = res.services.sort((a, b) => (a.Name < b.Name ? -1 : 1)).filter(x => x.ServiceId == this.serviceId);
         }
         return res;
       }),
@@ -267,7 +267,7 @@ export class AppoDialogComponent implements OnInit {
   }
 
   validateService(event){
-    let res = this.services.filter(x => x.ServiceId == event.value);
+    let res = this.services.sort((a, b) => (a.Name < b.Name ? -1 : 1)).filter(x => x.ServiceId == event.value);
     let validTime: number = 0;
     if (res.length > 0) { this.maxGuests = res[0].CustomerPerBooking; }
     let dateAppo = (this.data.appoTime.substring(6,8) == 'PM' ? (+this.data.appoTime.substring(0,2) == 12 ? this.data.appoTime.substring(0,2) : +this.data.appoTime.substring(0,2)+12) : this.data.appoTime.substring(0,2));
@@ -294,7 +294,7 @@ export class AppoDialogComponent implements OnInit {
 
   addGuests(){
     if (this.clientForm.value.ServiceId == '') {return;}
-    let data = this.services.filter(x => x.ServiceId == this.clientForm.value.ServiceId);
+    let data = this.services.sort((a, b) => (a.Name < b.Name ? -1 : 1)).filter(x => x.ServiceId == this.clientForm.value.ServiceId);
     let allowCustomer: number = data[0]['CustomerPerBooking'];
     this.varGuests = (this.varGuests+1 > allowCustomer ? this.varGuests : this.varGuests+1);
     this.clientForm.patchValue({Guests: this.varGuests});

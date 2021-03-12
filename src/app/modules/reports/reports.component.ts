@@ -86,7 +86,7 @@ export class ReportsComponent implements OnInit {
 
     this.locations$ = this.locationService.getLocationsCode(this.businessId).pipe(
       map((res: any) => {
-        return res.locs;
+        return res.locs.sort((a, b) => (a.Name < b.Name ? -1 : 1));;
       }), 
       catchError(res =>{
         return res;
@@ -104,7 +104,7 @@ export class ReportsComponent implements OnInit {
     this.locationId = event.value;
     this.providers$ = this.providerService.getProvidersLoc(this.businessId, event.value).pipe(
       map((res: any) => {
-        return res.providers;
+        return res.providers.sort((a, b) => (a.Name < b.Name ? -1 : 1));;
       }), 
       catchError(res =>{
         return res;

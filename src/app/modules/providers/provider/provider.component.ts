@@ -169,7 +169,7 @@ export class ProviderComponent implements OnInit {
       map((res: any) => {
         if (res != null){
           this.spinnerService.stop(spinnerRef);
-          return res.locs;
+          return res.locs.sort((a, b) => (a.Name < b.Name ? -1 : 1));
         }
       }),
       catchError(err => {

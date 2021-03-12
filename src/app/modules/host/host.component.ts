@@ -605,14 +605,14 @@ export class HostComponent implements OnInit {
           map((res: any) => {
             if (res.Locs != null){
               if (res.Locs.length > 0){
-                this.locations = res.Locs;
+                this.locations = res.Locs.sort((a, b) => (a.Name < b.Name ? -1 : 1));
                 let indexLoc = this.locations.findIndex(x=>x.LocationId == this.locationId);
                 if (indexLoc < 0) { indexLoc = 0; }
                 this.locationId = res.Locs[indexLoc].LocationId;
                 this.doorId = res.Locs[indexLoc].Door;
                 this.manualCheckOut = res.Locs[indexLoc].ManualCheckOut;
                 this.totLocation = res.Locs[indexLoc].MaxCustomers;
-                this.Providers = res.Locs[indexLoc].Providers;
+                this.Providers = res.Locs[indexLoc].Providers.sort((a, b) => (a.Name < b.Name ? -1 : 1));
                 this.locName = res.Locs[indexLoc].Name;
                 this.locationStatus = res.Locs[indexLoc].Open;
                 this.TimeZone = res.Locs[indexLoc].TimeZone;
@@ -665,14 +665,14 @@ export class HostComponent implements OnInit {
                 // this.Providers = res.Locs.Providers;
                 // return res;
                 if (res.Locs.length > 0){
-                  this.locations = res.Locs;
+                  this.locations = res.Locs.sort((a, b) => (a.Name < b.Name ? -1 : 1));
                   let indexLoc = this.locations.findIndex(x=> x.LocationId == this.locationId);
                   if (indexLoc < 0) { indexLoc = 0;}
                   this.locationId = res.Locs[indexLoc].LocationId;
                   this.doorId = res.Locs[indexLoc].Door;
                   this.manualCheckOut = res.Locs[indexLoc].ManualCheckOut;
                   this.totLocation = res.Locs[indexLoc].MaxCustomers;
-                  this.Providers = res.Locs[indexLoc].Providers;
+                  this.Providers = res.Locs[indexLoc].Providers.sort((a, b) => (a.Name < b.Name ? -1 : 1));
                   this.locName = res.Locs[indexLoc].Name;
                   this.locationStatus = res.Locs[indexLoc].Open;
                   this.TimeZone = res.Locs[indexLoc].TimeZone;
@@ -731,12 +731,12 @@ export class HostComponent implements OnInit {
       map((res: any) => {
         if (res.Locs != null){
           if (res.Locs.length > 0){
-            this.locations = res.Locs;
+            this.locations = res.Locs.sort((a, b) => (a.Name < b.Name ? -1 : 1));
             this.locationId = res.Locs[0].LocationId;
             this.doorId = res.Locs[0].Door;
             this.manualCheckOut = res.Locs[0].ManualCheckOut;
             this.totLocation = res.Locs[0].MaxCustomers;
-            this.Providers = res.Locs[0].Providers;
+            this.Providers = res.Locs[0].Providers.sort((a, b) => (a.Name < b.Name ? -1 : 1));
             this.locName = res.Locs[0].Name;
             this.locationStatus = res.Locs[0].Open;  //0 CLOSED, 1 OPEN
             this.TimeZone = res.Locs[0].TimeZone;
@@ -960,14 +960,14 @@ export class HostComponent implements OnInit {
         map((res: any) => {
           if (res.Locs != null){
             if (res.Locs.length > 0){
-              this.locations = res.Locs;
+              this.locations = res.Locs.sort((a, b) => (a.Name < b.Name ? -1 : 1));
               let indexLoc = this.locations.findIndex(x=> x.LocationId == this.locationId);
               if (indexLoc < 0) { indexLoc = 0;}
               this.locationId = res.Locs[indexLoc].LocationId;
               this.doorId = res.Locs[indexLoc].Door;
               this.manualCheckOut = res.Locs[indexLoc].ManualCheckOut;
               this.totLocation = res.Locs[indexLoc].MaxCustomers;
-              this.Providers = res.Locs[indexLoc].Providers;
+              this.Providers = res.Locs[indexLoc].Providers.sort((a, b) => (a.Name < b.Name ? -1 : 1));
               this.locName = res.Locs[indexLoc].Name;
               this.locationStatus = res.Locs[indexLoc].Open;
               this.TimeZone = res.Locs[indexLoc].TimeZone;
@@ -1060,14 +1060,14 @@ export class HostComponent implements OnInit {
             map((res: any) => {
               if (res.Locs != null){
                 if (res.Locs.length > 0){
-                  this.locations = res.Locs;
+                  this.locations = res.Locs.sort((a, b) => (a.Name < b.Name ? -1 : 1));
                   let indexLoc = this.locations.findIndex(x=>x.LocationId == this.locationId);
                   if (indexLoc < 0) { indexLoc = 0;}
                   this.locationId = res.Locs[indexLoc].LocationId;
                   this.doorId = res.Locs[indexLoc].Door;
                   this.manualCheckOut = res.Locs[indexLoc].ManualCheckOut;
                   this.totLocation = res.Locs[indexLoc].MaxCustomers;
-                  this.Providers = res.Locs[indexLoc].Providers;
+                  this.Providers = res.Locs[indexLoc].Providers.sort((a, b) => (a.Name < b.Name ? -1 : 1));
                   this.locName = res.Locs[indexLoc].Name;
                   this.locationStatus = res.Locs[indexLoc].Open;
                   this.TimeZone = res.Locs[indexLoc].TimeZone;

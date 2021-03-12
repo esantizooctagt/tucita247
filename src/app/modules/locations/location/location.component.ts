@@ -177,6 +177,8 @@ export class LocationComponent implements OnInit {
           return err;
         })
       );
+
+      this.locationForm.patchValue({TimeZone: 'America/Puerto_Rico'});
     }
 
     this.language = this.authService.language() == "" ? "EN" : this.authService.language();

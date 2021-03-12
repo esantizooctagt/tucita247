@@ -303,7 +303,7 @@ export class AppowiDialogComponent implements OnInit {
     this.hours = [];
     this.getLocInfo$ = this.serviceService.getServicesProvider(this.businessId, event.value).pipe(
       map((res: any) =>{
-        this.services = res.services.filter(x => x.Selected === 1);
+        this.services = res.services.sort((a, b) => (a.Name < b.Name ? -1 : 1)).filter(x => x.Selected === 1);
         return res;
       }),
       catchError(err => {

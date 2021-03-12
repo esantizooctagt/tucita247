@@ -192,7 +192,7 @@ export class BusinessOpeComponent implements OnInit {
             });
           }
           if (this.locationId != "_" && this.providerId == "_"){
-            this.locationData = res.Data;
+            this.locationData = res.Data.sort((a, b) => (a.Name < b.Name ? -1 : 1));
             this.locationId = res.Data[0].LocationId;
             this.locationParentHours = (res.Data[0].ParentHours == 1 ? true : false);
             var opeHour = JSON.parse(res.Data[0].OperationHours);
@@ -223,7 +223,8 @@ export class BusinessOpeComponent implements OnInit {
             });
           }
           if (this.providerId != "_"){
-            this.serviceData = res.Data;
+            this.serviceData = res.Data.sort((a, b) => (a.Name < b.Name ? -1 : 1));
+            this.serviceData.forEach(x => x.Services.sort((a, b) => (a.Name < b.Name ? -1 : 1)));
             this.providerVal = res.Data[0].LocationId + '#' + res.Data[0].Services[0].ProviderId;
             this.locationId = res.Data[0].LocationId;
             this.providerId = res.Data[0].Services[0].ProviderId;
