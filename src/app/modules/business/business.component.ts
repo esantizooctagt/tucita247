@@ -205,6 +205,7 @@ export class BusinessComponent implements OnInit {
     this.mapLoader.load().then(() => {
       this.geocoder = new google.maps.Geocoder;
     });
+
     var spinnerRef = this.spinnerService.start($localize`:@@business.loading:`);
     this.businessId = this.authService.businessId();
     this.language = this.authService.language();

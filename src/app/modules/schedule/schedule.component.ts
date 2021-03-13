@@ -158,15 +158,15 @@ export class ScheduleComponent implements OnInit {
       map((res: any) => {
         if (res.Code == 200){
           if (res.Locs.length > 0){
-            this.locationId = res.Locs[0].LocationId;
-            this.doors = res.Locs[0].Doors;
-            this.TimeZone = res.Locs[0].TimeZone;
             this.locations = res.Locs.sort((a, b) => (a.Name < b.Name ? -1 : 1));
+            this.locationId = this.locations[0].LocationId;
+            this.doors = this.locations[0].Doors;
+            this.TimeZone = this.locations[0].TimeZone;
             this.locations.forEach(x => x.Providers.sort((a, b) => (a.Name < b.Name ? -1 : 1)));
 
-            if (res.Locs[0].Providers.length > 0){
-              this.locationData = res.Locs[0].Providers[0].ProviderId;
-              this.providerId = res.Locs[0].Providers[0].ProviderId.split('#')[1];
+            if (this.locations[0].Providers.length > 0){
+              this.locationData = this.locations[0].Providers[0].ProviderId;
+              this.providerId = this.locations[0].Providers[0].ProviderId.split('#')[1];
             }
 
             let yearCurr = this.getYear();

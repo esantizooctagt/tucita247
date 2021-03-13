@@ -732,14 +732,14 @@ export class HostComponent implements OnInit {
         if (res.Locs != null){
           if (res.Locs.length > 0){
             this.locations = res.Locs.sort((a, b) => (a.Name < b.Name ? -1 : 1));
-            this.locationId = res.Locs[0].LocationId;
-            this.doorId = res.Locs[0].Door;
-            this.manualCheckOut = res.Locs[0].ManualCheckOut;
-            this.totLocation = res.Locs[0].MaxCustomers;
-            this.Providers = res.Locs[0].Providers.sort((a, b) => (a.Name < b.Name ? -1 : 1));
-            this.locName = res.Locs[0].Name;
-            this.locationStatus = res.Locs[0].Open;  //0 CLOSED, 1 OPEN
-            this.TimeZone = res.Locs[0].TimeZone;
+            this.locationId = this.locations[0].LocationId;
+            this.doorId = this.locations[0].Door;
+            this.manualCheckOut = this.locations[0].ManualCheckOut;
+            this.totLocation = this.locations[0].MaxCustomers;
+            this.Providers = this.locations[0].Providers.sort((a, b) => (a.Name < b.Name ? -1 : 1));
+            this.locName = this.locations[0].Name;
+            this.locationStatus = this.locations[0].Open;  //0 CLOSED, 1 OPEN
+            this.TimeZone = this.locations[0].TimeZone;
             this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
             if (this.Providers.length > 0){
               this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
