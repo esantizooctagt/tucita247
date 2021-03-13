@@ -304,6 +304,7 @@ export class AppowiDialogComponent implements OnInit {
 
   onProvChange(event){
     this.hours = [];
+    this.services = [];
     this.getLocInfo$ = this.serviceService.getServicesProvider(this.businessId, event.value).pipe(
       map((res: any) =>{
         this.services = res.services.sort((a, b) => (a.Name < b.Name ? -1 : 1)).filter(x => x.Selected === 1);
