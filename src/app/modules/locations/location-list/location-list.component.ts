@@ -27,7 +27,7 @@ export class LocationListComponent implements OnInit {
   public onError: string='';
 
   public length: number = 0;
-  public pageSize: number = 10;
+  public pageSize: number = 25;
   public _page: number;
   private _currentPage: any[] = [];
   private _currentSearchValue: string = '';
@@ -141,7 +141,7 @@ export class LocationListComponent implements OnInit {
             this._currentPage.push({page: this._page+1, locationId: res.lastItem});
           }
         }
-        this.locationForm.setControl('Locations', this.setExistingServices(res.locations));
+        this.locationForm.setControl('Locations', this.setExistingServices(res.locations.sort((a, b) => (a.Name < b.Name ? -1 : 1))));
         this.spinnerService.stop(spinnerRef);
         return res.locations;
       }),

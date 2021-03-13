@@ -29,7 +29,7 @@ export class ProviderListComponent implements OnInit {
   public onError: string='';
 
   public length: number = 0;
-  public pageSize: number = 10;
+  public pageSize: number = 25;
   public _page: number;
   private _currentPage: any[] = [];
   private _currentSearchValue: string = '';
@@ -145,7 +145,7 @@ export class ProviderListComponent implements OnInit {
             this._currentPage.push({page: this._page+1, providerId: res.lastItem});
           }
         }
-        this.providerForm.setControl('Providers', this.setExistingServices(res.providers));
+        this.providerForm.setControl('Providers', this.setExistingServices(res.providers.sort((a, b) => (a.Name < b.Name ? -1 : 1))));
         this.spinnerService.stop(spinnerRef);
         return res.providers;
       }),

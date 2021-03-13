@@ -29,7 +29,7 @@ export class ServiceListComponent implements OnInit {
   public onError: string='';
 
   public length: number = 0;
-  public pageSize: number = 10;
+  public pageSize: number = 25;
   public _page: number;
   private _currentPage: any[] = [];
   private _currentSearchValue: string = '';
@@ -143,7 +143,7 @@ export class ServiceListComponent implements OnInit {
             this._currentPage.push({page: this._page+1, serviceId: res.lastItem});
           }
         }
-        this.serviceForm.setControl('Services', this.setExistingServices(res.services));
+        this.serviceForm.setControl('Services', this.setExistingServices(res.services.sort((a, b) => (a.Name < b.Name ? -1 : 1))));
         this.spinnerService.stop(spinnerRef);
         return res.services;
       }),

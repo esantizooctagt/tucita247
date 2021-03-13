@@ -43,7 +43,7 @@ export class BusinessDaysComponent implements OnInit {
   businessData: any;
   locationData: any;
   serviceData: any;
-
+  disabledPicker: number = 0;
   providerParentDO: number = 1;
   locationParentDays: number = 1;
 
@@ -122,6 +122,12 @@ export class BusinessDaysComponent implements OnInit {
             this.providerParentDO = this.serviceData[0].Services[0].ParentDaysOff;
             this.providerVal = this.locationId + '#' + this.providerId;
           }
+          if (this.providerId != "_" && this.providerParentDO == 1){
+            this.disabledPicker = 1;
+          }
+          if (this.providerId == "_" && this.locationParentDays == 1){
+            this.disabledPicker = 1;
+          }
           setTimeout(() => {
             this.setMoths(this.currYear);
           }, 1);
@@ -192,6 +198,7 @@ export class BusinessDaysComponent implements OnInit {
   };
 
   onSelect(event: any, calendar: any) {
+    if (this.disabledPicker == 1) {return;}
     const date = event.getFullYear() + "-" + ("00" + (event.getMonth() + 1)).slice(-2) + "-" + ("00" + event.getDate()).slice(-2);
     const index = this.dateSelected.findIndex(x => x == date);
     // console.log('buss ' + this.businessId + ' loc ' + this.locationId + ' prov ' + this.providerId + ' date ' + date);
@@ -345,12 +352,24 @@ export class BusinessDaysComponent implements OnInit {
     this.updateParentDaysOff$ = this.businessService.updateBusinessParms(this.businessId, this.locationId, this.providerId, (event.checked == true ? 1 : 0), tipo).pipe(
       map((res: any) => {
         if (res.Code == 200){
-          this.providerParentDO = (event.checked == true ? 1 : 0);
+          if (this.providerId != "_"){
+            this.providerParentDO = (event.checked == true ? 1 : 0);
+            if (this.providerParentDO == 1){this.disabledPicker = 1;}
+          } else {
+            this.locationParentDays = (event.checked == true ? 1 : 0);
+            if (this.locationParentDays == 1){this.disabledPicker = 1;}
+          }
           this.openSnackBar($localize`:@@businessdays.updatedata:`,$localize`:@@businessdays.specdays:`);
         }
       }),
       catchError(err => {
-        this.providerParentDO = (!event.checked == true ? 1 : 0);
+        if (this.providerId != "_"){
+          this.providerParentDO = (!event.checked == true ? 1 : 0);
+          if (this.providerParentDO == 1){this.disabledPicker = 1;}
+        } else {
+          this.locationParentDays = (!event.checked == true ? 1 : 0);
+          if (this.locationParentDays == 1){this.disabledPicker = 1;}
+        }
         this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@businessdays.specdays:`);
         return err;
       })
