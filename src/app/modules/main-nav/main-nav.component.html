@@ -179,6 +179,10 @@
           <mat-icon>dehaze</mat-icon>
         </button>
         <!-- <span></span> -->
+        <div class="disp-aee">
+          <img *ngIf="displayImg==1" class="img-01" src="https://tucita247.s3.amazonaws.com/busTemp/aee.jpg">
+          <img *ngIf="displayImg==1" class="img-02" src="https://tucita247.s3.amazonaws.com/busTemp/luma.png">
+        </div>
         <span class="spacer"></span>
         <ng-container *ngIf="business$ | async"></ng-container>
         <mat-form-field class="col-md-4 input-search mt-3" *ngIf="searchBar == 1">          

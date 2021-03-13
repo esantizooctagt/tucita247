@@ -55,6 +55,7 @@ export class MainNavComponent implements OnInit {
   displayReporting: boolean = false;
   displayOperation: boolean = false;
   
+  displayImg: number = 0;
   readonly imgPath = environment.bucket;
 
   users: User[] = [];
@@ -134,6 +135,10 @@ export class MainNavComponent implements OnInit {
     this.userId = this.authService.userId();
     this.isAdmin = this.authService.isAdmin();
     this.roleAdm = this.authService.roleAdm();
+    
+    if (this.businessId == 'f02250d2f2d04f70a40661459ec0e8b5'){
+      this.displayImg = 1;
+    }
     
     if (this.roleAdm != ''){
       this.access$ = this.adminService.getAccess(this.businessAdm, this.roleAdm).pipe(
