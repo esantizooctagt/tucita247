@@ -218,7 +218,6 @@ export class AppowiDialogComponent implements OnInit {
       Type: typeAppo,
       UpdEmail: updE
     }
-
     let options = {
       timeZone: this.TimeZone,
       hour: 'numeric',
@@ -305,6 +304,8 @@ export class AppowiDialogComponent implements OnInit {
   onProvChange(event){
     this.hours = [];
     this.services = [];
+    this.clientForm.patchValue({'ServiceId': ''});
+    this.clientForm.patchValue({'Hour': '--'});
     this.getLocInfo$ = this.serviceService.getServicesProvider(this.businessId, event.value).pipe(
       map((res: any) =>{
         this.services = res.services.sort((a, b) => (a.Name < b.Name ? -1 : 1)).filter(x => x.Selected === 1);
@@ -431,13 +432,16 @@ export class AppowiDialogComponent implements OnInit {
     var hour: number = +actual.substring(0,2);
     var min: number = 0;
     var actTime: number = 0;
-    actTime = hour;
-    for (var i=0; i<= this.buckets.length-1; i++){
-      if (this.buckets[i].Time == actTime){
-        actualTime = this.buckets[i].TimeFormat;
-        break;
-      }
-    }
+    actualTime = hour.toString()+':00';
+    // console.log(actTime);
+    // console.log(this.buckets);
+    // for (var i=0; i<= this.buckets.length-1; i++){
+    //   if (this.buckets[i].Time == actTime){
+    //     actualTime = this.buckets[i].TimeFormat;
+    //     break;
+    //   }
+    // }
+    // console.log(actualTime);
     return actualTime;
   }
 
