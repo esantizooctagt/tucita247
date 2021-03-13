@@ -97,6 +97,9 @@ export class AppowiDialogComponent implements OnInit {
     this.Providers = this.data.providers.sort((a, b) => (a.Name < b.Name ? -1 : 1));;
     this.tipo = this.data.tipo;
 
+    if (this.providerId != "0"){
+      this.clientForm.patchValue({'ProviderId': this.providerId});
+    }
     // if (this.tipo == 2){
     //   this.getLocInfo$ = this.businessService.getBusinessOpeHours(this.businessId, this.locationId).pipe(
     //     map((res: any) => {

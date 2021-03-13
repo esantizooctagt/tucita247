@@ -963,14 +963,14 @@ export class HostComponent implements OnInit {
               this.locations = res.Locs.sort((a, b) => (a.Name < b.Name ? -1 : 1));
               let indexLoc = this.locations.findIndex(x=> x.LocationId == this.locationId);
               if (indexLoc < 0) { indexLoc = 0;}
-              this.locationId = res.Locs[indexLoc].LocationId;
-              this.doorId = res.Locs[indexLoc].Door;
-              this.manualCheckOut = res.Locs[indexLoc].ManualCheckOut;
-              this.totLocation = res.Locs[indexLoc].MaxCustomers;
-              this.Providers = res.Locs[indexLoc].Providers.sort((a, b) => (a.Name < b.Name ? -1 : 1));
-              this.locName = res.Locs[indexLoc].Name;
-              this.locationStatus = res.Locs[indexLoc].Open;
-              this.TimeZone = res.Locs[indexLoc].TimeZone;
+              this.locationId = this.locations[indexLoc].LocationId;
+              this.doorId = this.locations[indexLoc].Door;
+              this.manualCheckOut = this.locations[indexLoc].ManualCheckOut;
+              this.totLocation = this.locations[indexLoc].MaxCustomers;
+              this.Providers = this.locations[indexLoc].Providers.sort((a, b) => (a.Name < b.Name ? -1 : 1));
+              this.locName = this.locations[indexLoc].Name;
+              this.locationStatus = this.locations[indexLoc].Open;
+              this.TimeZone = this.locations[indexLoc].TimeZone;
               this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
               if (this.Providers.length > 0){
                 this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
@@ -1063,14 +1063,14 @@ export class HostComponent implements OnInit {
                   this.locations = res.Locs.sort((a, b) => (a.Name < b.Name ? -1 : 1));
                   let indexLoc = this.locations.findIndex(x=>x.LocationId == this.locationId);
                   if (indexLoc < 0) { indexLoc = 0;}
-                  this.locationId = res.Locs[indexLoc].LocationId;
-                  this.doorId = res.Locs[indexLoc].Door;
-                  this.manualCheckOut = res.Locs[indexLoc].ManualCheckOut;
-                  this.totLocation = res.Locs[indexLoc].MaxCustomers;
-                  this.Providers = res.Locs[indexLoc].Providers.sort((a, b) => (a.Name < b.Name ? -1 : 1));
-                  this.locName = res.Locs[indexLoc].Name;
-                  this.locationStatus = res.Locs[indexLoc].Open;
-                  this.TimeZone = res.Locs[indexLoc].TimeZone;
+                  this.locationId = this.locations[indexLoc].LocationId;
+                  this.doorId = this.locations[indexLoc].Door;
+                  this.manualCheckOut = this.locations[indexLoc].ManualCheckOut;
+                  this.totLocation = this.locations[indexLoc].MaxCustomers;
+                  this.Providers = this.locations[indexLoc].Providers.sort((a, b) => (a.Name < b.Name ? -1 : 1));
+                  this.locName = this.locations[indexLoc].Name;
+                  this.locationStatus = this.locations[indexLoc].Open;
+                  this.TimeZone = this.locations[indexLoc].TimeZone;
                   this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
                   if (this.Providers.length > 0){
                     this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; //this.Providers[0].Name;
