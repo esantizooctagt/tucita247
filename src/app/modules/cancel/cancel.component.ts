@@ -5,6 +5,8 @@ import { catchError, map, startWith } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { SpinnerService } from '@app/shared/spinner.service';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { DialogComponent } from '@app/shared/dialog/dialog.component';
 
 @Component({
   selector: 'app-cancel',
@@ -22,10 +24,27 @@ export class CancelComponent implements OnInit {
   statBusiness: string = '';
 
   constructor(
+    private dialog: MatDialog,
     private businessService: BusinessService,
     private adminService: AdminService,
     private spinnerService: SpinnerService,
   ) { }
+
+  openDialog(header: string, message: string, success: boolean, error: boolean, warn: boolean): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      header: header, 
+      message: message, 
+      success: success, 
+      error: error, 
+      warn: warn
+    };
+    dialogConfig.width ='280px';
+    dialogConfig.minWidth = '280px';
+    dialogConfig.maxWidth = '280px';
+    this.dialog.open(DialogComponent, dialogConfig);
+  }
 
   ngOnInit(): void {
     this.filteredBusiness$ = this.frmBusiness.valueChanges
@@ -56,6 +75,15 @@ export class CancelComponent implements OnInit {
     this.soft$ = this.adminService.putSuspend(this.busId, '0', type).pipe(
       map((res: any) => {
         if (res.Code == 200){
+          if (type == '1') {
+            this.openDialog('Cancel', 'Soft suspend', false, true, false);
+          } 
+          if(type == '2'){
+            this.openDialog('Cancel', 'Hard suspend', false, true, false);
+          }
+          if(type == '3'){
+            this.openDialog('Active', 'Active', false, true, false);
+          }
           this.spinnerService.stop(spinnerRef);
         }
         return res;

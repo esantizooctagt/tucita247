@@ -150,7 +150,7 @@ export class NewBusinessComponent implements OnInit {
 
     this.sectors[0] = [];
     this.sectors[0].push({SectorId: "0", Name: "N/A"});
-    this.cities.push({CityId: "0", Name: "N/A"});
+    // this.cities.push({CityId: "0", Name: "N/A"});
 
     this.onValueChanges();
 
@@ -393,6 +393,7 @@ export class NewBusinessComponent implements OnInit {
     this.businessSave$ = this.businessService.postBusiness(dataForm).pipe(
       tap((res: any) => { 
         if (res.Code == 200) {
+          this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', Email: '', Reasons: '', ShortDescription: '', TuCitaLink: '', Sector: '', MaxConcurrentCustomer: '', Service_Name: '', Provider_Name: '', First_Name: '', Last_Name: '', Language: 'es'});
           this.openDialog($localize`:@@business.businesstextpopup:`, $localize`:@@business.businessupdate:`, true, false, false);
         } else {
           this.openDialog($localize`:@@shared.error:`, 'Something goes wrong', false, true, false);

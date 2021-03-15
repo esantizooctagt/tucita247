@@ -198,7 +198,7 @@ export class BusinessDaysComponent implements OnInit {
   };
 
   onSelect(event: any, calendar: any) {
-    if (this.disabledPicker == 1) {return;}
+    if (this.disabledPicker == 1 && this.locationId != "_") {return;}
     const date = event.getFullYear() + "-" + ("00" + (event.getMonth() + 1)).slice(-2) + "-" + ("00" + event.getDate()).slice(-2);
     const index = this.dateSelected.findIndex(x => x == date);
     // console.log('buss ' + this.businessId + ' loc ' + this.locationId + ' prov ' + this.providerId + ' date ' + date);
@@ -354,10 +354,10 @@ export class BusinessDaysComponent implements OnInit {
         if (res.Code == 200){
           if (this.providerId != "_"){
             this.providerParentDO = (event.checked == true ? 1 : 0);
-            if (this.providerParentDO == 1){this.disabledPicker = 1;}
+            if (this.providerParentDO == 1){this.disabledPicker = 1;} else {this.disabledPicker = 0;}
           } else {
             this.locationParentDays = (event.checked == true ? 1 : 0);
-            if (this.locationParentDays == 1){this.disabledPicker = 1;}
+            if (this.locationParentDays == 1){this.disabledPicker = 1;} else {this.disabledPicker = 0;}
           }
           this.openSnackBar($localize`:@@businessdays.updatedata:`,$localize`:@@businessdays.specdays:`);
         }
