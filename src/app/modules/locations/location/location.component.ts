@@ -375,6 +375,8 @@ export class LocationComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log(this.locationForm.invalid);
+    console.log(this.locationForm.touched);
     if (this.locationForm.invalid) { return; }
     if (this.locationForm.touched) {
       let location = {
@@ -446,6 +448,8 @@ export class LocationComponent implements OnInit {
 
     this.lat = res.lat;
     this.lng = res.lng;
+    this.locationForm.patchValue({'Geolocation': '{"LAT": '+ this.lat+',"LNG": '+this.lng+'}'});
+    this.locationForm.markAllAsTouched();
   }
 
   markerDragEndLoc($event: MouseEvent) {
@@ -453,6 +457,8 @@ export class LocationComponent implements OnInit {
 
     this.lat = res.lat;
     this.lng = res.lng;
+    this.locationForm.patchValue({'Geolocation': '{"LAT": '+ this.lat+',"LNG": '+this.lng+'}'});
+    this.locationForm.markAllAsTouched();
   }
 
   setMarker(data){

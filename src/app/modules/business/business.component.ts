@@ -737,6 +737,8 @@ export class BusinessComponent implements OnInit {
 
     this.lat = res.lat;
     this.lng = res.lng;
+    this.businessForm.patchValue({'Geolocation': '{"LAT": '+ this.lat+',"LNG": '+this.lng+'}'});
+    this.businessForm.markAllAsTouched();
   }
 
   markerDragEndLoc($event: MouseEvent, i: number){
@@ -744,6 +746,8 @@ export class BusinessComponent implements OnInit {
 
     this.latLoc[i] = res.lat;
     this.lngLoc[i] = res.lng;
+    this.businessForm.patchValue({'Geolocation': '{"LAT": '+ this.lat+',"LNG": '+this.lng+'}'});
+    this.businessForm.markAllAsTouched();
   }
 
   ngOnDestroy() {
