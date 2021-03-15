@@ -88,6 +88,7 @@ import { StickerDialogComponent } from './shared/sticker-dialog/sticker-dialog.c
 import { AppowiDialogComponent } from './shared/appowi-dialog/appowi-dialog.component';
 import { MessDialogComponent } from './shared/mess-dialog/mess-dialog.component';
 import { NewBusinessComponent } from './modules/new-business/new-business.component';
+import { TabDirectiveDirective } from './shared/tab-directive.directive';
 
 @NgModule({
   declarations: [
@@ -121,7 +122,8 @@ import { NewBusinessComponent } from './modules/new-business/new-business.compon
     StickerDialogComponent,
     AppowiDialogComponent,
     MessDialogComponent,
-    NewBusinessComponent
+    NewBusinessComponent,
+    TabDirectiveDirective
   ],
   imports: [
     BrowserModule,

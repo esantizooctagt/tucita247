@@ -64,11 +64,11 @@
                     </mat-form-field>
                     <div class="row">
                         <mat-form-field class="col-md-4">
-                            <input type="text" i18n-placeholder="Country|Country in business@@business.country" placeholder="Country" matInput formControlName="Country"
-                                [matAutocomplete]="autoCountry" [errorStateMatcher]="confirmValidParentMatcher"
+                            <input #myCountry tab-directive type="text" i18n-placeholder="Country|Country in business@@business.country" placeholder="Country" matInput formControlName="Country"
+                                [matAutocomplete]="autoCountry" [errorStateMatcher]="confirmValidParentMatcher" (focusout)='getCities(myCountry.value)'
                                 required>
                             <mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayFn"
-                                activeOption="activeOption" (optionSelected)='getCities($event.option.value)'>
+                                activeOption="activeOption" autoActiveFirstOption="true" (optionSelected)='getCities($event.option.value)'>
                                 <mat-option *ngFor="let country of filteredCountries$ | async"
                                     [value]="country">
                                     {{country.n}}

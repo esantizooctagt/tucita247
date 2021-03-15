@@ -162,8 +162,19 @@ export class NewBusinessComponent implements OnInit {
       );
   }
 
-  getCities(countryCode){
-    this.countryCode = countryCode.c;
+  getCities(countryCode: any){
+    if (countryCode == Object){
+      this.countryCode = countryCode.c;
+    }
+    if (typeof countryCode === "string"){
+      let result = this.countries.filter(country => country.n.toLowerCase().indexOf(countryCode.toLowerCase()) === 0);
+      if (result.length >0){
+        this.countryCode = result[0].c.toString();
+      }
+    }
+    this.cities = [];
+    this.sectors = [];
+    this.sectors.push({ SectorId: "0", Name: "N/A" });
     this.cities$ = this.locationService.getCities(this.countryCode, this.language).pipe(
       map(res => {
         if (res != null) {
@@ -295,9 +306,9 @@ export class NewBusinessComponent implements OnInit {
             '';
     }
     if (component === 'City'){
-      return this.fBusiness.State.hasError('required') ? $localize`:@@shared.entervalue:` :
-        this.fBusiness.State.hasError('maxlength') ? $localize`:@@shared.maximun: ${max100}` :
-          this.fBusiness.State.hasError('minlength') ? $localize`:@@shared.minimun: ${min2}` :
+      return this.fBusiness.City.hasError('required') ? $localize`:@@shared.entervalue:` :
+        this.fBusiness.City.hasError('maxlength') ? $localize`:@@shared.maximun: ${max100}` :
+          this.fBusiness.City.hasError('minlength') ? $localize`:@@shared.minimun: ${min2}` :
           '';
     }
     if (component === 'ZipCode'){
@@ -390,9 +401,12 @@ export class NewBusinessComponent implements OnInit {
       "Language": this.businessForm.value.Language,
       "Locations": [dtLocs]
     }
+    console.log(dataForm);
+    return;
     this.businessSave$ = this.businessService.postBusiness(dataForm).pipe(
       tap((res: any) => { 
         if (res.Code == 200) {
+          this.categories = [];
           this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', Email: '', Reasons: '', ShortDescription: '', TuCitaLink: '', Sector: '', MaxConcurrentCustomer: '', Service_Name: '', Provider_Name: '', First_Name: '', Last_Name: '', Language: 'es'});
           this.openDialog($localize`:@@business.businesstextpopup:`, $localize`:@@business.businessupdate:`, true, false, false);
         } else {
