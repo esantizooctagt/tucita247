@@ -432,7 +432,7 @@ export class AppowiDialogComponent implements OnInit {
     var hour: number = +actual.substring(0,2);
     var min: number = 0;
     var actTime: number = 0;
-    actualTime = hour.toString()+':00';
+    actualTime = hour.toString().padStart(2,'0')+':00';
     // console.log(actTime);
     // console.log(this.buckets);
     // for (var i=0; i<= this.buckets.length-1; i++){
