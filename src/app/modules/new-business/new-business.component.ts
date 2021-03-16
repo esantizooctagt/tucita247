@@ -362,7 +362,7 @@ export class NewBusinessComponent implements OnInit {
   }
 
   onSubmitBusiness(){
-    let phone = this.businessForm.value.Phone.replace('+1','');
+    let phone = this.businessForm.value.Phone;
     phone = phone.replace(/[^0-9]/g,'');
     let countryId = this.businessForm.value.Country;
     let locs = [];
@@ -401,8 +401,6 @@ export class NewBusinessComponent implements OnInit {
       "Language": this.businessForm.value.Language,
       "Locations": [dtLocs]
     }
-    console.log(dataForm);
-    return;
     this.businessSave$ = this.businessService.postBusiness(dataForm).pipe(
       tap((res: any) => { 
         if (res.Code == 200) {
