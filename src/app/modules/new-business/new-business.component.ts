@@ -363,7 +363,7 @@ export class NewBusinessComponent implements OnInit {
 
   onSubmitBusiness(){
     let phone = this.businessForm.value.Phone;
-    phone = phone.replace(/[^0-9]/g,'');
+    phone = '1'+phone.replace(/[^0-9]/g,'');
     let countryId = this.businessForm.value.Country;
     let locs = [];
     let dtLocs = {
