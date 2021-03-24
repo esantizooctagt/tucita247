@@ -179,7 +179,7 @@ export class ScheduleComponent implements OnInit {
 
             this.weekStart = new Date(this.today.valueOf() - (d<=0 ? 7-startDay:d-startDay)*86400000);
             this.weekEnd = new Date(this.weekStart.valueOf() + 6*86400000);
-            this.currTime = this.getActTime();
+            this.currTime = this.getActTime().replace(':','');
 
             this.monday = this.weekStart;
             this.tuesday = this.addDays(this.weekStart, 1);
@@ -356,9 +356,9 @@ export class ScheduleComponent implements OnInit {
     if (result == {}) { return; }
     if (result.Available == 0) { return; }
 
-    let timeAppo = (result.Time.substring(6,8) == 'PM' ? (+result.Time.substring(0,2) == 12 ? result.Time.substring(0,2) : +result.Time.substring(0,2)+12) : result.Time.substring(0,2).padStart(2,'0'));
+    let timeAppo = (result.Time.substring(6,8) == 'PM' ? (+result.Time.substring(0,2) == 12 ? result.Time.substring(0,5).replace(':','-') : (+result.Time.substring(0,2)+12).toString()+'-'+result.Time.substring(3,5)) : result.Time.substring(0,5).replace(':','-'));
     var spinnerRef = this.spinnerService.start($localize`:@@sche.loadingsche:`);
-    this.validBusiness$ = this.businessService.getValidBusiness(this.businessId, this.locationId, this.providerId, (result.ServiceId == "" ? "_" : result.ServiceId), this.datepipe.transform(day, 'yyyy-MM-dd'), timeAppo + '-00').pipe(  //,  
+    this.validBusiness$ = this.businessService.getValidBusiness(this.businessId, this.locationId, this.providerId, (result.ServiceId == "" ? "_" : result.ServiceId), this.datepipe.transform(day, 'yyyy-MM-dd'), timeAppo).pipe(    
       map((res: any) => {
         if (res.Code == 200){
           this.spinnerService.stop(spinnerRef);
@@ -415,7 +415,7 @@ export class ScheduleComponent implements OnInit {
 
     // this.weekStart = new Date(this.today.valueOf() - (d<=0 ? 7-startDay:d-startDay)*86400000);
     // this.weekEnd = new Date(this.weekStart.valueOf() + 6*86400000);
-    this.currTime = this.getActTime();
+    this.currTime = this.getActTime().replace(':','');
 
     this.monday = this.weekStart;
     this.tuesday = this.addDays(this.weekStart, 1);

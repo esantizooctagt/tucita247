@@ -44,6 +44,11 @@ export class AppoDialogComponent implements OnInit {
   maxGuests: number = 1;
   dayInfo: any[]=[];
 
+  timeHr45 = [0,55,70,85,100,155,170,185,200,255,270,285,300,355,370,385,400,455,470,485,500,555,570,585,600];
+  timeHr30 = [0,15,70,85,100,115,170,185,200,215,270,285,300,315,370,385,400,415,470,485,500,515,570,585,600];
+  timeHr15 = [0,15,30,85,100,115,130,185,200,215,230,285,300,315,330,385,400,415,430,485,500,515,530,585,600];
+  timeHr = [0,15,30,45,100,115,130,145,200,215,230,245,300,315,330,345,400,415,430,445,500,515,530,545,600];
+
   services: any[]=[];
 
   get f(){
@@ -269,26 +274,70 @@ export class AppoDialogComponent implements OnInit {
   validateService(event){
     let res = this.services.sort((a, b) => (a.Name < b.Name ? -1 : 1)).filter(x => x.ServiceId == event.value);
     let validTime: number = 0;
+    let minInit = this.data.appoTime.substring(0,5).replace(':','').substring(2,4);
+    let timeInit = +(this.data.appoTime.substring(0,5).replace(':',''));
+    let intTime;
+    let calcTime;
+
     if (res.length > 0) { this.maxGuests = res[0].CustomerPerBooking; }
-    let dateAppo = (this.data.appoTime.substring(6,8) == 'PM' ? (+this.data.appoTime.substring(0,2) == 12 ? this.data.appoTime.substring(0,2) : +this.data.appoTime.substring(0,2)+12) : this.data.appoTime.substring(0,2));
-    for (var _i = 0; _i < 1; _i++) {
-      let data = this.dayInfo.filter(x => (x.Time.substring(6,8) == 'PM' ? (+x.Time.substring(0,2) == 12 ? +x.Time.substring(0,2) : +x.Time.substring(0,2)+12) : +x.Time.substring(0,2)) == +dateAppo+_i);
-      if (data.length > 0){        
-        if (data[0].Available > 0 && (data[0].ServiceId == '' || data[0].ServiceId == event.value)){
-          this.newTime = +dateAppo+res[0].TimeService > 12 ? (+dateAppo+res[0].TimeService-12).toString().padStart(2,'0') + ':00 PM' : (+dateAppo+res[0].TimeService).toString().padStart(2,'0') +':00 AM';
-          validTime = 1;
-        } else {
-          validTime = 0;
-          this.clientForm.patchValue({ServiceId: ''});
-          this.openSnackBar($localize`:@@appos.invalidserv:`, $localize`:@@appos.schedule:`);
-          break;
-        }
+    this.newTime = '';
+    
+    if (+minInit == 0){
+      intTime = +this.timeHr[this.timeHr.indexOf(+res[0].TimeService)];
+      calcTime = +this.timeHr[this.timeHr.indexOf(+res[0].TimeService)-1];
+    } 
+    if (+minInit == 15){
+      intTime = +this.timeHr15[this.timeHr.indexOf(+res[0].TimeService)];
+      calcTime = +this.timeHr15[this.timeHr.indexOf(+res[0].TimeService)-1];
+    }
+    if (+minInit == 30){
+      intTime = +this.timeHr30[this.timeHr.indexOf(+res[0].TimeService)];
+      calcTime = +this.timeHr30[this.timeHr.indexOf(+res[0].TimeService)-1];
+    }
+    if (+minInit == 45){
+      intTime = +this.timeHr45[this.timeHr.indexOf(+res[0].TimeService)];
+      calcTime = +this.timeHr45[this.timeHr.indexOf(+res[0].TimeService)-1];
+    }
+    intTime = timeInit+intTime;
+    calcTime = timeInit+calcTime;
+    let dateAppo = '';
+    if (intTime < 1200){
+      dateAppo = ' ' + this.data.appoTime.substring(6,8);
+    } else {
+      if (intTime > 1245){
+        intTime = intTime-1200;
+      }
+      dateAppo = ' PM';
+    }
+    let dateAppoCalc = '';
+    if (calcTime < 1200){
+      dateAppoCalc = ' ' + this.data.appoTime.substring(6,8);
+    } else {
+      if (calcTime > 1245){
+        calcTime = calcTime-1200;
+      }
+      dateAppoCalc = ' PM';
+    }
+    let nTime = intTime.toString().padStart(4,"0").substring(0,2)+':'+intTime.toString().padStart(4,"0").substring(2,4) + dateAppo;
+    let cTime = calcTime.toString().padStart(4,"0").substring(0,2)+':'+calcTime.toString().padStart(4,"0").substring(2,4) + dateAppoCalc;
+    let data = this.dayInfo.filter(x => x.Time >= this.data.appoTime.replace('-',':') && x.Time <= cTime);
+    for (var _i = 0; _i < data.length-1; _i++){
+      if (data[_i].Available > 0 && (data[_i].ServiceId == '' || data[_i].ServiceId == event.value)){
+        this.newTime = nTime;
+        validTime = 1;
       } else {
         validTime = 0;
+        this.newTime = '';
         this.clientForm.patchValue({ServiceId: ''});
         this.openSnackBar($localize`:@@appos.invalidserv:`, $localize`:@@appos.schedule:`);
         break;
       }
+    }
+    if (data.length < 0){
+      validTime = 0;
+      this.newTime = '';
+      this.clientForm.patchValue({ServiceId: ''});
+      this.openSnackBar($localize`:@@appos.invalidserv:`, $localize`:@@appos.schedule:`);  
     }
   }
 

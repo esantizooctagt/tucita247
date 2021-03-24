@@ -89,7 +89,8 @@ export class ShowappoDialogComponent implements OnInit {
     this.locationId = this.data.locationId;
     this.providerId = this.data.providerId;
 
-    this.newTime = +this.data.appoTime.substring(0,2) > 12 ? (+this.data.appoTime.substring(0,2)-12).toString() + ':00 PM' : this.data.appoTime + ' AM';
+    this.newTime =  +this.data.appoTime > 1200 ? (+this.data.appoTime <= 1245 ? (this.data.appoTime.substring(0,2) + ':' + this.data.appoTime.substring(2,4)) : ((+this.data.appoTime-1200).toString().padStart(4,'0').substring(0,2) + ':' + (+this.data.appoTime-1200).toString().padStart(4,'0').substring(2,4))) + ' PM' :  (this.data.appoTime.toString().padStart(4,'0').substring(0,2) + ':' + this.data.appoTime.toString().padStart(4,'0').substring(2,4))+ ' AM';
+    // +this.data.appoTime.substring(0,2) > 12 ? (+this.data.appoTime.substring(0,2)-12).toString() + ':00 PM' : this.data.appoTime + ' AM';
     this.reasons$ = this.reasonService.getReasons(this.businessId).pipe(
       map((res: any) => {
         if (res != null ){
@@ -108,7 +109,7 @@ export class ShowappoDialogComponent implements OnInit {
   }
 
   getAppointmentsSche(){
-    let hourIni = this.data.appoTime.replace(':','-');
+    let hourIni = this.data.appoTime.toString().padStart(4,'0').substring(0,2) + '-' + this.data.appoTime.toString().padStart(4,'0').substring(2,4); //this.data.appoTime.replace(':','-');
     let dateAppoStr = this.data.appoDate + '-' + hourIni;
     var spinnerRef = this.spinnerService.start($localize`:@@host.loadingappos1:`);
     this.schedule = [];
