@@ -214,7 +214,7 @@ export class AppowiDialogComponent implements OnInit {
       Disability: (this.clientForm.value.Disability == null ? '': this.clientForm.value.Disability),
       Guests: this.clientForm.value.Guests,
       AppoDate: dateAppo,
-      AppoHour: ((this.clientForm.value.Hour).toString() == "--" ? timeAppo : (this.clientForm.value.Hour).toString().padStart(2,'0')+':00'),
+      AppoHour: ((this.clientForm.value.Hour).toString() == "--" ? timeAppo : (this.clientForm.value.Hour).toString().padStart(4,'0').substring(0,2)+':'+(this.clientForm.value.Hour).toString().padStart(4,'0').substring(2,4)),
       Type: typeAppo,
       UpdEmail: updE
     }
