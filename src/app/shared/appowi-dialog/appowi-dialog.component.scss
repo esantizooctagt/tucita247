@@ -12,3 +12,36 @@
 .button-appo{
     width: 100px;
 }
+::ng-deep .country-left .mat-select-value-text {
+    padding-left: 40px;
+}
+.PRI{
+    background: url("../../../assets/images/pur.svg") left / contain no-repeat;
+    white-space: nowrap;
+    display: inline;
+}
+.GTM{
+    background: url("../../../assets/images/gua.svg") left / contain no-repeat;
+    white-space: nowrap;
+    display: inline;
+}
+.DEU{
+    background: url("../../../assets/images/ger.svg") left / contain no-repeat;
+    white-space: nowrap;
+    display: inline;
+}
+.DOM{
+    background: url("../../../assets/images/rep.svg") left / contain no-repeat;
+    white-space: nowrap;
+    display: inline;
+}
+.ESP{
+    background: url("../../../assets/images/spa.svg") left / contain no-repeat;
+    white-space: nowrap;
+    display: inline;
+}
+.USA{
+    background: url("../../../assets/images/usa.svg") left / contain no-repeat;
+    white-space: nowrap;
+    display: inline;
+}

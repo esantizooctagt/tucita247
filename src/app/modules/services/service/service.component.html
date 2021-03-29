@@ -29,19 +29,33 @@
                             </mat-form-field>
                         </div>
                         <div class="form-field pl-3 pr-3">
-                            <mat-form-field>
-                                <input matInput #Name
-                                    i18n-placeholder="Service duration|text in services@@services.textduration"
-                                    placeholder="Service duration" max="4" min="1" minlength="1"
-                                    formControlName="TimeService" [errorStateMatcher]="confirmValidParentMatcher"
-                                    required>
-                                <span matSuffix>hr</span>
-                                <button type="button" mat-icon-button matSuffix color="primary" class="learn" (click)="learnMore(22)">
-                                    <mat-icon>help</mat-icon>
-                                </button>
-                                <mat-error *ngIf="f.TimeService.invalid && f.TimeService.touched">
-                                    {{ 'Error: ' + getErrorMessage('TimeService')}}</mat-error>
+                            <mat-label class="col-md-3 pl-0 pr-3 time-label" i18n="Service duration|text in services@@services.textduration">Service duration</mat-label>
+                            <mat-form-field class="col-md-2 pl-0 pr-3">
+                                <mat-select formControlName="HourService">
+                                    <mat-option value="00">00</mat-option>
+                                    <mat-option value="01" selected>01</mat-option>
+                                    <mat-option value="02">02</mat-option>
+                                    <mat-option value="03">03</mat-option>
+                                    <mat-option value="04">04</mat-option>
+                                </mat-select>
+                                <mat-label>hr</mat-label>
+                                <mat-error *ngIf="f.HourService.invalid && f.HourService.touched">
+                                    {{ 'Error: ' + getErrorMessage('HourService')}}</mat-error>
                             </mat-form-field>
+                            <mat-form-field class="col-md-2 pl-3 pr-0">
+                                <mat-select formControlName="MinService">
+                                    <mat-option value="00" selected>00</mat-option>
+                                    <mat-option value="15">15</mat-option>
+                                    <mat-option value="30">30</mat-option>
+                                    <mat-option value="45">45</mat-option>
+                                </mat-select>
+                                <mat-label>min</mat-label>
+                                <mat-error *ngIf="f.MinService.invalid && f.MinService.touched">
+                                    {{ 'Error: ' + getErrorMessage('MinService')}}</mat-error>
+                            </mat-form-field>
+                            <button type="button" mat-icon-button matSuffix color="primary" class="learn col-md ml-3 mr-0" (click)="learnMore(22)">
+                                <mat-icon>help</mat-icon>
+                            </button>
                         </div>
                         <div class="form-field pl-3 pr-3">
                             <mat-form-field>
@@ -98,10 +112,6 @@
                                 </mat-radio-button>
                             </mat-radio-group>
                         </div>
-                        <!-- <div class="form-field-check ml-3 pr-3"
-                            *ngIf="serviceForm.value.ServiceId !== '' && serviceForm.value.ServiceId !== null">
-                            <mat-checkbox formControlName="Status" i18n="Status@@shared.status">Status</mat-checkbox>
-                        </div> -->
                         <div>
                             <button mat-flat-button color="primary" *ngIf="invalid == 0" id="save" [disabled]="!serviceForm.valid"
                                 class="button-action ml-3 mr-3 mt-2" i18n="Save@@shared.save">Save</button>

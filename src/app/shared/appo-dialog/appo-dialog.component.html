@@ -16,14 +16,26 @@
     </div>
     <div class="row pl-3 pr-3">
         <ng-container *ngIf="getCustomer$ | async"></ng-container>
-        <div class="form-field col-md-6">
+        <div class="form-field col-md-4 pr-0">
             <mat-form-field>
-                <input matInput #Phone placeholder="+1 (XXX) XXX-XXXX" appPhoneMask maxlength="17" formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher" (focusout)="loadCustomer()">
+                <mat-select [ngClass]="f.CountryCode.value" class="country-left" formControlName="CountryCode" (selectionChange)="changeValues($event)">
+                    <mat-option [value]="country.Country" *ngFor="let country of countryLst">
+                        <img with="15" height="15" [src]="country.Flag">
+                        {{country.Code}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="form-field col-md-8">
+            <mat-form-field>
+                <input matInput #Phone [placeholder]="phCountry" minlength="7" maxlength="17" appPhoneMask [ccode]="f.CountryCode" formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher" (focusout)="loadCustomer()">
                 <mat-spinner matSuffix *ngIf="search == 1" [diameter]="18" style="float: right; margin-left: 8px"></mat-spinner>
                 <mat-error *ngIf="f.Phone.invalid && f.Phone.touched">{{ 'Error: ' + getErrorMessage('Phone')}}</mat-error>
             </mat-form-field>
         </div>
-        <div class="form-field pl-3 pr-3 col-md-6">
+    </div>
+    <div class="row pl-3 pr-3">
+        <div class="form-field pl-3 pr-3 col-md">
             <mat-form-field>
                 <mat-label i18n="Date of birth|text in new appo@appos.datebirth">Date of birth</mat-label>
                 <input matInput [matDatepicker]="dobClient" formControlName="DOB">

@@ -8,6 +8,7 @@ import { map, catchError } from 'rxjs/operators';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { environment } from '@environments/environment';
 
 export interface DialogData {
   timeZone: string;
@@ -53,6 +54,10 @@ export class AppowiDialogComponent implements OnInit {
   getLocInfo$: Observable<any>;
   getCustomer$: Observable<any>;
 
+  readonly countryLst = environment.countryList;
+  phCountry: string = '(XXX) XXX-XXXX';
+  code: string = '+1';
+
   get f(){
     return this.clientForm.controls;
   }
@@ -71,11 +76,12 @@ export class AppowiDialogComponent implements OnInit {
   ) { }
 
   clientForm = this.fb.group({
-    Phone: ['',[Validators.maxLength(17)]],
+    Phone: ['',[Validators.maxLength(17), Validators.minLength(7)]],
     Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     ServiceId: ['', [Validators.required]],
     Hour: ['', [Validators.required]],
     Email: ['', [Validators.maxLength(200), Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
+    CountryCode: ['PRI'],
     DOB: [''],
     Gender: [''],
     Preference: ['1'],
@@ -154,6 +160,7 @@ export class AppowiDialogComponent implements OnInit {
     let timeAppo = this.getTimeAppo();
     if (!this.clientForm.valid) {return;}
     //AGREGAR WALK IN Y APPOINTMENT
+    let phoneNumber = this.clientForm.value.Phone.toString().replace(/[^0-9]/g,'');
     let dobClient: Date = this.clientForm.value.DOB;
     let dob: string = '';
     if (dobClient.toString() == '') {
@@ -163,7 +170,6 @@ export class AppowiDialogComponent implements OnInit {
       let day = dobClient.getDate().toString().padStart(2, '0');
       dob = dobClient.getUTCFullYear().toString() + '-' + month + '-' + day;
     }
-    let phoneNumber = this.clientForm.value.Phone.toString().replace(/[^0-9]/g,'');
     let yearCurr = this.getYear();
     let monthCurr = this.getMonth();
     let dayCurr = this.getDay();
@@ -205,7 +211,9 @@ export class AppowiDialogComponent implements OnInit {
       BusinessName: (this.authService.businessName().length > 27 ? this.authService.businessName().substring(0,27)+'...' : this.authService.businessName()),
       Language: this.authService.businessLanguage(),
       Door: this.doorId,
-      Phone: (phoneNumber == '' ?  '00000000000' : (phoneNumber.length <= 10 ? '1' + phoneNumber : phoneNumber)),
+      Phone: (phoneNumber == '' ?  '00000000000' : this.code.toString().replace(/[^0-9]/g,'') + phoneNumber),
+      CountryCode: this.code.toString().replace(/[^0-9]/g,''),
+      Country: this.clientForm.value.CountryCode,
       Name: this.clientForm.value.Name,
       Email: (this.clientForm.value.Email == '' ? '' : this.clientForm.value.Email),
       DOB: dob,
@@ -254,22 +262,25 @@ export class AppowiDialogComponent implements OnInit {
 
   loadCustomer(){
     let phoneNumber = this.clientForm.value.Phone.toString().replace(/[^0-9]/g,'');
-    let phone = (phoneNumber == '' ?  '00000000000' : (phoneNumber.length <= 10 ? '1' + phoneNumber : phoneNumber));
+    let cCode = this.clientForm.value.CountryCode;
+    let phone = (phoneNumber == '' ?  '00000000000' : this.code.toString().replace(/[^0-9]/g,'') + phoneNumber);
     if (phone != '00000000000'){
       this.search = 1;
-      this.getCustomer$ = this.appointmentService.getMobile(phone).pipe(
+      this.getCustomer$ = this.appointmentService.getMobile(phone, cCode).pipe(
         map((res: any) => {
           if (res.Code == 200){
             let dateDOB = new Date(res.Customer.DOB+'T06:00:00');
-            this.clientForm.patchValue(
-              { Name: res.Customer.Name, 
-                Email: res.Customer.Email,
-                Preference: res.Customer.Preferences.toString(), 
-                Disability: res.Customer.Disability.toString(), 
-                Gender: res.Customer.Gender.toString(),
-                DOB: (res.Customer.DOB == '' ? '' : dateDOB) }
-            );
-            this.currEmail = res.Customer.Email;
+            if (JSON.stringify(res.Customer) != '{}'){
+              this.clientForm.patchValue(
+                { Name: res.Customer.Name, 
+                  Email: res.Customer.Email,
+                  Preference: res.Customer.Preferences.toString(), 
+                  Disability: res.Customer.Disability.toString(), 
+                  Gender: res.Customer.Gender.toString(),
+                  DOB: (res.Customer.DOB == '' || res.Customer.DOB == 'None' ? '' : dateDOB) }
+              );
+              this.currEmail = res.Customer.Email;
+            }
             this.search = 0;
           }
           return res.Code;
@@ -323,7 +334,7 @@ export class AppowiDialogComponent implements OnInit {
     const val3 = '3';
     const val2 = '2';
     const val1 = '1';
-    const val6 = '6';
+    const val6 = '7';
     const val14 = '14';
     const val99 = '99';
     const val100 = '100';
@@ -415,6 +426,12 @@ export class AppowiDialogComponent implements OnInit {
         return this.onError;
       })
     );
+  }
+
+  changeValues($event){
+    this.clientForm.patchValue({CountryCode: $event.value, Phone: ''});
+    this.phCountry = this.countryLst.filter(x=>x.Country === $event.value)[0].PlaceHolder;
+    this.code = this.countryLst.filter(x=>x.Country === $event.value)[0].Code;
   }
 
   getTimeAppo(): string{

@@ -13,8 +13,8 @@ export class AdminService {
     readonly apiURL = environment.apiAdminUrl;
     constructor(private http: HttpClient) { }
   
-    getUser(userId, businessId): Observable<User> {
-      return this.http.get<User>(this.apiURL + '/user/' + userId + '/' + businessId)
+    getUser(userId, businessId): Observable<any> {
+      return this.http.get<any>(this.apiURL + '/user/' + userId + '/' + businessId)
                       .pipe(catchError(this.errorHandler));
     }
   

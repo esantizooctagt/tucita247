@@ -44,6 +44,9 @@ export class ScheduleComponent implements OnInit {
   SatHours = [];
   SunHours = [];
 
+  minHr: number = 0;
+  maxHr: number = 0;
+
   businessId: string = '';
   doors: string = '';
   TimeZone: string = '';
@@ -222,6 +225,37 @@ export class ScheduleComponent implements OnInit {
           this.FriHours = res.Friday;
           this.SatHours = res.Saturday;
           this.SunHours = res.Sunday;
+
+          this.MonHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
+          this.minHr = this.MonHours[0].Time24;
+          this.maxHr = this.MonHours[this.MonHours.length-1].Time24;
+
+          this.TueHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
+          this.minHr = (this.TueHours[0].Time24 < this.minHr ? this.TueHours[0].Time24 : this.minHr);
+          this.maxHr = (this.TueHours[this.TueHours.length-1].Time24 > this.maxHr ? this.TueHours[this.TueHours.length-1].Time24 : this.maxHr);
+
+          this.WedHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
+          this.minHr = (this.WedHours[0].Time24 < this.minHr ? this.WedHours[0].Time24 : this.minHr);
+          this.maxHr = (this.WedHours[this.WedHours.length-1].Time24 > this.maxHr ? this.WedHours[this.WedHours.length-1].Time24 : this.maxHr);
+
+          this.ThuHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
+          this.minHr = (this.ThuHours[0].Time24 < this.minHr ? this.ThuHours[0].Time24 : this.minHr);
+          this.maxHr = (this.ThuHours[this.ThuHours.length-1].Time24 > this.maxHr ? this.ThuHours[this.ThuHours.length-1].Time24 : this.maxHr);
+
+          this.FriHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
+          this.minHr = (this.FriHours[0].Time24 < this.minHr ? this.FriHours[0].Time24 : this.minHr);
+          this.maxHr = (this.FriHours[this.FriHours.length-1].Time24 > this.maxHr ? this.FriHours[this.FriHours.length-1].Time24 : this.maxHr);
+
+          this.SatHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
+          this.minHr = (this.SatHours[0].Time24 < this.minHr ? this.SatHours[0].Time24 : this.minHr);
+          this.maxHr = (this.SatHours[this.SatHours.length-1].Time24 > this.maxHr ? this.SatHours[this.SatHours.length-1].Time24 : this.maxHr);
+
+          this.SunHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
+          this.minHr = (this.SunHours[0].Time24 < this.minHr ? this.SunHours[0].Time24 : this.minHr);
+          this.maxHr = (this.SunHours[this.SunHours.length-1].Time24 > this.maxHr ? this.SunHours[this.SunHours.length-1].Time24 : this.maxHr);
+
+          console.log(this.minHr);
+          console.log(this.maxHr);
           this.spinnerService.stop(spinnerRef);
           return res;
         }
@@ -545,10 +579,11 @@ export class ScheduleComponent implements OnInit {
       hour12: false,
     },
     formatter = new Intl.DateTimeFormat([], options);
-    var actual = formatter.format(new Date());
-    var hour: string = (+actual.substring(0,2) == 24 ? '00' : (+actual.substring(0,2)-1).toString().padStart(2, '0'));
+    // var actual = formatter.format(new Date());
+    var v = new Date();
+    var actual = formatter.format(v.setMinutes(v.getMinutes()-14));
+    var hour: string = (+actual.substring(0,2) == 24 ? '00' : (+actual.substring(0,2)).toString().padStart(2, '0'));
     var min: string = actual.substring(3,5).padStart(2,'0');
-
     return hour+':'+min;
   }
 

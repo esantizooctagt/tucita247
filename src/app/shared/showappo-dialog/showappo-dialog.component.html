@@ -21,7 +21,7 @@
                     <div *ngIf="!showDetailsSche[i]" class="card-user col-md-9 pl-0 pr-0">{{item.Name}}</div>
                     <div *ngIf="showDetailsSche[i]" class="card-user-disp col-md-9 pl-0 pr-0">{{item.Name}}</div>
                     <div class="card-time col-md pr-0 pl-0">
-                        {{item.DateAppo.substring(0,2) + item.DateAppo.substring(5,8)}}</div>
+                        {{item.DateAppo}}</div>
                 </div>
                 <div class="row pr-3 pl-3">
                     <div class="card-phone col-md-9 pl-0 pr-0">{{item.Phone | phone}}</div>

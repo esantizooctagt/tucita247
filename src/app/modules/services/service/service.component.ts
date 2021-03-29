@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
-import { Validators, FormBuilder, FormArray, FormGroup, ValidatorFn } from '@angular/forms';
+import { Validators, FormBuilder } from '@angular/forms';
 import { AuthService } from '@app/core/services';
 import { SpinnerService } from '@app/shared/spinner.service';
 import { MonitorService } from '@app/shared/monitor.service';
@@ -57,7 +57,8 @@ export class ServiceComponent implements OnInit {
   serviceForm = this.fb.group({
     ServiceId: [''],
     Name: ['', [Validators.required, Validators.maxLength(100), Validators.minLength(3)]],
-    TimeService: ['', [Validators.required, Validators.max(4), Validators.min(1)]],
+    HourService: ['01'],
+    MinService: ['00'],
     CustomerPerTime: ['', [Validators.required, Validators.max(9999), Validators.min(1)]],
     CustomerPerBooking: ['', [Validators.required, Validators.max(9999), Validators.min(1)]],
     BufferTime: ['', [Validators.required, Validators.max(50), Validators.min(1)]],
@@ -137,14 +138,15 @@ export class ServiceComponent implements OnInit {
   onDisplay(){
     if (this.serviceDataList != undefined && this.serviceDataList != "0"){
       var spinnerRef = this.spinnerService.start($localize`:@@services.loadingserv:`);
-      this.serviceForm.reset({ ServiceId: '', Name: '', TimeService: '', BufferTime: '', CustomerPerTime: '', CustomerPerBooking: '', Color: '', Status: true});
+      this.serviceForm.reset({ ServiceId: '', Name: '', HourService: '01', MinService: '00', BufferTime: '', CustomerPerTime: '', CustomerPerBooking: '', Color: '', Status: true});
       this.service$ = this.serviceService.getService(this.businessId, this.serviceDataList).pipe(
         map(res => {
           if (res != ''){
             this.serviceForm.setValue({
               ServiceId: res.ServiceId,
               Name: res.Name,
-              TimeService: res.TimeService,
+              HourService: res.TimeService.toString().padStart(4,'0').substring(0,2),
+              MinService: res.TimeService.toString().padStart(4,'0').substring(2,4),
               CustomerPerBooking: res.CustomerPerBooking,
               CustomerPerTime: res.CustomerPerTime,
               BufferTime: res.BufferTime,
@@ -180,11 +182,13 @@ export class ServiceComponent implements OnInit {
           this.f.Name.hasError('maxlength') ? $localize`:@@shared.maximun: ${val100}` :
             '';
     }
-    if (component === 'TimeService'){
-      return this.f.TimeService.hasError('required') ? $localize`:@@shared.entervalue:` :
-        this.f.TimeService.hasError('min') ? $localize`:@@shared.minvalue: ${val1}` :
-          this.f.TimeService.hasError('max') ? $localize`:@@shared.maxvalue: ${val4}` :
-          '';
+    if (component === 'HourService'){
+      return this.f.HourService.hasError('required') ? $localize`:@@shared.entervalue:` :
+        '';
+    }
+    if (component === 'MinService'){
+      return this.f.MinService.hasError('required') ? $localize`:@@shared.entervalue:` :
+        '';
     }
     if (component === 'BufferTime'){
       return this.f.BufferTime.hasError('required') ? $localize`:@@shared.entervalue:` :
@@ -221,11 +225,13 @@ export class ServiceComponent implements OnInit {
 
   onSubmit(){
     if (this.serviceForm.invalid) { return; }
-
+    if (Number(this.serviceForm.value.HourService.toString() + this.serviceForm.value.MinService.toString()) == 0){
+      return this.f.HourService.hasError('required') ? $localize`:@@shared.entervalue:` : '';
+    }
     let dataForm = {
       ServiceId: this.serviceForm.value.ServiceId,
       BusinessId: this.businessId,
-      TimeService: this.serviceForm.value.TimeService,
+      TimeService: Number(this.serviceForm.value.HourService.toString() + this.serviceForm.value.MinService.toString()),
       BufferTime: this.serviceForm.value.BufferTime,
       Name: this.serviceForm.value.Name,
       CustomerPerTime: this.serviceForm.value.CustomerPerTime,

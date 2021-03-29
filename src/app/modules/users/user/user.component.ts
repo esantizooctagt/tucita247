@@ -47,6 +47,11 @@ export class UserComponent implements OnInit {
   // locations = [];
 
   readonly passKey = environment.passKey;
+  
+  readonly countryLst = environment.countryList;
+  phCountry: string = '(XXX) XXX-XXXX';
+  code: string = '+1';
+  
   //variable to handle errors on inputs components
   confirmValidParentMatcher = new ConfirmValidParentMatcher();
 
@@ -71,7 +76,8 @@ export class UserComponent implements OnInit {
     Last_Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     Password: ['',[Validators.minLength(8), Validators.maxLength(20), Validators.pattern("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}")]],
     Avatar: [''],
-    Phone: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(17)]],
+    Phone: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(17)]],
+    CountryCode: ['PRI'],
     RoleId: ['', [Validators.required]],
     LocationId: ['', [Validators.required]],
     Is_Admin: [{value: 0, disabled: true}],
@@ -136,7 +142,7 @@ export class UserComponent implements OnInit {
     const val200 = '200';
     const val3 = '3';
     const val100 = '100';
-    const val6 = '6';
+    const val6 = '7';
     const val17 = '17';
     if (component === 'Email'){
       return this.f.Email.hasError('required') ? $localize`:@@login.error:` :
@@ -207,6 +213,11 @@ export class UserComponent implements OnInit {
             } else {
               this.userForm.controls['RoleId'].setValidators([Validators.required]);
             }
+            if (user.CountryCode != '' && user.CountryCode != undefined){
+              let codCountry = this.countryLst.filter(x => x.Country == user.CountryCode)[0];
+              this.phCountry = codCountry.PlaceHolder;
+              this.code = codCountry.Code;
+            }
             this.userForm.setValue({
               UserId: user.User_Id,
               BusinessId: user.Business_Id,
@@ -215,7 +226,8 @@ export class UserComponent implements OnInit {
               Last_Name: user.Last_Name,
               Password: '',
               Avatar: '',
-              Phone: user.Phone,
+              CountryCode: user.CountryCode,
+              Phone: user.Phone.replace(this.code.replace(/[^0-9]/g,''), ''),
               RoleId: (user.Is_Admin === 1 ? 'None' : user.Role_Id),
               LocationId: (user.Location_Id == '' ? '0' : user.Location_Id),
               Is_Admin: user.Is_Admin,
@@ -255,7 +267,8 @@ export class UserComponent implements OnInit {
           "First_Name": this.userForm.value.First_Name,
           "Last_Name": this.userForm.value.Last_Name,
           "Password": '', //this.userForm.value.Password,
-          "Phone": this.userForm.value.Phone,
+          "Phone": this.code.toString().replace(/\D/g, '') + this.userForm.value.Phone.replace(/\D/g, ''),
+          "CountryCode": this.userForm.value.CountryCode,
           "RoleId": this.userForm.value.RoleId,
           "LocationId": (this.userForm.value.LocationId == '0' ? '' : this.userForm.value.LocationId),
           "Status": (this.statTemp === 3 ? 3 : this.userForm.value.Status)
@@ -268,7 +281,7 @@ export class UserComponent implements OnInit {
             this.userForm.controls.Email.enable();
             this.userData = '';
             this.statTemp = 0;
-            this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', LocationId: 'None', Is_Admin: 0, Status: 1});
+            this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', CountryCode: 'PRI', RoleId: 'None', LocationId: 'None', Is_Admin: 0, Status: 1});
             this.data.changeData('users');
             this.openDialog($localize`:@@users.usertexts:`, $localize`:@@userloc.userupdated:`, true, false, false);
             this.router.navigate(['/users']);
@@ -293,7 +306,9 @@ export class UserComponent implements OnInit {
           "First_Name": this.userForm.value.First_Name,
           "Last_Name": this.userForm.value.Last_Name,
           "Password": ctStr,
-          "Phone": this.userForm.value.Phone,
+          // "Phone": this.userForm.value.Phone,
+          "Phone": this.code.toString().replace(/\D/g, '') + this.userForm.value.Phone.replace(/\D/g, ''),
+          "CountryCode": this.userForm.value.CountryCode,
           "RoleId": this.userForm.value.RoleId,
           "LocationId": (this.userForm.value.LocationId == '0' ? '' : this.userForm.value.LocationId)
         }
@@ -305,7 +320,7 @@ export class UserComponent implements OnInit {
             this.userForm.controls.Email.enable();
             this.userData = '';
             this.statTemp = 0;
-            this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', RoleId: 'None', LocationId: 'None', Is_Admin: 0, Status: 1});
+            this.userForm.reset({UserId:'', BusinessId: '', Email: '', First_Name: '', Last_Name: '', Password: '', Avatar: '', Phone: '', CountryCode: 'PRI', RoleId: 'None', LocationId: 'None', Is_Admin: 0, Status: 1});
             this.data.changeData('users');
             this.openDialog($localize`:@@users.usertexts:`, $localize`:@@userloc.usercreated:`, true, false, false);
             this.router.navigate(['/users']);
@@ -393,4 +408,9 @@ export class UserComponent implements OnInit {
     }
   }
 
+  changeValues($event){
+    this.userForm.patchValue({CountryCode: $event.value, Phone: ''});
+    this.phCountry = this.countryLst.filter(x=>x.Country === $event.value)[0].PlaceHolder;
+    this.code = this.countryLst.filter(x=>x.Country === $event.value)[0].Code;
+  }
 }

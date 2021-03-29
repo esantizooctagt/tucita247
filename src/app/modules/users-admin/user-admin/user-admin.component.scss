@@ -36,6 +36,45 @@ mat-card{
 :host::ng-deep .mat-form-field-underline {
     background-color: #B6B6B6 !important;
 }
+.PRI{
+    background: url("../../../../assets/images/pur.svg") left / contain no-repeat;
+    white-space: nowrap;
+    display: inline;
+}
+.GTM{
+    background: url("../../../../assets/images/gua.svg") left / contain no-repeat;
+    white-space: nowrap;
+    display: inline;
+}
+.DEU{
+    background: url("../../../../assets/images/ger.svg") left / contain no-repeat;
+    white-space: nowrap;
+    display: inline;
+}
+.DOM{
+    background: url("../../../../assets/images/rep.svg") left / contain no-repeat;
+    white-space: nowrap;
+    display: inline;
+}
+.ESP{
+    background: url("../../../../assets/images/spa.svg") left / contain no-repeat;
+    white-space: nowrap;
+    display: inline;
+}
+.USA{
+    background: url("../../../../assets/images/usa.svg") left / contain no-repeat;
+    white-space: nowrap;
+    display: inline;
+}
+::ng-deep .country-left .mat-select-value-text {
+    padding-left: 40px;
+}
+.label-phone{
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: #f44f00;
+    font-family: 'Montserrat';
+}
 @media only screen and (max-width: 600px) {
     mat-card{
         margin-left: 0px;

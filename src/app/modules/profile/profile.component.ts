@@ -31,6 +31,10 @@ export class ProfileComponent implements OnInit {
 
   readonly imgPath = environment.bucket;
 
+  readonly countryLst = environment.countryList;
+  phCountry: string = '(XXX) XXX-XXXX';
+  code: string = '+1';
+  
   get f(){
     return this.profileForm.controls;
   }
@@ -51,7 +55,8 @@ export class ProfileComponent implements OnInit {
     First_Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     Last_Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     Avatar: [''],
-    Phone: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(17)]],
+    Phone: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(17)]],
+    CountryCode: ['PRI'],
     Language: ['']
   })
 
@@ -64,15 +69,21 @@ export class ProfileComponent implements OnInit {
     this.userId = this.authService.userId();
 
     var spinnerRef = this.spinnerService.start($localize`:@@profile.loading:`);
-    this.profileForm.reset({Email:'', First_Name: '', Last_Name: '', Avatar: '', Phone: '', Language: ''});
+    this.profileForm.reset({Email:'', First_Name: '', Last_Name: '', Avatar: '', Phone: '', CountryCode: '', Language: ''});
     this.user$ = this.usersService.getUser(this.userId, this.businessId).pipe(
       tap(res => {
+        if (res.CountryCode != '' && res.CountryCode != undefined){
+          let codCountry = this.countryLst.filter(x => x.Country == res.CountryCode)[0];
+          this.phCountry = codCountry.PlaceHolder;
+          this.code = codCountry.Code;
+        }
         this.profileForm.setValue({
           Email: res.Email,
           First_Name: res.First_Name,
           Last_Name: res.Last_Name,
           Avatar: res.Avatar,
-          Phone: res.Phone,
+          CountryCode: res.CountryCode,
+          Phone: res.Phone.replace(this.code.replace(/[^0-9]/g,''), ''),
           Language: res.Language
         });
         this.spinnerService.stop(spinnerRef);
@@ -103,7 +114,7 @@ export class ProfileComponent implements OnInit {
 
   getErrorMessage(component: string) {
     const val3 = '3';
-    const val6 = '6';
+    const val6 = '7';
     const val17 = '17';
     const val100 = '100';
     if (component === 'First_Name'){
@@ -182,7 +193,8 @@ export class ProfileComponent implements OnInit {
       "Email": this.profileForm.value.Email,
       "First_Name": this.profileForm.value.First_Name,
       "Last_Name": this.profileForm.value.Last_Name,
-      "Phone": this.profileForm.value.Phone,
+      "Phone": this.code.toString().replace(/\D/g, '') + this.profileForm.value.Phone.replace(/\D/g, ''),
+      "CountryCode": this.profileForm.value.CountryCode,
       "Language": this.profileForm.value.Language,
       "BusinessId": this.businessId
     }
@@ -231,4 +243,9 @@ export class ProfileComponent implements OnInit {
     );
   }
 
+  changeValues($event){
+    this.profileForm.patchValue({CountryCode: $event.value, Phone: ''});
+    this.phCountry = this.countryLst.filter(x=>x.Country === $event.value)[0].PlaceHolder;
+    this.code = this.countryLst.filter(x=>x.Country === $event.value)[0].Code;
+  }
 }

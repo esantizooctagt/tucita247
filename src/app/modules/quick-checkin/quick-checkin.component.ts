@@ -18,6 +18,7 @@ import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.comp
 import { MonitorService } from '@app/shared/monitor.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';
+import { AppowiDialogComponent } from '@app/shared/appowi-dialog/appowi-dialog.component';
 
 @Component({
   selector: 'app-quick-checkin',
@@ -55,7 +56,6 @@ export class QuickCheckinComponent implements OnInit {
   Locs$: Observable<any>;
   getWalkIns$: Observable<any[]>;
   check$: Observable<any>;
-  newAppointment$: Observable<any>;
   manualCheckOut$: Observable<any>;
   getLocInfo$: Observable<any>;
   openLoc$: Observable<any>;
@@ -74,6 +74,7 @@ export class QuickCheckinComponent implements OnInit {
   seeDetails: string = $localize`:@@shared.seedetails:`;
   hideDetails: string = $localize`:@@shared.hidedetails:`;
 
+  countryCode: string = 'PER';
   get f(){
     return this.clientForm.controls;
   }
@@ -281,15 +282,14 @@ export class QuickCheckinComponent implements OnInit {
       map((res: any) => {
         if (res.Locs != null){
           if (res.Locs.length > 0){
-            this.locations = res.Locs;
-            this.locationId = res.Locs[0].LocationId;
-            this.doorId = res.Locs[0].Door;
-            // this.manualCheckOut = res.Locs[0].ManualCheckOut;
-            this.totLocation = res.Locs[0].MaxCustomers;
-            this.Providers = res.Locs[0].Providers;
-            this.locName = res.Locs[0].Name;
-            this.locationStatus = res.Locs[0].Open;
-            this.TimeZone = res.Locs[0].TimeZone;
+            this.locations = res.Locs.sort((a, b) => (a.Name < b.Name ? -1 : 1));
+            this.locationId = this.locations[0].LocationId;
+            this.doorId = this.locations[0].Door;
+            this.totLocation = this.locations[0].MaxCustomers;
+            this.Providers = this.locations[0].Providers.sort((a, b) => (a.Name < b.Name ? -1 : 1));
+            this.locName = this.locations[0].Name;
+            this.locationStatus = this.locations[0].Open;  //0 CLOSED, 1 OPEN
+            this.TimeZone = this.locations[0].TimeZone;
             this.textOpenLocation = (this.locationStatus == 0 ? $localize`:@@host.locclosed:` : $localize`:@@host.locopen:`);
             if (this.Providers.length > 0){
               this.operationText = this.locName + ' / ' + $localize`:@@host.allproviders:`; 
@@ -514,147 +514,12 @@ export class QuickCheckinComponent implements OnInit {
     );
   }
 
-  validateService(event){
-    let res = this.services.filter(x => x.ServiceId == event.value);
-    if (res.length > 0) { this.maxGuests = res[0].CustomerPerBooking; }
-    this.numGuests =  1;
-    this.clientForm.patchValue({'Guests': this.numGuests});
-  }
-
-  addGuests(){
-    if (this.numGuests < this.maxGuests) {
-      this.numGuests = this.numGuests+1;
-    } else {
-      this.numGuests = this.numGuests;
-    }
-    this.clientForm.patchValue({'Guests': this.numGuests});
-  }
-
-  remGuests(){
-    if (this.numGuests > 1) {
-      this.numGuests=this.numGuests-1;
-     } else {
-      this.numGuests = this.numGuests;
-     }
-     this.clientForm.patchValue({'Guests': this.numGuests});
-  }
-
-  getErrorMessage(component: string){
-    const val200 = '200';
-    const val3 = '3';
-    const val100 = '100';
-    const val6 = '6';
-    const val14 = '14';
-    const val2 = '2';
-    const val1 = '1';
-    const val99 = '99';
-    const maxVal = this.maxGuests;
-    if (component === 'Email'){
-      return this.f.Email.hasError('required') ? $localize`:@@login.error:` :
-        this.f.Email.hasError('maxlength') ? $localize`:@@shared.maximun: ${val200}` :
-          this.f.Email.hasError('pattern') ? $localize`:@@forgot.emailformat:` :
-          '';
-    }
-    if (component === 'Name'){
-      return this.f.Name.hasError('required') ? $localize`:@@shared.entervalue:` :
-        this.f.Name.hasError('minlength') ? $localize`:@@shared.minimun: ${val3}` :
-          this.f.Name.hasError('maxlength') ? $localize`:@@shared.maximun: ${val100}` :
-            '';
-    }
-    if (component === 'ServiceId'){
-      return this.f.ServiceId.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
-            '';
-    }
-    if (component === 'ProviderId'){
-      return this.f.ProviderId.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
-            '';
-    }
-    if (component === 'Phone'){
-      return this.f.Phone.hasError('minlength') ? $localize`:@@shared.minimun: ${val6}` :
-        this.f.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: ${val14}` :
-          '';
-    }
-    if (component === 'Guests'){
-      return this.f.Guests.hasError('required') ? $localize`:@@shared.entervalue:` :
-      this.f.Guests.hasError('maxlength') ? $localize`:@@shared.maximun: ${val2}` :
-        this.f.Guests.hasError('min') ? $localize`:@@shared.minvalue: ${val1}` :
-          this.f.Guests.hasError('max') ? $localize`:@@shared.maxvalue: ${maxVal}` :
-            '';
-    }
-  }
-
-  onCancelAddAppointment(){
-    this.clientForm.reset({Phone:'', Name:'', ServiceId:'', Email:'', DOB:'', Gender:'', Preference:'1', Disability:'', ProviderId:'', Guests: 1});
-    this.showCard = false;
-  }
-
-  addAppointment(){
-    //AGREGAR WALK IN Y APPOINTMENT
-    let dobClient: Date = this.clientForm.value.DOB;
-    let dob: string = '';
-    if (dobClient.toString() == '') {
-      dob = '';
-    } else {
-      let month = (dobClient.getMonth()+1).toString().padStart(2, '0'); 
-      let day = dobClient.getDate().toString().padStart(2, '0');
-      dob = dobClient.getUTCFullYear().toString() + '-' + month + '-' + day;
-    }
-    let phoneNumber = this.clientForm.value.Phone.toString().replace( /\D+/g, '');
-    let yearCurr = this.getYear();
-    let monthCurr = this.getMonth();
-    let dayCurr = this.getDay();
-    let dateAppo = yearCurr + '-' + monthCurr + '-' + dayCurr;
-    let timeAppo = this.getTime();
-
-    let formData = {
-      BusinessId: this.businessId,
-      LocationId: this.locationId,
-      BusinessName: (this.authService.businessName().length > 27 ? this.authService.businessName().substring(0,27)+'...' : this.authService.businessName()),
-      Language: this.authService.businessLanguage(),
-      ProviderId: (this.providerId != '0' ? this.providerId : this.clientForm.value.ProviderId),
-      ServiceId: this.clientForm.value.ServiceId,
-      Door: this.doorId,
-      Phone: (phoneNumber == '' ?  '00000000000' : (phoneNumber.length <= 10 ? '1' + phoneNumber : phoneNumber)),
-      Name: this.clientForm.value.Name,
-      Email: (this.clientForm.value.Email == '' ? '' : this.clientForm.value.Email),
-      DOB: dob,
-      Gender: (this.clientForm.value.Gender == '' ? '': this.clientForm.value.Gender),
-      Preference: (this.clientForm.value.Preference == '' ? '': this.clientForm.value.Preference),
-      Disability: (this.clientForm.value.Disability == null ? '': this.clientForm.value.Disability),
-      Guests: this.clientForm.value.Guests,
-      Status: 3,
-      AppoDate: dateAppo,
-      AppoHour: timeAppo,
-      Type: 2
-    }
-    var spinnerRef = this.spinnerService.start($localize`:@@lite.addingbook:`);
-    this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
-      map((res: any) => {
-        this.spinnerService.stop(spinnerRef);
-        this.clientForm.reset({Phone:'', Name:'', ServiceId:'', Email:'', DOB:'', Gender:'', Preference:'1', Disability:'', ProviderId:'', Guests: 1});
-        this.showCard = false;
-        this.openSnackBar($localize`:@@lite.walkinadded:`,$localize`:@@host.checkintitle:`);
-        return res.Code;
-      }),
-      switchMap((res: any) => {
-        res = this.locationService.getLocationQuantity(this.businessId, this.locationId);
-        return res;
-      }),
-      map((res: any) => {
-        this.qtyPeople = res.Quantity;
-        this.perLocation = (+this.qtyPeople / +this.totLocation)*100;
-      }),
-      catchError(err => {
-        this.spinnerService.stop(spinnerRef);
-        this.onError = err.Message;
-        if (err.Status == 404){
-          this.openSnackBar($localize`:@@shared.invalidDateTime:`, $localize`:@@host.checkintitle:`);
-        } else {
-          this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@host.checkintitle:`);
-        }
-        return this.onError;
-      })
-    );
+  displayAddAppo(){
+    const dialogRef = this.dialog.open(AppowiDialogComponent, {
+      width: '450px',
+      height: '700px',
+      data: {timeZone: this.TimeZone, door: this.doorId, businessId: this.businessId, locationId: this.locationId, providerId: this.providerId, services: this.services, buckets: this.buckets, hours: [], providers: this.Providers, tipo: 1}
+    });
   }
 
   getWalkInsCheckOut(){
@@ -836,19 +701,6 @@ export class QuickCheckinComponent implements OnInit {
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
-        this.onError = err.Message;
-        return '0';
-      })
-    );
-  }
-
-  onProvChange(event){
-    this.getLocInfo$ = this.serviceService.getServicesProvider(this.businessId, event.value).pipe(
-      map((res: any) =>{
-        this.services = res.services.filter(x => x.Selected === 1);
-        return res;
-      }),
-      catchError(err => {
         this.onError = err.Message;
         return '0';
       })

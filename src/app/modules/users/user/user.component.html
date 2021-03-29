@@ -50,35 +50,21 @@
                             </mat-form-field>
                         </div>
                         <div class="form-field pl-3 pr-3">
-                            <mat-form-field>
-                                <input matInput #Phone placeholder="+1 (XXX) XXX-XXXX" appPhoneMask maxlength="17"
-                                    formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher" required>
+                            <mat-form-field class="col-md-2 pl-0 pr-0">
+                                <mat-select [ngClass]="f.CountryCode.value" class="country-left" formControlName="CountryCode" (selectionChange)="changeValues($event)">
+                                    <mat-option [value]="country.Country" *ngFor="let country of countryLst">
+                                        <img with="15" height="15" [src]="country.Flag">
+                                        {{country.Code}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="col-md-6">
+                                <input matInput appPhoneMask [ccode]="f.CountryCode" [placeholder]="phCountry" minlength="7" maxlength="17" formControlName="Phone" 
+                                    [errorStateMatcher]="confirmValidParentMatcher" required>
                                 <mat-error *ngIf="f.Phone.invalid && f.Phone.touched">{{ 'Error: ' + getErrorMessage('Phone')}}
                                 </mat-error>
                             </mat-form-field>
                         </div>
-                        <!-- <div class="form-field pl-3 pr-3">
-                            <mat-form-field *ngIf="f.UserId.value == ''">
-                                <input matInput #Password i18n-placeholder="Password@@shared.Password"
-                                    placeholder="Password" maxlength="20" minlength="8" formControlName="Password"
-                                    [errorStateMatcher]="confirmValidParentMatcher" [type]="hide ? 'password' : 'text'"
-                                    pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}">
-                                <button mat-icon-button matSuffix type="button" (click)="hide = !hide"
-                                    [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-                                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                                </button>
-                                <mat-error
-                                    *ngIf="f.Password.invalid && f.Password.touched && f.Password.errors?.minlength"
-                                    i18n="Min 8 characters|text in users@@users.mninchars2">Minimun
-                                    length 8</mat-error>
-                                <mat-error
-                                    *ngIf="f.Password.invalid && f.Password.touched && f.Password.errors?.pattern">
-                                    <div
-                                        i18n="Require at least 1 number, 1 uppercase and 1 lowercase letters|text in users@@users.policy">
-                                        Require at least 1 number, 1 uppercase and 1 lowercase letters</div>
-                                </mat-error>
-                            </mat-form-field>
-                        </div> -->
                         <div class="form-field pl-3 pr-3">
                             <mat-form-field>
                                 <mat-label i18n="Location:|text in user@@users.location">Location:</mat-label>

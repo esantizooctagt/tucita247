@@ -8,6 +8,7 @@ import { ConfirmValidParentMatcher } from '@app/validators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ServService, AppointmentService } from '@app/services';
 import { AuthService } from '@app/core/services';
+import { environment } from '@environments/environment';
 
 export interface DialogData {   
   businessId: string;
@@ -51,6 +52,10 @@ export class AppoDialogComponent implements OnInit {
 
   services: any[]=[];
 
+  readonly countryLst = environment.countryList;
+  phCountry: string = '(XXX) XXX-XXXX';
+  code: string = '+1';
+
   get f(){
     return this.clientForm.controls;
   }
@@ -69,9 +74,10 @@ export class AppoDialogComponent implements OnInit {
   ) {}
 
   clientForm = this.fb.group({
-    Phone: ['',[Validators.maxLength(17)]],
+    Phone: ['',[Validators.maxLength(17), Validators.minLength(7)]],
     Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     Email: ['', [Validators.maxLength(200), Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
+    CountryCode: ['PRI'],
     DOB: [''],
     Gender: [''],
     Door: [''],
@@ -166,7 +172,9 @@ export class AppoDialogComponent implements OnInit {
       AppoDate: this.data.appoDate,
       AppoHour: dateAppo+'-'+this.data.appoTime.substring(3,5),
       Door: this.clientForm.value.Door,
-      Phone: (phoneNumber == '' ?  '00000000000' : (phoneNumber.length <= 10 ? '1' + phoneNumber : phoneNumber)),
+      Phone: (phoneNumber == '' ?  '00000000000' : this.code.toString().replace(/[^0-9]/g,'') + phoneNumber),
+      CountryCode: this.code.toString().replace(/[^0-9]/g,''),
+      Country: this.clientForm.value.CountryCode,
       Name: this.clientForm.value.Name,
       Email: (this.clientForm.value.Email == '' ? '' : this.clientForm.value.Email),
       DOB: dob,
@@ -203,22 +211,25 @@ export class AppoDialogComponent implements OnInit {
 
   loadCustomer(){
     let phoneNumber = this.clientForm.value.Phone.toString().replace(/[^0-9]/g,'');
-    let phone = (phoneNumber == '' ?  '00000000000' : (phoneNumber.length <= 10 ? '1' + phoneNumber : phoneNumber));
+    let cCode = this.clientForm.value.CountryCode;
+    let phone = (phoneNumber == '' ?  '00000000000' : this.code.toString().replace(/[^0-9]/g,'') + phoneNumber);
     if (phone != '00000000000'){
       this.search = 1;
-      this.getCustomer$ = this.appointmentService.getMobile(phone).pipe(
+      this.getCustomer$ = this.appointmentService.getMobile(phone, cCode).pipe(
         map((res: any) => {
           if (res.Code == 200){
             let dateDOB = new Date(res.Customer.DOB+'T06:00:00');
-            this.clientForm.patchValue(
-              { Name: res.Customer.Name, 
-                Email: res.Customer.Email,
-                Preference: res.Customer.Preferences.toString(), 
-                Disability: res.Customer.Disability.toString(), 
-                Gender: res.Customer.Gender.toString(),
-                DOB: (res.Customer.DOB == '' ? '' : dateDOB) }
-            );
-            this.currEmail = res.Customer.Email;
+            if (JSON.stringify(res.Customer) != '{}'){
+              this.clientForm.patchValue(
+                { Name: res.Customer.Name, 
+                  Email: res.Customer.Email,
+                  Preference: res.Customer.Preferences.toString(), 
+                  Disability: res.Customer.Disability.toString(), 
+                  Gender: res.Customer.Gender.toString(),
+                  DOB: (res.Customer.DOB == '' || res.Customer.DOB == 'None' ? '' : dateDOB) }
+              );
+              this.currEmail = res.Customer.Email;
+            }
             this.search = 0;
           }
           return res.Code;
@@ -236,7 +247,7 @@ export class AppoDialogComponent implements OnInit {
     const val200 = '200';
     const val3 = '3';
     const val100 = '100';
-    const val6 = '6';
+    const val6 = '7';
     const val14 = '14';
     const val1 = '1';
     const val2 = '2';
@@ -352,6 +363,12 @@ export class AppoDialogComponent implements OnInit {
   remGuests(){
     this.varGuests = (this.varGuests > 1 ? this.varGuests-1 : this.varGuests);
     this.clientForm.patchValue({Guests: this.varGuests});
+  }
+
+  changeValues($event){
+    this.clientForm.patchValue({CountryCode: $event.value, Phone: ''});
+    this.phCountry = this.countryLst.filter(x=>x.Country === $event.value)[0].PlaceHolder;
+    this.code = this.countryLst.filter(x=>x.Country === $event.value)[0].Code;
   }
 
 }

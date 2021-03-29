@@ -77,18 +77,19 @@ import { PhonePipe } from '@shared/phone.pipe';
 import { HourdataPipe } from '@shared/hourdata.pipe';
 import { ServcolorPipe } from '@shared/servcolor.pipe';
 import { DatePipe } from '@angular/common';
+import { PhoneMaskPipe } from '@shared/phone-mask.pipe';
 import { ProviderListComponent } from '@modules/providers/provider-list/provider-list.component';
 import { ServiceListComponent } from '@modules/services/service-list/service-list.component';
 import { LocationListComponent } from '@modules/locations/location-list/location-list.component';
 import { UserListAdminComponent } from '@modules/users-admin/user-list-admin/user-list-admin.component';
 import { RoleListAdminComponent } from '@modules/roles-admin/role-list-admin/role-list-admin.component';
-import { LearnDialogComponent } from './shared/learn-dialog/learn-dialog.component';
+import { LearnDialogComponent } from '@shared/learn-dialog/learn-dialog.component';
 import { CancelComponent } from './modules/cancel/cancel.component';
-import { StickerDialogComponent } from './shared/sticker-dialog/sticker-dialog.component';
-import { AppowiDialogComponent } from './shared/appowi-dialog/appowi-dialog.component';
-import { MessDialogComponent } from './shared/mess-dialog/mess-dialog.component';
+import { StickerDialogComponent } from '@shared/sticker-dialog/sticker-dialog.component';
+import { AppowiDialogComponent } from '@shared/appowi-dialog/appowi-dialog.component';
+import { MessDialogComponent } from '@shared/mess-dialog/mess-dialog.component';
 import { NewBusinessComponent } from './modules/new-business/new-business.component';
-import { TabDirectiveDirective } from './shared/tab-directive.directive';
+import { TabDirectiveDirective } from '@shared/tab-directive.directive';
 
 @NgModule({
   declarations: [
@@ -123,7 +124,8 @@ import { TabDirectiveDirective } from './shared/tab-directive.directive';
     AppowiDialogComponent,
     MessDialogComponent,
     NewBusinessComponent,
-    TabDirectiveDirective
+    TabDirectiveDirective,
+    PhoneMaskPipe
   ],
   imports: [
     BrowserModule,
@@ -179,6 +181,8 @@ import { TabDirectiveDirective } from './shared/tab-directive.directive';
   providers: [
     SpinnerService,
     DatePipe,
+    PhonePipe,
+    PhoneMaskPipe,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],

@@ -26,11 +26,11 @@
                     </div>
                 </form>
                 <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
-                    <div class="form-field pl-3 pr-3">
-                        <mat-label i18n="Email@@shared.Email" class="">
+                    <div class="form-field pl-3 pr-3 pt-3 pb-3">
+                        <mat-label i18n="Email@@shared.Email" class="label-phone">
                             Email :
                         </mat-label>
-                        {{f.Email.value}}
+                        <span class="pl-3">{{f.Email.value}}</span>
                     </div>
                     <div class="form-field pl-3 pr-3">
                         <mat-form-field>
@@ -48,12 +48,21 @@
                                 {{ 'Error: ' + getErrorMessage('Last_Name')}}</mat-error>
                         </mat-form-field>
                     </div>
-                    <div class="form-field pl-3 pr-3">
-                        <mat-form-field>
-                            <input matInput #Phone placeholder="+1 (XXX) XXX-XXXX" appPhoneMask maxlength="17"
-                                formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher" required>
-                            <mat-error *ngIf="f.Phone.invalid && f.Phone.touched">{{ 'Error: ' + getErrorMessage('Phone')}}
-                            </mat-error>
+                    <div class="form-field pr-3 pl-3">
+                        <mat-label i18n="Phone|Phone in business@business.phone" class="col-md-2 pl-0 pr-0 label-phone">Phone</mat-label>
+                        <mat-form-field class="col-md-3">
+                            <mat-select [ngClass]="f.CountryCode.value" class="country-left" formControlName="CountryCode" (selectionChange)="changeValues($event)">
+                                <mat-option [value]="country.Country" *ngFor="let country of countryLst">
+                                    <img with="15" height="15" [src]="country.Flag">
+                                    {{country.Code}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="col-md-4">
+                            <input matInput appPhoneMask [ccode]="f.CountryCode" [placeholder]="phCountry" minlength="7" maxlength="17" formControlName="Phone"
+                                [errorStateMatcher]="confirmValidParentMatcher" required>
+                            <mat-error *ngIf="f.Phone.invalid && f.Phone.touched">
+                                {{ 'Error: ' + getErrorMessage('Phone')}}</mat-error>
                         </mat-form-field>
                     </div>
                     <div class="form-field pl-3 pr-3">

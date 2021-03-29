@@ -4,8 +4,16 @@
 <form [formGroup]="clientForm">
     <div class="form-field pl-3 pr-3">
         <ng-container *ngIf="getCustomer$ | async"></ng-container>
-        <mat-form-field>
-            <input matInput #Phone placeholder="+1 (XXX) XXX-XXXX" appPhoneMask maxlength="17" formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher" (focusout)="loadCustomer()">
+        <mat-form-field class="col-md-4 col-5 p-0 pr-2">
+            <mat-select [ngClass]="f.CountryCode.value" class="country-left" formControlName="CountryCode" (selectionChange)="changeValues($event)">
+                <mat-option [value]="country.Country" *ngFor="let country of countryLst">
+                    <img with="15" height="15" [src]="country.Flag">
+                    {{country.Code}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col-md-8 col-7 p-0">
+            <input matInput #Phone [placeholder]="phCountry" minlength="7" maxlength="17" appPhoneMask [ccode]="f.CountryCode" formControlName="Phone" [errorStateMatcher]="confirmValidParentMatcher" (focusout)="loadCustomer()">
             <mat-spinner matSuffix *ngIf="search == 1" [diameter]="18" style="float: right; margin-left: 8px"></mat-spinner>
             <mat-error *ngIf="f.Phone.invalid && f.Phone.touched">{{ 'Error: ' + getErrorMessage('Phone')}}</mat-error>
         </mat-form-field>
@@ -76,7 +84,7 @@
             <button mat-icon-button (click)="addGuests()">
                 <mat-icon class="site-color">add</mat-icon>
             </button>
-            <mat-form-field class="col-md-8">
+            <mat-form-field class="col-md-8 col-7">
                 <input matInput #Guests i18n-placeholder="Number of Guests|text in new appo@appos.number" placeholder="Number of Guests" maxlength="2" min="1" [max]="maxGuests" formControlName="Guests"
                     [errorStateMatcher]="confirmValidParentMatcher" required>
                 <mat-error *ngIf="f.Guests.invalid && f.Guests.touched">{{ 'Error: ' + getErrorMessage('Guests')}}</mat-error>

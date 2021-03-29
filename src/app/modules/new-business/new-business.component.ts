@@ -68,6 +68,10 @@ export class NewBusinessComponent implements OnInit {
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   
+  readonly countryLst = environment.countryList;
+  phCountry: string = '(XXX) XXX-XXXX';
+  code: string = '+1';
+
   existLink = false;
   linkValidated: boolean = false;
   availability$: Observable<any>;
@@ -113,7 +117,8 @@ export class NewBusinessComponent implements OnInit {
     Sector: ['', Validators.required],
     ZipCode: ['', [Validators.maxLength(10), Validators.minLength(3)]],
     Geolocation: ['', [Validators.maxLength(100), Validators.minLength(5)]],
-    Phone: ['', [Validators.maxLength(15), Validators.minLength(3)]],
+    Phone: ['', [Validators.maxLength(17), Validators.minLength(7)]],
+    CountryCode: ['PRI'],
     Email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
     ShortDescription: ['', [Validators.required, Validators.maxLength(75), Validators.minLength(10)]],
     TuCitaLink: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(2)]],
@@ -266,6 +271,7 @@ export class NewBusinessComponent implements OnInit {
   getErrorMessage(component: string, index: number=0) {
     const min2 = '2';
     const min3 = '3';
+    const min7 = '7';
     const min4 = '4';
     const min5 = '5';
     const min10 = '10';
@@ -323,7 +329,7 @@ export class NewBusinessComponent implements OnInit {
     }
     if (component === 'Phone'){
       return this.fBusiness.Phone.hasError('maxlength') ? $localize`:@@shared.maximun: ${max15}` :
-        this.fBusiness.Phone.hasError('minlength') ? $localize`:@@shared.minimun: ${min3}` :
+        this.fBusiness.Phone.hasError('minlength') ? $localize`:@@shared.minimun: ${min7}` :
         '';
     }
     if (component === 'Email'){
@@ -362,8 +368,8 @@ export class NewBusinessComponent implements OnInit {
   }
 
   onSubmitBusiness(){
-    let phone = this.businessForm.value.Phone;
-    phone = '1'+phone.replace(/[^0-9]/g,'');
+    // let phone = this.businessForm.value.Phone;
+    // phone = '1'+phone.replace(/[^0-9]/g,'');
     let countryId = this.businessForm.value.Country;
     let locs = [];
     let dtLocs = {
@@ -379,7 +385,7 @@ export class NewBusinessComponent implements OnInit {
       "Email": this.businessForm.value.Email,
       "First_Name": this.businessForm.value.First_Name,
       "Last_Name": this.businessForm.value.Last_Name,
-      "User_Phone": phone,
+      "User_Phone": this.code.toString().replace(/\D/g, '') + this.businessForm.value.Phone.replace(/\D/g, ''),
       "Address": this.businessForm.value.Address,
       "City": this.businessForm.value.City,
       "Country": countryId.c,
@@ -387,7 +393,9 @@ export class NewBusinessComponent implements OnInit {
       "CategoryName": this.businessForm.value.Categories[0].Name,
       "Name": this.businessForm.value.Name,
       "Provider": this.businessForm.value.Provider_Name,
-      "Phone": phone,
+      // "Phone": phone,
+      "Phone": this.code.toString().replace(/\D/g, '') + this.businessForm.value.Phone.replace(/\D/g, ''),
+      "CountryCode": this.businessForm.value.CountryCode,
       "Geolocation": '{"LAT": '+ this.lat+',"LNG": '+this.lng+'}',
       "Facebook": "",
       "Instagram": "",
@@ -405,7 +413,7 @@ export class NewBusinessComponent implements OnInit {
       tap((res: any) => { 
         if (res.Code == 200) {
           this.categories = [];
-          this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', Email: '', Reasons: '', ShortDescription: '', TuCitaLink: '', Sector: '', MaxConcurrentCustomer: '', Service_Name: '', Provider_Name: '', First_Name: '', Last_Name: '', Language: 'es'});
+          this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', CountryCode: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', Email: '', Reasons: '', ShortDescription: '', TuCitaLink: '', Sector: '', MaxConcurrentCustomer: '', Service_Name: '', Provider_Name: '', First_Name: '', Last_Name: '', Language: 'es'});
           this.openDialog($localize`:@@business.businesstextpopup:`, $localize`:@@business.businessupdate:`, true, false, false);
         } else {
           this.openDialog($localize`:@@shared.error:`, 'Something goes wrong', false, true, false);
@@ -482,5 +490,11 @@ export class NewBusinessComponent implements OnInit {
       text = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
       this.businessForm.get('TuCitaLink').setValue(text);
     }
+  }
+
+  changeValues($event){
+    this.businessForm.patchValue({CountryCode: $event.value, Phone: ''});
+    this.phCountry = this.countryLst.filter(x=>x.Country === $event.value)[0].PlaceHolder;
+    this.code = this.countryLst.filter(x=>x.Country === $event.value)[0].Code;
   }
 }
