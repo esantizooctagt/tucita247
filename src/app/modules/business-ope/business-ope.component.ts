@@ -1124,6 +1124,7 @@ export class BusinessOpeComponent implements OnInit {
     this.locationId = loc[0].LocationId;
 
     var opeHour = JSON.parse(serv[0].OperationHours);
+    this.providerParentHours = (serv[0].ParentHours == 1 ? true : false);
     this.businessForm.setValue({
       BusinessId: this.businessId,
       OperationHours: serv[0].OperationHours,
