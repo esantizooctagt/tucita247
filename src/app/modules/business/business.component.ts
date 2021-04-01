@@ -137,7 +137,7 @@ export class BusinessComponent implements OnInit {
           startWith(null),
           map((category: string | null) => category ? this._filterCategory(category)  : this.allCategories.slice()),
           map(cats => {
-            return cats.sort((a, b) => (a.CategoryId < b.CategoryId ? -1 : 1))
+            return cats;
           })
         );
         return this.allCategories;
