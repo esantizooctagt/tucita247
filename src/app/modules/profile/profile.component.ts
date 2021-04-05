@@ -228,8 +228,8 @@ export class ProfileComponent implements OnInit {
     this.imgAvatar$ = this.usersService.uploadImage(this.userId, this.businessId, formData).pipe(
       tap(response =>  {
           this.spinnerService.stop(spinnerRef);
-          this.profileForm.patchValue({'Avatar': this.businessId+'/img/avatars/'+this.userId+type});
-          this.authService.setUserAvatar(this.businessId+'/img/avatars/'+this.userId+type);
+          this.profileForm.patchValue({'Avatar': "/"+this.businessId+'/img/avatars/'+this.userId+type});
+          this.authService.setUserAvatar("/"+this.businessId+'/img/avatars/'+this.userId+type);
           this.avatarForm.reset({'Avatar':null});
           this.fileString = null;
           this.openDialog($localize`:@@shared.userpopup:`, $localize`:@@profile.uploadsuccess:`, true, false, false);
