@@ -398,7 +398,7 @@ export class AppowiDialogComponent implements OnInit {
         }),
         catchError(err => {
           this.onError = err.Message;
-          this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@host.error:`);
+          this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@shared.error:`);
           return this.onError;
         })
       );
@@ -422,7 +422,7 @@ export class AppowiDialogComponent implements OnInit {
       catchError(err => {
         this.onError = err.Message;
         console.log("error " + this.onError);
-        this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@host.error:`);
+        this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@shared.error:`);
         return this.onError;
       })
     );

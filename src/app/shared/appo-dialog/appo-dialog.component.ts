@@ -294,20 +294,20 @@ export class AppoDialogComponent implements OnInit {
     this.newTime = '';
     
     if (+minInit == 0){
-      intTime = +this.timeHr[this.timeHr.indexOf(+res[0].TimeService)];
-      calcTime = +this.timeHr[this.timeHr.indexOf(+res[0].TimeService)-1];
+      intTime = +this.timeHr[this.timeHr.indexOf(+res[0].TimeService.replace(':',''))];
+      calcTime = +this.timeHr[this.timeHr.indexOf(+res[0].TimeService.replace(':',''))-1];
     } 
     if (+minInit == 15){
-      intTime = +this.timeHr15[this.timeHr.indexOf(+res[0].TimeService)];
-      calcTime = +this.timeHr15[this.timeHr.indexOf(+res[0].TimeService)-1];
+      intTime = +this.timeHr15[this.timeHr.indexOf(+res[0].TimeService.replace(':',''))];
+      calcTime = +this.timeHr15[this.timeHr.indexOf(+res[0].TimeService.replace(':',''))-1];
     }
     if (+minInit == 30){
-      intTime = +this.timeHr30[this.timeHr.indexOf(+res[0].TimeService)];
-      calcTime = +this.timeHr30[this.timeHr.indexOf(+res[0].TimeService)-1];
+      intTime = +this.timeHr30[this.timeHr.indexOf(+res[0].TimeService.replace(':',''))];
+      calcTime = +this.timeHr30[this.timeHr.indexOf(+res[0].TimeService.replace(':',''))-1];
     }
     if (+minInit == 45){
-      intTime = +this.timeHr45[this.timeHr.indexOf(+res[0].TimeService)];
-      calcTime = +this.timeHr45[this.timeHr.indexOf(+res[0].TimeService)-1];
+      intTime = +this.timeHr45[this.timeHr.indexOf(+res[0].TimeService.replace(':',''))];
+      calcTime = +this.timeHr45[this.timeHr.indexOf(+res[0].TimeService.replace(':',''))-1];
     }
     intTime = timeInit+intTime;
     calcTime = timeInit+calcTime;
