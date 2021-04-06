@@ -213,6 +213,14 @@ export class AppoDialogComponent implements OnInit {
     let phoneNumber = this.clientForm.value.Phone.toString().replace(/[^0-9]/g,'');
     let cCode = this.clientForm.value.CountryCode;
     let phone = (phoneNumber == '' ?  '00000000000' : this.code.toString().replace(/[^0-9]/g,'') + phoneNumber);
+    this.clientForm.patchValue(
+      { Name: '', 
+        Email: '',
+        Preference: '1', 
+        Disability: '', 
+        Gender: '',
+        DOB: '' }
+    );
     if (phone != '00000000000'){
       this.search = 1;
       this.getCustomer$ = this.appointmentService.getMobile(phone, cCode).pipe(
