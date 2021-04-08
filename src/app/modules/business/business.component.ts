@@ -753,15 +753,13 @@ export class BusinessComponent implements OnInit {
     this.businessForm.markAllAsTouched();
   }
 
-  markerDragEndLoc($event: MouseEvent, i: number){
-    let res = $event['coords'];
-
-    this.latLoc[i] = res.lat;
-    this.lngLoc[i] = res.lng;
+  addMarker(lat, lng) {
+    this.lat = lat;
+    this.lng = lng;
     this.businessForm.patchValue({'Geolocation': '{"LAT": '+ this.lat+',"LNG": '+this.lng+'}'});
     this.businessForm.markAllAsTouched();
   }
-
+  
   ngOnDestroy() {
     if (this.subsBusiness){
       this.subsBusiness.unsubscribe();

@@ -74,7 +74,7 @@
                                     <div i18n="Map info|text in location@@location.map">
                                         Zoom
                                     </div>
-                                    <agm-map [latitude]="lat" [zoom]="zoom" [longitude]="lng">
+                                    <agm-map [latitude]="lat" [zoom]="zoom" [longitude]="lng" (mapClick)="addMarker($event.coords.lat, $event.coords.lng)">
                                         <agm-marker [latitude]="lat" [longitude]="lng" [markerDraggable]="true"
                                             (dragEnd)="markerDragEnd($event)"></agm-marker>
                                     </agm-map>

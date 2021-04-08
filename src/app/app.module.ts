@@ -90,6 +90,7 @@ import { AppowiDialogComponent } from '@shared/appowi-dialog/appowi-dialog.compo
 import { MessDialogComponent } from '@shared/mess-dialog/mess-dialog.component';
 import { NewBusinessComponent } from './modules/new-business/new-business.component';
 import { TabDirectiveDirective } from '@shared/tab-directive.directive';
+import { WeblinkComponent } from './modules/weblink/weblink.component';
 
 @NgModule({
   declarations: [
@@ -125,7 +126,8 @@ import { TabDirectiveDirective } from '@shared/tab-directive.directive';
     MessDialogComponent,
     NewBusinessComponent,
     TabDirectiveDirective,
-    PhoneMaskPipe
+    PhoneMaskPipe,
+    WeblinkComponent
   ],
   imports: [
     BrowserModule,

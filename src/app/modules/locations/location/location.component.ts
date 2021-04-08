@@ -443,7 +443,7 @@ export class LocationComponent implements OnInit {
     )
   }
 
-  markerDragEnd($event: MouseEvent) {
+  markerDragEndLoc($event: MouseEvent) {
     let res = $event['coords'];
 
     this.lat = res.lat;
@@ -452,11 +452,9 @@ export class LocationComponent implements OnInit {
     this.locationForm.markAllAsTouched();
   }
 
-  markerDragEndLoc($event: MouseEvent) {
-    let res = $event['coords'];
-
-    this.lat = res.lat;
-    this.lng = res.lng;
+  addMarker(lat, lng) {
+    this.lat = lat;
+    this.lng = lng;
     this.locationForm.patchValue({'Geolocation': '{"LAT": '+ this.lat+',"LNG": '+this.lng+'}'});
     this.locationForm.markAllAsTouched();
   }
