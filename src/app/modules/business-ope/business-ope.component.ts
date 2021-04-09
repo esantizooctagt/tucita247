@@ -22,16 +22,16 @@ export class BusinessOpeComponent implements OnInit {
   //Generic Option for ng5-slider
   genOption = {
     floor: 0,
-    ceil: 24,
+    ceil: 48,
     disabled: false,
     translate: (value: number, label: LabelType): string => {
       switch (label) {
         case LabelType.Low:
-          return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+          return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
         case LabelType.High:
-          return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+          return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
         default: 
-          return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+          return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
       }
     }
   };
@@ -78,26 +78,26 @@ export class BusinessOpeComponent implements OnInit {
   businessForm = this.fb.group({
     BusinessId: [''],
     OperationHours: ['', [Validators.required]],
-    Mon: new FormControl([8, 17]),
-    Mon02: new FormControl([8, 17]),
+    Mon: new FormControl([8*2, 17*2]),
+    Mon02: new FormControl([8*2, 17*2]),
     MonEnabled: [0],
-    Tue: new FormControl([8, 17]),
-    Tue02: new FormControl([8, 17]),
+    Tue: new FormControl([8*2, 17*2]),
+    Tue02: new FormControl([8*2, 17*2]),
     TueEnabled: [0],
-    Wed: new FormControl([8, 17]),
-    Wed02: new FormControl([8, 17]),
+    Wed: new FormControl([8*2, 17*2]),
+    Wed02: new FormControl([8*2, 17*2]),
     WedEnabled: [0],
-    Thu: new FormControl([8, 17]),
-    Thu02: new FormControl([8, 17]),
+    Thu: new FormControl([8*2, 17*2]),
+    Thu02: new FormControl([8*2, 17*2]),
     ThuEnabled: [0],
-    Fri: new FormControl([8, 17]),
-    Fri02: new FormControl([8, 17]),
+    Fri: new FormControl([8*2, 17*2]),
+    Fri02: new FormControl([8*2, 17*2]),
     FriEnabled: [0],
-    Sat: new FormControl([8, 12]),
-    Sat02: new FormControl([8, 17]),
+    Sat: new FormControl([8*2, 12*2]),
+    Sat02: new FormControl([8*2, 17*2]),
     SatEnabled: [0],
-    Sun: new FormControl([8, 12]),
-    Sun02: new FormControl([8, 17]),
+    Sun: new FormControl([8*2, 12*2]),
+    Sun02: new FormControl([8*2, 17*2]),
     SunEnabled: [0]
   });
 
@@ -168,26 +168,26 @@ export class BusinessOpeComponent implements OnInit {
             this.businessForm.setValue({
               BusinessId: res.Data[0].BusinessId,
               OperationHours: res.Data[0].OperationHours,
-              Mon: ("MON" in opeHour ? [+opeHour.MON[0].I, +opeHour.MON[0].F] : [8, 12]),
-              Mon02: ("MON" in opeHour ? (opeHour.MON.length > 1 ? [+opeHour.MON[1].I, +opeHour.MON[1].F] : [0,0]) : [0, 0]),
+              Mon: ("MON" in opeHour ? [+opeHour.MON[0].I*2, +opeHour.MON[0].F*2] : [8, 12]),
+              Mon02: ("MON" in opeHour ? (opeHour.MON.length > 1 ? [+opeHour.MON[1].I*2, +opeHour.MON[1].F*2] : [0,0]) : [0, 0]),
               MonEnabled: ("MON" in opeHour ? 1 : 0),
-              Tue: ("TUE" in opeHour ? [+opeHour.TUE[0].I, +opeHour.TUE[0].F] : [8, 12]),
-              Tue02: ("TUE" in opeHour ? (opeHour.TUE.length > 1 ? [+opeHour.TUE[1].I, +opeHour.TUE[1].F] : [0,0]) : [0, 0]),
+              Tue: ("TUE" in opeHour ? [+opeHour.TUE[0].I*2, +opeHour.TUE[0].F*2] : [8, 12]),
+              Tue02: ("TUE" in opeHour ? (opeHour.TUE.length > 1 ? [+opeHour.TUE[1].I*2, +opeHour.TUE[1].F*2] : [0,0]) : [0, 0]),
               TueEnabled: ("TUE" in opeHour ? 1 : 0),
-              Wed: ("WED" in opeHour ? [+opeHour.WED[0].I, +opeHour.WED[0].F] : [8, 12]),
-              Wed02: ("WED" in opeHour ? (opeHour.WED.length > 1 ? [+opeHour.WED[1].I, +opeHour.WED[1].F] : [0,0]) : [0, 0]),
+              Wed: ("WED" in opeHour ? [+opeHour.WED[0].I*2, +opeHour.WED[0].F*2] : [8, 12]),
+              Wed02: ("WED" in opeHour ? (opeHour.WED.length > 1 ? [+opeHour.WED[1].I*2, +opeHour.WED[1].F*2] : [0,0]) : [0, 0]),
               WedEnabled: ("WED" in opeHour ? 1 : 0),
-              Thu: ("THU" in opeHour ? [+opeHour.THU[0].I, +opeHour.THU[0].F] : [8, 12]),
-              Thu02: ("THU" in opeHour ? (opeHour.THU.length > 1 ? [+opeHour.THU[1].I, +opeHour.THU[1].F] : [0,0]) : [0, 0]),
+              Thu: ("THU" in opeHour ? [+opeHour.THU[0].I*2, +opeHour.THU[0].F*2] : [8, 12]),
+              Thu02: ("THU" in opeHour ? (opeHour.THU.length > 1 ? [+opeHour.THU[1].I*2, +opeHour.THU[1].F*2] : [0,0]) : [0, 0]),
               ThuEnabled: ("THU" in opeHour ? 1 : 0),
-              Fri: ("FRI" in opeHour ? [+opeHour.FRI[0].I, +opeHour.FRI[0].F] : [8, 12]),
-              Fri02: ("FRI" in opeHour ? (opeHour.FRI.length > 1 ? [+opeHour.FRI[1].I, +opeHour.FRI[1].F] : [0,0]) : [0, 0]),
+              Fri: ("FRI" in opeHour ? [+opeHour.FRI[0].I*2, +opeHour.FRI[0].F*2] : [8, 12]),
+              Fri02: ("FRI" in opeHour ? (opeHour.FRI.length > 1 ? [+opeHour.FRI[1].I*2, +opeHour.FRI[1].F*2] : [0,0]) : [0, 0]),
               FriEnabled: ("FRI" in opeHour ? 1 : 0),
-              Sat: ("SAT" in opeHour ? [+opeHour.SAT[0].I, +opeHour.SAT[0].F] : [8, 12]),
-              Sat02: ("SAT" in opeHour ? (opeHour.SAT.length > 1 ? [+opeHour.SAT[1].I, +opeHour.SAT[1].F] : [0,0]) : [0, 0]),
+              Sat: ("SAT" in opeHour ? [+opeHour.SAT[0].I*2, +opeHour.SAT[0].F*2] : [8, 12]),
+              Sat02: ("SAT" in opeHour ? (opeHour.SAT.length > 1 ? [+opeHour.SAT[1].I*2, +opeHour.SAT[1].F*2] : [0,0]) : [0, 0]),
               SatEnabled: ("SAT" in opeHour ? 1 : 0),
-              Sun: ("SUN" in opeHour ? [+opeHour.SUN[0].I, +opeHour.SUN[0].F] : [8, 12]),
-              Sun02: ("SUN" in opeHour ? (opeHour.SUN.length > 1 ? [+opeHour.SUN[1].I, +opeHour.TUE[1].F] : [0,0]) : [0, 0]),
+              Sun: ("SUN" in opeHour ? [+opeHour.SUN[0].I*2, +opeHour.SUN[0].F*2] : [8, 12]),
+              Sun02: ("SUN" in opeHour ? (opeHour.SUN.length > 1 ? [+opeHour.SUN[1].I*2, +opeHour.TUE[1].F*2] : [0,0]) : [0, 0]),
               SunEnabled: ("SUN" in opeHour ? 1 : 0),
             });
           }
@@ -199,26 +199,26 @@ export class BusinessOpeComponent implements OnInit {
             this.businessForm.setValue({
               BusinessId: this.businessId,
               OperationHours: res.Data[0].OperationHours,
-              Mon: ("MON" in opeHour ? [+opeHour.MON[0].I, +opeHour.MON[0].F] : [8, 12]),
-              Mon02: ("MON" in opeHour ? (opeHour.MON.length > 1 ? [+opeHour.MON[1].I, +opeHour.MON[1].F] : [0,0]) : [0, 0]),
+              Mon: ("MON" in opeHour ? [+opeHour.MON[0].I*2, +opeHour.MON[0].F*2] : [8, 12]),
+              Mon02: ("MON" in opeHour ? (opeHour.MON.length > 1 ? [+opeHour.MON[1].I*2, +opeHour.MON[1].F*2] : [0,0]) : [0, 0]),
               MonEnabled: ("MON" in opeHour ? 1 : 0),
-              Tue: ("TUE" in opeHour ? [+opeHour.TUE[0].I, +opeHour.TUE[0].F] : [8, 12]),
-              Tue02: ("TUE" in opeHour ? (opeHour.TUE.length > 1 ? [+opeHour.TUE[1].I, +opeHour.TUE[1].F] : [0,0]) : [0, 0]),
+              Tue: ("TUE" in opeHour ? [+opeHour.TUE[0].I*2, +opeHour.TUE[0].F*2] : [8, 12]),
+              Tue02: ("TUE" in opeHour ? (opeHour.TUE.length > 1 ? [+opeHour.TUE[1].I*2, +opeHour.TUE[1].F*2] : [0,0]) : [0, 0]),
               TueEnabled: ("TUE" in opeHour ? 1 : 0),
-              Wed: ("WED" in opeHour ? [+opeHour.WED[0].I, +opeHour.WED[0].F] : [8, 12]),
-              Wed02: ("WED" in opeHour ? (opeHour.WED.length > 1 ? [+opeHour.WED[1].I, +opeHour.WED[1].F] : [0,0]) : [0, 0]),
+              Wed: ("WED" in opeHour ? [+opeHour.WED[0].I*2, +opeHour.WED[0].F*2] : [8, 12]),
+              Wed02: ("WED" in opeHour ? (opeHour.WED.length > 1 ? [+opeHour.WED[1].I*2, +opeHour.WED[1].F*2] : [0,0]) : [0, 0]),
               WedEnabled: ("WED" in opeHour ? 1 : 0),
-              Thu: ("THU" in opeHour ? [+opeHour.THU[0].I, +opeHour.THU[0].F] : [8, 12]),
-              Thu02: ("THU" in opeHour ? (opeHour.THU.length > 1 ? [+opeHour.THU[1].I, +opeHour.THU[1].F] : [0,0]) : [0, 0]),
+              Thu: ("THU" in opeHour ? [+opeHour.THU[0].I*2, +opeHour.THU[0].F*2] : [8, 12]),
+              Thu02: ("THU" in opeHour ? (opeHour.THU.length > 1 ? [+opeHour.THU[1].I*2, +opeHour.THU[1].F*2] : [0,0]) : [0, 0]),
               ThuEnabled: ("THU" in opeHour ? 1 : 0),
-              Fri: ("FRI" in opeHour ? [+opeHour.FRI[0].I, +opeHour.FRI[0].F] : [8, 12]),
-              Fri02: ("FRI" in opeHour ? (opeHour.FRI.length > 1 ? [+opeHour.FRI[1].I, +opeHour.FRI[1].F] : [0,0]) : [0, 0]),
+              Fri: ("FRI" in opeHour ? [+opeHour.FRI[0].I*2, +opeHour.FRI[0].F*2] : [8, 12]),
+              Fri02: ("FRI" in opeHour ? (opeHour.FRI.length > 1 ? [+opeHour.FRI[1].I*2, +opeHour.FRI[1].F*2] : [0,0]) : [0, 0]),
               FriEnabled: ("FRI" in opeHour ? 1 : 0),
-              Sat: ("SAT" in opeHour ? [+opeHour.SAT[0].I, +opeHour.SAT[0].F] : [8, 12]),
-              Sat02: ("SAT" in opeHour ? (opeHour.SAT.length > 1 ? [+opeHour.SAT[1].I, +opeHour.SAT[1].F] : [0,0]) : [0, 0]),
+              Sat: ("SAT" in opeHour ? [+opeHour.SAT[0].I*2, +opeHour.SAT[0].F*2] : [8, 12]),
+              Sat02: ("SAT" in opeHour ? (opeHour.SAT.length > 1 ? [+opeHour.SAT[1].I*2, +opeHour.SAT[1].F*2] : [0,0]) : [0, 0]),
               SatEnabled: ("SAT" in opeHour ? 1 : 0),
-              Sun: ("SUN" in opeHour ? [+opeHour.SUN[0].I, +opeHour.SUN[0].F] : [8, 12]),
-              Sun02: ("SUN" in opeHour ? (opeHour.SUN.length > 1 ? [+opeHour.SUN[1].I, +opeHour.TUE[1].F] : [0,0]) : [0, 0]),
+              Sun: ("SUN" in opeHour ? [+opeHour.SUN[0].I*2, +opeHour.SUN[0].F*2] : [8, 12]),
+              Sun02: ("SUN" in opeHour ? (opeHour.SUN.length > 1 ? [+opeHour.SUN[1].I*2, +opeHour.TUE[1].F*2] : [0,0]) : [0, 0]),
               SunEnabled: ("SUN" in opeHour ? 1 : 0),
             });
           }
@@ -233,26 +233,26 @@ export class BusinessOpeComponent implements OnInit {
             this.businessForm.setValue({
               BusinessId: this.businessId,
               OperationHours: res.Data[0].Services[0].OperationHours,
-              Mon: ("MON" in opeHour ? [+opeHour.MON[0].I, +opeHour.MON[0].F] : [8, 12]),
-              Mon02: ("MON" in opeHour ? (opeHour.MON.length > 1 ? [+opeHour.MON[1].I, +opeHour.MON[1].F] : [0,0]) : [0, 0]),
+              Mon: ("MON" in opeHour ? [+opeHour.MON[0].I*2, +opeHour.MON[0].F*2] : [8, 12]),
+              Mon02: ("MON" in opeHour ? (opeHour.MON.length > 1 ? [+opeHour.MON[1].I*2, +opeHour.MON[1].F*2] : [0,0]) : [0, 0]),
               MonEnabled: ("MON" in opeHour ? 1 : 0),
-              Tue: ("TUE" in opeHour ? [+opeHour.TUE[0].I, +opeHour.TUE[0].F] : [8, 12]),
-              Tue02: ("TUE" in opeHour ? (opeHour.TUE.length > 1 ? [+opeHour.TUE[1].I, +opeHour.TUE[1].F] : [0,0]) : [0, 0]),
+              Tue: ("TUE" in opeHour ? [+opeHour.TUE[0].I*2, +opeHour.TUE[0].F*2] : [8, 12]),
+              Tue02: ("TUE" in opeHour ? (opeHour.TUE.length > 1 ? [+opeHour.TUE[1].I*2, +opeHour.TUE[1].F*2] : [0,0]) : [0, 0]),
               TueEnabled: ("TUE" in opeHour ? 1 : 0),
-              Wed: ("WED" in opeHour ? [+opeHour.WED[0].I, +opeHour.WED[0].F] : [8, 12]),
-              Wed02: ("WED" in opeHour ? (opeHour.WED.length > 1 ? [+opeHour.WED[1].I, +opeHour.WED[1].F] : [0,0]) : [0, 0]),
+              Wed: ("WED" in opeHour ? [+opeHour.WED[0].I*2, +opeHour.WED[0].F*2] : [8, 12]),
+              Wed02: ("WED" in opeHour ? (opeHour.WED.length > 1 ? [+opeHour.WED[1].I*2, +opeHour.WED[1].F*2] : [0,0]) : [0, 0]),
               WedEnabled: ("WED" in opeHour ? 1 : 0),
-              Thu: ("THU" in opeHour ? [+opeHour.THU[0].I, +opeHour.THU[0].F] : [8, 12]),
-              Thu02: ("THU" in opeHour ? (opeHour.THU.length > 1 ? [+opeHour.THU[1].I, +opeHour.THU[1].F] : [0,0]) : [0, 0]),
+              Thu: ("THU" in opeHour ? [+opeHour.THU[0].I*2, +opeHour.THU[0].F*2] : [8, 12]),
+              Thu02: ("THU" in opeHour ? (opeHour.THU.length > 1 ? [+opeHour.THU[1].I*2, +opeHour.THU[1].F*2] : [0,0]) : [0, 0]),
               ThuEnabled: ("THU" in opeHour ? 1 : 0),
-              Fri: ("FRI" in opeHour ? [+opeHour.FRI[0].I, +opeHour.FRI[0].F] : [8, 12]),
-              Fri02: ("FRI" in opeHour ? (opeHour.FRI.length > 1 ? [+opeHour.FRI[1].I, +opeHour.FRI[1].F] : [0,0]) : [0, 0]),
+              Fri: ("FRI" in opeHour ? [+opeHour.FRI[0].I*2, +opeHour.FRI[0].F*2] : [8, 12]),
+              Fri02: ("FRI" in opeHour ? (opeHour.FRI.length > 1 ? [+opeHour.FRI[1].I*2, +opeHour.FRI[1].F*2] : [0,0]) : [0, 0]),
               FriEnabled: ("FRI" in opeHour ? 1 : 0),
-              Sat: ("SAT" in opeHour ? [+opeHour.SAT[0].I, +opeHour.SAT[0].F] : [8, 12]),
-              Sat02: ("SAT" in opeHour ? (opeHour.SAT.length > 1 ? [+opeHour.SAT[1].I, +opeHour.SAT[1].F] : [0,0]) : [0, 0]),
+              Sat: ("SAT" in opeHour ? [+opeHour.SAT[0].I*2, +opeHour.SAT[0].F*2] : [8, 12]),
+              Sat02: ("SAT" in opeHour ? (opeHour.SAT.length > 1 ? [+opeHour.SAT[1].I*2, +opeHour.SAT[1].F*2] : [0,0]) : [0, 0]),
               SatEnabled: ("SAT" in opeHour ? 1 : 0),
-              Sun: ("SUN" in opeHour ? [+opeHour.SUN[0].I, +opeHour.SUN[0].F] : [8, 12]),
-              Sun02: ("SUN" in opeHour ? (opeHour.SUN.length > 1 ? [+opeHour.SUN[1].I, +opeHour.TUE[1].F] : [0,0]) : [0, 0]),
+              Sun: ("SUN" in opeHour ? [+opeHour.SUN[0].I*2, +opeHour.SUN[0].F*2] : [8, 12]),
+              Sun02: ("SUN" in opeHour ? (opeHour.SUN.length > 1 ? [+opeHour.SUN[1].I*2, +opeHour.TUE[1].F*2] : [0,0]) : [0, 0]),
               SunEnabled: ("SUN" in opeHour ? 1 : 0),
             });
           }
@@ -265,26 +265,26 @@ export class BusinessOpeComponent implements OnInit {
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   case LabelType.High:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   default: 
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
                 }
               }
             };
             let locGenOption = {
               floor: this.businessForm.value.Mon02[0],
-              ceil: 24,
+              ceil: 48,
               disabled: false,
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   case LabelType.High:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   default: 
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
                 }
               }
             };
@@ -302,26 +302,26 @@ export class BusinessOpeComponent implements OnInit {
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   case LabelType.High:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   default: 
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
                 }
               }
             };
             let locGenOption = {
               floor: this.businessForm.value.Tue02[0],
-              ceil: 24,
+              ceil: 48,
               disabled: false,
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   case LabelType.High:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   default: 
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
                 }
               }
             };
@@ -339,26 +339,26 @@ export class BusinessOpeComponent implements OnInit {
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   case LabelType.High:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   default: 
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
                 }
               }
             };
             let locGenOption = {
               floor: this.businessForm.value.Wed02[0],
-              ceil: 24,
+              ceil: 48,
               disabled: false,
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   case LabelType.High:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   default: 
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
                 }
               }
             };
@@ -376,26 +376,26 @@ export class BusinessOpeComponent implements OnInit {
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   case LabelType.High:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   default: 
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
                 }
               }
             };
             let locGenOption = {
               floor: this.businessForm.value.Thu02[0],
-              ceil: 24,
+              ceil: 48,
               disabled: false,
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   case LabelType.High:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   default: 
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
                 }
               }
             };
@@ -413,26 +413,26 @@ export class BusinessOpeComponent implements OnInit {
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   case LabelType.High:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   default: 
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
                 }
               }
             };
             let locGenOption = {
               floor: this.businessForm.value.Fri02[0],
-              ceil: 24,
+              ceil: 48,
               disabled: false,
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   case LabelType.High:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   default: 
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
                 }
               }
             };
@@ -450,26 +450,26 @@ export class BusinessOpeComponent implements OnInit {
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   case LabelType.High:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   default: 
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
                 }
               }
             };
             let locGenOption = {
               floor: this.businessForm.value.Sat02[0],
-              ceil: 24,
+              ceil: 48,
               disabled: false,
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   case LabelType.High:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   default: 
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
                 }
               }
             };
@@ -487,26 +487,26 @@ export class BusinessOpeComponent implements OnInit {
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   case LabelType.High:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   default: 
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
                 }
               }
             };
             let locGenOption = {
               floor: this.businessForm.value.Sun02[0],
-              ceil: 24,
+              ceil: 48,
               disabled: false,
               translate: (value: number, label: LabelType): string => {
                 switch (label) {
                   case LabelType.Low:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   case LabelType.High:
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
                   default: 
-                    return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+                    return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
                 }
               }
             };
@@ -571,7 +571,7 @@ export class BusinessOpeComponent implements OnInit {
       case 5: maxValue = this.businessForm.value.Sat[1]; break;
       case 6: maxValue = this.businessForm.value.Sun[1]; break;
     }
-    if (maxValue < 23){
+    if (maxValue < 47){
       this.newInterval[dayNum] = "1";
       let iniGenOption = {
         floor: 0,
@@ -580,26 +580,26 @@ export class BusinessOpeComponent implements OnInit {
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
       let locGenOption = {
         floor: maxValue+1,
-        ceil: 24,
+        ceil: 48,
         disabled: false,
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
@@ -617,11 +617,11 @@ export class BusinessOpeComponent implements OnInit {
       translate: (value: number, label: LabelType): string => {
         switch (label) {
           case LabelType.Low:
-            return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+            return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
           case LabelType.High:
-            return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+            return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
           default: 
-            return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+            return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
         }
       }
     };
@@ -689,51 +689,51 @@ export class BusinessOpeComponent implements OnInit {
 
     let opeHours = {}
     if (this.businessForm.value.MonEnabled === 1) {
-      mon.push({"I": this.businessForm.value.Mon[0].toString(), "F": this.businessForm.value.Mon[1].toString()});
+      mon.push({"I": (this.businessForm.value.Mon[0]/2).toString(), "F": (this.businessForm.value.Mon[1]/2).toString()});
       if (this.newInterval[0] == "1"){
-        mon.push({"I": this.businessForm.value.Mon02[0].toString(), "F": this.businessForm.value.Mon02[1].toString()});
+        mon.push({"I": (this.businessForm.value.Mon02[0]/2).toString(), "F": (this.businessForm.value.Mon02[1]/2).toString()});
       }
       opeHours["MON"] = mon
     }
     if (this.businessForm.value.TueEnabled === 1) {
-      tue.push({"I": this.businessForm.value.Tue[0].toString(), "F": this.businessForm.value.Tue[1].toString()});
+      tue.push({"I": (this.businessForm.value.Tue[0]/2).toString(), "F": (this.businessForm.value.Tue[1]/2).toString()});
       if (this.newInterval[1] == "1"){
-        tue.push({"I": this.businessForm.value.Tue02[0].toString(), "F": this.businessForm.value.Tue02[1].toString()});
+        tue.push({"I": (this.businessForm.value.Tue02[0]/2).toString(), "F": (this.businessForm.value.Tue02[1]/2).toString()});
       }
       opeHours["TUE"] = tue
     }
     if (this.businessForm.value.WedEnabled === 1) {
-      wed.push({"I": this.businessForm.value.Wed[0].toString(), "F": this.businessForm.value.Wed[1].toString()});
+      wed.push({"I": (this.businessForm.value.Wed[0]/2).toString(), "F": (this.businessForm.value.Wed[1]/2).toString()});
       if (this.newInterval[2] == "1"){
-        wed.push({"I": this.businessForm.value.Wed02[0].toString(), "F": this.businessForm.value.Wed02[1].toString()});
+        wed.push({"I": (this.businessForm.value.Wed02[0]/2).toString(), "F": (this.businessForm.value.Wed02[1]/2).toString()});
       }
       opeHours["WED"] = wed
     }
     if (this.businessForm.value.ThuEnabled === 1) {
-      thu.push({"I": this.businessForm.value.Thu[0].toString(), "F": this.businessForm.value.Thu[1].toString()});
+      thu.push({"I": (this.businessForm.value.Thu[0]/2).toString(), "F": (this.businessForm.value.Thu[1]/2).toString()});
       if (this.newInterval[3] == "1"){
-        thu.push({"I": this.businessForm.value.Thu02[0].toString(), "F": this.businessForm.value.Thu02[1].toString()});
+        thu.push({"I": (this.businessForm.value.Thu02[0]/2).toString(), "F": (this.businessForm.value.Thu02[1]/2).toString()});
       }
       opeHours["THU"] = thu
     }
     if (this.businessForm.value.FriEnabled === 1) {
-      fri.push({"I": this.businessForm.value.Fri[0].toString(), "F": this.businessForm.value.Fri[1].toString()});
+      fri.push({"I": (this.businessForm.value.Fri[0]/2).toString(), "F": (this.businessForm.value.Fri[1]/2).toString()});
       if (this.newInterval[4] == "1"){
-        fri.push({"I": this.businessForm.value.Fri02[0].toString(), "F": this.businessForm.value.Fri02[1].toString()});
+        fri.push({"I": (this.businessForm.value.Fri02[0]/2).toString(), "F": (this.businessForm.value.Fri02[1]/2).toString()});
       }
       opeHours["FRI"] = fri
     }
     if (this.businessForm.value.SatEnabled === 1) {
-      sat.push({"I": this.businessForm.value.Sat[0].toString(), "F": this.businessForm.value.Sat[1].toString()});
+      sat.push({"I": (this.businessForm.value.Sat[0]/2).toString(), "F": (this.businessForm.value.Sat[1]/2).toString()});
       if (this.newInterval[5] == "1"){
-        sat.push({"I": this.businessForm.value.Sat02[0].toString(), "F": this.businessForm.value.Sat02[1].toString()});
+        sat.push({"I": (this.businessForm.value.Sat02[0]/2).toString(), "F": (this.businessForm.value.Sat02[1]/2).toString()});
       }
       opeHours["SAT"] = sat
     }
     if (this.businessForm.value.SunEnabled === 1) {
-      sun.push({"I": this.businessForm.value.Sun[0].toString(), "F": this.businessForm.value.Sun[1].toString()});
+      sun.push({"I": (this.businessForm.value.Sun[0]/2).toString(), "F": (this.businessForm.value.Sun[1]/2).toString()});
       if (this.newInterval[6] == "1"){
-        sun.push({"I": this.businessForm.value.Sun02[0].toString(), "F": this.businessForm.value.Sun02[1].toString()});
+        sun.push({"I": (this.businessForm.value.Sun02[0]/2).toString(), "F": (this.businessForm.value.Sun02[1]/2).toString()});
       }
       opeHours["SUN"] = sun
     }
@@ -770,7 +770,7 @@ export class BusinessOpeComponent implements OnInit {
     if (event.value == "") {return;}
     var spinnerRef = this.spinnerService.start($localize`:@@business-ope.loadopeninghours:`);
     this.locationId = event.value;
-    this.businessForm.reset({BusinessId: '', OperationHours: '', Mon:[8,17], Mon02:[18,24], MonEnabled: 0, Tue:[8,17], Tue02:[18,24], TueEnabled: 0, Wed:[8,17], Wed02:[18,24], WedEnabled: 0, Thu:[8,17], Thu02:[18,24], ThuEnabled: 0, Fri:[8,17], Fri02:[18,24], FriEnabled: 0, Sat:[8,17], Sat02:[18,24], SatEnabled: 0, Sun:[8,17], Sun02:[18,24], SunEnabled: 0});
+    this.businessForm.reset({BusinessId: '', OperationHours: '', Mon:[8*2,17*2], Mon02:[18*2,24*2], MonEnabled: 0, Tue:[8*2,17*2], Tue02:[18*2,24*2], TueEnabled: 0, Wed:[8*2,17*2], Wed02:[18*2,24*2], WedEnabled: 0, Thu:[8*2,17*2], Thu02:[18*2,24*2], ThuEnabled: 0, Fri:[8*2,17*2], Fri02:[18*2,24*2], FriEnabled: 0, Sat:[8*2,17*2], Sat02:[18*2,24*2], SatEnabled: 0, Sun:[8*2,17*2], Sun02:[18*2,24*2], SunEnabled: 0});
 
     this.options[0] = Object.assign({}, this.genOption);
     this.options[1] = Object.assign({}, this.genOption);
@@ -802,26 +802,26 @@ export class BusinessOpeComponent implements OnInit {
     this.businessForm.setValue({
       BusinessId: this.businessId,
       OperationHours: loc[0].OperationHours,
-      Mon: ("MON" in opeHour ? [+opeHour.MON[0].I, +opeHour.MON[0].F] : [8, 12]),
-      Mon02: ("MON" in opeHour ? (opeHour.MON.length > 1 ? [+opeHour.MON[1].I, +opeHour.MON[1].F] : [0,0]) : [0, 0]),
+      Mon: ("MON" in opeHour ? [+opeHour.MON[0].I*2, +opeHour.MON[0].F*2] : [8, 12]),
+      Mon02: ("MON" in opeHour ? (opeHour.MON.length > 1 ? [+opeHour.MON[1].I*2, +opeHour.MON[1].F*2] : [0,0]) : [0, 0]),
       MonEnabled: ("MON" in opeHour ? 1 : 0),
-      Tue: ("TUE" in opeHour ? [+opeHour.TUE[0].I, +opeHour.TUE[0].F] : [8, 12]),
-      Tue02: ("TUE" in opeHour ? (opeHour.TUE.length > 1 ? [+opeHour.TUE[1].I, +opeHour.TUE[1].F] : [0,0]) : [0, 0]),
+      Tue: ("TUE" in opeHour ? [+opeHour.TUE[0].I*2, +opeHour.TUE[0].F*2] : [8, 12]),
+      Tue02: ("TUE" in opeHour ? (opeHour.TUE.length > 1 ? [+opeHour.TUE[1].I*2, +opeHour.TUE[1].F*2] : [0,0]) : [0, 0]),
       TueEnabled: ("TUE" in opeHour ? 1 : 0),
-      Wed: ("WED" in opeHour ? [+opeHour.WED[0].I, +opeHour.WED[0].F] : [8, 12]),
-      Wed02: ("WED" in opeHour ? (opeHour.WED.length > 1 ? [+opeHour.WED[1].I, +opeHour.WED[1].F] : [0,0]) : [0, 0]),
+      Wed: ("WED" in opeHour ? [+opeHour.WED[0].I*2, +opeHour.WED[0].F*2] : [8, 12]),
+      Wed02: ("WED" in opeHour ? (opeHour.WED.length > 1 ? [+opeHour.WED[1].I*2, +opeHour.WED[1].F*2] : [0,0]) : [0, 0]),
       WedEnabled: ("WED" in opeHour ? 1 : 0),
-      Thu: ("THU" in opeHour ? [+opeHour.THU[0].I, +opeHour.THU[0].F] : [8, 12]),
-      Thu02: ("THU" in opeHour ? (opeHour.THU.length > 1 ? [+opeHour.THU[1].I, +opeHour.THU[1].F] : [0,0]) : [0, 0]),
+      Thu: ("THU" in opeHour ? [+opeHour.THU[0].I*2, +opeHour.THU[0].F*2] : [8, 12]),
+      Thu02: ("THU" in opeHour ? (opeHour.THU.length > 1 ? [+opeHour.THU[1].I*2, +opeHour.THU[1].F*2] : [0,0]) : [0, 0]),
       ThuEnabled: ("THU" in opeHour ? 1 : 0),
-      Fri: ("FRI" in opeHour ? [+opeHour.FRI[0].I, +opeHour.FRI[0].F] : [8, 12]),
-      Fri02: ("FRI" in opeHour ? (opeHour.FRI.length > 1 ? [+opeHour.FRI[1].I, +opeHour.FRI[1].F] : [0,0]) : [0, 0]),
+      Fri: ("FRI" in opeHour ? [+opeHour.FRI[0].I*2, +opeHour.FRI[0].F*2] : [8, 12]),
+      Fri02: ("FRI" in opeHour ? (opeHour.FRI.length > 1 ? [+opeHour.FRI[1].I*2, +opeHour.FRI[1].F*2] : [0,0]) : [0, 0]),
       FriEnabled: ("FRI" in opeHour ? 1 : 0),
-      Sat: ("SAT" in opeHour ? [+opeHour.SAT[0].I, +opeHour.SAT[0].F] : [8, 12]),
-      Sat02: ("SAT" in opeHour ? (opeHour.SAT.length > 1 ? [+opeHour.SAT[1].I, +opeHour.SAT[1].F] : [0,0]) : [0, 0]),
+      Sat: ("SAT" in opeHour ? [+opeHour.SAT[0].I*2, +opeHour.SAT[0].F*2] : [8, 12]),
+      Sat02: ("SAT" in opeHour ? (opeHour.SAT.length > 1 ? [+opeHour.SAT[1].I*2, +opeHour.SAT[1].F*2] : [0,0]) : [0, 0]),
       SatEnabled: ("SAT" in opeHour ? 1 : 0),
-      Sun: ("SUN" in opeHour ? [+opeHour.SUN[0].I, +opeHour.SUN[0].F] : [8, 12]),
-      Sun02: ("SUN" in opeHour ? (opeHour.SUN.length > 1 ? [+opeHour.SUN[1].I, +opeHour.TUE[1].F] : [0,0]) : [0, 0]),
+      Sun: ("SUN" in opeHour ? [+opeHour.SUN[0].I*2, +opeHour.SUN[0].F*2] : [8, 12]),
+      Sun02: ("SUN" in opeHour ? (opeHour.SUN.length > 1 ? [+opeHour.SUN[1].I*2, +opeHour.TUE[1].F*2] : [0,0]) : [0, 0]),
       SunEnabled: ("SUN" in opeHour ? 1 : 0),
     });
 
@@ -834,26 +834,26 @@ export class BusinessOpeComponent implements OnInit {
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
       let locGenOption = {
         floor: this.businessForm.value.Mon02[0],
-        ceil: 24,
+        ceil: 48,
         disabled: false,
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
@@ -871,26 +871,26 @@ export class BusinessOpeComponent implements OnInit {
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
       let locGenOption = {
         floor: this.businessForm.value.Tue02[0],
-        ceil: 24,
+        ceil: 48,
         disabled: false,
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
@@ -908,26 +908,26 @@ export class BusinessOpeComponent implements OnInit {
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
       let locGenOption = {
         floor: this.businessForm.value.Wed02[0],
-        ceil: 24,
+        ceil: 48,
         disabled: false,
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
@@ -945,26 +945,26 @@ export class BusinessOpeComponent implements OnInit {
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
       let locGenOption = {
         floor: this.businessForm.value.Thu02[0],
-        ceil: 24,
+        ceil: 48,
         disabled: false,
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
@@ -982,26 +982,26 @@ export class BusinessOpeComponent implements OnInit {
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
       let locGenOption = {
         floor: this.businessForm.value.Fri02[0],
-        ceil: 24,
+        ceil: 48,
         disabled: false,
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
@@ -1019,26 +1019,26 @@ export class BusinessOpeComponent implements OnInit {
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
       let locGenOption = {
         floor: this.businessForm.value.Sat02[0],
-        ceil: 24,
+        ceil: 48,
         disabled: false,
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
@@ -1056,26 +1056,26 @@ export class BusinessOpeComponent implements OnInit {
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
       let locGenOption = {
         floor: this.businessForm.value.Sun02[0],
-        ceil: 24,
+        ceil: 48,
         disabled: false,
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
@@ -1091,7 +1091,7 @@ export class BusinessOpeComponent implements OnInit {
   onServiceChange(event){
     if (event.value == "") {return;}
     var spinnerRef = this.spinnerService.start($localize`:@@business-ope.loadopeninghours:`);
-    this.businessForm.reset({BusinessId: '', OperationHours: '', Mon:[8,17], Mon02:[18,24], MonEnabled: 0, Tue:[8,17], Tue02:[18,24], TueEnabled: 0, Wed:[8,17], Wed02:[18,24], WedEnabled: 0, Thu:[8,17], Thu02:[18,24], ThuEnabled: 0, Fri:[8,17], Fri02:[18,24], FriEnabled: 0, Sat:[8,17], Sat02:[18,24], SatEnabled: 0, Sun:[8,17], Sun02:[18,24], SunEnabled: 0});
+    this.businessForm.reset({BusinessId: '', OperationHours: '', Mon:[8*2,17*2], Mon02:[18*2,24*2], MonEnabled: 0, Tue:[8*2,17*2], Tue02:[18*2,24*2], TueEnabled: 0, Wed:[8*2,17*2], Wed02:[18*2,24*2], WedEnabled: 0, Thu:[8*2,17*2], Thu02:[18*2,24*2], ThuEnabled: 0, Fri:[8*2,17*2], Fri02:[18*2,24*2], FriEnabled: 0, Sat:[8*2,17*2], Sat02:[18*2,24*2], SatEnabled: 0, Sun:[8*2,17*2], Sun02:[18,24], SunEnabled: 0});
 
     this.options[0] = Object.assign({}, this.genOption);
     this.options[1] = Object.assign({}, this.genOption);
@@ -1128,26 +1128,26 @@ export class BusinessOpeComponent implements OnInit {
     this.businessForm.setValue({
       BusinessId: this.businessId,
       OperationHours: serv[0].OperationHours,
-      Mon: ("MON" in opeHour ? [+opeHour.MON[0].I, +opeHour.MON[0].F] : [8, 12]),
-      Mon02: ("MON" in opeHour ? (opeHour.MON.length > 1 ? [+opeHour.MON[1].I, +opeHour.MON[1].F] : [0,0]) : [0, 0]),
+      Mon: ("MON" in opeHour ? [+opeHour.MON[0].I*2, +opeHour.MON[0].F*2] : [8, 12]),
+      Mon02: ("MON" in opeHour ? (opeHour.MON.length > 1 ? [+opeHour.MON[1].I*2, +opeHour.MON[1].F*2] : [0,0]) : [0, 0]),
       MonEnabled: ("MON" in opeHour ? 1 : 0),
-      Tue: ("TUE" in opeHour ? [+opeHour.TUE[0].I, +opeHour.TUE[0].F] : [8, 12]),
-      Tue02: ("TUE" in opeHour ? (opeHour.TUE.length > 1 ? [+opeHour.TUE[1].I, +opeHour.TUE[1].F] : [0,0]) : [0, 0]),
+      Tue: ("TUE" in opeHour ? [+opeHour.TUE[0].I*2, +opeHour.TUE[0].F*2] : [8, 12]),
+      Tue02: ("TUE" in opeHour ? (opeHour.TUE.length > 1 ? [+opeHour.TUE[1].I*2, +opeHour.TUE[1].F*2] : [0,0]) : [0, 0]),
       TueEnabled: ("TUE" in opeHour ? 1 : 0),
-      Wed: ("WED" in opeHour ? [+opeHour.WED[0].I, +opeHour.WED[0].F] : [8, 12]),
-      Wed02: ("WED" in opeHour ? (opeHour.WED.length > 1 ? [+opeHour.WED[1].I, +opeHour.WED[1].F] : [0,0]) : [0, 0]),
+      Wed: ("WED" in opeHour ? [+opeHour.WED[0].I*2, +opeHour.WED[0].F*2] : [8, 12]),
+      Wed02: ("WED" in opeHour ? (opeHour.WED.length > 1 ? [+opeHour.WED[1].I*2, +opeHour.WED[1].F*2] : [0,0]) : [0, 0]),
       WedEnabled: ("WED" in opeHour ? 1 : 0),
-      Thu: ("THU" in opeHour ? [+opeHour.THU[0].I, +opeHour.THU[0].F] : [8, 12]),
-      Thu02: ("THU" in opeHour ? (opeHour.THU.length > 1 ? [+opeHour.THU[1].I, +opeHour.THU[1].F] : [0,0]) : [0, 0]),
+      Thu: ("THU" in opeHour ? [+opeHour.THU[0].I*2, +opeHour.THU[0].F*2] : [8, 12]),
+      Thu02: ("THU" in opeHour ? (opeHour.THU.length > 1 ? [+opeHour.THU[1].I*2, +opeHour.THU[1].F*2] : [0,0]) : [0, 0]),
       ThuEnabled: ("THU" in opeHour ? 1 : 0),
-      Fri: ("FRI" in opeHour ? [+opeHour.FRI[0].I, +opeHour.FRI[0].F] : [8, 12]),
-      Fri02: ("FRI" in opeHour ? (opeHour.FRI.length > 1 ? [+opeHour.FRI[1].I, +opeHour.FRI[1].F] : [0,0]) : [0, 0]),
+      Fri: ("FRI" in opeHour ? [+opeHour.FRI[0].I*2, +opeHour.FRI[0].F*2] : [8, 12]),
+      Fri02: ("FRI" in opeHour ? (opeHour.FRI.length > 1 ? [+opeHour.FRI[1].I*2, +opeHour.FRI[1].F*2] : [0,0]) : [0, 0]),
       FriEnabled: ("FRI" in opeHour ? 1 : 0),
-      Sat: ("SAT" in opeHour ? [+opeHour.SAT[0].I, +opeHour.SAT[0].F] : [8, 12]),
-      Sat02: ("SAT" in opeHour ? (opeHour.SAT.length > 1 ? [+opeHour.SAT[1].I, +opeHour.SAT[1].F] : [0,0]) : [0, 0]),
+      Sat: ("SAT" in opeHour ? [+opeHour.SAT[0].I*2, +opeHour.SAT[0].F*2] : [8, 12]),
+      Sat02: ("SAT" in opeHour ? (opeHour.SAT.length > 1 ? [+opeHour.SAT[1].I*2, +opeHour.SAT[1].F*2] : [0,0]) : [0, 0]),
       SatEnabled: ("SAT" in opeHour ? 1 : 0),
-      Sun: ("SUN" in opeHour ? [+opeHour.SUN[0].I, +opeHour.SUN[0].F] : [8, 12]),
-      Sun02: ("SUN" in opeHour ? (opeHour.SUN.length > 1 ? [+opeHour.SUN[1].I, +opeHour.TUE[1].F] : [0,0]) : [0, 0]),
+      Sun: ("SUN" in opeHour ? [+opeHour.SUN[0].I*2, +opeHour.SUN[0].F*2] : [8, 12]),
+      Sun02: ("SUN" in opeHour ? (opeHour.SUN.length > 1 ? [+opeHour.SUN[1].I*2, +opeHour.TUE[1].F*2] : [0,0]) : [0, 0]),
       SunEnabled: ("SUN" in opeHour ? 1 : 0),
     });
 
@@ -1160,26 +1160,26 @@ export class BusinessOpeComponent implements OnInit {
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
       let locGenOption = {
         floor: this.businessForm.value.Mon02[0],
-        ceil: 24,
+        ceil: 48,
         disabled: false,
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
@@ -1197,26 +1197,26 @@ export class BusinessOpeComponent implements OnInit {
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
       let locGenOption = {
         floor: this.businessForm.value.Tue02[0],
-        ceil: 24,
+        ceil: 48,
         disabled: false,
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
@@ -1234,26 +1234,26 @@ export class BusinessOpeComponent implements OnInit {
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
       let locGenOption = {
         floor: this.businessForm.value.Wed02[0],
-        ceil: 24,
+        ceil: 48,
         disabled: false,
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
@@ -1271,26 +1271,26 @@ export class BusinessOpeComponent implements OnInit {
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
       let locGenOption = {
         floor: this.businessForm.value.Thu02[0],
-        ceil: 24,
+        ceil: 48,
         disabled: false,
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
@@ -1308,26 +1308,26 @@ export class BusinessOpeComponent implements OnInit {
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
       let locGenOption = {
         floor: this.businessForm.value.Fri02[0],
-        ceil: 24,
+        ceil: 48,
         disabled: false,
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
@@ -1345,26 +1345,26 @@ export class BusinessOpeComponent implements OnInit {
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
       let locGenOption = {
         floor: this.businessForm.value.Sat02[0],
-        ceil: 24,
+        ceil: 48,
         disabled: false,
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
@@ -1382,26 +1382,26 @@ export class BusinessOpeComponent implements OnInit {
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
       let locGenOption = {
         floor: this.businessForm.value.Sun02[0],
-        ceil: 24,
+        ceil: 48,
         disabled: false,
         translate: (value: number, label: LabelType): string => {
           switch (label) {
             case LabelType.Low:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             case LabelType.High:
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : value) + ' ' + (value >= 12 ? 'PM' : 'AM');
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value % 2 == 0 ? value/2 : Math.floor(value/2)+':30' )) + ' ' + (value >= 24 ? 'PM' : 'AM');
             default: 
-              return (value > 12 ? ((value == 24 ? '11:59' : value-12).toString()) : (value).toString());
+              return (value > 25 ? ((value == 48 ? '11:59' : ((value-24) % 2 == 0 ? (value-24)/2 : ((value-25)/2)+':30' )).toString()) : (value).toString());
           }
         }
       };
@@ -1428,19 +1428,6 @@ export class BusinessOpeComponent implements OnInit {
         this.providerParentHours = false;
       }
     }
-    // this.updateParentHours$ = this.businessService.updateBusinessParms(this.businessId, this.locationId, this.providerId, (event.checked == true ? 1 : 0), tipo).pipe(
-    //   map((res: any) => {
-    //     if (res.Code == 200){
-    //       this.providerParentHours = (event.checked == true ? 1 : 0);
-    //       this.openSnackBar($localize`:@@business-ope.updatedata:`,$localize`:@@business-ope.openinghours:`);
-    //     }
-    //   }),
-    //   catchError(err => {
-    //     this.providerParentHours = (!event.checked == true ? 1 : 0);
-    //     this.openSnackBar($localize`:@@shared.wrong:`,$localize`:@@business-ope.openinghours:`);
-    //     return err;
-    //   })
-    // );
   }
 
   learnMore(textNumber: number){
