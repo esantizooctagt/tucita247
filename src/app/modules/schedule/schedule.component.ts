@@ -227,33 +227,40 @@ export class ScheduleComponent implements OnInit {
           this.SunHours = res.Sunday;
 
           this.MonHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
-          this.minHr = this.MonHours[0].Time24;
-          this.maxHr = this.MonHours[this.MonHours.length-1].Time24;
-
+          if (this.MonHours.length > 0){
+            this.minHr = this.MonHours[0].Time24;
+            this.maxHr = this.MonHours[this.MonHours.length-1].Time24;
+          }
           this.TueHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
-          this.minHr = (this.TueHours[0].Time24 < this.minHr ? this.TueHours[0].Time24 : this.minHr);
-          this.maxHr = (this.TueHours[this.TueHours.length-1].Time24 > this.maxHr ? this.TueHours[this.TueHours.length-1].Time24 : this.maxHr);
-
+          if (this.TueHours.length > 0){
+            this.minHr = (this.TueHours[0].Time24 < this.minHr ? this.TueHours[0].Time24 : this.minHr);
+            this.maxHr = (this.TueHours[this.TueHours.length-1].Time24 > this.maxHr ? this.TueHours[this.TueHours.length-1].Time24 : this.maxHr);
+          }
           this.WedHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
-          this.minHr = (this.WedHours[0].Time24 < this.minHr ? this.WedHours[0].Time24 : this.minHr);
-          this.maxHr = (this.WedHours[this.WedHours.length-1].Time24 > this.maxHr ? this.WedHours[this.WedHours.length-1].Time24 : this.maxHr);
-
+          if (this.WedHours.length > 0){
+            this.minHr = (this.WedHours[0].Time24 < this.minHr ? this.WedHours[0].Time24 : this.minHr);
+            this.maxHr = (this.WedHours[this.WedHours.length-1].Time24 > this.maxHr ? this.WedHours[this.WedHours.length-1].Time24 : this.maxHr);
+          }
           this.ThuHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
-          this.minHr = (this.ThuHours[0].Time24 < this.minHr ? this.ThuHours[0].Time24 : this.minHr);
-          this.maxHr = (this.ThuHours[this.ThuHours.length-1].Time24 > this.maxHr ? this.ThuHours[this.ThuHours.length-1].Time24 : this.maxHr);
-
+          if (this.ThuHours.length > 0){
+            this.minHr = (this.ThuHours[0].Time24 < this.minHr ? this.ThuHours[0].Time24 : this.minHr);
+            this.maxHr = (this.ThuHours[this.ThuHours.length-1].Time24 > this.maxHr ? this.ThuHours[this.ThuHours.length-1].Time24 : this.maxHr);
+          }
           this.FriHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
-          this.minHr = (this.FriHours[0].Time24 < this.minHr ? this.FriHours[0].Time24 : this.minHr);
-          this.maxHr = (this.FriHours[this.FriHours.length-1].Time24 > this.maxHr ? this.FriHours[this.FriHours.length-1].Time24 : this.maxHr);
-
+          if (this.FriHours.length > 0){
+            this.minHr = (this.FriHours[0].Time24 < this.minHr ? this.FriHours[0].Time24 : this.minHr);
+            this.maxHr = (this.FriHours[this.FriHours.length-1].Time24 > this.maxHr ? this.FriHours[this.FriHours.length-1].Time24 : this.maxHr);
+          }
           this.SatHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
-          this.minHr = (this.SatHours[0].Time24 < this.minHr ? this.SatHours[0].Time24 : this.minHr);
-          this.maxHr = (this.SatHours[this.SatHours.length-1].Time24 > this.maxHr ? this.SatHours[this.SatHours.length-1].Time24 : this.maxHr);
-
+          if (this.SatHours.length > 0){
+            this.minHr = (this.SatHours[0].Time24 < this.minHr ? this.SatHours[0].Time24 : this.minHr);
+            this.maxHr = (this.SatHours[this.SatHours.length-1].Time24 > this.maxHr ? this.SatHours[this.SatHours.length-1].Time24 : this.maxHr);
+          }
           this.SunHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
-          this.minHr = (this.SunHours[0].Time24 < this.minHr ? this.SunHours[0].Time24 : this.minHr);
-          this.maxHr = (this.SunHours[this.SunHours.length-1].Time24 > this.maxHr ? this.SunHours[this.SunHours.length-1].Time24 : this.maxHr);
-
+          if (this.SunHours.length > 0){
+            this.minHr = (this.SunHours[0].Time24 < this.minHr ? this.SunHours[0].Time24 : this.minHr);
+            this.maxHr = (this.SunHours[this.SunHours.length-1].Time24 > this.maxHr ? this.SunHours[this.SunHours.length-1].Time24 : this.maxHr);
+          }
           console.log(this.minHr);
           console.log(this.maxHr);
           this.spinnerService.stop(spinnerRef);
