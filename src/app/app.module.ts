@@ -76,6 +76,7 @@ import { AgmCoreModule } from '@agm/core';
 import { PhonePipe } from '@shared/phone.pipe';
 import { HourdataPipe } from '@shared/hourdata.pipe';
 import { ServcolorPipe } from '@shared/servcolor.pipe';
+import { NamecodePipe } from '@shared/namecode.pipe';
 import { DatePipe } from '@angular/common';
 import { PhoneMaskPipe } from '@shared/phone-mask.pipe';
 import { ProviderListComponent } from '@modules/providers/provider-list/provider-list.component';
@@ -91,6 +92,8 @@ import { MessDialogComponent } from '@shared/mess-dialog/mess-dialog.component';
 import { NewBusinessComponent } from './modules/new-business/new-business.component';
 import { TabDirectiveDirective } from '@shared/tab-directive.directive';
 import { WeblinkComponent } from './modules/weblink/weblink.component';
+import { SortHoursPipe } from './shared/sort-hours.pipe';
+import { ServiceDataPipe } from './shared/service-data.pipe';
 
 @NgModule({
   declarations: [
@@ -127,7 +130,10 @@ import { WeblinkComponent } from './modules/weblink/weblink.component';
     NewBusinessComponent,
     TabDirectiveDirective,
     PhoneMaskPipe,
-    WeblinkComponent
+    WeblinkComponent,
+    NamecodePipe,
+    SortHoursPipe,
+    ServiceDataPipe
   ],
   imports: [
     BrowserModule,

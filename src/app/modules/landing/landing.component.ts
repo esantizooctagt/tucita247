@@ -8,6 +8,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material/icon';
 import { AppowiDialogComponent } from '@app/shared/appowi-dialog/appowi-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { WeblinkComponent } from '../weblink/weblink.component';
 
 @Component({
   selector: 'app-landing',
@@ -16,6 +17,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class LandingComponent implements OnInit {
   business$: Observable<any>;
+  business: any;
   servs: []=[];
   link: string = '';
   readonly imgPath = environment.bucket;
@@ -44,11 +46,10 @@ export class LandingComponent implements OnInit {
     this.business$ = this.businessService.getBusinessLanding(this.link).pipe(
       map((res: any) => {
         if (res != null){
-          let data: any;
-          data = res;
-          data.Locs.sort((a, b) => (a.Name < b.Name ? -1 : 1));
+          this.business = res;
+          this.business.Locs.sort((a, b) => (a.Name < b.Name ? -1 : 1));
           this.servs = res.Services;
-          return data;
+          return this.business;
         }
       }),
       catchError(err => {
@@ -62,13 +63,15 @@ export class LandingComponent implements OnInit {
   }
 
   newAppo(busObj, busId){
-    console.log("datos prueba");
-    console.log(busObj);
-
-    const dialogRef = this.dialog.open(AppowiDialogComponent, {
+    // const dialogRef = this.dialog.open(AppowiDialogComponent, {
+    //   width: '450px',
+    //   height: '700px',
+    //   data: {timeZone: busObj.TimeZone, business: this.business, businessId: busId, locationId: busObj.LocationId}
+    // });
+    const dialogRef = this.dialog.open(WeblinkComponent, {
       width: '450px',
       height: '700px',
-      data: {timeZone: busObj.TimeZone, door: '', businessId: busId, locationId: busObj.LocationId, providerId: '0', services: this.servs, buckets: [], hours: [], providers: busObj.Provs, tipo: 2}
+      data: {timeZone: busObj.TimeZone, business: this.business, businessId: busId, locationId: busObj.LocationId}
     });
   }
 

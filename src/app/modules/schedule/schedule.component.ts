@@ -19,11 +19,10 @@ import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.comp
   templateUrl: './schedule.component.html',
   styleUrls: ['./schedule.component.scss']
 })
-export class ScheduleComponent implements OnInit {
-  // @HostListener('window:scroll', ['$event'])
-  
+export class ScheduleComponent implements OnInit {  
   currWeek: number = 1;
   currTime: string = '';
+  searchValue: string = '';
   isSticky: boolean = false;
   today: Date;
   weekStart: Date;
@@ -44,9 +43,6 @@ export class ScheduleComponent implements OnInit {
   SatHours = [];
   SunHours = [];
 
-  minHr: number = 0;
-  maxHr: number = 0;
-
   businessId: string = '';
   doors: string = '';
   TimeZone: string = '';
@@ -62,6 +58,9 @@ export class ScheduleComponent implements OnInit {
   locationId: string = '';
   providerId: string = '';
   resServices: any[]=[];
+
+  hiddenUp: boolean = true;
+  hiddenDown: boolean = true;
 
   subsMessages: Subscription;
 
@@ -82,7 +81,9 @@ export class ScheduleComponent implements OnInit {
     public datepipe: DatePipe
   ) {
     this.matIconRegistry.addSvgIcon('new',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/newAppo.svg'));
-    this.matIconRegistry.addSvgIcon('cancel02',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/cancelAppos.svg'));
+    this.matIconRegistry.addSvgIcon('less',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/less.svg'));
+    this.matIconRegistry.addSvgIcon('more',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/more.svg'));
+    this.matIconRegistry.addSvgIcon('cancel02',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/trash.svg'));
     this.matIconRegistry.addSvgIcon('view',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/expand02.svg'));
     this.matIconRegistry.addSvgIcon('check',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/check01.svg'));
     this.matIconRegistry.addSvgIcon('refresh',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icon/refresh.svg'));
@@ -225,44 +226,13 @@ export class ScheduleComponent implements OnInit {
           this.FriHours = res.Friday;
           this.SatHours = res.Saturday;
           this.SunHours = res.Sunday;
-
           this.MonHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
-          if (this.MonHours.length > 0){
-            this.minHr = this.MonHours[0].Time24;
-            this.maxHr = this.MonHours[this.MonHours.length-1].Time24;
-          }
           this.TueHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
-          if (this.TueHours.length > 0){
-            this.minHr = (this.TueHours[0].Time24 < this.minHr ? this.TueHours[0].Time24 : this.minHr);
-            this.maxHr = (this.TueHours[this.TueHours.length-1].Time24 > this.maxHr ? this.TueHours[this.TueHours.length-1].Time24 : this.maxHr);
-          }
           this.WedHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
-          if (this.WedHours.length > 0){
-            this.minHr = (this.WedHours[0].Time24 < this.minHr ? this.WedHours[0].Time24 : this.minHr);
-            this.maxHr = (this.WedHours[this.WedHours.length-1].Time24 > this.maxHr ? this.WedHours[this.WedHours.length-1].Time24 : this.maxHr);
-          }
           this.ThuHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
-          if (this.ThuHours.length > 0){
-            this.minHr = (this.ThuHours[0].Time24 < this.minHr ? this.ThuHours[0].Time24 : this.minHr);
-            this.maxHr = (this.ThuHours[this.ThuHours.length-1].Time24 > this.maxHr ? this.ThuHours[this.ThuHours.length-1].Time24 : this.maxHr);
-          }
           this.FriHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
-          if (this.FriHours.length > 0){
-            this.minHr = (this.FriHours[0].Time24 < this.minHr ? this.FriHours[0].Time24 : this.minHr);
-            this.maxHr = (this.FriHours[this.FriHours.length-1].Time24 > this.maxHr ? this.FriHours[this.FriHours.length-1].Time24 : this.maxHr);
-          }
           this.SatHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
-          if (this.SatHours.length > 0){
-            this.minHr = (this.SatHours[0].Time24 < this.minHr ? this.SatHours[0].Time24 : this.minHr);
-            this.maxHr = (this.SatHours[this.SatHours.length-1].Time24 > this.maxHr ? this.SatHours[this.SatHours.length-1].Time24 : this.maxHr);
-          }
           this.SunHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
-          if (this.SunHours.length > 0){
-            this.minHr = (this.SunHours[0].Time24 < this.minHr ? this.SunHours[0].Time24 : this.minHr);
-            this.maxHr = (this.SunHours[this.SunHours.length-1].Time24 > this.maxHr ? this.SunHours[this.SunHours.length-1].Time24 : this.maxHr);
-          }
-          console.log(this.minHr);
-          console.log(this.maxHr);
           this.spinnerService.stop(spinnerRef);
           return res;
         }
@@ -563,7 +533,7 @@ export class ScheduleComponent implements OnInit {
 
   enableHour(timeGrl: string, day: any, timeNom: string, dayNum: number){
     var spinnerRef = this.spinnerService.start($localize`:@@sche.openhour:`);
-    this.putAppo$ = this.appointmentService.putTimeAvailable(this.businessId, this.locationId, this.providerId, this.datepipe.transform(day, 'yyyy-MM-dd') + '-' + timeGrl.replace(':','-')).pipe(
+    this.putAppo$ = this.appointmentService.putTimeAvailable(this.businessId, this.locationId, this.providerId, this.datepipe.transform(day, 'yyyy-MM-dd') + '-' + timeGrl.toString().replace(':','-')).pipe(
       map((res: any) => {
         if (res != null) {
           if (res.Code == 200){

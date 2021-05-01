@@ -1,0 +1,69 @@
+.err-message{
+    color:red;
+    font-size:14px;
+    font-family: Montserrat;
+    font-weight: 600;
+}
+.client_gender{
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+}
+.button-appo{
+    width: 100px;
+}
+::ng-deep .country-left .mat-select-value-text {
+    padding-left: 40px;
+}
+:host ::ng-deep .mat-calendar-body-cell.selected
+{
+  background-color:#FF4F00!important;
+  border-radius: 50%;
+}
+.PRI{
+    background: url("../../../assets/images/pur.svg") left / contain no-repeat;
+    white-space: nowrap;
+    display: inline;
+}
+.GTM{
+    background: url("../../../assets/images/gua.svg") left / contain no-repeat;
+    white-space: nowrap;
+    display: inline;
+}
+.DEU{
+    background: url("../../../assets/images/ger.svg") left / contain no-repeat;
+    white-space: nowrap;
+    display: inline;
+}
+.DOM{
+    background: url("../../../assets/images/rep.svg") left / contain no-repeat;
+    white-space: nowrap;
+    display: inline;
+}
+.ESP{
+    background: url("../../../assets/images/spa.svg") left / contain no-repeat;
+    white-space: nowrap;
+    display: inline;
+}
+.USA{
+    background: url("../../../assets/images/usa.svg") left / contain no-repeat;
+    white-space: nowrap;
+    display: inline;
+}
+.on {
+    background-color: #FF4F00;
+    color: #fff;
+}
+.off {
+    background-color: #FFF;
+}
+.title{
+    font-weight: 600;
+}
+.loadContent{
+    display: flex;
+    justify-content: center;
+}
+.hour-btn{
+    width: 100px;
+}
