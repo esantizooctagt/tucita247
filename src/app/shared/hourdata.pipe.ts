@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class HourdataPipe implements PipeTransform {
 
-  transform(day: any[], time: string): any {
+  transform(day: any[], time: string, updatedThu: any): any {
     let res;
     let result = {
       Available: 0,

@@ -94,6 +94,7 @@ import { TabDirectiveDirective } from '@shared/tab-directive.directive';
 import { WeblinkComponent } from './modules/weblink/weblink.component';
 import { SortHoursPipe } from './shared/sort-hours.pipe';
 import { ServiceDataPipe } from './shared/service-data.pipe';
+import { DialogcancelComponent } from './shared/dialogcancel/dialogcancel.component';
 
 @NgModule({
   declarations: [
@@ -133,7 +134,8 @@ import { ServiceDataPipe } from './shared/service-data.pipe';
     WeblinkComponent,
     NamecodePipe,
     SortHoursPipe,
-    ServiceDataPipe
+    ServiceDataPipe,
+    DialogcancelComponent
   ],
   imports: [
     BrowserModule,

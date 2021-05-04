@@ -67,18 +67,15 @@
 .blank-bucket{
     height: 7px;
 }
-.hour-style{
-    font-size: 65px;
-    font-weight: 700;
+.div-style{
     position: relative;
-    top: -12px;
     text-align: right;
-    color: #000;
 }
 .time-hr{
     font-size: 16px;
     position: relative;
     top: -20px;
+    left: -2px;
     text-align: right;
     color:#000;
 }
@@ -88,6 +85,8 @@
 .time-actions{
     height: 30px;
     width: 140px;
+    min-width: 140px;
+    max-width: 160px;
     background-color: #fff;
     margin: 0 auto !important;
     border: 1px dotted #c4c4c4;
@@ -95,15 +94,20 @@
 .time-disabled{
     height: 30px;
     width: 140px;
+    min-width: 140px;
+    max-width: 160px;
     background-color: #e5e3e2 !important;
     margin: 0 auto !important;
     border: 1px dotted #c4c4c4;
-    display: inline-block;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .time-actions-disabled{
     height: 30px;
     width: 140px;
+    min-width: 140px;
+    max-width: 160px;
     margin: 0 auto !important;
 }
 .hidden-down{
@@ -146,7 +150,16 @@
 }
 .button-collapse{
     position: relative;
-    top: -45px;
+    top: -18px;
+    left: -90px;
+}
+.hr-style{
+    font-size: 65px;
+    padding: 0;
+    top: -15px;
+    position: relative;
+    right: 0px;
+    color: #000;
 }
 .action-enabled{
     stroke: #F44F00;
@@ -165,7 +178,7 @@
 }
 .main-background{
     background: #F5F5F5;
-    height: calc(100vh - 64px) !important;
+    height: auto !important;
 }
 .square-color{
     width: 20px;
@@ -183,17 +196,22 @@
 }
 .content-hr {
     position: relative;;
-    top: 144px;
+    top: 0px;
     padding-top: 10px !important;
     padding-bottom: 10px !important;
     border: 1px solid #18A0FB;
     background: #fff;
 }
 .sticky-header{
-    position: fixed;
-    width: calc(100vw - 15px);
+    position:sticky;
+    position: -webkit-sticky;
+    top: 66px;
+    // position: fixed;
+    // width: calc(100vw - 15px);
     z-index: 100;
     background-color: #f5f5f5;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 ::ng-deep .mat-tooltip {
     background-color: #ff4f00;
@@ -224,10 +242,5 @@ button.mat-stroked-button
         {
             opacity: 0;  // hide overlay
         }
-    }
-}
-@media (min-width: 1201px){
-    .sticky-header{
-        width: calc(100vw - 239px - 15px);
     }
 }

@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class ServcolorPipe implements PipeTransform {
 
-  transform(day: any[], time: string, services: any[]): string {
+  transform(day: any[], time: string, services: any[], updated: any): string {
     let res;
     let result: string = '';
     res = day.filter(val => val.Time == time);

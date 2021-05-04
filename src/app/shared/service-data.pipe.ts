@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class ServiceDataPipe implements PipeTransform {
 
-  transform(day: any[], services: any[], time24: string): any {
+  transform(day: any[], services: any[], time24: string, updated: any): any {
     let data: string = '';
     let serviceId: string ='';
     let res = day.filter(val => val.Time == time24);

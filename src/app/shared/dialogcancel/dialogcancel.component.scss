@@ -1,0 +1,44 @@
+.success-icon {
+    color: green;
+    height: 45px;
+    width: 45px;
+}
+/* Note: If you're using an SVG icon, you should make the class target the `<svg>` element */
+.success-icon svg {
+    fill: green;
+    height: 45px;
+    width: 45px;
+}
+.error-icon {
+    color: red;
+    height: 45px;
+    width: 45px;
+}
+/* Note: If you're using an SVG icon, you should make the class target the `<svg>` element */
+.error-icon svg {
+    fill: red;
+    height: 45px;
+    width: 45px;
+}
+.warn-icon {
+    color: orange;
+    height: 45px;
+    width: 45px;
+}
+/* Note: If you're using an SVG icon, you should make the class target the `<svg>` element */
+.warn-icon svg {
+    fill: orange;
+    height: 45px;
+    width: 45px;
+}
+.icon-close{
+    position: relative;
+    top: -60px;
+    right: -205px;
+}
+.icon{
+    text-align: center;
+}
+.header{
+    height: 40px;
+}

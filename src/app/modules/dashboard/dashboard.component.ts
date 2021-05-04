@@ -11,12 +11,20 @@ import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 
+import * as am4core from "@amcharts/amcharts4/core";
+import * as am4charts from "@amcharts/amcharts4/charts";
+import am4themes_animated from "@amcharts/amcharts4/themes/animated";
+import am4themes_dataviz from "@amcharts/amcharts4/themes/dataviz";
+
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  chart: am4charts.XYChart;
+
   quantityPeople$: Observable<any>;
   appos$: Observable<any>;
   avgData$: Observable<any[]>;
@@ -238,6 +246,113 @@ export class DashboardComponent implements OnInit {
         );
       }
     }, 120000);
+
+    am4core.useTheme(am4themes_animated);
+
+    this.chart = am4core.create("chartdiv", am4charts.XYChart);
+
+    // chart.paddingRight = 20;
+
+    // let data = [];
+    // let visits = 10;
+    // for (let i = 1; i < 366; i++) {
+    //   visits += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
+    //   data.push({ date: new Date(2018, 0, i), name: "name" + i, value: visits });
+    // }
+
+    // chart.data = data;
+
+    // let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+    // dateAxis.renderer.grid.template.location = 0;
+
+    // let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    // valueAxis.tooltip.disabled = true;
+    // valueAxis.renderer.minWidth = 35;
+
+    // let series = chart.series.push(new am4charts.LineSeries());
+    // series.dataFields.dateX = "date";
+    // series.dataFields.valueY = "value";
+    // series.tooltipText = "{valueY.value}";
+
+    // chart.cursor = new am4charts.XYCursor();
+
+    // let scrollbarX = new am4charts.XYChartScrollbar();
+    // scrollbarX.series.push(series);
+    // chart.scrollbarX = scrollbarX;
+
+    // this.chart = chart;
+    // Add data
+    this.chart.data = [{
+      "year": "2016",
+      "europe": 2.5,
+      "namerica": 2.5,
+      "asia": 2.1,
+      "lamerica": 0.3,
+      "meast": 0.2,
+      "africa": 0.1
+    }, {
+      "year": "2017",
+      "europe": 2.6,
+      "namerica": 2.7,
+      "asia": 2.2,
+      "lamerica": 0.3,
+      "meast": 0.3,
+      "africa": 0.1
+    }, {
+      "year": "2018",
+      "europe": 2.8,
+      "namerica": 2.9,
+      "asia": 2.4,
+      "lamerica": 0.3,
+      "meast": 0.3,
+      "africa": 0.1
+    }];
+
+    // Create axes
+    let categoryAxis = this.chart.xAxes.push(new am4charts.CategoryAxis());
+    categoryAxis.dataFields.category = "year";
+    categoryAxis.renderer.grid.template.location = 0;
+
+
+    let valueAxis = this.chart.yAxes.push(new am4charts.ValueAxis());
+    valueAxis.renderer.inside = true;
+    valueAxis.renderer.labels.template.disabled = true;
+    valueAxis.min = 0;
+
+    this.createSeries("europe", "Europe");
+    this.createSeries("namerica", "North America");
+    this.createSeries("asia", "Asia-Pacific");
+    this.createSeries("lamerica", "Latin America");
+    this.createSeries("meast", "Middle-East");
+    this.createSeries("africa", "Africa");
+
+    // Legend
+    this.chart.legend = new am4charts.Legend();
+  }
+
+  // Create series
+  createSeries(field, name) {
+    // Set up series
+    let series = this.chart.series.push(new am4charts.ColumnSeries());
+    series.name = name;
+    series.dataFields.valueY = field;
+    series.dataFields.categoryX = "year";
+    series.sequencedInterpolation = true;
+    
+    // Make it stacked
+    series.stacked = true;
+    
+    // Configure columns
+    series.columns.template.width = am4core.percent(60);
+    series.columns.template.tooltipText = "[bold]{name}[/]\n[font-size:14px]{categoryX}: {valueY}";
+    
+    // Add label
+    let labelBullet = series.bullets.push(new am4charts.LabelBullet());
+    labelBullet.label.text = "{valueY}";
+    labelBullet.locationY = 0.5;
+    labelBullet.label.hideOversized = true;
+    
+    return series;
   }
 
   onSelectLocation(event){

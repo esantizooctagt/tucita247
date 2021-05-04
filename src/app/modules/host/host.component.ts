@@ -233,6 +233,10 @@ export class HostComponent implements OnInit {
         var actualTime = formatter.format(new Date());
         let actTime = (+actualTime.replace(':','-').substring(0,2) == 24 ? 0 :+actualTime.replace(':','-').substring(0,2));
         let appoTime = +msg['DateFull'].substring(11).replace(':','-').substring(0,2);
+        let act = new Date();
+        if (Number(msg['DateFull'].toString().substring(0,10).replaceAll('-','')) > Number(act.getFullYear().toString()+(act.getMonth()+1).toString().padStart(2, '0')+act.getDate().toString().padStart(2, '0'))){
+          return;
+        }
         let hora = msg['DateAppo'];
         let data = {
           AppId: msg['AppId'],
