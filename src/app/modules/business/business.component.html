@@ -53,7 +53,7 @@
                                 </mat-form-field>
                             </div>
                             <div class="row">
-                                <mat-label i18n="Phone|Phone in business@business.phone" class="col-md-1 label-phone">Phone</mat-label>
+                                <mat-label i18n="Phone|Phone in business@@business.phone" class="col-md-1 label-phone">Phone</mat-label>
                                 <mat-form-field class="col-md-2">
                                     <mat-select [ngClass]="fBusiness.CountryCode.value" class="country-left" formControlName="CountryCode" (selectionChange)="changeValues($event)">
                                         <mat-option [value]="country.Country" *ngFor="let country of countryLst">

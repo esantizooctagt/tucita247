@@ -110,7 +110,7 @@
                             <mat-error *ngIf="fBusiness.ZipCode.invalid && fBusiness.ZipCode.touched">
                                 {{ 'Error: ' + getErrorMessage('ZipCode')}}</mat-error>
                         </mat-form-field>
-                        <mat-label i18n="Phone|Phone in business@business.phone" class="col-md-1 label-phone">Phone</mat-label>
+                        <mat-label i18n="Phone|Phone in business@@business.phone" class="col-md-1 label-phone">Phone</mat-label>
                         <mat-form-field class="col-md-2">
                             <mat-select [ngClass]="fBusiness.CountryCode.value" class="country-left" formControlName="CountryCode" (selectionChange)="changeValues($event)">
                                 <mat-option [value]="country.Country" *ngFor="let country of countryLst">

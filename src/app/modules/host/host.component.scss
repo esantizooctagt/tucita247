@@ -1,10 +1,9 @@
-//CAMBIO ERICK SANTIZO
 mat-card{
     margin-left:0px;
     padding: 5px 8px;
     background: #FFFFFF;
     box-shadow: -3px 1px 4px rgba(0, 0, 0, 0.25) !important;
-    border-radius: 0px; //10px;
+    border-radius: 0px;
     min-width: 95%;
     width: 95%;
 }
@@ -105,14 +104,13 @@ mat-card{
     line-height: 20px !important;
     top: -2px !important;
 }
-/* Use the button type you're using here */
 button.mat-icon-button
 {
     &.cdk-program-focused 
     {
         ::ng-deep .mat-button-focus-overlay
         {
-            opacity: 0;  // hide overlay
+            opacity: 0;
         }
     }
 }
@@ -122,12 +120,12 @@ button.mat-stroked-button
     {
         ::ng-deep .mat-button-focus-overlay
         {
-            opacity: 0;  // hide overlay
+            opacity: 0;
         }
     }
 }
 .drop-qeue{
-    height: calc(100vh - 285.33px); //209.33
+    height: calc(100vh - 285.33px);
     padding-right: 2px;
     padding-left: 1px;
 }
@@ -146,7 +144,6 @@ button.mat-stroked-button
     border: dashed 1px #ff4f00;
 }
 .walkin{
-    // min-height: 300px;
     height: 100%;
     width: 100%;
     overflow: auto;
@@ -169,7 +166,6 @@ button.mat-stroked-button
     position: absolute;
 }
 .waitlist{
-    // min-height: 163px;
     height: calc(100% - 37.33px);
     width: 100%;
     overflow: auto;
@@ -192,12 +188,6 @@ button.mat-stroked-button
 .host-container{
     background-color: #F5F5F5;
 }
-// .title-qeue{
-//     font-size: 25px;
-//     font-weight: 600;
-//     color: #797979;
-//     text-align: center;
-// }
 .add_client{
     color: #ff4f00;
     background: white;
@@ -253,13 +243,6 @@ mat-icon.mat-icon.notranslate.material-icons.mat-icon-no-color {
 .badge-color{
     color:white;
 }
-// .send_icon{
-//     color: #ff4f00;
-// }
-// .button-send{
-//     position: relative;
-//     top: -10px;
-// }
 .card {
     padding-top: 14px;
 }
@@ -346,33 +329,6 @@ mat-icon.mat-icon.notranslate.material-icons.mat-icon-no-color {
     line-height: 30px;
     right: -6px;
 }
-// .card-text{
-//     width: 100%;
-//     height: 100%;
-//     box-sizing: border-box;
-//     outline: 2px solid #18A0FB !important;
-// }
-// .card-chat{
-//     background-color: #F9F7F7;
-//     overflow-y: auto;
-//     height: 110px;
-// }
-// .card-chat-user{
-//     background: #D7D7D7;
-//     border-radius: 8px;
-// }
-// .card-chat-host{
-//     background: linear-gradient(0deg, #E8E8E8, #E8E8E8), #E1DDDD;
-//     border-radius: 8px;
-//     text-align: right;
-// }
-// .card-chat-time{
-//     font-family: Montserrat;
-//     font-style: normal;
-//     font-weight: 600;
-//     font-size: 8px;
-//     line-height: 10px;
-// }
 .size-icon{
     font-size: 20px;
     cursor: pointer;
@@ -451,7 +407,6 @@ mat-menu{
             0 8px 10px 1px rgba(0, 0, 0, 0.14),
             0 3px 14px 2px rgba(0, 0, 0, 0.12);
 }
-
 .cdk-drag-placeholder {
     opacity: 0;
 }
@@ -496,24 +451,18 @@ mat-menu{
     -webkit-overflow-scrolling: touch;
     overflow: auto;
 }
-/* Track */
 .waitlist::-webkit-scrollbar-track {
-    /*box-shadow: inset 0 0 5px grey; */
     border-radius: 10px;
 }
 .walkin::-webkit-scrollbar-track {
-    /*box-shadow: inset 0 0 5px grey; */
     border-radius: 10px;
 }
 .plan::-webkit-scrollbar-track {
-    /*box-shadow: inset 0 0 5px grey; */
     border-radius: 10px;
 }
 .precheck::-webkit-scrollbar-track {
-    /*box-shadow: inset 0 0 5px grey; */
     border-radius: 10px;
 }
-/* Handle */
 .waitlist::-webkit-scrollbar-thumb {
     background: #ff4f00; 
     border-radius: 10px;
@@ -530,7 +479,6 @@ mat-menu{
     background: #ff4f00; 
     border-radius: 10px;
 }
-/* Handle on hover */
 .waitlist::-webkit-scrollbar-thumb:hover {
     background: #b30000; 
 }
@@ -630,22 +578,14 @@ mat-menu{
         width: 20px !important;
     }
 } 
-
-// mat-tab-group .mat-tab-header .mat-tab-header-pagination {
-//     display: none !important; 
-// }
-
 ::ng-deep mat-tab-group {
     .mat-tab-header {
         .mat-tab-header-pagination {
-            display: none !important; // <== disable pagination
+            display: none !important;
         }
         .mat-tab-label-container {
-            // left: 0px; // if you need to use it on mobile - set left position to 0
-            // width: 100%;
             .mat-tab-list {
-                overflow-x: auto !important; // <== set horisontal scroll bar imperatively
-                // below rule prevents sliding of buttons' container - because it not sliding properly - to left it not slide as well
+                overflow-x: auto !important;
                 transform: none !important;
             }
             .mat-tab-list::-webkit-scrollbar {
