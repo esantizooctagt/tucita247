@@ -40,7 +40,7 @@
                                 <mat-icon [ngClass]="{'back-disabled': currWeek == 1,
                                     'back-enabled': currWeek == 0}">arrow_back</mat-icon>
                             </button>
-                            <span class="start-month">{{(weekStart | date: 'MMM d') + '/' + (weekEnd | date: 'MMM d')}}</span>
+                            <span class="start-month">{{((weekStart | date: 'MMM d') == null ? 'XXX X' : (weekStart | date: 'MMM d')) + '/' + ((weekEnd | date: 'MMM d') == null ? 'XXX X' : (weekEnd | date: 'MMM d'))}}</span>
                             <button mat-icon-button class="nav-buttons" type="button" (click)="nextWeek()">
                                 <mat-icon>arrow_forward</mat-icon>
                             </button>
