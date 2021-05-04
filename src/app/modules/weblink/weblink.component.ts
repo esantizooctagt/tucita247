@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable } from 'rxjs';
+import { empty, Observable } from 'rxjs';
 import { AppointmentService, ServService } from '@app/services';
 import { AuthService } from '@app/core/services';
 import { SpinnerService } from '@app/shared/spinner.service';
@@ -259,6 +259,8 @@ export class WeblinkComponent implements OnInit {
     this.locationId = event.value;
     this.providerId = "0";
     this.serviceId = "0";
+    this.hours$ = empty();
+    this.dateAppo = undefined;
     if (this.locationId != "0"){
       let locSel = this.locations.filter(x=> x.LocationId == this.locationId);
       if (locSel.length > 0){
@@ -292,6 +294,8 @@ export class WeblinkComponent implements OnInit {
     this.services = [];
     this.providerId = event.value;
     this.serviceId = "0";
+    this.hours$ = empty();
+    this.dateAppo = undefined;
     if (event.value != "0" && this.locationId != "0"){
       let locSel = this.locations.filter(x=> x.LocationId == this.locationId);
       let provSel = locSel[0].Provs.filter(x=>x.ProviderId = this.providerId);
@@ -311,6 +315,8 @@ export class WeblinkComponent implements OnInit {
 
   onServChange(event){
     this.serviceId = event.value;
+    this.hours$ = empty();
+    this.dateAppo = undefined;
   }
 
   getErrorMessage(component: string){
@@ -369,27 +375,6 @@ export class WeblinkComponent implements OnInit {
   onNoClick(){
     this.dialogRef.close();
   }
-
-  // validateService(event){
-  //   let res = this.services.filter(x => x.ServiceId == event.value);
-  //   if (res.length > 0) { this.maxGuests = res[0].CustomerPerBooking; }
-  //   this.clientForm.patchValue({'Guests': 1});
-
-  //   if (this.tipo == 1){
-  //     this.hours$ = this.appointmentService.getAvailability(this.businessId, this.locationId, this.clientForm.value.ProviderId, event.value).pipe(
-  //       map((res: any) => {
-  //         if (res.Code == 200){
-  //           return res.Hours;
-  //         }
-  //       }),
-  //       catchError(err => {
-  //         this.onError = err.Message;
-  //         this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@shared.error:`);
-  //         return this.onError;
-  //       })
-  //     );
-  //   }
-  // }
 
   changeValues($event){
     this.clientForm.patchValue({CountryCode: $event.value, Phone: ''});
