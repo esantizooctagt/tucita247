@@ -639,41 +639,83 @@ export class ScheduleComponent implements OnInit {
           this.FriHours = res.Friday;
           this.SatHours = res.Saturday;
           this.SunHours = res.Sunday;
-
+          
+          let entroMon = 0;
           this.MonHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
           if (this.MonHours.length > 0){
             this.minHr = this.MonHours[0].Time24;
             this.maxHr = this.MonHours[this.MonHours.length-1].Time24;
+            entroMon = 1;
           }
+          let entroTue = 0;
           this.TueHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
           if (this.TueHours.length > 0){
-            this.minHr = (this.TueHours[0].Time24 < this.minHr ? this.TueHours[0].Time24 : this.minHr);
-            this.maxHr = (this.TueHours[this.TueHours.length-1].Time24 > this.maxHr ? this.TueHours[this.TueHours.length-1].Time24 : this.maxHr);
+            if (entroMon == 1){
+              this.minHr = (this.TueHours[0].Time24 < this.minHr ? this.TueHours[0].Time24 : this.minHr);
+              this.maxHr = (this.TueHours[this.TueHours.length-1].Time24 > this.maxHr ? this.TueHours[this.TueHours.length-1].Time24 : this.maxHr);
+            } else {
+              this.minHr = this.TueHours[0].Time24;
+              this.maxHr = this.TueHours[this.TueHours.length-1].Time24;
+            }
+            entroTue = 1;
           }
+          let entroWed = 0;
           this.WedHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
           if (this.WedHours.length > 0){
-            this.minHr = (this.WedHours[0].Time24 < this.minHr ? this.WedHours[0].Time24 : this.minHr);
-            this.maxHr = (this.WedHours[this.WedHours.length-1].Time24 > this.maxHr ? this.WedHours[this.WedHours.length-1].Time24 : this.maxHr);
+            if (entroTue == 1){
+              this.minHr = (this.WedHours[0].Time24 < this.minHr ? this.WedHours[0].Time24 : this.minHr);
+              this.maxHr = (this.WedHours[this.WedHours.length-1].Time24 > this.maxHr ? this.WedHours[this.WedHours.length-1].Time24 : this.maxHr);
+            } else {
+              this.minHr = this.WedHours[0].Time24;
+              this.maxHr = this.WedHours[this.WedHours.length-1].Time24;
+            }
+            entroWed = 1;
           }
+          let entroThu = 0;
           this.ThuHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
           if (this.ThuHours.length > 0){
-            this.minHr = (this.ThuHours[0].Time24 < this.minHr ? this.ThuHours[0].Time24 : this.minHr);
-            this.maxHr = (this.ThuHours[this.ThuHours.length-1].Time24 > this.maxHr ? this.ThuHours[this.ThuHours.length-1].Time24 : this.maxHr);
+            if (entroWed == 1){
+              this.minHr = (this.ThuHours[0].Time24 < this.minHr ? this.ThuHours[0].Time24 : this.minHr);
+              this.maxHr = (this.ThuHours[this.ThuHours.length-1].Time24 > this.maxHr ? this.ThuHours[this.ThuHours.length-1].Time24 : this.maxHr);
+            } else{
+              this.minHr = this.ThuHours[0].Time24;
+              this.maxHr = this.ThuHours[this.ThuHours.length-1].Time24;
+            }
+            entroThu = 1;
           }
+          let entroFri = 0;
           this.FriHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
           if (this.FriHours.length > 0){
-            this.minHr = (this.FriHours[0].Time24 < this.minHr ? this.FriHours[0].Time24 : this.minHr);
-            this.maxHr = (this.FriHours[this.FriHours.length-1].Time24 > this.maxHr ? this.FriHours[this.FriHours.length-1].Time24 : this.maxHr);
+            if (entroThu == 1){
+              this.minHr = (this.FriHours[0].Time24 < this.minHr ? this.FriHours[0].Time24 : this.minHr);
+              this.maxHr = (this.FriHours[this.FriHours.length-1].Time24 > this.maxHr ? this.FriHours[this.FriHours.length-1].Time24 : this.maxHr);
+            } else {
+              this.minHr = this.FriHours[0].Time24;
+              this.maxHr = this.FriHours[this.FriHours.length-1].Time24;
+            }
+            entroFri = 1;
           }
+          let entroSat = 0;
           this.SatHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
           if (this.SatHours.length > 0){
-            this.minHr = (this.SatHours[0].Time24 < this.minHr ? this.SatHours[0].Time24 : this.minHr);
-            this.maxHr = (this.SatHours[this.SatHours.length-1].Time24 > this.maxHr ? this.SatHours[this.SatHours.length-1].Time24 : this.maxHr);
+            if (entroFri == 1){
+              this.minHr = (this.SatHours[0].Time24 < this.minHr ? this.SatHours[0].Time24 : this.minHr);
+              this.maxHr = (this.SatHours[this.SatHours.length-1].Time24 > this.maxHr ? this.SatHours[this.SatHours.length-1].Time24 : this.maxHr);
+            } else {
+              this.minHr = this.SatHours[0].Time24;
+              this.maxHr = this.SatHours[this.SatHours.length-1].Time24;
+            }
+            entroSat = 1;
           }
           this.SunHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
           if (this.SunHours.length > 0){
-            this.minHr = (this.SunHours[0].Time24 < this.minHr ? this.SunHours[0].Time24 : this.minHr);
-            this.maxHr = (this.SunHours[this.SunHours.length-1].Time24 > this.maxHr ? this.SunHours[this.SunHours.length-1].Time24 : this.maxHr);
+            if (entroSat == 1){
+              this.minHr = (this.SunHours[0].Time24 < this.minHr ? this.SunHours[0].Time24 : this.minHr);
+              this.maxHr = (this.SunHours[this.SunHours.length-1].Time24 > this.maxHr ? this.SunHours[this.SunHours.length-1].Time24 : this.maxHr);
+            } else {
+              this.minHr = this.SunHours[0].Time24;
+              this.maxHr = this.SunHours[this.SunHours.length-1].Time24;
+            }
           }
           
           this.minHr00 = +(this.minHr.toString().padStart(4,'0').substring(0,2)+'00');
@@ -684,7 +726,7 @@ export class ScheduleComponent implements OnInit {
 
           this.minHr = +(this.minHr.toString().padStart(4,'0').substring(0,2)+'30');
           this.maxHr = +(this.maxHr.toString().padStart(4,'0').substring(0,2)+'30');
-
+          
           this.MonHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
           this.TueHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
           this.WedHours.sort((a, b) => (a.Time24 < b.Time24 ? -1 : 1))
