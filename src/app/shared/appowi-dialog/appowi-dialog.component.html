@@ -35,7 +35,7 @@
             <mat-error *ngIf="f.ProviderId.invalid && f.ProviderId.touched">{{ 'Error: ' + getErrorMessage('Provider')}}</mat-error>
         </mat-form-field>
     </div>
-    <div class="form-field pl-3 pr-3">
+    <div class="form-field pl-3 pr-3" *ngIf="servHide == '0'">
         <mat-form-field>
             <mat-select i18n-placeholder="Service|text in citas@@host.service" placeholder="Service" name="services" formControlName="ServiceId" (selectionChange)="validateService($event)" required>
                 <mat-option *ngFor="let item of services" [value]="item.ServiceId">

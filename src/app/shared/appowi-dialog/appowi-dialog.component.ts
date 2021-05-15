@@ -36,6 +36,7 @@ export class AppowiDialogComponent implements OnInit {
   businessId: string = '';
   locationId: string = '';
   providerId: string = '';
+  servHide: string = '0';
   doorId: string = '';
   onError: string = '';
   services: any[]=[];
@@ -102,10 +103,71 @@ export class AppowiDialogComponent implements OnInit {
     this.hours = this.data.hours;
     this.Providers = this.data.providers.sort((a, b) => (a.Name < b.Name ? -1 : 1));;
     this.tipo = this.data.tipo;
-
+    if (this.providerId != "0"){
+      if (this.services.length == 1){
+        this.clientForm.patchValue({'ServiceId': this.services[0].ServiceId, 'Guests': 1, 'Hour': '--'});
+        this.servHide = this.services[0].ServiceId;
+        this.maxGuests = this.services[0].CustomerPerBooking;
+        this.hours = [];
+        if (this.tipo == 1){
+          this.hours$ = this.appointmentService.getAvailability(this.businessId, this.locationId, this.clientForm.value.ProviderId, this.services[0].ServiceId).pipe(
+            map((res: any) => {
+              if (res.Code == 200){
+                // this.hours = res.Hours;
+                return res.Hours;
+                // this.openSnackBar($localize`:@@host.checkoutsuccess:`, $localize`:@@host.checkoutpop:`);
+              }
+            }),
+            catchError(err => {
+              this.onError = err.Message;
+              this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@shared.error:`);
+              return this.onError;
+            })
+          );
+        }
+      }
+    }
+    if (this.Providers.length == 1 && this.providerId == '0'){
+      this.providerId = this.Providers[0].ProviderId;
+      this.hours = [];
+      this.services = [];
+      this.clientForm.patchValue({'ServiceId': '', 'Hour': '--'});
+      this.getLocInfo$ = this.serviceService.getServicesProvider(this.businessId, this.providerId).pipe(
+        map((res: any) =>{
+          this.services = res.services.sort((a, b) => (a.Name < b.Name ? -1 : 1)).filter(x => x.Selected === 1);
+          if (this.services.length == 1){
+            this.clientForm.patchValue({'ServiceId': this.services[0].ServiceId, 'Guests': 1});
+            this.servHide = this.services[0].ServiceId;
+            this.maxGuests = this.services[0].CustomerPerBooking;
+      
+            if (this.tipo == 1){
+              this.hours$ = this.appointmentService.getAvailability(this.businessId, this.locationId, this.clientForm.value.ProviderId, this.services[0].ServiceId).pipe(
+                map((res: any) => {
+                  if (res.Code == 200){
+                    // this.hours = res.Hours;
+                    return res.Hours;
+                    // this.openSnackBar($localize`:@@host.checkoutsuccess:`, $localize`:@@host.checkoutpop:`);
+                  }
+                }),
+                catchError(err => {
+                  this.onError = err.Message;
+                  this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@shared.error:`);
+                  return this.onError;
+                })
+              );
+            }
+          }
+          return res;
+        }),
+        catchError(err => {
+          this.onError = err.Message;
+          return '0';
+        })
+      );
+    }
     if (this.providerId != "0"){
       this.clientForm.patchValue({'ProviderId': this.providerId});
-    }
+    }    
     // if (this.tipo == 2){
     //   this.getLocInfo$ = this.businessService.getBusinessOpeHours(this.businessId, this.locationId).pipe(
     //     map((res: any) => {
@@ -320,6 +382,29 @@ export class AppowiDialogComponent implements OnInit {
     this.getLocInfo$ = this.serviceService.getServicesProvider(this.businessId, event.value).pipe(
       map((res: any) =>{
         this.services = res.services.sort((a, b) => (a.Name < b.Name ? -1 : 1)).filter(x => x.Selected === 1);
+        if (this.services.length == 1){
+          this.clientForm.patchValue({'ServiceId': this.services[0].ServiceId});
+          this.servHide = this.services[0].ServiceId;
+          this.maxGuests = this.services[0].CustomerPerBooking;
+          this.clientForm.patchValue({'Guests': 1});
+    
+          if (this.tipo == 1){
+            this.hours$ = this.appointmentService.getAvailability(this.businessId, this.locationId, this.clientForm.value.ProviderId, this.services[0].ServiceId).pipe(
+              map((res: any) => {
+                if (res.Code == 200){
+                  // this.hours = res.Hours;
+                  return res.Hours;
+                  // this.openSnackBar($localize`:@@host.checkoutsuccess:`, $localize`:@@host.checkoutpop:`);
+                }
+              }),
+              catchError(err => {
+                this.onError = err.Message;
+                this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@shared.error:`);
+                return this.onError;
+              })
+            );
+          }
+        }
         return res;
       }),
       catchError(err => {
