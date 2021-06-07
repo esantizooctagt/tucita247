@@ -100,7 +100,6 @@ export class AppoDialogComponent implements OnInit {
     this.businessId = this.data.businessId;
     this.providerId = this.data.providerId;
     this.dayInfo = this.data.dayData;
-
     if (this.doors.length > 0){
       const toSelect = this.doors.find(c => c == this.doors[0]);
       this.clientForm.get('Door').setValue(toSelect);
@@ -312,7 +311,6 @@ export class AppoDialogComponent implements OnInit {
 
     if (res.length > 0) { this.maxGuests = res[0].CustomerPerBooking; }
     this.newTime = '';
-    
     if (+minInit == 0){
       intTime = +this.timeHr[this.timeHr.indexOf(+res[0].TimeService.replace(':',''))];
       calcTime = +this.timeHr[this.timeHr.indexOf(+res[0].TimeService.replace(':',''))-1];
@@ -356,6 +354,7 @@ export class AppoDialogComponent implements OnInit {
       if (data[_i].Available > 0 && (data[_i].ServiceId == '' || data[_i].ServiceId == serviceId)){
         this.newTime = nTime;
         validTime = 1;
+        break;
       } else {
         validTime = 0;
         this.newTime = '';
