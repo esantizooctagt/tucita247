@@ -25,7 +25,7 @@
     <ng-container matColumnDef="Actions">
         <mat-header-cell *matHeaderCellDef class="col-md-1" i18n="Actions@@shared.actions"> Actions </mat-header-cell>
         <mat-cell *matCellDef="let element;let i=index" class="col-md-1 mat-column-Actions">
-            <button mat-icon-button (click)="onSelect(element.value.ProviderId)">
+            <button mat-icon-button (click)="onSelect(element.ProviderId)">
                 <mat-icon svgIcon="edit"></mat-icon>
             </button>
             <button mat-icon-button (click)="onDelete(element)">
