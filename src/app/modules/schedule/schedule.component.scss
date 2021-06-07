@@ -101,12 +101,11 @@
     text-align: right;
 }
 .time-hr{
-    font-size: 16px;
+    font-size: 15px;
     position: relative;
     display: block;
-    top: 30px;
-    z-index: 70 !important;
-    color: #000;
+    top: 25px;
+    z-index: 70!important;
 }
 .min-hr{
     color:#000;
@@ -128,9 +127,9 @@
     background-color: #e5e3e2 !important;
     margin: 0 auto !important;
     border: 1px dotted #c4c4c4;
-    display: flex;
     align-items: center;
     justify-content: center;
+    position: absolute;
 }
 .time-actions-disabled{
     height: 30px;
