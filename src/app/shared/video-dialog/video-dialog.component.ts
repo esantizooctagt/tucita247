@@ -11,6 +11,7 @@ export interface DialogData {
   guests: number;
   title: string;
   tipo: number;
+  qrValue: string;
   businessId: string;
   locationId: string;
   providerId: string;
@@ -36,6 +37,7 @@ export class VideoDialogComponent implements OnInit {
   checkInValues: any;
   Guests: number = 1;
   activeBlink: number = 0;
+  valQr: string = '';
 
   constructor(
     public dialogRef: MatDialogRef<VideoDialogComponent>,
@@ -46,6 +48,7 @@ export class VideoDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.Guests = (this.data.guests == 0 ? 1 : this.data.guests);
+    this.valQr = (this.data.qrValue != undefined || this.data.qrValue != '' ? this.data.qrValue : '');
   }
 
   displayCameras(event){
@@ -123,6 +126,10 @@ export class VideoDialogComponent implements OnInit {
   }
 
   validQr(event){
+    if (event.toString().length == 1 && event.toString() == "0"){
+      this.qrCode = this.valQr;
+      return;
+    }
     if (event.toString().length == 6){
 
       this.activeBlink = 1;

@@ -95,6 +95,8 @@ import { WeblinkComponent } from './modules/weblink/weblink.component';
 import { SortHoursPipe } from './shared/sort-hours.pipe';
 import { ServiceDataPipe } from './shared/service-data.pipe';
 import { DialogcancelComponent } from './shared/dialogcancel/dialogcancel.component';
+import { MaindashComponent } from './modules/maindash/maindash.component';
+import { SearchAppoDialogComponent } from './shared/search-appo-dialog/search-appo-dialog.component';
 
 @NgModule({
   declarations: [
@@ -135,7 +137,9 @@ import { DialogcancelComponent } from './shared/dialogcancel/dialogcancel.compon
     NamecodePipe,
     SortHoursPipe,
     ServiceDataPipe,
-    DialogcancelComponent
+    DialogcancelComponent,
+    MaindashComponent,
+    SearchAppoDialogComponent
   ],
   imports: [
     BrowserModule,

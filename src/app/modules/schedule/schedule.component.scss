@@ -3,14 +3,36 @@
     font-size: 15px;
     font-family: Montserrat;
     font-weight: 600;
-    height: 23px;
+    height: 30px;
+    min-width: 190px;
     color: #f44f00;
+    // position: sticky;
+    // left: 0;
+    // top: 0;
+    background: #fff;
+    z-index: 10;
+}
+.title-month-qeue{
+    text-align: center;
+    font-size: 15px;
+    font-family: Montserrat;
+    font-weight: 600;
+    min-width: 140px;
+    color: #f44f00;
+    border-bottom: 1px solid #18A0FB;
 }
 .month-qeue{
     text-align: center;
     font-size: 15px;
     font-family: Montserrat;
     font-weight: 600;
+    // position: sticky;
+    // left: 0;
+    // top: 0;
+    background: #fff;
+    z-index: 30;
+    min-width: 140px;
+    border-bottom: 1px solid #18A0FB;
 }
 .location-select{
     height: 65.5px;
@@ -20,13 +42,15 @@
 }
 .btn-search{
     height: 45px;
-    width: 150px;
     font-size: 19px;
     text-align: left;
     margin-left: 10px;
+    border-radius: 20px;
+    position: absolute;
+    top: 10px;
 }
 .input-search{
-    width: 73%;
+    width: 100%;
     font-size: 12px;
 }
 .mat-icon-button{
@@ -63,9 +87,14 @@
 }
 .time-bucket{
     height: 30px;
+    min-width: 140px;
 }
 .blank-bucket{
-    height: 7px;
+    height: 1px;
+    width: 140px;
+    min-width: 140px;
+    max-width: 160px;
+    display: table-cell;
 }
 .div-style{
     position: relative;
@@ -74,10 +103,10 @@
 .time-hr{
     font-size: 16px;
     position: relative;
-    top: -20px;
-    left: -2px;
-    text-align: right;
-    color:#000;
+    display: block;
+    top: 30px;
+    z-index: 70 !important;
+    color: #000;
 }
 .min-hr{
     color:#000;
@@ -108,25 +137,29 @@
     width: 140px;
     min-width: 140px;
     max-width: 160px;
-    margin: 0 auto !important;
+    display: inherit;
+    // margin: 0 auto !important;
 }
 .hidden-down{
-    display: none;
+    display: none !important;
 }
 .hidden-up{
-    display: none;
+    display: none !important;
 }
 .show-up{
-    display: block;
+    display: table-row !important;
 }
 .show-down{
-    display: block;
+    display: table-row !important;
 }
 .service-info{
     font-size:10px;
     text-align: center;
     font-weight: 600;
     cursor: pointer;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 .btn-add{
     text-align: left;
@@ -139,9 +172,9 @@
 }
 .time-week{
     height: 59px;
-    padding-bottom: 10px !important;
-    border: 1px solid #18A0FB;
+    // border-bottom: 1px solid #18A0FB;
     background: #fff;
+    flex-wrap: nowrap;
 }
 .space-hours{
     border-top: 1px solid #bebebe;
@@ -149,17 +182,19 @@
     top: 3px;
 }
 .button-collapse{
-    position: relative;
-    top: -18px;
-    left: -90px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
 }
 .hr-style{
     font-size: 65px;
     padding: 0;
-    top: -15px;
-    position: relative;
+    top: -12px;
+    position: absolute;
     right: 0px;
     color: #000;
+    line-height: 8px;
+    z-index: 60 !important;
 }
 .action-enabled{
     stroke: #F44F00;
@@ -180,6 +215,23 @@
     background: #F5F5F5;
     height: auto !important;
 }
+.cal-row{
+    flex-wrap: nowrap;
+    background-color: #fff;
+    z-index: 20;
+}
+.blank-sticky{
+    // top: 3px;
+    // position: sticky;
+    // left: 0;
+    background: #fff;
+    z-index: 5;
+    float: left;
+    height: 7px;
+}
+.padding-row{
+    padding-bottom: 4px;
+}
 .square-color{
     width: 20px;
     height: 20px;
@@ -195,26 +247,70 @@
     top: -3px;
 }
 .content-hr {
-    position: relative;;
-    top: 0px;
-    padding-top: 10px !important;
+    position: relative;
     padding-bottom: 10px !important;
     border: 1px solid #18A0FB;
+    overflow: scroll;
+    height: calc(100vh - 150px) !important;
+}
+.table-st {
+    display: table;
+    box-sizing: border-box;
+    text-indent: initial;
+    position: relative;
+    border-collapse: collapse;
+}
+.data {
+    height: 30px;
+    display: table-cell;
+}
+.header{
+    display: table-cell;
+    vertical-align: inherit;
+    font-weight: bold;
+    text-align: -internal-center;
+}
+.tb-header .header {
+    position: -webkit-sticky; /* for Safari */
+    position: sticky;
+    top: 0;
+    z-index: 40;
     background: #fff;
 }
-.sticky-header{
-    position:sticky;
-    position: -webkit-sticky;
-    top: 66px;
-    // position: fixed;
-    // width: calc(100vw - 15px);
-    z-index: 100;
-    background-color: #f5f5f5;
-    padding-left: 15px;
-    padding-right: 15px;
+.tb-header .header:first-child {
+    left: 0;
+    z-index: 50;
+}
+.tb-body .header {
+    position: -webkit-sticky; /* for Safari */
+    position: sticky;
+    left: 0;
+}
+.tb-row{
+    display: table-row;
+    vertical-align: inherit;
+    flex-wrap: wrap;
+}
+.tb-header{
+    display: table-header-group;
+    vertical-align: middle;
+    border-color: inherit;
+}
+.tb-body{
+    display: table-row-group;
+    vertical-align: middle;
+    border-color: inherit;
+}
+.header-blank{
+    width: 190px;
+    max-width: 190px;
 }
 ::ng-deep .mat-tooltip {
     background-color: #ff4f00;
+}
+:host ::ng-deep mat-toolbar{
+    min-width: 1230px;
+    max-width: 1230px;
 }
 :host ::ng-deep .mat-list.list-horizontal {
     padding: 0;
@@ -235,6 +331,16 @@ button.mat-icon-button
     }
 }
 button.mat-stroked-button
+{
+    &.cdk-program-focused 
+    {
+        ::ng-deep .mat-button-focus-overlay
+        {
+            opacity: 0;  // hide overlay
+        }
+    }
+}
+button.mat-flat-button
 {
     &.cdk-program-focused 
     {

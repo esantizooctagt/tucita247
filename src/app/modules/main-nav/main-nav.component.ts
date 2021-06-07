@@ -231,11 +231,11 @@ export class MainNavComponent implements OnInit {
   loadAccess(){
     this.apps$ = this.roleService.getApplications((this.roleId != '' ? this.roleId : 1), this.businessId, this.languageInit).pipe(
       map((res: any[]) => {
-        let app01 = res.filter(x=>x.ApplicationId == 'APP01' || x.ApplicationId == 'APP02');
+        let app01 = res.filter(x=>(x.ApplicationId == 'APP01' || x.ApplicationId == 'APP02' || x.ApplicationId == 'APP12') && x.Active == '1');
         if (app01.length > 0){
           this.displayReporting = true;
         }
-        let app02 = res.filter(x=>x.ApplicationId != 'APP01' && x.ApplicationId != 'APP02');
+        let app02 = res.filter(x=>(x.ApplicationId != 'APP01' && x.ApplicationId != 'APP02' && x.ApplicationId != 'APP12') && x.Active == '1');
         if (app02.length > 0){
           this.displayOperation = true;
         }

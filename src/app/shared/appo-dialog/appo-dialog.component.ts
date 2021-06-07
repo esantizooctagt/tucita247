@@ -44,6 +44,7 @@ export class AppoDialogComponent implements OnInit {
   varGuests: number = 1;
   maxGuests: number = 1;
   dayInfo: any[]=[];
+  dispServices: boolean = false;
 
   timeHr45 = [0,55,70,85,100,155,170,185,200,255,270,285,300,355,370,385,400,455,470,485,500,555,570,585,600];
   timeHr30 = [0,15,70,85,100,115,170,185,200,215,270,285,300,315,370,385,400,415,470,485,500,515,570,585,600];
@@ -113,6 +114,13 @@ export class AppoDialogComponent implements OnInit {
           this.services = res.services.sort((a, b) => (a.Name < b.Name ? -1 : 1)).filter(x => x.Selected === 1);
         } else {
           this.services = res.services.sort((a, b) => (a.Name < b.Name ? -1 : 1)).filter(x => x.ServiceId == this.serviceId);
+        }
+        if (this.services.length > 1){
+          this.dispServices = true;
+        } else {
+          this.dispServices = false;
+          this.clientForm.patchValue({ServiceId: this.services[0].ServiceId});
+          this.valService(this.services[0].ServiceId);
         }
         return res;
       }),
@@ -291,7 +299,11 @@ export class AppoDialogComponent implements OnInit {
   }
 
   validateService(event){
-    let res = this.services.sort((a, b) => (a.Name < b.Name ? -1 : 1)).filter(x => x.ServiceId == event.value);
+    this.valService(event.value);
+  }
+
+  valService(serviceId){
+    let res = this.services.sort((a, b) => (a.Name < b.Name ? -1 : 1)).filter(x => x.ServiceId == serviceId);
     let validTime: number = 0;
     let minInit = this.data.appoTime.substring(0,5).replace(':','').substring(2,4);
     let timeInit = +(this.data.appoTime.substring(0,5).replace(':',''));
@@ -341,7 +353,7 @@ export class AppoDialogComponent implements OnInit {
     let cTime = calcTime.toString().padStart(4,"0").substring(0,2)+':'+calcTime.toString().padStart(4,"0").substring(2,4) + dateAppoCalc;
     let data = this.dayInfo.filter(x => x.Time >= this.data.appoTime.replace('-',':') && x.Time <= cTime);
     for (var _i = 0; _i < data.length-1; _i++){
-      if (data[_i].Available > 0 && (data[_i].ServiceId == '' || data[_i].ServiceId == event.value)){
+      if (data[_i].Available > 0 && (data[_i].ServiceId == '' || data[_i].ServiceId == serviceId)){
         this.newTime = nTime;
         validTime = 1;
       } else {

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Input, SimpleChanges } from '@angular/core';
-import { MatTable } from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
 import { Observable } from 'rxjs/internal/Observable';
-import { FormArray, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthService } from '@app/core/services';
 import { MonitorService } from '@app/shared/monitor.service';
@@ -21,9 +21,10 @@ import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.comp
 })
 export class LocationListComponent implements OnInit {
   @Input() filterValue: string;
-  @ViewChild(MatTable) locationTable :MatTable<any>;
+  @ViewChild(MatSort) sort: MatSort;
   
   locations$: Observable<any[]>;
+  locations: any[]=[];
   public onError: string='';
 
   public length: number = 0;
@@ -35,28 +36,12 @@ export class LocationListComponent implements OnInit {
   displayYesNo: boolean = false;
 
   displayedColumns = ['Name', 'Actions'];
+  dataSource = new MatTableDataSource<any>(this.locations);
   businessId: string = '';
   changeData: string;
   locationData: any;
 
-  get fLocations(){
-    return this.locationForm.get('Locations') as FormArray;
-  }
-
-  locationForm = this.fb.group({
-    Locations: this.fb.array([this.addLocations()])
-  });
-
-  addLocations(): FormGroup{
-    return this.fb.group({
-      LocationId: [''],
-      Name: ['', [Validators.required, Validators.maxLength(100), Validators.minLength(3)]],
-      Status: []
-    });
-  }
-
   constructor(
-    private fb: FormBuilder,
     private domSanitizer: DomSanitizer,
     private authService: AuthService,
     private data: MonitorService,
@@ -141,7 +126,9 @@ export class LocationListComponent implements OnInit {
             this._currentPage.push({page: this._page+1, locationId: res.lastItem});
           }
         }
-        this.locationForm.setControl('Locations', this.setExistingServices(res.locations.sort((a, b) => (a.Name < b.Name ? -1 : 1))));
+        this.locations = res.locations.sort((a, b) => (a.Name < b.Name ? -1 : 1));
+        this.dataSource.data = this.locations;
+        this.dataSource.sort = this.sort;
         this.spinnerService.stop(spinnerRef);
         return res.locations;
       }),
@@ -151,20 +138,6 @@ export class LocationListComponent implements OnInit {
         return this.onError;
       })
     );
-  }
-
-  setExistingServices(services: any[]): FormArray{
-    const formArray = new FormArray([]);
-    services.forEach(res => {
-      formArray.push(this.fb.group({
-          LocationId: res.LocationId,
-          Name: res.Name,
-          Status: res.Status
-        })
-      );
-      this.locationTable.renderRows();
-    });
-    return formArray;
   }
 
   public goToPage(page: number, elements: number): void {

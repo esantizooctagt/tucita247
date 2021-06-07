@@ -42,3 +42,4 @@ export * from './roles-admin/role-admin/role-admin.component';
 export * from './cancel/cancel.component';
 export * from './new-business/new-business.component';
 export * from './weblink/weblink.component';
+export * from './maindash/maindash.component';

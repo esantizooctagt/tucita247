@@ -53,7 +53,7 @@
               </mat-expansion-panel-header>
               <mat-nav-list class="accordion-menu ml-0" dense>
               <ng-container class="" *ngFor="let item of apps$ | async">
-                <mat-list-item class="submenu-item" *ngIf="(item.ApplicationId == 'APP01' || item.ApplicationId == 'APP02') && item.Active == 1">
+                <mat-list-item class="submenu-item" *ngIf="(item.ApplicationId == 'APP01' || item.ApplicationId == 'APP02' || item.ApplicationId == 'APP12') && item.Active == '1'">
                   <a [routerLink]="['/'+item.Route]" routerLinkActive="submenu-active" class="value-submenu-item" (click)="(screenWidth < 500) ? drawer.toggle() : ''">{{ item.Name }}</a>
                 </mat-list-item>
                 <!-- <a class="list-item" *ngIf="item.ApplicationId == 'APP01' || item.ApplicationId == 'APP02'" mat-list-item [routerLink]="['/'+item.Route]" routerLinkActive="menu-active">{{ item.Name }}</a> -->
@@ -73,7 +73,7 @@
               </mat-expansion-panel-header>
               <mat-nav-list class="accordion-menu ml-0" dense>
               <ng-container class="" *ngFor="let item of apps$ | async">
-                <mat-list-item class="submenu-item" *ngIf="(item.ApplicationId != 'APP01' && item.ApplicationId != 'APP02') && item.Active == 1">
+                <mat-list-item class="submenu-item" *ngIf="(item.ApplicationId != 'APP01' && item.ApplicationId != 'APP02' && item.ApplicationId != 'APP12') && item.Active == '1'">
                   <a [routerLink]="['/'+item.Route]" routerLinkActive="submenu-active" class="value-submenu-item" (click)="(screenWidth < 500) ? drawer.toggle() : ''">{{ item.Name }}</a>
                 </mat-list-item>
                 <!-- <a class="list-item" *ngIf="item.ApplicationId == 'APP01' || item.ApplicationId == 'APP02'" mat-list-item [routerLink]="['/'+item.Route]" routerLinkActive="menu-active">{{ item.Name }}</a> -->

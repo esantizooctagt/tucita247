@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, Input, SimpleChanges } from '@angular/core';
-import { MatTable } from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
 import { Observable } from 'rxjs/internal/Observable';
 import { FormArray, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -22,10 +23,11 @@ import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.comp
 })
 export class ServiceListComponent implements OnInit {
   @Input() filterValue: string;
-  @ViewChild(MatTable) serviceTable :MatTable<any>;
+  @ViewChild(MatSort) sort: MatSort;
   
   deleteService$: Observable<any>;
   services$: Observable<any[]>;
+  services: any[]=[];
   public onError: string='';
 
   public length: number = 0;
@@ -37,28 +39,12 @@ export class ServiceListComponent implements OnInit {
   displayYesNo: boolean = false;
 
   displayedColumns = ['Name', 'Actions'];
+  dataSource = new MatTableDataSource<any>(this.services);
   businessId: string = '';
   changeData: string;
   serviceData: any;
 
-  get fServices(){
-    return this.serviceForm.get('Services') as FormArray;
-  }
-
-  serviceForm = this.fb.group({
-    Services: this.fb.array([this.addServices()])
-  });
-
-  addServices(): FormGroup{
-    return this.fb.group({
-      ServiceId: [''],
-      Name: ['', [Validators.required, Validators.maxLength(100), Validators.minLength(3)]],
-      Status: []
-    });
-  }
-
   constructor(
-    private fb: FormBuilder,
     private domSanitizer: DomSanitizer,
     private authService: AuthService,
     private data: MonitorService,
@@ -143,7 +129,9 @@ export class ServiceListComponent implements OnInit {
             this._currentPage.push({page: this._page+1, serviceId: res.lastItem});
           }
         }
-        this.serviceForm.setControl('Services', this.setExistingServices(res.services.sort((a, b) => (a.Name < b.Name ? -1 : 1))));
+        this.services = res.services.sort((a, b) => (a.Name < b.Name ? -1 : 1));
+        this.dataSource.data = this.services;
+        this.dataSource.sort = this.sort;
         this.spinnerService.stop(spinnerRef);
         return res.services;
       }),
@@ -153,20 +141,6 @@ export class ServiceListComponent implements OnInit {
         return this.onError;
       })
     );
-  }
-
-  setExistingServices(services: any[]): FormArray{
-    const formArray = new FormArray([]);
-    services.forEach(res => {
-      formArray.push(this.fb.group({
-          ServiceId: res.ServiceId,
-          Name: res.Name,
-          Status: res.Status
-        })
-      );
-      this.serviceTable.renderRows();
-    });
-    return formArray;
   }
 
   public goToPage(page: number, elements: number): void {

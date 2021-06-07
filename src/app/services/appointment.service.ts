@@ -145,10 +145,20 @@ export class AppointmentService {
                     .pipe(catchError(this.errorHandler));
   }
 
+  getSearchAppos(businessId, fullName, date){
+    return this.http.get<any>(this.apiURL + '/appointments/search/' + businessId + '/' + fullName + '/' + date)
+                    .pipe(catchError(this.errorHandler));
+  }
+
   getMobile(mobile, country): Observable<any> {
     return this.http.get<any>(this.apiURL + '/mobile/' + mobile + '/' + country)
                     .pipe(catchError(this.errorHandler));
-}
+  }
+
+  getDashboard(businessId, dateIni, dateFin){
+    return this.http.get<any>(this.apiURL + '/dashboard/' + businessId + '/' + dateIni + '/' + dateFin)
+                    .pipe(catchError(this.errorHandler));
+  }
 
   errorHandler(error) {
     return throwError(error || 'Server Error');

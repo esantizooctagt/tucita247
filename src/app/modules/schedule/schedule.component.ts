@@ -8,6 +8,7 @@ import { SpinnerService } from '@app/shared/spinner.service';
 import { AuthService } from '@app/core/services';
 import { AppoDialogComponent } from '@app/shared/appo-dialog/appo-dialog.component';
 import { ShowappoDialogComponent } from '@app/shared/showappo-dialog/showappo-dialog.component';
+import { SearchAppoDialogComponent } from '@app/shared/search-appo-dialog/search-appo-dialog.component';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
@@ -899,6 +900,16 @@ export class ScheduleComponent implements OnInit {
         return err;
       })
     );
+  }
+
+  searchAppos(){
+    let day = new Date();
+    const dialogRef = this.dialog.open(SearchAppoDialogComponent, {
+      width: '450px',
+      height: '700px',
+      data: {businessId: this.businessId, fullName: this.searchValue, date: this.datepipe.transform(day, 'yyyy-MM-dd HH:mm')}
+    });
+    this.searchValue='';
   }
 
   onSelectLocation(event){

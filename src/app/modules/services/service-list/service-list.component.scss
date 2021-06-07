@@ -35,5 +35,12 @@ mat-paginator{
     top: -3px;
 }
 :host ::ng-deep .mat-paginator-page-size{
-    display: none;
+    // display: none;
+    align-items: center;
+    margin-right: 8px;
+}
+:host ::ng-deep .mat-paginator-page-size-select {
+    margin: 6px 10px 0 10px;
+    width: 56px;
+    padding-bottom: 0px;
 }

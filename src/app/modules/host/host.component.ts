@@ -1334,7 +1334,7 @@ export class HostComponent implements OnInit {
       dialogRef.minWidth = '320px';
       dialogRef.maxWidth = '450px';
       dialogRef.height = '575px';
-      dialogRef.data = {guests: appo.Guests, title: $localize`:@@host.checkintitle:`, tipo: 1 };
+      dialogRef.data = {guests: appo.Guests, title: $localize`:@@host.checkintitle:`, tipo: 1, qrValue: appo.QrCode };
       const qrDialog = this.dialog.open(VideoDialogComponent, dialogRef);
       let formData;
       this.checkIn$ = qrDialog.afterClosed().pipe(

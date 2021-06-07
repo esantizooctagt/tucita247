@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Input, SimpleChanges } from '@angular/core';
-import { MatTable } from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
 import { Observable } from 'rxjs/internal/Observable';
-import { FormArray, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthService } from '@app/core/services';
 import { MonitorService } from '@app/shared/monitor.service';
@@ -22,14 +22,15 @@ import { LearnDialogComponent } from '@app/shared/learn-dialog/learn-dialog.comp
 })
 export class ProviderListComponent implements OnInit {
   @Input() filterValue: string;
-  @ViewChild(MatTable) providerTable :MatTable<any>;
+  @ViewChild(MatSort) sort: MatSort;
   
   deleteProvider$: Observable<any>;
   providers$: Observable<any[]>;
+  providers: any[]=[];
   public onError: string='';
 
   public length: number = 0;
-  public pageSize: number = 25;
+  public pageSize: number = 10;
   public _page: number;
   private _currentPage: any[] = [];
   private _currentSearchValue: string = '';
@@ -37,30 +38,12 @@ export class ProviderListComponent implements OnInit {
   displayYesNo: boolean = false;
 
   displayedColumns = ['Name', 'Location', 'Actions'];
+  dataSource = new MatTableDataSource<any>(this.providers);
   businessId: string = '';
   changeData: string;
   providerData: any;
 
-  get fProviders(){
-    return this.providerForm.get('Providers') as FormArray;
-  }
-
-  providerForm = this.fb.group({
-    Providers: this.fb.array([this.addProviders()])
-  });
-
-  addProviders(): FormGroup{
-    return this.fb.group({
-      ProviderId: [''],
-      Name: ['', [Validators.required, Validators.maxLength(100), Validators.minLength(3)]],
-      LocationId: [''],
-      Location: [''],
-      Status: []
-    });
-  }
-
   constructor(
-    private fb: FormBuilder,
     private domSanitizer: DomSanitizer,
     private authService: AuthService,
     private data: MonitorService,
@@ -145,7 +128,9 @@ export class ProviderListComponent implements OnInit {
             this._currentPage.push({page: this._page+1, providerId: res.lastItem});
           }
         }
-        this.providerForm.setControl('Providers', this.setExistingServices(res.providers.sort((a, b) => (a.Name < b.Name ? -1 : 1))));
+        this.providers = res.providers.sort((a, b) => (a.Name < b.Name ? -1 : 1));
+        this.dataSource.data = this.providers;
+        this.dataSource.sort = this.sort;
         this.spinnerService.stop(spinnerRef);
         return res.providers;
       }),
@@ -155,22 +140,6 @@ export class ProviderListComponent implements OnInit {
         return this.onError;
       })
     );
-  }
-
-  setExistingServices(services: any[]): FormArray{
-    const formArray = new FormArray([]);
-    services.forEach(res => {
-      formArray.push(this.fb.group({
-          ProviderId: res.ProviderId,
-          Name: res.Name,
-          LocationId: res.LocationId,
-          Location: res.Location,
-          Status: res.Status
-        })
-      );
-      this.providerTable.renderRows();
-    });
-    return formArray;
   }
 
   public goToPage(page: number, elements: number): void {

@@ -1,0 +1,38 @@
+<div class="container-fluid main-background">
+    <div class="row p-0">
+        <!-- <div class="col-md-6 pl-4 m-0">
+            Location
+        </div> -->
+        <div class="col-md-3 pl-4 m-0 form-field">
+            <mat-form-field appearance="outline" class="p-0">
+                <mat-label>Enter a date range</mat-label>
+                <mat-date-range-input [rangePicker]="picker">
+                  <input matStartDate placeholder="Start date" [(ngModel)]="initDate">
+                  <input matEndDate placeholder="End date" [(ngModel)]="endDate">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+            </mat-form-field>
+        </div>
+        <div class="col-md-1 ml-3 p-0 pt-3">
+            <button mat-flat-button color="primary" (click)="process()">Process</button>
+        </div>
+    </div>
+    <ng-container *ngIf="report$ | async"></ng-container>
+    <div class="row p-0">
+        <div class="col-md-6 pl-4 m-0">
+            <div id="chartdiv01" style="width: 100%; height: 400px"></div>
+        </div>
+        <div class="col-md-6 pl-4 m-0">
+            <div id="chartdiv02" style="width: 100%; height: 400px"></div>
+        </div>
+    </div>
+    <div class="row p-0">
+        <div class="col-md-6 pl-4 m-0">
+            <div id="chartdiv03" style="width: 100%; height: 400px"></div>
+        </div>
+        <div class="col-md-6 pl-4 m-0">
+            <div id="chartdiv04" style="width: 100%; height: 400px"></div>
+        </div>
+    </div>
+</div>

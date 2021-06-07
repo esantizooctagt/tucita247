@@ -2,10 +2,10 @@
 <h3 class="pl-3 pr-3 pb-3" i18n="Add New Appointment|text in add new appo@@appos.title">Add New Appointment</h3>
 <h5 class="pl-3 pr-3 pb-3">{{ (data.appoDate | date: 'MMM, d') + ' ' + data.appoTime.replace('-',':') + (newTime != '' ? ' - ' + newTime: '')}}</h5>
 <form [formGroup]="clientForm">
-    <div class="row pl-3 pr-3">
+    <ng-container *ngIf="services$ | async"></ng-container>
+    <div class="row pl-3 pr-3" *ngIf="dispServices">
         <div class="form-field pl-3 pr-3 col-md">
             <mat-form-field>
-                <ng-container *ngIf="services$ | async"></ng-container>
                 <mat-select i18n-placeholder="Service|text in new appo@@appos.newservice" placeholder="Service" name="service" formControlName="ServiceId" (selectionChange)="validateService($event)" required>
                     <mat-option *ngFor="let item of services" [value]="item.ServiceId">
                         {{item.Name}}
