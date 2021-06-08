@@ -173,7 +173,7 @@ export class ScheduleComponent implements OnInit {
                 data[i].Bucket = bckt;
                 data[i].ServiceId = msg['ServiceId'];
                 data[i].Used = Number(data[i].Used)+Number(msg['Guests']); 
-                data[i].Available = Number(bckt)-Number(data[i].Used);
+                data[i].Available = (Number(bckt)-Number(data[i].Used) < 0 ? 0 : Number(bckt)-Number(data[i].Used));
                 this.updatedMon = new Date();
               }
             }
@@ -189,7 +189,7 @@ export class ScheduleComponent implements OnInit {
                 data[i].Bucket = bckt;
                 data[i].ServiceId = msg['ServiceId'];
                 data[i].Used = Number(data[i].Used)+Number(msg['Guests']); 
-                data[i].Available = Number(bckt)-Number(data[i].Used);
+                data[i].Available = (Number(bckt)-Number(data[i].Used) < 0 ? 0 : Number(bckt)-Number(data[i].Used));
                 this.updatedTue = new Date();
               }
             }
@@ -205,7 +205,7 @@ export class ScheduleComponent implements OnInit {
                 data[i].Bucket = bckt;
                 data[i].ServiceId = msg['ServiceId'];
                 data[i].Used = Number(data[i].Used)+Number(msg['Guests']); 
-                data[i].Available = Number(bckt)-Number(data[i].Used);
+                data[i].Available = (Number(bckt)-Number(data[i].Used) < 0 ? 0 : Number(bckt)-Number(data[i].Used));
                 this.updatedWed = new Date();
               }
             }
@@ -221,7 +221,7 @@ export class ScheduleComponent implements OnInit {
                 data[i].Bucket = bckt;
                 data[i].ServiceId = msg['ServiceId'];
                 data[i].Used = Number(data[i].Used)+Number(msg['Guests']); 
-                data[i].Available = Number(bckt)-Number(data[i].Used);
+                data[i].Available = (Number(bckt)-Number(data[i].Used) < 0 ? 0 : Number(bckt)-Number(data[i].Used));
                 this.updatedThu = new Date();
               }
             }
@@ -237,7 +237,7 @@ export class ScheduleComponent implements OnInit {
                 data[i].Bucket = bckt;
                 data[i].ServiceId = msg['ServiceId'];
                 data[i].Used = Number(data[i].Used)+Number(msg['Guests']); 
-                data[i].Available = Number(bckt)-Number(data[i].Used);
+                data[i].Available = (Number(bckt)-Number(data[i].Used) < 0 ? 0 : Number(bckt)-Number(data[i].Used));
                 this.updatedFri = new Date();
               }
             }
@@ -253,7 +253,7 @@ export class ScheduleComponent implements OnInit {
                 data[i].Bucket = bckt;
                 data[i].ServiceId = msg['ServiceId'];
                 data[i].Used = Number(data[i].Used)+Number(msg['Guests']); 
-                data[i].Available = Number(bckt)-Number(data[i].Used);
+                data[i].Available = (Number(bckt)-Number(data[i].Used) < 0 ? 0 : Number(bckt)-Number(data[i].Used));
                 this.updatedSat = new Date();
               }
             }
@@ -269,7 +269,7 @@ export class ScheduleComponent implements OnInit {
                 data[i].Bucket = bckt;
                 data[i].ServiceId = msg['ServiceId'];
                 data[i].Used = Number(data[i].Used)+Number(msg['Guests']); 
-                data[i].Available = Number(bckt)-Number(data[i].Used);
+                data[i].Available = (Number(bckt)-Number(data[i].Used) < 0 ? 0 : Number(bckt)-Number(data[i].Used));
                 this.updatedSun = new Date();
               }
             }
