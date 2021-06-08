@@ -97,6 +97,7 @@ import { ServiceDataPipe } from './shared/service-data.pipe';
 import { DialogcancelComponent } from './shared/dialogcancel/dialogcancel.component';
 import { MaindashComponent } from './modules/maindash/maindash.component';
 import { SearchAppoDialogComponent } from './shared/search-appo-dialog/search-appo-dialog.component';
+import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 
 @NgModule({
   declarations: [
@@ -185,6 +186,7 @@ import { SearchAppoDialogComponent } from './shared/search-appo-dialog/search-ap
     InfiniteScrollModule,
     NgxChartsModule,
     ZXingScannerModule,
+    NgxQRCodeModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBdQ6vAlbIi3u_KdiMv8KILsjYExJLDUGU'
     })

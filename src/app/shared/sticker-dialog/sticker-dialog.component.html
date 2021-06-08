@@ -6,7 +6,9 @@
     </div>
     <div class="row">
         <div class="col-md-12 title-disp qr-style-disp">
-            <mat-icon class="qr-img-disp" svgIcon="qrCode"></mat-icon>
+            <!-- <mat-icon class="qr-img-disp" svgIcon="qrCode"></mat-icon> -->
+            <ngx-qrcode [elementType]="elementType" [width]="450" [value]="link" cssClass="qr-img-disp" errorCorrectionLevel="L">
+            </ngx-qrcode>
         </div>
     </div>
     <div class="row">
@@ -28,7 +30,9 @@
     </div>
     <div class="row">
         <div class="col-md-12 qr-title qr-style">
-            <img class="qr-img" src="assets/images/qrImg.png">
+            <!-- <img class="qr-img" src="assets/images/qrImg.png"> -->
+            <ngx-qrcode [elementType]="elementType" [width]="420" [value]="link" cssClass="qr-img" errorCorrectionLevel="L">
+            </ngx-qrcode>
             <!-- <mat-icon class="qr-img" svgIcon="qrCode"></mat-icon> -->
         </div>
     </div>

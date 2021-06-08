@@ -17,6 +17,7 @@ export class StickerDialogComponent implements OnInit {
   base: DialogData;
   business: string = '';
   link: string = '';
+  elementType : 'url' | 'canvas' | 'img' = 'url';
 
   constructor(
     private domSanitizer: DomSanitizer,
