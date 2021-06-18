@@ -259,7 +259,8 @@ export class HostComponent implements OnInit {
           OpenCanc: 0,
           OpenItem: 0,
           QrCode: msg['QrCode'],
-          DateTrans: msg['DateTrans']
+          DateTrans: msg['DateTrans'],
+          Comments: msg['Comments']
         }
         if (msg['Type'] == "1"){
           if (this.walkIns.filter(x => x.AppId ==  msg['AppId']).length == 0){
@@ -322,7 +323,8 @@ export class HostComponent implements OnInit {
           OpenCanc: 0,
           OpenItem: 0,
           QrCode: msg['QrCode'],
-          DateTrans: msg['DateTrans']
+          DateTrans: msg['DateTrans'],
+          Comments: msg['Comments']
         }
         var verifWI = this.walkIns.findIndex(x => x.AppId === msg['AppId']);
         if (verifWI >= 0){this.walkIns.splice(verifWI, 1);}
@@ -493,7 +495,8 @@ export class HostComponent implements OnInit {
               OpenCanc: 0,
               OpenItem: 0,
               Pause: "0",
-              DateTrans: dataSche['DateTrans']
+              DateTrans: dataSche['DateTrans'],
+              Comments: dataSche['Comments']
             }
             this.preCheckIn.push(data);
           }
@@ -530,7 +533,8 @@ export class HostComponent implements OnInit {
               OpenCanc: 0,
               OpenItem: 0,
               Pause: "0",
-              DateTrans: dataWalk['DateTrans']
+              DateTrans: dataWalk['DateTrans'],
+              Comments: dataWalk['Comments']
             }
             this.preCheckIn.push(data);
           }
@@ -567,7 +571,8 @@ export class HostComponent implements OnInit {
               OpenCanc: 0,
               OpenItem: 0,
               Pause: "0",
-              DateTrans: dataPrev['DateTrans']
+              DateTrans: dataPrev['DateTrans'],
+              Comments: dataPrev['Comments']
             }
             this.preCheckIn.push(data);
           }
@@ -1268,7 +1273,7 @@ export class HostComponent implements OnInit {
     // console.log({timeZone: this.TimeZone, door: this.doorId, businessId: this.businessId, locationId: this.locationId, providerId: this.providerId, services: this.services, buckets: this.buckets, hours: this.hours, providers: this.Providers});
     const dialogRef = this.dialog.open(AppowiDialogComponent, {
       width: '450px',
-      height: '700px',
+      // height: '700px',
       data: {timeZone: this.TimeZone, door: this.doorId, businessId: this.businessId, locationId: this.locationId, providerId: this.providerId, services: this.services, buckets: this.buckets, hours: this.hours, providers: this.Providers, tipo: 1}
     });
   }
@@ -1685,7 +1690,8 @@ export class HostComponent implements OnInit {
               OpenItem: 0,
               Unread: item['Unread'],
               DateTrans: item['DateTrans'],
-              QrCode: item['QrCode']
+              QrCode: item['QrCode'],
+              Comments: item['Comments']
             }
             this.schedule.push(data);
             this.schedule.sort(function(a, b) { 
@@ -1742,7 +1748,8 @@ export class HostComponent implements OnInit {
               OpenItem: 0,
               Unread: item['Unread'],
               DateTrans: item['DateTrans'],
-              QrCode: item['QrCode']
+              QrCode: item['QrCode'],
+              Comments: item['Comments']
             }
             this.walkIns.push(data);
             this.walkIns.sort(function(a, b) { 
@@ -1799,7 +1806,8 @@ export class HostComponent implements OnInit {
               OpenItem: 0,
               Unread: item['Unread'],
               DateTrans: item['DateTrans'],
-              QrCode: item['QrCode']
+              QrCode: item['QrCode'],
+              Comments: item['Comments']
             }
             this.waitlist.push(data);
             this.waitlist.sort(function(a, b) { 
@@ -1857,7 +1865,8 @@ export class HostComponent implements OnInit {
               Unread: item['Unread'],
               CheckInTime: item['CheckInTime'],
               ElapsedTime: this.calculateTime(item['CheckInTime']),
-              Pause: item['Pause']
+              Pause: item['Pause'],
+              Comments: item['Comments']
             }
             this.preCheckIn.push(data);
           });

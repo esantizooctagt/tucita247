@@ -877,7 +877,7 @@ export class ScheduleComponent implements OnInit {
           this.spinnerService.stop(spinnerRef);
           const dialogRef = this.dialog.open(AppoDialogComponent, {
             width: '450px',
-            height: '700px',
+            // height: '720px',
             data: {businessId: this.businessId, locationId: this.locationId, providerId: this.providerId, serviceId: result.ServiceId, appoTime: timeGrl, appoDate: this.datepipe.transform(day, 'yyyy-MM-dd'), doors: this.doors.split(','), dayData: dayInfo}
           });
         }

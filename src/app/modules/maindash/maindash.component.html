@@ -1,10 +1,7 @@
 <div class="container-fluid main-background">
-    <div class="row p-0">
-        <!-- <div class="col-md-6 pl-4 m-0">
-            Location
-        </div> -->
+    <div class="row pl-0 pr-0 pb-0 pt-2 filter">
         <div class="col-md-3 pl-4 m-0 form-field">
-            <mat-form-field appearance="outline" class="p-0">
+            <mat-form-field class="p-0">
                 <mat-label>Enter a date range</mat-label>
                 <mat-date-range-input [rangePicker]="picker">
                   <input matStartDate placeholder="Start date" [(ngModel)]="initDate">
@@ -14,25 +11,42 @@
                 <mat-date-range-picker #picker></mat-date-range-picker>
             </mat-form-field>
         </div>
-        <div class="col-md-1 ml-3 p-0 pt-3">
+        <div class="col-md-4 m-0 pr-4">
+            <mat-form-field class="p-0">
+                <mat-label i18n="Location@@shared.location">Location</mat-label>
+                <mat-select name="locations" (selectionChange)="onLocationChange($event)">
+                    <mat-option *ngFor="let item of locations$ | async" [value]="item.Name">
+                        {{item.Name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col-md-1 ml-3 p-0 pt-2">
             <button mat-flat-button color="primary" (click)="process()">Process</button>
         </div>
     </div>
-    <ng-container *ngIf="report$ | async"></ng-container>
     <div class="row p-0">
-        <div class="col-md-6 pl-4 m-0">
-            <div id="chartdiv01" style="width: 100%; height: 400px"></div>
+        <div class="col-md-6 pl-4 m-0 text-center">
+            <ng-container *ngIf="report01$ | async"></ng-container>
+            <span class="title-graph" i18n="Title|Title Graph 01@@maindash.graph01">Total Citas by Service</span>
+            <div id="chartdiv01" style="width: 100%; height: 340px"></div>
         </div>
-        <div class="col-md-6 pl-4 m-0">
-            <div id="chartdiv02" style="width: 100%; height: 400px"></div>
+        <div class="col-md-6 pl-4 m-0 text-center">
+            <ng-container *ngIf="report02$ | async"></ng-container>
+            <span class="title-graph" i18n="Title|Title Graph 01@@maindash.graph02">Total Citas by Channel</span>
+            <div id="chartdiv02" style="width: 100%; height: 340px"></div>
         </div>
     </div>
     <div class="row p-0">
-        <div class="col-md-6 pl-4 m-0">
-            <div id="chartdiv03" style="width: 100%; height: 400px"></div>
+        <div class="col-md-6 pl-4 m-0 text-center">
+            <ng-container *ngIf="report03$ | async"></ng-container>
+            <span class="title-graph" i18n="Title|Title Graph 01@@maindash.graph03">Total Daily Citas by Location</span>
+            <div id="chartdiv03" style="width: 100%; height: 340px"></div>
         </div>
-        <div class="col-md-6 pl-4 m-0">
-            <div id="chartdiv04" style="width: 100%; height: 400px"></div>
+        <div class="col-md-6 pl-4 m-0 text-center">
+            <ng-container *ngIf="report04$ | async"></ng-container>
+            <span class="title-graph" i18n="Title|Title Graph 01@@maindash.graph04">Daily Citas Distribution by Service</span>
+            <div id="chartdiv04" style="width: 100%; height: 340px"></div>
         </div>
     </div>
 </div>

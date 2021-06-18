@@ -1,3 +1,21 @@
 .form-field{
     height: 81px;
 }
+.title-graph{
+    font-size: 22px;
+    font-weight: 600;
+}
+.filter{
+    height: 60px;
+    border-bottom: 2px solid #C5C5C5;
+}
+button.mat-flat-button
+{
+    &.cdk-program-focused 
+    {
+        ::ng-deep .mat-button-focus-overlay
+        {
+            opacity: 0;
+        }
+    }
+}

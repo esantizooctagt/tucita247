@@ -129,7 +129,8 @@ export class SearchAppoDialogComponent implements OnInit {
               DateFull: item['DateOpe'],
               Type: item['Type'],
               DateAppo: hora,
-              Unread: 0
+              Unread: 0,
+              Comments: item['Comments']
             }
             this.schedule.push(data);
           });

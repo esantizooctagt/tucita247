@@ -130,7 +130,8 @@ export class ShowappoDialogComponent implements OnInit {
               DateFull: item['DateAppo'],
               Type: item['Type'],
               DateAppo: hora,
-              Unread: item['Unread']
+              Unread: item['Unread'],
+              Comments: item['Comments']
             }
             this.schedule.push(data);
           });

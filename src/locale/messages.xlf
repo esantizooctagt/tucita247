@@ -2,6 +2,69 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="shared.changeplan" datatype="html">
+        <source>Change Plan</source>
+        <context-group purpose="dashboard">
+          <context context-type="sourcefile">src/app/modules/dashboard/dashboard.component.html</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="maindash.graph01" datatype="html">
+        <source>Total Citas by Service</source>
+        <context-group purpose="maindash">
+          <context context-type="sourcefile">src/app/modules/maindash/maindash.component.html</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="maindash.graph02" datatype="html">
+        <source>Total Citas by Channel</source>
+        <context-group purpose="maindash">
+          <context context-type="sourcefile">src/app/modules/maindash/maindash.component.html</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="maindash.graph03" datatype="html">
+        <source>Total Daily Citas by Location</source>
+        <context-group purpose="maindash">
+          <context context-type="sourcefile">src/app/modules/maindash/maindash.component.html</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="maindash.graph04" datatype="html">
+        <source>Daily Citas Distribution by Service</source>
+        <context-group purpose="maindash">
+          <context context-type="sourcefile">src/app/modules/maindash/maindash.component.html</context>
+          <context context-type="linenumber">48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="shared.custom" datatype="html">
+        <source>Custom</source>
+        <context-group purpose="appo-dialog">
+          <context context-type="sourcefile">src/app/shared/appo-dialog/appo-dialog.component.html</context>
+          <context context-type="linenumber">88</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="shared.pns" datatype="html">
+        <source>Prefer not to say</source>
+        <context-group purpose="appo-dialog">
+          <context context-type="sourcefile">src/app/shared/appo-dialog/appo-dialog.component.html</context>
+          <context context-type="linenumber">89</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="shared.Comments" datatype="html">
+        <source>Comments</source>
+        <context-group purpose="host">
+          <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
+          <context context-type="linenumber">175</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="host.comments" datatype="html">
+        <source>Comments:</source>
+        <context-group purpose="host">
+          <context context-type="sourcefile">src/app/modules/host/host.component.html</context>
+          <context context-type="linenumber">175</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="shared.book" datatype="html">
         <source>Book</source>
         <context-group purpose="weblink">

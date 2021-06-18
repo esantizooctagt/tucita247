@@ -53,6 +53,8 @@ export class AppoDialogComponent implements OnInit {
 
   services: any[]=[];
 
+  enabledCustomG: boolean = false;
+
   readonly countryLst = environment.countryList;
   phCountry: string = '(XXX) XXX-XXXX';
   code: string = '+1';
@@ -85,6 +87,8 @@ export class AppoDialogComponent implements OnInit {
     Preference: ['1'],
     ServiceId: ['',[Validators.required]],
     Disability: [''],
+    Comments: [''],
+    Custom: [''],
     Guests: ['1', [Validators.required, Validators.max(99), Validators.min(1)]]
   })
 
@@ -186,12 +190,14 @@ export class AppoDialogComponent implements OnInit {
       Email: (this.clientForm.value.Email == '' ? '' : this.clientForm.value.Email),
       DOB: dob,
       Gender: (this.clientForm.value.Gender == '' ? '': this.clientForm.value.Gender),
+      Custom: this.clientForm.value.Custom,
       Preference: (this.clientForm.value.Preference == '' ? '': this.clientForm.value.Preference),
       Disability: (this.clientForm.value.Disability == null ? '': this.clientForm.value.Disability),
       Guests: this.clientForm.value.Guests,
       Status: 1,
       Type: 1,
-      UpdEmail: updE
+      UpdEmail: updE,
+      Comments: this.clientForm.value.Comments
     }
     var spinnerRef = this.spinnerService.start($localize`:@@host.addingappo:`);
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
@@ -369,6 +375,15 @@ export class AppoDialogComponent implements OnInit {
       this.clientForm.patchValue({ServiceId: ''});
       this.openSnackBar($localize`:@@appos.invalidserv:`, $localize`:@@appos.schedule:`);  
     }
+  }
+
+  selectGender(event){
+    if (event.value == "C"){
+      this.enabledCustomG = true;
+    } else {
+      this.enabledCustomG = false;
+    }
+    this.clientForm.patchValue({'Custom':''});
   }
 
   addGuests(){

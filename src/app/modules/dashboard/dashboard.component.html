@@ -11,9 +11,9 @@
                 <mat-card class="col-sm col-md col-lg mr-3 dashboard-plan">
                     <ng-container *ngIf="appos$ | async as appo">
                         <div class="row ml-2 mb-2">
-                            <h3 class="col-md-3 pl-2" i18n="Citas available|Text in Dashboard@@dashboard.citas" >Citas available</h3>
+                            <h3 class="col-md-6 pl-2" i18n="Citas available|Text in Dashboard@@dashboard.citas" >Citas available</h3>
                             <div class="col-md labels-content">
-                                {{appo.DueDate | date: 'MMM d'}}
+                                {{appo.DueDate | date: 'MMM d, y'}}
                             </div>
                         </div>
                         <div class="row">
@@ -54,12 +54,15 @@
                             <div class="col-md-3 labels-content">{{getExpireCitas(appo.Packs)}}</div>
                         </div> -->
                         <div class="row">
-                            <div class="col-md-6 ml-3"></div>
-                            <button mat-stroked-button class="col-md-3 ml-3" color="secondary" type="button" (click)="addCitas(appo.Name)" i18n="+ Add Citas|Buton en dashboard@@dashboard.button">+ Add Citas</button>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-6 ml-3"></div>
-                            <button mat-stroked-button class="col-md-3 ml-3" color="secondary" type="button" (click)="suspend()" i18n="Cancel Account|Buton en dashboard@@dashboard.cancel">Cancel Account</button>
+                            <div class="col-md-3 ml-3 mt-3">
+                                <button mat-stroked-button class="w-100" color="secondary" type="button" (click)="addCitas(appo.Name)" i18n="Change Plan|Buton en dashboard@@shared.changeplan">Change Plan</button>
+                            </div>
+                            <div class="col-md-3 ml-3 mt-3">
+                                <button mat-stroked-button class="w-100" color="secondary" type="button" (click)="addCitas(appo.Name)" i18n="+ Add Citas|Buton en dashboard@@dashboard.button">+ Add Citas</button>
+                            </div>
+                            <div class="col-md-3 ml-3 mt-3">
+                                <button mat-stroked-button class="w-100" color="secondary" type="button" (click)="suspend()" i18n="Cancel Account|Buton en dashboard@@dashboard.cancel">Cancel Account</button>
+                            </div>
                         </div>
                     </ng-container>
                 </mat-card>

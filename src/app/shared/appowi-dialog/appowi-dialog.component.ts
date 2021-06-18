@@ -55,6 +55,8 @@ export class AppowiDialogComponent implements OnInit {
   getLocInfo$: Observable<any>;
   getCustomer$: Observable<any>;
 
+  enabledCustomG: boolean = false;
+
   readonly countryLst = environment.countryList;
   phCountry: string = '(XXX) XXX-XXXX';
   code: string = '+1';
@@ -88,6 +90,8 @@ export class AppowiDialogComponent implements OnInit {
     Preference: ['1'],
     Disability: [''],
     DateAppo: [''],
+    Comments: [''],
+    Custom: [''],
     Guests: ['1', [Validators.required, (control: AbstractControl) => Validators.max(this.maxGuests)(control), Validators.min(1)]],
     ProviderId: ['']
   })
@@ -280,13 +284,15 @@ export class AppowiDialogComponent implements OnInit {
       Email: (this.clientForm.value.Email == '' ? '' : this.clientForm.value.Email),
       DOB: dob,
       Gender: (this.clientForm.value.Gender == '' ? '': this.clientForm.value.Gender),
+      Custom: this.clientForm.value.Custom,
       Preference: (this.clientForm.value.Preference == '' ? '': this.clientForm.value.Preference),
       Disability: (this.clientForm.value.Disability == null ? '': this.clientForm.value.Disability),
       Guests: this.clientForm.value.Guests,
       AppoDate: dateAppo,
       AppoHour: ((this.clientForm.value.Hour).toString() == "--" ? timeAppo : (this.clientForm.value.Hour).toString().padStart(4,'0').substring(0,2)+':'+(this.clientForm.value.Hour).toString().padStart(4,'0').substring(2,4)),
       Type: typeAppo,
-      UpdEmail: updE
+      UpdEmail: updE,
+      Comments: this.clientForm.value.Comments
     }
     let options = {
       timeZone: this.TimeZone,
@@ -517,6 +523,15 @@ export class AppowiDialogComponent implements OnInit {
     this.clientForm.patchValue({CountryCode: $event.value, Phone: ''});
     this.phCountry = this.countryLst.filter(x=>x.Country === $event.value)[0].PlaceHolder;
     this.code = this.countryLst.filter(x=>x.Country === $event.value)[0].Code;
+  }
+
+  selectGender(event){
+    if (event.value == "C"){
+      this.enabledCustomG = true;
+    } else {
+      this.enabledCustomG = false;
+    }
+    this.clientForm.patchValue({'Custom':''});
   }
 
   getTimeAppo(): string{
