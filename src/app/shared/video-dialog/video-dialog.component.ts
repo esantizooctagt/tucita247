@@ -119,6 +119,15 @@ export class VideoDialogComponent implements OnInit {
     this.dialogRef.close(checkInValues);
   }
 
+  onManual(){
+    this.qrCode = this.valQr;
+    let checkInValues ={
+      qrCode : this.qrCode,
+      Guests : +this.Guests
+    }
+    this.dialogRef.close(checkInValues);
+  }
+
   onNoClick(): void {
     this.enabledCamera = false;
     this.qrCode = '';
@@ -126,12 +135,7 @@ export class VideoDialogComponent implements OnInit {
   }
 
   validQr(event){
-    if (event.toString().length == 1 && event.toString() == "0"){
-      this.qrCode = this.valQr;
-      return;
-    }
     if (event.toString().length == 6){
-
       this.activeBlink = 1;
       let component = this;
       setTimeout(() => {

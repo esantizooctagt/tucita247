@@ -155,8 +155,8 @@ export class AppointmentService {
                     .pipe(catchError(this.errorHandler));
   }
 
-  getDashboard(businessId, locationId, dateIni, dateFin, type){
-    return this.http.get<any>(this.apiURL + '/dashboard/' + businessId + '/' + locationId + '/' + dateIni + '/' + dateFin + '/' + type)
+  getDashboard(businessId, dateIni, dateFin){
+    return this.http.get<any>(this.apiURL + '/dashboard/' + businessId + '/' + dateIni + '/' + dateFin)
                     .pipe(catchError(this.errorHandler));
   }
 

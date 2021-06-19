@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
+import * as XLSX from 'xlsx';
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import { AppointmentService, LocationService } from '@app/services';
 import { AuthService } from '@app/core/services';
@@ -11,7 +12,9 @@ import { Observable } from 'rxjs';
 
 let chart02 = am4core.create("chartdiv02", am4charts.XYChart);
 let chart03 = am4core.create("chartdiv03", am4charts.XYChart);
-let chart04 = am4core.create("chartdiv03", am4charts.XYChart);
+let chart04 = am4core.create("chartdiv04", am4charts.XYChart);
+let chart05 = am4core.create("chartdiv05", am4charts.PieChart);
+let chart06 = am4core.create("chartdiv06", am4charts.XYChart);
 let chart = am4core.create("chartdiv01", am4charts.PieChart);
 
 @Component({
@@ -21,15 +24,14 @@ let chart = am4core.create("chartdiv01", am4charts.PieChart);
 })
 export class MaindashComponent implements OnInit {
   businessId: string = '';
-  locationId: string = '_';
+  locationId: string = '0';
+  language: string = 'en';
   report01$: Observable<any>;
-  report02$: Observable<any>;
-  report03$: Observable<any>;
-  report04$: Observable<any>;
   locations$: Observable<any[]>;
   xAxis: any;
   endDate: any;
   initDate: any;
+  dataExport: any;
 
   constructor(
     private locationService: LocationService,
@@ -41,6 +43,8 @@ export class MaindashComponent implements OnInit {
   ngOnInit(): void {
     this.initDate = new Date();
     this.endDate = new Date();
+
+    this.language = this.authService.language().toLowerCase();
     this.initDate.setDate(this.endDate.getDate()-7);
     
     const inDate = new Date(this.initDate);
@@ -61,47 +65,13 @@ export class MaindashComponent implements OnInit {
       })
     );
 
-    this.report01$ = this.appointmentService.getDashboard(this.businessId, this.locationId, initD, finD, 1).pipe(
+    this.report01$ = this.appointmentService.getDashboard(this.businessId, initD, finD).pipe(
       map((res: any) => {
         if (res != null){
           if (res.Code == 200){
-            this.loadCharts01(res.Query);
-            this.spinnerService.stop(spinnerRef);
-            return res.Result;
-          }
-        }
-        this.spinnerService.stop(spinnerRef);
-      })
-    );
-    this.report02$ = this.appointmentService.getDashboard(this.businessId, this.locationId, initD, finD, 2).pipe(
-      map((res: any) => {
-        if (res != null){
-          if (res.Code == 200){
-            this.loadCharts02(res.Query);
-            this.spinnerService.stop(spinnerRef);
-            return res.Result;
-          }
-        }
-        this.spinnerService.stop(spinnerRef);
-      })
-    );
-    this.report03$ = this.appointmentService.getDashboard(this.businessId, this.locationId, initD, finD, 3).pipe(
-      map((res: any) => {
-        if (res != null){
-          if (res.Code == 200){
-            this.loadCharts03(res.Query);
-            this.spinnerService.stop(spinnerRef);
-            return res.Result;
-          }
-        }
-        this.spinnerService.stop(spinnerRef);
-      })
-    );
-    this.report04$ = this.appointmentService.getDashboard(this.businessId, this.locationId, initD, finD, 4).pipe(
-      map((res: any) => {
-        if (res != null){
-          if (res.Code == 200){
-            this.loadCharts04(res.Query);
+            this.dataExport = res.Query; 
+            this.loadResults(res.Query, '0');
+
             this.spinnerService.stop(spinnerRef);
             return res.Result;
           }
@@ -119,15 +89,12 @@ export class MaindashComponent implements OnInit {
     let finD = finDate.getFullYear().toString() + '-' + (1+finDate.getMonth()).toString().padStart(2, '0') + '-' + finDate.getDate().toString().padStart(2, '0') + ' 23:59:59.000';
     this.businessId = this.authService.businessId();
     var spinnerRef = this.spinnerService.start($localize`:@@lite.loadingdata:`);
-    this.report01$ = this.appointmentService.getDashboard(this.businessId, this.locationId, initD, finD, 1).pipe(
+    this.report01$ = this.appointmentService.getDashboard(this.businessId, initD, finD).pipe(
       map((res: any) => {
         if (res != null){
           if (res.Code == 200){
-            if (this.locationId != '_'){
-              this.loadCharts01(res.Query.filter(x => x.location == this.locationId));
-            } else {
-              this.loadCharts01(res.Query);
-            }
+            this.dataExport = res.Query;
+            this.loadResults(res.Query, this.locationId);
             this.spinnerService.stop(spinnerRef);
             return res.Result;
           }
@@ -135,54 +102,98 @@ export class MaindashComponent implements OnInit {
         this.spinnerService.stop(spinnerRef);
       })
     );
-    this.report02$ = this.appointmentService.getDashboard(this.businessId, this.locationId, initD, finD, 2).pipe(
-      map((res: any) => {
-        if (res != null){
-          if (res.Code == 200){
-            if (this.locationId != '_'){
-              this.loadCharts02(res.Query.filter(x => x.location == this.locationId));
-            } else {
-              this.loadCharts02(res.Query);
-            }
-            this.spinnerService.stop(spinnerRef);
-            return res.Result;
+  }
+
+  loadResults(dataQuery: any, location: string){
+    let query = dataQuery;
+    if (location != '0'){
+      query = query.filter(x => x.location == location);
+    }
+    let unique = [...new Set(query.map(item => item.service))];
+    let data: any[]=[];
+    for (let item of unique){
+      let info = {
+        service: item, 
+        citas: query.filter(x => x.service == item).length, 
+      }
+      data.push(info);
+    }
+    this.loadCharts01(data);
+    
+    let unique02 = [...new Set(query.map(item => (this.language == 'en' ? item.en : item.es)))];
+    let data02: any[]=[];
+    for (let item of unique02){
+      let info = {
+        name: item,
+        citas: query.filter(x => (this.language == 'en' ? x.en : x.es) == item).length
+      }
+      data02.push(info);
+    }
+    this.loadCharts02(data02);
+    
+    let unique03 = [...new Set(query.map(item => item.dateOpe))];
+    let data03: any[]=[];
+    for (let item of unique03){
+      let uniq = [...new Set(query.map(item => item.location))];
+      for (let loc of uniq){
+        if (query.filter(x => x.dateOpe == item && x.location == loc).length > 0){
+          let info = {
+            dateOpe: item,
+            location: loc, 
+            citas: query.filter(x => x.dateOpe == item && x.location == loc).length
           }
+          data03.push(info);
+        } 
+      }
+    }
+    this.loadCharts03(data03);
+
+    var array = query,
+      result = array.filter(function (a) {
+        var key = a.dateOpe + '|' + a.location + '|' + a.service;
+        if (!this[key]) {
+            this[key] = true;
+            return true;
         }
-        this.spinnerService.stop(spinnerRef);
-      })
-    );
-    this.report03$ = this.appointmentService.getDashboard(this.businessId, this.locationId, initD, finD, 3).pipe(
-      map((res: any) => {
-        if (res != null){
-          if (res.Code == 200){
-            if (this.locationId != '_'){
-              this.loadCharts03(res.Query.filter(x => x.location == this.locationId));
-            } else {
-              this.loadCharts03(res.Query);
-            }
-            this.spinnerService.stop(spinnerRef);
-            return res.Result;
-          }
+    }, Object.create(null));
+    let data04: any[]=[];
+    for (let item of result){
+      data04.push({
+        dateOpe: item.dateOpe,
+        service: item.service,
+        citas: query.filter(x => x.dateOpe == item.dateOpe && x.service == item.service).length
+      });
+    }
+    this.loadCharts04(data04);
+
+    let unique05 = [...new Set(query.map(item => item.provider))];
+    let data05: any[]=[];
+    for (let item of unique05){
+      let info = {
+        provider: item, 
+        citas: query.filter(x => x.provider == item).length, 
+      }
+      data05.push(info);
+    }
+    this.loadCharts05(data05);
+
+    var array = query,
+      result = array.filter(function (a) {
+        var key = a.dateOpe + '|' + a.location + '|' + a.provider;
+        if (!this[key]) {
+            this[key] = true;
+            return true;
         }
-        this.spinnerService.stop(spinnerRef);
-      })
-    );
-    this.report04$ = this.appointmentService.getDashboard(this.businessId, this.locationId, initD, finD, 4).pipe(
-      map((res: any) => {
-        if (res != null){
-          if (res.Code == 200){
-            if (this.locationId != '_'){
-              this.loadCharts04(res.Query.filter(x => x.location == this.locationId));
-            } else {
-              this.loadCharts04(res.Query);
-            }
-            this.spinnerService.stop(spinnerRef);
-            return res.Result;
-          }
-        }
-        this.spinnerService.stop(spinnerRef);
-      })
-    );
+    }, Object.create(null));
+    let data06: any[]=[];
+    for (let item of result){
+      data06.push({
+        dateOpe: item.dateOpe,
+        provider: item.provider,
+        citas: query.filter(x => x.dateOpe == item.dateOpe && x.provider == item.provider).length
+      });
+    }
+    this.loadCharts06(data06);
   }
 
   loadCharts01(data){
@@ -202,6 +213,30 @@ export class MaindashComponent implements OnInit {
     
     chart.legend = new am4charts.Legend();
     chart.legend.position = "right";
+
+    // This creates initial animation
+    pieSeries.hiddenState.properties.opacity = 1;
+    pieSeries.hiddenState.properties.endAngle = -90;
+    pieSeries.hiddenState.properties.startAngle = -90;
+  }
+
+  loadCharts05(data){
+    am4core.useTheme(am4themes_animated);
+    chart05 = am4core.create("chartdiv05", am4charts.PieChart);
+    chart05.data = data;
+
+    // Add and configure Series
+    let pieSeries = chart05.series.push(new am4charts.PieSeries());
+    pieSeries.dataFields.value = "citas";
+    pieSeries.dataFields.category = "provider";
+    pieSeries.ticks.template.disabled = true;
+    pieSeries.labels.template.disabled = true;
+    pieSeries.slices.template.stroke = am4core.color("#fff");
+    pieSeries.slices.template.strokeWidth = 2;
+    pieSeries.slices.template.strokeOpacity = 1;
+    
+    chart05.legend = new am4charts.Legend();
+    chart05.legend.position = "right";
 
     // This creates initial animation
     pieSeries.hiddenState.properties.opacity = 1;
@@ -278,8 +313,8 @@ export class MaindashComponent implements OnInit {
     yAxis.min = 0;
 
     chart03.data = data.sort((a, b) => a.dateOpe < b.dateOpe ? -1 : a.dateOpe > b.dateOpe ? 1 : 0);
-    for (let item of data){
-      this.createSeries03(chart03, item.dateOpe, item.dateOpe, xAxis);
+    for (let item of [...new Set(data.map(item => item.dateOpe))]){
+      this.createSeries03(chart03, item, item, xAxis);
     }
   }
 
@@ -345,17 +380,30 @@ export class MaindashComponent implements OnInit {
 
   loadCharts04(result){
     let data: any[]=[];
-    for (let item of result){
-      let prov = item.provider.replace(/[^a-zA-Z]/g, "");
-      let provName = item.provider;
+    let uniqueOpe = [...new Set(result.map(item => item.dateOpe))];
+    for (let item of uniqueOpe){
       let res = {
-        dateOpe: item.dateOpe, 
-        location: item.location, 
-        [prov]: +item.citas,
-        provider: provName 
+        dateOpe: item
+      }
+      let dayRes = result.filter(x => x.dateOpe == item);
+      for (let day of dayRes){
+        let serv = day.service.replace(/[^a-zA-Z]/g, "");
+        res[serv] = +day.citas
       }
       data.push(res);
     }
+
+    let dataInfo: any[]=[];
+    for (let item of result){
+      let serv = item.service.replace(/[^a-zA-Z]/g, "");
+      let servName = item.service;
+      let res = {
+        [serv]: +item.citas,
+        service: servName 
+      }
+      dataInfo.push(res);
+    }
+
     chart04 = am4core.create("chartdiv04", am4charts.XYChart);
     chart04.data = data.sort((a, b) => a.dateOpe < b.dateOpe ? -1 : a.dateOpe > b.dateOpe ? 1 : 0);;
 
@@ -374,10 +422,10 @@ export class MaindashComponent implements OnInit {
     valueAxis.renderer.labels.template.disabled = true;
     valueAxis.min = 0;
 
-    let unique = [...new Set(data.map(item => item.provider))];
+    let unique = [...new Set(dataInfo.map(item => item.service))];
     for (let item of unique){
-      let prov = item.replace(/[^a-zA-Z]/g, "");
-      this.createSeries(chart04, prov, item);
+      let serv = item.replace(/[^a-zA-Z]/g, "");
+      this.createSeries(chart04, serv, item);
     }
   }
 
@@ -407,7 +455,92 @@ export class MaindashComponent implements OnInit {
     return series;
   }
 
+  loadCharts06(result){
+    let data: any[]=[];
+    let uniqueOpe = [...new Set(result.map(item => item.dateOpe))];
+    for (let item of uniqueOpe){
+      let res = {
+        dateOpe: item
+      }
+      let dayRes = result.filter(x => x.dateOpe == item);
+      for (let day of dayRes){
+        let prov = day.provider.replace(/[^a-zA-Z]/g, "");
+        res[prov] = +day.citas
+      }
+      data.push(res);
+    }
+
+    let dataInfo: any[]=[];
+    for (let item of result){
+      let prov = item.provider.replace(/[^a-zA-Z]/g, "");
+      let provName = item.provider;
+      let res = {
+        [prov]: +item.citas,
+        provider: provName 
+      }
+      dataInfo.push(res);
+    }
+
+    chart06 = am4core.create("chartdiv06", am4charts.XYChart);
+    chart06.data = data.sort((a, b) => a.dateOpe < b.dateOpe ? -1 : a.dateOpe > b.dateOpe ? 1 : 0);;
+
+    chart06.legend = new am4charts.Legend()
+    chart06.legend.position = 'right'
+    chart06.legend.paddingBottom = 20
+    chart06.legend.labels.template.maxWidth = 95
+
+    // Create axes
+    let categoryAxis = chart06.xAxes.push(new am4charts.CategoryAxis());
+    categoryAxis.dataFields.category = "dateOpe";
+    categoryAxis.renderer.grid.template.location = 0;
+
+    let valueAxis = chart06.yAxes.push(new am4charts.ValueAxis());
+    valueAxis.renderer.inside = true;
+    valueAxis.renderer.labels.template.disabled = true;
+    valueAxis.min = 0;
+
+    let unique = [...new Set(dataInfo.map(item => item.provider))];
+    for (let item of unique){
+      let prov = item.replace(/[^a-zA-Z]/g, "");
+      this.createSeries06(chart06, prov, item);
+    }
+  }
+
+  createSeries06(chart06, value, name) {
+    // Set up series
+    let series = chart06.series.push(new am4charts.ColumnSeries());
+    series.name = name;
+    series.dataFields.valueY = value;
+    series.dataFields.categoryX = "dateOpe";
+    series.sequencedInterpolation = true;
+
+    // Make it stacked
+    series.stacked = true;
+    
+    // Configure columns
+    series.columns.template.width = am4core.percent(60);
+    series.columns.template.tooltipText = "[bold]{name}[/]\n[font-size:14px]{categoryX}: {valueY}";
+    series.columns.template.tooltipY = 0;
+    series.columns.template.strokeOpacity = 0;
+    
+    // Add label
+    let labelBullet = series.bullets.push(new am4charts.LabelBullet());
+    labelBullet.label.text = "{valueY}";
+    labelBullet.locationY = 0.5;
+    labelBullet.label.hideOversized = true;
+    
+    return series;
+  }
+
   onLocationChange(event){
     this.locationId = event.value;
+  }
+
+  exportExcel(){
+    const ws: XLSX.WorkSheet=XLSX.utils.json_to_sheet(this.dataExport);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    XLSX.writeFile(wb, 'tucita247.xlsx');
   }
 }

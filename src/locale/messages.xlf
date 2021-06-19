@@ -2,6 +2,20 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="maindash.graph06" datatype="html">
+        <source>Daily Citas Distribution by Provider</source>
+        <context-group purpose="maindash">
+          <context context-type="sourcefile">src/app/modules/maindash/maindash.component.html</context>
+          <context context-type="linenumber">48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="maindash.graph05" datatype="html">
+        <source>Total Citas by Provider</source>
+        <context-group purpose="maindash">
+          <context context-type="sourcefile">src/app/modules/maindash/maindash.component.html</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="shared.changeplan" datatype="html">
         <source>Change Plan</source>
         <context-group purpose="dashboard">
