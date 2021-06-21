@@ -7,7 +7,8 @@ import { SpinnerService } from '@app/shared/spinner.service';
 import { map, catchError } from 'rxjs/operators';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { ConfirmValidParentMatcher } from '@app/validators';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { DialogComponent } from '@app/shared/dialog/dialog.component';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { environment } from '@environments/environment';
 
 export interface DialogData {
@@ -54,6 +55,8 @@ export class WeblinkComponent implements OnInit {
   currHour: number = 0;
   bucketInterval: number = 0;
 
+  enabledCustomG: boolean = false;
+
   newAppointment$: Observable<any>;
   hours$: Observable<any>;
   getLocInfo$: Observable<any>;
@@ -79,6 +82,7 @@ export class WeblinkComponent implements OnInit {
     private appointmentService: AppointmentService,
     private serviceService: ServService,
     private fb: FormBuilder,
+    private dialog: MatDialog,
     private dialogRef: MatDialogRef<WeblinkComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
   ) {}
@@ -96,6 +100,8 @@ export class WeblinkComponent implements OnInit {
     Gender: [''],
     Preference: ['1'],
     Disability: [''],
+    Comments: [''],
+    Custom: [''],
     Guests: ['1', [Validators.required, (control: AbstractControl) => Validators.max(this.maxGuests)(control), Validators.min(1)]]
   })
 
@@ -115,6 +121,23 @@ export class WeblinkComponent implements OnInit {
     let locSel = this.locations.filter(x=> x.LocationId == this.locationId);
     this.providers = locSel[0].Provs.sort((a, b) => (a.Name < b.Name ? -1 : 1));
     this.services = this.business.Services.sort((a, b) => (a.Name < b.Name ? -1 : 1)); 
+  }
+
+  openDialog(header: string, message: string, success: boolean, error: boolean, warn: boolean): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      header: header, 
+      message: message, 
+      success: success, 
+      error: error, 
+      warn: warn
+    };
+    dialogConfig.width ='280px';
+    dialogConfig.minWidth = '280px';
+    dialogConfig.maxWidth = '280px';
+
+    this.dialog.open(DialogComponent, dialogConfig);
   }
 
   openSnackBar(message: string, action: string) {
@@ -171,13 +194,15 @@ export class WeblinkComponent implements OnInit {
       Email: (this.clientForm.value.Email == '' ? '' : this.clientForm.value.Email),
       DOB: dob,
       Gender: (this.clientForm.value.Gender == '' ? '': this.clientForm.value.Gender),
+      Custom: this.clientForm.value.Custom,
       Preference: (this.clientForm.value.Preference == '' ? '': this.clientForm.value.Preference),
       Disability: (this.clientForm.value.Disability == null ? '': this.clientForm.value.Disability),
       Guests: this.clientForm.value.Guests,
       AppoDate: dateAppointment,
       AppoHour: (this.clientForm.value.Hour).toString().padStart(4,'0').substring(0,2)+':'+(this.clientForm.value.Hour).toString().padStart(4,'0').substring(2,4),
       Type: 1,
-      UpdEmail: updE
+      UpdEmail: updE,
+      Comments: this.clientForm.value.Comments
     }
     var spinnerRef = this.spinnerService.start($localize`:@@host.addingappo:`);
     this.newAppointment$ = this.appointmentService.postNewAppointment(formData).pipe(
@@ -195,8 +220,10 @@ export class WeblinkComponent implements OnInit {
         this.onError = err.Message;
         if (err.Status == 404){
           this.onError = $localize`:@@shared.invalidDateTime:`;
+          this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.invalidDateTime:`, false, true, false);
         } else {
           this.onError = $localize`:@@shared.wrong:`;
+          this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.wrong:`, false, true, false);
         }
         return this.onError;
       })
@@ -465,6 +492,15 @@ export class WeblinkComponent implements OnInit {
       acc[key].push(obj);
       return acc;
     }, {});
+  }
+
+  selectGender(event){
+    if (event.value == "C"){
+      this.enabledCustomG = true;
+    } else {
+      this.enabledCustomG = false;
+    }
+    this.clientForm.patchValue({'Custom':''});
   }
 
   getTimeAppo(): string{

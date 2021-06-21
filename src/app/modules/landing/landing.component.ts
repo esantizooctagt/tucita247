@@ -63,14 +63,8 @@ export class LandingComponent implements OnInit {
   }
 
   newAppo(busObj, busId){
-    // const dialogRef = this.dialog.open(AppowiDialogComponent, {
-    //   width: '450px',
-    //   height: '700px',
-    //   data: {timeZone: busObj.TimeZone, business: this.business, businessId: busId, locationId: busObj.LocationId}
-    // });
     const dialogRef = this.dialog.open(WeblinkComponent, {
       width: '450px',
-      height: '700px',
       data: {timeZone: busObj.TimeZone, business: this.business, businessId: busId, locationId: busObj.LocationId}
     });
   }

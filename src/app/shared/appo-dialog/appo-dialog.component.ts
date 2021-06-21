@@ -7,6 +7,8 @@ import { Observable } from 'rxjs';
 import { ConfirmValidParentMatcher } from '@app/validators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ServService, AppointmentService } from '@app/services';
+import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { AuthService } from '@app/core/services';
 import { environment } from '@environments/environment';
 
@@ -72,6 +74,7 @@ export class AppoDialogComponent implements OnInit {
     private serviceService: ServService,
     private appointmentService: AppointmentService,
     private authService: AuthService,
+    private dialog: MatDialog,
     private fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) {}
@@ -96,6 +99,23 @@ export class AppoDialogComponent implements OnInit {
     this._snackBar.open(message, action, {
       duration: 2000,
     });
+  }
+
+  openDialog(header: string, message: string, success: boolean, error: boolean, warn: boolean): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = false;
+    dialogConfig.data = {
+      header: header, 
+      message: message, 
+      success: success, 
+      error: error, 
+      warn: warn
+    };
+    dialogConfig.width ='280px';
+    dialogConfig.minWidth = '280px';
+    dialogConfig.maxWidth = '280px';
+
+    this.dialog.open(DialogComponent, dialogConfig);
   }
 
   ngOnInit(): void {
@@ -212,11 +232,11 @@ export class AppoDialogComponent implements OnInit {
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
         if (err.Status == 404){
-          this.openSnackBar($localize`:@@shared.invalidDateTime:`, $localize`:@@appos.schedule:`);
+          this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.invalidDateTime:`, false, true, false);
+          this.dialogRef.close({newAppo: 'OK'});
         } else {
-          this.openSnackBar($localize`:@@shared.wrong:`, $localize`:@@appos.schedule:`);
+          this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.wrong:`, false, true, false);
         }
-        this.dialogRef.close({newAppo: 'OK'});
         return err;
       })
     );
