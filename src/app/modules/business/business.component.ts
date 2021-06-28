@@ -54,6 +54,7 @@ export class BusinessComponent implements OnInit {
   categories$: Observable<Category[]>;
   geoLoc$: Observable<any>;
   sectors$: Observable<any[]>;
+  cities$: Observable<any[]>;
   filteredCategories$: Observable<Category[]>;
   allCategories: Category[]=[];
   @ViewChild('categoryInput') categoryInput: ElementRef<HTMLInputElement>;
@@ -151,6 +152,7 @@ export class BusinessComponent implements OnInit {
     Country: ['', Validators.required],
     Address: ['', [Validators.required, Validators.maxLength(500), Validators.minLength(3)]],
     City: ['', [Validators.maxLength(100), Validators.minLength(2)]],
+    Sector: [''],
     ZipCode: ['', [Validators.maxLength(10), Validators.minLength(3)]],
     Geolocation: ['', [Validators.maxLength(100), Validators.minLength(5)]],
     Phone: ['', [Validators.maxLength(17), Validators.minLength(7)]],
@@ -227,14 +229,16 @@ export class BusinessComponent implements OnInit {
         map(country => country ? this._filterCountry(country) : this.countries.slice())
       );
     let item = 0;
-    this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', CountryCode: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', Tags: '', Reasons: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen: '', ParentBusiness: 0, Status: 1});
+    this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', CountryCode: '', Address: '', City: '', Sector: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', Tags: '', Reasons: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen: '', ParentBusiness: 0, Status: 1});
     this.business$ = this.businessService.getBusiness(this.businessId, this.language).pipe(
       tap((res: any) => {
         if (res != null){
           let countryValue : Country[];
           if (res.Country != '' && res.Country != undefined){
             countryValue = this.countries.filter(country => country.c.indexOf(res.Country) === 0);
+            this.getCities(countryValue[0].n.toString(), res.City, res.Sector);
           }
+          
           var locMap = JSON.parse(res.Geolocation);
           if ("LAT" in locMap) {
             this.lat = locMap['LAT'];
@@ -261,6 +265,7 @@ export class BusinessComponent implements OnInit {
             Country: (countryValue != undefined ? countryValue[0] : ''),
             Address: res.Address,
             City: res.City,
+            Sector: res.Sector,
             ZipCode: res.ZipCode,
             Geolocation: res.Geolocation,
             CountryCode: res.CountryCode,
@@ -288,16 +293,70 @@ export class BusinessComponent implements OnInit {
           this.spinnerService.stop(spinnerRef);
         } else {
           this.spinnerService.stop(spinnerRef);
-          this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', Language: '', Reasons: '', ParentBusiness: 0, Status: 1});
+          this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', Address: '', City: '', Sector: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', Language: '', Reasons: '', ParentBusiness: 0, Status: 1});
         }
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
-        this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', Address: '', City: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', Language: '', Reasons: '', ParentBusiness: 0, Status: 1});
+        this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', Address: '', City: '', Sector: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', Language: '', Reasons: '', ParentBusiness: 0, Status: 1});
         this.openDialog('Error !', err.Message, false, true, false);
         return throwError(err || err.message);
       })
     );
+  }
+
+  getCities(countryCode: any, cityId: string, sectorId: string){
+    if (countryCode == Object){
+      this.countryCode = countryCode.c;
+    }
+    if (typeof countryCode === "string"){
+      let result = this.countries.filter(country => country.n.toLowerCase().indexOf(countryCode.toLowerCase()) === 0);
+      if (result.length >0){
+        this.countryCode = result[0].c.toString();
+      }
+    }
+    this.cities = [];
+    this.sectors = [];
+    this.sectors.push({ SectorId: "0", Name: "N/A" });
+    this.cities$ = this.locationService.getCities(this.countryCode, this.language).pipe(
+      map(res => {
+        if (res != null) {
+          res.forEach(element => {
+            this.cities.push(element);
+          });
+          console.log(cityId);
+          if (cityId != ''){
+            this.businessForm.patchValue({"City": cityId});
+            this.loadSectors(cityId, sectorId);
+          }
+          return res;
+        }
+      })
+    );
+  }
+
+  loadSectors(cityId: string, secId: string) {
+    this.sectors$ = this.locationService.getSectors(this.countryCode, cityId, this.language).pipe(
+      map(res => {
+        if (res != null) {
+          this.sectors = [];
+          this.sectors.push({ SectorId: "0", Name: "N/A" });
+          res.forEach(element => {
+            this.sectors.push(element);
+          });
+          console.log(secId);
+          if (secId != ""){
+            this.businessForm.patchValue({"Sector": secId});
+          } else {
+            this.businessForm.patchValue({"Sector": "0"});
+          }
+          return res;
+        }
+      }),
+      catchError(err => {
+        return throwError(err || err.message);
+      })
+    )
   }
 
   public findInvalidControls() {
@@ -644,6 +703,7 @@ export class BusinessComponent implements OnInit {
       "Country": countryId.c,
       "Address": this.businessForm.value.Address,
       "City": this.businessForm.value.City,
+      "Sector": this.businessForm.value.Sector,
       "ZipCode": this.businessForm.value.ZipCode,
       "Geolocation": '{"LAT": '+ this.lat+',"LNG": '+this.lng+'}',
       "Phone": this.code.toString().replace(/\D/g, '') + this.businessForm.value.Phone.replace(/\D/g, ''),
@@ -690,24 +750,6 @@ export class BusinessComponent implements OnInit {
     let user = JSON.parse(sessionStorage.getItem('TC247_USS'));
     user.Business_Language = lang;
     sessionStorage.setItem('TC247_USS', JSON.stringify(user));
-  }
-
-  loadSectors(cityId: string, i: number){
-    this.sectors$ = this.locationService.getSectors(this.countryCode, cityId, this.language).pipe(
-      map(res => {
-        if (res != null){
-          this.sectors[i]= [];
-          this.sectors[i].push({SectorId: "0", Name: "N/A"});
-          res.forEach(element => {
-            this.sectors[i].push(element);
-          });
-          return res;
-        }
-      }),
-      catchError(err => {
-        return throwError(err || err.message);
-      })
-    )
   }
 
   removeTag(tag: string){

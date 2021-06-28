@@ -26,12 +26,12 @@
                                     {{ 'Error: ' + getErrorMessage('Address')}}</mat-error>
                             </mat-form-field>
                             <div class="row">
-                                <mat-form-field class="col-md-5">
-                                    <input type="text" i18n-placeholder="Country|Country in business@@business.country" placeholder="Country" matInput formControlName="Country"
-                                        [matAutocomplete]="autoCountry" [errorStateMatcher]="confirmValidParentMatcher"
+                                <mat-form-field class="col-md-4">
+                                    <input #myCountry tab-directive type="text" i18n-placeholder="Country|Country in business@@business.country" placeholder="Country" matInput formControlName="Country"
+                                        [matAutocomplete]="autoCountry" [errorStateMatcher]="confirmValidParentMatcher" (focusout)='getCities(myCountry.value, "", "")'
                                         required>
                                     <mat-autocomplete #autoCountry="matAutocomplete" [displayWith]="displayFn"
-                                        activeOption="activeOption">
+                                        activeOption="activeOption" (optionSelected)='getCities($event.option.value ,"", "")'>
                                         <mat-option *ngFor="let country of filteredCountries$ | async"
                                             [value]="country">
                                             {{country.n}}
@@ -39,12 +39,36 @@
                                     </mat-autocomplete>
                                     <mat-error *ngIf="fBusiness.Country.invalid && fBusiness.Country.touched">{{ 'Error: ' + getErrorMessage('Country')}}</mat-error>
                                 </mat-form-field>
-                                <mat-form-field class="col-md-5">
+                                <ng-container *ngIf="cities$ | async"></ng-container>
+                                <ng-container *ngIf="sectors$ | async"></ng-container>
+                                <mat-form-field class="col-md-3">
+                                    <mat-label i18n="City|text in locations@@locations.city">City</mat-label>
+                                    <mat-select formControlName="City" (selectionChange)="loadSectors($event.value, '')" 
+                                    [errorStateMatcher]="confirmValidParentMatcher" required>
+                                        <mat-option *ngFor="let city of cities" [value]="city.CityId">
+                                            {{ city.Name }}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="fBusiness.City.invalid && fBusiness.City.touched">{{ 'Error: ' + getErrorMessage('City')}}
+                                    </mat-error>
+                                </mat-form-field>
+                                <mat-form-field class="col-md-3">
+                                    <mat-label i18n="Sector|text in locations@@locations.sector">Sector</mat-label>
+                                    <mat-select formControlName="Sector" [errorStateMatcher]="confirmValidParentMatcher" required>
+                                        <mat-option *ngFor="let sector of sectors" [value]="sector.SectorId">
+                                            {{ sector.Name }}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="fBusiness.Sector.invalid && fBusiness.Sector.touched">
+                                        {{ 'Error: ' + getErrorMessage('Sector')}}</mat-error>
+                                </mat-form-field>
+
+                                <!-- <mat-form-field class="col-md-5">
                                     <input matInput i18n-placeholder="City|City in business@@business.city" placeholder="City" formControlName="City" maxlength="100"
                                         minlength="2" [errorStateMatcher]="confirmValidParentMatcher" required>
                                     <mat-error *ngIf="fBusiness.City.invalid && fBusiness.City.touched">
                                         {{ 'Error: ' + getErrorMessage('City')}}</mat-error>
-                                </mat-form-field>
+                                </mat-form-field> -->
                                 <mat-form-field class="col-md-2">
                                     <input #zipcode (change)="setMarker(zipcode.value)" matInput i18n-placeholder="Zip Code|Zip code in business@business.zipcode" placeholder="Zip Code" formControlName="ZipCode" maxlength="10"
                                         minlength="3" [errorStateMatcher]="confirmValidParentMatcher">
