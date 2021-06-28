@@ -3,6 +3,39 @@
 <h3 mat-dialog-title class="pl-3 pr-3 pb-3 m-0" i18n="Add New Appointment|text in add new appo@@appos.title">Add New Appointment</h3>
 <mat-dialog-content class="">
     <form [formGroup]="clientForm">
+        <div class="form-field pl-3 pr-3" *ngIf="providerId == '0'">
+            <mat-form-field class="pb-0">
+                <mat-select i18n-placeholder="Provider|text in citas@@host.provider" placeholder="Provider" name="providers" formControlName="ProviderId" (selectionChange)="onProvChange($event)" required>
+                    <mat-option *ngFor="let item of Providers" [value]="item.ProviderId">
+                        {{item.Name}}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="f.ProviderId.invalid && f.ProviderId.touched">{{ 'Error: ' + getErrorMessage('Provider')}}</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="form-field pl-3 pr-3" *ngIf="servHide == '0'">
+            <mat-form-field class="pb-0">
+                <mat-select i18n-placeholder="Service|text in citas@@host.service" placeholder="Service" name="services" formControlName="ServiceId" (selectionChange)="validateService($event)" required>
+                    <mat-option *ngFor="let item of services" [value]="item.ServiceId">
+                        {{item.Name}}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="f.ServiceId.invalid && f.ServiceId.touched">{{ 'Error: ' + getErrorMessage('Service')}}</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="row pl-3 pr-3">
+            <div class="col-md-12">
+                <mat-form-field class="pl-0 pr-0">
+                    <mat-select i18n-placeholder="Hour|text in citas@@host.hour" placeholder="Hour" name="hours" formControlName="Hour" required>
+                        <mat-option value="--">Current Time</mat-option>
+                        <mat-option *ngFor="let item of hours$ | async" [value]="item.Time24">
+                            {{item.Hour}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="f.Hour.invalid && f.Hour.touched">{{ 'Error: ' + getErrorMessage('Hour')}}</mat-error>
+                </mat-form-field>
+            </div>
+        </div>
         <div class="form-field pl-3 pr-3">
             <ng-container *ngIf="getCustomer$ | async"></ng-container>
             <mat-form-field class="col-md-4 col-5 p-0 pr-2">
@@ -62,26 +95,6 @@
                     [errorStateMatcher]="confirmValidParentMatcher">
             </mat-form-field>
         </div>
-        <div class="form-field pl-3 pr-3" *ngIf="providerId == '0'">
-            <mat-form-field>
-                <mat-select i18n-placeholder="Provider|text in citas@@host.provider" placeholder="Provider" name="providers" formControlName="ProviderId" (selectionChange)="onProvChange($event)" required>
-                    <mat-option *ngFor="let item of Providers" [value]="item.ProviderId">
-                        {{item.Name}}
-                    </mat-option>
-                </mat-select>
-                <mat-error *ngIf="f.ProviderId.invalid && f.ProviderId.touched">{{ 'Error: ' + getErrorMessage('Provider')}}</mat-error>
-            </mat-form-field>
-        </div>
-        <div class="form-field pl-3 pr-3" *ngIf="servHide == '0'">
-            <mat-form-field>
-                <mat-select i18n-placeholder="Service|text in citas@@host.service" placeholder="Service" name="services" formControlName="ServiceId" (selectionChange)="validateService($event)" required>
-                    <mat-option *ngFor="let item of services" [value]="item.ServiceId">
-                        {{item.Name}}
-                    </mat-option>
-                </mat-select>
-                <mat-error *ngIf="f.ServiceId.invalid && f.ServiceId.touched">{{ 'Error: ' + getErrorMessage('Service')}}</mat-error>
-            </mat-form-field>
-        </div>
         <div class="form-field pl-3 pr-3" *ngIf="tipo == 2">
             <mat-form-field class="pb-0">
                 <mat-label i18n="Date|text in citas@@host.date">Date</mat-label>
@@ -89,29 +102,6 @@
                 <mat-datepicker-toggle matSuffix [for]="dateAppointment"></mat-datepicker-toggle>
                 <mat-datepicker #dateAppointment></mat-datepicker>
             </mat-form-field>
-        </div>
-        <div class="row pl-3 pr-3">
-            <div class="col-md-4">
-                <mat-form-field class="pl-0 pr-0">
-                    <mat-select i18n-placeholder="Hour|text in citas@@host.hour" placeholder="Hour" name="hours" formControlName="Hour" required>
-                        <mat-option value="--">Current Time</mat-option>
-                        <mat-option *ngFor="let item of hours$ | async" [value]="item.Time24">
-                            {{item.Hour}}
-                        </mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="f.Hour.invalid && f.Hour.touched">{{ 'Error: ' + getErrorMessage('Hour')}}</mat-error>
-                </mat-form-field>
-            </div>
-            <div class="col-md-8">
-                <mat-form-field class="pl-0 pr-0">
-                    <mat-label i18n="Preference|text in citas@@host.preference">Preference</mat-label>
-                    <mat-select formControlName="Preference">
-                        <mat-option matLine value="0">NA</mat-option>
-                        <mat-option matLine value="1" i18n="SMS|text in citas@@host.sms">SMS</mat-option>
-                        <mat-option matLine value="2" i18n="Email@@shared.Email">Email</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
         </div>
         <div class="row pl-3 pr-3">
             <div class="form-field pl-3 pr-3 col-md-6">
@@ -140,6 +130,18 @@
                         <mat-option matLine value="1" i18n="Senior|text in citas@@host.senior">Senior</mat-option>
                         <mat-option matLine value="2" i18n="Pregnant|text in citas@@host.pregnant">Pregnant</mat-option>
                         <mat-option matLine value="3" i18n="Disability|text in citas@@host.disability">Disability</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row pl-3 pr-3">
+            <div class="col-md-8">
+                <mat-form-field class="pl-0 pr-0">
+                    <mat-label i18n="Preference|text in citas@@host.preference">Preference</mat-label>
+                    <mat-select formControlName="Preference">
+                        <mat-option matLine value="0">NA</mat-option>
+                        <mat-option matLine value="1" i18n="SMS|text in citas@@host.sms">SMS</mat-option>
+                        <mat-option matLine value="2" i18n="Email@@shared.Email">Email</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>

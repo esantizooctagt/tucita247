@@ -23,10 +23,10 @@
             </mat-form-field>
         </div>
         <div class="col-md-1 ml-3 p-0 pt-2">
-            <button mat-flat-button color="primary" (click)="process()">Process</button>
+            <button mat-flat-button color="primary" class="btn-width" (click)="process()">Process</button>
         </div>
         <div class="col-md-1 ml-3 p-0 pt-2">
-            <button mat-flat-button color="primary" (click)="exportExcel()">Export</button>
+            <button mat-flat-button color="primary" class="btn-width" (click)="exportExcel()">Export</button>
         </div>
     </div>
     <ng-container *ngIf="report01$ | async"></ng-container>

@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import * as XLSX from 'xlsx';
-import am4themes_animated from "@amcharts/amcharts4/themes/animated";
+import am4themes_kelly from "@amcharts/amcharts4/themes/kelly";
 import { AppointmentService, LocationService } from '@app/services';
 import { AuthService } from '@app/core/services';
 import { SpinnerService } from '@app/shared/spinner.service';
@@ -197,7 +197,7 @@ export class MaindashComponent implements OnInit {
   }
 
   loadCharts01(data){
-    am4core.useTheme(am4themes_animated);
+    am4core.useTheme(am4themes_kelly);
     chart = am4core.create("chartdiv01", am4charts.PieChart);
     chart.data = data;
 
@@ -205,6 +205,7 @@ export class MaindashComponent implements OnInit {
     let pieSeries = chart.series.push(new am4charts.PieSeries());
     pieSeries.dataFields.value = "citas";
     pieSeries.dataFields.category = "service";
+    // pieSeries.tooltipText = "[bold]{category}: {value}";
     pieSeries.ticks.template.disabled = true;
     pieSeries.labels.template.disabled = true;
     pieSeries.slices.template.stroke = am4core.color("#fff");
@@ -221,7 +222,7 @@ export class MaindashComponent implements OnInit {
   }
 
   loadCharts05(data){
-    am4core.useTheme(am4themes_animated);
+    am4core.useTheme(am4themes_kelly);
     chart05 = am4core.create("chartdiv05", am4charts.PieChart);
     chart05.data = data;
 
@@ -245,7 +246,7 @@ export class MaindashComponent implements OnInit {
   }
 
   loadCharts02(data){
-    am4core.useTheme(am4themes_animated);
+    am4core.useTheme(am4themes_kelly);
     chart02 = am4core.create("chartdiv02", am4charts.XYChart);
 
     chart02.hiddenState.properties.opacity = 0;
@@ -266,7 +267,7 @@ export class MaindashComponent implements OnInit {
     let series = chart02.series.push(new am4charts.ColumnSeries());
     series.dataFields.categoryX = "name";
     series.dataFields.valueY = "citas";
-    series.columns.template.tooltipText = "{valueY.value}";
+    series.columns.template.tooltipText = "[bold]{name}:[/][font-size:14px]{valueY.value}";
     series.columns.template.tooltipY = 0;
     series.columns.template.strokeOpacity = 0;
     series.columns.template.column.cornerRadiusTopRight = 10;
@@ -323,7 +324,7 @@ export class MaindashComponent implements OnInit {
     series.dataFields.valueY = value
     series.dataFields.categoryX = 'location'
     series.name = name
-    series.columns.template.column.tooltipText = "{valueY.value}";
+    series.columns.template.column.tooltipText = "[bold]{categoryX}[/]\n[font-size:14px]{name}: {valueY}"; //"{valueY.value}";
     series.columns.template.column.tooltipY = 0;
     series.columns.template.column.strokeOpacity = 0;
     series.columns.template.column.cornerRadiusTopLeft = 10;

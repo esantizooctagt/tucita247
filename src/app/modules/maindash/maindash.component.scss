@@ -5,8 +5,16 @@
     font-size: 22px;
     font-weight: 600;
 }
+.btn-width{
+    width: 100px;
+}
+@media screen and (min-width: 1024px) {
+    .filter{
+        height: 60px;
+        border-bottom: 2px solid #C5C5C5;
+    }
+  }
 .filter{
-    height: 60px;
     border-bottom: 2px solid #C5C5C5;
 }
 button.mat-flat-button

@@ -34,6 +34,7 @@ export class MainNavComponent implements OnInit {
   resetToken$: Observable<any>;
   access$: Observable<any>;
   business$: Observable<any>;
+  businessData$: Observable<any>;
   filteredBusiness$: Observable<any[]>;
   allBusiness: []=[];
   apps$: Observable<Access[]>;
@@ -41,6 +42,7 @@ export class MainNavComponent implements OnInit {
   md5Admin = 'c4ca4238a0b923820dcc509a6f75849b';
   frmBusiness = new FormControl();
   roleAdm: string = '';
+  busImage: string = '';
   superAccess: number = 0;
   searchBar: number = 0;
   businessAdm: string = '';
@@ -55,7 +57,6 @@ export class MainNavComponent implements OnInit {
   displayReporting: boolean = false;
   displayOperation: boolean = false;
   
-  displayImg: number = 0;
   readonly imgPath = environment.bucket;
 
   users: User[] = [];
@@ -136,10 +137,6 @@ export class MainNavComponent implements OnInit {
     this.isAdmin = this.authService.isAdmin();
     this.roleAdm = this.authService.roleAdm();
     
-    if (this.businessId == 'f02250d2f2d04f70a40661459ec0e8b5'){
-      this.displayImg = 1;
-    }
-    
     if (this.roleAdm != ''){
       this.access$ = this.adminService.getAccess(this.businessAdm, this.roleAdm).pipe(
         map((res: any) => {
@@ -155,6 +152,18 @@ export class MainNavComponent implements OnInit {
         })
       );
     }
+
+    this.businessData$ = this.businessService.getBusiness(this.businessId, 'es').pipe(
+      map((res: any) => {
+        if (res != null){
+          this.busImage = res.Imagen;
+          return this.busImage;
+        }
+      }),
+      catchError(err => {
+        return err.message;
+      })
+    );
 
     if (this.authService.superAdmin() == 'c4ca4238a0b923820dcc509a6f75849b'){
       this.superAdmin = 1;
