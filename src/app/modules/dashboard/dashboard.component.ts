@@ -347,11 +347,11 @@ export class DashboardComponent implements OnInit {
     return sortPack[0].Available;
   }
 
-  addCitas(subs){
+  addCitas(subs, type){
     if (this.language == 'en'){
-    window.open("https://tucita247.com/direct-shopping/?email="+this.email+"&business_id="+this.businessId+"&subscription_type="+this.MD5(subs.toLowerCase()), "_blank");
+      window.open("https://tucita247.com/direct-shopping/?email="+this.email+"&business_id="+this.businessId+"&subscription_type="+this.MD5(subs.toLowerCase())+"&type="+type, "_blank");
     } else {
-      window.open("https://tucita247.com/es/compra-directa/?email="+this.email+"&business_id="+this.businessId+"&subscription_type="+this.MD5(subs.toLowerCase()), "_blank");
+      window.open("https://tucita247.com/es/compra-directa/?email="+this.email+"&business_id="+this.businessId+"&subscription_type="+this.MD5(subs.toLowerCase())+"&type="+type, "_blank");
     }
   }
 
