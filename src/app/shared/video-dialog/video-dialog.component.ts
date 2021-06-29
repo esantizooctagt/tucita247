@@ -50,6 +50,7 @@ export class VideoDialogComponent implements OnInit {
   ngOnInit(): void {
     this.Guests = (this.data.guests == 0 ? 1 : this.data.guests);
     this.valQr = (this.data.qrValue != undefined || this.data.qrValue != '' ? this.data.qrValue : '');
+    console.log(this.data.tipo);
     this.ManualCI = this.data.tipo;
   }
 
