@@ -179,13 +179,14 @@ export class NewBusinessComponent implements OnInit {
     }
     this.cities = [];
     this.sectors = [];
-    this.sectors.push({ SectorId: "0", Name: "N/A" });
+    this.sectors.push({ SectorId: "0", Name: "-N/A-" });
     this.cities$ = this.locationService.getCities(this.countryCode, this.language).pipe(
       map(res => {
         if (res != null) {
           res.forEach(element => {
             this.cities.push(element);
           });
+          this.cities.sort((a, b) => (a.Name < b.Name ? -1 : 1));
           return res;
         }
       })
@@ -253,12 +254,13 @@ export class NewBusinessComponent implements OnInit {
       map(res => {
         if (res != null) {
           this.sectors = [];
-          this.sectors.push({ SectorId: "0", Name: "N/A" });
+          this.sectors.push({ SectorId: "0", Name: "-N/A-" });
           res.forEach(element => {
             this.sectors.push(element);
           });
           console.log("set default value");
           this.businessForm.patchValue({Sector: "0"});
+          this.sectors.sort((a, b) => (a.Name < b.Name ? -1 : 1));
           return res;
         }
       }),

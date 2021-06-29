@@ -317,19 +317,19 @@ export class BusinessComponent implements OnInit {
     }
     this.cities = [];
     this.sectors = [];
-    this.sectors.push({ SectorId: "0", Name: "N/A" });
+    this.sectors.push({ SectorId: "0", Name: "-N/A-" });
     this.cities$ = this.locationService.getCities(this.countryCode, this.language).pipe(
       map(res => {
         if (res != null) {
           res.forEach(element => {
             this.cities.push(element);
           });
-          console.log(cityId);
           if (cityId != ''){
             this.businessForm.patchValue({"City": cityId});
             this.loadSectors(cityId, sectorId);
           }
-          return res;
+          this.cities.sort((a, b) => (a.Name < b.Name ? -1 : 1));
+          return res.sort((a, b) => (a.Name < b.Name ? -1 : 1));
         }
       })
     );
@@ -340,17 +340,17 @@ export class BusinessComponent implements OnInit {
       map(res => {
         if (res != null) {
           this.sectors = [];
-          this.sectors.push({ SectorId: "0", Name: "N/A" });
+          this.sectors.push({ SectorId: "0", Name: "-N/A-" });
           res.forEach(element => {
             this.sectors.push(element);
           });
-          console.log(secId);
           if (secId != ""){
             this.businessForm.patchValue({"Sector": secId});
           } else {
             this.businessForm.patchValue({"Sector": "0"});
           }
-          return res;
+          this.sectors.sort((a, b) => (a.Name < b.Name ? -1 : 1));
+          return res.sort((a, b) => (a.Name < b.Name ? -1 : 1));
         }
       }),
       catchError(err => {
