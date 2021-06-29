@@ -184,13 +184,13 @@ export class LocationComponent implements OnInit {
     this.language = this.authService.language() == "" ? "EN" : this.authService.language();
 
     this.sectors = [];
-    this.sectors.push({ SectorId: "0", Name: "N/A" });
-    this.cities.push({ CityId: "0", Name: "N/A" });
+    this.sectors.push({ SectorId: "0", Name: "-N/A-" });
+    this.cities.push({ CityId: "0", Name: "-N/A-" });
 
     this.parentBus$ = this.businessService.getBusinessParent().pipe(
       map(res => {
         if (res != null) {
-          this.businessParent.push({ BusinessId: "0", Name: "N/A" });
+          this.businessParent.push({ BusinessId: "0", Name: "-N/A-" });
           res.forEach(x=>{
             this.businessParent.push({ BusinessId: x.BusinessId, Name: x.Name});
           });
@@ -213,6 +213,7 @@ export class LocationComponent implements OnInit {
             res.forEach(element => {
               this.cities.push(element);
             });
+            this.cities.sort((a, b) => (a.Name < b.Name ? -1 : 1));
             this.spinnerService.stop(spinnerRef);
             return res;
           }
@@ -375,8 +376,6 @@ export class LocationComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.locationForm.invalid);
-    console.log(this.locationForm.touched);
     if (this.locationForm.invalid) { return; }
     if (this.locationForm.touched) {
       let location = {
@@ -428,13 +427,13 @@ export class LocationComponent implements OnInit {
       map(res => {
         if (res != null) {
           this.sectors = [];
-          this.sectors.push({ SectorId: "0", Name: "N/A" });
+          this.sectors.push({ SectorId: "0", Name: "-N/A-" });
           res.forEach(element => {
             this.sectors.push(element);
           });
-          console.log("set default value");
+          this.sectors.sort((a, b) => (a.Name < b.Name ? -1 : 1));
           this.locationForm.patchValue({Sector: "0"});
-          return res;
+          return res.sort((a, b) => (a.Name < b.Name ? -1 : 1));;
         }
       }),
       catchError(err => {
