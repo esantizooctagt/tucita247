@@ -55,13 +55,13 @@
                         </div> -->
                         <div class="row">
                             <div class="col-md-3 ml-3 mt-3">
+                                <button mat-stroked-button class="w-100" color="secondary" type="button" (click)="suspend()" i18n="Cancel Account|Buton en dashboard@@dashboard.cancel">Cancel Account</button>
+                            </div>
+                            <div class="col-md-3 ml-3 mt-3">
                                 <button mat-stroked-button class="w-100" color="secondary" type="button" (click)="addCitas(appo.Name, 1)" i18n="Change Plan|Buton en dashboard@@shared.changeplan">Change Plan</button>
                             </div>
                             <div class="col-md-3 ml-3 mt-3">
-                                <button mat-stroked-button class="w-100" color="secondary" type="button" (click)="addCitas(appo.Name, 2)" i18n="+ Add Citas|Buton en dashboard@@dashboard.button">+ Add Citas</button>
-                            </div>
-                            <div class="col-md-3 ml-3 mt-3">
-                                <button mat-stroked-button class="w-100" color="secondary" type="button" (click)="suspend()" i18n="Cancel Account|Buton en dashboard@@dashboard.cancel">Cancel Account</button>
+                                <button mat-stroked-button *ngIf="appo.Name != 'FREE'" class="w-100" color="secondary" type="button" (click)="addCitas(appo.Name, 2)" i18n="+ Add Citas|Buton en dashboard@@dashboard.button">+ Add Citas</button>
                             </div>
                         </div>
                     </ng-container>
