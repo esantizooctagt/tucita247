@@ -38,5 +38,5 @@
 <div mat-dialog-actions>
     <button mat-flat-button class="mr-3 btn-cancel" (click)="onNoClick()" i18n="Cancel@@shared.cancel">Cancel</button>
     <button mat-flat-button color="primary" class="btn-ok mr-3" (click)="onOK()" cdkFocusInitial>Scan</button>
-    <button mat-flat-button color="primary" class="btn-ok" (click)="onManual()" cdkFocusInitial>Manual</button>
+    <button mat-flat-button color="primary" *ngIf="ManualCI == 1" class="btn-ok" (click)="onManual()" cdkFocusInitial>Manual</button>
 </div>

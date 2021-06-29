@@ -38,6 +38,7 @@ export class VideoDialogComponent implements OnInit {
   Guests: number = 1;
   activeBlink: number = 0;
   valQr: string = '';
+  ManualCI: number = 0;
 
   constructor(
     public dialogRef: MatDialogRef<VideoDialogComponent>,
@@ -49,6 +50,7 @@ export class VideoDialogComponent implements OnInit {
   ngOnInit(): void {
     this.Guests = (this.data.guests == 0 ? 1 : this.data.guests);
     this.valQr = (this.data.qrValue != undefined || this.data.qrValue != '' ? this.data.qrValue : '');
+    this.ManualCI = this.data.tipo;
   }
 
   displayCameras(event){
