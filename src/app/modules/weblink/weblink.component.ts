@@ -239,7 +239,12 @@ export class WeblinkComponent implements OnInit {
       this.getCustomer$ = this.appointmentService.getMobile(phone, cCode).pipe(
         map((res: any) => {
           if (res.Code == 200){
-            let dateDOB = new Date(res.Customer.DOB+'T06:00:00');
+            let DOB = '';
+            let dateDOB = new Date();
+            if (res.Customer.DOB != '' && res.Customer.DOB != 'None'){
+              DOB = res.Customer.DOB.substring(6,10)+'-'+res.Customer.DOB.substring(3,5)+'-'+res.Customer.DOB.substring(0,2);
+              dateDOB = new Date(DOB+'T06:00:00');
+            }
             if (JSON.stringify(res.Customer) != '{}'){
               this.clientForm.patchValue(
                 { Name: res.Customer.Name, 

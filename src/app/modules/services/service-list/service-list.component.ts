@@ -183,7 +183,7 @@ export class ServiceListComponent implements OnInit {
       if(result != undefined){
         var spinnerRef = this.spinnerService.start($localize`:@@services.deletingserv:`);
         if (result){ 
-          this.deleteService$ = this.serviceService.deleteService(this.businessId, service.value.ServiceId).pipe(
+          this.deleteService$ = this.serviceService.deleteService(this.businessId, service.ServiceId).pipe(
             tap(res => {
               this.spinnerService.stop(spinnerRef);
               this.displayYesNo = false;

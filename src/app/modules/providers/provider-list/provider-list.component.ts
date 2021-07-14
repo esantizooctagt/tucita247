@@ -182,7 +182,7 @@ export class ProviderListComponent implements OnInit {
       if(result != undefined){
         if (result){
           var spinnerRef = this.spinnerService.start($localize`:@@providers.deletingservice:`); 
-          this.deleteProvider$ = this.providerService.deleteProvider(this.businessId, service.value.LocationId, service.value.ProviderId).pipe(
+          this.deleteProvider$ = this.providerService.deleteProvider(this.businessId, service.LocationId, service.ProviderId).pipe(
             tap(res => {
               this.spinnerService.stop(spinnerRef);
               this.displayYesNo = false;
