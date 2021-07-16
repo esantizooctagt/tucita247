@@ -320,9 +320,9 @@ export class WeblinkComponent implements OnInit {
       }
     }
     if (this.providers.length == 1){
-      this.clientForm.patchValue({ProviderId: this.providerId, ServiceId: '0'});
+      this.clientForm.patchValue({ProviderId: this.providerId, ServiceId: '0', Guests: 1});
     } else {
-      this.clientForm.patchValue({ProviderId: '0', ServiceId: '0'});
+      this.clientForm.patchValue({ProviderId: '0', ServiceId: '0', Guests: 1});
     }
   }
 
@@ -344,9 +344,9 @@ export class WeblinkComponent implements OnInit {
       }
     }
     if (this.services.length == 1) {
-      this.clientForm.patchValue({ServiceId: this.serviceId});
+      this.clientForm.patchValue({ServiceId: this.serviceId, Guests: 1});
     } else {
-      this.clientForm.patchValue({ServiceId: '0'});
+      this.clientForm.patchValue({ServiceId: '0', Guests: 1});
     }
   }
 
@@ -355,6 +355,7 @@ export class WeblinkComponent implements OnInit {
     this.maxGuests = this.services.filter(x => x.ServiceId == this.serviceId)[0].MaxGuests;
     this.hours$ = empty();
     this.dateAppo = undefined;
+    this.clientForm.patchValue({Guests: 1});
   }
 
   getErrorMessage(component: string){
