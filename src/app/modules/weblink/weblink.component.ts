@@ -340,6 +340,7 @@ export class WeblinkComponent implements OnInit {
       this.services = this.business.Services.sort((a, b) => (a.Name < b.Name ? -1 : 1));
       if (this.services.length == 1){
         this.serviceId = this.services[0].ServiceId;
+        this.maxGuests = this.services[0].MaxGuests;
       }
     }
     if (this.services.length == 1) {
@@ -351,6 +352,7 @@ export class WeblinkComponent implements OnInit {
 
   onServChange(event){
     this.serviceId = event.value;
+    this.maxGuests = this.services.filter(x => x.ServiceId == this.serviceId)[0].MaxGuests;
     this.hours$ = empty();
     this.dateAppo = undefined;
   }
