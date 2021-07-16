@@ -194,6 +194,7 @@
                                 <mat-form-field class="col-md-6">
                                     <input matInput i18n-placeholder="WebSite|Text in business@@business.website" placeholder="WebSite" formControlName="WebSite" maxlength="150"
                                         minlength="4" [errorStateMatcher]="confirmValidParentMatcher">
+                                    <span matPrefix>https://&nbsp;</span>
                                     <mat-error *ngIf="fBusiness.WebSite.invalid && fBusiness.WebSite.touched">
                                         {{ 'Error: ' + getErrorMessage('WebSite')}}</mat-error>
                                 </mat-form-field>

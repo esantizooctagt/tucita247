@@ -110,7 +110,7 @@ export class PollComponent implements OnInit {
               Name: poll.Name,
               LocationId: poll.LocationId,
               DatePoll: dateP,
-              DateFinPoll: dateFinP,
+              DateFinPoll: (poll.DateFinPoll == '' ? '' : dateFinP),
               Happy: poll.Happy,
               Neutral: poll.Neutral,
               Angry: poll.Angry,

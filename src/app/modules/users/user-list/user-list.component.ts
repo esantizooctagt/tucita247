@@ -210,26 +210,32 @@ export class UserListComponent implements OnInit {
 
     const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
-      if(result != undefined){
+      if(result == undefined || result == false){ return; }  
+      if (result){
         var spinnerRef = this.spinnerService.start($localize`:@@users.deletinguser:`);
-        if (result){
-          this.deleteUser$ = this.userService.deleteUser(user, this.businessId).pipe(
-            tap(res => {
-              this.spinnerService.stop(spinnerRef);
-              this.displayYesNo = false;
+        this.deleteUser$ = this.userService.deleteUser(user, this.businessId).pipe(
+          tap((res: any) => {
+            this.spinnerService.stop(spinnerRef);
+            this.displayYesNo = false;
+            if (res.Code == 200){
               this.loadUsers(
                 this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].userId
               );
               this.openDialog($localize`:@@users.usertext:`, $localize`:@@users.deletedsuccess:`, true, false, false);
-            }),
-            catchError(err => {
-              this.spinnerService.stop(spinnerRef);
-              this.displayYesNo = false;
-              this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
-              return throwError (err || err.message);
-            })
-          );
-        }
+            } else {
+              this.loadUsers(
+                this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].userId
+              );
+              this.openDialog($localize`:@@users.usertext:`, res.Message, false, true, false);
+            }
+          }),
+          catchError(err => {
+            this.spinnerService.stop(spinnerRef);
+            this.displayYesNo = false;
+            this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
+            return throwError (err || err.message);
+          })
+        );
       }
     });
   }

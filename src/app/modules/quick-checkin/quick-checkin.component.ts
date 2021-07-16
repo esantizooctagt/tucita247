@@ -865,8 +865,8 @@ export class QuickCheckinComponent implements OnInit {
       minute: 'numeric',
       second: 'numeric',
       hour12: false,
-    },
-    formatter = new Intl.DateTimeFormat([], options);
+    } as const;
+    let formatter = new Intl.DateTimeFormat([], options);
     var actual = formatter.format(new Date());
     var actualTime = '';
     var a = new Date();
@@ -900,8 +900,8 @@ export class QuickCheckinComponent implements OnInit {
     let options = {
       timeZone: this.TimeZone,
       year: 'numeric'
-    },
-    formatter = new Intl.DateTimeFormat([], options);
+    } as const;
+    let formatter = new Intl.DateTimeFormat([], options);
     var actual = formatter.format(new Date());
     return actual;
   }
@@ -910,8 +910,8 @@ export class QuickCheckinComponent implements OnInit {
     let options = {
       timeZone: this.TimeZone,
       month: 'numeric'
-    },
-    formatter = new Intl.DateTimeFormat([], options);
+    } as const;
+    let formatter = new Intl.DateTimeFormat([], options);
     var actual = formatter.format(new Date());
     return actual.padStart(2,'0');
   }
@@ -920,8 +920,8 @@ export class QuickCheckinComponent implements OnInit {
     let options = {
       timeZone: this.TimeZone,
       day: 'numeric'
-    },
-    formatter = new Intl.DateTimeFormat([], options);
+    } as const;
+    let formatter = new Intl.DateTimeFormat([], options);
     var actual = formatter.format(new Date());
     return actual.padStart(2,'0');
   }

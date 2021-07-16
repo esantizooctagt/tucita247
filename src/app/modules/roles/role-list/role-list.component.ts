@@ -204,26 +204,25 @@ export class RoleListComponent implements OnInit {
 
     const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
-      if(result != undefined){
+      if(result == undefined || result == false){ return; }
+      if (result){
         var spinnerRef = this.spinnerService.start($localize`:@@roles.deletingrole:`);
-        if (result){
-          this.deleteRole$ = this.rolesService.deleteRole(role, this.businessId).pipe(
-            tap(res => {
-              this.spinnerService.stop(spinnerRef);
-              this.displayYesNo = false;
-              this.loadRoles(
-                this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].roleId
-              );
-              this.openDialog($localize`:@@roles.rolepop:`, $localize`:@@roles.roledeleted:`, true, false, false);
-            }),
-            catchError(err => {
-              this.spinnerService.stop(spinnerRef);
-              this.displayYesNo = false;
-              this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
-              return throwError (err || err.message);
-            })
-          );
-        }
+        this.deleteRole$ = this.rolesService.deleteRole(role, this.businessId).pipe(
+          tap(res => {
+            this.spinnerService.stop(spinnerRef);
+            this.displayYesNo = false;
+            this.loadRoles(
+              this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].roleId
+            );
+            this.openDialog($localize`:@@roles.rolepop:`, $localize`:@@roles.roledeleted:`, true, false, false);
+          }),
+          catchError(err => {
+            this.spinnerService.stop(spinnerRef);
+            this.displayYesNo = false;
+            this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
+            return throwError (err || err.message);
+          })
+        );
       }
     });
   }

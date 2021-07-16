@@ -184,7 +184,7 @@ export class WeblinkComponent implements OnInit {
       LocationId: this.locId,
       ProviderId: this.provId,
       ServiceId: this.servId,
-      BusinessName: (this.business.Name.length > 27 ? this.business.Name.substring(0,27)+'...' : this.business.Name),
+      BusinessName: this.business.Name,
       Language: 'es',
       Door: this.doorId,
       Phone: (phoneNumber == '' ?  '00000000000' : this.code.toString().replace(/[^0-9]/g,'') + phoneNumber),
@@ -252,8 +252,12 @@ export class WeblinkComponent implements OnInit {
                   Preference: res.Customer.Preferences.toString(), 
                   Disability: res.Customer.Disability.toString(), 
                   Gender: res.Customer.Gender.toString(),
+                  Custom: res.Customer.CUSTOM.toString(),
                   DOB: (res.Customer.DOB == '' || res.Customer.DOB == 'None' ? '' : dateDOB) }
               );
+              if (res.Customer.Gender.toString() == 'C'){
+                this.enabledCustomG = true;
+              }
               this.currEmail = res.Customer.Email;
             }
             this.search = 0;
@@ -515,8 +519,8 @@ export class WeblinkComponent implements OnInit {
       minute: 'numeric',
       second: 'numeric',
       hour12: false,
-    },
-    formatter = new Intl.DateTimeFormat([], options);
+    } as const;
+    let formatter = new Intl.DateTimeFormat([], options);
     var actual = formatter.format(new Date());
     var actualTime = '';
     var a = new Date();
@@ -544,8 +548,8 @@ export class WeblinkComponent implements OnInit {
     let options = {
       timeZone: this.TimeZone,
       year: 'numeric'
-    },
-    formatter = new Intl.DateTimeFormat([], options);
+    } as const;
+    let formatter = new Intl.DateTimeFormat([], options);
     var actual = formatter.format(new Date());
     return actual;
   }
@@ -554,8 +558,8 @@ export class WeblinkComponent implements OnInit {
     let options = {
       timeZone: this.TimeZone,
       month: 'numeric'
-    },
-    formatter = new Intl.DateTimeFormat([], options);
+    } as const;
+    let formatter = new Intl.DateTimeFormat([], options);
     var actual = formatter.format(new Date());
     return actual.padStart(2,'0');
   }
@@ -564,8 +568,8 @@ export class WeblinkComponent implements OnInit {
     let options = {
       timeZone: this.TimeZone,
       day: 'numeric'
-    },
-    formatter = new Intl.DateTimeFormat([], options);
+    } as const;
+    let formatter = new Intl.DateTimeFormat([], options);
     var actual = formatter.format(new Date());
     return actual.padStart(2,'0');
   }

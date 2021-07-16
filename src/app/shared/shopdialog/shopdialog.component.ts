@@ -1,5 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { AuthService } from '@app/core/services';
+import { BusinessService } from '@app/services';
+import { Observable } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 export interface DialogData {
   header: string;
@@ -20,21 +24,44 @@ export class ShopdialogComponent implements OnInit {
   message: string;
   businessId: string;
   email: string;
+  appos$: Observable<any>;
+  language: string = '';
+  plan: string = '';
 
   constructor(
+    private authService: AuthService,
     private dialogRef: MatDialogRef<ShopdialogComponent>,
+    private businessService: BusinessService,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
-  ) { }
+  ) {
+    this.language = this.authService.language().toLowerCase();
+  }
 
   ngOnInit(): void {
     this.header = this.data.header;
     this.message = this.data.message;
     this.email = this.data.email;
     this.businessId = this.data.businessId;
+
+    this.appos$ = this.businessService.getBusinessAppos(this.businessId).pipe(
+        map((res: any) => {
+            if (res != null){
+                this.plan = res.Name;
+                return res;
+            }
+        }),
+        catchError(err => {
+            return err;
+        })
+    );
   }
 
   goTo(){
-    window.open("https://tucita247.com/direct-shopping/?email="+this.email+"&business_id="+this.businessId+"&subscription_type="+this.MD5('FREE'), "_blank");
+    if (this.language == 'en'){
+        window.open("https://tucita247.com/direct-shopping/?email="+this.email+"&business_id="+this.businessId+"&subscription_type="+this.MD5(this.plan.toLowerCase())+"&type=1", "_blank");
+    } else {
+        window.open("https://tucita247.com/es/compra-directa/?email="+this.email+"&business_id="+this.businessId+"&subscription_type="+this.MD5(this.plan.toLowerCase())+"&type=1", "_blank");
+    }
   }
 
   close() {
@@ -240,6 +267,6 @@ export class ShopdialogComponent implements OnInit {
       var temp = WordToHex(a)+WordToHex(b)+WordToHex(c)+WordToHex(d);
  
       return temp.toLowerCase();
- }
+  }
 
 }

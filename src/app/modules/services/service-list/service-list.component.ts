@@ -180,26 +180,26 @@ export class ServiceListComponent implements OnInit {
 
     const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
-      if(result != undefined){
+      console.log(result);
+      if(result == undefined || result == false){ return; }
+      if (result){ 
         var spinnerRef = this.spinnerService.start($localize`:@@services.deletingserv:`);
-        if (result){ 
-          this.deleteService$ = this.serviceService.deleteService(this.businessId, service.ServiceId).pipe(
-            tap(res => {
-              this.spinnerService.stop(spinnerRef);
-              this.displayYesNo = false;
-              this.loadServices(
-                this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].serviceId
-              );
-              this.openDialog($localize`:@@services.service:`, $localize`:@@services.deletedsuccess:`, true, false, false);
-            }),
-            catchError(err => {
-              this.spinnerService.stop(spinnerRef);
-              this.displayYesNo = false;
-              this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
-              return throwError (err || err.message);
-            })
-          );
-        }
+        this.deleteService$ = this.serviceService.deleteService(this.businessId, service.ServiceId).pipe(
+          tap(res => {
+            this.spinnerService.stop(spinnerRef);
+            this.displayYesNo = false;
+            this.loadServices(
+              this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].serviceId
+            );
+            this.openDialog($localize`:@@services.service:`, $localize`:@@services.deletedsuccess:`, true, false, false);
+          }),
+          catchError(err => {
+            this.spinnerService.stop(spinnerRef);
+            this.displayYesNo = false;
+            this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
+            return throwError (err || err.message);
+          })
+        );
       }
     });
   }

@@ -179,26 +179,25 @@ export class ProviderListComponent implements OnInit {
 
     const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
-      if(result != undefined){
-        if (result){
-          var spinnerRef = this.spinnerService.start($localize`:@@providers.deletingservice:`); 
-          this.deleteProvider$ = this.providerService.deleteProvider(this.businessId, service.LocationId, service.ProviderId).pipe(
-            tap(res => {
-              this.spinnerService.stop(spinnerRef);
-              this.displayYesNo = false;
-              this.loadProviders(
-                this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].providerId
-              );
-              this.openDialog($localize`:@@providers.servprovider:`, $localize`:@@providers.deletedsuccess:`, true, false, false);
-            }),
-            catchError(err => {
-              this.spinnerService.stop(spinnerRef);
-              this.displayYesNo = false;
-              this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
-              return throwError (err || err.message);
-            })
-          );
-        }
+      if(result == undefined || result == false){ return; }
+      if (result){
+        var spinnerRef = this.spinnerService.start($localize`:@@providers.deletingservice:`); 
+        this.deleteProvider$ = this.providerService.deleteProvider(this.businessId, service.LocationId, service.ProviderId).pipe(
+          tap(res => {
+            this.spinnerService.stop(spinnerRef);
+            this.displayYesNo = false;
+            this.loadProviders(
+              this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].providerId
+            );
+            this.openDialog($localize`:@@providers.servprovider:`, $localize`:@@providers.deletedsuccess:`, true, false, false);
+          }),
+          catchError(err => {
+            this.spinnerService.stop(spinnerRef);
+            this.displayYesNo = false;
+            this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
+            return throwError (err || err.message);
+          })
+        );
       }
     });
   }

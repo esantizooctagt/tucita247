@@ -228,8 +228,8 @@ export class HostComponent implements OnInit {
           hour: 'numeric',
           minute: 'numeric',
           hour12: false,
-        },
-        formatter = new Intl.DateTimeFormat([], options);
+        } as const;
+        let formatter = new Intl.DateTimeFormat([], options);
         var actualTime = formatter.format(new Date());
         let actTime = (+actualTime.replace(':','-').substring(0,2) == 24 ? 0 :+actualTime.replace(':','-').substring(0,2));
         let appoTime = +msg['DateFull'].substring(11).replace(':','-').substring(0,2);
@@ -845,8 +845,8 @@ export class HostComponent implements OnInit {
             minute: 'numeric',
             second: 'numeric',
             hour12: false,
-          },
-          formatter = new Intl.DateTimeFormat([], options);
+          } as const;
+          let formatter = new Intl.DateTimeFormat([], options);
           var actual = formatter.format(new Date());
           var d = new Date();
           d.setHours(+res.CheckInTime.substring(11,13));
@@ -1543,8 +1543,8 @@ export class HostComponent implements OnInit {
       minute: 'numeric',
       second: 'numeric',
       hour12: false,
-    },
-    formatter = new Intl.DateTimeFormat([], options);
+    } as const;
+    let formatter = new Intl.DateTimeFormat([], options);
     var actual = formatter.format(new Date());
     var actualTime = '';
     var a = new Date();
@@ -1568,8 +1568,8 @@ export class HostComponent implements OnInit {
       minute: 'numeric',
       second: 'numeric',
       hour12: false,
-    },
-    formatter = new Intl.DateTimeFormat([], options);
+    } as const;
+    let formatter = new Intl.DateTimeFormat([], options);
     var actual = formatter.format(new Date());
     var actualTime = '';
     var a = new Date();
@@ -1606,8 +1606,8 @@ export class HostComponent implements OnInit {
       minute: 'numeric',
       second: 'numeric',
       hour12: false,
-    },
-    formatter = new Intl.DateTimeFormat([], options);
+    } as const;
+    let formatter = new Intl.DateTimeFormat([], options);
     var actual = formatter.format(new Date());
     var actualTime = '';
     var a = new Date();
@@ -1633,8 +1633,8 @@ export class HostComponent implements OnInit {
     let options = {
       timeZone: this.TimeZone,
       year: 'numeric'
-    },
-    formatter = new Intl.DateTimeFormat([], options);
+    } as const;
+    let formatter = new Intl.DateTimeFormat([], options);
     var actual = formatter.format(new Date());
     return actual;
   }
@@ -1643,8 +1643,8 @@ export class HostComponent implements OnInit {
     let options = {
       timeZone: this.TimeZone,
       month: 'numeric'
-    },
-    formatter = new Intl.DateTimeFormat([], options);
+    } as const;
+    let formatter = new Intl.DateTimeFormat([], options);
     var actual = formatter.format(new Date());
     return actual.padStart(2,'0');
   }
@@ -1653,8 +1653,8 @@ export class HostComponent implements OnInit {
     let options = {
       timeZone: this.TimeZone,
       day: 'numeric'
-    },
-    formatter = new Intl.DateTimeFormat([], options);
+    } as const;
+    let formatter = new Intl.DateTimeFormat([], options);
     var actual = formatter.format(new Date());
     return actual.padStart(2,'0');
   }
@@ -2081,8 +2081,8 @@ export class HostComponent implements OnInit {
       minute: 'numeric',
       second: 'numeric',
       hour12: false,
-    },
-    formatter = new Intl.DateTimeFormat([], options);
+    } as const;
+    let formatter = new Intl.DateTimeFormat([], options);
     var actual = formatter.format(new Date());
     var d = new Date();
     d.setHours(+cardTime.substring(11,13));

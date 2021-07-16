@@ -1011,8 +1011,8 @@ export class ScheduleComponent implements OnInit {
       minute: 'numeric',
       second: 'numeric',
       hour12: false,
-    },
-    formatter = new Intl.DateTimeFormat([], options);
+    } as const;
+    let formatter = new Intl.DateTimeFormat([], options);
     // var actual = formatter.format(new Date());
     var v = new Date();
     var actual = formatter.format(v.setMinutes(v.getMinutes()-14));
@@ -1025,8 +1025,8 @@ export class ScheduleComponent implements OnInit {
     let options = {
       timeZone: this.TimeZone,
       year: 'numeric'
-    },
-    formatter = new Intl.DateTimeFormat([], options);
+    } as const;
+    let formatter = new Intl.DateTimeFormat([], options);
     var actual = formatter.format(new Date());
     return actual;
   }
@@ -1035,8 +1035,8 @@ export class ScheduleComponent implements OnInit {
     let options = {
       timeZone: this.TimeZone,
       month: 'numeric'
-    },
-    formatter = new Intl.DateTimeFormat([], options);
+    } as const;
+    let formatter = new Intl.DateTimeFormat([], options);
     var actual = formatter.format(new Date());
     return actual.padStart(2,'0');
   }
@@ -1045,8 +1045,8 @@ export class ScheduleComponent implements OnInit {
     let options = {
       timeZone: this.TimeZone,
       day: 'numeric'
-    },
-    formatter = new Intl.DateTimeFormat([], options);
+    } as const;
+    let formatter = new Intl.DateTimeFormat([], options);
     var actual = formatter.format(new Date());
     return actual.padStart(2,'0');
   }

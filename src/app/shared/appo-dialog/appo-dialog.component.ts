@@ -197,7 +197,7 @@ export class AppoDialogComponent implements OnInit {
       BusinessId: this.data.businessId,
       LocationId: this.data.locationId,
       ProviderId: this.data.providerId,
-      BusinessName: (this.authService.businessName().length > 27 ? this.authService.businessName().substring(0,27)+'...' : this.authService.businessName()),
+      BusinessName: this.authService.businessName(),
       Language: this.authService.businessLanguage(),
       ServiceId: this.clientForm.value.ServiceId,
       AppoDate: this.data.appoDate,
@@ -252,6 +252,7 @@ export class AppoDialogComponent implements OnInit {
         Preference: '1', 
         Disability: '', 
         Gender: '',
+        Custom: '',
         DOB: '' }
     );
     if (phone != '00000000000'){
@@ -272,8 +273,12 @@ export class AppoDialogComponent implements OnInit {
                   Preference: res.Customer.Preferences.toString(), 
                   Disability: res.Customer.Disability.toString(), 
                   Gender: res.Customer.Gender.toString(),
+                  Custom: res.Customer.CUSTOM.toString(),
                   DOB: (res.Customer.DOB == '' || res.Customer.DOB == 'None' ? '' : dateDOB) }
               );
+              if (res.Customer.Gender.toString() == 'C'){
+                this.enabledCustomG = true;
+              }
               this.currEmail = res.Customer.Email;
             }
             this.search = 0;

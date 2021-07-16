@@ -83,8 +83,8 @@ export class MessDialogComponent implements OnInit {
       hour: 'numeric',
       minute: 'numeric',
       hour12: true,
-    },
-    formatter = new Intl.DateTimeFormat([], options);
+    } as const;
+    let formatter = new Intl.DateTimeFormat([], options);
     var actual = formatter.format(new Date());
     let value = item.value;
     item.value = '';

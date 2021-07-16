@@ -208,26 +208,25 @@ export class PollListComponent implements OnInit {
 
     const dialogRef = this.dialog.open(DialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
-      if(result != undefined){
+      if(result == undefined || result == false){ return; }
+      if (result){ 
         var spinnerRef = this.spinnerService.start($localize`:@@polls.deletingpoll:`);
-        if (result){ 
-          this.deletePoll$ = this.pollService.deletePoll(poll.value.PollId, this.businessId, poll.value.DatePoll).pipe(
-            tap(res => {
-              this.spinnerService.stop(spinnerRef);
-              this.displayYesNo = false;
-              this.loadPolls(
-                this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].pollId
-              );
-              this.openDialog($localize`:@@polls.pollssub:`, $localize`:@@polls.deletedsuccessful:`, true, false, false);
-            }),
-            catchError(err => {
-              this.spinnerService.stop(spinnerRef);
-              this.displayYesNo = false;
-              this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
-              return throwError (err || err.message);
-            })
-          );
-        }
+        this.deletePoll$ = this.pollService.deletePoll(poll.value.PollId, this.businessId, poll.value.DatePoll).pipe(
+          tap(res => {
+            this.spinnerService.stop(spinnerRef);
+            this.displayYesNo = false;
+            this.loadPolls(
+              this._currentPage[0].page, this.pageSize, this._currentSearchValue, this._currentPage[0].pollId
+            );
+            this.openDialog($localize`:@@polls.pollssub:`, $localize`:@@polls.deletedsuccessful:`, true, false, false);
+          }),
+          catchError(err => {
+            this.spinnerService.stop(spinnerRef);
+            this.displayYesNo = false;
+            this.openDialog($localize`:@@shared.error:`, err.Message, false, true, false);
+            return throwError (err || err.message);
+          })
+        );
       }
     });
   }

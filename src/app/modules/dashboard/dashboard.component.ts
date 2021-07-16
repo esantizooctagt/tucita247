@@ -396,8 +396,8 @@ export class DashboardComponent implements OnInit {
     let options = {
       timeZone: 'America/Puerto_Rico',
       year: 'numeric'
-    },
-    formatter = new Intl.DateTimeFormat([], options);
+    } as const;
+    let formatter = new Intl.DateTimeFormat([], options);
     var actual = formatter.format(new Date());
     return actual;
   }
@@ -406,8 +406,8 @@ export class DashboardComponent implements OnInit {
     let options = {
       timeZone: 'America/Puerto_Rico',
       month: 'numeric'
-    },
-    formatter = new Intl.DateTimeFormat([], options);
+    } as const;
+    let formatter = new Intl.DateTimeFormat([], options);
     var actual = formatter.format(new Date());
     return actual.padStart(2,'0');
   }
@@ -416,8 +416,8 @@ export class DashboardComponent implements OnInit {
     let options = {
       timeZone: 'America/Puerto_Rico',
       day: 'numeric'
-    },
-    formatter = new Intl.DateTimeFormat([], options);
+    } as const;
+    let formatter = new Intl.DateTimeFormat([], options);
     var actual = formatter.format(new Date());
     return actual.padStart(2,'0');
   }

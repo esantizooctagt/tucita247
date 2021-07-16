@@ -9,7 +9,7 @@
             </div>
             <ng-container *ngIf="poll$ | async"></ng-container>
             <ng-container *ngIf="savePoll$ | async"></ng-container>
-            <div class="row p-0 m-0">
+            <div class="row p-0 ml-0 mr-0 mt-0 mb-3">
                 <mat-card class="col-sm col-md col-lg-7">
                     <form [formGroup]="pollForm" (ngSubmit)="onSubmit()" class="mt-4">
                         <div class="form-field pl-3 pr-3">
