@@ -84,7 +84,7 @@ export class AppowiDialogComponent implements OnInit {
     Phone: ['',[Validators.maxLength(17), Validators.minLength(7)]],
     Name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     ServiceId: ['', [Validators.required]],
-    Hour: ['', [Validators.required]],
+    Hour: ['--', [Validators.required]],
     Email: ['', [Validators.maxLength(200), Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
     CountryCode: ['PRI'],
     DOB: [''],
@@ -308,7 +308,7 @@ export class AppowiDialogComponent implements OnInit {
       Disability: (this.clientForm.value.Disability == null ? '': this.clientForm.value.Disability),
       Guests: this.clientForm.value.Guests,
       AppoDate: dateAppo,
-      AppoHour: ((this.clientForm.value.Hour).toString() == "--" ? timeAppo : (this.clientForm.value.Hour).toString().padStart(4,'0').substring(0,2)+':'+(this.clientForm.value.Hour).toString().padStart(4,'0').substring(2,4)),
+      AppoHour: ((this.clientForm.value.Hour).toString() == "--" || (this.clientForm.value.Hour).toString() == "" ? timeAppo : (this.clientForm.value.Hour).toString().padStart(4,'0').substring(0,2)+':'+(this.clientForm.value.Hour).toString().padStart(4,'0').substring(2,4)),
       Type: typeAppo,
       UpdEmail: updE,
       Comments: this.clientForm.value.Comments
@@ -413,8 +413,7 @@ export class AppowiDialogComponent implements OnInit {
   onProvChange(event){
     this.hours = [];
     this.services = [];
-    this.clientForm.patchValue({'ServiceId': ''});
-    this.clientForm.patchValue({'Hour': '--'});
+    this.clientForm.patchValue({'ServiceId': '', 'Hour': '--'});
     this.getLocInfo$ = this.serviceService.getServicesProvider(this.businessId, event.value).pipe(
       map((res: any) =>{
         this.services = res.services.sort((a, b) => (a.Name < b.Name ? -1 : 1)).filter(x => x.Selected === 1);
@@ -440,6 +439,8 @@ export class AppowiDialogComponent implements OnInit {
               })
             );
           }
+        } else {
+          this.servHide = '0';
         }
         return res;
       }),
