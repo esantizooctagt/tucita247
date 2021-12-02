@@ -42,6 +42,10 @@
           <mat-icon svgIcon="home" class="icon-option"></mat-icon>
           <div class="mat-welcome" mat-line [routerLink]="['/welcome']" routerLinkActive="menu-active-welcome" i18n="Welcome@@main.welcome" (click)="(screenWidth < 500) ? drawer.toggle() : ''">Welcome</div>
         </mat-list-item>
+        <mat-list-item *ngIf="isAdmin">
+          <mat-icon svgIcon="billing" class="icon-option"></mat-icon>
+          <div class="mat-welcome" mat-line [routerLink]="['/billing']" routerLinkActive="menu-active-welcome" i18n="billing@@main.billing" (click)="(screenWidth < 500) ? drawer.toggle() : ''">Billing</div>
+        </mat-list-item>
         <ng-container class="" *ngIf="apps$ | async">
           <mat-accordion multi="true" [displayMode]="displayMode" *ngIf="displayReporting">
             <mat-expansion-panel class="no-shadow">
@@ -53,7 +57,7 @@
               </mat-expansion-panel-header>
               <mat-nav-list class="accordion-menu ml-0" dense>
               <ng-container class="" *ngFor="let item of apps$ | async">
-                <mat-list-item class="submenu-item" *ngIf="(item.ApplicationId == 'APP01' || item.ApplicationId == 'APP02' || item.ApplicationId == 'APP12') && item.Active == '1'">
+                <mat-list-item class="submenu-item" *ngIf="(item.ApplicationId == 'APP02' || item.ApplicationId == 'APP12') && item.Active == '1'">
                   <a [routerLink]="['/'+item.Route]" routerLinkActive="submenu-active" class="value-submenu-item" (click)="(screenWidth < 500) ? drawer.toggle() : ''">{{ item.Name }}</a>
                 </mat-list-item>
                 <!-- <a class="list-item" *ngIf="item.ApplicationId == 'APP01' || item.ApplicationId == 'APP02'" mat-list-item [routerLink]="['/'+item.Route]" routerLinkActive="menu-active">{{ item.Name }}</a> -->

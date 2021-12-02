@@ -11,6 +11,12 @@ import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 
+// import {MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
+// import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+// import * as _moment from 'moment';
+// import {default as _rollupMoment, Moment} from 'moment';
+
+
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
@@ -52,6 +58,14 @@ export class DashboardComponent implements OnInit {
   yAxisLabel: string = ''; //Average cita
   legendTitle: string = ''; //Locations
   displayYesNo: boolean = false;
+
+  ccName: string = '';
+  ccNumber: string = '';
+  ccv: number;
+  ccDate: Date;
+  today: Date = new Date();
+
+  dispForm: boolean =false;
 
   tabSelected = 0;
 
@@ -420,6 +434,10 @@ export class DashboardComponent implements OnInit {
     let formatter = new Intl.DateTimeFormat([], options);
     var actual = formatter.format(new Date());
     return actual.padStart(2,'0');
+  }
+
+  update(){
+
   }
 
   MD5 = function (string) {

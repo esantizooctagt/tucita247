@@ -2,6 +2,12 @@
     <ng-container *ngIf="operationHours$ | async"></ng-container>
     <ng-container *ngIf="liveData$ | async"></ng-container>
     <div class="row">
+        <div class="col-md-2 col-lg-2 pt-2 calendar-title">
+            <h3 class="text-schedule" i18n="CALENDAR|text in schedule@@sche.calendar">CALENDAR</h3>
+            <button class="help-btn" mat-icon-button color="primary" (click)="learnMore(35)">
+                <mat-icon>help</mat-icon>
+            </button>
+        </div>
         <div class="col-md-5 col-lg-5 location-select">
             <mat-form-field class="pb-0 selection-line">
                 <mat-select name="locations" [(value)]="locationData" (selectionChange)="onSelectLocation($event)">
@@ -14,7 +20,7 @@
                 </mat-select>
             </mat-form-field>
         </div>
-        <div class="col-md-5 col-lg-5 pt-2 pr-0">
+        <div class="col-md-3 col-lg-3 pt-2 pr-0">
             <mat-form-field class="input-search pb-0" appearance="outline">
                 <mat-label i18n="Search@@shared.search">Search customer</mat-label>
                 <input matInput placeholder="Search customer" [(ngModel)]="searchValue">
@@ -117,7 +123,7 @@
                                 </ng-container>
                                 <ng-template #valCheckMon>
                                     <ng-container *ngIf="(MonHours | hourdata: item.Time: updatedMon).Time == undefined || ((MonHours | hourdata: item.Time: updatedMon).Cancel == 1 && ((monday > today) || (monday.toString() == today.toString() && currTime < item.Time24H)))">
-                                        <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, monday, item.Time, 1)">
+                                        <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, monday, item.Time, 1)" i18n-matTooltip="Enable|Enable time slot tooltip@@learnMore.LMCON60" matTooltip="Enabled">
                                             <mat-icon class="action-enabled" svgIcon="check01"></mat-icon>
                                         </button>
                                     </ng-container>
@@ -144,7 +150,7 @@
                                 </ng-container>
                                 <ng-template #valCheckTue>
                                     <ng-container *ngIf="(TueHours | hourdata: item.Time: updatedTue).Time == undefined || ((TueHours | hourdata: item.Time: updatedTue).Cancel == 1 && ((tuesday > today) || (tuesday.toString() == today.toString() && currTime < item.Time24H)))">
-                                        <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, tuesday, item.Time, 2)">
+                                        <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, tuesday, item.Time, 2)" i18n-matTooltip="Enable|Enable time slot tooltip@@learnMore.LMCON60" matTooltip="Enabled">
                                             <mat-icon class="action-enabled" svgIcon="check01"></mat-icon>
                                         </button>
                                     </ng-container>
@@ -171,7 +177,7 @@
                                 </ng-container>
                                 <ng-template #valCheckWed>
                                     <ng-container *ngIf="(WedHours | hourdata: item.Time: updatedWed).Time == undefined || ((WedHours | hourdata: item.Time: updatedWed).Cancel == 1 && ((wednesday > today) || (wednesday.toString() == today.toString() && currTime < item.Time24H)))">
-                                        <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, wednesday, item.Time, 3)">
+                                        <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, wednesday, item.Time, 3)" i18n-matTooltip="Enable|Enable time slot tooltip@@learnMore.LMCON60" matTooltip="Enabled">
                                             <mat-icon class="action-enabled" svgIcon="check01"></mat-icon>
                                         </button>
                                     </ng-container>
@@ -198,7 +204,7 @@
                                 </ng-container>
                                 <ng-template #valCheckThu>
                                     <ng-container *ngIf="(ThuHours | hourdata: item.Time: updatedThu).Time == undefined || ((ThuHours | hourdata: item.Time: updatedThu).Cancel == 1 && ((thursday > today) || (thursday.toString() == today.toString() && currTime < item.Time24H)))">
-                                        <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, thursday, item.Time, 4)">
+                                        <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, thursday, item.Time, 4)" i18n-matTooltip="Enable|Enable time slot tooltip@@learnMore.LMCON60" matTooltip="Enabled">
                                             <mat-icon class="action-enabled" svgIcon="check01"></mat-icon>
                                         </button>
                                     </ng-container>
@@ -225,7 +231,7 @@
                             </ng-container>
                             <ng-template #valCheckFri>
                                 <ng-container *ngIf="(FriHours | hourdata: item.Time: updatedFri).Time == undefined || ((FriHours | hourdata: item.Time: updatedFri).Cancel == 1 && ((friday > today) || (friday.toString() == today.toString() && currTime < item.Time24H)))">
-                                    <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, friday, item.Time, 5)">
+                                    <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, friday, item.Time, 5)" i18n-matTooltip="Enable|Enable time slot tooltip@@learnMore.LMCON60" matTooltip="Enabled">
                                         <mat-icon class="action-enabled" svgIcon="check01"></mat-icon>
                                     </button>
                                 </ng-container>
@@ -252,7 +258,7 @@
                                 </ng-container>
                                 <ng-template #valCheckSat>
                                     <ng-container *ngIf="(SatHours | hourdata: item.Time: updatedSat).Time == undefined || ((SatHours | hourdata: item.Time: updatedSat).Cancel == 1 && ((saturday > today) || (saturday.toString() == today.toString() && currTime < item.Time24H)))">
-                                        <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, saturday, item.Time, 6)">
+                                        <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, saturday, item.Time, 6)" i18n-matTooltip="Enable|Enable time slot tooltip@@learnMore.LMCON60" matTooltip="Enabled">
                                             <mat-icon class="action-enabled" svgIcon="check01"></mat-icon>
                                         </button>
                                     </ng-container>
@@ -279,7 +285,7 @@
                                 </ng-container>
                                 <ng-template #valCheckSun>
                                     <ng-container *ngIf="(SunHours | hourdata: item.Time: updatedSun).Time == undefined || ((SunHours | hourdata: item.Time: updatedSun).Cancel == 1 && ((sunday > today) || (sunday.toString() == today.toString() && currTime < item.Time24H)))">
-                                        <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, sunday, item.Time, 7)">
+                                        <button mat-icon-button class="col-md-3" (click)="enableHour(item.Time24H, sunday, item.Time, 7)" i18n-matTooltip="Enable|Enable time slot tooltip@@learnMore.LMCON60" matTooltip="Enabled">
                                             <mat-icon class="action-enabled" svgIcon="check01"></mat-icon>
                                         </button>
                                     </ng-container>

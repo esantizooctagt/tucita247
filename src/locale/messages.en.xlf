@@ -2,6 +2,14 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en-US" datatype="plaintext" original="ng2.template" target-language="en">
     <body>
+      <trans-unit id="learnMore.LMCON60" datatype="html">
+        <source>LMCON60</source>
+        <target state="translated">Enable this timeslot</target>
+        <context-group purpose="schedule">
+          <context context-type="sourcefile">src/app/modules/schedule/schedule.component.html</context>
+          <context context-type="linenumber">247</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="maindash.graph06" datatype="html">
         <source>Daily Citas Distribution by Provider</source>
         <target state="translated">Daily Citas Distribution by Provider</target>
@@ -819,6 +827,15 @@
         </context-group>
         <note priority="1" from="description">Welcome</note>
       </trans-unit>
+      <trans-unit id="main.billing" datatype="html">
+        <source>Billing</source>
+        <target state="translated">Billing</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/main-nav/main-nav.component.html</context>
+          <context context-type="linenumber">47</context>
+        </context-group>
+        <note priority="1" from="description">Billing</note>
+      </trans-unit>
       <trans-unit id="main.timesettings" datatype="html">
         <source>Time Settings</source>
         <target state="translated">Time settings</target>
@@ -965,7 +982,7 @@
       </trans-unit>
       <trans-unit id="dashboard.title" datatype="html">
         <source>DASHBOARD</source>
-        <target state="translated">DASHBOARD</target>
+        <target state="translated">BILLING</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/dashboard/dashboard.component.html</context>
           <context context-type="linenumber">6</context>
@@ -5120,8 +5137,8 @@ When using Manual Check-Out, the system will not send polls to that location.</t
         </context-group>
       </trans-unit>
       <trans-unit id="shared.invalidDateTime">
-        <source>Invalid date and time for this service</source>
-        <target state="translated">Invalid date and time for this service</target>
+        <source>Period expired. Please choose another time.</source>
+        <target state="translated">Period expired. Please choose another time.</target>
       </trans-unit>
       <trans-unit id="shared.closingLoc">
         <source>Closing Location</source>
@@ -5153,11 +5170,43 @@ When using Manual Check-Out, the system will not send polls to that location.</t
       </trans-unit>
       <trans-unit id="dashboard.cancelmess">
         <source>Are you sure you want to cancel your account? You can't revert this process.</source>
-        <target state="translated">Are you sure you want to cancel your account? You can revert this process.</target>
+        <target state="translated">Are you sure you want to cancel your account? You can't revert this process.</target>
       </trans-unit>
       <trans-unit id="dashboard.cancel">
         <source>Cancel</source>
         <target state="translated">Cancel</target>
+      </trans-unit>
+      <trans-unit id="dashboard.deactivate">
+        <source>Deactivate Account</source>
+        <target state="translated">Deactivate Account</target>
+      </trans-unit>
+      <trans-unit id="dashboard.paymentmethod">
+        <source>Payment Method</source>
+        <target state="translated">Payment Met</target>
+      </trans-unit>
+      <trans-unit id="dashboard.cancel">
+        <source>Cancel</source>
+        <target state="translated">Cancel</target>
+      </trans-unit>
+      <trans-unit id="dashboard.update">
+        <source>Update</source>
+        <target state="translated">Update</target>
+      </trans-unit>
+      <trans-unit id="dashboard.billing.ccname">
+        <source>Name</source>
+        <target state="translated">Name</target>
+      </trans-unit>
+      <trans-unit id="dashboard.billing.ccnumber">
+        <source>Number</source>
+        <target state="translated">Number</target>
+      </trans-unit>
+      <trans-unit id="dashboard.billing.ccdate">
+        <source>Due Date</source>
+        <target state="translated">Due Date</target>
+      </trans-unit>
+      <trans-unit id="dashboard.billing.ccv">
+        <source>CCV</source>
+        <target state="translated">CCV</target>
       </trans-unit>
     </body>
   </file>

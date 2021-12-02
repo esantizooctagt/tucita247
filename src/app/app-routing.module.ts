@@ -17,7 +17,7 @@ const routes: Routes = [
       { path: 'polls', component: PollsComponent, canActivate: [AuthGuard] },
       { path: 'poll/:pollId', component: PollComponent, canActivate: [AuthGuard] },
       { path: 'surveys', component: SurveysComponent, canActivate: [AuthGuard] },
-      { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+      { path: 'billing', component: DashboardComponent, canActivate: [AuthGuard] },
       { path: 'main-dashboard', component: MaindashComponent, canActivate: [AuthGuard] },
       { path: 'welcome', component: WelcomeComponent, canActivate: [AuthGuard] },
       { path: 'cancel', component: CancelComponent, canActivate: [AuthGuard] },

@@ -616,7 +616,11 @@ export class ScheduleComponent implements OnInit {
         this.spinnerService.stop(spinnerRef);
         return err;
       })
-    )
+    );
+    setInterval(() => { 
+      this.currTime = this.getActTime().replace(':','');
+      console.log(this.currTime);
+    }, 60000);
   }
 
   loadHours(){
@@ -1015,7 +1019,7 @@ export class ScheduleComponent implements OnInit {
     let formatter = new Intl.DateTimeFormat([], options);
     // var actual = formatter.format(new Date());
     var v = new Date();
-    var actual = formatter.format(v.setMinutes(v.getMinutes()-14));
+    var actual = formatter.format(v.setMinutes(v.getMinutes()));
     var hour: string = (+actual.substring(0,2) == 24 ? '00' : (+actual.substring(0,2)).toString().padStart(2, '0'));
     var min: string = actual.substring(3,5).padStart(2,'0');
     return hour+':'+min;

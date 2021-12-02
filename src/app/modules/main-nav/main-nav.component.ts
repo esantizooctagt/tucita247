@@ -100,6 +100,7 @@ export class MainNavComponent implements OnInit {
       this.matIconRegistry.addSvgIcon('user',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/user-mn.svg'));
       this.matIconRegistry.addSvgIcon('ope',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/ope-mn.svg'));
       this.matIconRegistry.addSvgIcon('home',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/home-mn.svg'));
+      this.matIconRegistry.addSvgIcon('billing',this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/dollar.svg'));
 
       this.screenWidth = window.innerWidth;
       window.onresize = () => {
