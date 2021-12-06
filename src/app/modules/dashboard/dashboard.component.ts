@@ -10,7 +10,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
-
+import { environment } from '@environments/environment';
 // import {MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
 // import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 // import * as _moment from 'moment';
@@ -31,6 +31,8 @@ export class DashboardComponent implements OnInit {
   appos$: Observable<any>;
   avgData$: Observable<any[]>;
   soft$: Observable<any>;
+  payment$: Observable<any>;
+
   businessId: string = '';
   onError: string = '';
   locationId: string = '';
@@ -42,6 +44,7 @@ export class DashboardComponent implements OnInit {
   email: string = '';
   language: string = '';
   selectedLoc: string = '';
+  siteId: string = '';
   resultLoc: any[] =[];
   perLocation: number = 0;
   quantity: number = 0;
@@ -59,11 +62,16 @@ export class DashboardComponent implements OnInit {
   legendTitle: string = ''; //Locations
   displayYesNo: boolean = false;
 
+  ccData: any[]=[];
   ccName: string = '';
   ccNumber: string = '';
-  ccv: number;
+  cvv: number;
   ccDate: Date;
   today: Date = new Date();
+
+  ccNumberData: string = '';
+  ccNameData: string = '';
+  ccToken: string = '';
 
   dispForm: boolean =false;
 
@@ -110,6 +118,8 @@ export class DashboardComponent implements OnInit {
     this.email = this.authService.email();
     this.isAdmin = this.authService.isAdmin();
     this.userId = this.authService.userId();
+    this.businessService.setSession(Math.floor(Math.random() * 999999) + 900001);
+    this.siteId = environment.siteId;
 
     let initDate = '';
     let yearCurr = this.getYear();
@@ -232,6 +242,38 @@ export class DashboardComponent implements OnInit {
           return '0';
         })
       );
+      let contentHash = '';
+      this.payment$ = this.businessService.getHash(this.siteId + this.businessService.getSession().toString() +  this.businessId).pipe(
+        map((res: any) => {
+          if (res != ''){
+            contentHash = res;
+          }
+        }),
+        switchMap(_ => 
+          this.businessService.getAccounts(this.businessId, contentHash).pipe(
+            map((res: any) => {
+              this.ccData = res;
+              if (this.ccData.length > 0){
+                let resCC = this.ccData.filter(x => x.IsDefault == true);
+                if (resCC.length > 0){
+                  this.ccNumberData = resCC[0].Account;
+                  this.ccNameData = resCC[0].CustomerName;
+                  this.ccToken = resCC[0].AccountToken;
+                } else {
+                  this.ccNumberData = this.ccData[0].Account;
+                  this.ccNameData = this.ccData[0].CustomerName;
+                  this.ccToken = this.ccData[0].AccountToken;
+                }
+              }
+            })
+          )
+        ),
+        catchError(err => {
+          this.spinnerService.stop(spinnerRef);
+          this.onError = err.Message;
+          return '0';
+        })
+      );
     }
 
     setInterval(() => { 
@@ -256,6 +298,21 @@ export class DashboardComponent implements OnInit {
         );
       }
     }, 120000);
+
+    // let dataForm = {
+    //   'MerchantKey': 'NDY1OTM1OTk=',
+    //   'AccountNumber': this.ccNumber,
+    //   'ExpirationMonth': this.ccDate.getMonth(),
+    //   'ExpirationYear': this.ccDate.getFullYear(),
+    //   'CustomerName': this.ccName,
+    //   'IsDefault': true,
+    //   'CustomerId': this.businessId,
+    //   'AccountType': '1',
+    //   'CustomerEmail': this.authService.email(),
+    //   'ZipCode': '12345'
+    // }
+    // this.businessService.getHash('DTu95sTbDJAPWS6d' + '1' +  this.ccNumber + this.ccName + this.businessId + '1');
+    // this.businessService.getToken(messageData, businessId, dataForm)
   }
 
   onSelectLocation(event){

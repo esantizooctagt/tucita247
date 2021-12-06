@@ -5192,21 +5192,21 @@ When using Manual Check-Out, the system will not send polls to that location.</t
         <source>Update</source>
         <target state="translated">Update</target>
       </trans-unit>
-      <trans-unit id="dashboard.billing.ccname">
+      <trans-unit id="billing.ccname">
         <source>Name</source>
         <target state="translated">Name</target>
       </trans-unit>
-      <trans-unit id="dashboard.billing.ccnumber">
+      <trans-unit id="billing.ccnumber">
         <source>Number</source>
         <target state="translated">Number</target>
       </trans-unit>
-      <trans-unit id="dashboard.billing.ccdate">
+      <trans-unit id="billing.ccdate">
         <source>Due Date</source>
         <target state="translated">Due Date</target>
       </trans-unit>
-      <trans-unit id="dashboard.billing.ccv">
-        <source>CCV</source>
-        <target state="translated">CCV</target>
+      <trans-unit id="billing.cvv">
+        <source>CVV</source>
+        <target state="translated">CVV</target>
       </trans-unit>
     </body>
   </file>

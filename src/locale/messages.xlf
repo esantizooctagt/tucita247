@@ -4568,17 +4568,17 @@
       <trans-unit id="dashboard.update">
         <source>Update</source>
       </trans-unit>
-      <trans-unit id="dashboard.billing.ccname">
+      <trans-unit id="billing.ccname">
         <source>Name</source>
       </trans-unit>
-      <trans-unit id="dashboard.billing.ccnumber">
+      <trans-unit id="billing.ccnumber">
         <source>Number</source>
       </trans-unit>
-      <trans-unit id="dashboard.billing.ccdate">
+      <trans-unit id="billing.ccdate">
         <source>Due Date</source>
       </trans-unit>
-      <trans-unit id="dashboard.billing.ccv">
-        <source>CCV</source>
+      <trans-unit id="billing.cvv">
+        <source>CVV</source>
       </trans-unit>
     </body>
   </file>

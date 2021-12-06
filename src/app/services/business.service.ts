@@ -13,6 +13,10 @@ export class BusinessService {
   readonly apiURL = environment.apiUrl;
   readonly apiAdminUrl = environment.apiAdminUrl;
   readonly apiWPURL = environment.apiWPUrl;
+  readonly siteId = environment.siteId;
+  readonly merchantKey = environment.merchantKey;
+
+  sessionId: number;
   constructor(private http: HttpClient) { }
 
   getBusinessAdmin(): Observable<any>{
@@ -101,6 +105,51 @@ export class BusinessService {
 
   validateLink(link){
     return this.http.get<any>(this.apiURL + '/business/link/' + link)
+                    .pipe(catchError(this.errorHandler))
+  }
+
+  getSession(){
+    return this.sessionId;
+  }
+
+  setSession(val: number){
+    this.sessionId = val;
+  }
+
+  getToken(messageHash, businessId, dataForm){
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        SiteId: this.siteId,
+        MessageHash: messageHash,
+        SessionId: businessId
+      })
+    };
+    return this.http.post('https://www.agilpay.net/WebApi/APaymentTokenApi/RegisterToken', dataForm, httpOptions)
+                    .pipe(catchError(this.errorHandler))
+  }
+
+  getHash(contentHash: string){
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        SiteId: this.siteId
+      })
+    };
+    return this.http.get<any>('https://www.agilpay.net/WebApi/APaymentTokenApi/GetHash?contentHash=' + contentHash, httpOptions)
+                    .pipe(catchError(this.errorHandler))
+  }
+
+  getAccounts(customerId, contentHash){
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        SiteId: this.siteId,
+        SessionId: this.sessionId.toString(),
+        MessageHash: contentHash
+      })
+    };
+    return this.http.get<any>('https://www.agilpay.net/WebApi/APaymentTokenApi/GetCustomerTokens?CustomerID='+customerId, httpOptions)
                     .pipe(catchError(this.errorHandler))
   }
 

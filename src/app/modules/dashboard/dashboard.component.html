@@ -55,32 +55,34 @@
                         </div> -->
                         <div class="row">
                             <div class="col-md-3 ml-3 mt-3">
-                                <button mat-stroked-button class="w-100" color="secondary" type="button" (click)="suspend()" i18n="Deactivate Account|Buton en dashboard@@dashboard.deactivate">Deactivate Account</button>
+                                <button mat-stroked-button class="w-100" color="primary" type="button" (click)="suspend()" i18n="Deactivate Account|Buton en dashboard@@dashboard.deactivate">Deactivate Account</button>
                             </div>
                             <div class="col-md-3 ml-3 mt-3">
-                                <button mat-stroked-button class="w-100" color="secondary" type="button" (click)="addCitas(appo.Name, 1)" i18n="Change Plan|Buton en dashboard@@shared.changeplan">Change Plan</button>
+                                <button mat-stroked-button class="w-100" color="primary" type="button" (click)="addCitas(appo.Name, 1)" i18n="Change Plan|Buton en dashboard@@shared.changeplan">Change Plan</button>
                             </div>
                             <div class="col-md-3 ml-3 mt-3">
-                                <button mat-stroked-button *ngIf="appo.Name != 'FREE'" class="w-100" color="secondary" type="button" (click)="addCitas(appo.Name, 2)" i18n="+ Add Citas|Buton en dashboard@@dashboard.button">+ Add Citas</button>
+                                <button mat-stroked-button *ngIf="appo.Name != 'FREE'" class="w-100" color="primary" type="button" (click)="addCitas(appo.Name, 2)" i18n="+ Add Citas|Buton en dashboard@@dashboard.button">+ Add Citas</button>
                             </div>
                         </div>
                     </ng-container>
                 </mat-card>
                 <mat-card class="col-sm col-md-4 col-lg-4">
-                    <div class="row ml-2 mb-2">
+                    <div class="row m-auto">
                         <h3 i18n="Current visitors|text in dashboard@@paymentmethod">Payment Method</h3>
                     </div>
-                    <div class="row ml-2 mb-2">
-                        <mat-label class="">**** **** **** 1122</mat-label>
+                    <div class="row m-auto">
+                        <ng-container *ngIf="payment$ | async"></ng-container>
+                        <mat-label class="">{{ccNumberData}}</mat-label>
+                        <mat-label class="">{{ccNameData}}</mat-label>
                         <ng-container *ngIf="!dispForm">
                             <button mat-stroked-button class="w-100" color="primary" type="button" (click)="dispForm = true" i18n="Update|Buton@@dashboard.update">Update</button>
                         </ng-container>
                         <ng-container *ngIf="dispForm">
-                            <mat-form-field class="pb-0 col-md-10">
+                            <mat-form-field class="pb-0 col-md-12">
                                 <input matInput i18n-placeholder="Name CC placeholder@@billing.ccname" placeholder="Name" maxlength="100" minlength="3"
                                     [(ngModel)]="ccName">
                             </mat-form-field>
-                            <mat-form-field class="pb-0 col-md-10">
+                            <mat-form-field class="pb-0 col-md-12">
                                 <input matInput i18n-placeholder="CC Number placeholder@@billing.ccnumber" placeholder="Number" maxlength="18" minlength="18"
                                     [(ngModel)]="ccNumber">
                             </mat-form-field>
@@ -95,11 +97,15 @@
                                 (monthSelected)="chosenMonthHandler($event picker)" -->
                             </mat-form-field>
                             <mat-form-field class="pb-0 col-md-4">
-                                <input matInput i18n-placeholder="CCV placeholder@@billing.ccv" placeholder="CCV" minlength="3"
-                                    [(ngModel)]="ccv">
+                                <input matInput i18n-placeholder="CVV placeholder@@billing.cvv" placeholder="CVV" minlength="3"
+                                    [(ngModel)]="cvv">
                             </mat-form-field>
-                            <button mat-stroked-button class="w-100" color="primary" type="button" (click)="dispForm = false" i18n="Cancel|Buton@@dashboard.cancel">Cancel</button>
-                            <button mat-stroked-button class="w-100" color="primary" type="button" (click)="update()" i18n="Update|Buton@@dashboard.update">Update</button>
+                            <div class="col-md-12">
+                                <div class="row justify-content-between">
+                                    <button mat-stroked-button class="col-md-5" color="primary" type="button" (click)="dispForm = false" i18n="Cancel|Buton@@dashboard.cancel">Cancel</button>
+                                    <button mat-stroked-button class="col-md-5" color="primary" type="button" (click)="update()" i18n="Update|Buton@@dashboard.update">Update</button>
+                                </div>
+                            </div>
                         </ng-container>
                         
                         <!-- <mat-form-field class="col-md selection-line pl-0">

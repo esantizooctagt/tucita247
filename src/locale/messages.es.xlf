@@ -5193,21 +5193,21 @@ Cuando se escoge la opción de Check-Out Manual, el sistema no enviará encuesta
         <source>Update</source>
         <target state="translated">Actualizar</target>
       </trans-unit>
-      <trans-unit id="dashboard.billing.ccname">
+      <trans-unit id="billing.ccname">
         <source>Name</source>
         <target state="translated">Nombre</target>
       </trans-unit>
-      <trans-unit id="dashboard.billing.ccnumber">
+      <trans-unit id="billing.ccnumber">
         <source>Number</source>
         <target state="translated">Número de tarjeta</target>
       </trans-unit>
-      <trans-unit id="dashboard.billing.ccdate">
+      <trans-unit id="billing.ccdate">
         <source>Due Date</source>
         <target state="translated">Fecha Ven.</target>
       </trans-unit>
-      <trans-unit id="dashboard.billing.ccv">
-        <source>CCV</source>
-        <target state="translated">CCV</target>
+      <trans-unit id="billing.cvv">
+        <source>CVV</source>
+        <target state="translated">CVV</target>
       </trans-unit>
     </body>
   </file>
