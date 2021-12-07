@@ -11,15 +11,10 @@ import { DialogComponent } from '@app/shared/dialog/dialog.component';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { environment } from '@environments/environment';
-// import {MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
-// import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-// import * as _moment from 'moment';
-// import {default as _rollupMoment, Moment} from 'moment';
 
-
-import * as am4core from "@amcharts/amcharts4/core";
-import * as am4charts from "@amcharts/amcharts4/charts";
-import am4themes_animated from "@amcharts/amcharts4/themes/animated";
+// import * as am4core from "@amcharts/amcharts4/core";
+// import * as am4charts from "@amcharts/amcharts4/charts";
+// import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 
 @Component({
   selector: 'app-dashboard',
@@ -32,7 +27,11 @@ export class DashboardComponent implements OnInit {
   avgData$: Observable<any[]>;
   soft$: Observable<any>;
   payment$: Observable<any>;
+  paymentSave$: Observable<any>;
+  customerId$: Observable<any>;
 
+  orders: any[]=[];
+  customerId: string = '';
   businessId: string = '';
   onError: string = '';
   locationId: string = '';
@@ -44,6 +43,8 @@ export class DashboardComponent implements OnInit {
   email: string = '';
   language: string = '';
   selectedLoc: string = '';
+  contentHash: string = '';
+  merchantKey: string = '';
   siteId: string = '';
   resultLoc: any[] =[];
   perLocation: number = 0;
@@ -62,13 +63,18 @@ export class DashboardComponent implements OnInit {
   legendTitle: string = ''; //Locations
   displayYesNo: boolean = false;
 
+  orderId: string = '';
   ccData: any[]=[];
   ccName: string = '';
   ccNumber: string = '';
-  cvv: number;
-  ccDate: Date;
+  cvv: string;
+  ccMonth: number;
+  ccYear: number;
   today: Date = new Date();
+  numMonths = ['01','02','03','04','05','06','07','08','09','10','11','12'];
+  numYears =[];
 
+  displayedColumns = ['id', 'date_created', 'status', 'total'];
   ccNumberData: string = '';
   ccNameData: string = '';
   ccToken: string = '';
@@ -120,6 +126,8 @@ export class DashboardComponent implements OnInit {
     this.userId = this.authService.userId();
     this.businessService.setSession(Math.floor(Math.random() * 999999) + 900001);
     this.siteId = environment.siteId;
+    this.merchantKey = environment.merchantKey;
+    this.numYears = Array(10).fill(10).map((_, i) => i+this.today.getFullYear());
 
     let initDate = '';
     let yearCurr = this.getYear();
@@ -138,6 +146,7 @@ export class DashboardComponent implements OnInit {
     this.appos$ = this.businessService.getBusinessAppos(this.businessId).pipe(
       map((res: any) => {
         if (res != null){
+          this.orderId = res.Order;
           return res;
         }
       }),
@@ -242,15 +251,15 @@ export class DashboardComponent implements OnInit {
           return '0';
         })
       );
-      let contentHash = '';
+      
       this.payment$ = this.businessService.getHash(this.siteId + this.businessService.getSession().toString() +  this.businessId).pipe(
         map((res: any) => {
           if (res != ''){
-            contentHash = res;
+            this.contentHash = res;
           }
         }),
         switchMap(_ => 
-          this.businessService.getAccounts(this.businessId, contentHash).pipe(
+          this.businessService.getAccounts(this.businessId, this.contentHash).pipe(
             map((res: any) => {
               this.ccData = res;
               if (this.ccData.length > 0){
@@ -274,6 +283,24 @@ export class DashboardComponent implements OnInit {
           return '0';
         })
       );
+
+      this.customerId$ = this.businessService.getId(this.email).pipe(
+        map((res: any) => {
+          this.customerId = res[0].id;
+        }),
+        switchMap (_ => 
+          this.businessService.getOrders(this.customerId).pipe(
+            map((res: any) => {
+              this.orders = res;
+            })
+          )
+        ),
+        catchError(err => {
+          this.spinnerService.stop(spinnerRef);
+          this.onError = err.Message;
+          return '0';
+        })
+      )
     }
 
     setInterval(() => { 
@@ -298,21 +325,6 @@ export class DashboardComponent implements OnInit {
         );
       }
     }, 120000);
-
-    // let dataForm = {
-    //   'MerchantKey': 'NDY1OTM1OTk=',
-    //   'AccountNumber': this.ccNumber,
-    //   'ExpirationMonth': this.ccDate.getMonth(),
-    //   'ExpirationYear': this.ccDate.getFullYear(),
-    //   'CustomerName': this.ccName,
-    //   'IsDefault': true,
-    //   'CustomerId': this.businessId,
-    //   'AccountType': '1',
-    //   'CustomerEmail': this.authService.email(),
-    //   'ZipCode': '12345'
-    // }
-    // this.businessService.getHash('DTu95sTbDJAPWS6d' + '1' +  this.ccNumber + this.ccName + this.businessId + '1');
-    // this.businessService.getToken(messageData, businessId, dataForm)
   }
 
   onSelectLocation(event){
@@ -494,7 +506,39 @@ export class DashboardComponent implements OnInit {
   }
 
   update(){
-
+    if (this.ccName == '' || this.ccNumber == '' || this.ccYear.toString() == '' || this.ccMonth.toString() == '' || this.cvv.toString() == '') {return;}
+    let dataForm = {
+      'MerchantKey': this.merchantKey,
+      'AccountNumber': this.ccNumber,
+      'ExpirationMonth': this.ccMonth,
+      'ExpirationYear': this.ccYear,
+      'CustomerName': this.ccName,
+      'IsDefault': true,
+      'CustomerId': this.businessId,
+      'AccountType': '1',
+      'CustomerEmail': this.authService.email(),
+      'ZipCode': '12345'
+    }
+    var spinnerRef = this.spinnerService.start($localize`:@@dashboard.loading:`);
+    this.paymentSave$ = this.businessService.getToken(this.contentHash, dataForm).pipe(
+      map((res: any) => {
+        if (res.AccountToken != '' && res.State == 'Validated'){
+          this.ccToken = res.AccountToken;
+        }
+      }),
+      switchMap(_ => 
+        this.businessService.updAccount(this.orderId, this.ccToken).pipe(
+          map((res: any) => {
+            return res.id;
+          })
+        )
+      ),
+      catchError(err => {
+        this.spinnerService.stop(spinnerRef);
+        this.onError = err.Message;
+        return '0';
+      })
+    );
   }
 
   MD5 = function (string) {

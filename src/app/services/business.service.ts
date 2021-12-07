@@ -116,13 +116,13 @@ export class BusinessService {
     this.sessionId = val;
   }
 
-  getToken(messageHash, businessId, dataForm){
+  getToken(messageHash, dataForm){
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
         SiteId: this.siteId,
         MessageHash: messageHash,
-        SessionId: businessId
+        SessionId: this.sessionId.toString()
       })
     };
     return this.http.post('https://www.agilpay.net/WebApi/APaymentTokenApi/RegisterToken', dataForm, httpOptions)
@@ -132,8 +132,10 @@ export class BusinessService {
   getHash(contentHash: string){
     const httpOptions = {
       headers: new HttpHeaders({
+        'Access-Control-Allow-Origin' : '*',
+        'Access-Control-Allow-Credentials': 'true',
         'Content-Type':  'application/json',
-        SiteId: this.siteId
+        'SiteId': this.siteId
       })
     };
     return this.http.get<any>('https://www.agilpay.net/WebApi/APaymentTokenApi/GetHash?contentHash=' + contentHash, httpOptions)
@@ -150,6 +152,49 @@ export class BusinessService {
       })
     };
     return this.http.get<any>('https://www.agilpay.net/WebApi/APaymentTokenApi/GetCustomerTokens?CustomerID='+customerId, httpOptions)
+                    .pipe(catchError(this.errorHandler))
+  }
+
+  updAccount(orderId: string, token: string){
+    const utcDate = Date.now();
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+    const body = {
+      "meta_data": [
+      {
+        "key": "AccountToken",
+        "value": token
+      }]
+    }
+    return this.http.put('https://tucita247.com/wp-json/wc/v3/orders/'+orderId+'?oauth_consumer_key=ck_3fcd8bc23ab2aa9b5cb27f3ff68c798a072b9662&oauth_signature_method=HMAC-SHA1&oauth_timestamp='+utcDate.toString()+'&oauth_nonce=ohqdd3nNDzO&oauth_version=1.0&oauth_signature=9vjdei1+oafJz25J5pjoQfRAx34=', body, httpOptions)
+                    .pipe(catchError(this.errorHandler))
+  }
+
+  getId(email: string){
+    const utcDate = Date.now();
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+    return this.http.get<any>('https://tucita247.com/wp-json/wc/v3/customers?email=' + email + '&oauth_consumer_key=ck_3fcd8bc23ab2aa9b5cb27f3ff68c798a072b9662&oauth_signature_method=HMAC-SHA1&oauth_timestamp='+utcDate.toString()+'&oauth_nonce=ohqdd3nNDzO&oauth_version=1.0&oauth_signature=9vjdei1+oafJz25J5pjoQfRAx34=', httpOptions)
+                    .pipe(catchError(this.errorHandler))
+  }
+
+  getOrders(customerId: string){
+    const utcDate = Date.now();
+    const newD = new Date();
+    const today = new Date(newD.setMonth(newD.getMonth()-10));
+    const data = today.getFullYear() + '-' + (today.getMonth()+1).toString().padStart(2,'0') + '-' + (today.getDate()).toString().padStart(2,'0')
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+    return this.http.get<any>('https://tucita247.com/wp-json/wc/v3/orders?after='+data+'T00:00:00Z&customer=' + customerId + '&oauth_consumer_key=ck_3fcd8bc23ab2aa9b5cb27f3ff68c798a072b9662&oauth_signature_method=HMAC-SHA1&oauth_timestamp='+utcDate.toString()+'&oauth_nonce=ohqdd3nNDzO&oauth_version=1.0&oauth_signature=9vjdei1+oafJz25J5pjoQfRAx34=', httpOptions)
                     .pipe(catchError(this.errorHandler))
   }
 

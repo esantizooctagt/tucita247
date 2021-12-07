@@ -1070,7 +1070,7 @@
       </trans-unit>
       <trans-unit id="Month to Date" datatype="html">
         <source>Month to Date</source>
-        <target state="translated">Month to date</target>
+        <target state="translated">Invoices</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/dashboard/dashboard.component.html</context>
           <context context-type="linenumber">89</context>
@@ -5182,7 +5182,7 @@ When using Manual Check-Out, the system will not send polls to that location.</t
       </trans-unit>
       <trans-unit id="dashboard.paymentmethod">
         <source>Payment Method</source>
-        <target state="translated">Payment Met</target>
+        <target state="translated">Payment Method</target>
       </trans-unit>
       <trans-unit id="dashboard.cancel">
         <source>Cancel</source>

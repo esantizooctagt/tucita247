@@ -10,11 +10,15 @@ import { AuthService } from '@core/services';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
+  excludeDomain = ['https://www.agilpay.net','https://tucita247.com'];
   constructor(private authService: AuthService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     let currentUser = this.authService.currentUserValue;
     let currentUserTkn = this.authService.currentAccessValue;
+    this.excludeDomain.forEach(res => {
+      if (request.url.includes(res)){ return next.handle(request); }
+    })
     if (currentUser && currentUserTkn) {
       request = request.clone({
           setHeaders: { 

@@ -1,3 +1,4 @@
+<ng-container *ngIf="customerId$ | async"></ng-container>
 <div class="container-fluid main-background">
     <div class="row p-0">
         <div class="col-md-12 pl-4 m-0">
@@ -55,23 +56,24 @@
                         </div> -->
                         <div class="row">
                             <div class="col-md-3 ml-3 mt-3">
-                                <button mat-stroked-button class="w-100" color="primary" type="button" (click)="suspend()" i18n="Deactivate Account|Buton en dashboard@@dashboard.deactivate">Deactivate Account</button>
+                                <button mat-stroked-button *ngIf="appo.Name != 'FREE'" class="w-100" color="primary" type="button" (click)="addCitas(appo.Name, 2)" i18n="+ Add Citas|Buton en dashboard@@dashboard.button">+ Add Citas</button>
                             </div>
                             <div class="col-md-3 ml-3 mt-3">
                                 <button mat-stroked-button class="w-100" color="primary" type="button" (click)="addCitas(appo.Name, 1)" i18n="Change Plan|Buton en dashboard@@shared.changeplan">Change Plan</button>
                             </div>
                             <div class="col-md-3 ml-3 mt-3">
-                                <button mat-stroked-button *ngIf="appo.Name != 'FREE'" class="w-100" color="primary" type="button" (click)="addCitas(appo.Name, 2)" i18n="+ Add Citas|Buton en dashboard@@dashboard.button">+ Add Citas</button>
+                                <button mat-stroked-button class="w-100" color="primary" type="button" (click)="suspend()" i18n="Deactivate Account|Buton en dashboard@@dashboard.deactivate">Deactivate Account</button>
                             </div>
                         </div>
                     </ng-container>
                 </mat-card>
                 <mat-card class="col-sm col-md-4 col-lg-4">
                     <div class="row m-auto">
-                        <h3 i18n="Current visitors|text in dashboard@@paymentmethod">Payment Method</h3>
+                        <h3 i18n="Current visitors|text in dashboard@@dashboard.paymentmethod">Payment Method</h3>
                     </div>
                     <div class="row m-auto">
                         <ng-container *ngIf="payment$ | async"></ng-container>
+                        <ng-container *ngIf="paymentSave$ | async"></ng-container>
                         <mat-label class="">{{ccNumberData}}</mat-label>
                         <mat-label class="">{{ccNameData}}</mat-label>
                         <ng-container *ngIf="!dispForm">
@@ -86,18 +88,24 @@
                                 <input matInput i18n-placeholder="CC Number placeholder@@billing.ccnumber" placeholder="Number" maxlength="18" minlength="18"
                                     [(ngModel)]="ccNumber">
                             </mat-form-field>
-                            <mat-form-field class="pb-0 col-md-5">
-                                <mat-label>Choose a date</mat-label>
-                                <input matInput i18n-placeholder="CCV placeholder@@billing.ccdate" placeholder="Date" [min]="today"
-                                    [(ngModel)]="ccDate" [matDatepicker]="picker">
-                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                                <mat-datepicker #picker></mat-datepicker>
-                                <!-- 
-                                startView="multi-year"
-                                (monthSelected)="chosenMonthHandler($event picker)" -->
+                            <mat-form-field class="pb-0 col-md-3">
+                                <mat-label>Month</mat-label>
+                                <mat-select [(ngModel)]="ccMonth">
+                                    <mat-option *ngFor="let mon of numMonths" [value]="mon">
+                                        {{mon}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="pb-0 col-md-3">
+                                <mat-label>Year</mat-label>
+                                <mat-select [(ngModel)]="ccYear">
+                                    <mat-option *ngFor="let year of numYears" [value]="year">
+                                        {{year}}
+                                    </mat-option>
+                                </mat-select>
                             </mat-form-field>
                             <mat-form-field class="pb-0 col-md-4">
-                                <input matInput i18n-placeholder="CVV placeholder@@billing.cvv" placeholder="CVV" minlength="3"
+                                <input type="text" matInput i18n-placeholder="CVV placeholder@@billing.cvv" placeholder="CVV" maxlength="3" minlength="3"
                                     [(ngModel)]="cvv">
                             </mat-form-field>
                             <div class="col-md-12">
@@ -128,38 +136,42 @@
                     </div> -->
                 </mat-card>
             </div>
-            <div class="row p-0 m-0 mt-3 mb-3">
+            <div class="row p-0 m-0">
                 <ng-container *ngIf="avgData$ | async"></ng-container>
-                <mat-card class="col-sm col-md col-lg graph-style">
-                    <h3 class="title-graph" i18n="Month to Date|text in dashboard@@Month to Date">Month to Date</h3>
-                    <div class="row ml-2 mb-2">
-                        <mat-tab-group (selectedTabChange)="changeGraph($event)">
-                            <mat-tab label="Citas"></mat-tab>
-                            <mat-tab label="Average Time" i18n-label="Average Time@@dashboard.averagetime"></mat-tab>
-                        </mat-tab-group>
-                    </div>
-                    <div class="row ml-2 mb-2 mr-2 chart-dim">
-                        <ng-container *ngIf="series != undefined">
-                            <ng-container *ngIf="series.length > 0; else nodata">
-                                <ngx-charts-bar-vertical class="col-md"
-                                    [scheme]="colorScheme" 
-                                    [results]="series"
-                                    [gradient]="gradient" 
-                                    [xAxis]="showXAxis" 
-                                    [yAxis]="showYAxis" 
-                                    [legend]="showLegend"
-                                    [showXAxisLabel]="showXAxisLabel" 
-                                    [showYAxisLabel]="showYAxisLabel"
-                                    [xAxisLabel]="xAxisLabel" 
-                                    [yAxisLabel]="yAxisLabel" 
-                                    [legendTitle]="legendTitle">
-                                </ngx-charts-bar-vertical>
-                            </ng-container>
-                            <ng-template #nodata>
-                                <div class="not-found" i18n="No data found|text in dashboard@@nodatafound">No data found</div>
-                            </ng-template>
+                <mat-card class="col-sm col-md col-lg graph-style mt-3 mb-3">
+                    <h3 class="title-graph" i18n="Month to Date|text in dashboard@@Month to Date">Invoices</h3>
+                    <mat-table [dataSource]="orders"class="pl-0 pr-0 pt-1 pb-2 col-md-12 mt-1 mb-1">
+                        <ng-container matColumnDef="id">
+                            <mat-header-cell *matHeaderCellDef class="col-md-4" i18n="Name@@shared.name"> Id </mat-header-cell>
+                            <mat-cell *matCellDef="let element;let i=index" class="col-md-4">
+                                {{element.id}}
+                            </mat-cell>
                         </ng-container>
-                    </div>
+
+                        <ng-container matColumnDef="date_created">
+                            <mat-header-cell *matHeaderCellDef class="col-md-3" i18n="Location@@shared.location"> Date </mat-header-cell>
+                            <mat-cell *matCellDef="let element;let i=index" class="col-md-3">
+                                {{element.date_created}}
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="status">
+                            <mat-header-cell *matHeaderCellDef class="col-md-2" i18n="Initial Date Poll|text in polls@@polls.initialdatepoll"> Status </mat-header-cell>
+                            <mat-cell *matCellDef="let element;let i=index" class="col-md-2">
+                                {{element.status}}
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="total">
+                            <mat-header-cell *matHeaderCellDef class="col-md-2" i18n="Final Date Poll|text in polls@@polls.finaldatepoll"> Total </mat-header-cell>
+                            <mat-cell *matCellDef="let element;let i=index" class="col-md-2">
+                                {{element.total}}
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns; let i=index"></mat-row>
+                    </mat-table>
                 </mat-card>
             </div>
         </div>
