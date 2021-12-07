@@ -25,9 +25,9 @@
                         <mat-label class="col-md-4">{{statBusiness}}</mat-label>
                     </div>
                     <div>
-                        <button mat-flat-button color="primary" id="soft" type="button" class="ml-3 mr-3 mt-2" (click)="suspend('1')">Soft Suspend</button>
-                        <button mat-flat-button color="primary" id="cancel" type="button" class="mt-2 ml-3" (click)="suspend('2')">Hard Suspend</button>
-                        <button *ngIf="statBusiness != 'ACTIVE'" mat-flat-button color="primary" id="active" type="button" class="mt-2 ml-3" (click)="suspend('3')">Active</button>
+                        <button *ngIf="statBusiness == 'ACTIVE'" mat-flat-button color="primary" id="soft" type="button" class="ml-3 mr-3 mt-2" (click)="suspend('1')">Soft Suspend</button>
+                        <button *ngIf="statBusiness == 'SOFT SUSPEND' || statBusiness == 'ACTIVE'" mat-flat-button color="primary" id="cancel" type="button" class="mt-2 ml-3" (click)="suspend('2')">Hard Suspend</button>
+                        <button *ngIf="statBusiness == 'SOFT SUSPEND'" mat-flat-button color="primary" id="active" type="button" class="mt-2 ml-3" (click)="suspend('3')">Active</button>
                     </div>
                 </mat-card>
             </div>
