@@ -4580,6 +4580,18 @@
       <trans-unit id="billing.cvv">
         <source>CVV</source>
       </trans-unit>
+      <trans-unit id="shared.id">
+        <source>Id</source>
+      </trans-unit>
+      <trans-unit id="shared.date">
+        <source>Date</source>
+      </trans-unit>
+      <trans-unit id="shared.status">
+        <source>Status</source>
+      </trans-unit>
+      <trans-unit id="shared.total">
+        <source>Total</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

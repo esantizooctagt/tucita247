@@ -142,28 +142,28 @@
                     <h3 class="title-graph" i18n="Month to Date|text in dashboard@@Month to Date">Invoices</h3>
                     <mat-table [dataSource]="orders"class="pl-0 pr-0 pt-1 pb-2 col-md-12 mt-1 mb-1">
                         <ng-container matColumnDef="id">
-                            <mat-header-cell *matHeaderCellDef class="col-md-4" i18n="Name@@shared.name"> Id </mat-header-cell>
+                            <mat-header-cell *matHeaderCellDef class="col-md-4" i18n="Id@@shared.id"> Id </mat-header-cell>
                             <mat-cell *matCellDef="let element;let i=index" class="col-md-4">
                                 {{element.id}}
                             </mat-cell>
                         </ng-container>
 
                         <ng-container matColumnDef="date_created">
-                            <mat-header-cell *matHeaderCellDef class="col-md-3" i18n="Location@@shared.location"> Date </mat-header-cell>
+                            <mat-header-cell *matHeaderCellDef class="col-md-3" i18n="Date@@shared.date"> Date </mat-header-cell>
                             <mat-cell *matCellDef="let element;let i=index" class="col-md-3">
-                                {{element.date_created}}
+                                {{element.date_created | date:'MMM d, y'}}
                             </mat-cell>
                         </ng-container>
 
                         <ng-container matColumnDef="status">
-                            <mat-header-cell *matHeaderCellDef class="col-md-2" i18n="Initial Date Poll|text in polls@@polls.initialdatepoll"> Status </mat-header-cell>
+                            <mat-header-cell *matHeaderCellDef class="col-md-2" i18n="Status@@shared.status"> Status </mat-header-cell>
                             <mat-cell *matCellDef="let element;let i=index" class="col-md-2">
                                 {{element.status}}
                             </mat-cell>
                         </ng-container>
 
                         <ng-container matColumnDef="total">
-                            <mat-header-cell *matHeaderCellDef class="col-md-2" i18n="Final Date Poll|text in polls@@polls.finaldatepoll"> Total </mat-header-cell>
+                            <mat-header-cell *matHeaderCellDef class="col-md-2" i18n="Total@@shared.total"> Total </mat-header-cell>
                             <mat-cell *matCellDef="let element;let i=index" class="col-md-2">
                                 {{element.total}}
                             </mat-cell>

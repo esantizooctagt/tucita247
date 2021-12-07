@@ -5209,6 +5209,22 @@ Cuando se escoge la opción de Check-Out Manual, el sistema no enviará encuesta
         <source>CVV</source>
         <target state="translated">CVV</target>
       </trans-unit>
+      <trans-unit id="shared.id">
+        <source>Id</source>
+        <target state="translated">No. Orden</target>
+      </trans-unit>
+      <trans-unit id="shared.date">
+        <source>Date</source>
+        <target state="translated">Fecha de Orden</target>
+      </trans-unit>
+      <trans-unit id="shared.status">
+        <source>Status</source>
+        <target state="translated">Estado</target>
+      </trans-unit>
+      <trans-unit id="shared.total">
+        <source>Total</source>
+        <target state="translated">Total</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

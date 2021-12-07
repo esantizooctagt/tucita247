@@ -5208,6 +5208,22 @@ When using Manual Check-Out, the system will not send polls to that location.</t
         <source>CVV</source>
         <target state="translated">CVV</target>
       </trans-unit>
+      <trans-unit id="shared.id">
+        <source>Id</source>
+        <target state="translated">No. Order</target>
+      </trans-unit>
+      <trans-unit id="shared.date">
+        <source>Date</source>
+        <target state="translated">Order Date</target>
+      </trans-unit>
+      <trans-unit id="shared.status">
+        <source>Status</source>
+        <target state="translated">Status</target>
+      </trans-unit>
+      <trans-unit id="shared.total">
+        <source>Total</source>
+        <target state="translated">Total</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
