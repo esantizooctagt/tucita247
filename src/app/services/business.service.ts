@@ -6,6 +6,9 @@ import { Business } from '@app/_models';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
+import hmacSHA1 from 'crypto-js/hmac-sha1';
+import Base64 from 'crypto-js/enc-base64';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -15,6 +18,9 @@ export class BusinessService {
   readonly apiWPURL = environment.apiWPUrl;
   readonly siteId = environment.siteId;
   readonly merchantKey = environment.merchantKey;
+
+  readonly customer_key = environment.ckey;
+  readonly customer_secret = environment.csecret; 
 
   sessionId: number;
   constructor(private http: HttpClient) { }
@@ -38,6 +44,7 @@ export class BusinessService {
     return this.http.get<any>(this.apiURL + '/business/valid/' + businessId + '/' + locationId + '/' + providerId + '/' + serviceId + '/' + appoDate + '/' + appoHour)
                     .pipe(catchError(this.errorHandler));
   }
+
   getBusinessParent(): Observable<any[]>{
     return this.http.get<any[]>(this.apiURL + '/business/parents')
                     .pipe(catchError(this.errorHandler));
@@ -173,32 +180,65 @@ export class BusinessService {
                     .pipe(catchError(this.errorHandler))
   }
 
-  getId(email: string){
-    const utcDate = Date.now();
+  getId(emailBus: string){
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json'
       })
     };
-    return this.http.get<any>('https://tucita247.com/wp-json/wc/v3/customers?email=' + email + '&oauth_consumer_key=ck_3fcd8bc23ab2aa9b5cb27f3ff68c798a072b9662&oauth_signature_method=HMAC-SHA1&oauth_timestamp='+utcDate.toString()+'&oauth_nonce=ohqdd3nNDzO&oauth_version=1.0&oauth_signature=9vjdei1+oafJz25J5pjoQfRAx34=', httpOptions)
+    return this.http.get<any>('https://tucita247.com/wp-json/wc/v3/customers?email=' + emailBus + '&consumer_key='+this.customer_key+'&consumer_secret='+this.customer_secret, httpOptions)
                     .pipe(catchError(this.errorHandler))
   }
 
   getOrders(customerId: string){
-    const utcDate = Date.now();
     const newD = new Date();
-    const today = new Date(newD.setMonth(newD.getMonth()-10));
+    const today = new Date(newD.setMonth(newD.getMonth()-4));
     const data = today.getFullYear() + '-' + (today.getMonth()+1).toString().padStart(2,'0') + '-' + (today.getDate()).toString().padStart(2,'0')
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json'
       })
     };
-    return this.http.get<any>('https://tucita247.com/wp-json/wc/v3/orders?after='+data+'T00:00:00Z&customer=' + customerId + '&oauth_consumer_key=ck_3fcd8bc23ab2aa9b5cb27f3ff68c798a072b9662&oauth_signature_method=HMAC-SHA1&oauth_timestamp='+utcDate.toString()+'&oauth_nonce=ohqdd3nNDzO&oauth_version=1.0&oauth_signature=9vjdei1+oafJz25J5pjoQfRAx34=', httpOptions)
+    return this.http.get<any>('https://tucita247.com/wp-json/wc/v3/orders?after='+data+'T00:00:00Z&customer=' + customerId + '&consumer_key='+this.customer_key+'&consumer_secret='+this.customer_secret, httpOptions)
                     .pipe(catchError(this.errorHandler))
   }
 
   errorHandler(error){
     return throwError(error || 'Server Error');
   }
+
+  getSignedURL(method: string, url: string, params: any){
+    // const url = this.getSignedURL('GET', 'https://tucita247.com/wp-json/wc/v3/customers', {email: emailBus});
+    const currentTimestamp = Math.floor(new Date().getTime() / 1000);
+    var nonce = '';
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for(var i = 0; i < 11; i++) {
+      nonce += possible.charAt(Math.floor(Math.random() * possible.length));
+    }    
+    let authParam:object ={
+        oauth_consumer_key : this.customer_key,
+        oauth_nonce : nonce,
+        oauth_signature_method : 'HMAC-SHA1',
+        oauth_timestamp : currentTimestamp,
+        oauth_version : '1.0',
+    } 
+    let parameters = Object.assign({}, authParam, params);
+    let signatureStr:string = '';
+    Object.keys(parameters).sort().forEach(function(key) {
+        if(signatureStr == '')
+            signatureStr += key+'='+parameters[key];
+        else
+            signatureStr += '&'+key+'='+parameters[key];
+    });
+    let paramStr:string = '';
+    Object.keys(params).sort().forEach(function(key) {
+        paramStr += '&'+key+'='+parameters[key];
+    });
+    console.log(signatureStr);
+    console.log(method+'&'+encodeURIComponent(url)+'&'+encodeURIComponent(signatureStr));
+    console.log(this.customer_secret+'&');
+    return url+'?oauth_consumer_key='+this.customer_key+'&oauth_nonce='+nonce+'&oauth_signature_method=HMAC-SHA1&oauth_timestamp='+currentTimestamp+'&oauth_version=1.0&oauth_signature='+Base64.stringify(hmacSHA1(method+'&'+encodeURIComponent(url)+'&'+encodeURIComponent(signatureStr),this.customer_secret+'&'))+paramStr;
+  }
+
 }

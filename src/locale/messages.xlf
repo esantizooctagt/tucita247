@@ -4586,7 +4586,7 @@
       <trans-unit id="shared.date">
         <source>Date</source>
       </trans-unit>
-      <trans-unit id="shared.status">
+      <trans-unit id="shared.statuswp">
         <source>Status</source>
       </trans-unit>
       <trans-unit id="shared.total">

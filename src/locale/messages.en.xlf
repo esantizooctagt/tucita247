@@ -5216,7 +5216,7 @@ When using Manual Check-Out, the system will not send polls to that location.</t
         <source>Date</source>
         <target state="translated">Order Date</target>
       </trans-unit>
-      <trans-unit id="shared.status">
+      <trans-unit id="shared.statuswp">
         <source>Status</source>
         <target state="translated">Status</target>
       </trans-unit>

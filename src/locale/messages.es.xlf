@@ -5217,7 +5217,7 @@ Cuando se escoge la opción de Check-Out Manual, el sistema no enviará encuesta
         <source>Date</source>
         <target state="translated">Fecha de Orden</target>
       </trans-unit>
-      <trans-unit id="shared.status">
+      <trans-unit id="shared.statuswp">
         <source>Status</source>
         <target state="translated">Estado</target>
       </trans-unit>
