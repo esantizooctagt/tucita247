@@ -127,9 +127,9 @@ export class BusinessService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
-        SiteId: this.siteId,
-        MessageHash: messageHash,
-        SessionId: this.sessionId.toString()
+        'SiteId': this.siteId,
+        'MessageHash': messageHash,
+        'SessionId': this.sessionId.toString()
       })
     };
     return this.http.post('https://www.agilpay.net/WebApi/APaymentTokenApi/RegisterToken', dataForm, httpOptions)
@@ -139,8 +139,6 @@ export class BusinessService {
   getHash(contentHash: string){
     const httpOptions = {
       headers: new HttpHeaders({
-        'Access-Control-Allow-Origin' : '*',
-        'Access-Control-Allow-Credentials': 'true',
         'Content-Type':  'application/json',
         'SiteId': this.siteId
       })
