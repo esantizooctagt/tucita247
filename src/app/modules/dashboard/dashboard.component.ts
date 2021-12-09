@@ -252,16 +252,16 @@ export class DashboardComponent implements OnInit {
         })
       );
       
-      this.payment$ = this.businessService.getHash(this.siteId + this.businessService.getSession().toString() +  this.businessId).pipe(
+      this.payment$ = this.businessService.postHash(this.siteId + this.businessService.getSession().toString() +  this.businessId).pipe(
         map((res: any) => {
-          if (res != ''){
-            this.contentHash = res;
+          if (res.Code == 200){
+            this.contentHash = res.Hash;
           }
         }),
         switchMap(_ => 
           this.businessService.getAccounts(this.businessId, this.contentHash).pipe(
             map((res: any) => {
-              this.ccData = res;
+              this.ccData = res.Data;
               if (this.ccData.length > 0){
                 let resCC = this.ccData.filter(x => x.IsDefault == true);
                 if (resCC.length > 0){
@@ -507,20 +507,8 @@ export class DashboardComponent implements OnInit {
 
   update(){
     if (this.ccName == '' || this.ccNumber == '' || this.ccYear.toString() == '' || this.ccMonth.toString() == '' || this.cvv.toString() == '') {return;}
-    let dataForm = {
-      'MerchantKey': this.merchantKey,
-      'AccountNumber': this.ccNumber,
-      'ExpirationMonth': this.ccMonth,
-      'ExpirationYear': this.ccYear,
-      'CustomerName': this.ccName,
-      'IsDefault': true,
-      'CustomerId': this.businessId,
-      'AccountType': '1',
-      'CustomerEmail': this.authService.email(),
-      'ZipCode': '12345'
-    }
     var spinnerRef = this.spinnerService.start($localize`:@@dashboard.loading:`);
-    this.paymentSave$ = this.businessService.getToken(this.contentHash, dataForm).pipe(
+    this.paymentSave$ = this.businessService.postToken(this.contentHash, this.merchantKey, this.ccNumber, this.ccMonth, this.ccYear, this.ccName, this.businessId, this.authService.email()).pipe(
       map((res: any) => {
         if (res.AccountToken != '' && res.State == 'Validated'){
           this.ccToken = res.AccountToken;
@@ -529,6 +517,7 @@ export class DashboardComponent implements OnInit {
       switchMap(_ => 
         this.businessService.updAccount(this.orderId, this.ccToken).pipe(
           map((res: any) => {
+            this.spinnerService.stop(spinnerRef);
             return res.id;
           })
         )

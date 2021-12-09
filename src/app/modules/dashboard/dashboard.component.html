@@ -74,8 +74,8 @@
                     <div class="row m-auto">
                         <ng-container *ngIf="payment$ | async"></ng-container>
                         <ng-container *ngIf="paymentSave$ | async"></ng-container>
-                        <mat-label class="">{{ccNumberData}}</mat-label>
-                        <mat-label class="">{{ccNameData}}</mat-label>
+                        <div class="col-md-12">{{ccNumberData}}</div>
+                        <div class="col-md-12">{{ccNameData}}</div>
                         <ng-container *ngIf="!dispForm">
                             <button mat-stroked-button class="w-100" color="primary" type="button" (click)="dispForm = true" i18n="Update|Buton@@dashboard.update">Update</button>
                         </ng-container>
@@ -88,7 +88,7 @@
                                 <input matInput i18n-placeholder="CC Number placeholder@@billing.ccnumber" placeholder="Number" maxlength="18" minlength="18"
                                     [(ngModel)]="ccNumber">
                             </mat-form-field>
-                            <mat-form-field class="pb-0 col-md-3">
+                            <mat-form-field class="pb-0 col-md-4">
                                 <mat-label>Month</mat-label>
                                 <mat-select [(ngModel)]="ccMonth">
                                     <mat-option *ngFor="let mon of numMonths" [value]="mon">

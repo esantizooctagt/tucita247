@@ -123,40 +123,32 @@ export class BusinessService {
     this.sessionId = val;
   }
 
-  getToken(messageHash, dataForm){
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        'SiteId': this.siteId,
-        'MessageHash': messageHash,
-        'SessionId': this.sessionId.toString()
-      })
-    };
-    return this.http.post('https://www.agilpay.net/WebApi/APaymentTokenApi/RegisterToken', dataForm, httpOptions)
+  postToken(contentHash: string, merchantKey: string, ccNumber: string, ccMonth: number, ccYear: number, ccName: string, customerId: string, email: string){
+    let dataForm = {
+      MerchantKey: merchantKey,
+      AccountNumber: ccNumber,
+      ExpirationMonth: ccMonth,
+      ExpirationYear: ccYear,
+      CustomerName: ccName,
+      IsDefault: true,
+      CustomerId: customerId,
+      AccountType: '1',
+      CustomerEmail: email,
+      ZipCode: '12345',
+      hash: contentHash,
+      sessionId: this.sessionId.toString()
+    }
+    return this.http.post(this.apiAdminUrl + '/dynamics/token', dataForm)
                     .pipe(catchError(this.errorHandler))
   }
 
-  getHash(contentHash: string){
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        'SiteId': this.siteId
-      })
-    };
-    return this.http.get<any>('https://www.agilpay.net/WebApi/APaymentTokenApi/GetHash?contentHash=' + contentHash, httpOptions)
+  postHash(contentHash: string){
+    return this.http.post(this.apiAdminUrl + '/dynamics/hash/' + contentHash, '')
                     .pipe(catchError(this.errorHandler))
   }
 
   getAccounts(customerId, contentHash){
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        SiteId: this.siteId,
-        SessionId: this.sessionId.toString(),
-        MessageHash: contentHash
-      })
-    };
-    return this.http.get<any>('https://www.agilpay.net/WebApi/APaymentTokenApi/GetCustomerTokens?CustomerID='+customerId, httpOptions)
+    return this.http.post(this.apiAdminUrl + '/dynamics/accounts/' + customerId, { hash: contentHash, sessionId: this.sessionId.toString() })
                     .pipe(catchError(this.errorHandler))
   }
 
@@ -174,7 +166,7 @@ export class BusinessService {
         "value": token
       }]
     }
-    return this.http.put('https://tucita247.com/wp-json/wc/v3/orders/'+orderId+'?oauth_consumer_key=ck_3fcd8bc23ab2aa9b5cb27f3ff68c798a072b9662&oauth_signature_method=HMAC-SHA1&oauth_timestamp='+utcDate.toString()+'&oauth_nonce=ohqdd3nNDzO&oauth_version=1.0&oauth_signature=9vjdei1+oafJz25J5pjoQfRAx34=', body, httpOptions)
+    return this.http.put('https://tucita247.com/wp-json/wc/v3/orders/' + orderId + '?consumer_key='+this.customer_key+'&consumer_secret='+this.customer_secret, body, httpOptions)
                     .pipe(catchError(this.errorHandler))
   }
 
