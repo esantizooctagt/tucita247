@@ -510,7 +510,8 @@ export class DashboardComponent implements OnInit {
     var spinnerRef = this.spinnerService.start($localize`:@@dashboard.loading:`);
     this.paymentSave$ = this.businessService.postToken(this.contentHash, this.merchantKey, this.ccNumber, this.ccMonth, this.ccYear, this.ccName, this.businessId, this.authService.email()).pipe(
       map((res: any) => {
-        if (res.AccountToken != '' && res.State == 'Validated'){
+        //&& res.State == 'Validated'
+        if (res.AccountToken != ''){
           this.ccToken = res.AccountToken;
         }
       }),

@@ -4522,6 +4522,9 @@
       <trans-unit id="learnMore.LMCON45">
         <source>LMCON45</source>
       </trans-unit>
+      <trans-unit id="learnMore.LMCON80">
+        <source>LMCON80</source>
+      </trans-unit>
       <trans-unit id="sche.calendar" datatype="html">
         <source>CALENDAR</source>
         <context-group purpose="schedule">

@@ -5132,6 +5132,10 @@ When using Manual Check-Out, the system will not send polls to that location.</t
         <source>LMCON45</source>
         <target state="translated">Tu Cita 24/7 will use this language to send booking messages to your customers.</target>
       </trans-unit>
+      <trans-unit id="learnMore.LMCON80">
+        <source>LMCON80</source>
+        <target state="translated">Email communication</target>
+      </trans-unit>
       <trans-unit id="sche.calendar" datatype="html">
         <source>CALENDAR</source>
         <target state="translated">CALENDAR</target>

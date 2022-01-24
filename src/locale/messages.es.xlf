@@ -5133,6 +5133,10 @@ Cuando se escoge la opción de Check-Out Manual, el sistema no enviará encuesta
         <source>LMCON45</source>
         <target state="translated">Tu Cita 24/7 utilizará este idioma para enviar mensajes de la cita a sus clientes.</target>
       </trans-unit>
+      <trans-unit id="learnMore.LMCON80">
+        <source>LMCON80</source>
+        <target state="translated">Email communication</target>
+      </trans-unit>
       <trans-unit id="sche.calendar" datatype="html">
         <source>CALENDAR</source>
         <target state="translated">CALENDARIO</target>

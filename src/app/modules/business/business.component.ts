@@ -893,6 +893,10 @@ export class BusinessComponent implements OnInit {
         message = $localize`:@@learnMore.LMCON45:`;
         break; 
       }
+      case 80: {
+        message = $localize`:@@learnMore.LMCON80:`;
+        break;
+      }
       default: { 
         message = ''; 
         break; 
