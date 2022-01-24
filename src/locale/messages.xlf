@@ -4313,6 +4313,9 @@
       <trans-unit id="host.invalidTime">
         <source>Invalid time for appointment</source>
       </trans-unit>
+      <trans-unit id="host.errorslot">
+        <source>You must enable additional periods to create this booking.</source>
+      </trans-unit>
       <trans-unit id="host.companydisabled">
         <source>Company disabled</source>
       </trans-unit>
@@ -4551,7 +4554,7 @@
         <source>Processing</source>
       </trans-unit>
       <trans-unit id="dashboard.cancelmess">
-        <source>Are you sure you want to cancel your account? You can revert this process.</source>
+        <source>Are you sure you want to deactivate this account? If you want to reactivate later, please contact support@tucita247.com</source>
       </trans-unit>
       <trans-unit id="dashboard.cancel">
         <source>Cancel</source>

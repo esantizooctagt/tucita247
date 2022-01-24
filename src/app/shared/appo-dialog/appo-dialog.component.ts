@@ -231,7 +231,10 @@ export class AppoDialogComponent implements OnInit {
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
-        if (err.Status == 404){
+        if (err.Message == 'Next slots are disabled'){
+          this.openDialog($localize`:@@shared.error:`, $localize`:@@host.errorslot:`, false, true, false);
+          this.dialogRef.close({newAppo: 'OK'});
+        } else if (err.Status == 404){
           this.openDialog($localize`:@@shared.error:`, $localize`:@@shared.invalidDateTime:`, false, true, false);
           this.dialogRef.close({newAppo: 'OK'});
         } else {

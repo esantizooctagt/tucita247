@@ -551,6 +551,10 @@
         <source>Invalid time for appointment</source>
         <target>Horario seleccionado no disponible</target>
       </trans-unit>
+      <trans-unit id="host.errorslot">
+        <source>You must enable additional periods to create this booking.</source>
+        <target>Debe habilitar periodos adicionales para crear esta cita.</target>
+      </trans-unit>
       <trans-unit id="host.companydisabled">
         <source>Company disabled</source>
         <target>Negocio deshabilitado</target>
@@ -5170,8 +5174,8 @@ Cuando se escoge la opción de Check-Out Manual, el sistema no enviará encuesta
         <target state="translated">Procesando</target>
       </trans-unit>
       <trans-unit id="dashboard.cancelmess">
-        <source>Are you sure you want to cancel your account? You can revert this process.</source>
-        <target state="translated">Esta seguro de cancelar su cuenta? Este proceso ya no puede revertirse.</target>
+        <source>Are you sure you want to deactivate this account? If you want to reactivate later, please contact support@tucita247.com</source>
+        <target state="translated">¿Está seguro que desea desactivar esta cuenta? Si desea reactivar más tarde, comuníquese con support@tucita247.com.</target>
       </trans-unit>
       <trans-unit id="dashboard.cancel">
         <source>Cancel</source>

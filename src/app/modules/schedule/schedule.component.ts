@@ -885,16 +885,17 @@ export class ScheduleComponent implements OnInit {
             data: {businessId: this.businessId, locationId: this.locationId, providerId: this.providerId, serviceId: result.ServiceId, appoTime: timeGrl, appoDate: this.datepipe.transform(day, 'yyyy-MM-dd'), doors: this.doors.split(','), dayData: dayInfo}
           });
         }
+        this.spinnerService.stop(spinnerRef);
+        if (res.Code == 405){
+          this.openSnackBar($localize`:@@host.errorslot:`,$localize`:@@shared.error:`);
+        }
         if (res.Code == 404){
-          this.spinnerService.stop(spinnerRef);
           this.openSnackBar($localize`:@@host.companydisabled:`,$localize`:@@shared.error:`);
         }
         if (res.Code == 400){
-          this.spinnerService.stop(spinnerRef);
           this.openSnackBar($localize`:@@host.noappos:`,$localize`:@@shared.error:`);
         }
         if (res.Code == 500){
-          this.spinnerService.stop(spinnerRef);
           this.openSnackBar($localize`:@@host.invalidTime:`,$localize`:@@shared.error:`);
         }
         return res;

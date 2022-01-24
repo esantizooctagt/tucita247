@@ -162,6 +162,7 @@ export class BusinessComponent implements OnInit {
     Twitter: ['', [Validators.maxLength(150), Validators.minLength(4)]],
     Instagram: ['', [Validators.maxLength(150), Validators.minLength(4)]],
     Email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
+    EmailComm: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
     LongDescription: ['', [Validators.required, Validators.maxLength(255), Validators.minLength(10)]],
     ShortDescription: ['', [Validators.required, Validators.maxLength(75), Validators.minLength(10)]],
     TuCitaLink: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(2)]],
@@ -229,7 +230,7 @@ export class BusinessComponent implements OnInit {
         map(country => country ? this._filterCountry(country) : this.countries.slice())
       );
     let item = 0;
-    this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', CountryCode: '', Address: '', City: '', Sector: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', Tags: '', Reasons: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen: '', ParentBusiness: 0, Status: 1});
+    this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', CountryCode: '', Address: '', City: '', Sector: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', EmailComm: '', Tags: '', Reasons: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen: '', ParentBusiness: 0, Status: 1});
     this.business$ = this.businessService.getBusiness(this.businessId, this.language).pipe(
       tap((res: any) => {
         if (res != null){
@@ -275,6 +276,7 @@ export class BusinessComponent implements OnInit {
             Twitter: res.Twitter,
             Instagram: res.Instagram,
             Email: res.Email,
+            EmailComm: res.EmailComm,
             Categories: res.Categories,
             LongDescription: res.LongDescription, 
             ShortDescription: res.ShortDescription,
@@ -293,12 +295,12 @@ export class BusinessComponent implements OnInit {
           this.spinnerService.stop(spinnerRef);
         } else {
           this.spinnerService.stop(spinnerRef);
-          this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', Address: '', City: '', Sector: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', Language: '', Reasons: '', ParentBusiness: 0, Status: 1});
+          this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', Address: '', City: '', Sector: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', EmailComm: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', Language: '', Reasons: '', ParentBusiness: 0, Status: 1});
         }
       }),
       catchError(err => {
         this.spinnerService.stop(spinnerRef);
-        this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', Address: '', City: '', Sector: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', Language: '', Reasons: '', ParentBusiness: 0, Status: 1});
+        this.businessForm.reset({BusinessId: '', Categories: '', Name: '', Country: '', Address: '', City: '', Sector: '', ZipCode: '', Geolocation: '', Phone: '', WebSite: '', Facebook: '', Twitter: '', Instagram: '', Email: '', EmailComm: '', LongDescription: '', ShortDescription: '', TuCitaLink: '', Imagen:'', Tags: '', Language: '', Reasons: '', ParentBusiness: 0, Status: 1});
         this.openDialog('Error !', err.Message, false, true, false);
         return throwError(err || err.message);
       })
@@ -660,6 +662,10 @@ export class BusinessComponent implements OnInit {
       return this.fBusiness.Categories.hasError('required') ? $localize`:@@shared.invalidselectvalue:` :
         '';
     }
+    if (component === 'EmailComm'){
+      return this.fBusiness.EmailComm.hasError('pattern') ? $localize`:@@forgot.emailformat:` :
+        '';
+    }
   }
 
   openDialog(header: string, message: string, success: boolean, error: boolean, warn: boolean): void {
@@ -716,6 +722,7 @@ export class BusinessComponent implements OnInit {
       "Twitter": this.businessForm.value.Twitter,
       "Instagram": this.businessForm.value.Instagram,
       "Email": this.businessForm.value.Email,
+      "EmailComm": this.businessForm.value.EmailComm,
       "Tags": this.tags.toString(),
       "Reasons": this.reasons.toString(),
       "Categories": JSON.stringify(this.categories),

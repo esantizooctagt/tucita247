@@ -444,7 +444,7 @@ export class DashboardComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = false;
     dialogConfig.data = {
-      header: $localize`:@@dashboard.cancel:`, 
+      header: $localize`:@@dashboard.deactivate:`, 
       message: $localize`:@@dashboard.cancelmess:`, 
       success: false, 
       error: false, 

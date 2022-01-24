@@ -112,21 +112,21 @@
         <div class="row pl-3 pr-3">
             <div class="form-field pl-3 pr-3 col-md-6">
                 <mat-form-field>
-                    <mat-label i18n="Door|text in new appo@@appos.door">Door</mat-label>
-                    <mat-select name="doors" formControlName="Door"> 
-                        <mat-option *ngFor="let item of doors" [value]="item">
-                            {{item}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div class="form-field pl-3 pr-3 col-md-6">
-                <mat-form-field>
                     <mat-label i18n="Preference|text in citas@@host.preference">Preference</mat-label>
                     <mat-select formControlName="Preference">
                         <mat-option matLine value="0">NA</mat-option>
                         <mat-option matLine value="1" i18n="SMS|text in citas@@host.sms">SMS</mat-option>
                         <mat-option matLine value="2" i18n="Email@@shared.Email">Email</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="form-field pl-3 pr-3 col-md-6">
+                <mat-form-field *ngIf="doors.length > 1">
+                    <mat-label i18n="Door|text in new appo@@appos.door">Door</mat-label>
+                    <mat-select name="doors" formControlName="Door"> 
+                        <mat-option *ngFor="let item of doors" [value]="item">
+                            {{item}}
+                        </mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
