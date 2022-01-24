@@ -159,7 +159,7 @@
                                             <div class="row pr-3 pl-3 mt-2 mb-2">
                                                 <div class="card-contentprio col-md-6 pl-0" i18n="No. of guests: |text in citas@@host.noguests">Number of guests: </div><div class="card-resultprio col-md">{{item.Guests}}</div>
                                             </div>
-                                            <div class="row pr-3 pl-3 mt-2 mb-2">
+                                            <div class="row pr-3 pl-3 mt-2 mb-2" *ngIf="item.Door != ''">
                                                 <div class="card-contentprio col-md-6 pl-0" i18n="Door: |text in citas@@host.door">Door: </div><div class="card-resultprio-door col-md">{{item.Door}}</div>
                                             </div>
                                             <!-- <div class="row pr-3 pl-3 mt-2 mb-2">
@@ -267,7 +267,7 @@
                                             <div class="row pr-3 pl-3 mt-2 mb-2">
                                                 <div class="card-contentprio col-md-6 pl-0" i18n="No. of guests: |text in citas@@host.noguests">Number of guests: </div><div class="card-resultprio col-md">{{item.Guests}}</div>
                                             </div>
-                                            <div class="row pr-3 pl-3 mt-2 mb-2">
+                                            <div class="row pr-3 pl-3 mt-2 mb-2" *ngIf="item.Door != ''">
                                                 <div class="card-contentprio col-md-6 pl-0" i18n="Door: |text in citas@@host.door">Door: </div><div class="card-resultprio-door col-md">{{item.Door}}</div>
                                             </div>
                                             <!-- <div class="row pr-3 pl-3 mt-2 mb-2">
@@ -374,7 +374,7 @@
                                             <div class="row pr-3 pl-3 mt-2 mb-2">
                                                 <div class="card-contentprio col-md-6 pl-0" i18n="No. of guests: |text in citas@@host.noguests">Number of guests: </div><div class="card-resultprio col-md">{{item.Guests}}</div>
                                             </div>
-                                            <div class="row pr-3 pl-3 mt-2 mb-2">
+                                            <div class="row pr-3 pl-3 mt-2 mb-2" *ngIf="item.Door != ''">
                                                 <div class="card-contentprio col-md-6 pl-0" i18n="Door: |text in citas@@host.door">Door: </div><div class="card-resultprio-door col-md">{{item.Door}}</div>
                                             </div>
                                             <!-- <div class="row pr-3 pl-3 mt-2 mb-2">
@@ -489,7 +489,7 @@
                                 <div class="row pr-3 pl-3 mt-2 mb-2">
                                     <div class="card-contentprio col-md-6 pl-0" i18n="No. of guests: |text in citas@@host.noguests">Number of guests: </div><div class="card-resultprio col-md">{{item.Guests}}</div>
                                 </div>
-                                <div class="row pr-3 pl-3 mt-2 mb-2">
+                                <div class="row pr-3 pl-3 mt-2 mb-2" *ngIf="item.Door != ''">
                                     <div class="card-contentprio col-md-6 pl-0" i18n="Door: |text in citas@@host.door">Door: </div><div class="card-resultprio-door col-md">{{item.Door}}</div>
                                 </div>
                                 <!-- <div class="row pr-3 pl-3 mt-2 mb-2">
