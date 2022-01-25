@@ -334,7 +334,7 @@
                                     <input matInput type="email" i18n-placeholder="Email@@shared.email" placeholder="Email Communication" maxlength="200"
                                         pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" formControlName="EmailComm"
                                         [errorStateMatcher]="confirmValidParentMatcher">
-                                    <button type="button" mat-icon-button color="primary" matSuffix (click)="learnMore(80)">
+                                    <button type="button" mat-icon-button color="primary" class="learn" matSuffix (click)="learnMore(80)">
                                             <mat-icon>help</mat-icon>
                                         </button>
                                     <mat-error *ngIf="fBusiness.EmailComm.invalid && fBusiness.EmailComm.touched">
