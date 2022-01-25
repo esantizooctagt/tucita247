@@ -511,8 +511,11 @@ export class DashboardComponent implements OnInit {
     this.paymentSave$ = this.businessService.postToken(this.contentHash, this.merchantKey, this.ccNumber, this.ccMonth, this.ccYear, this.ccName, this.businessId, this.authService.email()).pipe(
       map((res: any) => {
         //&& res.State == 'Validated'
-        if (res.AccountToken != ''){
-          this.ccToken = res.AccountToken;
+        if (res.Code == 200){
+          let data = res.Data;
+          if (data.AccountToken != ''){
+            this.ccToken = data.AccountToken;
+          }
         }
       }),
       switchMap(_ => 
